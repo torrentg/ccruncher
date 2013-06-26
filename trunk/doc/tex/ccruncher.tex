@@ -960,6 +960,37 @@ formulation.
 	%that values are aggregated by sector. 
 \end{definition}
 
+\begin{example}[]
+	We have two sectors, S1 and S2, and four ratings, A, B, C, D, where 
+	D is the \emph{defaulted} status. We have collected the observations displayed
+	in table~\ref{table:histdata}.
+	This example has a number of ratings and sectors less than the previous 
+	examples for practical reasons (otherwise data tables do not fit 
+	in the width of the page).
+	\begin{table}[!ht]
+		\centering
+		\begin{tabular}{cc|c|c|c||c|c|c|  c  |c|c|c||c|c|c|}
+			\cline{3-8} \cline{10-15}
+			& & \multicolumn{6}{|c|}{N (\# obligors)} & & \multicolumn{6}{|c|}{K (\# defaults)} \\
+			\cline{3-8} \cline{10-15}
+			& & \multicolumn{3}{|c||}{S1} & \multicolumn{3}{|c|}{S2} & & \multicolumn{3}{|c||}{S1} & \multicolumn{3}{|c|}{S2} \\
+			\cline{1-1} \cline{3-8} \cline{10-15}
+			\multicolumn{1}{|c|}{Year} & & A & B & C & A & B & C & & A & B & C & A & B & C \\
+			\cline{1-1} \cline{3-8} \cline{10-15}
+			\multicolumn{1}{|c|}{1} & & 529 & 932 & 293 & 685 & 1249 & 206 & & 3 & 12 & 15 & 3 & 25 & 10 \\
+			\cline{1-1} \cline{3-8} \cline{10-15}
+			\multicolumn{1}{|c|}{2} & & 522 & 977 & 278 & 638 & 1315 & 194 & & 1 & 18 & 13 & 7 & 28 & 8 \\
+			\cline{1-1} \cline{3-8} \cline{10-15}
+			\multicolumn{1}{|c|}{\vdots} & & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+			\cline{1-1} \cline{3-8} \cline{10-15}
+			\multicolumn{1}{|c|}{20} & & 492 & 962 & 310 & 602 & 1227 & 183 & & 6 & 28 & 21 & 4 & 31 & 16 \\
+			\cline{1-1} \cline{3-8} \cline{10-15}
+		\end{tabular}
+		\caption{Example of historical records}
+		\label{table:histdata}
+	\end{table}
+\end{example}
+
 % It is possible that the there is no historical records disaggregated at 
 % the rating level. In these cases, when the historical records are 
 % $\left\{N_{s}^t, K_{s}^t \right\}_{t=1,\dots,T}$ without the counts by 
@@ -1004,43 +1035,29 @@ and~\ref{prop:tmfm}).
 	\end{enumerate}
 \end{algorithm}
 
-\begin{example}[]
-	We have two sectors, S1 and S2, and four ratings, A, B, C, D, where 
-	D is the \emph{defaulted} status. We have collected the observations displayed
-	in table~\ref{table:histdata}.
-	This example has a number of ratings and sectors less than the previous 
-	examples for practical reasons (otherwise data tables do not fit 
-	in the width of the page).
-	\begin{table}[!ht]
-		\centering
-		\begin{tabular}{cc|c|c|c||c|c|c|  c  |c|c|c||c|c|c|}
-			\cline{3-8} \cline{10-15}
-			& & \multicolumn{6}{|c|}{N (\# obligors)} & & \multicolumn{6}{|c|}{K (\# defaults)} \\
-			\cline{3-8} \cline{10-15}
-			& & \multicolumn{3}{|c||}{S1} & \multicolumn{3}{|c|}{S2} & & \multicolumn{3}{|c||}{S1} & \multicolumn{3}{|c|}{S2} \\
-			\cline{1-1} \cline{3-8} \cline{10-15}
-			\multicolumn{1}{|c|}{Year} & & A & B & C & A & B & C & & A & B & C & A & B & C \\
-			\cline{1-1} \cline{3-8} \cline{10-15}
-			\multicolumn{1}{|c|}{1} & & 529 & 932 & 293 & 685 & 1249 & 206 & & 3 & 12 & 15 & 3 & 25 & 10 \\
-			\cline{1-1} \cline{3-8} \cline{10-15}
-			\multicolumn{1}{|c|}{2} & & 522 & 977 & 278 & 638 & 1315 & 194 & & 1 & 18 & 13 & 7 & 28 & 8 \\
-			\cline{1-1} \cline{3-8} \cline{10-15}
-			\multicolumn{1}{|c|}{\vdots} & & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
-			\cline{1-1} \cline{3-8} \cline{10-15}
-			\multicolumn{1}{|c|}{20} & & 492 & 962 & 310 & 602 & 1227 & 183 & & 6 & 28 & 21 & 4 & 31 & 16 \\
-			\cline{1-1} \cline{3-8} \cline{10-15}
-		\end{tabular}
-		\caption{Example of historical records}
-		\label{table:histdata}
-	\end{table}
-\end{example}
+%------------------------------------------------------------------------------
+% QUICK-AND-DIRTY METHOD
+%------------------------------------------------------------------------------
+\section{Quick-and-Dirty Method}
+
+\begin{remark}
+	Don't read this section if you don't want pollute your mind.
+	Trying to capture the dependence structure from a few count-data type 
+	observations as a single value is BAD. If you are doing this then you 
+	are not doing risk assessment but gambling or trying to justify your 
+	decisions using quantitative methods. If the risk that you manage is not 
+	yours then you are EVIL. Despite this, we put this section here because 
+	there a lot of people who are already doomed and they want 
+	to repeat its errors over and over again. At least, let us try to make 
+	these errors as smaller as possible.
+\end{remark}
 
 We might be tempted to use the popular nonparametric approach based on discrete 
 default correlation~\cite{lucas:1995,nagpal:2001} for obtaining correlations.
-\underline{Be aware}, this method doesn't work at all in the current model. 
+\underline{Be aware}, this method doesn't work at all in the current framework. 
 To verify this, we simulated 1000 observations of an extremely simple case and we 
-verify that the estimated discrete correlations differ significantly from the 
-original values. The simulated scenario is the following:
+found that the estimated discrete correlations differ significantly from the 
+original values. Consider the following scenario:
 \begin{itemize}
 	\item Gaussian case ($\nu = \infty$).
 	\item One non-defaulted rating, A, with 1-year default probability $p_A=5\%$
@@ -1074,16 +1091,14 @@ in~\cite{nagpal:2001}:
 \begin{displaymath}
 	\widetilde{\rho_{ij}} = \frac{p_{ij} - p_i \cdot p_j}{\sqrt{p_i \cdot (1-p_i)} \cdot \sqrt{p_j \cdot (1-p_j)}}
 	\quad \text{ where } \quad
-	\quad
 	\left\{
 		\begin{array}{ll}
-			p_i = \frac{\sum K_i^t}{\sum N_i^t} & i = 1,2 \\
-			p_{ii} = \frac{\sum K_i^t \cdot (K_i^t-1)}{\sum N_i^t \cdot (N_i^t-1)} & i = 1,2 \\
+			p_i = \frac{\sum K_i^t}{\sum N_i^t} & \forall\ i \\
+			p_{ii} = \frac{\sum K_i^t \cdot (K_i^t-1)}{\sum N_i^t \cdot (N_i^t-1)} & \forall\ i \\
 			p_{ij} = \frac{\sum K_i^t \cdot K_j^t}{\sum N_i^t \cdot N_j^t} & i \ne j \\
 		\end{array}
 	\right.
 \end{displaymath}
-
 Finally we compare these estimated values with the exact values
 (using proposition \ref{prop:tmfm}) to assert that differences are too 
 high to be attributed to a small sample size.
@@ -1101,6 +1116,117 @@ high to be attributed to a small sample size.
 	\hline
 \end{tabular}
 
+We have assessed that the above formula does not work. The following 
+proposition uses these ideas to propose a correlation statistic adapted to
+the current model.
+
+\begin{definition}[Quick-and-dirty correlation]
+	$\widetilde{\rho_{ij}}$ is an estimator of the default correlation between 
+	obligors when there is a unique non-defaulted rating and the available data 
+	is the observed number of defaults that satisfies:
+	\begin{displaymath}
+		p_{ij} - \displaystyle \int_{-\infty}^{t_{\nu}^{-1}(p_i)} \int_{-\infty}^{t_{\nu}^{-1}(p_j)} 
+		f(x,y\ ;\ \nu, \widetilde{\rho_{ij}})\ \ud x \ud y = 0
+		\quad \text{ where } \quad
+		\left\{
+			\begin{array}{ll}
+				p_i = \frac{\sum K_i^t}{\sum N_i^t} & \forall\ i \\
+				p_{ii} = \frac{\sum K_i^t \cdot (K_i^t-1)}{\sum N_i^t \cdot (N_i^t-1)} & \forall\ i \\
+				p_{ij} = \frac{\sum K_i^t \cdot K_j^t}{\sum N_i^t \cdot N_j^t} & i \ne j \\
+			\end{array}
+		\right.
+	\end{displaymath}
+	where $N_i^t$ and $K_i^t$ are respectively the number of obligors and 
+	defaults in the i-th sector and t-th year, $f(x,y\ ;\ \nu,\rho_{ij})$ 
+	is the pdf of the bivariate t-Student, and $t_{\nu}^{-1}$ is the inverse 
+	of the cdf of the univariate t-Student. Listing \ref{sc:qadc} implements
+	this estimator in the $R$ language.
+\end{definition}
+
+\begin{lstlisting}[language=R, label=sc:qadc, caption=Quick-and-dirty correlation (R script)]
+
+ #install.packages("mvtnorm")
+ library(mvtnorm)
+
+ pri <- function(i, K, N)
+ {
+   if (sum(dim(K)!=dim(N))) stop("K and N dim differs")
+   if (i <= 0 | ncol(K) < i) stop("i out-of-range")
+   ret = sum(K[,i])/sum(N[,i])
+   return(ret)
+ }
+
+ prij <- function(i, j, K, N)
+ {
+   if (sum(dim(K)!=dim(N))) stop("K and N dim differs")
+   if (i <= 0 | ncol(K) < i) stop("i out-of-range")
+   if (j <= 0 | ncol(K) < j) stop("j out-of-range")
+   if (i != j) {
+     ret = sum(K[,i]*K[,j])/sum(N[,i]*N[,j])
+   }
+   else {
+     ret = sum(K[,i]*(K[,i]-1))/sum(N[,i]*(N[,i]-1))
+   }
+   return(ret)
+ }
+
+ f <- function(r, nu, p1, p2, p12)
+ {
+   q1 = qt(p1, df=nu)
+   q2 = qt(p2, df=nu)
+   R = matrix(nrow=2, ncol=2, 1)
+   R[1,2] = R[2,1] = r
+   val = pmvt(lower=c(-Inf,-Inf), upper=c(q1,q2), corr=R, df=nu)
+   return(p12-val)
+ }
+
+ quick_and_dirty_correl <- function(nu, K, N)
+ {
+   if (sum(dim(K)!=dim(N))) stop("K and N dim differs")
+   n = ncol(K)
+   ret = matrix(nrow=n, ncol=n, 0)
+   for(i in 1:n) {
+     for(j in i:n) {
+       p1 = pri(i, K, N)
+       p2 = pri(j, K, N)
+       p12 = prij(i, j, K, N)
+       ret[i,j] = uniroot(f, nu, p1, p2, p12, interval=c(-0.9,0.9))$root
+       ret[j,i] = ret[i,j]
+     }
+   }
+   return(ret)
+ }
+
+\end{lstlisting}
+
+We compute the quick-and-dirty estimator of the previous scenario. 
+You can found the results below. This time the estimated values are close 
+to the exact values.
+
+\hspace*{1cm}
+\begin{tabular}{c|c|c|}
+	\cline{2-3}
+	& Exact & Estimated \\
+	\hline
+	\multicolumn{1}{|c|}{$\rho_{11}$} & $w_1^2 = 0.09$ & 0.0963 \\
+	\hline
+	\multicolumn{1}{|c|}{$\rho_{22}$} & $w_2^2 = 0.0625$ & 0.0657 \\
+	\hline
+	\multicolumn{1}{|c|}{$\rho_{12}$} & $w_1 \cdot w_2 \cdot R_{12} = 0.0075$ & 0.0079 \\
+	\hline
+\end{tabular}
+\ \\
+
+The drawbacks of the quick-and-dirty correlation estimator are:
+\begin{inparaenum}[1)]
+	\item don't take into account parameter uncertainty, 
+	\item require knowing in advance the value of $\nu$, and
+	\item only supports one rating per sector.
+\end{inparaenum}
+These drawbacks are also present in most estimators based on a 
+single value such as the maximum likelihood estimator or the method 
+of moments. The rest of this chapter is devoted to obtain a solid 
+method to estimate the dependence parameters.
 
 %------------------------------------------------------------------------------
 % DISTRIBUTION OF THE NUMBERS OF DEFAULTS

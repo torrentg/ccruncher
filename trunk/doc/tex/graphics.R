@@ -518,6 +518,86 @@ for(i in 1:nrow(Y)) {
 # 'Measuring Default Correlation' is false
 # ================================================
 
+ pri <- function(i, K, N)
+ {
+   if (sum(dim(K)!=dim(N))) stop("K and N dim differs")
+   if (i <= 0 | ncol(K) < i) stop("i out-of-range")
+   ret = sum(K[,i])/sum(N[,i])
+   return(ret)
+ }
+
+ prij <- function(i, j, K, N)
+ {
+   if (sum(dim(K)!=dim(N))) stop("K and N dim differs")
+   if (i <= 0 | ncol(K) < i) stop("i out-of-range")
+   if (j <= 0 | ncol(K) < j) stop("j out-of-range")
+   if (i != j) {
+     ret = sum(K[,i]*K[,j])/sum(N[,i]*N[,j])
+   }
+   else {
+     ret = sum(K[,i]*(K[,i]-1))/sum(N[,i]*(N[,i]-1))
+   }
+   return(ret)
+ }
+
+ f <- function(r, nu, p1, p2, p12)
+ {
+   q1 = qt(p1, df=nu)
+   q2 = qt(p2, df=nu)
+   R = matrix(nrow=2, ncol=2, 1)
+   R[1,2] = R[2,1] = r
+   val = pmvt(lower=c(-Inf,-Inf), upper=c(q1,q2), corr=R, df=nu)
+   return(p12-val)
+ }
+
+ quick_and_dirty_correl <- function(nu, K, N)
+ {
+   if (sum(dim(K)!=dim(N))) stop("K and N dim differs")
+   n = ncol(K)
+   ret = matrix(nrow=n, ncol=n, 0)
+   for(i in 1:n) {
+     for(j in i:n) {
+       p1 = pri(i, K, N)
+       p2 = pri(j, K, N)
+       p12 = prij(i, j, K, N)
+       ret[i,j] = uniroot(f, nu, p1, p2, p12, interval=c(-0.9,0.9))$root
+       ret[j,i] = ret[i,j]
+     }
+   }
+   return(ret)
+ }
+
+lucas <- function(K, N)
+{
+  n = ncol(K)
+  p = 1:n
+
+  for(i in 1:n) {
+    p[i] = pri(i, K, N)
+  }
+
+  ret = matrix(nrow=n, ncol=n, 0)
+
+  for(i in 1:n) {
+    for(j in i:n) {
+      ret[i,j] = (prij(i,j,K,N)-p[i]*p[j])/sqrt(p[i]*(1-p[i])*p[j]*(1-p[j]))
+    }
+  }
+
+  return(ret)
+}
+
+exact <- function(rcount)
+{
+  ret = matrix(ncol=2, nrow=2, 0)
+  ret[1,1] = rcount$w[1]^2
+  ret[2,2] = rcount$w[2]^2
+  ret[1,2] = ret[2,1] = rcount$w[1]*rcount$w[2]*rcount$R[1,2]
+  return(ret)
+}
+
+#----------
+
 # 2-FACTORS, 1-RATING
 p = c(0.05)
 w = c(0.3, 0.25)
@@ -526,94 +606,10 @@ R = matrix(ncol=2, nrow=2, data=c(1.0,0.1,0.1,1.0))
 nu = 10000
 rcount = ccruncher.rcount(1000, p, D, w, R, nu)
 
+K = rcount$K
+N = matrix(nrow=nrow(K), ncol=2, 750)
 
-pri1 <- function(i, rcount)
-{
-  T = nrow(rcount$K)
-  ret = sum(rcount$K[,i]/rcount$D[i,1])
-  return(ret/T)
-}
-
-prij1 <- function(i, j, rcount)
-{
-  T = nrow(rcount$K)
-  if (i != j) {
-    ret = sum((rcount$K[,i]*rcount$K[,j])/(rcount$D[i,1]*rcount$D[j,1]))
-  }
-  else {
-    ret = sum((rcount$K[,i]*(rcount$K[,i]-1))/(rcount$D[i,1]*(rcount$D[i,1]-1)))
-  }
-  return(ret/T);
-}
-
-correl1 <- function(rcount)
-{
-  n = nrow(rcount$D)
-  p = 1:n
-
-  for(i in 1:n) {
-    p[i] = pri1(i, rcount)
-  }
-
-  ret = matrix(nrow=n, ncol=n, 0)
-
-  for(i in 1:n) {
-    for(j in i:n) {
-      ret[i,j] = (prij1(i,j,rcount)-p[i]*p[j])/sqrt(p[i]*(1-p[i])*p[j]*(1-p[j]))
-    }
-  }
-
-  return(ret)
-}
-
-#----------
-
-pri2 <- function(i, rcount)
-{
-  T = nrow(rcount$K)
-  ret = sum(rcount$K[,i])/(T*rcount$D[i,1])
-  return(ret)
-}
-
-prij2 <- function(i, j, rcount)
-{
-  T = nrow(rcount$K)
-  if (i != j) {
-    ret = sum(rcount$K[,i]*rcount$K[,j])/(T*rcount$D[i,1]*rcount$D[j,1])
-  }
-  else {
-    ret = sum(rcount$K[,i]*(rcount$K[,i]-1))/(T*rcount$D[i,1]*(rcount$D[i,1]-1))
-  }
-  return(ret);
-}
-
-correl2 <- function(rcount)
-{
-  n = nrow(rcount$D)
-  p = 1:n
-
-  for(i in 1:n) {
-    p[i] = pri2(i, rcount)
-  }
-
-  ret = matrix(nrow=n, ncol=n, 0)
-
-  for(i in 1:n) {
-    for(j in i:n) {
-      ret[i,j] = (prij2(i,j,rcount)-p[i]*p[j])/sqrt(p[i]*(1-p[i])*p[j]*(1-p[j]))
-    }
-  }
-
-  return(ret)
-}
-
-#----------
-
-correl1(rcount)
-correl2(rcount)
-
-rcount$w[1]^2
-rcount$w[2]^2
-rcount$w[1]*rcount$w[2]*rcount$R[1,2]
-
+exact(rcount)
+lucas(K, N)
+quick_and_dirty_correl(rcount$nu, K, N)
 
