@@ -1040,17 +1040,17 @@ and~\ref{prop:tmfm}).
 %------------------------------------------------------------------------------
 \section{Quick-and-Dirty Method}
 
-\begin{remark}
-	Don't read this section if you don't want pollute your mind.
-	Trying to capture the dependence structure from a few count-data type 
-	observations as a single value is BAD. If you are doing this then you 
-	are not doing risk assessment but gambling or trying to justify your 
-	decisions using quantitative methods. If the risk that you manage is not 
-	yours then you are EVIL. Despite this, we put this section here because 
-	there a lot of people who are already doomed and they want 
-	to repeat its errors over and over again. At least, let us try to make 
-	these errors as smaller as possible.
-\end{remark}
+% \begin{remark}
+% 	Don't read this section if you don't want pollute your mind.
+% 	Trying to capture the dependence structure from a few count-data type 
+% 	observations as a single value is BAD. If you are doing this then you 
+% 	are not doing risk assessment but gambling or trying to justify your 
+% 	decisions using quantitative methods. If the risk that you manage is not 
+% 	yours then you are EVIL. Despite this, we put this section here because 
+% 	there a lot of people who are already doomed and they want 
+% 	to repeat its errors over and over again. At least, let us try to make 
+% 	these errors as smaller as possible.
+% \end{remark}
 
 We might be tempted to use the popular nonparametric approach based on discrete 
 default correlation~\cite{lucas:1995,nagpal:2001} for obtaining correlations.
@@ -1118,7 +1118,7 @@ high to be attributed to a small sample size.
 
 We have assessed that the above formula does not work. The following 
 proposition uses these ideas to propose a correlation statistic adapted to
-the current model.
+the current framework.
 
 \begin{definition}[Quick-and-dirty correlation]
 	$\widetilde{\rho_{ij}}$ is an estimator of the default correlation between 
@@ -1223,10 +1223,9 @@ The drawbacks of the quick-and-dirty correlation estimator are:
 	\item require knowing in advance the value of $\nu$, and
 	\item only supports one rating per sector.
 \end{inparaenum}
-These drawbacks are also present in most estimators based on a 
-single value such as the maximum likelihood estimator or the method 
-of moments. The rest of this chapter is devoted to obtain a solid 
-method to estimate the dependence parameters.
+For these reasons, you should not use this estimator. The rest of 
+this chapter is devoted to obtain a solid method to estimate the 
+dependence parameters.
 
 %------------------------------------------------------------------------------
 % DISTRIBUTION OF THE NUMBERS OF DEFAULTS
