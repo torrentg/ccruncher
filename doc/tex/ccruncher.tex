@@ -176,14 +176,14 @@ please cite it when using it for credit risk analysis.
 %==============================================================================
 \chapter{Introduction}
 
-The \textbf{CCruncher} project provides a framework for quantify portfolio 
+The \textbf{CCruncher} project provides a framework to quantify portfolio 
 credit risk. It is developed and maintained by 
-\href{http://www.tatine.es}{Tatine}, a quantitative consulting firm located 
-in Barcelona (Catalonia, Spain). You can download the latest version of the 
-project from the CCruncher's site, \url{http://www.ccruncher.net}.
+\href{http://www.tatine.es}{Tatine}, a consulting firm located in Barcelona 
+(Catalonia, Spain). You can download the latest version of the project from 
+the CCruncher's site, \url{http://www.ccruncher.net}.
 
-The framework consist of this document that explains the models and algorithms, 
-and a piece of software that implements it in an efficient way. 
+The CCruncher framework consists of this document that explains the models and 
+algorithms, and a piece of software that implements it in an efficient way. 
 Both elements, documentation and software, are licensed with open-source type 
 licenses. CCruncher is a mature and active project in which you can participate 
 sending your suggestions and contributions to 
@@ -207,7 +207,7 @@ when the number of components in each factor is high.
 Portfolio credit risk tries to respond to questions like: \enquote{what is the 
 portfolio expected loss for the next year?}, and \enquote{how much could I 
 lose in a really bad year?}. There are several approaches to answer these 
-questions. Here we present briefly the two most used approaches~\cite{crouhy:2000} 
+questions. Below we present briefly the two most used approaches~\cite{crouhy:2000} 
 \cite[chap. 2.4]{bluhm:2002}. Both try to do the same: obtain the portfolio 
 loss distribution and measure the credit risk using a set of selected 
 statistics (eg.\ mean, quantile). They differ on how to obtain this 
@@ -232,10 +232,10 @@ Other representatives are the KMV model~\cite{kmv:2003}, or the copula
 approach~\cite{li:2000}. 
 
 Both approaches give similar results for simple cases~\cite{koyluoglu:1998},
-but differ when the dependence structure between obligors is distinct than
-the simplistic case~\cite{bluhm:2001}. CCruncher implements the copula 
-approach, a Merton model variant that puts the focus on the dependence among 
-obligors, one of the key points in the portfolio credit risk quantification.
+but differ when there is more than a factor~\cite{bluhm:2001}. 
+CCruncher implements the copula approach, a Merton model variant that puts 
+the focus on the dependence among obligors, one of the key points in the 
+portfolio credit risk quantification.
 
 \textbf{Copula approach}. This approach considers that the obligors default 
 times are the proper way to explain the observed defaults. The dependence 
@@ -246,49 +246,42 @@ David X. Li introduced this approach in the famous document
 which stated that the CreditMetrics{\texttrademark} model can be interpreted 
 in the copula approach context and that has a Gaussian copula.
 
-CCruncher quantifies the portfolio credit risk simulating the portfolio loss
+CCruncher quantifies the portfolio credit risk sampling the portfolio loss
 distribution multiple times and computing the appropriate statistics (EL, 
-VaR, ES) over this sample. The portfolio losses are obtained simulating 
-the obligors default times and the EADs and LGDs of its assets. These 
-default times are a multivariate distribution where its marginals are 
-the probabilities of default given by the obligors ratings, and dependence
-structure between obligors is determined by the obligors industrial sector.
+VaR, ES). The portfolio losses are obtained simulating the obligors default 
+times, and simulating the EADs and LGDs of the obligors' assets. The obligors 
+default times is a multivariate distribution where marginals are the 
+probabilities of default given by obligors' ratings, and dependence between 
+obligors is determined by obligors' industrial sectors.
 CCruncher assumes that the dependence structure is a t-Student copula.
 This document provides a guide to estimate the copula parameters using
-Bayesian inference and encourages to transfer the parameters uncertainty
+Bayesian inference and encourages transferring the parameters uncertainty
 to the credit risk measures.
 
-CCruncher quantifies the credit risk of portfolios with a buy-and-hold policy. 
-Also it is necessary that each obligor has an assigned rating, belongs to an 
-unique economic sector, and has known assets exposures and recoveries. 
-An example of a credit portfolio that can benefit of CCruncher is a SMEs 
-loan portfolio (buy-and-hold, rated obligors, multiple sectors where each
-obligor belongs to a unique sector, known EADs and LGDs).
+CCruncher requires a portfolio with a buy-and-hold policy, where each obligor 
+has a rating assigned, and belongs to a single economic sector.
+An example of such credit portfolio is a SMEs loan portfolio (buy-and-hold, 
+rated obligors, multiple sectors where each obligor belongs to a single sector). 
 Unlike CreditMetrics{\texttrademark}, CCruncher doesn't follow a mark-to-market 
-account, but follows a two-state model (default/no-default). Later we use the 
-transition matrix concept in order to determine the shape of PD functions, 
-not to perform an accounting type mark-to-market.
+account, but follows a two-state model (default/no-default). 
 
 The advantages of CCruncher are: 
 \begin{inparaenum}[1)]
-	\item avoids over-simplifications, 
-	\item supports multiple risk measures (eg. user defined),
-	\item don't presuppose uniform transition matrix,
-	\item correlations are considered suitably, 
-	\item allows to consider parameters uncertainty,
-	\item allows multiple sub-portfolios (risk disaggregation),
 	\item allows multiple factors,
 	\item allows multiple ratings,
 	\item obligors can have multiple assets,
 	\item each of them with their own EAD and LGD,
 	\item that can be stochastic values, and
-	\item vary over the time.
+	\item vary over the time, moreover
+	\item allows risk disaggregation,
+	\item don't presuppose uniform transition matrix,
+	\item correlations are considered suitably, and
+	\item allows to consider parameters uncertainty.
 \end{inparaenum}
 
 The disadvantages of CCruncher are: 
 \begin{inparaenum}[1)]
 	\item computationally intensive,
-	\item requires a big amount of simulations,
 	\item lack of precision due to Monte Carlo barrier $1/\sqrt{N}$,
 	\item obligors can't belong to a weighted sum of factors,
 	\item correlations are constant over time,
