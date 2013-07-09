@@ -85,7 +85,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1080}
+\def\svnversion{R1084}
 
 %----------------------------------------------------------------------------------------
 
@@ -176,33 +176,25 @@ please cite it when using it for credit risk analysis.
 %==============================================================================
 \chapter{Introduction}
 
-The \textbf{CCruncher} project provides a framework to quantify portfolio 
-credit risk. It is developed and maintained by 
-\href{http://www.tatine.es}{Tatine}, a consulting firm located in Barcelona 
-(Catalonia, Spain). You can download the latest version of the project from 
-the CCruncher's site, \url{http://www.ccruncher.net}.
+The \textbf{CCruncher} project is a framework to quantify portfolio credit 
+risk. It is developed and maintained by \href{http://www.tatine.es}{Tatine}, 
+a consulting firm located in Barcelona (Catalonia, Spain). You can download 
+the latest version of the project from the CCruncher's site, 
+\url{http://www.ccruncher.net}.
 
-The CCruncher framework consists of this document that explains the models and 
-algorithms, and a piece of software that implements it in an efficient way. 
-Both elements, documentation and software, are licensed with open-source type 
-licenses. CCruncher is a mature and active project in which you can participate 
-sending your suggestions and contributions to 
-\href{mailto:gtorrent@ccruncher.net}{gtorrent@ccruncher.net}.
+The CCruncher framework consists of this document that explains the models 
+and algorithms, and a piece of software. Both elements, documentation and 
+software, are licensed with open-source type licenses. CCruncher is a mature 
+and active project in which you can participate sending your suggestions and 
+contributions to \href{mailto:gtorrent@ccruncher.net}{gtorrent@ccruncher.net}.
 Because it is an evolving project, it is recommended to mention the version
 identifier when you refer the project name (eg.\ CCruncher-\numversion).
 
-This document provides a comprehensive view of credit risk modeling 
-under the copula approach (t-Student case), emphasizing the practical aspects. 
-Care is taken to make short introductions about the methods and concepts used, 
-give examples, and to mention the small details of implementation.
-This document does not provide new basic results. Most exposed models and 
-algorithms are used for some time. There are two exceptions to this. First, 
-no references have been found about the internals of parameter estimation
-in the general case. For this reason, the development of this section is 
-original. Its validity has been verified with tests listed in the document. 
-And second, the minor result that states that t-Student multi-factor model 
-and multivariate t-Student with correlation block matrix are quasi-equivalents 
-when the number of components in each factor is high.
+This document provides a comprehensible view of credit risk modeling under the
+copula approach (t-Student case). It emphasize the practical aspects, taking 
+care to make short introductions about the methods and concepts used, give 
+examples, and mention the small details of implementation. It isn't a software
+guide.
 
 Portfolio credit risk tries to respond to questions like: \enquote{what is the 
 portfolio expected loss for the next year?}, and \enquote{how much could I 
@@ -232,7 +224,8 @@ Other representatives are the KMV model~\cite{kmv:2003}, or the copula
 approach~\cite{li:2000}. 
 
 Both approaches give similar results for simple cases~\cite{koyluoglu:1998},
-but differ when there is more than a factor~\cite{bluhm:2001}. 
+but differ when there is more than one factor~\cite{bluhm:2001}, that is, 
+when the dependence between debtors stop being simple.
 CCruncher implements the copula approach, a Merton model variant that puts 
 the focus on the dependence among obligors, one of the key points in the 
 portfolio credit risk quantification.
@@ -286,11 +279,19 @@ The disadvantages of CCruncher are:
 	\item obligors can't belong to a weighted sum of factors,
 	\item correlations are constant over time,
 	\item dependence only relies on sectors,
-	\item only a copula type is supported, and
-	\item mark-to-market not supported.
+	\item only one copula type is supported, and
+	\item mark-to-market isn't supported.
 \end{inparaenum}
 Despite this, CCruncher is designed to be very fast doing most simulations
 in seconds or minutes if the portfolio is really huge.
+
+The original results contained in this document are: 
+\begin{inparaenum}[1)]
+	\item justification about the multi-factor model coverage,
+	\item the proposal of a new correlation estimator named \emph{quick-and-dirty},
+	\item description of the parameters estimation using the Metropolis-Hastings algorithm, and
+	\item transferring the dependence parameters uncertainty to the credit risk measures.
+\end{inparaenum}
 
 The content is organized in three chapters. The first one details the 
 distribution used to simulate the obligors default times. It is easy to 
@@ -309,7 +310,6 @@ chapter (default times modeling). These are a recommended reading because
 contain key statements and establish the used notation.
 
 %TODO: identificar els suposits (cicle econ., rating 1-year, etc.)
-%TODO: implications (fixed correlations, economic cycle)
 
 
 %==============================================================================
@@ -1033,18 +1033,6 @@ and~\ref{prop:tmfm}).
 %------------------------------------------------------------------------------
 \section{Quick-and-Dirty Method}
 
-% \begin{remark}
-% 	Don't read this section if you don't want pollute your mind.
-% 	Trying to capture the dependence structure from a few count-data type 
-% 	observations as a single value is BAD. If you are doing this then you 
-% 	are not doing risk assessment but gambling or trying to justify your 
-% 	decisions using quantitative methods. If the risk that you manage is not 
-% 	yours then you are EVIL. Despite this, we put this section here because 
-% 	there a lot of people who are already doomed and they want 
-% 	to repeat its errors over and over again. At least, let us try to make 
-% 	these errors as smaller as possible.
-% \end{remark}
-
 We might be tempted to use the popular nonparametric approach based on discrete 
 default correlation~\cite{lucas:1995,nagpal:2001} for obtaining correlations.
 \underline{Be aware}, this method doesn't work at all in the current framework. 
@@ -1333,14 +1321,14 @@ to solve the problem recurring to the multi-factor formulation.
 	We can express the density of the annual number of defaults using 
 	the conditioned density:
 	\begin{displaymath}
-		\begin{array}{l}
-			K(k_{11},\dots,k_{sr}\ ;\ \nu, \vec{w}, R) =                \\
-			\\
-			\displaystyle \int_0^{\infty} \int_{\mathbb{R}^k}                                         
+		%\begin{array}{l}
+			K(k_{11},\dots,k_{sr}\ ;\ \nu, \vec{w}, R) = %\\
+			%\\
+			\displaystyle \int_0^{\infty} \int_{\mathbb{R}^k}
 			\psi(\upsilon) \cdot \phi(\vec{z}) \cdot
 			K(k_{11},\dots,k_{sr} \mid \upsilon,\vec{z}\ ;\ \nu,\vec{w}, R) 
 			\ \ud z_1 \dots \ud z_k \ud \upsilon
-		\end{array}
+		%\end{array}
 	\end{displaymath}
 	where $\psi$ is the pdf of $\chi_{\nu}^2$, and $\phi$ is the pdf of $N(0,R)$.
 \end{corollary}
