@@ -85,7 +85,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1086}
+\def\svnversion{R1087}
 
 %----------------------------------------------------------------------------------------
 
@@ -283,10 +283,10 @@ The disadvantages of CCruncher are:
 	\item mark-to-market isn't supported.
 \end{inparaenum}
 
-The original results contained in this document are: 
+The original results claimed by this document are: 
 \begin{inparaenum}[1)]
 	\item limitations of the t-Student multi-factor model with respect to 
-	the multivariate t-Student,
+	the multivariate t-Student distribution,
 	\item a new estimator of the obligors default time correlation named 
 	\emph{quick-and-dirty},
 	\item estimation of the t-Student copula parameters using the 
@@ -602,7 +602,7 @@ extracted from~\cite{kreinin:2001}.
 	Finally we use the proposition~\ref{prop:pdftm} to determine the 
 	PD function for each rating and month. Results are displayed in 
 	figure~\ref{fig:pdftm}. Observe that values around $T=1$ are similar 
-	to those of 	example~\ref{ex:pdfsv}, but they differ as they move 
+	to those of example~\ref{ex:pdfsv}, but they differ as they move 
 	away from this.
 
 	\begin{figure}[!ht]
@@ -623,11 +623,9 @@ extracted from~\cite{kreinin:2001}.
 There are financial institutions that may have models to forecast 
 the transition matrix using some economic indicators like GDP
 or inflation. We note as $M_T(t)$ the T-period transition matrix
-at time $t$. This matrix depends of the forecasted indicators at 
-$t$ in the form $M_T(\theta_1(t),\dots,\theta_k(t))$. In these 
-cases, the PDs functions can be obtained composing successively
-the transition matrices for each T-period. The PD for an obligor
-with rating $r_j$ is:
+at time $t$. In these cases, the PDs functions can be obtained 
+composing successively the transition matrices for each T-period. 
+The PD for an obligor with rating $r_j$ is:
 \begin{displaymath}
 	\Pr\{T_. \le t\} = \left(
 		\left( \prod_{i=1}^{[t/T]} M_T(i) \right) \cdot 
@@ -647,7 +645,7 @@ the most suitable for risk estimates in the medium and long term.
 CCruncher allows to describe the PDs derived from advanced models specifying 
 its values at given time points. These have to fulfill the cdf conditions:
 \begin{itemize}
-	\item $\text{PD}_r(0) = 0$,
+	\item $\text{PD}_r(0) = 0 \quad r \ne \text{default}$,
 	\item strictly increasing, 
 	\item $\text{PD}_r(\infty) = 1$, and
 	\item $\text{PD}_{\text{default}}(t) = 1 \quad \forall\ t \ge 0$.
@@ -742,19 +740,19 @@ it is immediate to derive a method to sample the default times distribution.
 
 The current situation is not yet satisfactory because the dimension 
 $n {\times} n$ of the obligors correlation matrix causes that any 
-operation (eg.\ simulate random value, or estimate the parameters) cannot 
+attempt to simulate random values or estimate the parameters cannot 
 be done in practice when $n$ is large. For this reason we introduce the
 multi-factor formulation.
 
 \subsection{The multi-factor formulation}
 
-To bypass the dimension problem we assume that a reduced number $k$ of 
+To bypass the problem of dimension we assume that a reduced number $k$ of 
 industrial sectors exists and that each obligor belong to a single sector. 
 Also that default times dependence between obligors only relies on the 
-involved industrials sectors. With these restrictions, if we sort the 
-obligors by sector, the obligors default times correlation matrix, $\bar{R}$, 
-is a $n {\times} n$ correlation block matrix $B_k(\vec{n},\vec{1},M)$. See 
-appendix~\ref{ap:cbm} for more information about covariance block matrices. 
+involved industrials sectors. With these restrictions, and sorting the obligors 
+by sector, we obtain that the obligors default times correlation matrix, is a 
+$n {\times} n$ correlation block matrix, that is $\bar{R} = B_k(\vec{n},\vec{1},M)$. 
+See appendix~\ref{ap:cbm} for more information about covariance block matrices. 
 \begin{displaymath}
 	\bar{R} = B_k(\vec{n},\vec{1},M) = 
 	\left(
@@ -781,18 +779,32 @@ appendix~\ref{ap:cbm} for more information about covariance block matrices.
 		\end{array}
 		\right) \\
 		\\
-		\vec{n} = (n_1,\dots,n_k)
+		\vec{n} = (n_1,\dots,n_k) \\
+		\\
+		n = \displaystyle \sum_{i=1}^{k} n_i
 	\end{array}
 \end{displaymath}
 
 Up to this point the multivariate default times distribution $F$ can 
 be expressed by its marginals $\text{PD}_i$ and a multivariate t-Student 
 distribution, $t_n(\nu,0,\bar{R})$ with an obligors correlation block 
-matrix $\bar{R} = B_k(\vec{n},\vec{1},M)$. The proposition\footnote{
-Proof available in the \emph{Proofs} part.} that follows gives us the 
-key to reformulate the problem as a multi-factor problem.
+matrix $\bar{R} = B_k(\vec{n},\vec{1},M)$. 
 
-%TODO: indicar que multi-factor included and distinct from multivariate t-Student
+The multivariate t-Student distribution relies on the multivariate Gaussian
+distribution (see proposition \ref{prop:mtschar}). The multivariate Gaussian 
+with a correlation block matrix  can be expressed as a multi-factor model in 
+most cases (see proposition \ref{prop:ibne}). The cases that aren't covered 
+are those that contain negative inter-sectorial correlations, and those 
+containing inter-sectorial correlations too high. (see proposition 
+\ref{prop:gmfamgb}). These cases tend to $0$ when we assume that the 
+number of obligors by sector tends to $\infty$. Because we are modeling 
+sectors composed by thousands of individuals, although our portfolio may 
+contain only a few, we can assume that for our purposes the t-Student 
+multi-factor model maps the multivariate t-Student distribution.
+
+The next proposition\footnote{Proof available in the \emph{Proofs} part.} 
+formalize the ideas and gives us the key to reformulate the problem as a 
+multi-factor problem.
 
 \begin{proposition}[t-Student distr.\ as a multi-factor model]
 	\label{prop:tmfm}
@@ -826,15 +838,22 @@ key to reformulate the problem as a multi-factor problem.
 
 Note that we expressed the multi-factor model in terms of the factor 
 loadings and the factors correlation matrix, instead of the more concise 
-covariance matrix. We do this because the factor loadings have a treatment 
-distinct than factors correlation in the estimation procedure.
+form based on the covariance matrix. We do this because the factor loadings 
+have a treatment distinct than factors correlation in the estimation procedure.
 
-Factor loadings $\vec{w}$, measures the correlation between obligors 
-belonging to the same industrial sector $i$, satisfying in the Gaussian case 
-that $\rho_i = w_i^2$. Factor correlations $R$ measure the correlation 
-between factors, and also the correlation between obligors belonging to 
-different sectors, satisfying in the Gaussian case that 
-$\rho_{ij} = w_i \cdot w_j \cdot R_{ij}$.
+\begin{corollary}[Relationship between obligors correlation and factors correlation]
+	\label{cor:rbc}
+	The relationship between the multi-factor parameters, $\vec{w}$ and $R$,
+	and the multivariate parameters $B_k(\vec{n},\vec{1},M)$ is:
+	\begin{displaymath}
+		\begin{array}{ll}
+			\rho_i = w_i^2 & i = 1,\dots,k \\
+			\rho_{ij} = w_i \cdot w_j \cdot R_{ij} & i = 1,\dots,k \quad \text{and} \quad j = 1,\dots,k
+		\end{array}
+	\end{displaymath}
+	where $\rho_{ij}$ is the obligors default times correlation between obligors
+	belonging to i-th and j-th sector respectively.
+\end{corollary}
 
 The t-Student multi-factor model exposed in proposition \ref{prop:tmfm} 
 combined with the corollary~\ref{cor:dts1} provides an efficient algorithm 
@@ -874,9 +893,9 @@ Later we will use this algorithm to simulate the portfolio losses.
 \label{chap:estimation}
 
 We want to estimate the dependence parameters of the multivariate default 
-times model considered as a multi-factor model. These parameters are: the 
-degrees of freedom $\nu$, the factor loadings $\vec{w}$, and the factors 
-correlation matrix $R$.
+times distribution considered as a multi-factor model. These parameters 
+are: the degrees of freedom $\nu$, the factor loadings $\vec{w}$, and the 
+factors correlation matrix $R$.
 
 \begin{definition}[Annual number of defaults]
 	We define the annual number of defaults by sector and rating like a
@@ -1032,7 +1051,7 @@ in~\cite{nagpal:2001}:
 	\right.
 \end{displaymath}
 Finally we compare these estimated values with the exact values (using 
-proposition \ref{prop:tmfm} to convert factor loadings and factor correlations
+corollary \ref{cor:rbc} to convert factor loadings and factor correlations
 to obligors correlations) to assert that differences are too high to be 
 attributed to a small sample size.
 
@@ -3102,6 +3121,7 @@ in~\cite{torrent:2012}.
 \end{proof}
 
 \begin{proposition}[Gaussian multi-factor model $\subsetneq$ multivariate Gaussian block]
+	\label{prop:ibne}
 	Any multi-factor model can be expressed as a multivariate Gaussian 
 	block, but there are multivariate Gaussian blocks that cannot be 
 	expressed as a Gaussian multi-factor model.
