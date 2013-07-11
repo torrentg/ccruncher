@@ -85,7 +85,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1085}
+\def\svnversion{R1086}
 
 %----------------------------------------------------------------------------------------
 
@@ -125,8 +125,8 @@ TODO\@: SET ACKNOWLEDGEMENTS HERE
 
 ~\vfill
 \section*{Contributors}
-The following people have contributed in some way to this document, but this 
-doesn't mean that they support or endorse its contents. 
+The following people have contributed to this document, but this doesn't mean 
+that they support or endorse its contents. 
 Any remaining errors are attributable only to the author.\\
 BE THE FIRST!
 
@@ -219,7 +219,7 @@ gives the portfolio loss distribution. This distribution is approximated
 using the Monte Carlo method. The Basel II accord~\cite{basel2:2006}, the 
 de-facto international financial risk regulation framework, is strongly 
 influenced by this approach~\cite{cespedes:2002}. The main representative of 
-this approach is the CreditMetrics\texttrademark model~\cite{cmetrics:1997}. 
+this approach is the CreditMetrics\texttrademark{} model~\cite{cmetrics:1997}. 
 Other representatives are the KMV model~\cite{kmv:2003}, or the copula 
 approach~\cite{li:2000}. 
 
@@ -236,7 +236,7 @@ between these default times is modeled using a copula. The sum of the
 obligors' exposures at the default times gives the portfolio loss distribution.
 David X. Li introduced this approach in the famous document
 \emph{On Default Correlation: A Copula Function Approach}~\cite{li:2000}
-which stated that the CreditMetrics{\texttrademark} model can be interpreted 
+which stated that the CreditMetrics\texttrademark{} model can be interpreted 
 in the copula approach context and that has a Gaussian copula.
 
 CCruncher quantifies the portfolio credit risk sampling the portfolio loss
@@ -255,7 +255,7 @@ CCruncher requires a portfolio with a buy-and-hold policy, where each obligor
 has a rating assigned, and belongs to a single economic sector.
 An example of such credit portfolio is a SMEs loan portfolio (buy-and-hold, 
 rated obligors, multiple sectors where each obligor belongs to a single sector). 
-Unlike CreditMetrics{\texttrademark}, CCruncher doesn't follow a mark-to-market 
+Unlike CreditMetrics\texttrademark{}, CCruncher doesn't follow a mark-to-market 
 account, but follows a two-state model (default/no-default). 
 
 The advantages of CCruncher are: 
@@ -265,7 +265,7 @@ The advantages of CCruncher are:
 	\item obligors can have multiple assets,
 	\item each of them with their own EAD and LGD,
 	\item that can be stochastic values, and
-	\item vary over the time, moreover
+	\item vary over time, moreover
 	\item allows risk disaggregation,
 	\item don't presuppose uniform transition matrix,
 	\item correlations are considered suitably, and
@@ -282,16 +282,19 @@ The disadvantages of CCruncher are:
 	\item only one copula type is supported, and
 	\item mark-to-market isn't supported.
 \end{inparaenum}
-Despite this, CCruncher is designed to be very fast doing most simulations
-in seconds or minutes if the portfolio is really huge.
 
 The original results contained in this document are: 
 \begin{inparaenum}[1)]
-	\item justification about the multi-factor model coverage,
-	\item the proposal of a new correlation estimator named \emph{quick-and-dirty},
-	\item description of the parameters estimation using the Metropolis-Hastings algorithm, and
-	\item transferring the dependence parameters uncertainty to the credit risk measures.
+	\item limitations of the t-Student multi-factor model with respect to 
+	the multivariate t-Student,
+	\item a new estimator of the obligors default time correlation named 
+	\emph{quick-and-dirty},
+	\item estimation of the t-Student copula parameters using the 
+	Metropolis-Hastings algorithm, and
+	\item transferring the dependence parameters uncertainty to the credit 
+	risk measures.
 \end{inparaenum}
+We intend to publish these results in peer-reviewed journals over the coming years.
 
 The content is organized in three chapters. The first one details the 
 distribution used to simulate the obligors default times. It is easy to 
@@ -301,9 +304,9 @@ estimation. This topic can be rough for those not familiarized
 with MCMC, for this reason it includes a detailed introduction to the 
 Metropolis-Hastings method. You can skip this chapter if you don't need 
 to estimate the parameters of the obligors default times model. Finally, the 
-third chapter contains the credit portfolio loss quantification and details 
-of the implementation. Reading is recommended. You can skip the last 
-section referred to parameters uncertainty if you are not concerned about 
+third chapter describes how to obtain the portfolio loss distribution and 
+quantify the credit risk. It is a recommended reading where you can skip the 
+last section referred to parameters uncertainty if you are not concerned about 
 parameters estimation and its impact in the credit risk measures.
 
 There are four little appendices that cover issues used in the first chapter 
@@ -319,6 +322,7 @@ this document in order to facilitate the reading.
 % MODELING DEFAULT TIMES
 %==============================================================================
 \chapter{Modeling Default Times}
+\label{chap:mdt}
 
 %------------------------------------------------------------------------------
 % THE PROBABILITIES OF DEFAULT
@@ -328,7 +332,9 @@ this document in order to facilitate the reading.
 One pillar of the multivariate default times model are the probabilities 
 of default over time. In this section we define and construct these curves 
 using the available information, such as the 1-year PDs or the ratings 
-transition matrix.
+transition matrix. You can skip this section and goes directly to the 
+multivariate model section if you already know how to obtain the PDs over 
+time.
 
 \begin{definition}[Probability of Default (PD)]
 	The Probability of Default of the i-th obligor, $\text{PD}_i(t)$
@@ -688,10 +694,10 @@ that $C$ is a t-Student copula for the following practical reasons:
 	simulation.
 	\item allows a wide range of dependence structures through parameter $\nu$.
 	\item it exhibits tail dependence when $\nu \ne \infty$.
-	\item exist an efficient simulation algorithm.
-	\item the Gaussian case ($\nu = \infty$) is the copula used by 
-	CreditMetrics\texttrademark.
 	\item it can be expressed as a multi-factor model.
+	\item exist an efficient simulation algorithm.
+	\item the Gaussian case ($\nu = \infty$) leads to the 
+	CreditMetrics\texttrademark{} model.
 \end{itemize}
 
 Previous versions of the CCruncher project implemented a simulation schema
@@ -734,7 +740,7 @@ it is immediate to derive a method to sample the default times distribution.
 	\end{displaymath}
 \end{corollary}
 
-The current formulation is not yet satisfactory because the dimension 
+The current situation is not yet satisfactory because the dimension 
 $n {\times} n$ of the obligors correlation matrix causes that any 
 operation (eg.\ simulate random value, or estimate the parameters) cannot 
 be done in practice when $n$ is large. For this reason we introduce the
@@ -744,7 +750,7 @@ multi-factor formulation.
 
 To bypass the dimension problem we assume that a reduced number $k$ of 
 industrial sectors exists and that each obligor belong to a single sector. 
-Also that default times dependence between obligors only depends on the 
+Also that default times dependence between obligors only relies on the 
 involved industrials sectors. With these restrictions, if we sort the 
 obligors by sector, the obligors default times correlation matrix, $\bar{R}$, 
 is a $n {\times} n$ correlation block matrix $B_k(\vec{n},\vec{1},M)$. See 
@@ -786,6 +792,8 @@ matrix $\bar{R} = B_k(\vec{n},\vec{1},M)$. The proposition\footnote{
 Proof available in the \emph{Proofs} part.} that follows gives us the 
 key to reformulate the problem as a multi-factor problem.
 
+%TODO: indicar que multi-factor included and distinct from multivariate t-Student
+
 \begin{proposition}[t-Student distr.\ as a multi-factor model]
 	\label{prop:tmfm}
 	Let a random vector $X=(X_1,\dots,X_n)$ be with a multivariate t-Student 
@@ -819,7 +827,7 @@ key to reformulate the problem as a multi-factor problem.
 Note that we expressed the multi-factor model in terms of the factor 
 loadings and the factors correlation matrix, instead of the more concise 
 covariance matrix. We do this because the factor loadings have a treatment 
-distinct than factors correlation in the estimation of parameters.
+distinct than factors correlation in the estimation procedure.
 
 Factor loadings $\vec{w}$, measures the correlation between obligors 
 belonging to the same industrial sector $i$, satisfying in the Gaussian case 
@@ -830,7 +838,8 @@ $\rho_{ij} = w_i \cdot w_j \cdot R_{ij}$.
 
 The t-Student multi-factor model exposed in proposition \ref{prop:tmfm} 
 combined with the corollary~\ref{cor:dts1} provides an efficient algorithm 
-to simulate the obligors default times.
+to simulate the obligors default times exposed in the next corollary. 
+Later we will use this algorithm to simulate the portfolio losses.
 
 \begin{corollary}[Default times simulation (II)]
 	\label{cor:dts2}
@@ -945,7 +954,7 @@ is a direct application of the multivariate default times distribution
 and the t-Student multi-factor model (see propositions~\ref{prop:dtd} 
 and~\ref{prop:tmfm}).
 
-\begin{algorithm}[Simulating number of defaults]
+\begin{algorithm}[Annual number of defaults simulation]
 	\label{alg:snod}
 	Let a multivariate default times distribution with a t-Student copula
 	that has $k$ factors, factor loadings $\vec{w}$, factors correlation 
@@ -977,7 +986,7 @@ and~\ref{prop:tmfm}).
 We might be tempted to use the popular nonparametric approach based on discrete 
 default correlation~\cite{lucas:1995,nagpal:2001} for obtaining correlations.
 \underline{Be aware}, this method doesn't work at all in the current framework
-or the CreditMetrics\texttrademark framework. 
+or the CreditMetrics\texttrademark{} framework. 
 To verify this, we simulated 1000 observations of a simple case and we found 
 that the estimated discrete correlations differ significantly from the original 
 values. Consider the following scenario:
@@ -3239,7 +3248,7 @@ The following proposition clarifies this theme.
 %------------------------------------------------------------------------------
 % MODELING DEFAULT TIMES
 %------------------------------------------------------------------------------
-\section{Modeling Default Times}
+\section{\nameref{chap:mdt}}
 
 \subsection{Proposition \ref{prop:pdfsv} -- \nameref{prop:pdfsv} (page \pageref{prop:pdfsv})}
 \begin{proof}
@@ -3317,7 +3326,10 @@ The following proposition clarifies this theme.
 	proposition~\ref{prop:gmfamgb}.
 \end{proof}
 
-\section{Estimating Parameters}
+%------------------------------------------------------------------------------
+% ESTIMATING PARAMETERS
+%------------------------------------------------------------------------------
+\section{\nameref{chap:estimation}}
 
 \subsection{Proposition \ref{prop:cdand} -- \nameref{prop:cdand} (page \pageref{prop:cdand})}
 \begin{proof}
