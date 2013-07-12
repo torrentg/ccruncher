@@ -54,7 +54,8 @@
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
 
 % Bibliography
-\usepackage[hidelinks]{hyperref} %added by GTG
+\usepackage[hidelinks,hyperfootnotes=false]{hyperref} %added by GTG
+\usepackage[all]{hypcap} % needed to help hyperlinks direct correctly
 \usepackage{csquotes} %added by GTG
 %\usepackage[backend=bibtex]{biblatex} %added by GTG
 %\usepackage[sorting=nyt,sortcites=true,autopunct=true,babel=hyphen,hyperref=true,abbreviate=false,backend=biber]{biblatex} %style=alphabetic,backref=true,
@@ -79,13 +80,14 @@
 \usepackage{wrapfig}
 \usepackage{bbm}
 \usepackage{listings}
+\usepackage{soul}
 
 \usepackage[firstpage]{draftwatermark}
 \SetWatermarkText{DRAFT COPY}
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1087}
+\def\svnversion{R1088}
 
 %----------------------------------------------------------------------------------------
 
@@ -794,7 +796,7 @@ The multivariate t-Student distribution relies on the multivariate Gaussian
 distribution (see proposition \ref{prop:mtschar}). The multivariate Gaussian 
 with a correlation block matrix  can be expressed as a multi-factor model in 
 most cases (see proposition \ref{prop:ibne}). The cases that aren't covered 
-are those that contain negative inter-sectorial correlations, and those 
+are those that contain negative intra-sectorial correlations, and those 
 containing inter-sectorial correlations too high. (see proposition 
 \ref{prop:gmfamgb}). These cases tend to $0$ when we assume that the 
 number of obligors by sector tends to $\infty$. Because we are modeling 
@@ -966,12 +968,11 @@ factors correlation matrix $R$.
 % and the economic cycle and requires to be estimated based on historical 
 % data and current PD models.
 
-Below we provide an algorithm to simulate the number of defaults based on
-the multi-factor model. We will use it to generate samples with which 
-we can test the parameters estimation procedures. The following algorithm 
-is a direct application of the multivariate default times distribution
-and the t-Student multi-factor model (see propositions~\ref{prop:dtd} 
-and~\ref{prop:tmfm}).
+Below we provide an algorithm to simulate the number of defaults. It is a 
+direct application of the multivariate default times distribution and the 
+t-Student multi-factor model (see propositions~\ref{prop:dtd} 
+and~\ref{prop:tmfm}). We will use it to generate samples with which we can 
+test the parameters estimation procedures. 
 
 \begin{algorithm}[Annual number of defaults simulation]
 	\label{alg:snod}
@@ -1051,9 +1052,9 @@ in~\cite{nagpal:2001}:
 	\right.
 \end{displaymath}
 Finally we compare these estimated values with the exact values (using 
-corollary \ref{cor:rbc} to convert factor loadings and factor correlations
-to obligors correlations) to assert that differences are too high to be 
-attributed to a small sample size.
+corollary \ref{cor:rbc} to convert factor correlations to obligors 
+correlations) to assert that differences are too high to be attributed 
+to a small sample size.
 
 \hspace*{1cm}
 \begin{tabular}{c|c|c|}
@@ -1073,9 +1074,9 @@ required by the current model. The following proposition uses these ideas to
 suggest a new correlation statistic.
 
 \begin{definition}[Quick-and-dirty correlation]
-	$\widetilde{\rho_{ij}}$ is an estimator of the default correlation between 
-	obligors when there is a unique non-defaulted rating and the available data 
-	is the observed number of defaults that satisfies:
+	$\widetilde{\rho_{ij}}$ is an estimator of the default time correlation 
+	between obligors when there is a unique non-defaulted rating and the 
+	available data is the annual number of defaults that satisfies:
 	\begin{displaymath}
 		p_{ij} - \displaystyle \int_{-\infty}^{t_{\nu}^{-1}(p_i)} \int_{-\infty}^{t_{\nu}^{-1}(p_j)} 
 		f(x,y\ ;\ \nu, \widetilde{\rho_{ij}})\ \ud x \ud y = 0
@@ -1280,41 +1281,22 @@ numerically with accuracy when the number of factors is high (eg. 10).
 %------------------------------------------------------------------------------
 \section{Bayesian Inference}
 
-\begin{wrapfigure}{r}{0.4\textwidth}
-	\vspace{-20pt}
-	\begin{center}
-		\includegraphics[width=0.38\textwidth]{ccbnd}
-	\end{center}
-	\vspace{-10pt}
-	\caption{Distr.\ of correlation coefficient of the bivariate Normal with $\rho=0.2$ and sample size $20$.}
-	\vspace{-10pt}
-	\label{fig:ccbnd}
-\end{wrapfigure}
-Parameters $\vec{w}$ and $R$ are variances and correlations that must be 
-estimated. It is difficult to estimate this type of statistics. To illustrate
-this we suppose a simplified problem: estimate the correlation of a bivariate 
-Normal distribution with $\rho=0.2$ from a sample size of $20$. 
-Figure~\ref{fig:ccbnd} displays the distribution of the correlation 
-coefficient~\cite[pp. 217--221]{kenney:1951}. We observe that the 
-uncertainty is important. In fact, the probability that we observe a negative 
-correlation coefficient is significant despite having a correlation value as 
-high as $0.2$. Our goal is the inverse case, we have a correlation coefficient 
-from a sample size of $20$ observations and we estimate the original $\rho$.
-The previous observation about the dispersion indicates that the searched 
-value also can have an important dispersion. This is exacerbated by the fact 
-that some of our variables are latent, and that we are estimating from 
+If you simulate a multivariate Gaussian distribution 20 times and calculate the
+sample correlation you can note that exist a high uncertainty on correlation 
+values. This stylized fact reflects our situation because we are trying to 
+estimate factors correlations among other values. Uncertainty is exacerbated 
+by the fact that our variables are latent, and that we are estimating from 
 observations of type count-data. After this, considering the estimated 
-parameters as unique values, like the Maximum Likelihood estimator, is a naive 
-and risky positioning. The Bayesian approach seems  more appropriate 
-\cite{gossl:2005,tarashev:2010} because it takes into account 
-the uncertainty of the parameters. Later we will see how to transfer 
-this uncertainty to the assessment of credit risk.
+parameters as unique values, like the Maximum Likelihood estimator, is a 
+naive and risky positioning. The Bayesian approach seems  more 
+appropriate~\cite{gossl:2005,tarashev:2010} because it takes into account 
+the uncertainty of the parameters. Later we will see how to transfer this 
+uncertainty to the assessment of credit risk.
 
-Bayesian statistics differ from the classical statistical 
-theory since all unknown parameters are considered as random 
-variables. We want to calculate the distribution $f(\theta \mid y)$ 
-of the parameters $\theta$ given the observed data $y$. 
-According to the Bayes theorem, this can be written as:
+Bayesian statistics differ from the classical statistical theory since all 
+unknown parameters are considered as random variables. We want to calculate 
+the distribution $f(\theta \mid y)$ of the parameters $\theta$ given the 
+observed data $y$. According to the Bayes theorem, this can be written as:
 \begin{displaymath}
 	f(\theta \mid y) = \frac{f(y \mid \theta) \cdot f(\theta)}{f(y)} \propto f(y \mid \theta) \cdot f(\theta)
 \end{displaymath}
@@ -1331,8 +1313,8 @@ known as the likelihood.
 
 In our case, we can define an analytic likelihood function using the 
 conditional density of the number of defaults. Thus it implies that 
-the parameters to be inferred are $\nu,\vec{w},R$ and the latent 
-variables $\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T$.
+the parameters to be inferred are $\nu,\vec{w},R$ \ul{and the latent 
+variables $\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T$}.
 
 \begin{definition}[Conditioned likelihood]
 	Let a set of observations $\{K^t, N^t\}_{t=1,\dots,T}$ be where $N^t$ 
@@ -1342,8 +1324,8 @@ variables $\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T$.
 	\begin{displaymath}
 		\begin{array}{l}
 			L(\nu,\vec{w},R \mid \upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\ ;\ K^1,\dots,K^T) = \\
-			\displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t \mid \upsilon^t,\vec{z}^t\ ;\ \nu,\vec{w},R) = \\
-			\displaystyle
+			= \displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t \mid \upsilon^t,\vec{z}^t\ ;\ \nu,\vec{w},R) = \\
+			= \displaystyle
 			\prod_{t=1}^T \prod_{i=1}^s \prod_{j=1}^r 
 			\binom{n_{ij}^t}{k_{ij}^t} \cdot
 			H_{ij}(\upsilon^t,z_i^t)^{k_{ij}^t} \cdot
@@ -1418,21 +1400,22 @@ As this is a Markov chain, it is irrelevant the chosen starting point
 $x^{(0)}$ because the algorithm converges to the target distribution
 whatever the starting point. If the starting point has low probability 
 respect the target distribution, then the initial samples don't come 
-from the equilibrium distribution and need to be discarded until it is 
-not reached. We call \emph{burnin period} the first $B$ iterations 
-eliminated from the sample for this reason.
+from the equilibrium distribution and need to be discarded until the 
+equilibrium state isn't reached. We call \emph{burnin period} the first 
+$B$ iterations eliminated from the sample for this reason.
 
 \textbf{Bayesian inference}.
-The Metropolis-Hastings algorithm outlined above can be directly implemented to do
-Bayesian inference by substituting $x$ by the unknown parameters, $\theta$, and 
-the target distribution $f(x)$ by the posterior distribution $f(\theta \mid y)$. Then 
-the acceptance rate becomes:
+The Metropolis-Hastings algorithm outlined above can be directly implemented 
+to do Bayesian inference by substituting $x$ by the unknown parameters 
+$\theta$, and the target distribution $f(x)$ by the posterior distribution 
+$f(\theta \mid y)$. Then the acceptance rate becomes:
 \begin{displaymath}
 	\alpha = \min\left(1,\frac{f(\theta' \mid y) \cdot q(\theta \mid \theta')}{f(\theta \mid y) \cdot q(\theta' \mid \theta)}\right) = \min\left(1,\frac{f(y \mid \theta') \cdot f(\theta') \cdot q(\theta \mid \theta')}{f(y \mid \theta)  \cdot f(\theta) \cdot q(\theta' \mid \theta)}\right)
 \end{displaymath}
 
-\textbf{Random-walk Metropolis-Hastings} is a special case with symmetric proposals
-$q(\theta' \mid \theta) = q(\theta \mid \theta')$ where $q(\theta' \mid \theta) \equiv N(\theta,\sigma)$. 
+\textbf{Random-walk Metropolis-Hastings} is a special case with symmetric 
+proposals $q(\theta' \mid \theta) = q(\theta \mid \theta')$ where 
+$q(\theta' \mid \theta) \equiv N(\theta,\sigma)$. 
 In this case the acceptance rate depends only on the posterior distribution
 and, in the Bayesian inference Metropolis-Hastings case, becomes:
 \begin{displaymath}
@@ -1461,7 +1444,7 @@ that performs an adaptive scaling to achieve the desired acceptance ratio.
 		\end{array}
 		\right.
 	\end{displaymath}
-	were the starting value $\sigma_1$ has an arbitrary value.
+	were the starting value $\sigma_1 > 0$ has an arbitrary value.
 \end{proposition}
 
 \textbf{Metropolis-Hastings using logarithms}.
@@ -1490,7 +1473,7 @@ the updating sequence. We use the notation $\theta_{\backslash j}$ to indicate
 the vector $\theta$ excluding its j-th component [ $\theta_{\backslash j}
 = (\theta_1,\dots,\theta_{j-1},\theta_{j+1},\dots,\theta_{d})$ ].
 
-\begin{algorithm}[Bayesian inference Metropolis-Hastings] 
+\begin{algorithm}[Bayesian inference using Metropolis-Hastings] 
 	\label{alg:bimh}
 	Let $f(y \mid \theta)$ the likelihood function, with priors $f_j(\theta_j)$,
 	and desired acceptance ratios $p_j$. Then the parameters distribution
@@ -1570,7 +1553,7 @@ they form a multivariate distribution.
 	Figure~\ref{fig:mhbd} display the results after 25000 iterations.
 	Observe that the first 500 iterations aren't valid because the Markov 
 	chain hasn't achieved the equilibrium distribution. These have to be 
-	considered into the burnin period. The histogram of the sampled values
+	considered into the burnin period. The histograms of the sampled values
 	approximates the parameters distribution that we are inferring.
 	\begin{figure}[!ht]
 		\centering
@@ -1601,9 +1584,9 @@ they form a multivariate distribution.
 
 \begin{proposition}[Parameters estimation]
 	\label{prop:pemh}
-	We can estimate the parameters of the conditioned likelihood using
-	the Bayesian framework and Metropolis-Hastings algorithm 
-	(see algorithm~\ref{alg:bimh}) with the following rules:
+	We can estimate the parameters of the t-Student copula from the annual 
+	number of defaults using the Metropolis-Hastings algorithm (see 
+	algorithm~\ref{alg:bimh}) considering:
 	\begin{itemize}
 		\item parameters $\theta \equiv \{ \nu,\vec{w},R,\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\}$
 		\item observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$
@@ -1643,9 +1626,9 @@ they form a multivariate distribution.
 				p_A=2\%     \\
 				p_B=8\%     \\
 			\end{array}
-			\quad
+			\quad \text{,} \quad
 			\vec{w} = (0.4, 0.25, 0.3)
-			\quad 
+			\quad \text{,} \quad
 			R = \left(
 			\begin{array}{ccc}
 				1 & 0.5 & 0.3 \\
@@ -1678,11 +1661,12 @@ they form a multivariate distribution.
 	\end{itemize}
 	\vspace{11pt}
 
-	\textbf{1000 observations}. We simulate 1000 observations of the numbers of 
-	defaults by sector-rating using the algorithm~\ref{alg:snod}. Then we infer 
-	the parameters distribution from this sample using the Metropolis-Hastings 
-	algorithm~\ref{alg:bimh}. Results are displayed in figure~\ref{fig:calib1}.
-	Note that variance of factor loadings is lower than factor correlations.
+	\textbf{1000 observations case}. We simulate 1000 observations of the number 
+	of defaults by sector-rating using the algorithm~\ref{alg:snod}. Then we 
+	infer the parameters distribution from this sample using the 
+	Metropolis-Hastings algorithm~\ref{alg:bimh}. Results are displayed in 
+	figure~\ref{fig:calib1}. Note that variance of factor loadings is lower than 
+	factor correlations.
 	\begin{figure}[!ht]
 		\centering
 		\subcaptionbox{Simulated defaults}{
@@ -1721,7 +1705,7 @@ they form a multivariate distribution.
 		\label{fig:calib1}
 	\end{figure}
 
-	\textbf{20 observations}. To appreciate the impact of the number of 
+	\textbf{20 observations case}. To appreciate the impact of the number of 
 	observations in the final result we repeat the estimation procedure 
 	but considering only the first 20 observations instead of the 1000 
 	available. Results are displayed in figure~\ref{fig:calib3}. Note 
@@ -1822,11 +1806,10 @@ In the example~\ref{ex:calib} the averaged 1-year PDs by sectors are:
 
 \textbf{Constrained model}. When we have a significant number of factors 
 (eg.\ 10) and a reduced set of observations (eg.\ 20), then uncertainty of 
-the factors correlation matrix can be very high. In these cases it is 
-justified to consider a constrained model~\cite{roncalli:2004} that 
-assumes that all correlations have the same value, or similar assumptions 
-that reduces the number correlations to estimate from $k \cdot(k-1)/2$ to 
-a few ones.
+the factors correlation matrix can be high. In these cases you can consider 
+a constrained model~\cite{roncalli:2004} that assumes that all correlations 
+have the same value, or similar assumptions that reduces the number 
+correlations to estimate from $k \cdot(k-1)/2$ to a few ones.
 % \begin{displaymath}
 % 	R = \left(
 % 	\begin{array}{cccc}
@@ -1838,17 +1821,17 @@ a few ones.
 % 	\right)
 % \end{displaymath}
 
-\textbf{Degrees of freedom}. In the general case we observe that
-correlation and the degrees of freedom are interleaved. When we move a value
-in one direction the others reacts to compensate the modification. This
-effect is dramatic when the number of observations is reduced and the amount 
-of information available is scarce causing that estimations of $\nu$ and $R$
+\textbf{Degrees of freedom}. In the general case we observe that correlations
+and degrees of freedom are interleaved. When we move a value in one direction 
+the others reacts to compensate the modification. This effect is more 
+pronounced when the number of observations is reduced and the amount of 
+information available is scarce causing that estimations of $\nu$ and $R$
 have a high uncertainty. The Gaussian case ($\nu = \infty$) avoids this 
 problem and reduces the number of parameters to estimate (we don't need to 
 estimate $\nu$ and $\upsilon^t$ where $t=1,\dots,T$). 
 The risk analyst must evaluate the appropriateness of the Gaussian model 
 considering the amount of information available, the number of factors, 
-renouncing to capture the tail dependence, the AIC and BIC values, etc.
+the renounce to capture the tail dependence, the AIC and BIC values, etc.
 
 
 %==============================================================================
@@ -1861,11 +1844,12 @@ renouncing to capture the tail dependence, the AIC and BIC values, etc.
 %------------------------------------------------------------------------------
 \section{Portfolio Loss Distribution}
 
-We define the key concepts used to model the credit risk emphasizing 
+Below we define the key concepts used to model the credit risk emphasizing 
 the temporal dimension since it is a key point in further development. 
 These concepts and the probability of default, are those of the Basel II 
 accord~\cite{basel2:2006}, the de-facto international financial risk 
-regulation framework.
+regulation framework. Figure \ref{fig:lnlblock} displays the hierarchy
+of the portfolio components.
 
 \begin{figure}[!ht]
 	\setlength{\unitlength}{0.14in}
@@ -1894,10 +1878,9 @@ regulation framework.
 		\put(25,0.5){\small 1:1}
 	\end{picture}
 %}
-	\caption{Concepts hierarchy}
+	\caption{Hierarchy of the portfolio components}
 	\label{fig:lnlblock}
 \end{figure}
-
 
 \begin{definition}[Exposure At Default (EAD)]
 	The Exposure At Default of the j-th asset at time $t$ indicates 
@@ -2008,9 +1991,16 @@ regulation framework.
 \end{definition}
 
 Let a credit portfolio be where the obligors default times $(T_1,\dots,T_n)$ 
-are a multivariate distribution with marginals $\text{PD}_i$. Also, each 
-obligor $i$ has $m_i$ assets with known EAD and LGD\@. Then, the portfolio 
-loss distribution at time horizon $t$ is:
+is a multivariate distribution with marginals $\text{PD}_i$. Also we consider
+that each obligor $i$ has $m_i$ assets with known EAD and LGD\@. Then, the 
+portfolio loss distribution at time horizon $t$ is:
+% \begin{displaymath}
+	% L_t = \int_{(0,\infty)^n} f(t_1,\dots,t_n) \cdot
+	% \displaystyle \sum_{i=1}^{n}
+	% \displaystyle \sum_{j=1}^{m_i}
+	% \text{EAD}_j(t_i) \cdot \text{LGD}_j(t_i)
+	% \ud t_1 \dots \ud t_n
+% \end{displaymath}
 \begin{displaymath}
 	L_t = \displaystyle \sum_{i=1}^n \mathbbm{1}_{[0,t]}(T_i) \cdot 
 	\left( 
@@ -2042,27 +2032,28 @@ using the appropriate statistics.
 \begin{algorithm}[Portfolio losses sampling]
 	\label{alg:pldmc}
 	Let a multivariate default times distribution with marginals $\text{PD}_i$
-	and a t-Student multi-factor model with $k$ factors, factor loadings $\vec{w}$, 
-	factors correlation matrix $R$, degrees of freedom $\nu$. Then, we can 
-	simulate a sample of size $T$ of the portfolio loss distribution by doing:
+	and a t-Student t-Student multi-factor copula with $k$ factors, factor 
+	loadings $\vec{w}$, factors correlation matrix $R$, degrees of freedom $\nu$.
+	Then, we can simulate a sample of size $M$ of the portfolio loss distribution
+	at time $t$ by doing:
 	\begin{enumerate}
 		\item Compute the Cholesky decomposition of R, $R = L \cdot L^\intercal$
-		\item For $t=1,\dots,T$ repeat the following steps
+		\item For $m=1,\dots,M$ repeat the following steps
 		\begin{itemize}
-			\item $\text{Loss}^t = 0$
+			\item $\text{Loss}^m = 0$
 			\item Simulate $k$ independent $N(0,1)$, $\vec{z}$
 			\item Simulate factors doing $\vec{z} = L \cdot \vec{z}$
 			\item Simulate $\upsilon \sim \chi_{\nu}^2$
 			\item For $i=1,\dots,n$ repeat the following steps
 			\begin{itemize}
-				\item Set $s = $ obligor factor index
-				\item Set $r = $ obligor rating index
+				\item Set $s = $ i-th obligor factor index
+				\item Set $r = $ i-th obligor rating index
 				\item Simulate $\epsilon \sim N(0,1)$
 				\item Compute $x_i = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_s \cdot z_s + \sqrt{1-w_s^2} \cdot \epsilon \right)$
 				\item Compute $t_i = \text{PD}_r^{-1}\left(t_{\nu}(x_i)\right)$
-				\item if $t_i \le t$ then do for each asset $l$ belonging to i-th obligor
+				\item if $t_i \le t$ then do for each asset $j$ belonging to i-th obligor
 				\begin{itemize}
-					\item $\text{Loss}^t = \text{Loss}^t + \text{EAD}_l(t_i) \cdot \text{LGD}_l(t_i)$
+					\item $\text{Loss}^m = \text{Loss}^m + \text{EAD}_j(t_i) \cdot \text{LGD}_j(t_i)$
 				\end{itemize}
 			\end{itemize}
 		\end{itemize}
@@ -2115,9 +2106,9 @@ bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 	Let be a portfolio composed of 1000 obligors where every obligor owe 1\euro\ to
 	1 year, this means that $\text{EAD}(t) = \mathbbm{1}_{[0,1]}(t)$, with 
 	a LGD of $100\%$. There are 4 ratings \{A, B, C, D\} where D is the 
-	\emph{defaulted} status and the other ones have the following 1-year default 
-	probability: $p_A = 5\%, p_B = 10\%, p_C = 20\%$. Factors loadings are 
-	$\vec{w} = (0.4, 0.35)$ and the factors correlation is 
+	\emph{defaulted} status and the remaining ratings have the following 1-year 
+	default probability: $p_A = 5\%, p_B = 10\%, p_C = 20\%$. Factors loadings 
+	are $\vec{w} = (0.4, 0.35)$ and the factors correlation is 
 	$\text{Cor}(S_1,S_2) = 0.25$. The t-Student copula has $\nu=15$ degrees
 	of freedom and the number of obligors by sector and rating are:
 
@@ -2231,16 +2222,16 @@ deviation estimators.
 \subsection{Value at Risk}
 
 \begin{definition}[Value at Risk (VaR)]
-	The Value At Risk of a portfolio at time horizon $T$ and 
+	The Value at Risk of a portfolio at time horizon $T$ and 
 	confidence level $\beta$ is the $\beta$-quantile of the portfolio loss 
-	distribution.
+	distribution at time $T$.
 	\begin{displaymath}
 		\text{VaR}_\beta(L_T) = \inf\{x \in \mathbb{R} \mid F(x) \ge \beta \}
 	\end{displaymath}
 	where $F(x)=\Pr\{L_T \le x\}$ is the portfolio loss distribution at time $T$.
 \end{definition}
 
-The Value At Risk~\cite{var:jorion} is the most commonly 
+The Value at Risk~\cite{var:jorion} is the most commonly 
 used risk measure to respond the question \enquote{how much could I lose in a 
 really bad year?}. It can be approximated using the following statistic:
 \begin{displaymath}
@@ -2285,13 +2276,14 @@ $B(a,b,x)$ is the regularized incomplete beta function.
 
 \begin{definition}[Expected Shortfall (ES)]
 	The Expected Shortfall of a portfolio at time horizon $T$ and 
-	confidence level $\beta$ is the average of the worst $\beta\%$ losses.
+	confidence level $\beta$ is the average of the worst $\beta\%$ portfolio 
+	losses at time $T$.
 	\begin{displaymath}
 		\text{ES}_\beta(L_T) = \text{E}(L_t \mid L_t \ge \text{VaR}_\beta(L_T))
 	\end{displaymath}
 \end{definition}
 
-VaR is not a distance because it does not fulfill the sub-additive property 
+VaR is not a distance because it doesn't fulfill the sub-additive property 
 \cite{var:varbad}, $\text{VaR}(A+B) \nleq \text{VaR}(A)+\text{VaR}(B)$. 
 Similar to VaR, Expected Shortfall is a consistent risk measure 
 \cite{var:eshortfall}. We note as
@@ -2410,16 +2402,14 @@ to implement parallelization in CUDA-like architectures.
 The CCruncher input file contains the data required to simulate the portfolio
 losses (obligors, assets, EADs, LGDs, ratings, factor correlations, factor
 loadings, copula to use, interest rates, segmentations, etc.). This file can 
-be quite large (eg. 1GB). 
-When we do stress testing or we evaluate the impact of parameters
-uncertainty in the credit risk measure we need to modify slightly this file 
-and reevaluate the portfolio loss multiple times. To simplify this task 
-CCruncher provides the macros mechanism that allows using variables that are 
-replaced by the user-defined values anywhere they are located in the 
-input file. CCruncher also allows the automatic evaluation of numerical 
-expressions. These two features combined, macros and evaluation of numerical 
-expressions, gives a flexible way to parameterize your input file 
-(eg. 2000*\$EUR2USD). 
+be quite large (eg. 1GB). When we do stress-testing or we evaluate the impact 
+of parameters uncertainty, then we need to modify slightly the input file and 
+reevaluate the portfolio loss multiple times. To simplify this task CCruncher 
+provides the macros mechanism that allows using variables that are replaced by 
+the user-defined values anywhere they are located in the input file. CCruncher 
+also allows the automatic evaluation of numerical expressions. These two 
+features combined, macros and evaluation of numerical expressions, gives a 
+flexible way to parameterize your input file (eg. 2000*\$EUR2USD). 
 
 %------------------------------------------------------------------------------
 % VARIANCE REDUCTION
@@ -2444,7 +2434,7 @@ reduction techniques, but not simultaneously.
 For this reason the variance reduction techniques used in CCruncher 
 don't aims the increase of precision, but improve the overall result in 
 some manner. The applied variance reduction procedures implemented in
-CCruncher are the following.
+CCruncher are antithetic variates and latin hypercube sampling.
 
 \subsection{Antithetic variates}
 We are estimating $E(g(X))$ using the Monte 
@@ -2584,11 +2574,11 @@ cannot be ignored~\cite{tarashev:2010,gossl:2005}. The example~\ref{ex:calib}
 illustrates this phenomenon and its magnitude (see the 20 observations case).
 
 The CCruncher framework encourages incorporating the parameter uncertainty 
-in the credit risk valuation. This means that some credit risk measures
-(eg.\ $\text{VaR}_{99\%}$, $\text{ES}_{99\%}$) are therefore regarded as 
-distributions instead of precise values. As example, in the case of the Value 
-at Risk, we consider it as a distribution $\text{VaR}_{99\%}(L_T(\nu,\vec{w},R))$ 
-that depends on multivariate random variables $\nu, \vec{w}$ and $R$.
+in the credit risk valuation. This means that credit risk measures
+(eg.\ $\text{VaR}_{99\%}$, $\text{ES}_{99\%}$) are regarded as distributions 
+instead of precise values. As example, in the case of the Value at Risk, we 
+consider it as a function $\text{VaR}_{99\%}(L_T(\nu,\vec{w},R))$ that 
+depends on multivariate random variables $\nu, \vec{w}$ and $R$.
 Note that the EL measure is not affected by the uncertainty of dependence 
 parameters because the expectation satisfies $E(X+Y)=E(X)+E(Y)$ even if $X$ 
 is not statistically independent of $Y$.
@@ -2598,24 +2588,22 @@ credit risk measure is the obvious. It is based in the same procedure
 used to determine the distribution of the portfolio loss, or the distribution 
 of the parameters: the random sampling of the risk measure distribution. 
 
-On one hand we are able to measure the credit risk of a portfolio considering
-that dependence parameters are fixed values. This is done sampling the 
-portfolio loss (algorithm~\ref{alg:pldmc}) and approximating the credit risk 
-indicator using the appropriate statistic (see section~\ref{sec:riskm}). The 
-risk measure obtained by this procedure consists of an approximated value and
-a standard error that allows to define a confidence interval fixed a 
-confidence level (eg.\ 95\%).
-
-On the other hand we have a procedure (see proposition~\ref{prop:pemh}) that 
-generate random samples from the multivariate parameters distribution.
+On one hand we have a procedure that generate random samples from the 
+multivariate parameters distribution (see proposition~\ref{prop:pemh}).
 These samples can be filtered in order to obtain a sample of independent
 parameters values.
+
+On the other hand we are able to measure the credit risk of a portfolio 
+considering that dependence parameters are fixed values. This is done 
+sampling the portfolio loss (see algorithm~\ref{alg:pldmc}) and approximating 
+the credit risk indicator using the appropriate statistic (see 
+section~\ref{sec:riskm}).
 
 We combine both parts to define an algorithm that samples the desired
 credit risk measure. The empirical density given by this sample 
 approximates the risk measure distribution and allows to evaluate the 
-impact of the parameter uncertainty. Caution, this procedure unveils the 
-parameter uncertainty but other uncertainties remains undercovered:
+impact of the parameter uncertainty. \ul{Caution}, this procedure unveils 
+the parameter uncertainty but other uncertainties remains undercovered:
 \begin{inparaenum}[1)]
 	\item copula selection, 
 	\item PDs uncertainty,
@@ -2703,10 +2691,9 @@ parameter uncertainty but other uncertainties remains undercovered:
 
 	The fourth step is the simulation of the portfolio loss distribution
 	for each simulated parameters. This is a very intensive computation.
-	CCruncher can be executed as a command line and has a macro expansion in
-	the input file that can help to do this step. If you have a cluster, a 
-	cloud or grid you can consider to execute multiple task in parallel using 
-	a framework like 
+	The CCruncher's command line execution and the input file macro expansion
+	can help to do this step. If you have a cluster, a cloud or grid, you can 
+	consider to execute multiple task in parallel using a framework like 
 	MakeFlow\footnote{\url{http://www3.nd.edu/~ccl/software/makeflow/}} 
 	or similar. Listing~\ref{sc:paramu4} displays a very simple batch
 	script to execute sequentially the required simulations.
