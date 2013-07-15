@@ -87,7 +87,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1088}
+\def\svnversion{R1089}
 
 %----------------------------------------------------------------------------------------
 
@@ -236,7 +236,7 @@ portfolio credit risk quantification.
 times are the proper way to explain the observed defaults. The dependence 
 between these default times is modeled using a copula. The sum of the 
 obligors' exposures at the default times gives the portfolio loss distribution.
-David X. Li introduced this approach in the famous document
+David X. Li introduced this approach in the famous paper
 \emph{On Default Correlation: A Copula Function Approach}~\cite{li:2000}
 which stated that the CreditMetrics\texttrademark{} model can be interpreted 
 in the copula approach context and that has a Gaussian copula.
@@ -271,7 +271,7 @@ The advantages of CCruncher are:
 	\item allows risk disaggregation,
 	\item don't presuppose uniform transition matrix,
 	\item correlations are considered suitably, and
-	\item allows to consider parameters uncertainty.
+	\item consider parameters uncertainty.
 \end{inparaenum}
 
 The disadvantages of CCruncher are: 
@@ -365,8 +365,8 @@ all obligors with the same rating have the same PD\@. Below we expose
 three different ways of inferring the PD depending upon the amount of 
 information available. All of them give similar results when the time 
 unit and evaluation time is reduced (eg.\ 1 year) but differ as this 
-goes away. Here we present the transition matrix because it is used in 
-the three alternatives.
+goes away. Before to detail the different ways, we define the transition 
+matrix because it is used in all three cases.
 
 \begin{definition}[Transition matrix]
 	\label{def:tm}
@@ -685,7 +685,7 @@ distribution we obtain:
 \end{displaymath}
 where marginal $\text{PD}_i(t) = \Pr\{T_i \le t\}$ is the Probability 
 of Default of the i-th obligor, and $C$ is a copula. CCruncher considers 
-that $C$ is a t-Student copula for the following practical reasons:
+that $C$ is a t-Student copula for the following \ul{practical} reasons:
 
 \begin{itemize}
 	\item is determined by the correlation matrix (elliptical). 
@@ -700,15 +700,14 @@ that $C$ is a t-Student copula for the following practical reasons:
 	CreditMetrics\texttrademark{} model.
 \end{itemize}
 
-Previous versions of the CCruncher project implemented a simulation schema
-consisting in simulating the t-Student copula directly. This approach 
-requires an adapted simulation algorithm for high-dimensional problems~\cite{torrent:2012}
-and disturbs the estimation of the parameters. The current CCruncher version 
-relies in the following proposition\footnote{Proof available in the 
-\emph{Proofs} part.} that reformulates $F$ in terms of the 
-multivariate t-Student distribution. This result, combined with the t-Student
-multi-factor model, provides an efficient simulation algorithm and allows 
-estimating the parameters.
+Previous versions of the CCruncher project simulated the t-Student copula 
+directly. This approach requires an adapted simulation algorithm for 
+high-dimensional problems~\cite{torrent:2012} and disturbs the estimation 
+of the parameters. The current CCruncher version relies in the following 
+proposition\footnote{Proof available in the \emph{Proofs} part.} that 
+reformulates $F$ in terms of the multivariate t-Student distribution. 
+This result, combined with the t-Student multi-factor model, provides an 
+efficient simulation algorithm and allows estimating the parameters.
 
 \begin{proposition}[Multivariate Default Times distribution]
 	\label{prop:dtd}
@@ -797,16 +796,12 @@ distribution (see proposition \ref{prop:mtschar}). The multivariate Gaussian
 with a correlation block matrix  can be expressed as a multi-factor model in 
 most cases (see proposition \ref{prop:ibne}). The cases that aren't covered 
 are those that contain negative intra-sectorial correlations, and those 
-containing inter-sectorial correlations too high. (see proposition 
-\ref{prop:gmfamgb}). These cases tend to $0$ when we assume that the 
-number of obligors by sector tends to $\infty$. Because we are modeling 
+containing inter-sectorial correlations too high. These cases tend to $0$ 
+when we assume that the number of obligors by sector tends to $\infty$
+(see proposition \ref{prop:gmfamgb}). Because we are modeling 
 sectors composed by thousands of individuals, although our portfolio may 
 contain only a few, we can assume that for our purposes the t-Student 
 multi-factor model maps the multivariate t-Student distribution.
-
-The next proposition\footnote{Proof available in the \emph{Proofs} part.} 
-formalize the ideas and gives us the key to reformulate the problem as a 
-multi-factor problem.
 
 \begin{proposition}[t-Student distr.\ as a multi-factor model]
 	\label{prop:tmfm}
@@ -838,6 +833,7 @@ multi-factor problem.
 	\end{displaymath}
 \end{proposition}
 
+Proof available in the \emph{Proofs} part.
 Note that we expressed the multi-factor model in terms of the factor 
 loadings and the factors correlation matrix, instead of the more concise 
 form based on the covariance matrix. We do this because the factor loadings 
@@ -845,8 +841,8 @@ have a treatment distinct than factors correlation in the estimation procedure.
 
 \begin{corollary}[Relationship between obligors correlation and factors correlation]
 	\label{cor:rbc}
-	The relationship between the multi-factor parameters, $\vec{w}$ and $R$,
-	and the multivariate parameters $B_k(\vec{n},\vec{1},M)$ is:
+	The relationship between the multi-factor parameters $\vec{w}$ and $R$,
+	and $B_k(\vec{n},\vec{1},M)$ is:
 	\begin{displaymath}
 		\begin{array}{ll}
 			\rho_i = w_i^2 & i = 1,\dots,k \\
@@ -870,12 +866,12 @@ Later we will use this algorithm to simulate the portfolio losses.
 	factor loadings $\vec{w}$, and factor correlations $R$. Then we can simulate 
 	this distribution doing:
 	\begin{enumerate}
-		\item Simule the factors, $\vec{z} \sim N(0,R)$.
-		\item Simule the degrees of freedom, $\upsilon \sim \chi_{\nu}^2$.
+		\item Simulate the factors, $\vec{z} \sim N(0,R)$.
+		\item Simulate the degrees of freedom, $\upsilon \sim \chi_{\nu}^2$.
 		\item For each obligor repeat the following steps:
 		\begin{enumerate}
-			\item Simule $\epsilon \sim N(0,1)$.
-			\item Simule the multivariate t-Student component using the obligor's sector:
+			\item Simulate $\epsilon \sim N(0,1)$.
+			\item Simulate the multivariate t-Student component using the obligor's sector:
 			\begin{displaymath}
 				x = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_s \cdot z_s + \sqrt{1-w_s^2} \cdot \epsilon \right)
 			\end{displaymath}
@@ -1012,7 +1008,7 @@ that the estimated discrete correlations differ significantly from the original
 values. Consider the following scenario:
 \begin{itemize}
 	\item Gaussian case ($\nu = \infty$).
-	\item One non-defaulted rating, A, with 1-year default probability $p_A=5\%$
+	\item One non-defaulted rating A, with 1-year default probability $p_A=5\%$
 	\item Two factors \{S1, S2\}, with factor loadings $\vec{w} = (0.3, 0.25)$, 
 	factors correlation $R_{12} = 0.1$, and number of obligors $\vec{n} = (750, 750)$.
 \end{itemize}
@@ -1821,10 +1817,11 @@ correlations to estimate from $k \cdot(k-1)/2$ to a few ones.
 % 	\right)
 % \end{displaymath}
 
-\textbf{Degrees of freedom}. In the general case we observe that correlations
-and degrees of freedom are interleaved. When we move a value in one direction 
-the others reacts to compensate the modification. This effect is more 
-pronounced when the number of observations is reduced and the amount of 
+\textbf{Degrees of freedom}. We observe that factor correlations and degrees 
+of freedom are interleaved. When we fix a one of them with a value distinct 
+than generated data and we estimate the other, then this reacts to compensate
+the modification. This effect is more pronounced when the number of 
+observations is reduced and the amount of 
 information available is scarce causing that estimations of $\nu$ and $R$
 have a high uncertainty. The Gaussian case ($\nu = \infty$) avoids this 
 problem and reduces the number of parameters to estimate (we don't need to 
@@ -2626,7 +2623,7 @@ the parameter uncertainty but other uncertainties remains undercovered:
 		\item Let $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$ the subsample
 		of the parameters distribution composed by the indexes multiples 
 		of $B$.
-		\item For each simulated parameters simule the portfolio loss 
+		\item For each simulated parameters simulate the portfolio loss 
 		distribution using the algorithm~\ref{alg:pldmc}.
 		\item For each simulated portfolio loss distribution compute its 
 		risk measure using the statistic described in~\ref{sec:riskm}:
