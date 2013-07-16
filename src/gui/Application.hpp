@@ -25,8 +25,6 @@
 
 #include <QApplication>
 
-using namespace std;
-
 namespace ccruncher_gui {
 
 //===========================================================================
