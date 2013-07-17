@@ -87,7 +87,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1089}
+\def\svnversion{R1091}
 
 %----------------------------------------------------------------------------------------
 
@@ -127,9 +127,9 @@ TODO\@: SET ACKNOWLEDGEMENTS HERE
 
 ~\vfill
 \section*{Contributors}
+Any remaining errors are attributable only to the author.
 The following people have contributed to this document, but this doesn't mean 
-that they support or endorse its contents. 
-Any remaining errors are attributable only to the author.\\
+that they support or endorse its contents. \\
 BE THE FIRST!
 
 ~\vfill
@@ -609,10 +609,10 @@ extracted from~\cite{kreinin:2001}.
 
 	\begin{figure}[!ht]
 		\centering
-		\subcaptionbox{Probability of Default}{
+		\subcaptionbox{Probability of Default (100-years)}{
 			\includegraphics[width=7cm]{pdftm1}
 		}
-		\subcaptionbox{Probability of Default (zoom)}{
+		\subcaptionbox{Probability of Default (10-years zoom)}{
 			\includegraphics[width=7cm]{pdftm2}
 		}
 		\caption{PDs derived from transition matrix}
@@ -656,6 +656,8 @@ The functions specified in this way are interpolated using cubic splines
 when the above conditions are preserved and interpolated using linear splines 
 when they aren't.
 
+%TODO: introduir i usar t-Student multi-factor copula
+
 %------------------------------------------------------------------------------
 % THE MULTIVARIATE MODEL
 %------------------------------------------------------------------------------
@@ -688,8 +690,8 @@ of Default of the i-th obligor, and $C$ is a copula. CCruncher considers
 that $C$ is a t-Student copula for the following \ul{practical} reasons:
 
 \begin{itemize}
-	\item is determined by the correlation matrix (elliptical). 
-	\item is symmetrical (elliptical), allowing to 
+	\item it is determined by the correlation matrix (elliptical). 
+	\item it is symmetrical (elliptical), allowing to 
 	apply the antithetic reduction variance technique in the Monte Carlo 
 	simulation.
 	\item allows a wide range of dependence structures through parameter $\nu$.
@@ -751,7 +753,7 @@ To bypass the problem of dimension we assume that a reduced number $k$ of
 industrial sectors exists and that each obligor belong to a single sector. 
 Also that default times dependence between obligors only relies on the 
 involved industrials sectors. With these restrictions, and sorting the obligors 
-by sector, we obtain that the obligors default times correlation matrix, is a 
+by sector, we obtain that the obligors default times correlation matrix is a 
 $n {\times} n$ correlation block matrix, that is $\bar{R} = B_k(\vec{n},\vec{1},M)$. 
 See appendix~\ref{ap:cbm} for more information about covariance block matrices. 
 \begin{displaymath}
@@ -839,14 +841,31 @@ loadings and the factors correlation matrix, instead of the more concise
 form based on the covariance matrix. We do this because the factor loadings 
 have a treatment distinct than factors correlation in the estimation procedure.
 
-\begin{corollary}[Relationship between obligors correlation and factors correlation]
+\begin{corollary}[Relationship between default time obligors correlation and factors correlation]
 	\label{cor:rbc}
-	The relationship between the multi-factor parameters $\vec{w}$ and $R$,
-	and $B_k(\vec{n},\vec{1},M)$ is:
+	The relationship between the default time obligors correlation and the t-Student
+	multi-factor parameters $\nu$, $\vec{w}$ and $R$ is:\\
 	\begin{displaymath}
 		\begin{array}{ll}
-			\rho_i = w_i^2 & i = 1,\dots,k \\
-			\rho_{ij} = w_i \cdot w_j \cdot R_{ij} & i = 1,\dots,k \quad \text{and} \quad j = 1,\dots,k
+			\nu < 2 & \left\{
+				\begin{array}{ll}
+					\text{No correlation} & 
+				\end{array}
+			\right. \\
+			& \\
+			\nu \in (2,\infty) & \left\{
+				\begin{array}{ll}
+					\rho_i = \frac{\nu}{\nu-2} \cdot w_i^2 & i = 1,\dots,k \\
+					\rho_{ij} = \frac{\nu}{\nu-2} \cdot w_i \cdot w_j \cdot R_{ij} & i = 1,\dots,k \quad \text{and} \quad j = 1,\dots,k
+				\end{array}
+			\right. \\
+			& \\
+			\nu = \infty & \left\{
+				\begin{array}{ll}
+					\rho_i = w_i^2 & i = 1,\dots,k \\
+					\rho_{ij} = w_i \cdot w_j \cdot R_{ij} & i = 1,\dots,k \quad \text{and} \quad j = 1,\dots,k
+				\end{array}
+			\right. \\
 		\end{array}
 	\end{displaymath}
 	where $\rho_{ij}$ is the obligors default times correlation between obligors
@@ -861,10 +880,9 @@ Later we will use this algorithm to simulate the portfolio losses.
 \begin{corollary}[Default times simulation (II)]
 	\label{cor:dts2}
 	Let $T=(T_1, \dots, T_n)$ be a random vector with marginals 
-	$\text{PD}_1, \dots, \text{PD}_n$ and a t-Student copula $C_{\nu,\bar{R}}^n$
-	coming from a t-Student multi-factor model with $\nu$ degrees of freedom, 
-	factor loadings $\vec{w}$, and factor correlations $R$. Then we can simulate 
-	this distribution doing:
+	$\text{PD}_1, \dots, \text{PD}_n$ and a t-Student multi-factor copula with 
+	$\nu$ degrees of freedom, factor loadings $\vec{w}$, and factor correlations 
+	$R$. Then we can simulate this distribution doing:
 	\begin{enumerate}
 		\item Simulate the factors, $\vec{z} \sim N(0,R)$.
 		\item Simulate the degrees of freedom, $\upsilon \sim \chi_{\nu}^2$.
@@ -972,11 +990,11 @@ test the parameters estimation procedures.
 
 \begin{algorithm}[Annual number of defaults simulation]
 	\label{alg:snod}
-	Let a multivariate default times distribution with a t-Student copula
-	that has $k$ factors, factor loadings $\vec{w}$, factors correlation 
-	matrix $R$, degrees of freedom $\nu$, and annual probabilities of
-	default $p_j$ where $j=1,\dots,m$. Then, we can simulate a sample of 
-	size $T$ of the annual number of defaults by factor and rating doing:
+	Let a multivariate default times distribution with annual probabilities of
+	default $p_j$ where $j=1,\dots,m$ and a t-Student multi-factor copula having
+	$k$ factors, factor loadings $\vec{w}$, factors correlation matrix $R$, 
+	degrees of freedom $\nu$. Then, we can simulate a sample of size $T$ of the 
+	annual number of defaults by factor and rating doing:
 	\begin{enumerate}
 		\item Compute the Cholesky decomposition of R, $R = L \cdot L^\intercal$
 		\item For $t=1,\dots,T$ repeat the following steps
@@ -1049,8 +1067,7 @@ in~\cite{nagpal:2001}:
 \end{displaymath}
 Finally we compare these estimated values with the exact values (using 
 corollary \ref{cor:rbc} to convert factor correlations to obligors 
-correlations) to assert that differences are too high to be attributed 
-to a small sample size.
+correlations). 
 
 \hspace*{1cm}
 \begin{tabular}{c|c|c|}
@@ -1065,17 +1082,32 @@ to a small sample size.
 	\hline
 \end{tabular}
 
-We have assessed that the discrete default correlation isn't the correlation
-required by the current model. The following proposition uses these ideas to 
-suggest a new correlation statistic.
+Clearly, This estimator has a serious problem of accuracy when
+used in our model (note that we are using a large sample size). We can say that
+the discrete default correlation isn't the correlation required by the current 
+model.
+
+All is not lost. Next we will use the estimates of $p_i$, $p_j$ and $p_{ij}$ 
+to suggest a new parametric estimator. If there are two obligors whose default
+times are governed by a multi-factor t-Student copula with $\nu$ degrees of 
+freedom and factor correlation $\rho_{ij}$ then, the probability that both 
+defaults in 1-year is:
+\begin{displaymath}
+	p_{ij} = \displaystyle \int_{-\infty}^{t_{\nu}^{-1}(p_i)} \int_{-\infty}^{t_{\nu}^{-1}(p_j)} 
+	f(x,y\ ;\ \nu, \rho_{ij})\ \ud x \ud y
+\end{displaymath}
+where $f(x,y\ ;\ \nu,\rho_{ij})$ is the pdf of the bivariate t-Student, 
+and $t_{\nu}^{-1}$ is the inverse of the cdf of the univariate t-Student.
+We use this fact to define the new correlation estimator.
 
 \begin{definition}[Quick-and-dirty correlation]
-	$\widetilde{\rho_{ij}}$ is an estimator of the default time correlation 
-	between obligors when there is a unique non-defaulted rating and the 
-	available data is the annual number of defaults that satisfies:
+	We assume that we have a unique non-defaulted rating, that we know the 
+	degrees of freedom of the t-Student multi-factor copula, and that available 
+	data is the annual number of defaults. We define the estimator of the 
+	factors correlation as that value $\widetilde{\rho_{ij}}$ which satisfies:
 	\begin{displaymath}
-		p_{ij} - \displaystyle \int_{-\infty}^{t_{\nu}^{-1}(p_i)} \int_{-\infty}^{t_{\nu}^{-1}(p_j)} 
-		f(x,y\ ;\ \nu, \widetilde{\rho_{ij}})\ \ud x \ud y = 0
+		p_{ij} = \displaystyle \int_{-\infty}^{t_{\nu}^{-1}(p_i)} \int_{-\infty}^{t_{\nu}^{-1}(p_j)} 
+		f(x,y\ ;\ \nu, \widetilde{\rho_{ij}})\ \ud x \ud y
 		\quad \text{ where } \quad
 		\left\{
 			\begin{array}{ll}
@@ -1088,8 +1120,9 @@ suggest a new correlation statistic.
 	where $N_i^t$ and $K_i^t$ are respectively the number of obligors and 
 	defaults in the i-th sector and t-th year, $f(x,y\ ;\ \nu,\rho_{ij})$ 
 	is the pdf of the bivariate t-Student, and $t_{\nu}^{-1}$ is the inverse 
-	of the cdf of the univariate t-Student. Listing \ref{sc:qadc} implements
-	this estimator in the $R$ language.
+	of the cdf of the univariate t-Student. Listing \ref{sc:qadc} implements 
+	this estimator in the $R$ language. It is inmediate to obtain an estimation 
+	of the obligor default times correlation using corollary~\ref{cor:rbc}.
 \end{definition}
 
 \begin{lstlisting}[language=R, label=sc:qadc, caption=Quick-and-dirty correlation (R script)]
@@ -1196,14 +1229,14 @@ default times distribution. More info at~\cite{gordy:2002,roncalli:2004}.
 			K(k_{11},\dots,k_{sr}\ ;\ \nu, \bar{R}) = 
 			\Pr\{K_{11}=k_{11},\dots,K_{sr}=k_{sr}\ ;\ \nu, \bar{R}\} = \\
 			\\
-			= \left( \displaystyle \prod_{i=1}^s \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \right) \cdot       
-			\displaystyle                                                                                 
-			\underbrace{\int_{-\infty}^{t_{\nu}^{-1}(p_1)}}_{k_{11} \text{ times}}                        
-			\underbrace{\int_{t_{\nu}^{-1}(p_1)}^{\infty}}_{n_{11}-k_{11} \text{ times}}                  
-			\dots                                                                                         
-			\underbrace{\int_{-\infty}^{t_{\nu}^{-1}(p_r)}}_{k_{sr} \text{ times}}                        
-			\underbrace{\int_{t_{\nu}^{-1}(p_r)}^{\infty}}_{n_{sr}-k_{sr} \text{ times}}                  
-			f(x_1,\dots,x_n)\ \ud x_1 \dots \ud x_n                                                        
+			= \left( \displaystyle \prod_{i=1}^s \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \right) \cdot
+			\displaystyle
+			\underbrace{\int_{-\infty}^{t_{\nu}^{-1}(p_1)}}_{k_{11} \text{ times}}
+			\underbrace{\int_{t_{\nu}^{-1}(p_1)}^{\infty}}_{n_{11}-k_{11} \text{ times}}
+			\dots
+			\underbrace{\int_{-\infty}^{t_{\nu}^{-1}(p_r)}}_{k_{sr} \text{ times}}
+			\underbrace{\int_{t_{\nu}^{-1}(p_r)}^{\infty}}_{n_{sr}-k_{sr} \text{ times}}
+			f(x_1,\dots,x_n)\ \ud x_1 \dots \ud x_n
 		\end{array}
 	\end{displaymath}
 	where $n_{ij}$ and $k_{ij}$ are respectively the number of obligors and 
@@ -1231,7 +1264,7 @@ conditioned density of the annual number of defaults.
 		\begin{array}{l}
 			K(k_{11},\dots,k_{sr} \mid \upsilon,\vec{z}\ ;\ \nu,\vec{w}, R) = 
 			\Pr\{K_{11}=k_{11},\dots,K_{sr}=k_{sr} \mid \upsilon,\vec{z}\ ;\ \nu, \vec{w}, R\} = \\
-			                                                                                                                                 \\
+			\\
 			= \displaystyle \prod_{i=1}^s \prod_{j=1}^r \binom{n_{ij}}{k_{ij}} \cdot
 			H_{ij}(\upsilon,z_i)^{k_{ij}} \cdot
 			\left( 1 - H_{ij}(\upsilon,z_i) \right)^{n_{ij}-k_{ij}}
@@ -1258,7 +1291,7 @@ conditioned density of the annual number of defaults.
 		%\begin{array}{l}
 			K(k_{11},\dots,k_{sr}\ ;\ \nu, \vec{w}, R) = %\\
 			%\\
-			\displaystyle \int_0^{\infty} \int_{\mathbb{R}^k}
+			\displaystyle \int_2^{\infty} \int_{\mathbb{R}^k}
 			\psi(\upsilon) \cdot \phi(\vec{z}) \cdot
 			K(k_{11},\dots,k_{sr} \mid \upsilon,\vec{z}\ ;\ \nu,\vec{w}, R) 
 			\ \ud z_1 \dots \ud z_k \ud \upsilon
@@ -1570,7 +1603,6 @@ they form a multivariate distribution.
 		\caption{Metropolis-Hastings algorithm example}
 		\label{fig:mhbd}
 	\end{figure}
-	%TODO: listing R script of this example?
 \end{example}
 
 %------------------------------------------------------------------------------
@@ -2883,11 +2915,13 @@ use this statement to define and simulate the t-Student copula.
 \section{Multivariate t-Student Distribution}
 \label{ap:mtsd}
 
+Most of the results set out below have been extracted from~\cite{kotz:2004}.
+
 \begin{definition}[Multivariate t-Student distribution]
 	The $d$-dimensional random vector $X=(X_1,\dots,X_d)$ is said to have a 
 	(non-singular) multivariate t-Student distribution with $\nu$ degrees of freedom, 
 	mean vector $\mu$ and positive-definite dispersion or scatter matrix $\Sigma$, 
-	denoted $t \sim t_d(\nu,\mu,\Sigma)$, if its density is given by
+	denoted $t_d(\nu,\mu,\Sigma)$, if its density is given by
 	\begin{displaymath}
 		f(x)=\frac{\Gamma\left(\frac{\nu+d}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)\sqrt{(\pi \nu)^d |\Sigma|}}
 		\left(
@@ -2897,6 +2931,13 @@ use this statement to define and simulate the t-Student copula.
 	\noindent where $\Gamma$ is the gamma function, and $|\Sigma|$ is the 
 	determinant of the matrix.
 \end{definition}
+
+\begin{proposition}[t-Student covariance]
+	The covariance matrix of the $X \sim t_d(\nu,\mu,\Sigma)$ is:
+	\begin{displaymath}
+		\text{Cov}(X) = \frac{\nu}{\nu-2} \cdot \Sigma \quad \text{if} \quad \nu > 2
+	\end{displaymath}
+\end{proposition}
 
 \begin{proposition}[Gaussian as limit of the t-Student]
 	The t-Student distribution converges to a Gaussian distribution 
@@ -2915,7 +2956,7 @@ use this statement to define and simulate the t-Student copula.
 	\end{displaymath}
 \end{proposition}
 
-\begin{proposition}[Multivariate t-Student marginals]~\cite{kotz:2004}
+\begin{proposition}[Multivariate t-Student marginals]
 	Let $X \sim t_d(\nu,\vec{0},\Sigma)$. Then, its i-th marginal is 
 	$X_i \sim t_1(\nu,0,R_{ii})$.
 \end{proposition}
@@ -3083,11 +3124,11 @@ in~\cite{torrent:2012}.
 	components is a matrix composed by blocks that fulfill the equivalence.
 	\begin{displaymath}
 		\begin{array}{rl}
-			\text{Var}(X_i^j) =                       &                                                                                                            
-			w_i \cdot \text{Var}(Z_i) + (1-w_i^2) \cdot \text{Var}(\epsilon_i^j) +
-			2 \cdot w_i \cdot \sqrt{1-w_i^2} \cdot \text{Cov}(Z_i, \epsilon_i^j) \\
-			=                                         & w_i + (1-w_i^2) = 1                                                                                        \\
-			                                          &                                                                                                            \\
+			\text{Var}(X_i^j) =                       &
+			w_i^2 \cdot \text{Var}(Z_i) + (1-w_i^2) \cdot \text{Var}(\epsilon_i^j) +
+			2 \cdot w_i \cdot \sqrt{1-w_i^2} \cdot \text{Cov}(Z_i, \epsilon_i^j)    \\
+			=                                         & w_i^2 + (1-w_i^2) = 1       \\
+			                                          &                             \\
 			\text{Cor}(X_{i_1}^{j_1},X_{i_2}^{j_2}) = & \text{Cov}(X_{i_1}^{j_1},X_{i_2}^{j_2})                                                                    \\
 			=                                         & w_{i_1} \cdot w_{i_2} \cdot \text{Cov}(Z_{i_1},Z_{i_2}) +                                                  \\
 			                                          & + w_{i_1} \cdot \sqrt{1-w_{i_2}^2} \cdot \text{Cov}(Z_{i_1}, \epsilon_{i_2}^{j_2}) +                       \\
