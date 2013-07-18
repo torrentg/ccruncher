@@ -87,7 +87,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1091}
+\def\svnversion{R1092}
 
 %----------------------------------------------------------------------------------------
 
@@ -841,9 +841,9 @@ loadings and the factors correlation matrix, instead of the more concise
 form based on the covariance matrix. We do this because the factor loadings 
 have a treatment distinct than factors correlation in the estimation procedure.
 
-\begin{corollary}[Relationship between default time obligors correlation and factors correlation]
+\begin{corollary}[Relationship between obligors default times correlation and factors correlation]
 	\label{cor:rbc}
-	The relationship between the default time obligors correlation and the t-Student
+	The relationship between the obligors default times correlation and the t-Student
 	multi-factor parameters $\nu$, $\vec{w}$ and $R$ is:\\
 	\begin{displaymath}
 		\begin{array}{ll}
@@ -874,7 +874,7 @@ have a treatment distinct than factors correlation in the estimation procedure.
 
 The t-Student multi-factor model exposed in proposition \ref{prop:tmfm} 
 combined with the corollary~\ref{cor:dts1} provides an efficient algorithm 
-to simulate the obligors default times exposed in the next corollary. 
+to simulate the obligors default times disclosed in the next corollary. 
 Later we will use this algorithm to simulate the portfolio losses.
 
 \begin{corollary}[Default times simulation (II)]
@@ -908,10 +908,10 @@ Later we will use this algorithm to simulate the portfolio losses.
 \chapter{Estimating Parameters}
 \label{chap:estimation}
 
-We want to estimate the dependence parameters of the multivariate default 
-times distribution considered as a multi-factor model. These parameters 
-are: the degrees of freedom $\nu$, the factor loadings $\vec{w}$, and the 
-factors correlation matrix $R$.
+We want to estimate the t-Student multi-factor copula parameters of the 
+multivariate default times distribution. These parameters are: the degrees of 
+freedom $\nu$, the factor loadings $\vec{w}$, and the factors correlation 
+matrix $R$.
 
 \begin{definition}[Annual number of defaults]
 	We define the annual number of defaults by sector and rating like a
@@ -1074,40 +1074,38 @@ correlations).
 	\cline{2-3}
 	& Exact & Estimated \\
 	\hline
-	\multicolumn{1}{|c|}{$\rho_{11}$} & $w_1^2 = 0.09$ & 0.0219 \\
+	\multicolumn{1}{|c|}{$\rho_{11}$} & $w_1^2 = 0.09$ & $\widetilde{\rho_{11}} \approx 0.0219$ \\
 	\hline
-	\multicolumn{1}{|c|}{$\rho_{22}$} & $w_2^2 = 0.0625$ & 0.0138 \\
+	\multicolumn{1}{|c|}{$\rho_{22}$} & $w_2^2 = 0.0625$ & $\widetilde{\rho_{22}} \approx 0.0138$ \\
 	\hline
-	\multicolumn{1}{|c|}{$\rho_{12}$} & $w_1 \cdot w_2 \cdot R_{12} = 0.0075$ & 0.0015 \\
+	\multicolumn{1}{|c|}{$\rho_{12}$} & $w_1 \cdot w_2 \cdot R_{12} = 0.0075$ & $\widetilde{\rho_{12}} \approx 0.0015$ \\
 	\hline
 \end{tabular}
 
-Clearly, This estimator has a serious problem of accuracy when
-used in our model (note that we are using a large sample size). We can say that
-the discrete default correlation isn't the correlation required by the current 
-model.
+Clearly, this estimator has a serious problem of accuracy, all the more since 
+we are using a large sample size. This counterexample suggests that the discrete 
+default correlation isn't the correlation required by the current model.
 
 All is not lost. Next we will use the estimates of $p_i$, $p_j$ and $p_{ij}$ 
 to suggest a new parametric estimator. If there are two obligors whose default
 times are governed by a multi-factor t-Student copula with $\nu$ degrees of 
-freedom and factor correlation $\rho_{ij}$ then, the probability that both 
+freedom and factor covariance $\sigma_{ij}$ then, the probability that both 
 defaults in 1-year is:
 \begin{displaymath}
 	p_{ij} = \displaystyle \int_{-\infty}^{t_{\nu}^{-1}(p_i)} \int_{-\infty}^{t_{\nu}^{-1}(p_j)} 
-	f(x,y\ ;\ \nu, \rho_{ij})\ \ud x \ud y
+	f(x,y\ ;\ \nu, \sigma_{ij})\ \ud x \ud y
 \end{displaymath}
-where $f(x,y\ ;\ \nu,\rho_{ij})$ is the pdf of the bivariate t-Student, 
-and $t_{\nu}^{-1}$ is the inverse of the cdf of the univariate t-Student.
-We use this fact to define the new correlation estimator.
+We use this fact to define the new covariance estimator.
 
-\begin{definition}[Quick-and-dirty correlation]
+\begin{definition}[Quick-and-dirty covariance estimator]
 	We assume that we have a unique non-defaulted rating, that we know the 
 	degrees of freedom of the t-Student multi-factor copula, and that available 
 	data is the annual number of defaults. We define the estimator of the 
-	factors correlation as that value $\widetilde{\rho_{ij}}$ which satisfies:
+	factors covariance, $\sigma_{ij} = w_i \cdot w_j \cdot R_{ij}$, as that 
+	value $\widetilde{\sigma_{ij}}$ which satisfies:
 	\begin{displaymath}
 		p_{ij} = \displaystyle \int_{-\infty}^{t_{\nu}^{-1}(p_i)} \int_{-\infty}^{t_{\nu}^{-1}(p_j)} 
-		f(x,y\ ;\ \nu, \widetilde{\rho_{ij}})\ \ud x \ud y
+		f(x,y\ ;\ \nu, \widetilde{\sigma_{ij}})\ \ud x \ud y
 		\quad \text{ where } \quad
 		\left\{
 			\begin{array}{ll}
@@ -1118,7 +1116,7 @@ We use this fact to define the new correlation estimator.
 		\right.
 	\end{displaymath}
 	where $N_i^t$ and $K_i^t$ are respectively the number of obligors and 
-	defaults in the i-th sector and t-th year, $f(x,y\ ;\ \nu,\rho_{ij})$ 
+	defaults in the i-th sector and t-th year, $f(x,y\ ;\ \nu,\sigma_{ij})$ 
 	is the pdf of the bivariate t-Student, and $t_{\nu}^{-1}$ is the inverse 
 	of the cdf of the univariate t-Student. Listing \ref{sc:qadc} implements 
 	this estimator in the $R$ language. It is inmediate to obtain an estimation 
@@ -1181,8 +1179,8 @@ We use this fact to define the new correlation estimator.
 
 \end{lstlisting}
 
-We compute the quick-and-dirty estimator of the previous scenario. 
-You can found the results below. This time the estimated values are closer 
+We compute the quick-and-dirty estimator of the previous scenario and we display
+results in the table below. This time the estimated values are closer 
 to the exact values.
 
 \hspace*{1cm}
@@ -1190,24 +1188,25 @@ to the exact values.
 	\cline{2-3}
 	& Exact & Estimated \\
 	\hline
-	\multicolumn{1}{|c|}{$\rho_{11}$} & $w_1^2 = 0.09$ & 0.0963 \\
+	\multicolumn{1}{|c|}{$\rho_{11}$} & $w_1^2 = 0.09$ & $w_1^2 \approx \widetilde{\sigma_{11}} = 0.0963$ \\
 	\hline
-	\multicolumn{1}{|c|}{$\rho_{22}$} & $w_2^2 = 0.0625$ & 0.0657 \\
+	\multicolumn{1}{|c|}{$\rho_{22}$} & $w_2^2 = 0.0625$ & $w_2^2 \approx \widetilde{\sigma_{22}} = 0.0657$ \\
 	\hline
-	\multicolumn{1}{|c|}{$\rho_{12}$} & $w_1 \cdot w_2 \cdot R_{12} = 0.0075$ & 0.0079 \\
+	\multicolumn{1}{|c|}{$\rho_{12}$} & $w_1 \cdot w_2 \cdot R_{12} = 0.0075$ & $w_1 \cdot w_2 \cdot R_{12} \approx \widetilde{\sigma_{12}} = 0.0079$ \\
 	\hline
 \end{tabular}
 \ \\
 
-The drawbacks of the quick-and-dirty correlation estimator are:
+The drawbacks of the quick-and-dirty covariance estimator are:
 \begin{inparaenum}[1)]
 	\item don't take into account parameter uncertainty, 
 	\item require knowing in advance the value of $\nu$, and
 	\item only supports one rating per sector.
 \end{inparaenum}
-For these reasons, you should not use this estimator. The rest of 
-this chapter is devoted to obtain a solid-as-a-rock method to estimate 
-the dependence parameters.
+This last point is crucial because it presupposes the absence of economic 
+cycle. For these reasons, you should not use this estimator. The rest of 
+this chapter is devoted to obtain a generic and solid-as-a-rock method to 
+estimate all the dependence parameters.
 
 %------------------------------------------------------------------------------
 % DISTRIBUTION OF THE NUMBERS OF DEFAULTS
@@ -1612,8 +1611,8 @@ they form a multivariate distribution.
 
 \begin{proposition}[Parameters estimation]
 	\label{prop:pemh}
-	We can estimate the parameters of the t-Student copula from the annual 
-	number of defaults using the Metropolis-Hastings algorithm (see 
+	We can estimate the parameters of the t-Student multi-factor copula from 
+	the annual number of defaults using the Metropolis-Hastings algorithm (see 
 	algorithm~\ref{alg:bimh}) considering:
 	\begin{itemize}
 		\item parameters $\theta \equiv \{ \nu,\vec{w},R,\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\}$
@@ -1850,10 +1849,10 @@ correlations to estimate from $k \cdot(k-1)/2$ to a few ones.
 % \end{displaymath}
 
 \textbf{Degrees of freedom}. We observe that factor correlations and degrees 
-of freedom are interleaved. When we fix a one of them with a value distinct 
-than generated data and we estimate the other, then this reacts to compensate
-the modification. This effect is more pronounced when the number of 
-observations is reduced and the amount of 
+of freedom are interleaved. When we fix one of them with a value distinct 
+than generated data and we estimate the other one, then this reacts to 
+compensate the modification. This effect is more pronounced when the number 
+of observations is reduced and the amount of 
 information available is scarce causing that estimations of $\nu$ and $R$
 have a high uncertainty. The Gaussian case ($\nu = \infty$) avoids this 
 problem and reduces the number of parameters to estimate (we don't need to 
@@ -1873,7 +1872,7 @@ the renounce to capture the tail dependence, the AIC and BIC values, etc.
 %------------------------------------------------------------------------------
 \section{Portfolio Loss Distribution}
 
-Below we define the key concepts used to model the credit risk emphasizing 
+We define the key concepts used to model the credit risk emphasizing 
 the temporal dimension since it is a key point in further development. 
 These concepts and the probability of default, are those of the Basel II 
 accord~\cite{basel2:2006}, the de-facto international financial risk 
@@ -2020,9 +2019,9 @@ of the portfolio components.
 \end{definition}
 
 Let a credit portfolio be where the obligors default times $(T_1,\dots,T_n)$ 
-is a multivariate distribution with marginals $\text{PD}_i$. Also we consider
-that each obligor $i$ has $m_i$ assets with known EAD and LGD\@. Then, the 
-portfolio loss distribution at time horizon $t$ is:
+is a multivariate distribution. Also we consider that each obligor $i$ has 
+$m_i$ assets with known EAD and LGD\@. Then, the portfolio loss distribution 
+at time horizon $t$ is:
 % \begin{displaymath}
 	% L_t = \int_{(0,\infty)^n} f(t_1,\dots,t_n) \cdot
 	% \displaystyle \sum_{i=1}^{n}
@@ -2053,16 +2052,19 @@ These simplified models must be managed
 with care as it can cause problems~\cite{long:2012} when the assumptions 
 are not satisfied.
 
-CCruncher generates samples of the portfolio loss distribution simulating 
-the obligors default times applying the corollary~\ref{cor:dts2}.
-This method allows approximation of the density and the risk measurement 
-using the appropriate statistics.
+CCruncher assumes that the multivariate default times distribution has
+marginals $\text{PD}_i$ and a t-Student multi-factor copula with degrees 
+of freedom $\nu$, factor loadings $\vec{w}$, and factors correlation matrix 
+$R$. CCruncher generates samples of the portfolio loss distribution simulating 
+the obligors default times. Portfolio loss distribution is approximated by the 
+empirical distribution of the sample and credit risk is measured using the 
+appropriate statistics.
 
 \begin{algorithm}[Portfolio losses sampling]
 	\label{alg:pldmc}
 	Let a multivariate default times distribution with marginals $\text{PD}_i$
-	and a t-Student t-Student multi-factor copula with $k$ factors, factor 
-	loadings $\vec{w}$, factors correlation matrix $R$, degrees of freedom $\nu$.
+	and a t-Student multi-factor copula with $k$ factors, factor loadings 
+	$\vec{w}$, factors correlation matrix $R$, and degrees of freedom $\nu$.
 	Then, we can simulate a sample of size $M$ of the portfolio loss distribution
 	at time $t$ by doing:
 	\begin{enumerate}
@@ -2082,16 +2084,19 @@ using the appropriate statistics.
 				\item Compute $t_i = \text{PD}_r^{-1}\left(t_{\nu}(x_i)\right)$
 				\item if $t_i \le t$ then do for each asset $j$ belonging to i-th obligor
 				\begin{itemize}
+					\item Evalue or simulate $\text{EAD}_j(t_i)$
+					\item Evalue or simulate $\text{LGD}_j(t_i)$
 					\item $\text{Loss}^m = \text{Loss}^m + \text{EAD}_j(t_i) \cdot \text{LGD}_j(t_i)$
 				\end{itemize}
 			\end{itemize}
+			\item print $\text{Loss}^m$
 		\end{itemize}
 	\end{enumerate}
 \end{algorithm}
 
 \begin{example}[Large Homogeneous Pool]
 	\label{ex:test04}
-	Let a portfolio composed of 1000 identical obligors (with same rating 
+	Let a portfolio composed of 1000 exchangeable obligors (with same rating 
 	and sector) where every one of them owe 1\euro\ to 1 year. The common 1-year
 	default probability is $p=10\%$ and the factor loading is $20\%$. This 
 	problem is close to fulfill the LHP assumptions. In the Gaussian case the 
@@ -2108,10 +2113,10 @@ using the appropriate statistics.
 
 	File \texttt{\$CCRUNCHER/samples/test04.xml} contains the CCruncher input
 	file of this example. The figure~\ref{fig:test04} displays the theoretical
-	distribution provided by LHP approach and the approximated by CCruncher.
-	Both are very similar, as expected. If we reduce the number of obligors from
-	1000 to 100, then the LHP assumptions are broken and the distribution 
-	provided by the LHP approach fails.
+	distribution provided by LHP approach and the distribution approximated by 
+	CCruncher. Both are very similar, as expected. If we reduce the number of 
+	obligors from 1000 to 100, then the LHP assumptions are broken and the 
+	distribution provided by the LHP approach fails.
 	\begin{figure}[!ht]
 		\centering
 		\subcaptionbox{1000 obligors}{
@@ -2990,8 +2995,8 @@ Most of the results set out below have been extracted from~\cite{kotz:2004}.
 		\frac{\displaystyle\left( 1+\frac{\zeta' R^{-1} \zeta}{\nu}\right)^{-\frac{\nu+d}{2}}}{\displaystyle\prod_{i=1}^d \left( 1+\frac{\zeta_i^2}{\nu} \right)^{-\frac{\nu+1}{2}}}
 	\end{displaymath}
 	\noindent
-	where $\zeta=(t_\nu^{-1}(u_1), \dots, t_\nu^{-1}(u_n))$ is the vector of 
-	the t-student univariate inverse distribution functions.
+	where $\zeta=(t_\nu^{-1}(u_1), \dots, t_\nu^{-1}(u_d))$ is the vector of 
+	the t-Student univariate inverse distribution functions.
 \end{proposition}
 
 %------------------------------------------------------------------------------
