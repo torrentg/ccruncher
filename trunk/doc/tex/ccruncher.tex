@@ -81,13 +81,14 @@
 \usepackage{bbm}
 \usepackage{listings}
 \usepackage{soul}
+\usepackage[hang,flushmargin]{footmisc} 
 
 \usepackage[firstpage]{draftwatermark}
 \SetWatermarkText{DRAFT COPY}
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1092}
+\def\svnversion{R1093}
 
 %----------------------------------------------------------------------------------------
 
@@ -184,13 +185,13 @@ a consulting firm located in Barcelona (Catalonia, Spain). You can download
 the latest version of the project from the CCruncher's site, 
 \url{http://www.ccruncher.net}.
 
-The CCruncher framework consists of this document that explains the models 
-and algorithms, and a piece of software. Both elements, documentation and 
-software, are licensed with open-source type licenses. CCruncher is a mature 
-and active project in which you can participate sending your suggestions and 
-contributions to \href{mailto:gtorrent@ccruncher.net}{gtorrent@ccruncher.net}.
-Because it is an evolving project, it is recommended to mention the version
-identifier when you refer the project name (eg.\ CCruncher-\numversion).
+The CCruncher framework consists of this document and a piece of software. 
+Both elements are released under open-source type licenses. CCruncher is a 
+mature and active project in which you can participate sending your 
+suggestions and contributions to \href{mailto:gtorrent@ccruncher.net}
+{gtorrent@ccruncher.net}. Because it is an evolving project, it is recommended 
+to mention the version identifier when you refer the project name 
+(eg.\ CCruncher-\numversion).
 
 This document provides a comprehensible view of credit risk modeling under the
 copula approach (t-Student case). It emphasize the practical aspects, taking 
@@ -289,12 +290,12 @@ The original results claimed by this document are:
 \begin{inparaenum}[1)]
 	\item limitations of the t-Student multi-factor model with respect to 
 	the multivariate t-Student distribution,
-	\item a new estimator of the obligors default time correlation named 
+	\item a new estimator of the t-Student multi-factor copula covariance named 
 	\emph{quick-and-dirty},
-	\item estimation of the t-Student copula parameters using the 
+	\item estimation of the t-Student multi-factor copula parameters using the 
 	Metropolis-Hastings algorithm, and
-	\item transferring the dependence parameters uncertainty to the credit 
-	risk measures.
+	\item transferring the t-Student multi-factor copula parameters uncertainty 
+	to the credit risk measures.
 \end{inparaenum}
 We intend to publish these results in peer-reviewed journals over the coming years.
 
@@ -341,20 +342,20 @@ time.
 \begin{definition}[Probability of Default (PD)]
 	The Probability of Default of the i-th obligor, $\text{PD}_i(t)$
 	indicates the probability that this obligor defaults in the time 
-	interval $(0,t]$.
+	interval $[0,t]$.
 	\begin{displaymath}
 		\text{PD}_i(t) = \Pr\{T_i \le t\} = 
 		\Pr\{\text{ i-th obligor defaults before $t$ years }\}
 	\end{displaymath}
-	where $T_i$ is a random variable that represents the default
-	time of the i-th obligor. Note that the PD defined in this way 
-	is the cdf of $T_i$. We indicate as $p_i$ the probability that 
+	where $T_i$ is a random variable that represents the time-until-default,
+	or survival time, of the i-th obligor. Note that the PD defined in this 
+	way is the cdf of $T_i$. We indicate as $p_i$ the probability that 
 	i-th obligor defaults in the time range $[0,1]$.
 	\begin{displaymath}
 		p_i = \Pr\{T_i \le 1\} = \text{PD}_i(1) 
 	\end{displaymath}
-	Some texts~\cite{li:2000,roncalli:2001} use the concept of 
-	survival instead of the PD\@. The survival is defined as:
+	Some texts~\cite{li:2000,roncalli:2001} use the concept of survival 
+	function instead of the PD\@. The survival function is defined as:
 	\begin{displaymath}
 		\text{Survival}_i(t) = 1-\text{PD}_i(t)
 	\end{displaymath}
@@ -365,7 +366,7 @@ all obligors with the same rating have the same PD\@. Below we expose
 three different ways of inferring the PD depending upon the amount of 
 information available. All of them give similar results when the time 
 unit and evaluation time is reduced (eg.\ 1 year) but differ as this 
-goes away. Before to detail the different ways, we define the transition 
+goes away. Before detailing the different ways, we define the transition 
 matrix because it is used in all three cases.
 
 \begin{definition}[Transition matrix]
@@ -442,7 +443,7 @@ stated by the following proposition\footnote{Proof available in the
 
 \begin{proposition}[Exponential distribution]
 	\label{prop:pdfsv}
-	A diagonal transition matrix as above leads to default times with 
+	A diagonal transition matrix as above leads to time-until-default with 
 	exponential distributions:
 	\begin{displaymath}
 		\Pr\{T_. \le t\} = 1 - e^{-\lambda t} 
@@ -487,8 +488,8 @@ stated by the following proposition\footnote{Proof available in the
 		\right)
 	\end{displaymath}\par}
 	We determine the PDs function for each rating using the 
-	proposition~\ref{prop:pdfsv}, that is, considering that default times are 
-	exponential distributions. Results are displayed in figure~\ref{fig:pdfsv}. 
+	proposition~\ref{prop:pdfsv}, that is, considering that time-until-default
+	are exponential distributions. Results are displayed in figure~\ref{fig:pdfsv}. 
 	\begin{figure}[!ht]
 		\centering
 		\subcaptionbox{Probability of Default (100-years)}{
@@ -557,10 +558,10 @@ extracted from~\cite{kreinin:2001}.
 	\begin{displaymath}
 		\Pr\{T_. \le t\} = \left( M_t \right)_{jn}
 	\end{displaymath}
-	where $T_.$ is the obligor default time, $j$ is the index of the obligor's
-	rating, $n$ is the index of the \emph{defaulted} rating, $M_t$ is the 
-	transition matrix scaled to time $t$, and $(M)_{ij}$ is the matrix element
-	in the i-th row and j-th column.
+	where $T_.$ is the time-until-default of an obligor with the j-th rating, 
+	$n$ is the index of the \emph{defaulted} rating, $M_t$ is the transition 
+	matrix scaled to time $t$, and $(M)_{ij}$ is the matrix element located in 
+	the i-th row and the j-th column.
 \end{proposition}
 
 \begin{example}
@@ -634,11 +635,11 @@ The PD for an obligor with rating $r_j$ is:
 		M_{t-T\cdot[t/T]}\left([t/T]+1\right) 
 		\right)_{jn}
 \end{displaymath}
-where $[x]$ is the integer part of $x$, $T_.$ is the obligor default time, 
-$j$ is the index of the obligor's rating, $n$ is the index of the 
-\emph{defaulted} rating, $M_t(i)$ is the T-period transition matrix 
-evaluated at time $i$ and scaled to time $t$, and $(M)_{ij}$ is the 
-matrix element in the i-th row and j-th column.
+where $[x]$ is the integer part of $x$, $T_.$ is the time-until-default
+of an obligor with the j-th rating, $n$ is the index of the \emph{defaulted} 
+rating, $M_t(i)$ is the T-period transition matrix evaluated at time $i$ 
+and scaled to time $t$, and $(M)_{ij}$ is the matrix element located in the 
+i-th row and the j-th column.
 
 The PDs functions derived from an advanced model may show various steps 
 according to the different stages of the economic cycle. This approach is 
@@ -702,11 +703,7 @@ that $C$ is a t-Student copula for the following \ul{practical} reasons:
 	CreditMetrics\texttrademark{} model.
 \end{itemize}
 
-Previous versions of the CCruncher project simulated the t-Student copula 
-directly. This approach requires an adapted simulation algorithm for 
-high-dimensional problems~\cite{torrent:2012} and disturbs the estimation 
-of the parameters. The current CCruncher version relies in the following 
-proposition\footnote{Proof available in the \emph{Proofs} part.} that 
+The following proposition\footnote{Proof available in the \emph{Proofs} part.} 
 reformulates $F$ in terms of the multivariate t-Student distribution. 
 This result, combined with the t-Student multi-factor model, provides an 
 efficient simulation algorithm and allows estimating the parameters.
@@ -725,10 +722,10 @@ efficient simulation algorithm and allows estimating the parameters.
 	t-Student distribution $t_1(\nu,0,1)$.
 \end{proposition}
 
-The previous proposition can be stated by any other copula coming from
-a multivariate distribution and applied if this had a known distribution 
-and marginals (eg.\ the Gaussian copula). Also from the previous proposition
-it is immediate to derive a method to sample the default times distribution.
+This proposition can be stated by any other copula coming from a multivariate 
+distribution and applied if this had a known distribution and marginals 
+(eg.\ the Gaussian copula). Also from the previous proposition it is immediate 
+to derive a method to sample the default times distribution.
 
 \begin{corollary}[Default times simulation (I)]
 	\label{cor:dts1}
@@ -744,20 +741,24 @@ it is immediate to derive a method to sample the default times distribution.
 The current situation is not yet satisfactory because the dimension 
 $n {\times} n$ of the obligors correlation matrix causes that any 
 attempt to simulate random values or estimate the parameters cannot 
-be done in practice when $n$ is large. For this reason we introduce the
-multi-factor formulation.
+be done in practice when $n$ is large. 
+Previous versions of the CCruncher project bypassed the simulation problem 
+using an algorithm adapted to deal with high-dimensional 
+cases~\cite{torrent:2012}, but the parameters estimation problem remains. 
+For this reason we introduce the multi-factor formulation.
 
 \subsection{The multi-factor formulation}
 
-To bypass the problem of dimension we assume that a reduced number $k$ of 
-industrial sectors exists and that each obligor belong to a single sector. 
-Also that default times dependence between obligors only relies on the 
-involved industrials sectors. With these restrictions, and sorting the obligors 
-by sector, we obtain that the obligors default times correlation matrix is a 
-$n {\times} n$ correlation block matrix, that is $\bar{R} = B_k(\vec{n},\vec{1},M)$. 
-See appendix~\ref{ap:cbm} for more information about covariance block matrices. 
+In order to dispose a correlation matrix easy to handle we assume that a 
+reduced number $k$ of industrial sectors exists and that each obligor belong 
+to a single sector. Also that default times dependence between obligors only 
+relies on the involved industrials sectors. With these restrictions, and 
+sorting the obligors by sector, we obtain that the obligors default times 
+Spearman's rank correlation matrix is a $n {\times} n$ correlation block 
+matrix $\bar{R}_S = B_k(\vec{n},\vec{1},M_S)$.
+
 \begin{displaymath}
-	\bar{R} = B_k(\vec{n},\vec{1},M) = 
+	\bar{R}_S = B_k(\vec{n},\vec{1},M_S) = 
 	\left(
 	\begin{array}{ccccccc}
 		1         & \cdots & \rho_{11} &        & \rho_{1k} & \cdots & \rho_{1k} \\
@@ -773,7 +774,7 @@ See appendix~\ref{ap:cbm} for more information about covariance block matrices.
 	\right)
 	\qquad 
 	\begin{array}{l}
-		M = 
+		M_S = 
 		\left(
 		\begin{array}{ccc}
 			\rho_{11} & \cdots & \rho_{1k} \\
@@ -788,10 +789,17 @@ See appendix~\ref{ap:cbm} for more information about covariance block matrices.
 	\end{array}
 \end{displaymath}
 
-Up to this point the multivariate default times distribution $F$ can 
-be expressed by its marginals $\text{PD}_i$ and a multivariate t-Student 
-distribution, $t_n(\nu,0,\bar{R})$ with an obligors correlation block 
-matrix $\bar{R} = B_k(\vec{n},\vec{1},M)$. 
+We use the Spearman's rank correlation because it is a measure of dependence 
+that doesn't depend on marginals ($\text{PD}_i$ in our case), unlike the usual
+Pearson's correlation that does it. It is the case that t-Student copulas with 
+Spearman's correlation block matrix are those that come from a multivariate 
+t-Student $t_n(\nu,\bar{R})$ where $\bar{R} = B_k(\vec{n},\vec{1},M)$~
+\footnote{ In the Gaussian case, the relationship between Spearman's 
+and Pearson's correlation is $\rho_S = \frac{6}{\pi}\cdot \arcsin(\frac{\rho}{2})$.}.
+Consequently, the multivariate default times 
+distribution $F$ can be expressed by its marginals $\text{PD}_i$ and a 
+t-Student copula $C_{\nu,\bar{R}}^n$.
+%TODO: prove that block Spearman's comes from block Pearson
 
 The multivariate t-Student distribution relies on the multivariate Gaussian
 distribution (see proposition \ref{prop:mtschar}). The multivariate Gaussian 
@@ -835,47 +843,16 @@ multi-factor model maps the multivariate t-Student distribution.
 	\end{displaymath}
 \end{proposition}
 
-Proof available in the \emph{Proofs} part.
+Proof is available in the \emph{Proofs} part.
 Note that we expressed the multi-factor model in terms of the factor 
 loadings and the factors correlation matrix, instead of the more concise 
 form based on the covariance matrix. We do this because the factor loadings 
 have a treatment distinct than factors correlation in the estimation procedure.
 
-\begin{corollary}[Relationship between obligors default times correlation and factors correlation]
-	\label{cor:rbc}
-	The relationship between the obligors default times correlation and the t-Student
-	multi-factor parameters $\nu$, $\vec{w}$ and $R$ is:\\
-	\begin{displaymath}
-		\begin{array}{ll}
-			\nu < 2 & \left\{
-				\begin{array}{ll}
-					\text{No correlation} & 
-				\end{array}
-			\right. \\
-			& \\
-			\nu \in (2,\infty) & \left\{
-				\begin{array}{ll}
-					\rho_i = \frac{\nu}{\nu-2} \cdot w_i^2 & i = 1,\dots,k \\
-					\rho_{ij} = \frac{\nu}{\nu-2} \cdot w_i \cdot w_j \cdot R_{ij} & i = 1,\dots,k \quad \text{and} \quad j = 1,\dots,k
-				\end{array}
-			\right. \\
-			& \\
-			\nu = \infty & \left\{
-				\begin{array}{ll}
-					\rho_i = w_i^2 & i = 1,\dots,k \\
-					\rho_{ij} = w_i \cdot w_j \cdot R_{ij} & i = 1,\dots,k \quad \text{and} \quad j = 1,\dots,k
-				\end{array}
-			\right. \\
-		\end{array}
-	\end{displaymath}
-	where $\rho_{ij}$ is the obligors default times correlation between obligors
-	belonging to i-th and j-th sector respectively.
-\end{corollary}
-
-The t-Student multi-factor model exposed in proposition \ref{prop:tmfm} 
-combined with the corollary~\ref{cor:dts1} provides an efficient algorithm 
-to simulate the obligors default times disclosed in the next corollary. 
-Later we will use this algorithm to simulate the portfolio losses.
+The t-Student multi-factor model combined with the corollary~\ref{cor:dts1} 
+provides an efficient algorithm to simulate the obligors default times 
+disclosed in the next corollary. Later we will use this algorithm to simulate
+the portfolio losses.
 
 \begin{corollary}[Default times simulation (II)]
 	\label{cor:dts2}
@@ -969,19 +946,6 @@ matrix $R$.
 	\end{table}
 \end{example}
 
-% It is possible that the there is no historical records disaggregated at 
-% the rating level. In these cases, when the historical records are 
-% $\left\{N_{s}^t, K_{s}^t \right\}_{t=1,\dots,T}$ without the counts by 
-% rating, we can use the following approximation:
-% \begin{displaymath}
-	% K_{ij}^t = K_{i}^t \cdot \frac{\lambda_{ij}^t \cdot p_j}{\displaystyle \sum \lambda_{ik}^t \cdot p_k}
-	% \quad \text{ where }
-	% \lambda_{ij}^t \approx \frac{\text{\# obligors sector $i$ rating $j$}}{\text{\# obligors sector $i$}}
-% \end{displaymath}
-% Values $\lambda_{ij}^t$ depends on the characteristics of the portfolio 
-% and the economic cycle and requires to be estimated based on historical 
-% data and current PD models.
-
 Below we provide an algorithm to simulate the number of defaults. It is a 
 direct application of the multivariate default times distribution and the 
 t-Student multi-factor model (see propositions~\ref{prop:dtd} 
@@ -1017,85 +981,9 @@ test the parameters estimation procedures.
 %------------------------------------------------------------------------------
 \section{Quick-and-Dirty Method}
 
-We might be tempted to use the popular nonparametric approach based on discrete 
-default correlation~\cite{lucas:1995,nagpal:2001} for obtaining correlations.
-\underline{Be aware}, this method doesn't work at all in the current framework
-or the CreditMetrics\texttrademark{} framework. 
-To verify this, we simulated 1000 observations of a simple case and we found 
-that the estimated discrete correlations differ significantly from the original 
-values. Consider the following scenario:
-\begin{itemize}
-	\item Gaussian case ($\nu = \infty$).
-	\item One non-defaulted rating A, with 1-year default probability $p_A=5\%$
-	\item Two factors \{S1, S2\}, with factor loadings $\vec{w} = (0.3, 0.25)$, 
-	factors correlation $R_{12} = 0.1$, and number of obligors $\vec{n} = (750, 750)$.
-\end{itemize}
-We simulate the number of defaults of this scenario 1000 times using algorithm 
-\ref{alg:snod}:
-
-\hspace*{1cm}
-\begin{tabular}{cc|c||c|  c  |c||c|}
-	\cline{3-4} \cline{6-7}
-	& & \multicolumn{2}{|c|}{N (\# obligors)} & & \multicolumn{2}{|c|}{K (\# defaults)} \\
-	\cline{3-4} \cline{6-7}
-	& & \multicolumn{1}{|c||}{S1} & \multicolumn{1}{|c|}{S2} & & \multicolumn{1}{|c||}{S1} & \multicolumn{1}{|c|}{S2} \\
-	\cline{1-1} \cline{3-4} \cline{6-7}
-	\multicolumn{1}{|c|}{Year} & & A & A & & A & A \\
-	\cline{1-1} \cline{3-4} \cline{6-7}
-	\multicolumn{1}{|c|}{1} & & 58 & 28 & & 750 & 750 \\
-	\cline{1-1} \cline{3-4} \cline{6-7}
-	\multicolumn{1}{|c|}{2} & & 41 & 26 & & 750 & 750 \\
-	\cline{1-1} \cline{3-4} \cline{6-7}
-	\multicolumn{1}{|c|}{\vdots} & & \vdots & \vdots & & \vdots & \vdots \\
-	\cline{1-1} \cline{3-4} \cline{6-7}
-	\multicolumn{1}{|c|}{1000} & & 33 & 65 & & 750 & 750 \\
-	\cline{1-1} \cline{3-4} \cline{6-7}
-\end{tabular}
-
-Then we estimate the discrete default correlations using the formula exposed 
-in~\cite{nagpal:2001}:
-\begin{displaymath}
-	\widetilde{\rho_{ij}} = \frac{p_{ij} - p_i \cdot p_j}{\sqrt{p_i \cdot (1-p_i)} \cdot \sqrt{p_j \cdot (1-p_j)}}
-	\quad \text{ where } \quad
-	\left\{
-		\begin{array}{ll}
-			p_i = \frac{\sum K_i^t}{\sum N_i^t} & \forall\ i \\
-			p_{ii} = \frac{\sum K_i^t \cdot (K_i^t-1)}{\sum N_i^t \cdot (N_i^t-1)} & \forall\ i \\
-			p_{ij} = \frac{\sum K_i^t \cdot K_j^t}{\sum N_i^t \cdot N_j^t} & i \ne j \\
-		\end{array}
-	\right.
-\end{displaymath}
-Finally we compare these estimated values with the exact values (using 
-corollary \ref{cor:rbc} to convert factor correlations to obligors 
-correlations). 
-
-\hspace*{1cm}
-\begin{tabular}{c|c|c|}
-	\cline{2-3}
-	& Exact & Estimated \\
-	\hline
-	\multicolumn{1}{|c|}{$\rho_{11}$} & $w_1^2 = 0.09$ & $\widetilde{\rho_{11}} \approx 0.0219$ \\
-	\hline
-	\multicolumn{1}{|c|}{$\rho_{22}$} & $w_2^2 = 0.0625$ & $\widetilde{\rho_{22}} \approx 0.0138$ \\
-	\hline
-	\multicolumn{1}{|c|}{$\rho_{12}$} & $w_1 \cdot w_2 \cdot R_{12} = 0.0075$ & $\widetilde{\rho_{12}} \approx 0.0015$ \\
-	\hline
-\end{tabular}
-
-Clearly, this estimator has a serious problem of accuracy, all the more since 
-we are using a large sample size. This counterexample suggests that the discrete 
-default correlation isn't the correlation required by the current model.
-
-All is not lost. Next we will use the estimates of $p_i$, $p_j$ and $p_{ij}$ 
-to suggest a new parametric estimator. If there are two obligors whose default
-times are governed by a multi-factor t-Student copula with $\nu$ degrees of 
-freedom and factor covariance $\sigma_{ij}$ then, the probability that both 
-defaults in 1-year is:
-\begin{displaymath}
-	p_{ij} = \displaystyle \int_{-\infty}^{t_{\nu}^{-1}(p_i)} \int_{-\infty}^{t_{\nu}^{-1}(p_j)} 
-	f(x,y\ ;\ \nu, \sigma_{ij})\ \ud x \ud y
-\end{displaymath}
-We use this fact to define the new covariance estimator.
+Next we use the estimates of $p_i$ (prob. that an obligor defaults)
+and $p_{ij}$ (prob. that two obligors defaults simultaneously) indicated 
+in~\cite{nagpal:2001} to define a basic covariance estimator. 
 
 \begin{definition}[Quick-and-dirty covariance estimator]
 	We assume that we have a unique non-defaulted rating, that we know the 
@@ -1119,8 +1007,7 @@ We use this fact to define the new covariance estimator.
 	defaults in the i-th sector and t-th year, $f(x,y\ ;\ \nu,\sigma_{ij})$ 
 	is the pdf of the bivariate t-Student, and $t_{\nu}^{-1}$ is the inverse 
 	of the cdf of the univariate t-Student. Listing \ref{sc:qadc} implements 
-	this estimator in the $R$ language. It is inmediate to obtain an estimation 
-	of the obligor default times correlation using corollary~\ref{cor:rbc}.
+	this estimator in the $R$ language.
 \end{definition}
 
 \begin{lstlisting}[language=R, label=sc:qadc, caption=Quick-and-dirty correlation (R script)]
@@ -1179,23 +1066,31 @@ We use this fact to define the new covariance estimator.
 
 \end{lstlisting}
 
-We compute the quick-and-dirty estimator of the previous scenario and we display
-results in the table below. This time the estimated values are closer 
-to the exact values.
+\begin{example}
+	Consider the following scenario:
+	\begin{itemize}
+		\item Gaussian case ($\nu = \infty$).
+		\item One non-defaulted rating A, with 1-year default probability $p_A=5\%$
+		\item Two factors \{S1, S2\}, with factor loadings $\vec{w} = (0.3, 0.25)$, 
+		factors correlation $R_{12} = 0.1$, and number of obligors $\vec{n} = (750, 750)$.
+	\end{itemize}
+	We simulate the number of defaults of this scenario 1000 times using algorithm 
+	\ref{alg:snod}. Then, we compute the quick-and-dirty estimator and we display the 
+	results in the table below.
 
-\hspace*{1cm}
-\begin{tabular}{c|c|c|}
-	\cline{2-3}
-	& Exact & Estimated \\
-	\hline
-	\multicolumn{1}{|c|}{$\rho_{11}$} & $w_1^2 = 0.09$ & $w_1^2 \approx \widetilde{\sigma_{11}} = 0.0963$ \\
-	\hline
-	\multicolumn{1}{|c|}{$\rho_{22}$} & $w_2^2 = 0.0625$ & $w_2^2 \approx \widetilde{\sigma_{22}} = 0.0657$ \\
-	\hline
-	\multicolumn{1}{|c|}{$\rho_{12}$} & $w_1 \cdot w_2 \cdot R_{12} = 0.0075$ & $w_1 \cdot w_2 \cdot R_{12} \approx \widetilde{\sigma_{12}} = 0.0079$ \\
-	\hline
-\end{tabular}
-\ \\
+	\hspace*{1cm}
+	\begin{tabular}{|c|c|}
+		\hline
+		Exact & Estimated \\
+		\hline
+		$w_1^2 = 0.09$ & $w_1^2 \approx \widetilde{\sigma_{11}} = 0.0963$ \\
+		\hline
+		$w_2^2 = 0.0625$ & $w_2^2 \approx \widetilde{\sigma_{22}} = 0.0657$ \\
+		\hline
+		$w_1 \cdot w_2 \cdot R_{12} = 0.0075$ & $w_1 \cdot w_2 \cdot R_{12} \approx \widetilde{\sigma_{12}} = 0.0079$ \\
+		\hline
+	\end{tabular}
+\end{example}
 
 The drawbacks of the quick-and-dirty covariance estimator are:
 \begin{inparaenum}[1)]
@@ -1219,10 +1114,9 @@ function. In this section we derive this distribution from the multivariate
 default times distribution. More info at~\cite{gordy:2002,roncalli:2004}.
 
 \begin{proposition}[Density of the annual number of defaults (I)]
-	The density of the annual number of defaults, assuming that default 
-	times are distributed according to a multivariate block t-Student distribution
-	with $\nu$ degrees of freedom, and $n {\times} n$ obligors block correlation 
-	matrix $\bar{R} = B_k(\vec{n},\vec{1},M)$, is:
+	The density of the annual number of defaults, assuming that multivariate 
+	default times has marginals $\text{PD}_1,\dots,\text{PD}_n$ and a 
+	t-Student copula $C_{\nu,\bar{R}}^n$ with $\bar{R} = B_k(\vec{n},\vec{1},M)$, is:
 	\begin{displaymath}
 		\begin{array}{l}
 			K(k_{11},\dots,k_{sr}\ ;\ \nu, \bar{R}) = 
@@ -1256,9 +1150,9 @@ conditioned density of the annual number of defaults.
 \begin{proposition}[Conditioned density of the annual number of defaults]
 	\label{prop:cdand}
 	The conditioned density of the annual number of defaults, assuming 
-	that default times are distributed according to a t-Student multi-factor 
-	model with $\nu$ degrees of freedom, factor loadings $\vec{w}$, and 
-	factors correlations $R$, is:
+	that multivariate default times has marginals $\text{PD}_1,\dots,\text{PD}_n$ 
+	and a t-Student multi-factor copula with $\nu$ degrees of freedom, factor 
+	loadings $\vec{w}$, and factors correlations $R$, is:
 	\begin{displaymath}
 		\begin{array}{l}
 			K(k_{11},\dots,k_{sr} \mid \upsilon,\vec{z}\ ;\ \nu,\vec{w}, R) = 
@@ -1834,9 +1728,9 @@ In the example~\ref{ex:calib} the averaged 1-year PDs by sectors are:
 \textbf{Constrained model}. When we have a significant number of factors 
 (eg.\ 10) and a reduced set of observations (eg.\ 20), then uncertainty of 
 the factors correlation matrix can be high. In these cases you can consider 
-a constrained model~\cite{roncalli:2004} that assumes that all correlations 
-have the same value, or similar assumptions that reduces the number 
-correlations to estimate from $k \cdot(k-1)/2$ to a few ones.
+a constrained model~\cite{roncalli:2004} that assumes that all factors
+correlations have the same value, or similar assumptions that reduces the 
+number correlations to estimate from $k \cdot(k-1)/2$ to a few ones.
 % \begin{displaymath}
 % 	R = \left(
 % 	\begin{array}{cccc}
@@ -2130,9 +2024,9 @@ appropriate statistics.
 	\end{figure}
 \end{example}
 \begin{comment}
-# bash command
-bin/ccruncher-cmd -w -o data/test04-1000 samples/test04-1000.xml
-bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
+	# bash command
+	bin/ccruncher-cmd -w -o data/test04-1000 samples/test04-1000.xml
+	bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 \end{comment}
 
 \begin{example}[2 factors]
@@ -2156,16 +2050,6 @@ bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 		167 & 166 & 167 & 167 & 167 & 166 \\
 		\hline
 	\end{tabular}
-	
-	% We use the proposition~\ref{prop:tmfm} to infere the correlations between
-	% obligors based on its sector belonging:
-	% \begin{displaymath}
-		% \begin{array}{l}
-			% \text{Cor}(S1,S1) = 0.4 \times 0.4 = 16\% \\
-			% \text{Cor}(S1,S2) = 0.4 \times 0.35 \times 0.25 = 3.5\% \\
-			% \text{Cor}(S2,S2) = 0.35 \times 0.35 = 12.25\%
-		% \end{array}
-	% \end{displaymath}
 
 	File \texttt{\$CCRUNCHER/samples/test05.xml} contains the CCruncher input
 	file of this example. Figure~\ref{fig:test05} displays the portfolio
@@ -2971,7 +2855,7 @@ Most of the results set out below have been extracted from~\cite{kotz:2004}.
 	t-Student distribution $t_d(\nu,\mu,\Sigma)$.
 \end{definition}
 
-\begin{proposition}[t-Student copula invariance]
+\begin{proposition}[t-Student copula equivalence]
 	The copula of $t_d(\nu,\mu,\Sigma)$ is identical of that of $t_d(\nu,\vec{0},R)$
 	where $R$ is the correlation matrix implied by the dispersion matrix $\Sigma$.
 \end{proposition}
