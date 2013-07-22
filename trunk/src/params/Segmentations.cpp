@@ -75,7 +75,7 @@ int ccruncher::Segmentations::indexOfSegmentation(const string &sname) const thr
   {
     if (disabled[i].name == sname)
     {
-      return -i-1;
+      return -(int)(i+1);
     }
   }
   throw Exception("segmentation '" + sname + "' not found");
@@ -97,7 +97,7 @@ int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const throw
   {
     if (disabled[i].name.compare(sname) == 0)
     {
-      return -i-1;
+      return -(int)(i+1);
     }
   }
   throw Exception("segmentation '" + string(sname) + "' not found");

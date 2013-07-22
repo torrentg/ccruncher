@@ -58,6 +58,7 @@ ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), assets(NULL), chol(NUL
   ndf = NAN;
   assetsize = 0;
   numassets = 0;
+  numsegments = 0;
 }
 
 //===========================================================================
