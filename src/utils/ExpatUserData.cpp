@@ -31,7 +31,7 @@ using namespace ccruncher;
 // void constructor (don't use)
 //===========================================================================
 ccruncher::ExpatUserData::ExpatUserData(size_t buffersize) :
-  pila(10), pila_pos(-1), current_tag(NULL),
+  xmlparser(NULL), pila(10), pila_pos(-1), current_tag(NULL),
   buffer(NULL), buffer_size(buffersize), buffer_pos1(NULL), buffer_pos2(NULL)
 {
   if (buffer_size == 0) buffer_size = 1;
@@ -44,7 +44,7 @@ ccruncher::ExpatUserData::ExpatUserData(size_t buffersize) :
 // constructor
 //===========================================================================
 ccruncher::ExpatUserData::ExpatUserData(XML_Parser xmlparser_, size_t buffersize) :
-  pila(10), pila_pos(-1), current_tag(NULL),
+  xmlparser(NULL), pila(10), pila_pos(-1), current_tag(NULL),
   buffer(NULL), buffer_size(buffersize), buffer_pos1(NULL), buffer_pos2(NULL)
 {
   if (buffer_size == 0) buffer_size = 1;
@@ -58,7 +58,7 @@ ccruncher::ExpatUserData::ExpatUserData(XML_Parser xmlparser_, size_t buffersize
 // copy constructor
 //===========================================================================
 ccruncher::ExpatUserData::ExpatUserData(const ExpatUserData &o) :
-  pila(0), pila_pos(-1), current_tag(NULL),
+  xmlparser(NULL), pila(0), pila_pos(-1), current_tag(NULL),
   buffer(NULL), buffer_size(0), buffer_pos1(NULL), buffer_pos2(NULL)
 {
   *this = o;
@@ -173,8 +173,8 @@ const char* ccruncher::ExpatUserData::applyDefines(const char *str)
 
   while ((p2=strchr(p1,'$'))!=NULL)
   {
-    if (ret == str) ret = bufferPush(p1, p2-p1);
-    else ret = bufferAppend(p1, p2-p1);
+    if (ret == str) bufferPush(p1, p2-p1);
+    else bufferAppend(p1, p2-p1);
 
     p1 = p2 = p2+1; // skips '$'
     while(isalnum(*p2) || *p2=='_') p2++;
@@ -182,7 +182,7 @@ const char* ccruncher::ExpatUserData::applyDefines(const char *str)
 
     map<string,string>::const_iterator it = defines.find(key);
     if (it == defines.end()) throw Exception("macro '" + key + "' not defined");
-    else ret = bufferAppend(it->second.c_str(), it->second.size());
+    ret = bufferAppend(it->second.c_str(), it->second.size());
 
     p1 = p2;
   }

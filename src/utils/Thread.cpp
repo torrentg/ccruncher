@@ -27,6 +27,7 @@
 //===========================================================================
 ccruncher::Thread::Thread()
 {
+  thread = 0;
   pthread_mutex_init(&mutex, NULL);
   setStatus(fresh);
 }
