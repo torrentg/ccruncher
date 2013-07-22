@@ -3186,45 +3186,49 @@ The following proposition clarifies this theme.
 
 \subsection{Proposition \ref{prop:pdfsv} -- \nameref{prop:pdfsv} (page \pageref{prop:pdfsv})}
 \begin{proof}
-	We note that ratings are detached from each other. 
-	For this reason we do the proof for a generic rating and we
-	use the subscripts to indicate the time, not the rating.
-	Let $p_t$ the probability of default in the time range $[0,t]$ and
-	$q_t=1-p_t$ the probability of survival. We express $p_1$ in term
-	of $p_{\frac{1}{n}}$ using the geometric serie formula.
+	We note that ratings are detached from each other. We use the spectral 
+	decomposition to obtain the probability of default at time $t$ of the 
+	i-th rating:
+	\small
 	\begin{displaymath}
-		p_1 = p_{\frac{1}{n}} \cdot q_{\frac{1}{n}}^{(n-1)} + 
-			p_{\frac{1}{n}} \cdot q_{\frac{1}{n}}^{(n-2)} + \cdots + 
-			p_{\frac{1}{n}} \cdot q_{\frac{1}{n}} + 
-			p_{\frac{1}{n}}
-		= p_{\frac{1}{n}} \cdot \frac{1-q_{\frac{1}{n}}^n}{1-q_{\frac{1}{n}}}
-		= 1 - q_{\frac{1}{n}}^n
-		= 1- (1-p_{\frac{1}{n}})^n
-	\end{displaymath}
-	This gives:
-	\begin{displaymath}
-		p_{\frac{1}{n}} = 1-(1-p_1)^{\frac{1}{n}}
-	\end{displaymath}
-	We use the limit definition of the logarithm function, that is 
-	$\ln(x)=\lim_{n \to \infty} n \cdot(x^{\frac{1}{n}}-1)$, to
-	found the following limit:
-	\begin{displaymath}
-		\lim_{n \to \infty} n \cdot p_{\frac{1}{n}} = 
-		\lim_{n \to \infty} -n \cdot ((1-p_1)^{\frac{1}{n}} -1) =
-		-\ln(1-p_1) = \lambda
-	\end{displaymath}
-	We use this equivalence and the limit definition of the 
-	exponential function to determine the survival probability:
-	\begin{displaymath}
-		(1-p_1)^t 
-		= \left( \lim_{n \to \infty} (1-p_{\frac{1}{n}})^n \right)^t
-		= \left(\lim_{n \to \infty} (1-\frac{\lambda}{n})^n \right)^t
-		= e^{-\lambda t}
+		\left(
+		\begin{array}{cc}
+			1-p_i & p_i \\
+			0 & 1
+		\end{array}
+		\right) ^ t 
+		= 
+		\left(
+		\begin{array}{cc}
+			1 & 1 \\
+			1 & 0
+		\end{array}
+		\right) 
+		\cdot
+		\left(
+		\begin{array}{cc}
+			1 & 0 \\
+			0 & 1-p_i
+		\end{array}
+		\right) ^t 
+		\cdot
+		\left(
+		\begin{array}{cc}
+			0 & 1 \\
+			1 & -1
+		\end{array}
+		\right)
+		=
+		\left(
+		\begin{array}{cc}
+			(1-p_i)^t & 1-(1-p_i)^t \\
+			0 & 1
+		\end{array}
+		\right)
 	\end{displaymath}
 	Then,
 	\begin{displaymath}
-		\Pr\{T_. \le t\} = \text{PD}(t) = 
-		1 - \text{Survival}(t) = 1 - e^{-\lambda t}
+		F_i(t) = 1-(1-p_i)^t = 1 - e^{-\lambda_i \cdot t} \quad \text{ where } \quad \lambda_i = -\ln(1-p_i)
 	\end{displaymath}
 \end{proof}
 
