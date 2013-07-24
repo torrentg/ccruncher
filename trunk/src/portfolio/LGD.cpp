@@ -32,7 +32,7 @@ using namespace std;
 using namespace ccruncher;
 
 //=============================================================
-// supported EAD distributions
+// supported LGD distributions
 //=============================================================
 const ccruncher::LGD::Distr ccruncher::LGD::distrs[] = {
   {"uniform", 7, Uniform},
@@ -52,33 +52,36 @@ ccruncher::LGD::LGD(const char *cstr) throw(Exception)
   // triming initial spaces
   while (isspace(*cstr)) cstr++;
 
-  // parsing ead distribution
-  for(size_t i=0; i<NUMDISTRS; i++)
+  size_t len = strlen(cstr);
+  if (strchr(cstr,'(') != NULL && cstr[len-1] == ')')
   {
-    if (strncmp(cstr, distrs[i].str, distrs[i].len) == 0)
+    // parsing lgd distribution
+    for(size_t i=0; i<NUMDISTRS; i++)
     {
-      size_t len = strlen(cstr);
-      if (len-distrs[i].len-2 >= 256 || *(cstr+distrs[i].len) != '(' || *(cstr+len-1) != ')') {
-        throw Exception("invalid lgd value");
+      if (strncmp(cstr, distrs[i].str, distrs[i].len) == 0)
+      {
+        size_t len_pars = len-distrs[i].len-2;
+        if (len_pars >= 256 || *(cstr+distrs[i].len) != '(' || *(cstr+len-1) != ')') {
+          throw Exception("invalid lgd value");
+        }
+        char aux[256];
+        memcpy(aux, cstr+distrs[i].len+1, len_pars);
+        aux[len_pars] = 0;
+        char *p = aux-1;
+        size_t num_pars = 0;
+        while (*(++p) != 0) {
+          if (*p == '(') { num_pars++; continue; }
+          else if (*p == ')' && num_pars > 0) { num_pars--; continue; }
+          else if (*p == ',' && num_pars == 0) { *p = 0; break; }
+        }
+        if (p == aux+len_pars) {
+          throw Exception("invalid number of arguments");
+        }
+        value2 = Parser::doubleValue(p+1);
+        value1 = Parser::doubleValue(aux);
+        init(distrs[i].type, value1, value2);
+        return;
       }
-      char aux[256];
-      memcpy(aux, cstr+distrs[i].len+1, len-distrs[i].len-2);
-      len -= distrs[i].len + 2;
-      aux[len] = 0;
-      char *p = aux-1;
-      size_t num_pars = 0;
-      while (*(++p) != 0) {
-        if (*p == '(') { num_pars++; continue; }
-        else if (*p == ')' && num_pars > 0) { num_pars--; continue; }
-        else if (*p == ',' && num_pars == 0) { *p = 0; break; }
-      }
-      if (p == aux+len) {
-        throw Exception("invalid number of arguments");
-      }
-      value2 = Parser::doubleValue(p+1);
-      value1 = Parser::doubleValue(aux);
-      init(distrs[i].type, value1, value2);
-      return;
     }
   }
 
