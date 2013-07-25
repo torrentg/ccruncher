@@ -28,7 +28,7 @@
   </parameters>
 
   <interest type="compound">
-    <rate t="0D" r="0.0%"/>
+    <rate t="1D" r="3.99%"/>
     <rate t="1M" r="4.0%"/>
     <rate t="2M" r="4.1%"/>
     <rate t="3M" r="4.5%"/>

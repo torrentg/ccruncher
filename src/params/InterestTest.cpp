@@ -47,7 +47,7 @@ void ccruncher_test::InterestTest::test1()
 
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <interest type='simple' spline='linear'>\n\
-        <rate t='0M' r='0.0'/>\n\
+        <rate t='0M' r='0.0399'/>\n\
         <rate t='1M' r='0.04'/>\n\
         <rate t='2M' r='0.041'/>\n\
         <rate t='3M' r='0.045'/>\n\
@@ -87,7 +87,7 @@ void ccruncher_test::InterestTest::test2()
 
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <interest type='compound'>\n\
-        <rate t='0D' r='0.0'/>\n\
+        <rate t='1D' r='0.0399'/>\n\
         <rate t='1M' r='0.04'/>\n\
         <rate t='2M' r='0.041'/>\n\
         <rate t='3M' r='0.045'/>\n\
@@ -127,7 +127,7 @@ void ccruncher_test::InterestTest::test3()
 
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
       <interest type='continuous'>\n\
-        <rate t='0D' r='0.0'/>\n\
+        <rate t='1D' r='0.0399'/>\n\
         <rate t='1M' r='0.04'/>\n\
         <rate t='2M' r='0.041'/>\n\
         <rate t='3M' r='0.045'/>\n\

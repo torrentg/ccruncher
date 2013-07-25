@@ -38,10 +38,10 @@ namespace ccruncher {
 class File
 {
 
-  private:
+  public:
 
-    // non-instantiable class
-    File() {}
+    // path separator symbol
+    static const std::string pathSeparator;
 
   private:
 

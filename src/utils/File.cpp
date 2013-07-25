@@ -32,15 +32,17 @@
 #include "utils/Format.hpp"
 #include "utils/File.hpp"
 
-// --------------------------------------------------------------------------
-
-#ifdef _WIN32
-  #define PATHSEPARATOR string("\\")
-#else
-  #define PATHSEPARATOR string("/")
-#endif
-
 using namespace std;
+
+//=============================================================
+// path separator
+//=============================================================
+const string ccruncher::File::pathSeparator =
+#ifdef _WIN32
+  string("\\");
+#else
+  string("/");
+#endif
 
 //===========================================================================
 // normalize a string
@@ -70,17 +72,17 @@ bool ccruncher::File::isAbsolutePath(const string &path)
 
 #ifdef _WIN32
   string str = normalize(path);
-  if (str.substr(0,1) == PATHSEPARATOR) { // \users, \\net-pc1\users
+  if (str.substr(0,1) == pathSeparator) { // \users, \\net-pc1\users
     return true;
   }
-  else if (str.length() >= 3 && isalpha(str.c_str()[0]) && str.substr(2,1) == PATHSEPARATOR) { // C:\users
+  else if (str.length() >= 3 && isalpha(str.c_str()[0]) && str.substr(2,1) == pathSeparator) { // C:\users
     return true;
   }
   else {
     return false;
   }
 #else
-  if (path.substr(0,1) == PATHSEPARATOR) { // /home
+  if (path.substr(0,1) == pathSeparator) { // /home
     return true;
   }
   else {
@@ -109,8 +111,8 @@ string ccruncher::File::getWorkDir() throw(Exception)
       string aux = string(ret);
 
       // appending '/' at last position
-      if (aux.substr(aux.length()-1, 1) != PATHSEPARATOR) {
-        aux = aux + PATHSEPARATOR;
+      if (aux.substr(aux.length()-1, 1) != pathSeparator) {
+        aux = aux + pathSeparator;
       }
 
       return aux;
@@ -137,7 +139,7 @@ string ccruncher::File::normalizePath(const string &path) throw(Exception)
 
   if (ret.substr(0,1) != "." && !isAbsolutePath(ret))
   {
-    ret = "." + PATHSEPARATOR + ret;
+    ret = "." + pathSeparator + ret;
   }
 
   if (ret == ".")
@@ -145,19 +147,19 @@ string ccruncher::File::normalizePath(const string &path) throw(Exception)
     ret = getWorkDir();
   }
 
-  if (ret.substr(0,2) == ("." + PATHSEPARATOR))
+  if (ret.substr(0,2) == ("." + pathSeparator))
   {
     ret = getWorkDir() + ret.substr(2);
   }
 
-  if (ret.substr(0,3) == (".." + PATHSEPARATOR))
+  if (ret.substr(0,3) == (".." + pathSeparator))
   {
     ret = getWorkDir() + ret;
   }
 
-  if (ret.substr(ret.length()-1, 1) != PATHSEPARATOR)
+  if (ret.substr(ret.length()-1, 1) != pathSeparator)
   {
-    ret = ret + PATHSEPARATOR;
+    ret = ret + pathSeparator;
   }
 
   return ret;
@@ -301,9 +303,9 @@ string ccruncher::File::filepath(const string &path, const string &name)
   else
   {
     string str1 = normalize(path);
-    string ret = ((str1=="." || str1=="."+PATHSEPARATOR)?"":str1);
-    if (ret.length() > 0 && ret.substr(ret.length()-1,1) != PATHSEPARATOR) {
-      ret += PATHSEPARATOR;
+    string ret = ((str1=="." || str1=="."+pathSeparator)?"":str1);
+    if (ret.length() > 0 && ret.substr(ret.length()-1,1) != pathSeparator) {
+      ret += pathSeparator;
     }
     ret += normalize(name);
     return ret;

@@ -35,19 +35,21 @@ void ccruncher_test::FileTest::test1()
   string str1;
   ASSERT_NO_THROW(str1= File::normalizePath("./dir1/dir2"));
   ASSERT(str1.substr(0,1) != ".");
-  ASSERT(str1.substr(str1.length()-1,1) == "/");
+  ASSERT(str1.substr(str1.length()-1,1) == File::pathSeparator);
 
   // testing getWorkDir function
   string str2;
   ASSERT_NO_THROW(str2 = File::getWorkDir());
   ASSERT(str2.substr(0,1) != ".");
-  ASSERT(str2.substr(str2.length()-1,1) == "/");
+  ASSERT(str2.substr(str2.length()-1,1) == File::pathSeparator);
 
   // testing existDir function
   ASSERT(File::existDir("."));
   ASSERT(!File::existDir("nonexistentdir"));
 
   // makeDir function not tested
+
+#ifndef _WIN32
 
   // test checkFile function (run as non-root user)
   ASSERT_NO_THROW(File::checkFile("/etc/passwd", "r"));
@@ -72,5 +74,7 @@ void ccruncher_test::FileTest::test1()
   ASSERT_EQUALS("../readme.txt", File::filepath("../","readme.txt"));
   ASSERT_EQUALS("/etc/passwd", File::filepath("/etc","passwd"));
   ASSERT_EQUALS("/etc/passwd", File::filepath("/etc/","passwd"));
+
+#endif
 }
 
