@@ -4,7 +4,8 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-
+  * move #define setMajorPen setMajPen to src/gui/AnalysisWidget.cpp
+  
 Future works
 -------------------
   * technical features
