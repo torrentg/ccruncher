@@ -250,7 +250,14 @@ Developers tips & tricks
       > # lines of code
       > cloc src
 
-12. making source distribution package
+12. using clang compiler (http://clang.llvm.org/)
+      > #using autotools
+      > ./configure CXX=clang++
+      > make
+      > # using qmake
+      > qmake -spec unsupported/linux-clang 
+
+13. making source distribution package
       > make distcheck
       > make dist
     or (better) use script $CCRUNCHER/bin/makedist.sh
@@ -258,7 +265,7 @@ Developers tips & tricks
       > $CCRUNCHER/bin/makedist.sh -b
       > $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
 
-13. create a tag in subversion repository
+14. create a tag in subversion repository
       > svn cp http://www.ccruncher.net/svn/trunk/ \
              http://www.ccruncher.net/svn/tags/ccruncher-x.y/ \
              -m "created tag ccruncher-x.y"

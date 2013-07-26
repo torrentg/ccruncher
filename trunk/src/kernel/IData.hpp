@@ -125,7 +125,7 @@ class IData : public ExpatHandlers
     // destructor
     ~IData();
     // initialize content
-    void init(const std::string &filename, const std::map<std::string,std::string> &m=std::map<std::string,std::string>(), bool *stop_=NULL, bool parse_portfolio_=true) throw(Exception);
+    void init(const std::string &f, const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *stop_=NULL, bool parse_portfolio_=true) throw(Exception);
     // returns simulation title
     const std::string &getTitle() const;
     // returns simulation description
