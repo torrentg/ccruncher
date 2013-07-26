@@ -433,7 +433,7 @@ dev.off()
  cdf1 = ecdf(x1)
  pdf(file="lhs1.pdf", width=7, height=3)
  par(mar=c(2,2,1,1))
- plot(cdf1, verticals=TRUE, pch=26, ylab="prob", main="");
+ plot(cdf1, verticals=TRUE, pch=-1, ylab="prob", main="");
  grid()
  dev.off()
 
@@ -441,7 +441,7 @@ dev.off()
  cdf2 = ecdf(x2)
  pdf(file="lhs2.pdf", width=7, height=3)
  par(mar=c(2,2,1,1))
- plot(cdf2, verticals=TRUE, pch=26, ylab="prob", main="");
+ plot(cdf2, verticals=TRUE, pch=-1, ylab="prob", main="");
  grid()
  dev.off()
 

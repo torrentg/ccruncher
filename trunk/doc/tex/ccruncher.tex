@@ -88,7 +88,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1097}
+\def\svnversion{R1100}
 
 %----------------------------------------------------------------------------------------
 
@@ -692,9 +692,8 @@ parameters.
 \begin{proposition}[Multivariate Default Times distribution]
 	\label{prop:dtd}
 	Let $T=(T_1,\dots,T_n)$ the time-until-default of obligors with marginals 
-	$F_i$ and a t-Student copula $C_{\nu,\bar{R}}^n$ with $\nu$ degrees of 
-	freedom and a $n {\times} n$ obligors correlation matrix $\bar{R}$. Then, 
-	its distribution $F$ is:
+	$F_i$ and a t-Student copula $C_{\nu,\bar{R}}^t$. Then, its distribution 
+	$F$ is:
 	\begin{displaymath}
 		F(t_1,\dots,t_n) = H\left(t_\nu^{-1}(F_1(t_1)), \dots, t_\nu^{-1}(F_n(t_n))\right)
 	\end{displaymath}
@@ -706,12 +705,13 @@ parameters.
 \begin{corollary}[Default times simulation (I)]
 	\label{cor:dts1}
 	Let $T=(T_1, \dots, T_n)$ a random vector with marginals 
-	$F_1, \dots, F_n$ and a t-Student copula $C_{\nu,\bar{R}}^n$. 
+	$F_1, \dots, F_n$ and a t-Student copula $C_{\nu,\bar{R}}^t$. 
 	Then we can simulate this distribution using a multivariate t-Student 
 	distribution $X \sim t_n(\nu,\bar{R})$:
 	\begin{displaymath}
 		(T_1, \dots, T_n) = \left(F_1^{-1}\left(t_{\nu}(X_1)\right), \dots, F_n^{-1}\left(t_{\nu}(X_n)\right)\right)
 	\end{displaymath}
+	where $t_\nu$ is the cdf of the univariate t-Student distribution $t_1(\nu,0,1)$.
 \end{corollary}
 
 The current situation is not yet satisfactory because the dimension 
@@ -773,7 +773,7 @@ t-Student $t_n(\nu,\bar{R})$ where $\bar{R} = B_k(\vec{n},\vec{1},M)$~
 \footnote{ In the Gaussian case, the relationship between Spearman's 
 and Pearson's correlation is $\rho_S = \frac{6}{\pi}\cdot \arcsin(\frac{\rho}{2})$.}.
 Consequently, the multivariate time-until-default distribution $F$ can be 
-expressed by its marginals $F_i$ and a t-Student copula $C_{\nu,\bar{R}}^n$
+expressed by its marginals $F_i$ and a t-Student copula $C_{\nu,\bar{R}}^t$
 where $\bar{R} = B_k(\vec{n},\vec{1},M)$.
 
 As we have seen, proposition~\ref{prop:dtd} establishes the link between the 
@@ -784,7 +784,7 @@ multi-factor model.
 
 The multivariate t-Student distribution relies on the multivariate Gaussian
 distribution (see proposition \ref{prop:mtschar}). The multivariate Gaussian 
-with a correlation block matrix  can be expressed as a multi-factor model in 
+with a correlation block matrix can be expressed as a multi-factor model in 
 most cases (see proposition \ref{prop:ibne}). The cases that aren't covered 
 are those that contain negative intra-sectorial correlations, and those 
 containing inter-sectorial correlations too high. These cases tend to $0$ 
@@ -1095,7 +1095,7 @@ default times distribution. More info at~\cite{gordy:2002,roncalli:2004}.
 \begin{proposition}[Density of the annual number of defaults (I)]
 	The density of the annual number of defaults, assuming that multivariate 
 	default times has marginals $F_1,\dots,F_n$ and a t-Student copula 
-	$C_{\nu,\bar{R}}^n$ with $\bar{R} = B_k(\vec{n},\vec{1},M)$, is:
+	$C_{\nu,\bar{R}}^t$ with $\bar{R} = B_k(\vec{n},\vec{1},M)$, is:
 	\begin{displaymath}
 		\begin{array}{l}
 			K(k_{11},\dots,k_{sr}\ ;\ \nu, \bar{R}) = 
@@ -2359,7 +2359,7 @@ EADs and LGDs random values for each variate.
 
  f <- function(x) { 1/(1+x) }
  result = matrix(nrow=4, ncol=3)
- colnames(result) = c("N", "Mean", "Var")
+ colnames(result) = c("N", "Mean", "Variance")
  rownames(result) = 1:4
 
  rownames(result)[1] = "Exact";
@@ -2385,12 +2385,14 @@ EADs and LGDs random values for each variate.
  result[4,1] = length(u)
  result[4,2] = mean(f(u))
  result[4,3] = var(f(u))
+ 
+ result
 
 \end{lstlisting}
 \hspace*{1cm}
 \begin{tabular}{l|c|c|c|}
 	\cline{2-4}
-	& N & Mean & Var \\
+	& N & Mean & Variance \\
 	\hline
 	\multicolumn{1}{|l|}{Exact} & 0 & 0.693147 & 0.000000 \\
 	\hline
@@ -2406,7 +2408,7 @@ EADs and LGDs random values for each variate.
 \subsection{Latin Hypercube Sampling (LHS)}
 This variance reduction technique 
 belongs to the stratified sampling family. It consists in dividing the total 
-probability range ($100\%$) in $N$ equispaced segments. Then we create a 
+probability range [0,1] in $N$ equispaced segments. Then we create a 
 sample of size $N$ picking a random value from each segment using a uniform 
 distribution and applying the inverse transform sampling. Finally we shuffle 
 the sample to obtain the desired distribution random values. When we have 
@@ -2414,7 +2416,7 @@ two independent random variables, we repeat the above procedure for each of
 them obtaining the Latin Square effect: the generated random points are in
 a reticle where each row and column has only one point. The procedure for
 three or more independent variables is exactly the same and its named Latin 
-Hypercube Sampling~\cite{jorgensen:1998,glasserman:1997}.
+Hypercube Sampling~\cite{glasserman:1997}.
 
 When the random variables are dependent the previous schema doesn't work 
 and it is reformulated recurring to copulas and the rank statistic 
@@ -2422,7 +2424,7 @@ and it is reformulated recurring to copulas and the rank statistic
 quality of the generated values, the bigger the better.
 
 In CCruncher, the random variables that can be sampled using the LHS 
-technique are the degrees of freedom, $\nu$, and the factors, $\vec{z}$. 
+technique are the degrees of freedom $\nu$, and the factors $\vec{z}$. 
 The aim is to ensure a uniform scanning of these variables so that the
 extreme cases are represented.
 
@@ -2441,11 +2443,11 @@ extreme cases are represented.
 
  x1 = rnorm(100, mean=0, sd=1)
  cdf1 = ecdf(x1)
- plot(cdf1, verticals=TRUE, pch=26, ylab="prob", main="");
+ plot(cdf1, verticals=TRUE, pch=-1, ylab="prob", main="");
  
  x2 = rlhs(100, qnorm, mean=0, sd=1)
  cdf2 = ecdf(x2)
- plot(cdf2, verticals=TRUE, pch=26, ylab="prob", main="");
+ plot(cdf2, verticals=TRUE, pch=-1, ylab="prob", main="");
  
 \end{lstlisting}
 \begin{figure}[!ht]
@@ -2709,7 +2711,7 @@ See~\cite[chap. 5]{mcneil:2005} for a pleasant and detailed introduction to
 copulas.
 
 \begin{definition}[Copula]
-	A copula function, $C$, is a multivariate distribution defined on the 
+	A copula function $C$, is a multivariate distribution defined on the 
 	unit hypercube $[0,1]^d$ with standard uniform marginals. 
 	More precisely,
 	\begin{displaymath}
@@ -2740,10 +2742,10 @@ use this statement to define and simulate the t-Student copula.
 \begin{corollary}[Copula of a multivariate distribution]
 	\label{cor:cop1}
 	Let $X=(X_1, \dots, X_d)$ be a random vector with a multivariate 
-	distribution $F$ and continuous marginals $F_1, \dots, F_n$. 
+	distribution $F$ and continuous marginals $F_1, \dots, F_d$. 
 	Then its copula is:
 	\begin{displaymath}
-		C(u_1,\dots,u_n) = F(F_1^{-1}(u_1), \dots, F_n^{-1}(u_n))
+		C(u_1,\dots,u_d) = F(F_1^{-1}(u_1), \dots, F_d^{-1}(u_d))
 	\end{displaymath}
 \end{corollary}
 %\begin{proof}
@@ -2758,18 +2760,19 @@ use this statement to define and simulate the t-Student copula.
 \begin{corollary}[Copula simulation]
 	\label{cor:cop2}
 	Let $X=(X_1, \dots, X_d)$ be a random vector with a multivariate 
-	distribution $F$ and continuous marginals $F_1, \dots, F_n$.
+	distribution $F$ and continuous marginals $F_1, \dots, F_d$.
 	If we have a procedure to simulate $X$ then we can simulate 
 	its copula $C$ using:
 	\begin{displaymath}
 		(U_1, \dots, U_d) = (F_1(X_1), \dots, F_d(X_d))
 	\end{displaymath}
+	where $U_i$ are the copula components.
 \end{corollary}
 
 \begin{corollary}[Multivariate distribution simulation]
 	\label{cor:cop3}
 	Let $X=(X_1, \dots, X_d)$ a random vector with a copula $C$
-	and continuous marginals $F_1, \dots, F_n$. If we have a
+	and continuous marginals $F_1, \dots, F_d$. If we have a
 	procedure to simulate $C$ then we can simulate $X$ using:
 	\begin{displaymath}
 		(X_1, \dots, X_d) = (F_1^{-1}(U_1), \dots, F_d^{-1}(U_d))
@@ -2841,11 +2844,11 @@ Most of the results set out below have been extracted from~\cite{kotz:2004}.
 
 \begin{proposition}[Multivariate t-Student marginals]
 	Let $X \sim t_d(\nu,\vec{0},\Sigma)$. Then, its i-th marginal is 
-	$X_i \sim t_1(\nu,0,R_{ii})$.
+	$X_i \sim t_1(\nu,0,\sigma_{ii})$.
 \end{proposition}
 
 \begin{definition}[t-Student copula]
-	The t-Student copula, $C_{\nu,\Sigma}^d$, is the copula of the multivariate 
+	The t-Student copula, $C_{\nu,\Sigma}^t$, is the copula of the multivariate 
 	t-Student distribution $t_d(\nu,\mu,\Sigma)$.
 \end{definition}
 
@@ -2855,18 +2858,18 @@ Most of the results set out below have been extracted from~\cite{kotz:2004}.
 \end{proposition}
 
 \begin{proposition}[t-Student copula density]
-	The t-Student copula, $C_{\nu,R}^d$, where $R$ is a correlation matrix,
-	has the following distribution:
+	The t-Student copula, $C_{\nu,R}^t$, where $R$ is a correlation matrix,
+	has the following distribution function:
 	\begin{displaymath}
-		C_{\nu,R}^d(u_1, \dots, u_d) = 
+		C_{\nu,R}^t(u_1, \dots, u_d) = 
 		\int_{-\infty}^{t_\nu^{-1}(u_1)} \dots \int_{-\infty}^{t_\nu^{-1}(u_d)} f(x)\ \ud x
 	\end{displaymath}
 	where $f(x)$ is the density function of $t_d(\nu,\vec{0},R)$, and $t_{\nu}^{-1}$ 
 	denotes the quantile function of the univariate distribution $t_1(\nu,0,1)$. 
-	The copula density is
+	The copula density is:
 	\begin{displaymath}
 		\label{eq:density}
-		c_{\nu,R}^d(u_1,\dots,u_d) =
+		c_{\nu,R}^t(u_1,\dots,u_d) =
 		|R|^{-\frac{1}{2}} 
 		\displaystyle\frac{\Gamma{\left(\frac{\nu+d}{2}\right)}}{\Gamma{\left(\frac{\nu}{2}\right)}}
 		\displaystyle\left[ \frac{\Gamma{\left(\frac{\nu}{2}\right)}}{\Gamma{\left(\frac{\nu+1}{2}\right)}} \right]^d
@@ -2905,12 +2908,26 @@ in~\cite{torrent:2012}.
 	\label{example1}
 	We have $6$ obligors sorted by sector. The first three belong to the 
 	banking sector, the next two belong to the energy sector 
-	and the last one belongs to the services sector. The correlations are 
-	determined by sectors, where $m_{ij}$ is the correlation between two 
-	obligors belonging to sectors $i$ and $j$. Then the correlation matrix 
-	between obligors is:
+	and the last one belongs to the services sector. Obligors default time
+	dependence is determined only by sectors. Then, the correlation matrix 
+	of the underlying elliptical copula is a correlation block matrix.
+	\small
 	\begin{displaymath}
-		R=
+		\left.
+		\begin{array}{l}
+			\vec{n} = \left(3,2,1\right) \\
+			\vec{d} = \left(1,1,1\right) \\
+			M = \left(
+			\begin{array}{ccc}
+				0.5 & 0.2  & 0.1  \\
+				0.2 & 0.4  & 0.15 \\
+				0.1 & 0.15 & 0.5  \\
+			\end{array}
+			\right)
+		\end{array}
+		\right\}
+		\rightarrow
+		B_3(\vec{n},\vec{d},M)=
 		\left(
 		\begin{array}{ccc|cc|c} 
 			1   & 0.5 & 0.5 & 0.2  & 0.2  & 0.1  \\ 
@@ -3036,7 +3053,7 @@ in~\cite{torrent:2012}.
 \end{proposition}
 \begin{proof}
 	Proposition~\ref{prop:gmfigs} states that any multi-factor model 
-	can be expressed as a multivariate normal composed by blocks.
+	is a multivariate Gaussian composed by blocks.
 	Next we see that reciprocal is false. Let 
 	$\bar{R} = B_k(\vec{n},\vec{1},M)$ the Gaussian distribution 
 	correlation matrix. We use the equivalence 
@@ -3077,7 +3094,7 @@ in~\cite{torrent:2012}.
 		R_{ij} = \frac{M_{ij}}{w_i \cdot w_j} = 
 		\frac{M_{ij}}{\sqrt{M_{ii} \cdot M_{jj}}}
 	\end{displaymath}
-	If $M_{ii}^2 > M_{ii} \cdot M_{jj}$, then $R_{ij}$ has an absolute value
+	If $M_{ij}^2 > M_{ii} \cdot M_{jj}$, then $R_{ij}$ has an absolute value
 	bigger than 1, which is not possible because $R_{ij}$ is a correlation
 	value. By example:
 	\begin{displaymath}
@@ -3097,9 +3114,9 @@ in~\cite{torrent:2012}.
 			\frac{0.6}{0.5} & 1               \\
 		\end{array}
 		\right)
+		\text{ !!}
 		\text{ , }
 		w = (\sqrt{0.5}, \sqrt{0.5})
-		\text{ !!}
 	\end{displaymath}
 \end{proof}
 
@@ -3230,7 +3247,7 @@ The following proposition clarifies this theme.
 \begin{proof}
 	We note as $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
 	distribution $t_n(\nu,\bar{R})$, and $(U_1,\dots,U_n)$ to represent
-	the components of the copula $C_{\nu,\bar{R}}^n$.
+	the components of the copula $C_{\nu,\bar{R}}^t$.
 	\begin{displaymath}
 		\begin{array}{rl}
 			F(t_1,\dots,t_n) = & \Pr\{ T_1 \le t_1 , \dots, T_n \le t_n \} = \\
@@ -3240,9 +3257,9 @@ The following proposition clarifies this theme.
 			                   & \text{we use the corollary~\ref{cor:cop2}: }
 			(U_1,\dots,U_n) = (t_\nu(X_1),\dots,t_\nu(X_n)) \\
 			=                  & \Pr\{ F_1^{-1}(t_\nu(X_1)) \le t_1 , \dots , F_n^{-1}(t_\nu(X_n)) \le t_n \} = \\
-			=                  & \Pr\{ t_\nu(X_1) \le F_1(t_1) , \dots , t_\nu(X_n) \le F_n(t_n) \} = \\
-			=                  & \Pr\{ X_1 \le t_\nu^{-1}(\text{PD}_1(t_1)) , \dots , X_n \le t_\nu^{-1}(\text{PD}_n(t_n)) \} = \\
-			=                  & H(t_\nu^{-1}(\text{PD}_1(t_1)), \dots, t_\nu^{-1}(\text{PD}_n(t_n))) \\
+			=                  & \Pr\{ t_\nu(X_1) \le F_1(t_1), \dots , t_\nu(X_n) \le F_n(t_n) \} = \\
+			=                  & \Pr\{ X_1 \le t_\nu^{-1}(F_1(t_1)), \dots , X_n \le t_\nu^{-1}(F_n(t_n)) \} = \\
+			=                  & H(t_\nu^{-1}(F_1(t_1)), \dots, t_\nu^{-1}(F_n(t_n))) \\
 		\end{array}
 	\end{displaymath}
 \end{proof}
@@ -3272,7 +3289,7 @@ The following proposition clarifies this theme.
 	\begin{displaymath}
 		H_{ij}(\upsilon,z_i) = 
 		\Pr\{T_k \le 1 \mid \upsilon, z_i\} = 
-		\Pr\{ X_k \le t_{\nu}^{-1}(\text{PD}_j(1)) \mid \upsilon, z_i\} = 
+		\Pr\{ X_k \le t_{\nu}^{-1}(F_j(1)) \mid \upsilon, z_i\} = 
 		\Pr\{ X_k \le t_{\nu}^{-1}(p_j) \mid \upsilon, z_i\}
 	\end{displaymath}
 	where the k-th obligor belongs to sector $i$ and has rating $j$, 
@@ -3306,32 +3323,10 @@ The following proposition clarifies this theme.
 %==============================================================================
 % BIBLIOGRAPHY
 %==============================================================================
-% \chapter*{Bibliography}
 \addcontentsline{toc}{chapter}{\textcolor{ocre}{Bibliography}}
-% \section*{Books}
-% \addcontentsline{toc}{section}{Books}
-% \printbibliography[heading=bibempty,type=book]
-% \section*{Articles}
-% \addcontentsline{toc}{section}{Articles}
-% \printbibliography[heading=bibempty,type=article]
-% \section*{Others}
-% \addcontentsline{toc}{section}{Others}
-% \printbibliography[heading=bibempty,type=techreport]
-
 \bibliographystyle{plain}
 \bibliography{bibliography}
 
-% \section*{References}
-% \addcontentsline{toc}{section}{References}
-% \printbibliography[heading=bibempty]
-
-%----------------------------------------------------------------------------------------
-%	INDEX
-%----------------------------------------------------------------------------------------
-% \cleardoublepage
-% \setlength{\columnsep}{0.75cm}
-% \addcontentsline{toc}{chapter}{\textcolor{ocre}{Index}}
-% \printindex
 
 %----------------------------------------------------------------------------------------
 
