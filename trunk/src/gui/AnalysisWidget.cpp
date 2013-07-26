@@ -41,10 +41,14 @@
 #include "utils/Format.hpp"
 #include <cassert>
 
-using namespace std;
-using namespace ccruncher;
+#if QWT_VERSION < 0x060100
+  #define setMajorPen setMajPen
+#endif
 
 #define REFRESH_MS 100
+
+using namespace std;
+using namespace ccruncher;
 
 //===========================================================================
 // constructor

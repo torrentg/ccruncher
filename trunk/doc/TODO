@@ -4,8 +4,8 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * move #define setMajorPen setMajPen to src/gui/AnalysisWidget.cpp
-  
+  * set creditvar.png (same as pdf doc) in index.html
+
 Future works
 -------------------
   * technical features
