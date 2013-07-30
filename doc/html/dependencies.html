@@ -8,10 +8,10 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   </head>
 
-  <body class="composite">
+  <body>
     <div id="main-container">
     <div id="page-header" style="background:#005080;">
-      <table style="height:100%"><tr>
+      <table><tr>
         <td style="vertical-align:middle;">
           <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
             &nbsp;CCRUNCHER
@@ -25,11 +25,41 @@
         </td>
         <td style="vertical-align: middle;">
           <a href="index.html">
-            <img src="logo.png" alt="logo" height="80" style="margin-right:10px;"/>
+            <img src="logo.png" alt="logo" height="80" style="margin-right:10px; border:0"/>
           </a>
         </td>
-      </tr></table>
-    </div>
+      </tr>
+      </table>
+      </div>
+      <div id="navbar">
+        <ul>
+          <li><a href="index.html">Home</a>
+            <ul>
+              <li><a href="faq.html">F.A.Q.</a></li>
+              <li><a href="features.html">Features</a></li>
+              <li><a href="screenshots.html">Screenshots</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Let's work!</a>
+            <ul>
+              <li><a href="http://sourceforge.net/projects/ccruncher/">Download&nbsp;<img src="external.png" alt="" style="border:none;"/></a></li>
+              <li><a href="gstarted.html">Getting Started</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Documentation</a>
+            <ul>
+              <li><a href="ccruncher.pdf">Technical Doc.&nbsp;<img src="pdf.png" width="14" alt="" style="border:none;"/></a></li>
+              <li><a href="ifileref.html">Input File Format</a></li>
+            </ul>
+          </li>
+          <li><a class="active" href="#">Development</a>
+            <ul>
+              <li><a href="dependencies.html">Dependencies</a></li>
+              <li><a href="http://www.ccruncher.net/svn/">Repository (svn)</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
 
     <h1>Dependencies</h1>
 
@@ -304,14 +334,12 @@
     </table>
 
     <div id="page-footer">
-      <table style="width:100%; height:100%"><tr>
-        <td style="width:100%; text-align:center;">
-          Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
-        </td>
-        <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 12-Jun-2013
-        </td>
-      </tr></table>
+      <span id="copyright" >
+        Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+      </span>
+      <span id="modified">
+        Last modified: 30-Jul-2013
+      </span>
     </div>
 
   </div>

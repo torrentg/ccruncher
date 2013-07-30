@@ -121,13 +121,6 @@ checkout() {
 # -------------------------------------------------------------
 prepare() {
 
-  # create html doc graphics
-  $1/bin/tex2png.sh $1/doc/html/*.html;
-  if [ $? != 0 ]; then
-    echo "aborting: error found processing images";
-    exit 1;
-  fi
-  
   # set version information
   $1/bin/rollversion.sh -s;
   if [ $? != 0 ]; then
@@ -140,11 +133,8 @@ prepare() {
   rm $1/bin/rollversion.sh
   rm $1/bin/tests.sh;
   rm $1/bin/tests.R;
-  rm $1/bin/tex2png.sh;
-  rm $1/bin/tex2png.xsl;
   rm -rvf `find $1/ -name \.svn\*`;
   rm -rvf $1/doc/share;
-  rm -vf $1/doc/html/*.gpi;
   rm -vf $1/doc/html/*.vsd;
 
 }

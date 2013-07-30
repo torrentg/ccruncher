@@ -39,7 +39,7 @@
   <body>
     <div id="main-container">
     <div id="page-header" style="background:#005080;">
-      <table style="height:100%"><tr>
+      <table><tr>
         <td style="vertical-align:middle;">
           <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
             &nbsp;CCRUNCHER
@@ -53,11 +53,41 @@
         </td>
         <td style="vertical-align: middle;">
           <a href="index.html">
-            <img src="logo.png" alt="logo" height="80" style="margin-right:10px;"/>
+            <img src="logo.png" alt="logo" height="80" style="margin-right:10px; border:0"/>
           </a>
         </td>
-      </tr></table>
-    </div>
+      </tr>
+      </table>
+      </div>
+      <div id="navbar">
+        <ul>
+          <li><a href="index.html">Home</a>
+            <ul>
+              <li><a href="faq.html">F.A.Q.</a></li>
+              <li><a href="features.html">Features</a></li>
+              <li><a href="screenshots.html">Screenshots</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Let's work!</a>
+            <ul>
+              <li><a href="http://sourceforge.net/projects/ccruncher/">Download&nbsp;<img src="external.png" alt="" style="border:none;"/></a></li>
+              <li><a href="gstarted.html">Getting Started</a></li>
+            </ul>
+          </li>
+          <li><a class="active" href="#">Documentation</a>
+            <ul>
+              <li><a href="ccruncher.pdf">Technical Doc.&nbsp;<img src="pdf.png" width="14" alt="" style="border:none;"/></a></li>
+              <li><a href="ifileref.html">Input File Format</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Development</a>
+            <ul>
+              <li><a href="dependencies.html">Dependencies</a></li>
+              <li><a href="http://www.ccruncher.net/svn/">Repository (svn)</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
 
 <!-- ==================================================== -->
 <!--    introduction                                      -->
@@ -66,8 +96,8 @@
 
     <p>
       This document describes the xml input file for ccruncher-2.3.
-      In the distribution package you can find the DTD, the XSD and some XML 
-      samples into the $CCRUNCHER/samples directory. The xml used as
+      You can find the DTD, the XSD and some XML samples under the 
+      $CCRUNCHER/samples directory. The xml used as
       <a href="sample.xml">example</a> is not intended to reflect a real 
       case, but to see the CCruncher configuration options.
       <br /><br />
@@ -330,7 +360,7 @@
       compute the Current Net Value of simulated losses. If you skip this 
       section then the amounts will not be updated to their Current Net Value.
       In the euro area you can obtain these values from 
-      <a href="http://www.ecb.int/stats/money/yc/html/index.en.html">ECB</a>.
+      <a href="http://www.ecb.int/stats/money/yc/html/index.en.html">ECB</a>&nbsp;<img src="external.png" alt="" style="border:none;"/>.
     </p>
 
     <h3>Example</h3>
@@ -646,8 +676,7 @@
       <tr class="a">
         <td class="c1">loading</td>
         <td class="c2">
-          Factor loading value (<i>w<sub>i</sub></i> in the 
-          <a href="technical.html#multifactor-model">multi-factor model</a>). 
+          Factor loading value (<i>w<sub>i</sub></i> in the multi-factor model). 
           A value in the range [0%,100%].
         </td>
         <td class="c3">double</td>
@@ -669,7 +698,7 @@
 
     <p>
       This section shows how to define the correlation matrix between 
-      factors, <i>R</i> in the <a href="technical.html#multifactor-model">multi-factor model</a>. 
+      factors, <i>R</i> in the multi-factor model. 
       The diagonal values are always <i>1</i> and don't need to be specified.
       The non-diagonal elements are the correlation matrix coefficients. 
       You only need to set up the upper triangle elements. 
@@ -1220,14 +1249,12 @@
     </table>
 
     <div id="page-footer">
-      <table style="width:100%; height:100%"><tr>
-        <td style="width:100%; text-align:center;">
-          Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
-        </td>
-        <td style="white-space:nowrap; text-align:right; font-weight:bold; padding-right:10px;">
-          Last modified: 27-Jul-2013
-        </td>
-      </tr></table>
+      <span id="copyright" >
+        Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+      </span>
+      <span id="modified">
+        Last modified: 30-Jul-2013
+      </span>
     </div>
 
   </div>
