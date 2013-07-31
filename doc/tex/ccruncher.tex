@@ -88,7 +88,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1101}
+\def\svnversion{R1103}
 
 %----------------------------------------------------------------------------------------
 
@@ -1115,7 +1115,7 @@ default times distribution. More info at~\cite{gordy:2002,roncalli:2004}.
 	defaults in the i-th sector with the j-th rating, $p_j = F_j(1)$ 
 	is the probability to default in 1-year of the j-th rating, $f(\vec{x})$ 
 	is the pdf of $t_n(\nu,\bar{R})$, and $t_{\nu}^{-1}$ is the inverse of the 
-	cdf of the univariate t-Student. The combinatorial coefficients take in 
+	cdf of the univariate t-Student. The combinatorial coefficients take into 
 	account all the combinations of exchangeable obligors.
 \end{proposition}
 
@@ -1152,7 +1152,7 @@ proposition exposes the conditioned density of the annual number of defaults.
 	is the probability to default in 1-year of the j-th rating,
 	$\Phi$ is the cdf of the univariate $N(0,1)$, and $t_{\nu}^{-1}$ is the 
 	inverse of the cdf of the univariate t-Student. The combinatorial coefficients 
-	take in account all the combinations of exchangeable obligors.
+	take into account all the combinations of exchangeable obligors.
 \end{proposition}
 
 \begin{corollary}[Density of the annual number of defaults (II)]
@@ -1801,7 +1801,7 @@ the de-facto international financial risk regulation framework.
 		\right\}
 	\end{displaymath}
 	$\text{EAD}_i^j$ can be a function dependent of time when these amounts 
-	are fixed and known in advance (eg.\ loan), or can be a distribution
+	are fixed and known in advance (eg.\ loan, bond), or can be a distribution
 	defined over time when we have a model that supports it 
 	(eg.\ line of credit).
 \end{definition}
@@ -2356,9 +2356,11 @@ speed. Please note that when we use the antithetic method to sample the
 default times and there are some stochastic EADs or LGDs, we use distinct 
 EADs and LGDs random values for each variate.
 
+%TODO: set example section + explanation
 \begin{lstlisting}[language=R, label=sc:antithetic, caption=Antithetic example (R script)]
 
  f <- function(x) { 1/(1+x) }
+ 
  result = matrix(nrow=4, ncol=3)
  colnames(result) = c("N", "Mean", "Variance")
  rownames(result) = 1:4
@@ -2429,6 +2431,7 @@ technique are the degrees of freedom $\nu$, and the factors $\vec{z}$.
 The aim is to ensure a uniform scanning of these variables so that the
 extreme cases are represented.
 
+%TODO: set example section + explanation
 \begin{lstlisting}[language=R, label=sc:lhs, caption=Latin Hypercube Sampling example (R script)]
 
  rlhs <- function(nblocks, icdf, ...) 
@@ -2476,7 +2479,7 @@ illustrates this phenomenon and its magnitude (see the 20 observations case).
 The CCruncher framework encourages incorporating the parameter uncertainty 
 in the credit risk valuation. This means that credit risk measures
 (eg.\ $\text{VaR}_{99\%}$, $\text{ES}_{99\%}$) are regarded as distributions 
-instead of precise values. As example, in the case of the Value at Risk, we 
+instead of values. As example, in the case of the Value at Risk, we 
 consider it as a function $\text{VaR}_{99\%}(L_T(\nu,\vec{w},R))$ that 
 depends on multivariate random variables $\nu, \vec{w}$ and $R$.
 Note that the EL measure is not affected by the uncertainty of dependence 
@@ -2495,8 +2498,8 @@ parameters values.
 
 On the other hand we are able to measure the credit risk of a portfolio 
 considering that dependence parameters are fixed values. This is done 
-sampling the portfolio loss (see algorithm~\ref{alg:pldmc}) and approximating 
-the credit risk indicator using the appropriate statistic (see 
+sampling the portfolio loss (see algorithm~\ref{alg:pldmc}) and computing 
+the credit risk measure using the appropriate statistic (see 
 section~\ref{sec:riskm}).
 
 We combine both parts to define an algorithm that samples the desired
@@ -2527,9 +2530,9 @@ the parameter uncertainty but other uncertainties remains undercovered:
 		of the parameters distribution composed by the indexes multiples 
 		of $B$.
 		\item For each simulated parameters simulate the portfolio loss 
-		distribution using the algorithm~\ref{alg:pldmc}.
+		distribution $L_T(\nu^t,\vec{w}^t,R^t)$ using the algorithm~\ref{alg:pldmc}.
 		\item For each simulated portfolio loss distribution compute its 
-		risk measure using the statistic described in~\ref{sec:riskm}:
+		risk measure using the statistic described in section~\ref{sec:riskm}:
 		$\{\text{VaR}_{99\%}(L_T(\nu^t,\vec{w}^t,R^t))\}_{t=1,\dots,N}$.
 	\end{enumerate}
 \end{algorithm}
@@ -2891,10 +2894,11 @@ The content presented in this appendix is detailed and extended
 in~\cite{torrent:2012}.
 
 \begin{definition}[Covariance block matrix]
-	We say that a matrix $A$ is a covariance block matrix $B_k(n,d,M)$ where:
+	We say that a matrix $A$ is a covariance block matrix $B_k(\vec{n},\vec{d},M)$
+	where:
 	\begin{itemize}
-		\item $n=(n_1,\dots,n_k)$ with $n_i \in \mathbb{N}$ and $1 \le n_i$ (number of elements per block),
-		\item $d=(d_1,\dots,d_k)$ with $d_i \in \mathbb{R}$ (diagonal block values), and
+		\item $\vec{n}=(n_1,\dots,n_k)$ with $n_i \in \mathbb{N}$ and $1 \le n_i$ (number of elements per block),
+		\item $\vec{d}=(d_1,\dots,d_k)$ with $d_i \in \mathbb{R}$ (diagonal block values), and
 		\item $M$ is a $k {\times} k$ symmetric matrix with values $m_{ij} \in \mathbb{R}$ (block values).
 	\end{itemize}
 	when
@@ -2946,8 +2950,8 @@ in~\cite{torrent:2012}.
 
 \begin{proposition}[Covariance block matrix eigenvalues]
 	\label{prop1}
-	Let $A = B_k(n, d, M)$ a non-singular matrix, and let $G$ be the $k {\times} k$ 
-	deflated matrix
+	Let $A = B_k(\vec{n}, \vec{d}, M)$ a non-singular matrix, and let $G$ be 
+	the $k {\times} k$ deflated matrix
 	\begin{displaymath}
 		G =
 		\left( \begin{array}{cccc}
@@ -2965,7 +2969,7 @@ in~\cite{torrent:2012}.
 \end{proposition}
 
 \begin{corollary}
-	A covariance block matrix $B_k(n,d,M)$ is definite-positive if
+	A covariance block matrix $B_k(\vec{n},\vec{d},M)$ is definite-positive if
 	\begin{itemize}
 		\item $d_r > m_{rr}$ for all $r=1,\dots,k$, and
 		\item the deflated matrix $G$ is definite-positive.
@@ -3283,27 +3287,25 @@ The following proposition clarifies this theme.
 
 \subsection{Proposition \ref{prop:cdand} -- \nameref{prop:cdand} (page \pageref{prop:cdand})}
 \begin{proof}
-	Let $H_{ij}$ be the probability that an obligor belonging to sector $i$
-	with initial rating $j$ defaults the first year conditioned to $z_i$ 
-	and $\upsilon$. We use the pdf of the default times distribution (see 
-	proposition~\ref{prop:dtd}) to assess it value:
+	We use the pdf of the default times distribution (see proposition~\ref{prop:dtd}) 
+	to obtain the probability that an obligor $k$ belonging to i-th sector with j-th 
+	rating defaults the first year conditioned to $z_i$ and $\upsilon$:
 	\begin{displaymath}
 		H_{ij}(\upsilon,z_i) = 
 		\Pr\{T_k \le 1 \mid \upsilon, z_i\} = 
 		\Pr\{ X_k \le t_{\nu}^{-1}(F_j(1)) \mid \upsilon, z_i\} = 
 		\Pr\{ X_k \le t_{\nu}^{-1}(p_j) \mid \upsilon, z_i\}
 	\end{displaymath}
-	where the k-th obligor belongs to sector $i$ and has rating $j$, 
-	$T_k$ is the k-th component of the multivariate default 
-	times, and $X_k$ is the k-th component of the multivariate t-Student. 
-	Now express $X$ in the multi-factor form:
+	where $T_k$ is the k-th component of the multivariate default times, 
+	and $X_k$ is the k-th component of the multivariate t-Student. 
+	Now we express $X$ in the multi-factor form:
 	\begin{displaymath}
 		H_{ij}(\upsilon,z_i) = \Pr \left\{ 
-		\sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \epsilon\right)
+		\sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j\right)
 		\le t_{\nu}^{-1}(p_j) \mid \upsilon, z_i
 		\right\}
 	\end{displaymath}
-	Because $\upsilon$ and $z_i$ are fixed and independent from $\epsilon \sim N(0,1)$, we obtain:
+	Because $\upsilon$ and $z_i$ are fixed and independent from $\epsilon_i^j \sim N(0,1)$, we obtain:
 	\begin{displaymath}
 		H_{ij}(\upsilon,z_i) = \Phi\left(  
 		\frac{\sqrt{\frac{\upsilon}{\nu}} \cdot t_{\nu}^{-1}(p_j) - w_i\cdot z_i}{\sqrt{1-w_i^2}}
