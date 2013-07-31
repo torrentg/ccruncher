@@ -218,11 +218,12 @@
     <p>
       The command line version of CCruncher is the proper way to perform
       multiple simulations, or to integrate CCruncher in your management
-      system.
+      system. Below we show the available options:
     </p>
     <pre>
 
-  > bin/ccruncher-cmd -h
+<b>  > bin/ccruncher-cmd -h</b>
+
   Usage: ccruncher-cmd [OPTION]... -o DIRECTORY [FILE]
 
   Simule the loss distribution of the credit portfolio described in the xml
@@ -257,10 +258,15 @@
   'ccruncher-cmd --info' in the body of your report and attach the input
   file if at all possible.
     </pre>
-    <br/>
+    <p>
+      The following example simulates the input file <code>samples/test05.xml</code> 
+      redefining macros NU, W1, W2, R12, placing output files in <code>data/</code> 
+      directory and overwriting output files if they exist.
+    </p>
     <pre>
 
-  > bin/ccruncher-cmd -w -o data -DNU=12.54 -DW1=0.29 -DW2=0.48 -DR12=0.21 samples/test05.xml
+<b>  > bin/ccruncher-cmd -w -o data -DNU=12.54 -DW1=0.29 -DW2=0.48 -DR12=0.21 samples/test05.xml</b>
+
           ccruncher is Copyright (C) 2004-2013 Gerard Torrent and licensed
            under the GNU General Public License, version 2. More info at
                               http://www.ccruncher.net

@@ -4,7 +4,8 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * set creditvar.png (same as pdf doc) in index.html
+  * factor correlation vary when dimension changes
+  * check that multi-factor model is numerically stable
 
 Future works
 -------------------
