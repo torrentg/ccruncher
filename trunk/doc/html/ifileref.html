@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
   <head>
-    <title>CreditCruncher - Input file format</title>
+    <title>CCruncher - Input file</title>
     <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <style type="text/css">
@@ -28,14 +28,12 @@
             font-family: monospace;
         }
         @media print {
-            td.c1, td.c2, td.c3
-            {
+            td.c1, td.c2, td.c3 {
                 border: 1px solid gray;
             }
         }
     </style>
   </head>
-
   <body>
     <div id="main-container">
     <div id="page-header" style="background:#005080;">
@@ -80,7 +78,8 @@
           <li><a class="active" href="#">Documentation</a>
             <ul>
               <li><a href="ccruncher.pdf">Technical Doc.&nbsp;<img src="pdf.png" width="14" alt="" style="border:none;"/></a></li>
-              <li><a href="ifileref.html">Input File Format</a></li>
+              <li><a href="ofileref.html">Output Files</a></li>
+              <li><a href="ifileref.html">Input File</a></li>
             </ul>
           </li>
           <li><a href="#">Development</a>
@@ -98,7 +97,7 @@
     <h1>Input File Format</h1>
 
     <p>
-      This document describes the xml input file for ccruncher-2.3.
+      This page describes the xml input file for ccruncher-2.3.
       You can find the DTD, the XSD and some XML samples under the 
       $CCRUNCHER/samples directory. The xml used as
       <a href="sample.xml">example</a> is not intended to reflect a real 
@@ -579,11 +578,11 @@
   &lt;/transitions&gt;
     </pre>
 
-	<p>
-	  The above matrix is the S&amp;P 1-year transition matrix which is adjusted 
-	  for unrated bonds and covers the period between 01-Jan-1981 and 31-Dec-1998.
-	  It has been extracted from <a href="http://web.sakarya.edu.tr/~adurmus/basel_II/SSRN-id252517%20rating.pdf">Estimating Credit Rating Transition Probabilities for Corporate Bonds</a>.
-	</p>
+  <p>
+    The above matrix is the S&amp;P 1-year transition matrix which is adjusted 
+    for unrated bonds and covers the period between 01-Jan-1981 and 31-Dec-1998.
+    It has been extracted from <a href="http://web.sakarya.edu.tr/~adurmus/basel_II/SSRN-id252517%20rating.pdf">Estimating Credit Rating Transition Probabilities for Corporate Bonds</a>.
+  </p>
 
     <h3>Transitions Attributes</h3>
 
@@ -1256,7 +1255,7 @@
         Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
       </span>
       <span id="modified">
-        Last modified: 31-Jul-2013
+        Last modified: 01-Aug-2013
       </span>
     </div>
 
