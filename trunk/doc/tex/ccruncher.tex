@@ -88,7 +88,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1103}
+\def\svnversion{R1105}
 
 %----------------------------------------------------------------------------------------
 
@@ -218,25 +218,33 @@ the CreditRisk+ model~\cite{creditrisk+:1997}.
 probabilities of default are the proper way to explain the observed defaults.
 The sum of the obligors' exposures weighted by the probabilities of default 
 gives the portfolio loss distribution. This distribution is approximated 
-using the Monte Carlo method. The main representative of this approach is the 
-CreditMetrics\texttrademark{} model~\cite{cmetrics:1997}. Other representatives 
-are the KMV model~\cite{kmv:2003}, and the copula approach~\cite{li:2000}. 
+using the Monte Carlo method. The main representatives of this approach are the 
+CreditMetrics\texttrademark{} model~\cite{cmetrics:1997} and the KMV 
+model~\cite{kmv:2003}. 
 
 Both approaches give similar results for simple cases~\cite{koyluoglu:1998},
 but differ when there is more than one factor~\cite{bluhm:2001}, that is, 
-when the dependence between obligors stop being simple.
-CCruncher implements the copula approach, a Merton model variant that puts 
-the focus on the dependence among obligors, one of the key points in the 
-portfolio credit risk quantification.
+when the dependence between obligors stop being simple. Circa 2000 appears
+the copula approach in scene putting the focus on the dependence among 
+obligors, the \underline{key} point in the portfolio credit risk quantification. 
+This approach was first introduced by Embrechts, McNeil and 
+Straumann~\cite{embrechts:2002}, popularized by David X. Li~\cite{li:2000}, 
+and unfairly demonized by Salmon~\cite{salmon:2009} blaming it for the 
+sub-prime crisis in 2009.
 
 \textbf{Copula approach} considers that the lifetime of obligors
 are the proper way to explain the observed defaults. The dependence between 
 these variables is modeled using a copula. The sum of the obligors' exposures 
-at the default times gives the portfolio loss distribution.
-David X. Li introduced this approach in the famous paper
-\emph{On Default Correlation: A Copula Function Approach}~\cite{li:2000}
-which stated that the CreditMetrics\texttrademark{} model can be interpreted 
-in the copula approach context and that has a Gaussian copula.
+at the default times gives the portfolio loss distribution. The 
+CreditMetrics\texttrademark{} model can be interpreted as the Gaussian case 
+into the copula approach context~\cite{li:2000}.
+
+The CCruncher quantification model belongs to the copula approach and 
+implements the t-Student multi-factor copula, even for high-dimensional 
+portfolios. Model is formulated according to the Basel II concepts (PD, 
+EAD, LGD) and developed keeping portfolios of credits to SMEs in mind, 
+but it can be used to evaluate other types of portfolios such as 
+portfolios of bonds or otherwise.
 
 CCruncher quantifies the portfolio credit risk sampling the portfolio loss
 distribution and computing the appropriate statistics (EL, VaR, ES). The 
@@ -2805,7 +2813,7 @@ use this statement to define and simulate the t-Student copula.
 \section{Multivariate t-Student Distribution}
 \label{ap:mtsd}
 
-Most of the results set out below have been extracted from~\cite{kotz:2004}.
+Most of the results set out below have been extracted from~\cite{kotz:2004,demarta:2005}.
 
 \begin{definition}[Multivariate t-Student distribution]
 	The $d$-dimensional random vector $X=(X_1,\dots,X_d)$ is said to have a 
