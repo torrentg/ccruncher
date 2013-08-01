@@ -3,16 +3,41 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
   <head>
-    <title>CCruncher - Getting started</title>
+    <title>CCruncher - Ouput files</title>
     <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <style type="text/css">
-        li {
-          text-align: justify;
+        ul {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        td.c1 {
+            text-align: left;
+            padding: 8px;
+            width: 150px;
+        }
+        td.c2 {
+            text-align: justify;
+            padding: 8px;
+        }
+        td.c3 {
+            text-align: center;
+            padding: 8px;
+            width: 70px;
+        }
+        td.c4 {
+            text-align: center;
+            padding: 8px;
+            width: 70px;
+            white-space: nowrap;
+        }
+        @media print {
+            td.c1, td.c2, td.c3 {
+                border: 1px solid gray;
+            }
         }
     </style>
   </head>
-
   <body>
     <div id="main-container">
     <div id="page-header" style="background:#005080;">
@@ -48,13 +73,13 @@
               <li><a href="screenshots.html">Screenshots</a></li>
             </ul>
           </li>
-          <li><a class="active" href="#">Let's work!</a>
+          <li><a href="#">Let's work!</a>
             <ul>
               <li><a href="http://sourceforge.net/projects/ccruncher/">Download&nbsp;<img src="external.png" alt="" style="border:none;"/></a></li>
               <li><a href="gstarted.html">Getting Started</a></li>
             </ul>
           </li>
-          <li><a href="#">Documentation</a>
+          <li><a class="active" href="#">Documentation</a>
             <ul>
               <li><a href="ccruncher.pdf">Technical Doc.&nbsp;<img src="pdf.png" width="14" alt="" style="border:none;"/></a></li>
               <li><a href="ofileref.html">Output Files</a></li>
@@ -70,203 +95,188 @@
         </ul>
       </div>
 
-    <h1>Getting Started</h1>
+    <h1>Output Files</h1>
+    <p>
+      CCruncher leaves the output files in the directory indicated by the 
+      '-o' argument in ccruncher-cmd, or the directory indicated by the 
+      'Output' textbox in the ccruncher-gui. CCruncher output files are:
+    </p>
+    <table cellpadding="3">
+      <tr class="a">
+        <th>File</th>
+        <th>Content</th>
+        <th>Format</th>
+        <th>Number</th>
+      </tr>
+      <tr class="b">
+        <td class="c1"><a href="#segmentation">segmentation.csv</a></td>
+        <td class="c2">
+          Portfolio or sub-portfolios simulated losses.
+        </td>
+        <td class="c3">CSV</td>
+        <td class="c4">1 or more</td>
+      </tr>
+      <tr class="a">
+        <td class="c1"><a href="#indexes">indexes.csv</a></td>
+        <td class="c2">
+          Additional info about simulated values.
+        </td>
+        <td class="c3">CSV</td>
+        <td class="c4">0 or 1</td>
+      </tr>
+      <tr class="b">
+        <td class="c1"><a href="#trace">ccruncher.out</a></td>
+        <td class="c2">
+          Execution trace.
+        </td>
+        <td class="c3">TXT</td>
+        <td class="c4">1 (gui),<br/>0 (cmd)</td>
+      </tr>
+    </table>
+    <p>
+      CCruncher uses the <a href="http://en.wikipedia.org/wiki/Comma-separated_values">CSV file format</a>
+      to save tabular data. This is a widely accepted data format supported by
+      all data analysis tool (SPSS, R, Excel, Matlab, Mathematica, etc.).
+      CCruncher CSV files satisfy the following considerations:
+    </p>
+    <ul>
+      <li>
+        The field separator is the comma (,).
+      </li>
+      <li>
+        Each record contains the same number of comma-separated fields.
+      </li>
+      <li>
+        First line contains the names of fields. Names are surrounded by double quotes (").
+      </li>
+      <li>
+        Amounts are rounded and represented with 2 decimal places, using the period (.) 
+        as decimal point separator and without thousand separators.
+      </li>
+    </ul>
 
-    <h2>First steps</h2>
+<!-- ==================================================== -->
+<!--    segmentation                                      -->
+<!-- ==================================================== -->
+    <a name="segmentation"></a>
+    <h2>segmentation.csv</h2>
     <p>
-      Follow these steps to install CCruncher and discover its capabilities.
-    </p>
-    <ol>
-      <li>
-        Download your binary package from 
-        <a href="http://sourceforge.net/projects/ccruncher/">SourceForge</a>&nbsp;<img src="external.png" alt="" style="border:none;"/>.
-      </li>
-      <li>
-        Unpack it in a folder.
-      </li>
-      <li>
-        Take a time to inspect the directory contents (<code>bin, data, doc, samples</code>)
-      </li>
-      <li>
-        Execute CCruncher double-clicking <code>bin/ccruncher-gui</code>.
-      </li>
-      <li>
-        Open file <code>samples/test05.xml</code>.
-      </li>
-      <li>
-        Click on the 'Edit' button, or the 'Edit' icon, to view the input file content.
-      </li>
-      <li>
-        Return to the simulation tab.
-      </li>
-      <li>
-        Set <code>data/</code> as output directory.
-      </li>
-      <li>
-        Click the 'Run' button, or the 'Run' icon, to execute the Monte Carlo simulation.
-      </li>
-      <li>
-        Read the execution trace.
-      </li>
-      <li>
-        Open a file browser and review the content of the <code>data/</code> directory.
-        Observe the new file named <code>portfolio.csv</code>. Open it and inspect
-        its content. The values are the simulated portfolio losses.
-      </li>
-      <li>
-        Return to CCruncher.
-      </li>
-      <li>
-        Open output data files clicking the links in the trace, or clicking the 
-        'Data analysis' icon, or using the 'File > Open file' dialog.
-      </li>
-      <li>
-        Do your risk analysis.
-      </li>
-    </ol>
-
-    <h2>Using segmentations</h2>
-    <p>
-      Segmentations are a powerful mechanism to define sub-portfolios.
-      This feature can be used to disaggregate the risk of the whole
-      portfolio. CCruncher simulates all the sub-portfolios defined 
-      in the <code>&lt;segmentations&gt;</code> section of the input
-      file and creates an output file for each one of them.
-    </p>
-    <ol>
-      <li>
-        Open file <code>samples/test03.xml</code>.
-      </li>
-      <li>
-        Set <code>data/</code> as output directory.
-      </li>
-      <li>
-        Edit the input file pressing the 'Edit' button.
-      </li>
-      <li>
-        Locate the <code>&lt;segmentations&gt;</code> sections.
-      </li>
-      <li>
-        Enable the 'offices' segmentation.
-      </li>
-      <li>
-        Save the changes made in input file.
-      </li>
-      <li>
-        Click the 'Run' button, or the 'Run' icon, to execute the Monte Carlo simulation. 
-      </li>
-      <li>
-        Open a file browser and review the content of the <code>data/</code> directory.
-        Observe the new file named <code>offices.csv</code>. Open it and inspect its 
-        content. Each column is a segment of the segmentation 'offices'. The 'unassigned' 
-        segment appears because the obligor '100' isn't assigned to any segment of the 
-        'offices' segmentation.
-      </li>
-      <li>
-        Click the 'Data analysis' icon to open an analysis tab for each enabled
-        segmentation. 
-      </li>
-    </ol>
-    
-    <h2>Using macros</h2>
-    <p>
-      The macros mechanism allows modifying the input file in easy way.
-      This is useful if you desire to evaluate the same input file modifying slightly
-      a parameter each time.
-    </p>
-    <ol>
-      <li>
-        Open file <code>samples/test03.xml</code>.
-      </li>
-      <li>
-        Set <code>data/</code> as output directory.
-      </li>
-      <li>
-        Edit the input file pressing the 'Edit' button.
-      </li>
-      <li>
-        Create a new define adding the following line into the <code>&lt;defines&gt;</code> tag:<br/>
-        <code>&nbsp;&nbsp;&nbsp;&nbsp;&lt;define name="numsecs" value="20" /&gt;</code>
-      </li>
-      <li>
-        Go to the <code>maxseconds</code> parameter and replace its
-        value by <code>$numsecs</code>.
-      </li>
-      <li>
-        Save the changes made in input file.
-      </li>
-      <li>
-        Click on the 'Set ...' defines button.
-      </li>
-      <li>
-        Set <code>numsims</code> value to <i>0</i> (unbounded number of simulations).
-      </li>
-      <li>
-        Set <code>numsecs</code> value to <i>30</i>.
-      </li>
-      <li>
-        Close defines dialog pressing the 'Ok' button.
-      </li>
-      <li>
-        Click the 'Run' button, or the 'Run' icon, to execute the Monte Carlo simulation.
-      </li>
-      <li>
-        Check that the simulation has elapsed ~30 seconds before to stop.
-      </li>
-    </ol>
-    
-    <h2>Using command line</h2>
-    <p>
-      The command line version of CCruncher is the proper way to perform
-      multiple simulations, or to integrate CCruncher in your management
-      system. Below we show the available options:
+      These files contain the simulated losses of the indicated segmentation
+      disaggregated by its segments (aka. sub-portfolios). There are so many 
+      files of this type as segmentations defined in the input file.
+      Below we show the segmentations entry in the 
+      <code>samples/test05.xml</code> input file.
+      The segmentation name lead to the corresponding file name (portfolio.csv
+      and sector-ratings.csv in the example below), and the segment names leads 
+      to the corresponding column names and values. 
     </p>
     <pre>
 
-<b>  > bin/ccruncher-cmd -h</b>
-
-  Usage: ccruncher-cmd [OPTION]... -o DIRECTORY [FILE]
-
-  Simule the loss distribution of the credit portfolio described in the xml
-  input FILE using the Monte Carlo method. FILE can be gziped. If no one is
-  given, then STDIN is considered. The input file format description and
-  details of the simulation procedure can be found at http://www.ccruncher.net.
-
-  Mandatory arguments to long options are mandatory for short options too.
-
-    -D, --define=KEY=VAL    replace '$KEY' strings by 'VAL' in input file
-    -a, --append            output data is appended to existing files
-    -w, --overwrite         existing output files are overwritten
-    -o, --output=DIRECTORY  directory where output files will be placed
-    -i, --indexes           create file indexes.csv with info about simulation
-        --nice=NICEVAL      set process priority to NICEVAL (see nice command)
-        --threads=NTHREADS  number of threads to use (default=number of cores)
-        --hash=HASHNUM      print '.' for each HASHNUM simulations (default=1000)
-        --info              show build parameters and exit
-    -h, --help              show this message and exit
-        --version           show version and exit
-
-  Exit status:
-    0   finished without errors
-    1   finished with errors
-
-  Examples:
-    basic example      ccruncher-cmd -o data/ samples/test04.xml
-    forcing overwrite  ccruncher-cmd -w -o data/ samples/test100.xml
-    redefining values  ccruncher-cmd -w -o data/ -D ndf=8 samples/sample.xml
-
-  Report bugs to gtorrent@ccruncher.net. Please include the output of
-  'ccruncher-cmd --info' in the body of your report and attach the input
-  file if at all possible.
+  &lt;segmentations&gt;
+    &lt;segmentation name="portfolio" components="obligor"/&gt;
+    &lt;segmentation name="sector-rating" components="asset"&gt;
+      &lt;segment name="S1-A"/&gt;
+      &lt;segment name="S1-B"/&gt;
+      &lt;segment name="S1-C"/&gt;
+      &lt;segment name="S2-A"/&gt;
+      &lt;segment name="S2-B"/&gt;
+      &lt;segment name="S2-C"/&gt;
+    &lt;/segmentation&gt;
+  &lt;/segmentations&gt;
     </pre>
     <p>
-      The following example simulates the input file <code>samples/test05.xml</code> 
-      redefining macros NU, W1, W2, R12, placing output files in <code>data/</code> 
-      directory and overwriting output files if they exist.
+      Each row corresponds to a simulation performed by CCruncher, and each column 
+      value corresponds to the losses of the segment indicated in the first line.
     </p>
     <pre>
 
-<b>  > bin/ccruncher-cmd -w -o data -DNU=12.54 -DW1=0.29 -DW2=0.48 -DR12=0.21 samples/test05.xml</b>
+  "S1-A", "S1-B", "S1-C", "S2-A", "S2-B", "S2-C"
+  44.00, 46.00, 75.00, 32.00, 39.00, 69.00
+  9.00, 30.00, 41.00, 14.00, 36.00, 35.00
+  0.00, 0.00, 3.00, 1.00, 0.00, 3.00
+  11.00, 21.00, 57.00, 13.00, 28.00, 67.00
+  11.00, 14.00, 37.00, 5.00, 8.00, 16.00
+  5.00, 17.00, 32.00, 13.00, 25.00, 57.00
+  12.00, 19.00, 29.00, 6.00, 9.00, 24.00
+  13.00, 31.00, 39.00, 18.00, 55.00, 71.00
+  1.00, 3.00, 10.00, 2.00, 2.00, 7.00
+  21.00, 30.00, 65.00, 15.00, 37.00, 77.00
+  0.00, 5.00, 8.00, 5.00, 11.00, 29.00
+  ...
+  24.00, 57.00, 76.00, 14.00, 23.00, 40.00
+    </pre>
+    <p>
+      When there is more than one segment, the sum of row losses can 
+      differ slightly from the corresponding whole portfolio loss
+      (located in a different file) due to the rounding errors (losses 
+      are rounded to 2 decimal places).
+    </p>
+    <p>
+      <b>Whole portfolio</b>. Usually we set the segmentation name 'portfolio' 
+      to indicate the whole portfolio but you can set any other name.
+      In this case it is irrelevant the type of components (obligor or asset) 
+      because both gives the same result. If exist more than one segmentation 
+      with a unique segment then CCruncher complains about it and stops.
+      This happens when you define a segmentation with multiple segments
+      but you don't assign any obligor/asset to this segmentation. In this case
+      all obligors/assets are assigned to the 'unassigned' segment causing a 
+      unique segment equivalent to the whole portfolio.
+    </p>
+
+<!-- ==================================================== -->
+<!--    indexes                                           -->
+<!-- ==================================================== -->
+    <a name="indexes"></a>
+    <h2>indexes.csv</h2>
+    <p>
+      This file contains additional info about simulated values. Its creation
+      is managed by the '-i' argument in ccruncher-cmd or ccruncher-gui programs.
+      We recommend disabling this option and not generate this file unless you 
+      are checking the program or trying to apply some variance reduction 
+      technique.
+    </p>
+    <p>
+      Each row contains information about the corresponding simulation.
+      The first column (thread) contains the thread index (starting at 1) that 
+      performed the simulation. The second column contains the Latin Hypercube 
+      Sampling batch (where each batch consists of <i>lhs sample size</i> 
+      simulations). Finally, the third column (antithetic) indicates (0=false, 
+      1=true) if this simulation is an antithetic variate or not.
+    </p>
+    <pre>
+
+  "thread", "lhs", "antithetic"
+  1, 1, 0
+  1, 1, 0
+  2, 1, 1
+  2, 1, 0
+  1, 1, 1
+  2, 1, 0
+  ...
+  1, 21, 0
+  1, 21, 1
+  ...
+  2, 51, 0
+  2, 51, 1
+    </pre>
+
+<!-- ==================================================== -->
+<!--    trace                                             -->
+<!-- ==================================================== -->
+    <a name="trace"></a>
+    <h2>ccruncher.out</h2>
+    <p>
+      ccruncher-gui program saves the execution trace in the ccruncher.out file.
+      This file, together with the input file, allows interpreting the output 
+      files contents.
+      The command line program (ccruncher-cmd) doesn't save its trace because it is
+      designed with the unix philosophy in mind (<i>Write programs that do one thing 
+      and do it well. Write programs to work together. Write programs to handle text 
+      streams, because that is a universal interface.</i>). If you want preserve the
+      trace you can redirect the program output using the 
+      <a href="http://ss64.com/bash/tee.html">tee</a> utility.
+    </p>
+    <pre>
 
           ccruncher is Copyright (C) 2004-2013 Gerard Torrent and licensed
            under the GNU General Public License, version 2. More info at
@@ -337,31 +347,6 @@
     end time (dd/MM/yyyy hh:mm:ss)                             30/07/2013 13:17:01
     total elapsed time                                                00:00:02.875
     </pre>
-
-    <h2>Flying solo</h2>
-    <p>
-      We have revised the main features. 
-      Some final words before you move by yourself:
-    </p>
-    <ul>
-      <li>
-        Read carefully the <a href="ccruncher.pdf">technical document</a>.
-      </li>
-      <li>
-        Read carefully the <a href="ifileref.html">input file documentation</a>.
-      </li>
-      <li>
-        Create your own input files using some file from samples directory as template.
-      </li>
-      <li>
-        Be tidy. Save the input and output files of a problem in the same directory.
-        This way you will know the meaning of the output in the future.
-      </li>
-      <li>
-        Don't hesitate to send your questions, suggestions, improvements, bugs, 
-        etc. to the <a href="mailto:gtorrent@ccruncher.net">CCruncher team</a>.
-      </li>
-    </ul>
 
     <div id="page-footer">
       <span id="copyright" >
