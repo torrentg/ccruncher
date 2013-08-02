@@ -88,7 +88,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1105}
+\def\svnversion{R1106}
 
 %----------------------------------------------------------------------------------------
 
@@ -124,14 +124,32 @@ Version \numversion\par
 \newpage
 
 \section*{Acknowledgements}
-TODO\@: SET ACKNOWLEDGEMENTS HERE
+I want to thank my beloved wife Marga for loving me just as I am, and for 
+supporting the decision to dedicate more than one year of unpaid work in 
+making this project possible.
 
-~\vfill
-\section*{Contributors}
-Any remaining errors are attributable only to the author.
-The following people have contributed to this document, but this doesn't mean 
-that they support or endorse its contents. \\
-BE THE FIRST!
+It's hard to find people with mathematical skills and interest in the topic 
+with which to talk about the issues raised in this document. In this sense, 
+I thank Josep Fortiana the indications and stimulating questions done, and 
+these evenings when I could explain to someone what I was doing without 
+looking like a madman.
+
+I thank all those who write documents that open your mind and make you to 
+dream. People like Gupton, Finger and Bhatia by the \emph{CreditMetrics 
+Technical Document}, Embrechts, McNeil and Straumann by \emph{Correlation And 
+Dependence In Risk Management: Properties And Pitfalls}, Ntzoufras by his book 
+\emph{Bayesian Modeling Using WinBUGS}, and Bluhm, Overbeck and Wagner by the 
+magnificent book \emph{An Introduction to Credit Risk Modeling}.
+
+Finally I want to thank my mother for making me believe that anything is 
+possible.
+
+% ~\vfill
+% \section*{Contributors}
+% The following people have contributed with corrections and suggestions to
+% improve this document. Naturally, these contributions don't mean that they 
+% endorse content, and any remaining mistakes are only mine. 
+% I sincerely thank all of them.
 
 ~\vfill
 The BibTeX entry of this document for \LaTeX\ users is:
@@ -425,8 +443,9 @@ transition matrix because it is used in all three cases.
 
 In some circumstances the transition matrix is not available, and we only 
 have the probabilities of default at 1-year for each rating, 
-$p_1,\dots,p_n$. In the absence of more information, we can considerer 
-a diagonal transition matrix like this:
+$p_1,\dots,p_{n-1},p_n$ where the n-th rating is the defaulted status. 
+In the absence of more information, we can considerer a diagonal transition 
+matrix like this:
 \begin{displaymath}
 	M_1 = \left(
 	\begin{array}{cccc}
