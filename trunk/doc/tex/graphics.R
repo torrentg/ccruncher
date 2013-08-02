@@ -567,49 +567,48 @@ for(i in 1:nrow(Y)) {
    return(ret)
  }
 
-lucas <- function(K, N)
-{
-  n = ncol(K)
-  p = 1:n
-
-  for(i in 1:n) {
-    p[i] = pri(i, K, N)
-  }
-
-  ret = matrix(nrow=n, ncol=n, 0)
-
-  for(i in 1:n) {
-    for(j in i:n) {
-      ret[i,j] = (prij(i,j,K,N)-p[i]*p[j])/sqrt(p[i]*(1-p[i])*p[j]*(1-p[j]))
-    }
-  }
-
-  return(ret)
-}
-
 exact <- function(rcount)
 {
-  ret = matrix(ncol=2, nrow=2, 0)
-  ret[1,1] = rcount$w[1]^2
-  ret[2,2] = rcount$w[2]^2
-  ret[1,2] = ret[2,1] = rcount$w[1]*rcount$w[2]*rcount$R[1,2]
+  k = length(rcount$w)
+  ret = matrix(ncol=k, nrow=k, 0)
+  for(i in 1:k) {
+    for(j in i:k) {
+      ret[i,j] = ret[j,i] = rcount$w[i]*rcount$w[j]*rcount$R[i,j]
+    }
+  }
   return(ret)
 }
 
 #----------
 
-# 2-FACTORS, 1-RATING
+# 2-FACTORS, 1-RATING, GAUSSIAN
 p = c(0.05)
 w = c(0.3, 0.25)
-D = matrix(nrow=2, ncol=1, data=c(750, 750))
+D = matrix(ncol=1, nrow=2, data=c(750, 750))
 R = matrix(ncol=2, nrow=2, data=c(1.0,0.1,0.1,1.0))
 nu = 10000
 rcount = ccruncher.rcount(1000, p, D, w, R, nu)
 
-K = rcount$K
-N = matrix(nrow=nrow(K), ncol=2, 750)
+# 4-FACTORS, 4-RATINGS, NON-GAUSSIAN
+p = c(0.05, 0.025, 0.03, 0.045)
+w = c(0.3, 0.25, 0.4, 0.8)
+D = diag(c(1000,2000,3000,4000))
+R = matrix(ncol=4, nrow=4, data=c(1.0,0.1,0.2,0.4, 0.1,1.0,0.4,0.3, 0.2,0.4,1.0,0.2, 0.4,0.3,0.2,1.0))
+nu = 10
+rcount = ccruncher.rcount(1000, p, D, w, R, nu)
 
+# changing format
+m = length(rcount$p)
+k = length(rcount$w)
+n = nrow(rcount$K)
+K = matrix(nrow=n, ncol=k)
+N = matrix(nrow=n, ncol=k, byrow=TRUE, rowSums(rcount$D))
+for(i in 1:n) {
+  for(j in 1:k) {
+    K[i,j] = sum(rcount$K[i,((j-1)*m+1):(j*m)])
+  }
+}
+
+# computing estimators
 exact(rcount)
-lucas(K, N)
 quick_and_dirty_correl(rcount$nu, K, N)
-
