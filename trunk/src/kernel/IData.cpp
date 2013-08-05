@@ -134,7 +134,7 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m) throw(Exc
     map<string,string>::const_iterator it;
     for (it=m.begin() ; it != m.end(); ++it) {
       checkDefine((*it).first, (*it).second);
-      log << "define (command line)" << split << (*it).first+"="+(*it).second << endl;
+      log << "define (user defined)" << split << (*it).first+"="+(*it).second << endl;
     }
 
     // parsing
@@ -142,7 +142,7 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m) throw(Exc
     ExpatParser parser;
     parser.setDefines(m);
     parser.parse(file, this, stop);
-    log << "file checksum" << split << parser.getChecksum() << endl;
+    log << "file checksum (adler32)" << split << parser.getChecksum() << endl;
     log << "elapsed time parsing data" << split << timer << endl;
     log << indent(-1);
   }
@@ -177,7 +177,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
     string value = getStringAttribute(attributes, "value");
     checkDefine(key, value);
     if (eu.defines.find(key) == eu.defines.end()) {
-      log << "define (configuration file)" << split << key+"="+value << endl;
+      log << "define (input file)" << split << key+"="+value << endl;
       eu.defines[key] = value;
     }
   }
@@ -292,7 +292,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
       parser.setDefines(eu.defines);
       parser.parse(file, &portfolio, stop);
 
-      log << "included file checksum" << split << parser.getChecksum() << endl;
+      log << "included file checksum (adler32)" << split << parser.getChecksum() << endl;
 
       pthread_mutex_lock(&mutex);
       curfile = prevfile;
