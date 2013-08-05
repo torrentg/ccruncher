@@ -330,11 +330,10 @@ linewidth=4pt]{aBox}
 \DeclareCaptionFont{white}{\color{white}}
 \DeclareCaptionFormat{listing}{%
   \small\sffamily
-  \parbox{\textwidth}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}\vskip-4pt}}
+  \parbox{\textwidth}{\colorbox{gray}{\parbox{0.98\textwidth}{#1#2#3}}\vskip-4pt}}
 \captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
 \lstset{frame=none, backgroundcolor=\color{black!5}, showlines=true, basicstyle=\footnotesize\ttfamily}
 % other lstlisting options:
 % frame=lrtbLRTB|none, rulecolor=\color{gray}, numbers=left, backgroundcolor=\color{gray},
 % framesep=10pt, xleftmargin=10pt, xrightmargin=-\fboxsep,
 % framexleftmargin=20pt, framerule=0pt
-

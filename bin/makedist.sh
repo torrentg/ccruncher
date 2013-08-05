@@ -134,7 +134,6 @@ prepare() {
   rm $1/bin/tests.sh;
   rm $1/bin/tests.R;
   rm -rvf `find $1/ -name \.svn\*`;
-  rm -rvf $1/doc/share;
   rm -vf $1/doc/html/*.vsd;
 
 }

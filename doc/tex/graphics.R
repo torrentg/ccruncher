@@ -5,43 +5,8 @@ library(rgl)
 setwd("./Pictures/")
 
 # ================================================
-# PD in the Bond example
+# Bond example
 # ================================================
-ratings = c("AAA", "AA", "A", "BBB", "BB", "B", "CCC", "default")
-
-A = matrix(ncol=8, nrow=8, data=c(
-  90.81, 0.7, 0.09, 0.02, 0.03, 0, 0.22, 0,
-  8.33, 90.65, 2.27, 0.33, 0.14, 0.11, 0, 0,
-  0.68, 7.79, 91.05, 5.95, 0.67, 0.24, 0.22, 0,
-  0.06, 0.64, 5.52, 86.93, 7.73, 0.43, 1.3, 0,
-  0.12, 0.06, 0.74, 5.3, 80.53, 6.48, 2.38, 0,
-  0, 0.14, 0.26, 1.17, 8.84, 83.46, 11.24, 0,
-  0, 0.02, 0.01, 0.12, 1.0, 4.07, 64.86, 0,
-  0, 0, 0.06, 0.18, 1.06, 5.2, 19.79, 100
-)/100)
-
-n=201
-B = diag(8)
-T = matrix(nrow=n, ncol=8, 0)
-colnames(T) <- ratings
-
-for(i in 2:n)
-{
-  B = B %*% A
-  T[i,] = B[,8]
-}
-
-pdf(file="bond_pd1.pdf")
-plot(0:200, T[1:201,5], type='l', xlab="Time in years", ylab="PD")
-grid()
-dev.off();
-
-pdf(file="bond_pd2.pdf")
-plot(0:10, T[1:11,5], type='l', xlab="Time in years", ylab="PD")
-axis(1, at=0:10)
-grid()
-dev.off();
-
 cash = rep(1000*0.04,10)
 cash[10] = cash[10] + 1000
 ead = rev(cumsum(rev(cash)))
@@ -320,12 +285,12 @@ dev.off()
 # ================================================
 # Bayessian inference example (1000 obs)
 # ================================================
-source('/home/gerard/projects/ccbinf/bin/ccbinf.R')
 skip=2000
 
 fcalib <- function(name)
 {
-	X <- import(name %&% ".out"); n=nrow(X)
+	X <- read.csv(name %&% ".out", header=TRUE, sep="\t")
+	n=nrow(X)
 
 	pdf(file=name %&% "1.pdf", width=2.3, height=1.8)
 	par(mar=c(2,2,0.5,0))
@@ -448,7 +413,8 @@ dev.off()
 # ================================================
 # paramu example
 # ================================================
-X <- import("paramu.out"); n=nrow(X)
+X <- read.csv("paramu.out", header=TRUE, sep="\t")
+n=nrow(X)
 skip = 5000
 pdf(file="paramu-1.pdf", width=7, height=2)
 par(mfrow=c(1,4));
@@ -513,9 +479,7 @@ for(i in 1:nrow(Y)) {
 
 
 # ================================================
-# this script checks that default correlation estimation
-# proposed by Krishan Nagpal and Reza Bahar in paper
-# 'Measuring Default Correlation' is false
+# quick-and-dirty estimator
 # ================================================
 
  pri <- function(i, K, N)
@@ -580,6 +544,7 @@ exact <- function(rcount)
 }
 
 #----------
+source('/home/gerard/projects/ccbinf/bin/ccbinf.R')
 
 # 2-FACTORS, 1-RATING, GAUSSIAN
 p = c(0.05)
