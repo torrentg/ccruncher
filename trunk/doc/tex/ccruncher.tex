@@ -82,13 +82,16 @@
 \usepackage{listings}
 \usepackage{soul}
 \usepackage[hang,flushmargin]{footmisc} 
+\usepackage{datetime}
 
 \usepackage[firstpage]{draftwatermark}
 \SetWatermarkText{DRAFT COPY}
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1109}
+\def\svnversion{R1110}
+
+\newdateformat{mmmyyyy}{\THEMONTH-\THEYEAR}
 
 %----------------------------------------------------------------------------------------
 
@@ -159,11 +162,13 @@ The BibTeX entry of this document for \LaTeX\ users is:
     author = \{Torrent-Gironella, Gerard\},
     organization = \{Tatine\},
     address = \{Barcelona, Catalonia, Spain\},
-    year = \{2013\},
+    year = \{\the\year\}, 
+    month = \shortmonthname,
     url = \{http://www.ccruncher.net/\},
     note = \{Version \numversion\}
 \}
 \end{alltt}
+%use \shortmonthname[1] to indicate January, etc
 
 ~\vfill
 \thispagestyle{empty}
@@ -773,7 +778,7 @@ $\bar{R}_S = B_k(\vec{n},\vec{1},M_S)$.
 		\rho_{1k} & \cdots & \rho_{1k} &        & \rho_{kk} & \cdots & 1         \\
 	\end{array}
 	\right)
-	\qquad 
+	\quad 
 	\begin{array}{l}
 		M_S = 
 		\left(
@@ -922,10 +927,7 @@ matrix $R$.
 		\right\}
 	\end{displaymath}
 	Note that $K_{ij} \le N_{ij}$. We use the superscript to indicate 
-	the observation at time $t$ (eg. $K_{ij}^t$). \\
-	\ 
-	%When the subscript only has one index ($K_{i}$ and $N_{i}$) this means 
-	%that values are aggregated by sector. 
+	the observation at time $t$ (eg. $K_{ij}^t$).
 \end{definition}
 
 \begin{example}[]
@@ -1017,7 +1019,7 @@ in~\cite{nagpal:2001} to define a basic covariance estimator.
 	where $N_i^t$ and $K_i^t$ are respectively the number of obligors and 
 	defaults in the i-th sector and t-th year, $f(x,y\ ;\ \nu,\sigma_{ij})$ 
 	is the pdf of the bivariate t-Student, and $t_{\nu}^{-1}$ is the inverse 
-	of the cdf of the univariate t-Student. Listing \ref{sc:qadc} implements 
+	of the cdf of the univariate t-Student. Listing~\ref{sc:qadc} implements 
 	this estimator in the $R$ language.
 \end{definition}
 
@@ -1875,39 +1877,6 @@ the de-facto international financial risk regulation framework.
 		\label{figure:bond} 
 	\end{figure}
 \end{example}
-
-\begin{comment}
-\begin{example}[Bond]
-	Let a 10-years fixed rate bond with an annual coupon of the
-	$4\%$ issued by a company rated BB\@. The credit rating agency 
-	reports, for this obligor and rating, the PD over time displayed 
-	in figure~\ref{figure:bond} with a $F(1)=1.06\%$. 
-	The EAD for this asset can be obtained from its expected cashflows 
-	because they are known in advance. We suppose that the bank 
-	internal models indicate that in this case the LGD is a 
-	$\text{Beta}(5,2)$ distribution regardless of the default time.
-	Figure~\ref{figure:bond} illustrates the defined basic concepts 
-	applied to this issuer and bond.
-	\begin{figure}[!ht]
-		\centering
-		\subcaptionbox{Probability of Default}{
-			\includegraphics[width=7cm]{bond_pd1}
-		}
-		\subcaptionbox{Probability of Default (zoom)}{
-			\includegraphics[width=7cm]{bond_pd2}
-		}
-		\\
-		\subcaptionbox{Exposure At Default}{
-			\includegraphics[width=7cm]{bond_ead}
-		}
-		\subcaptionbox{Loss Given Default}{
-			\includegraphics[width=7cm]{bond_lgd}
-		}
-		\caption{Basic concepts bond example}
-		\label{figure:bond} 
-	\end{figure}
-\end{example}
-\end{comment}
 
 \begin{definition}[Portfolio Loss at time $T$]
 	The Portfolio Loss at time $T$ is the cumulated losses in the time 

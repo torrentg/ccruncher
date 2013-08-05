@@ -22,19 +22,15 @@
 
 all: pdf
 
-pdf: ccruncher.tex bibliography.bib
+pdf: ccruncher.tex structure.tex bibliography.bib
 	pdflatex ccruncher
-#	makeindex ccruncher.idx -s StyleInd.ist
 	bibtex ccruncher
 	pdflatex ccruncher
 	pdflatex ccruncher
 
-graphics: graphics.R
-	R --vanilla --slave < graphics.R
-
 rtf: ccruncher.tex bibliography.bib
 	iconv -f utf8 -t iso88591 < ccruncher.tex > ccruncher-iso88591.tex
-	latex ccruncher-iso88591
+	pdflatex ccruncher-iso88591
 	bibtex ccruncher-iso88591
 	latex2rtf -Z9 -S -M12 ccruncher-iso88591
 	mv ccruncher-iso88591.rtf ccruncher.rtf
@@ -45,24 +41,13 @@ clean:
 	rm -f *.ilg *.ind *.ptc *.toc *.log
 	rm -f *.run.xml
 	rm -f *~
-#	rm -f Pictures/bond_pd1.pdf
-#	rm -f Pictures/bond_pd2.pdf
-#	rm -f Pictures/bond_ead.pdf
-#	rm -f Pictures/bond_lgd.pdf
-#	rm -f Pictures/pdftm1.pdf
-#	rm -f Pictures/pdftm2.pdf
-#	rm -f Pictures/pdfsv1.pdf
-#	rm -f Pictures/pdfsv2.pdf
-#	rm -f Pictures/ccbnd.pdf
-#	rm -f Pictures/mhbd1.pdf
-#	rm -f Pictures/mhbd2.pdf
-#	rm -f Pictures/mhbd3.pdf
-#	rm -f Pictures/mhbd4.pdf
-	
-# biber, bibliography.bib, main.tex, makefile, Pictures/, structure.tex, StyleInd.ist, 
+
+#
+#Developers tips & tricks
+#--------------------------------
 # yum install "tex(wrapfig.sty)"
 # yum install "tex(bbm.sty)"
 # miktex package manager -> mpm.exe
-# set draft in \documentclass properties
+# set 'draft' in \documentclass properties
 # check tex file using : chktex ccruncher.tex
-
+#
