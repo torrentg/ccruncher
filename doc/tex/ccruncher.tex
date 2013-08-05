@@ -88,7 +88,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1108}
+\def\svnversion{R1109}
 
 %----------------------------------------------------------------------------------------
 
@@ -745,7 +745,7 @@ attempt to simulate random values or estimate the parameters cannot
 be done in practice when $n$ is large. 
 Previous versions of the CCruncher project bypassed the simulation problem 
 using an algorithm adapted to deal with high-dimensional 
-cases~\cite{torrent:2012}, but the parameters estimation problem remains. 
+cases~\cite{torrent:2011}, but the parameters estimation problem remains. 
 For this reason we introduce the multi-factor formulation.
 
 \subsection{The multi-factor formulation}
@@ -2196,9 +2196,9 @@ where $x_i$ are the simulated portfolio losses, $x_{k:N}$ is the $k$-th
 element of ascendant-sorted values, $\alpha$ is the error confidence level, 
 $\Phi^{-1}$ is the $N(0,1)$ inverse cumulative distribution function, 
 $\widehat{q_{\beta}}$ is the quantile estimator, $\textrm{stderr}(q_{\beta})$ 
-is the estimation of the standard error using the Maritz-Jarret method 
-described in~\cite{quant:algor}, $[x]$ is the integer part of $x$, and 
-$B(a,b,x)$ is the regularized incomplete beta function.
+is the estimation of the standard error using the Maritz-Jarrett method 
+described in~\cite[chap. 3.5.3]{wilcox:2004}, $[x]$ is the integer part of 
+$x$, and $B(a,b,x)$ is the regularized incomplete beta function.
 When sample size is high, the standard error can be difficult to obtain due 
 to the convergence of the incomplete beta function, and the number of times 
 that incomplete beta (numerically costly to obtain) is evaluated.
@@ -2767,8 +2767,7 @@ profile because its underlying  dependence structure is distinct (Gaussian
 copula vs.\ t-Student(3) copula). The mathematical concept that does reflect 
 the structure of dependence between random variables, however, is the copula, 
 which we define below. The world of copulas is vast and very interesting. 
-See~\cite[chap. 5]{mcneil:2005} for a pleasant and detailed introduction to 
-copulas.
+See~\cite[chap. 5]{mcneil:2005} for a pleasant introduction to copulas.
 
 \begin{definition}[Copula]
 	A copula function $C$, is a multivariate distribution defined on the 
@@ -2947,7 +2946,7 @@ Most of the results set out below have been extracted from~\cite{kotz:2004,demar
 \label{ap:cbm}
 
 The content presented in this appendix is detailed and extended 
-in~\cite{torrent:2012}.
+in~\cite{torrent:2011}.
 
 \begin{definition}[Covariance block matrix]
 	We say that a matrix $A$ is a covariance block matrix $B_k(\vec{n},\vec{d},M)$
