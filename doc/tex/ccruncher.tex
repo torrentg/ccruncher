@@ -88,7 +88,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1107}
+\def\svnversion{R1108}
 
 %----------------------------------------------------------------------------------------
 
@@ -124,9 +124,8 @@ Version \numversion\par
 \newpage
 
 \section*{Acknowledgements}
-I want to thank my beloved wife Marga for loving me just as I am, and for 
-supporting the decision to dedicate more than one year of unpaid work in 
-making this project possible.
+I want to thank my wife Marga for loving me just as I am, and for supporting 
+the decision to dedicate more than one year in making this project possible.
 
 It's hard to find people with mathematical skills and interest in the topic 
 with which to talk about the issues raised in this document. In this sense, 
@@ -136,10 +135,11 @@ looking like a madman.
 
 I thank all those who write documents that open your mind and make you to 
 dream. People like Gupton, Finger and Bhatia by the \emph{CreditMetrics 
-Technical Document}, Embrechts, McNeil and Straumann by \emph{Correlation And 
-Dependence In Risk Management: Properties And Pitfalls}, Ntzoufras by his book 
-\emph{Bayesian Modeling Using WinBUGS}, and Bluhm, Overbeck and Wagner by the 
-magnificent book \emph{An Introduction to Credit Risk Modeling}.
+Technical Document}~\cite{cmetrics:1997}, Embrechts, McNeil and Straumann by 
+\emph{Correlation And Dependence In Risk Management: Properties And 
+Pitfalls}~\cite{embrechts:2002}, Ntzoufras by his book \emph{Bayesian Modeling 
+Using WinBUGS}~\cite{ntzoufras:2009}, and Bluhm, Overbeck and Wagner by his 
+book \emph{An Introduction to Credit Risk Modeling}~\cite{bluhm:2002}.
 
 Finally I want to thank my mother for making me believe that anything is 
 possible.
@@ -666,8 +666,6 @@ The functions specified in this way are interpolated using cubic splines
 when the above conditions are preserved and interpolated using linear splines 
 when they aren't.
 
-%TODO: introduir i usar t-Student multi-factor copula
-
 %------------------------------------------------------------------------------
 % THE MULTIVARIATE MODEL
 %------------------------------------------------------------------------------
@@ -842,14 +840,20 @@ multi-factor model maps the multivariate t-Student distribution.
 		\end{array}
 		\right.
 	\end{displaymath}
-	where $w_1,\dots,w_k$ and $R$ satisfy:
+	Relationship between the multi-factor coefficients $\vec{w}$, $R$ and the
+	multivariate t-Student correlation matrix $\bar{R} = B_k(\vec{n},\vec{1},M)$ 
+	is:
 	\begin{displaymath}
 		\begin{array}{l}
+			M_{ij} = w_i \cdot w_j \cdot R_{ij} \quad \forall\ i,j \\
 			R_{ii} = 1 \quad i = 1,\dots,k \\
-			M_{ij} = w_i \cdot w_j \cdot R_{ij} \quad \forall\ i,j
 		\end{array}
 	\end{displaymath}
 \end{proposition}
+
+We call t-Student multi-factor copula to the copula of the t-Student multi-factor 
+model. As we have seen, the t-Student multi-factor copula ($C_{\nu,\vec{w},R}^t$) 
+is nothing but the t-Student copula ($C_{\nu,\bar{R}}^t$).
 
 Note that we expressed the multi-factor model in terms of the factor 
 loadings and the factors correlation matrix, instead of the more concise 
@@ -2195,6 +2199,9 @@ $\widehat{q_{\beta}}$ is the quantile estimator, $\textrm{stderr}(q_{\beta})$
 is the estimation of the standard error using the Maritz-Jarret method 
 described in~\cite{quant:algor}, $[x]$ is the integer part of $x$, and 
 $B(a,b,x)$ is the regularized incomplete beta function.
+When sample size is high, the standard error can be difficult to obtain due 
+to the convergence of the incomplete beta function, and the number of times 
+that incomplete beta (numerically costly to obtain) is evaluated.
 
 \subsection{Expected Shortfall}
 
@@ -2383,57 +2390,74 @@ speed. Please note that when we use the antithetic method to sample the
 default times and there are some stochastic EADs or LGDs, we use distinct 
 EADs and LGDs random values for each variate.
 
-%TODO: set example section + explanation
-\begin{lstlisting}[language=R, label=sc:antithetic, caption=Antithetic example (R script)]
+\begin{example}
+	In this example we show how the antithetical method works and how it 
+	is used by CCruncher. We would like to estimate the following integral 
+	using the Monte Carlo method\footnote{Example extracted from 
+	\href{http://en.wikipedia.org/wiki/Antithetic_variates}{Wikipedia}.}:
+	\begin{displaymath}
+	I = \displaystyle \int_0^1 \frac{1}{1+x}\ \ud x
+	\end{displaymath}
+	In this case the random variable is $U \sim \text{Uniform}[0,1]$ and its variate 
+	is $1-U$. Listing~\ref{sc:antithetic} computes the integral value using plain Monte 
+	Carlo, Monte Carlo with antithetic variates, and Monte Carlo with antithetic but only
+	to reduce the number of simulated values as CCruncher does.
+
+	\begin{lstlisting}[language=R, label=sc:antithetic, caption=Antithetic example (R script)]
 
  f <- function(x) { 1/(1+x) }
  
- result = matrix(nrow=4, ncol=3)
- colnames(result) = c("N", "Mean", "Variance")
+ result = matrix(nrow=4, ncol=4)
+ colnames(result) = c("Sims", "N", "Mean", "Variance")
  rownames(result) = 1:4
 
  rownames(result)[1] = "Exact";
  result[1,1] = 0
- result[1,2] = integrate(f, lower=0, upper=1)$value
- result[1,3] = 0
+ result[1,2] = 0
+ result[1,3] = integrate(f, lower=0, upper=1)$value
+ result[1,4] = 0
 
  u = runif(10000)
  rownames(result)[2] = "Monte Carlo";
  result[2,1] = length(u)
- result[2,2] = mean(f(u))
- result[2,3] = var(f(u))
+ result[2,2] = length(u)
+ result[2,3] = mean(f(u))
+ result[2,4] = var(f(u))
 
  u = runif(5000)
  rownames(result)[3] = "Antithetic";
  result[3,1] = length(u)
- result[3,2] = mean((f(u)+f(1-u))/2)
- result[3,3] = var((f(u)+f(1-u))/2)
+ result[3,2] = length(u)
+ result[3,3] = mean((f(u)+f(1-u))/2)
+ result[3,4] = var((f(u)+f(1-u))/2)
 
  u = runif(5000)
  u = c(u, 1-u)
  rownames(result)[4] = "CCruncher";
- result[4,1] = length(u)
- result[4,2] = mean(f(u))
- result[4,3] = var(f(u))
+ result[4,1] = length(u)/2
+ result[4,2] = length(u)
+ result[4,3] = mean(f(u))
+ result[4,4] = var(f(u))
  
  result
 
-\end{lstlisting}
-\hspace*{1cm}
-\begin{tabular}{l|c|c|c|}
-	\cline{2-4}
-	& N & Mean & Variance \\
-	\hline
-	\multicolumn{1}{|l|}{Exact} & 0 & 0.693147 & 0.000000 \\
-	\hline
-	\multicolumn{1}{|l|}{Monte Carlo} & 10000 & 0.695685 & 0.019624 \\
-	\hline
-	\multicolumn{1}{|l|}{Antithetic} & 5000 & 0.693404 & 0.000593 \\
-	\hline
-	\multicolumn{1}{|l|}{CCruncher} & 10000 & 0.693099 & 0.019508 \\
-	\hline
-\end{tabular}
-\vspace{11pt}
+	\end{lstlisting}
+	\hspace*{1cm}
+	\begin{tabular}{l|c|c|c|c|}
+		\cline{2-5}
+		& Sims & N & Mean & Variance \\
+		\hline
+		\multicolumn{1}{|l|}{Exact = $\ln(2)$} & - & - & 0.693147 & - \\
+		\hline
+		\multicolumn{1}{|l|}{Monte Carlo} & 10000 & 10000 & 0.695685 & 0.019624 \\
+		\hline
+		\multicolumn{1}{|l|}{Antithetic} & 5000 & 5000 & 0.693404 & 0.000593 \\
+		\hline
+		\multicolumn{1}{|l|}{CCruncher} & 5000 & 10000 & 0.693099 & 0.019508 \\
+		\hline
+	\end{tabular}
+\end{example}
+%\vspace{11pt}
 
 \subsection{Latin Hypercube Sampling (LHS)}
 This variance reduction technique 
@@ -2458,8 +2482,12 @@ technique are the degrees of freedom $\nu$, and the factors $\vec{z}$.
 The aim is to ensure a uniform scanning of these variables so that the
 extreme cases are represented.
 
-%TODO: set example section + explanation
-\begin{lstlisting}[language=R, label=sc:lhs, caption=Latin Hypercube Sampling example (R script)]
+\begin{example}
+	In this example we estimate the density of $N(0,1)$ using a sample of 
+	100 simulated values. Listing~\ref{sc:lhs} exposes the R script and 
+	figure~\ref{fig:lhs} displays the results.
+
+	\begin{lstlisting}[language=R, label=sc:lhs, caption=Latin Hypercube Sampling example (R script)]
 
  rlhs <- function(nblocks, icdf, ...) 
  {
@@ -2480,18 +2508,19 @@ extreme cases are represented.
  cdf2 = ecdf(x2)
  plot(cdf2, verticals=TRUE, pch=-1, ylab="prob", main="");
  
-\end{lstlisting}
-\begin{figure}[!ht]
-	\centering
-	\subcaptionbox{Empirical cdf (without lhs)}{
-		\includegraphics[width=7cm]{lhs1}
-	}
-	\subcaptionbox{Empirical cdf (using lhs)}{
-		\includegraphics[width=7cm]{lhs2}
-	}
-	\caption{Latin Hypercube Sampling example (1-dim)}
-	\label{fig:lhs} 
-\end{figure}
+	\end{lstlisting}
+	\begin{figure}[!ht]
+		\centering
+		\subcaptionbox{Empirical cdf (without lhs)}{
+			\includegraphics[width=7cm]{lhs1}
+		}
+		\subcaptionbox{Empirical cdf (using lhs)}{
+			\includegraphics[width=7cm]{lhs2}
+		}
+		\caption{Latin Hypercube Sampling example (1-dim)}
+		\label{fig:lhs} 
+	\end{figure}
+\end{example}
 
 %------------------------------------------------------------------------------
 % PARAMETERS UNCERTAINTY
