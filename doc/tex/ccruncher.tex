@@ -89,13 +89,13 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1111}
-
-\newdateformat{mmmyyyy}{\THEMONTH-\THEYEAR}
+\def\svnversion{R1112}
 
 %----------------------------------------------------------------------------------------
 
 \input{structure}
+
+\hyphenation{CCruncher obli-gors}
 
 \begin{document}
 
@@ -110,9 +110,9 @@
 \centering
 \vspace*{0.5cm}
 \par\normalfont\fontsize{35}{55}\sffamily\selectfont
-Quantifying Portfolio Credit Risk Using CCruncher\par
-%\par\normalfont\fontsize{25}{25}\sffamily\selectfont
-%Using CCruncher\par
+Quantifying\par 
+Portfolio Credit Risk\par
+Using CCruncher\par
 \vspace*{2cm}
 {\huge Gerard Torrent-Gironella}\par
 \vspace*{2cm}
@@ -132,19 +132,19 @@ the decision to dedicate more than one year in making this project possible.
 
 It's hard to find people with mathematical skills and interest in the topic 
 with which to talk about the issues raised in this document. In this sense, 
-I thank Josep Fortiana the indications and stimulating questions done, and 
-these evenings when I could explain to someone what I was doing without 
-looking like a madman.
+I thank Josep Fortiana for the indications and stimulating questions, and 
+those afternoons when I could explain to someone what I was doing without 
+looking crazy.
 
-I thank all those who write documents that open your mind and make you to 
-dream. People like Gupton, Finger and Bhatia by the \emph{CreditMetrics 
-Technical Document}~\cite{cmetrics:1997}, Embrechts, McNeil and Straumann by 
+I thank all those who write documents that open your mind and make you dream. 
+People like Gupton, Finger and Bhatia for \emph{CreditMetrics Technical 
+Document}~\cite{cmetrics:1997}, Embrechts, McNeil and Straumann for
 \emph{Correlation And Dependence In Risk Management: Properties And 
-Pitfalls}~\cite{embrechts:2002}, Ntzoufras by his book \emph{Bayesian Modeling 
-Using WinBUGS}~\cite{ntzoufras:2009}, and Bluhm, Overbeck and Wagner by his 
+Pitfalls}~\cite{embrechts:2002}, Ntzoufras for his book \emph{Bayesian Modeling 
+Using WinBUGS}~\cite{ntzoufras:2009}, and Bluhm, Overbeck and Wagner for their 
 book \emph{An Introduction to Credit Risk Modeling}~\cite{bluhm:2002}.
 
-Finally I want to thank my mother for making me believe that anything is 
+Finally I want to thank my mother to make me believe that anything is 
 possible.
 
 % ~\vfill
@@ -201,34 +201,33 @@ please cite it when using it for credit risk analysis.
 %==============================================================================
 \chapter{Introduction}
 
-The \textbf{CCruncher} project is a framework to quantify portfolio credit 
-risk. It is developed and maintained by \href{http://www.tatine.es}{Tatine}, 
+\textbf{CCruncher} is a project for quantifying the portfolio credit risk. 
+It is developed and maintained by \href{http://www.tatine.es}{Tatine}, 
 a consulting firm located in Barcelona (Catalonia, Spain). You can download 
 the latest version of the project from the CCruncher's site, 
 \url{http://www.ccruncher.net}.
 
-The CCruncher framework consists of this document and a piece of software. 
-Both elements are released under open-source type licenses. CCruncher is a 
-mature and active project in which you can participate sending your 
-suggestions and contributions to \href{mailto:gtorrent@ccruncher.net}
+The CCruncher framework consists of this document you are reading now and a 
+piece of software. Both elements are released under open-source type licenses. 
+CCruncher is a mature and active project in which you can participate sending 
+your suggestions and contributions to \href{mailto:gtorrent@ccruncher.net}
 {gtorrent@ccruncher.net}. Because it is an evolving project, it is recommended 
 to mention the version identifier when you refer the project name 
 (eg.\ CCruncher-\numversion).
 
 This document provides a comprehensible view of portfolio credit risk modeling 
-under the copula approach (t-Student case). It emphasize the practical aspects, 
-taking care to make short introductions about the methods and concepts used, 
-give examples, and mention the small details of implementation. This document 
-isn't a software guide.
+under the copula approach (t-Student case). It emphasizes the practical aspects, 
+taking care of making short introductions of methods and concepts, giving 
+examples, and mentioning the small details of implementation. 
 
 Portfolio credit risk tries to respond to questions like: \enquote{what is the 
 portfolio expected loss for the next year?}, and \enquote{how much could I 
 lose in a really bad year?}. There are several approaches to answer these 
-questions. Below we present briefly the two most used approaches~\cite{crouhy:2000} 
-\cite[chap. 2.4]{bluhm:2002}. Both try to do the same: obtain the portfolio 
-loss distribution and measure the credit risk using a set of selected 
-statistics (eg.\ mean, quantile). They differ on how to obtain this 
-distribution. 
+questions. Now we are going to present briefly the two most used 
+approaches~\cite{crouhy:2000}\cite[chap. 2.4]{bluhm:2002}. 
+Both try to do the same: obtain the portfolio loss distribution and measure 
+the credit risk using a set of selected statistics (eg.\ mean, quantile). 
+They differ on how to obtain this distribution. 
 
 \textbf{Actuarial approach} considers that the frequency 
 of defaults (Poisson type distributions) is the proper way to interpret the 
@@ -246,47 +245,48 @@ CreditMetrics\texttrademark{} model~\cite{cmetrics:1997} and the KMV
 model~\cite{kmv:2003}. 
 
 Both approaches give similar results for simple cases~\cite{koyluoglu:1998},
-but differ when there is more than one factor~\cite{bluhm:2001}, that is, 
-when the dependence between obligors stop being simple. Circa 2000 appears
-the copula approach in scene putting the focus on the dependence among 
-obligors, the \underline{key} point in the portfolio credit risk quantification. 
-This approach was first introduced by Embrechts, McNeil and 
-Straumann~\cite{embrechts:2002}, popularized by David X. Li~\cite{li:2000}, 
-and unfairly demonized by Salmon~\cite{salmon:2009} blaming it for the 
-sub-prime crisis in 2009.
+but differ when there is more than one underlying factor~\cite{bluhm:2001}, 
+that is, when the dependence between obligors stops being simple.
+This is a paradoxical situation because, when we evaluate the portfolio credit 
+risk, the \underline{key point} should be the dependence between obligors. 
+Circa 2000 the copula approach appeared in scene, putting the focus on the 
+dependence structure. This approach was first introduced by Embrechts, McNeil 
+and Straumann~\cite{embrechts:2002}, popularized by David X. Li~\cite{li:2000}, 
+and unfairly demonized by Salmon~\cite{salmon:2009} in 2009 who blamed it for 
+causing the sub-prime crisis.
 
-\textbf{Copula approach} considers that the lifetime of obligors
-are the proper way to explain the observed defaults. The dependence between 
-these variables is modeled using a copula. The sum of the obligors' exposures 
-at the default times gives the portfolio loss distribution. The 
-CreditMetrics\texttrademark{} model can be interpreted as the Gaussian case 
-into the copula approach context~\cite{li:2000}.
+\textbf{Copula approach} considers that the lifetime of obligors is
+the proper way to explain the observed defaults. The dependence between 
+these variables is explicitly modeled using a copula. The sum of the obligors' 
+exposures at the end of their lifetimes provides the portfolio loss 
+distribution. The CreditMetrics\texttrademark{} model can be interpreted as 
+the Gaussian case into the copula approach context~\cite{li:2000}.
 
-The CCruncher quantification model belongs to the copula approach and 
-implements the t-Student multi-factor copula, even for high-dimensional 
-portfolios. Model is formulated according to the Basel II concepts (PD, 
-EAD, LGD) and developed keeping portfolios of credits to SMEs in mind, 
-but it can be used to evaluate other types of portfolios such as 
-portfolios of bonds or otherwise.
+The CCruncher quantification model is adhered to the copula approach 
+implementing the t-Student multi-factor copula, even for high-dimensional 
+portfolios. CCruncher is formulated according to the Basel II concepts 
+(PD, EAD, LGD) and developed keeping in mind portfolios of credits to SMEs;
+it can also be used to evaluate other types of portfolios such as portfolios 
+of bonds.
 
-CCruncher quantifies the portfolio credit risk sampling the portfolio loss
+CCruncher quantifies the portfolio credit risk by sampling the portfolio loss
 distribution and computing the appropriate statistics (EL, VaR, ES). The 
 portfolio losses are obtained simulating the time-until-default of obligors, 
-and simulating the EADs and LGDs of its assets. The time-until-default of 
-obligors is a multivariate distribution where marginals are the probabilities 
-of default given by obligors' ratings, and dependence between obligors is 
-determined by obligors' industrial sectors.
+and simulating the EADs and LGDs of their assets. The time-until-default of 
+obligors is a multivariate distribution where the marginals are the 
+probabilities of default given by obligors' ratings, and where the dependence 
+between obligors is determined by obligors' industrial sectors.
 CCruncher assumes that the dependence structure is a t-Student copula.
-This document provides a guide to estimate the copula parameters using
+This document provides a procedure to estimate the copula parameters using
 Bayesian inference and encourages transferring the parameters uncertainty
 to the credit risk measures.
 
 CCruncher requires a portfolio with a buy-and-hold policy, where each obligor 
-has a rating assigned, and belongs to a single economic sector.
-An example of such credit portfolio is a SMEs loan portfolio (buy-and-hold, 
-rated obligors, multiple sectors where each obligor belongs to a single sector). 
-Unlike CreditMetrics\texttrademark{}, CCruncher doesn't follow a mark-to-market 
-account, but follows a two-state model (default/no-default). 
+has a rating assigned, and belongs to a single economic sector. An example of 
+such credit portfolio could be a SMEs loan portfolio (buy-and-hold policy, 
+rated obligors, multiple sectors where each obligor belongs to a single 
+sector). Unlike CreditMetrics\texttrademark{}, CCruncher doesn't follow a 
+mark-to-market account, but follows a two-state model (default/no-default). 
 
 The advantages of CCruncher are: 
 \begin{inparaenum}[1)]
@@ -294,31 +294,31 @@ The advantages of CCruncher are:
 	\item allows multiple ratings,
 	\item obligors can have multiple assets,
 	\item each of them with their own EAD and LGD,
-	\item that can be stochastic values, and
+	\item these EADs and LGDs can be stochastic values, and
 	\item vary over time, moreover
-	\item allows risk disaggregation,
-	\item don't presuppose uniform transition matrix,
-	\item correlations are considered suitably, and
-	\item consider parameters uncertainty.
+	\item CCruncher allows risk disaggregation,
+	\item doesn't presuppose uniform transition matrix,
+	\item factors correlations are considered suitably, and finally
+	\item parameters uncertainty is taken into account.
 \end{inparaenum}
 
 The disadvantages of CCruncher are: 
 \begin{inparaenum}[1)]
 	\item computationally intensive,
-	\item lack of precision due to Monte Carlo barrier $1/\sqrt{N}$,
+	\item the convergence rate of the Monte Carlo method is rather slow,
 	\item obligors can't belong to a weighted sum of factors,
 	\item correlations are constant over time,
 	\item dependence only relies on sectors,
-	\item only one copula type is supported, and
+	\item only Gaussian and t-Student copulas are supported, and
 	\item mark-to-market isn't supported.
 \end{inparaenum}
 
 The original results claimed by this document are: 
 \begin{inparaenum}[1)]
-	\item limitations of the t-Student multi-factor model with respect to 
-	the multivariate t-Student distribution,
-	\item a new estimator of the t-Student multi-factor copula covariance named 
-	\emph{quick-and-dirty},
+	\item identifying the limitations of the t-Student multi-factor model with 
+	respect to the multivariate t-Student distribution,
+	\item proposal for a new covariance estimator for the t-Student multi-factor 
+	copula named \emph{quick-and-dirty},
 	\item estimation of the t-Student multi-factor copula parameters using the 
 	Metropolis-Hastings algorithm, and
 	\item transferring the t-Student multi-factor copula parameters uncertainty 
