@@ -18,7 +18,6 @@
 #-------------------------------------------------------------
 progname=makedist.sh
 numversion="2.3"
-svnversion="R1039"
 disttype="xxx"
 PACKAGE="ccruncher"
 pathexes="."
@@ -133,8 +132,10 @@ prepare() {
   rm $1/bin/rollversion.sh
   rm $1/bin/tests.sh;
   rm $1/bin/tests.R;
+  rm $1/doc/html/robots.txt;
+  rm $1/doc/html/.repo.xsl;
+  rm -rvf $1/doc/tex;
   rm -rvf `find $1/ -name \.svn\*`;
-  rm -vf $1/doc/html/*.vsd;
 
 }
 

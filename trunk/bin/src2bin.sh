@@ -18,9 +18,6 @@
 # variables declaration
 #-------------------------------------------------------------
 CCRUNCHER=`dirname $0`/..
-progname=src2bin.sh
-numversion="2.3"
-svnversion="R1039"
 
 #-------------------------------------------------------------
 # checking arguments
@@ -49,9 +46,11 @@ rm -f  $CCRUNCHER/config*;
 rm -f  $CCRUNCHER/depcomp;
 rm -f  $CCRUNCHER/install-sh;
 rm -f  $CCRUNCHER/missing;
+rm -r  $CCRUNCHER/test-driver;
 rm -rf $CCRUNCHER/autom4te.cache;
 rm -f  $CCRUNCHER/Makefile*;
 rm -rf $CCRUNCHER/src;
 rm -rf $CCRUNCHER/build;
 rm -f  $CCRUNCHER/doc/INSTALL;
 rm -f  $CCRUNCHER/bin/src2bin.sh;
+
