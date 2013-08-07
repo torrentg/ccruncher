@@ -89,7 +89,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1112}
+\def\svnversion{R1115}
 
 %----------------------------------------------------------------------------------------
 
@@ -560,8 +560,7 @@ extracted from~\cite{kreinin:2001}.
 	\end{enumerate}
 	
 	Apply the previous algorithm for every row. The algorithm stops after $m$ 
-	steps, where $m \le n$ (Merkoulovitch 2000). The final matrix is a regularized
-	matrix. 
+	steps, where $m \le n$. The final matrix is a regularized matrix. 
 \end{algorithm}
 
 \begin{proposition}[PDs derived from transition matrix]
@@ -757,10 +756,10 @@ For this reason we introduce the multi-factor formulation.
 
 In order to dispose a correlation matrix easy to handle we assume that a 
 reduced number $k$ of industrial sectors exists and that each obligor belong 
-to a single sector. Also that obligors time-until-default dependence only 
+to a single sector. Also that obligors' time-until-default dependence only 
 relies on the involved industrials sectors. With these restrictions, and 
-sorting the obligors by sector, we obtain that the obligors time-until-default
-Spearman's correlation is a $n {\times} n$ block matrix 
+sorting the obligors by sector, we obtain that the obligors' time-until-default
+Spearman's correlation is an $n {\times} n$ block matrix 
 $\bar{R}_S = B_k(\vec{n},\vec{1},M_S)$.
 
 \begin{displaymath}
@@ -2625,8 +2624,7 @@ the parameter uncertainty but other uncertainties remains undercovered:
 	MakeFlow\footnote{\url{http://www3.nd.edu/~ccl/software/makeflow/}} 
 	or similar. Listing~\ref{sc:paramu4} displays a very simple batch
 	script to execute sequentially the required simulations.
-	\begin{lstlisting}[language=bash, label={sc:paramu4}, 
-	caption={Execution of multiple CCrunchers (bash script)}]
+	\begin{lstlisting}[language=bash, label={sc:paramu4}, caption={Execution of multiple CCrunchers (bash script)}]
  
  mkdir data/MH001;
  bin/ccruncher-cmd -o data/MH001 -DNU=12.54 -DW1=0.29 \
@@ -2648,8 +2646,7 @@ the parameter uncertainty but other uncertainties remains undercovered:
 	for each portfolio loss distribution. The density of the $\text{ES}_{99\%}$ 
 	can be approximated using the empirical density. Listing~\ref{sc:paramu5}
 	provides an R script to do this task. 
-	\begin{lstlisting}[language=R, label={sc:paramu5}, 
-	caption={$ES_{99\%}$ distribution (R script)}]
+	\begin{lstlisting}[language=R, label={sc:paramu5}, caption={$ES_{99\%}$ distribution (R script)}]
 
  getRisk <- function(dir)
  {
@@ -2927,7 +2924,7 @@ in~\cite{torrent:2011}.
 	\end{itemize}
 	when
 	\begin{itemize}
-		\item each block $B_{ij}$ is a $n_i {\times} n_j$ constant matrix with value $m_{ij}$
+		\item each block $B_{ij}$ is an $n_i {\times} n_j$ constant matrix with value $m_{ij}$
 		\item diagonal blocks $B_{ii}$ have diagonal values $d_i$
 		\item A is definite-positive
 	\end{itemize}
@@ -3044,7 +3041,7 @@ in~\cite{torrent:2011}.
 	The Gaussian multi-factor model defined by factor loadings 
 	$w_1,\dots,w_k$, the $k {\times} k$ factors correlation matrix $R$, and
 	$n_1,\dots,n_k$ with $\sum_{i=1}^k n_i = n$ is a multivariate Gaussian 
-	distribution with a $n {\times} n$ block correlation matrix 
+	distribution with an $n {\times} n$ block correlation matrix 
 	$\bar{R}=B_k(\vec{n},\vec{1},M)$ with values
 	$M_{ij} = w_i \cdot w_j \cdot R_{ij}$.
 \end{proposition}

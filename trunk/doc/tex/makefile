@@ -29,10 +29,23 @@ pdf: ccruncher.tex structure.tex bibliography.bib
 	pdflatex ccruncher
 
 rtf: ccruncher.tex bibliography.bib
+	# convert to iso8859
 	iconv -f utf8 -t iso88591 < ccruncher.tex > ccruncher-iso88591.tex
+	iconv -f utf8 -t iso88591 < structure.tex > structure-iso88591.tex
+	# include structure-iso88591
+	sed -i -e "s/\input{structure}/\input{structure-iso88591}/g" ccruncher-iso88591.tex
+	# remove box environment in structure
+	sed -i -e "s/\\\\\(begin\|end\){.Box}//g" structure-iso88591.tex
+	# remove watermark
+	sed -i -e "s/^.*[Ww]atermark/%REMOVED/g" ccruncher-iso88591.tex
+	# recreate proof environment
+	sed -i -e "s/\\\begin{proof}/\\\emph{Proof. }/g" ccruncher-iso88591.tex
+	sed -i -e "s/\\\end{proof}/\\\qedsymbol/g" ccruncher-iso88591.tex
+	# create bibtex entries
 	pdflatex ccruncher-iso88591
 	bibtex ccruncher-iso88591
-	latex2rtf -Z9 -S -M12 ccruncher-iso88591
+	# create rtf document
+	latex2rtf -Z9 -S -M2 -M4 -t2 -f0 -E2 ccruncher-iso88591
 	mv ccruncher-iso88591.rtf ccruncher.rtf
 	rm -f ccruncher-iso88591.tex
 
