@@ -368,16 +368,16 @@ multivariate model section if you already know how to obtain the PDs over
 time.
 
 \begin{definition}[Probability of Default (PD)]
-	$T_i$ is the random variable that represents the default time (aka. 
-	time-until-default, aka. survival time) of the i-th obligor. Let $F_i(t)$
-	denote the distribution function of $T_i$:
+	$T_i$ is the random variable that represents the default time 
+	(aka.\ time-until-default, aka.\ survival time) of the i-th obligor. 
+	Let $F_i(t)$ denote the distribution function of $T_i$:
 	\begin{displaymath}
 		F_i(t) = \Pr\{T_i \le t\} = 
 		\Pr\{\text{ i-th obligor defaults before $t$ years }\}
 	\end{displaymath}
 	Note that $F_i(t)$ is the probability of default (PD) of the i-th obligor
 	at time horizon $t$. PD is a key parameter used in the calculation of credit 
-	risk under Basel II. We indicate as $p_i$ the probability that i-th obligor 
+	risk under Basel II\@. We indicate as $p_i$ the probability that i-th obligor 
 	defaults in the time range $[0,1]$.
 	\begin{displaymath}
 		p_i = \Pr\{T_i \le 1\ \text{year}\} = F_i(1) 
@@ -796,11 +796,12 @@ $\bar{R}_S = B_k(\vec{n},\vec{1},M_S)$.
 
 We use the Spearman's rank correlation because it is a measure of dependence 
 that doesn't depend on marginals ($F_i$ in our case), unlike the usual
-Pearson's correlation that does it. It is the case that t-Student copulas with 
-Spearman's correlation block matrix are those that come from a multivariate 
-t-Student $t_n(\nu,\bar{R})$ where $\bar{R} = B_k(\vec{n},\vec{1},M)$~
-\footnote{ In the Gaussian case, the relationship between Spearman's 
-and Pearson's correlation is $\rho_S = \frac{6}{\pi}\cdot \arcsin(\frac{\rho}{2})$.}.
+Pearson's correlation that does it. It is the case that t-Student copulas 
+with Spearman's correlation block matrix are those that come from a 
+multivariate t-Student $t_n(\nu,\bar{R})$ where 
+$\bar{R} = B_k(\vec{n},\vec{1},M)$~\footnote{ In the Gaussian case, the 
+relationship between Spearman's and Pearson's correlation is 
+$\rho_S = \frac{6}{\pi}\cdot \arcsin(\frac{\rho}{2})$.}.
 Consequently, the multivariate time-until-default distribution $F$ can be 
 expressed by its marginals $F_i$ and a t-Student copula $C_{\nu,\bar{R}}^t$
 where $\bar{R} = B_k(\vec{n},\vec{1},M)$.
@@ -812,13 +813,13 @@ $t_n(\nu,\bar{R})$ where $\bar{R} = B_k(\vec{n},\vec{1},M)$ as a t-Student
 multi-factor model.
 
 The multivariate t-Student distribution relies on the multivariate Gaussian
-distribution (see proposition \ref{prop:mtschar}). The multivariate Gaussian 
+distribution (see proposition~\ref{prop:mtschar}). The multivariate Gaussian 
 with a correlation block matrix can be expressed as a multi-factor model in 
-most cases (see proposition \ref{prop:ibne}). The cases that aren't covered 
+most cases (see proposition~\ref{prop:ibne}). The cases that aren't covered 
 are those that contain negative intra-sectorial correlations, and those 
 containing inter-sectorial correlations too high. These cases tend to $0$ 
 when we assume that the number of obligors by sector tends to $\infty$
-(see proposition \ref{prop:gmfamgb}). Because we are modeling 
+(see proposition~\ref{prop:gmfamgb}). Because we are modeling 
 sectors composed by thousands of obligors, although our portfolio may 
 contain only a few, we can assume that for our purposes the t-Student 
 multi-factor model maps the multivariate t-Student distribution.
@@ -993,8 +994,8 @@ test the parameters estimation procedures.
 %------------------------------------------------------------------------------
 \section{Quick-and-Dirty Method}
 
-Next we use the estimates of $p_i$ (prob. that an obligor defaults)
-and $p_{ij}$ (prob. that two obligors defaults simultaneously) indicated 
+Next we use the estimates of $p_i$ (prob.\ that an obligor defaults)
+and $p_{ij}$ (prob.\ that two obligors defaults simultaneously) indicated 
 in~\cite{nagpal:2001} to define a basic covariance estimator. 
 
 \begin{definition}[Quick-and-dirty covariance estimator]
@@ -1086,9 +1087,9 @@ in~\cite{nagpal:2001} to define a basic covariance estimator.
 		\item Two factors \{S1, S2\}, with factor loadings $\vec{w} = (0.3, 0.25)$, 
 		factors correlation $R_{12} = 0.1$, and number of obligors $\vec{n} = (750, 750)$.
 	\end{itemize}
-	We simulate the number of defaults of this scenario 1000 times using algorithm 
-	\ref{alg:snod}. Then, we compute the quick-and-dirty estimator and we display the 
-	results in the table below.
+	We simulate the number of defaults of this scenario 1000 times using 
+	algorithm~\ref{alg:snod}. Then, we compute the quick-and-dirty estimator 
+	and we display the results in the table below.
 
 	\hspace*{1cm}
 	\begin{tabular}{|c|c|}
@@ -2174,7 +2175,7 @@ that incomplete beta (numerically costly to obtain) is evaluated.
 \subsection{Expected Shortfall}
 
 \begin{definition}[Expected Shortfall (ES)]
-	The Expected Shortfall (aka. Conditional VaR, aka. Conditional Tail 
+	The Expected Shortfall (aka.\ Conditional VaR, aka.\ Conditional Tail 
 	Expectation) of a portfolio at time horizon $T$ and 
 	confidence level $\beta$ is the average of the worst $\beta\%$ portfolio 
 	losses at time $T$.
@@ -3221,11 +3222,11 @@ The following proposition clarifies this theme.
 %------------------------------------------------------------------------------
 \section{\nameref{chap:mdt}}
 
-\subsection{Proposition \ref{prop:pdfsv} -- \nameref{prop:pdfsv} (page \pageref{prop:pdfsv})}
+\subsection{Proposition~\ref{prop:pdfsv} --~\nameref{prop:pdfsv} (page~\pageref{prop:pdfsv})}
 \begin{proof}
-	We note that ratings are detached from each other. We use proposition
-	\ref{prop:pdftm} to obtain the time-until-default distribution of the 
-	i-th rating:
+	We note that ratings are detached from each other. We use 
+	proposition~\ref{prop:pdftm} to obtain the time-until-default distribution 
+	of the i-th rating:
 	\small
 	\begin{displaymath}
 		\left(
@@ -3269,7 +3270,7 @@ The following proposition clarifies this theme.
 	\end{displaymath}
 \end{proof}
 
-\subsection{Proposition \ref{prop:dtd} -- \nameref{prop:dtd} (page \pageref{prop:dtd})}
+\subsection{Proposition~\ref{prop:dtd} --~\nameref{prop:dtd} (page~\pageref{prop:dtd})}
 \begin{proof}
 	We note as $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
 	distribution $t_n(\nu,\bar{R})$, and $(U_1,\dots,U_n)$ to represent
@@ -3290,7 +3291,7 @@ The following proposition clarifies this theme.
 	\end{displaymath}
 \end{proof}
 
-\subsection{Proposition \ref{prop:tmfm} -- \nameref{prop:tmfm} (page \pageref{prop:tmfm})}
+\subsection{Proposition~\ref{prop:tmfm} --~\nameref{prop:tmfm} (page~\pageref{prop:tmfm})}
 \begin{proof}
 	We use the t-Student characterization (proposition~\ref{prop:mtschar}),
 	$X = \sqrt{\frac{\nu}{V}} \cdot Z$, where $V \sim \chi_{\nu}^2$ and 
@@ -3306,7 +3307,7 @@ The following proposition clarifies this theme.
 %------------------------------------------------------------------------------
 \section{\nameref{chap:estimation}}
 
-\subsection{Proposition \ref{prop:cdand} -- \nameref{prop:cdand} (page \pageref{prop:cdand})}
+\subsection{Proposition~\ref{prop:cdand} --~\nameref{prop:cdand} (page~\pageref{prop:cdand})}
 \begin{proof}
 	We use the pdf of the default times distribution (see proposition~\ref{prop:dtd}) 
 	to obtain the probability that an obligor $k$ belonging to i-th sector with j-th 
