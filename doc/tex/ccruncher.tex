@@ -79,7 +79,7 @@
 % \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1118}
+\def\svnversion{R1119}
 
 %----------------------------------------------------------------------------------------
 
@@ -555,7 +555,7 @@ extracted from~\cite{kreinin:2001}.
 
 \begin{proposition}[PDs derived from transition matrix]
 	\label{prop:pdftm}
-	Let $M_T$ be a transition matrix, then the time-until-default distribution 
+	If $M_T$ is a transition matrix, then the time-until-default distribution 
 	for an obligor with the i-th rating is:
 	\begin{displaymath}
 		F_i(t) = \Pr\{T_. \le t\} = \left( M_t \right)_{in}
@@ -809,7 +809,7 @@ with a correlation block matrix can be expressed as a multi-factor model in
 most cases (see proposition~\ref{prop:ibne}). The cases that aren't covered 
 are those that contain negative intra-sectorial correlations, and those 
 containing inter-sectorial correlations too high. The number of these cases 
-tend to $0$ when the number of obligors by sector tends to $\infty$ (see 
+tends to $0$ when the number of obligors by sector tends to $\infty$ (see 
 proposition~\ref{prop:gmfamgb}). Because we are modeling sectors composed 
 by thousands of obligors, although our portfolio may contain only a few, we 
 can assume that for our purposes the t-Student multi-factor model maps the 
@@ -1322,7 +1322,7 @@ $x^{(0)}$ because the algorithm converges to the target distribution
 whatever the starting point. If the starting point has low probability 
 respect the target distribution, then the initial samples don't come 
 from the equilibrium distribution and need to be discarded until the 
-equilibrium state isn't reached. We call \emph{burnin period} the first 
+equilibrium state isn't reached. We call \emph{burn-in period} the first 
 $B$ iterations eliminated from the sample for this reason.
 
 \textbf{Bayesian inference}.
@@ -1475,8 +1475,8 @@ they form a multivariate distribution.
 	Figure~\ref{fig:mhbd} display the results after 25000 iterations.
 	Observe that the first 500 iterations aren't valid because the Markov 
 	chain hasn't achieved the equilibrium distribution. These have to be 
-	considered into the burnin period. The histograms of the sampled values
-	approximates the parameters distribution that we are inferring.
+	considered into the burn-in period. The histograms of the sampled values
+	approximate the parameters distribution that we are inferring.
 	\begin{figure}[!ht]
 		\centering
 		\subcaptionbox{Iterations 1--1000 of parameters $\alpha$ and $\beta$}{
@@ -1743,7 +1743,7 @@ number correlations to estimate from $k \cdot(k-1)/2$ to a few ones.
 
 \textbf{Degrees of freedom}. We observe that factor correlations and degrees 
 of freedom are interleaved. When we fix one of them with a value distinct 
-than generated data and we estimate the other one, then this reacts to 
+than generated data and we estimate the other one, the latter reacts to 
 compensate the modification. This effect is more pronounced when the number 
 of observations is reduced and the amount of 
 information available is scarce causing that estimations of $\nu$ and $R$
@@ -1845,7 +1845,7 @@ the de-facto international financial risk regulation framework.
 \begin{example}[10-years Bond]
 	Let a 10-years fixed rate bond with an annual coupon of the
 	$4\%$ issued by a company rated BB\@.
-	The EAD for this asset can be obtained from its expected cashflows 
+	The EAD for this asset can be obtained from its expected cash flows 
 	because they are known in advance. We suppose that the bank's
 	internal models indicate that in this case the LGD is a 
 	$\text{Beta}(5,2)$ distribution regardless of the default time.
@@ -1944,8 +1944,8 @@ appropriate statistics.
 				\item Compute $t_i = F_r^{-1}\left(t_{\nu}(x_i)\right)$
 				\item if $t_i \le t$ then do for each asset $j$ belonging to i-th obligor
 				\begin{itemize}
-					\item Evalue or simulate $\text{EAD}_i^j(t_i)$
-					\item Evalue or simulate $\text{LGD}_i^j(t_i)$
+					\item Evaluate or simulate $\text{EAD}_i^j(t_i)$
+					\item Evaluate or simulate $\text{LGD}_i^j(t_i)$
 					\item $\text{Loss}^m = \text{Loss}^m + \text{EAD}_i^j(t_i) \cdot \text{LGD}_i^j(t_i)$
 				\end{itemize}
 			\end{itemize}
@@ -2171,7 +2171,7 @@ that incomplete beta (numerically costly to obtain) is evaluated.
 	\end{displaymath}
 \end{definition}
 
-VaR is not a coeherent risk measure because it doesn't fulfill the sub-additive 
+VaR is not a coherent risk measure because it doesn't fulfill the sub-additive 
 property~\cite{var:varbad}, $\text{VaR}(A+B) \nleq \text{VaR}(A)+\text{VaR}(B)$. 
 Expected Shortfall is a coherent risk measure similar to VaR~\cite{var:eshortfall}.
 We note as 
@@ -2242,7 +2242,7 @@ CCruncher determines the set $\mathbb{S}$ using the following procedure:
 	\end{itemize}
 \end{itemize}
 
-\textbf{Interest rate}. CCruncher allows to consider the Net Present Value 
+\textbf{Interest rate}. CCruncher allows considering the Net Present Value 
 of the simulated losses. This is computed using an interest rate curve 
 defined at fixed times and interpolated using linear or cubic splines 
 (selected by user). Allowed methods are simple interest, compound interest 
@@ -2257,7 +2257,7 @@ and continuous interest. The formulas used to compute the present value are:
 \end{center}
 where $V_t$ is the value at time $t$, and $r$ is the interest rate given 
 by the interest curve at time $t$. This option does not make much sense
-if your EAD are the sum of cashflows at distinct dates. In this case we 
+if your EAD are the sum of cash flows at distinct dates. In this case we 
 recommend fill the input file with the EAD's present value and to set to 
 $0$ the interest rate curve.
 
@@ -2265,7 +2265,7 @@ $0$ the interest rate curve.
 \label{ss:ra}
 CCruncher simulates the whole portfolio loss at time $T$. It also allows (in 
 the same execution) the simulation of sub-portfolios losses. The name to refer
-a sub-portfolio is \emph{segment}. A segmentation is the disjoint union of some 
+a sub-portfolio is \emph{segment}. Segmentation is the disjoint union of some 
 segments that constitutes the whole portfolio so that an asset belongs to only 
 one segment of a given segmentation. By example, we can define a segmentation
 of assets where the segments are bonds, loans, leases, etc. Each asset
@@ -2343,7 +2343,7 @@ Expected Loss is the unique statistic that benefits from the variance
 reduction. But rather than reducing the variance we are interested 
 in the reusing of the simulated random numbers to increase the simulation 
 speed. Please note that when we use the antithetic method to sample the 
-default times and there are some stochastic EADs or LGDs, we use distinct 
+default times and there is some stochastic EADs or LGDs, we use distinct 
 EADs and LGDs random values for each variate.
 
 \begin{example}
@@ -2503,7 +2503,7 @@ credit risk measure is the obvious. It is based in the same procedure
 used to determine the distribution of the portfolio loss, or the distribution 
 of the parameters: the random sampling of the risk measure distribution. 
 
-On one hand we have a procedure that generate random samples from the 
+On one hand we have a procedure that generates random samples from the 
 multivariate parameters distribution (see proposition~\ref{prop:pemh}).
 These samples can be filtered in order to obtain a sample of independent
 parameters values.
@@ -2516,9 +2516,9 @@ section~\ref{sec:riskm}).
 
 We combine both parts to define an algorithm that samples the desired
 credit risk measure. The empirical density given by this sample 
-approximates the risk measure distribution and allows to evaluate the 
+approximates the risk measure distribution and allows evaluating the 
 impact of the parameter uncertainty. \ul{Caution}, this procedure unveils 
-the parameter uncertainty but other uncertainties remains undercovered:
+the parameter uncertainty but other uncertainties remain under covered:
 \begin{inparaenum}[1)]
 	\item copula selection, 
 	\item PDs uncertainty,
@@ -2536,7 +2536,7 @@ the parameter uncertainty but other uncertainties remains undercovered:
 	\begin{enumerate}
 		\item Obtain an ergodic sample of the parameters applying the
 		Metropolis-Hastings algorithm (see proposition~\ref{prop:pemh}).
-		\item Remove the first iterations (burnin period) and determine
+		\item Remove the first iterations (burn-in period) and determine
 		the minimum common length $B$ at which the autocorrelation is $0$.
 		\item Let $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$ the subsample
 		of the parameters distribution composed by the indexes multiples 
@@ -2848,7 +2848,7 @@ Most of the results set out below have been extracted from~\cite{kotz:2004,demar
 
 \begin{proposition}[Multivariate t-Student characterization]
 	\label{prop:mtschar}
-	A random vector $T \sim t_d(\nu,\mu,\Sigma)$ can be expresed as:
+	A random vector $T \sim t_d(\nu,\mu,\Sigma)$ can be expressed as:
 	\begin{displaymath}
 		T \stackrel{d}{=} \mu + \sqrt{\frac{\nu}{V}}\cdot Z
 		\quad \text{ where } Z \sim N(0,\Sigma) \text{ and } V \sim \chi_{\nu}^2
@@ -3034,7 +3034,7 @@ in~\cite{torrent:2011}.
 	$M_{ij} = w_i \cdot w_j \cdot R_{ij}$.
 \end{proposition}
 \begin{proof}
-	We check that the correlations between Gaussian multi-factor model
+	We check that the correlation between Gaussian multi-factor model
 	components is a matrix composed by blocks that fulfill the equivalence.
 	\begin{displaymath}
 		\begin{array}{rl}
@@ -3134,8 +3134,8 @@ in~\cite{torrent:2011}.
 	\end{displaymath}
 \end{proof}
 
-It's disturbing that multivariate block Gaussian distributions 
-that can't be expressed as a multi-factor model exists. Fortunately the 
+It's disturbing that exist multivariate block Gaussian distributions 
+that can't be expressed as a multi-factor model. Fortunately the 
 cases where that occur haven't practical interest in credit risk
 modeling where the number of obligors in each block is higher. 
 The following proposition clarifies this theme.
