@@ -56,16 +56,6 @@
 % Bibliography
 \usepackage[hidelinks,hyperfootnotes=false]{hyperref} %added by GTG
 \usepackage[all]{hypcap} % needed to help hyperlinks direct correctly
-\usepackage{csquotes} %added by GTG
-%\usepackage[backend=bibtex]{biblatex} %added by GTG
-%\usepackage[sorting=nyt,sortcites=true,autopunct=true,babel=hyphen,hyperref=true,abbreviate=false,backend=biber]{biblatex} %style=alphabetic,backref=true,
-%\addbibresource{bibliography.bib} % BibTeX bibliography file
-%\defbibheading{bibempty}{}
-
-% Index
-%\usepackage{calc} % For simpler calculation - used for spacing the index letter headings correctly
-%\usepackage{makeidx} % Required to make an index
-%\makeindex % Tells LaTeX to create the files required for indexing
 
 % added by GTG
 \usepackage{verbatim}
@@ -84,12 +74,12 @@
 \usepackage[hang,flushmargin]{footmisc} 
 \usepackage{datetime}
 
-\usepackage[firstpage]{draftwatermark}
-\SetWatermarkText{DRAFT COPY}
-\SetWatermarkScale{0.75}
+% \usepackage[firstpage]{draftwatermark}
+% \SetWatermarkText{DRAFT COPY}
+% \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1115}
+\def\svnversion{R1118}
 
 %----------------------------------------------------------------------------------------
 
@@ -104,8 +94,8 @@
 %==============================================================================
 \begingroup
 \thispagestyle{empty}
-\AddToShipoutPicture*{\put(6,5){\includegraphics[scale=1]{background}}}
-\vspace*{-1cm}
+%\AddToShipoutPicture*{\put(6,5){\includegraphics[scale=1]{background}}}
+\vspace*{-2.5cm}
 \centerline{\includegraphics[angle=0]{./Pictures/logo.png}}
 \centering
 \vspace*{0.5cm}
@@ -219,9 +209,9 @@ under the copula approach (t-Student case). It emphasizes the practical aspects,
 taking care of making short introductions of methods and concepts, giving 
 examples, and mentioning the small details of implementation. 
 
-Portfolio credit risk tries to respond to questions like: \enquote{what is the 
-portfolio expected loss for the next year?}, and \enquote{how much could I 
-lose in a really bad year?}. There are several approaches to answer these 
+Portfolio credit risk tries to respond to questions like: ``what is the 
+portfolio expected loss for the next year?'', and ``how much could I 
+lose in a really bad year?''. There are several approaches to answer these 
 questions. Now we are going to present briefly the two most used 
 approaches~\cite{crouhy:2000}\cite[chap. 2.4]{bluhm:2002}. 
 Both try to do the same: obtain the portfolio loss distribution and measure 
@@ -1007,7 +997,7 @@ in~\cite{nagpal:2001} to define a basic covariance estimator.
 	$\widetilde{\sigma_{ij}}$ which satisfies:
 	\begin{displaymath}
 		p_{ij} = \displaystyle \int_{-\infty}^{t_{\nu}^{-1}(p_i)} \int_{-\infty}^{t_{\nu}^{-1}(p_j)} 
-		f(x,y\ ;\ \nu, \widetilde{\sigma_{ij}})\ \ud x \ud y
+		f(x,y\ ;\ \nu, \widetilde{\sigma_{ij}}) \ud x \ud y
 		\quad \text{ where } \quad
 		\left\{
 			\begin{array}{ll}
@@ -1142,7 +1132,7 @@ default times distribution. More info at~\cite{gordy:2002,roncalli:2004}.
 			\dots
 			\underbrace{\int_{-\infty}^{t_{\nu}^{-1}(p_r)}}_{k_{sr} \text{ times}}
 			\underbrace{\int_{t_{\nu}^{-1}(p_r)}^{\infty}}_{n_{sr}-k_{sr} \text{ times}}
-			f(x_1,\dots,x_n)\ \ud x_1 \dots \ud x_n
+			f(x_1,\dots,x_n) \ud x_1 \dots \ud x_n
 		\end{array}
 	\end{displaymath}
 	where $n_{ij}$ and $k_{ij}$ are respectively the number of obligors and 
@@ -1193,14 +1183,11 @@ proposition exposes the conditioned density of the annual number of defaults.
 	We can express the density of the annual number of defaults using 
 	the conditioned density:
 	\begin{displaymath}
-		%\begin{array}{l}
-			K(k_{11},\dots,k_{sr}\ ;\ \nu, \vec{w}, R) = %\\
-			%\\
+			K(k_{11},\dots,k_{sr}\ ;\ \nu, \vec{w}, R) = 
 			\displaystyle \int_2^{\infty} \int_{\mathbb{R}^k}
 			\psi(\upsilon) \cdot \phi(\vec{z}) \cdot
 			K(k_{11},\dots,k_{sr} \mid \upsilon,\vec{z}\ ;\ \nu,\vec{w}, R) 
-			\ \ud z_1 \dots \ud z_k \ud \upsilon
-		%\end{array}
+			\ud z_1 \dots \ud z_k \ud \upsilon
 	\end{displaymath}
 	where $\psi$ is the pdf of $\chi_{\nu}^2$, and $\phi$ is the pdf of $N(0,R)$.
 \end{corollary}
@@ -1535,7 +1522,6 @@ they form a multivariate distribution.
 	For the prior distributions of $r_{ij}$ we set the likelihood distribution
 	of the latent variables $\vec{z}^t$. The pdf of the distribution 
 	$\Xi_{ij}(\vec{z}^1,\dots,\vec{z}^T,R)$ is:
-	%hyperparameters, hyperdistributions
 	\begin{displaymath}
 		\xi_{ij}(r_{ij}\ ;\ \vec{z}^1,\dots,\vec{z}^T,R) = \frac
 		{\displaystyle \prod_{t=1}^{T} \phi\left( \vec{z}^t\ ;\ \vec{0}, R(r_{ij},i,j) \right)}
@@ -2095,8 +2081,8 @@ is recommended to use the Kahan~\cite{kahan:1965} summation algorithm.
 	\end{displaymath}
 \end{definition}
 
-The Expected Loss tries to answer to the question \enquote{what is my expected 
-loss for the next year?}. It can be approximated using the following 
+The Expected Loss tries to answer to the question ``what is my expected 
+loss for the next year?''. It can be approximated using the following 
 statistic:
 \begin{displaymath}
 	\text{EL} = \widehat{\mu} \pm \Phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma}}{\sqrt{N}}
@@ -2130,8 +2116,8 @@ deviation estimators.
 \end{definition}
 
 The Value at Risk~\cite{var:jorion} is the most commonly 
-used risk measure to respond the question \enquote{how much could I lose in a 
-really bad year?}. It can be approximated using the following statistic:
+used risk measure to respond the question ``how much could I lose in a 
+really bad year?''. It can be approximated using the following statistic:
 \begin{displaymath}
 	\begin{array}{lcl}
 		\textrm{VaR}_{\beta} = \widehat{q_{\beta}} \pm \Phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \textrm{stderr}(q_{\beta})
@@ -2366,7 +2352,7 @@ EADs and LGDs random values for each variate.
 	using the Monte Carlo method\footnote{Example extracted from 
 	\href{http://en.wikipedia.org/wiki/Antithetic_variates}{Wikipedia}.}:
 	\begin{displaymath}
-	I = \displaystyle \int_0^1 \frac{1}{1+x}\ \ud x
+	I = \displaystyle \int_0^1 \frac{1}{1+x} \ud x
 	\end{displaymath}
 	In this case the random variable is $U \sim \text{Uniform}[0,1]$ and its variate 
 	is $1-U$. Listing~\ref{sc:antithetic} computes the integral value using plain Monte 
@@ -2818,7 +2804,7 @@ use this statement to define and simulate the t-Student copula.
 	It has the important property that its value only relies on the underlying 
 	copula $C$, not on marginals. It can be written as:
 	\begin{displaymath}
-		\rho_s = 12 \displaystyle \int_0^1 \int_0^1 C(u,v)\ \ud u \ud v -3
+		\rho_s = 12 \displaystyle \int_0^1 \int_0^1 C(u,v) \ud u \ud v -3
 	\end{displaymath}
 \end{definition}
 
@@ -2889,7 +2875,7 @@ Most of the results set out below have been extracted from~\cite{kotz:2004,demar
 	has the following distribution function:
 	\begin{displaymath}
 		C_{\nu,R}^t(u_1, \dots, u_d) = 
-		\int_{-\infty}^{t_\nu^{-1}(u_1)} \dots \int_{-\infty}^{t_\nu^{-1}(u_d)} f(x)\ \ud x
+		\int_{-\infty}^{t_\nu^{-1}(u_1)} \dots \int_{-\infty}^{t_\nu^{-1}(u_d)} f(x) \ud x
 	\end{displaymath}
 	where $f(x)$ is the density function of $t_d(\nu,\vec{0},R)$, and $t_{\nu}^{-1}$ 
 	denotes the quantile function of the univariate distribution $t_1(\nu,0,1)$. 
@@ -3299,7 +3285,7 @@ The following proposition clarifies this theme.
 	$Z \sim N(0,\bar{R})$ expressing $Z$ as a Gaussian multi-factor model 
 	(definition~\ref{def:gmfm}). The determination of $R$ and $w_1,\dots,w_n$
 	values can be found at proposition~\ref{prop:gmfigs}. The tag line 
-	\enquote{$n_i$ sizes are high-enough} is justified in 
+	``$n_i$ sizes are high-enough'' is justified in 
 	proposition~\ref{prop:gmfamgb}.
 \end{proof}
 
