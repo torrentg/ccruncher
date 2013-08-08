@@ -132,9 +132,8 @@ the decision to dedicate more than one year in making this project possible.
 
 It's hard to find people with mathematical skills and interest in the topic 
 with which to talk about the issues raised in this document. In this sense, 
-I thank Josep Fortiana for the indications and stimulating questions, and 
-those afternoons when I could explain to someone what I was doing without 
-looking crazy.
+I thank Josep Fortiana for the indications, and for those afternoons when I 
+could explain to someone what I was doing without looking crazy.
 
 I thank all those who write documents that open your mind and make you dream. 
 People like Gupton, Finger and Bhatia for \emph{CreditMetrics Technical 
@@ -201,7 +200,7 @@ please cite it when using it for credit risk analysis.
 %==============================================================================
 \chapter{Introduction}
 
-\textbf{CCruncher} is a project for quantifying the portfolio credit risk. 
+CCruncher is a project for quantifying the portfolio credit risk. 
 It is developed and maintained by \href{http://www.tatine.es}{Tatine}, 
 a consulting firm located in Barcelona (Catalonia, Spain). You can download 
 the latest version of the project from the CCruncher's site, 
@@ -249,7 +248,7 @@ but differ when there is more than one underlying factor~\cite{bluhm:2001},
 that is, when the dependence between obligors stops being simple.
 This is a paradoxical situation because, when we evaluate the portfolio credit 
 risk, the \underline{key point} should be the dependence between obligors. 
-Circa 2000 the copula approach appeared in scene, putting the focus on the 
+Circa 2000, the copula approach appeared in scene putting the focus on the 
 dependence structure. This approach was first introduced by Embrechts, McNeil 
 and Straumann~\cite{embrechts:2002}, popularized by David X. Li~\cite{li:2000}, 
 and unfairly demonized by Salmon~\cite{salmon:2009} in 2009 who blamed it for 
@@ -275,8 +274,9 @@ portfolio losses are obtained simulating the time-until-default of obligors,
 and simulating the EADs and LGDs of their assets. The time-until-default of 
 obligors is a multivariate distribution where the marginals are the 
 probabilities of default given by obligors' ratings, and where the dependence 
-between obligors is determined by obligors' industrial sectors.
-CCruncher assumes that the dependence structure is a t-Student copula.
+between obligors is determined by obligors' industrial sectors. CCruncher 
+assumes that the dependence structure is a t-Student copula, specifically, 
+a t-Student multi-factor copula where factors are the industrial sectors.
 This document provides a procedure to estimate the copula parameters using
 Bayesian inference and encourages transferring the parameters uncertainty
 to the credit risk measures.
@@ -533,8 +533,8 @@ equivalent to consider an averaged economic cycle.
 
 The root of a matrix $M$ can be obtained using the spectral decomposition
 $M = P \cdot D \cdot P^{-1}$ doing 
-$M^{\gamma} = P \cdot D^{\gamma} \cdot P^{-1}$, where $P$ and $D$ are the 
-eigenvectors and eigenvalues matrices of $M$. 
+$M^{a} = P \cdot D^{a} \cdot P^{-1}$, where $P$ and $D$ are the eigenvectors 
+and eigenvalues matrices of $M$. 
 
 Sometimes, the scaled transition matrix does not satisfy the Markov conditions
 (the row sum is equal to one, and all elements are non-negatives). In this case, 
@@ -661,10 +661,10 @@ approach is the most suitable for risk estimates in the medium and long term.
 CCruncher allows to describe the PDs derived from advanced models specifying 
 its values at given time points. These have to fulfill the cdf conditions:
 \begin{itemize}
-	\item $F_r(0) = 0 \quad r \ne \text{default}$,
-	\item $F_r(t)$ strictly increasing $r \ne \text{default}$, 
-	\item $F_r(\infty) = 1 \quad \forall r$, and
-	\item $F_{\text{default}}(t) = 1 \quad \forall\ t \ge 0$.
+	\item $F_r(0) = 0 \quad r \ne \text{default}$
+	\item $F_r(t)$ strictly increasing $r \ne \text{default}$
+	\item $F_r(\infty) = 1 \quad \forall\ r$
+	\item $F_{\text{default}}(t) = 1 \quad \forall\ t \ge 0$
 \end{itemize}
 The functions specified in this way are interpolated using cubic splines
 when the above conditions are preserved and interpolated using linear splines 
@@ -696,8 +696,9 @@ theorem we obtain:
 	C\left(F_1(t_1), \dots, F_n(t_n)\right)
 \end{displaymath}
 where marginal $F_i(t) = \Pr\{T_i \le t\}$ is the time-until-default 
-distribution of the i-th obligor, and $C$ is a copula. CCruncher considers 
-that $C$ is a t-Student copula for the following \ul{practical} reasons:
+distribution of the i-th obligor obtained in section~\ref{sec:pd}, and $C$ 
+is a copula. CCruncher considers that $C$ is a t-Student copula for the 
+following \ul{practical} reasons:
 
 \begin{itemize}
 	\item it is determined by the correlation matrix (elliptical). 
@@ -817,12 +818,12 @@ distribution (see proposition~\ref{prop:mtschar}). The multivariate Gaussian
 with a correlation block matrix can be expressed as a multi-factor model in 
 most cases (see proposition~\ref{prop:ibne}). The cases that aren't covered 
 are those that contain negative intra-sectorial correlations, and those 
-containing inter-sectorial correlations too high. These cases tend to $0$ 
-when we assume that the number of obligors by sector tends to $\infty$
-(see proposition~\ref{prop:gmfamgb}). Because we are modeling 
-sectors composed by thousands of obligors, although our portfolio may 
-contain only a few, we can assume that for our purposes the t-Student 
-multi-factor model maps the multivariate t-Student distribution.
+containing inter-sectorial correlations too high. The number of these cases 
+tend to $0$ when the number of obligors by sector tends to $\infty$ (see 
+proposition~\ref{prop:gmfamgb}). Because we are modeling sectors composed 
+by thousands of obligors, although our portfolio may contain only a few, we 
+can assume that for our purposes the t-Student multi-factor model maps the 
+multivariate t-Student distribution.
 
 \begin{proposition}[t-Student distr.\ as a multi-factor model]
 	\label{prop:tmfm}
@@ -858,7 +859,7 @@ multi-factor model maps the multivariate t-Student distribution.
 
 We call t-Student multi-factor copula to the copula of the t-Student multi-factor 
 model. As we have seen, the t-Student multi-factor copula ($C_{\nu,\vec{w},R}^t$) 
-is nothing but the t-Student copula ($C_{\nu,\bar{R}}^t$).
+is nothing but a t-Student copula ($C_{\nu,\bar{R}}^t$).
 
 Note that we expressed the multi-factor model in terms of the factor 
 loadings and the factors correlation matrix, instead of the more concise 
@@ -999,11 +1000,11 @@ and $p_{ij}$ (prob.\ that two obligors defaults simultaneously) indicated
 in~\cite{nagpal:2001} to define a basic covariance estimator. 
 
 \begin{definition}[Quick-and-dirty covariance estimator]
-	We assume that we have a unique non-defaulted rating, that we know the 
-	degrees of freedom of the t-Student multi-factor copula, and that available 
-	data is the annual number of defaults. We define the estimator of the 
-	factors covariance, $\sigma_{ij} = w_i \cdot w_j \cdot R_{ij}$, as that 
-	value $\widetilde{\sigma_{ij}}$ which satisfies:
+	We assume that all obligors in a sector are exchangeable (same rating per
+	sector), and that we know the degrees of freedom of the t-Student 
+	multi-factor copula. We define the estimator of the factors covariance, 
+	$\sigma_{ij} = w_i \cdot w_j \cdot R_{ij}$, as that value 
+	$\widetilde{\sigma_{ij}}$ which satisfies:
 	\begin{displaymath}
 		p_{ij} = \displaystyle \int_{-\infty}^{t_{\nu}^{-1}(p_i)} \int_{-\infty}^{t_{\nu}^{-1}(p_j)} 
 		f(x,y\ ;\ \nu, \widetilde{\sigma_{ij}})\ \ud x \ud y
@@ -1765,8 +1766,8 @@ problem and reduces the number of parameters to estimate (we don't need to
 estimate $\nu$ and $\upsilon^t$ where $t=1,\dots,T$). 
 The risk analyst must evaluate the appropriateness of the Gaussian model 
 considering the amount of information available, the number of factors, 
-the renounce to capture the tail dependence, the DIC (Deviance Information 
-Criterion) values, etc.
+the renounce to capture the tail dependence, the Deviance Information 
+Criterion (DIC) values, etc.
 
 
 %==============================================================================
