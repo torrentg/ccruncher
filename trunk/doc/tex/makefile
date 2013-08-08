@@ -46,17 +46,26 @@ rtf: ccruncher.tex bibliography.bib
 	# recreate listings
 	sed -i -e "s/\\\begin{lstlisting}\\[.*\\]/\\\begin{verbatim}/g" ccruncher-iso88591.tex
 	sed -i -e "s/\\\end{lstlisting}/\\\end{verbatim}/g" ccruncher-iso88591.tex
-	# replace \text by \textnormal
-	sed -i -e "s/\\\text{/\\\textnormal{/g" ccruncher-iso88591.tex
+	# replace \text by \textrm
+	sed -i -e "s/\\\text{/\\\textrm{/g" ccruncher-iso88591.tex
 	# replace \upsilon by v
 	sed -i -e "s/\\\upsilon/v/g" ccruncher-iso88591.tex
+	# alltt replaced by verbatim
+	sed -i -e "s/\\\begin{alltt}/\\\begin{verbatim}/g" ccruncher-iso88591.tex
+	sed -i -e "s/\\\end{alltt}/\\\end{verbatim}/g" ccruncher-iso88591.tex
 	# create bibtex entries
 	pdflatex ccruncher-iso88591
 	bibtex ccruncher-iso88591
+	pdflatex ccruncher-iso88591
+	pdflatex ccruncher-iso88591
 	# create rtf document
 	latex2rtf -Z9 -S -M2 -M4 -t2 -f0 -E2 ccruncher-iso88591 2>&1 | tee ccruncher-iso88591.out
 	mv ccruncher-iso88591.rtf ccruncher.rtf
-	rm -f ccruncher-iso88591.tex
+	rm -f *-iso88591.*
+	# open with msword
+	# force grammar review
+	# change normal style to calibri-11pt-justified-noindent
+	# save as docx
 
 clean:
 	rm -f *.aux *.bbl *.bcf *.blg *.dvi *.idx
