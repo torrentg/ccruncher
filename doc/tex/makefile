@@ -29,6 +29,8 @@ pdf: ccruncher.tex structure.tex bibliography.bib
 	pdflatex ccruncher
 
 rtf: ccruncher.tex bibliography.bib
+	# remove existent files
+	rm *-iso88591.*
 	# convert to iso8859
 	iconv -f utf8 -t iso88591 < ccruncher.tex > ccruncher-iso88591.tex
 	iconv -f utf8 -t iso88591 < structure.tex > structure-iso88591.tex
@@ -65,6 +67,7 @@ rtf: ccruncher.tex bibliography.bib
 	# open with msword
 	# force grammar review
 	# change normal style to calibri-11pt-justified-noindent
+	# change styles: theorem, title1, title2, title3
 	# save as docx
 
 clean:

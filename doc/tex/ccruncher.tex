@@ -79,7 +79,7 @@
 % \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1119}
+\def\svnversion{R1120}
 
 %----------------------------------------------------------------------------------------
 
@@ -254,7 +254,7 @@ the Gaussian case into the copula approach context~\cite{li:2000}.
 The CCruncher quantification model is adhered to the copula approach 
 implementing the t-Student multi-factor copula, even for high-dimensional 
 portfolios. CCruncher is formulated according to the Basel II concepts 
-(PD, EAD, LGD) and developed keeping in mind portfolios of credits to SMEs;
+(PD, EAD, and LGD) and developed keeping in mind portfolios of credits to SMEs;
 it can also be used to evaluate other types of portfolios such as portfolios 
 of bonds.
 
@@ -350,7 +350,7 @@ this document in order to facilitate the reading.
 \section{The Probabilities of Default}
 \label{sec:pd}
 
-One pillar of the multivariate time-until-default model are the probabilities 
+One pillar of the multivariate time-until-default model is the probabilities 
 of default over time. In this section we define and construct these curves 
 using the available information, such as the 1-year PDs or the ratings 
 transition matrix. You can skip this section and goes directly to the 
@@ -985,8 +985,8 @@ test the parameters estimation procedures.
 %------------------------------------------------------------------------------
 \section{Quick-and-Dirty Method}
 
-Next we use the estimates of $p_i$ (prob.\ that an obligor defaults)
-and $p_{ij}$ (prob.\ that two obligors defaults simultaneously) indicated 
+Next we use the estimates of $p_i$ (probability that an obligor defaults)
+and $p_{ij}$ (probability that two obligors defaults simultaneously) indicated 
 in~\cite{nagpal:2001} to define a basic covariance estimator. 
 
 \begin{definition}[Quick-and-dirty covariance estimator]
@@ -2064,11 +2064,12 @@ sample and its standard error can be obtained using resampling methods.
 	\label{fig:lossdistr}
 \end{figure}
 
-When the loss values are high (eg.\ $\mathcal{O}(10^7)$) and the number of 
-simulations are also high (eg.\ $\mathcal{O}(10^6)$) we can incur in a loss of 
-precision when we do the sum of squares ($\mathcal{O}(10^{2 \cdot 7 + 6})$). 
+When the loss values are high, for example $\mathcal{O}(10^7)$, and the number 
+of simulations is also high, for example $\mathcal{O}(10^6)$, then we can 
+incur in a loss of precision when we do the sum of squares. 
 The usual type used to store these values has 15--17 significant decimal 
-digits precision that can be exceeded in the sum of squares. In this case it 
+digits precision that can be exceeded in the sum of squares, as we can see
+in the previous example: $\mathcal{O}(10^{2 \cdot 7 + 6})$. In these cases it 
 is recommended to use the Kahan~\cite{kahan:1965} summation algorithm.
 
 \subsection{Expected Loss}
