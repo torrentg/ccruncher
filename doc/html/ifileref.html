@@ -290,7 +290,7 @@
         <td class="c2">
           Seed used to initialize a random number generator. If it has value 0
           then a random number based on the current time will be used.  Note that 
-          you need to set distinct and non-consecutive seeds if you're planning 
+          you need to set distinct and non-consecutive seeds if you are planning 
           to do multiple simulations of the same input file and merge the outputs. 
           It requires being non-consecutive because each thread has its how RNG 
           seeded with the seed value plus the thread index (zero-based 
@@ -303,19 +303,18 @@
       <tr class="b">
         <td class="c1">antithetic</td>
         <td class="c2">
-          Specifies whether or not to use a variance reduction technique 
-          named antithetic. If you have doubts about setting this 
-          parameter then set it to 'false', otherwise set it to 'true'.
-          File <code>indexes.csv</code> contains info about the 
-          simulated values.
+          Specifies whether to use the 'antithetic' variance reduction technique.
+          If you have doubts about setting this parameter then set it to 'false', 
+          otherwise set it to 'true'.
+          File <code>indexes.csv</code> contains info about the simulated values.
         </td>
         <td class="c3">boolean</td>
       </tr>
       <tr class="a">
         <td class="c1">lhs</td>
         <td class="c2">
-          Specifies whether or not to use a variance reduction technique 
-          named Latin Hypercube Sampling on random variables <i>S</i> and <i>Z</i>. 
+          Specifies whether to use the 'Latin Hypercube Sampling' variance reduction 
+          technique on the random variables <i>S</i> and <i>Z</i>. 
           If you have doubts about setting this parameter then set it to 'false', 
           otherwise set the sample size. If LHS is set and there is more than one 
           factor, then make sure that the sample size is high enough (eg. 1000),
@@ -346,7 +345,7 @@
           If you want to simulate all the obligors, including obligors without
           risk in the time range, type 'false'. If you want to simulate
           only active obligors in the simulation period type 'true'. We 
-          suggest to set this value to 'true'.
+          suggest setting this value to 'true'.
         </td>
         <td class="c3">boolean</td>
       </tr>
@@ -362,7 +361,7 @@
       This section shows how to define the interest rates curve used to 
       compute the Current Net Value of simulated losses. If you skip this 
       section then the amounts will not be updated to their Current Net Value.
-      In the euro area you can obtain these values from 
+      In the euro area, you can obtain these values from 
       <a href="http://www.ecb.int/stats/money/yc/html/index.en.html">ECB</a>&nbsp;<img src="external.png" alt="" style="border:none;"/>.
     </p>
 
@@ -580,7 +579,7 @@
     </pre>
 
   <p>
-    The above matrix is the S&amp;P 1-year transition matrix which is adjusted 
+    The above matrix is the S&amp;P 1-year transition matrix, which is adjusted 
     for unrated bonds and covers the period between 01-Jan-1981 and 31-Dec-1998.
     It has been extracted from <a href="http://web.sakarya.edu.tr/~adurmus/basel_II/SSRN-id252517%20rating.pdf">Estimating Credit Rating Transition Probabilities for Corporate Bonds</a>&nbsp;<img src="external.png" alt="" style="border:none;"/>.
   </p>
@@ -771,7 +770,7 @@
       This section shows how to define portfolio segmentations. Segmentations
       allow you to analyze your portfolio's risk according to a hierarchical organization
       or another type of classification. Segmentation is composed of segments.
-      There are 2 types of segmentations depending on the segments components:
+      There are two types of segmentations depending on the segments components:
     </p>
     <ul>
       <li>those composed of obligors (eg. sector, obligor size, initial credit rating, etc.)</li>
@@ -779,8 +778,8 @@
     </ul> 
     <p>
       All segmentations must be complete, so that an element belongs to only one segment and 
-      the union of all segments constitutes the whole portfolio. Every segmentation has 
-      an inplicit segment named 'unassigned'. If an obligor (or an asset)
+      the union of all segments constitutes the whole portfolio. Each segmentation has a
+      segment named 'unassigned' that is implicitly declared. If an obligor (or an asset)
       does not belong to any segment, then it is considered part of the 'unassigned' segment.
       The maximum number of segments in segmentation is 65535.
     </p>
@@ -890,11 +889,11 @@
       At Default (EAD) and Loss Given Default rates (LGD). 
     </p>
     <p>
-      LGD can be defined at 3 different levels: obligor, asset and data value. 
-      When a default occurs at time t, we get the LGD at time <i>t</i> (or the 
-      closest date above). If this value is not reported, we get the asset LGD. 
-      If this value is not reported, we get the obligor LGD. In the obligor 
-      level, the value is shared by all assets that haven't defined a LGD.
+      LGD can be defined at three different levels: obligor, asset and data value. 
+      When a default occurs at time t, we get the data value LGD at time <i>t</i> 
+      (or the closest date above). If this value is not reported, we get the asset LGD. 
+      Finally, if even the asset LGD is not reported, we get the obligor LGD. The 
+      obligor' LGD is shared by all assets that have not defined a LGD.
     </p>
 
     <h3>Example</h3>
@@ -1161,7 +1160,7 @@
 
     <p>
       Default probabilities over time are difficult to obtain, for 
-      this reason it is better to work with the transition matrix. 
+      this reason is better to work with the transition matrix. 
       CCruncher will take care to convert the transition matrix in the 
       corresponding default probability functions. This implies that 
       the credit rating transitions follow a Markov model. Sometimes 
@@ -1256,7 +1255,7 @@
         Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
       </span>
       <span id="modified">
-        Last modified: 07-Aug-2013
+        Last modified: 09-Aug-2013
       </span>
     </div>
 
