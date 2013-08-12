@@ -102,25 +102,6 @@ readconf() {
 }
 
 #-------------------------------------------------------------
-# replace function
-# $1: regexp string to apply
-# $2: file to be replaced
-#-------------------------------------------------------------
-replace() {
-
-  sed -e "$1" $2 > /tmp/$progname.aux
-
-  if [ $? != 0 ]; then
-    echo "problems replacing file $2";
-    retcode=`expr $retcode + 1`;
-  else
-    cat /tmp/$progname.aux > $2;
-    echo "$2 updated";
-  fi
-
-}
-
-#-------------------------------------------------------------
 # getPath
 #-------------------------------------------------------------
 getPath() {
@@ -155,19 +136,17 @@ getPath;
 
 if [ "$csvn" = "true" ]; then
   getSvnVersion;
-  replace "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/configure.ac
-  replace "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h.in
-  replace "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h
-  replace "s/\\\def\\\svnversion{.*}/\\\def\\\svnversion{$svnversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
+  sed -i -e "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/configure.ac
+  sed -i -e "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h.in
+  sed -i -e "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h
+  sed -i -e "s/\\\def\\\svnversion{.*}/\\\def\\\svnversion{$svnversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
 fi
 
 if [ "$cver" = "true" ]; then
-  replace "s/AC_INIT(ccruncher,\([^,]*\),\(.*\))/AC_INIT(ccruncher, $gloversion,\\2)/g" $CCRUNCHERPATH/configure.ac
-  replace "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$gloversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
+  sed -i -e "s/AC_INIT(ccruncher,\([^,]*\),\(.*\))/AC_INIT(ccruncher, $gloversion,\\2)/g" $CCRUNCHERPATH/configure.ac
+  sed -i -e "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$gloversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
+  sed -i -e "s/<span class=\"version\">.*<\/span>/<span class=\"version\">$gloversion<\/span>/g" $CCRUNCHERPATH/doc/html/*.html
   echo "you need to run autoconf to take effect some changes";
 fi
 
-#TODO: add version changes in HTML's
-
 exit $retcode;
-
