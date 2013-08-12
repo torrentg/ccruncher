@@ -6,6 +6,7 @@
 #
 # dependencies:
 #   shell, tar, gzip, zip, svn, auto-tools, unix2dos
+#   make, pdflatex, bibtex, iconv
 #
 # retcodes:
 #   0    : OK
@@ -17,10 +18,9 @@
 # variables declaration
 #-------------------------------------------------------------
 progname=makedist.sh
-numversion="2.3"
-disttype="xxx"
+numversion="xxx"
 PACKAGE="ccruncher"
-pathexes="."
+winexes="."
 
 #-------------------------------------------------------------
 # usage function
@@ -32,36 +32,17 @@ usage() {
 
   description:
     $progname is a shell script to create the distribution
-    packages in CreditCruncher project. This script is only 
+    packages in CCruncher project. This script is only 
     used by developers.
   options
-    -s       make source package (default)
-    -b       make binary linux package
-    -w       make binary windows package
-    -d       directory where resides exe files (only win dist)
+    -n       set version identifier (eg. "2.3")
+    -w       windows files directory
     -h       show this message and exit
   return codes:
     0        OK. finished without errors
     1        KO. finished with errors
   examples:
-    $progname -s
-    $progname -b
-    $progname -w -d /c:/temp/ccruncher/bin
-
-_EOF_
-
-}
-
-#-------------------------------------------------------------
-# copyright function
-#-------------------------------------------------------------
-copyright() {
-
-  cat << _EOF_
-
-   $progname is Copyright (C) 2004-2013 Gerard Torrent and licensed
-     under the GNU General Public License, version 2. More info at
-                   http://www.ccruncher.net
+    $progname -n 2.3 -w /c:/temp/ccruncher/bin
 
 _EOF_
 
@@ -74,19 +55,16 @@ readconf() {
 
   OPTIND=0
 
-  while getopts 'sbwhd:' opt
+  while getopts 'n:w:h' opt
   do
     case $opt in
-      s) disttype="src";;
-      b) disttype="bin";;
-      w) disttype="win";;
-      d) pathexes=$OPTARG;;
+      n) numversion=$OPTARG;;
+      w) winexes=$OPTARG;;
       h) usage; 
          exit 0;;
      \?) echo "unknow option. use -h for more information"; 
          exit 1;;
-      *) echo "unexpected error parsing arguments. Please report this bug sending";
-         echo "$progname version and arguments at gtorrent@ccruncher.net";
+      *) echo "unexpected error parsing arguments.";
          exit 1;;
     esac
   done
@@ -97,11 +75,12 @@ readconf() {
     for arg in "$@"
     do
       echo "unexpected argument: $arg";
-      echo "please, try again";
+      echo "use -h for more information"; 
       exit 1;
     done
   fi
 
+  #TODO: check win dir
 }
 
 # -------------------------------------------------------------
@@ -120,13 +99,23 @@ checkout() {
 # -------------------------------------------------------------
 prepare() {
 
-  # set version information
+  # get current version
+  numversion=$(grep AC_INIT $1/configure.ac | cut -d"," -f2 | tr -d ' ');
+
+  # update subversion revision info
   $1/bin/rollversion.sh -s;
   if [ $? != 0 ]; then
     echo "aborting: error setting version";
     exit 1;
   fi
 
+  # compile pdf documentation
+  make -C $1/doc/tex
+  cp $1/doc/tex/ccruncher.pdf $1/doc/
+
+  # redirect html document
+  sed -i -e 's/href="ccruncher\.pdf"/href="\.\.\/ccruncher\.pdf"/g' $1/doc/html/*.html
+  
   # remove developers files
   rm $1/bin/makedist.sh;
   rm $1/bin/rollversion.sh
@@ -144,17 +133,7 @@ prepare() {
 # -------------------------------------------------------------
 makeSrcDist() {
 
-  # local variables
-  currpath=$(pwd);
-  # automake don't add missing files if a parent dir content them
-  workpath=/tmp/$PACKAGE-${numversion}_src
-
-  # obtaining a clean environement
-  chmod -R +w $workpath > /dev/null 2> /dev/null;
-  rm -rvf $workpath > /dev/null 2> /dev/null;
-  checkout $workpath;
-  prepare $workpath;
-  cd $workpath;
+  cd $1;
 
   # creating tarball
   aclocal;
@@ -163,11 +142,8 @@ makeSrcDist() {
   ./configure --prefix=$PWD;
   make -j4 distcheck;
 
-  # cleaning
-  mv $PACKAGE-$numversion.tar.gz $currpath/$PACKAGE-${numversion}_src.tgz;
-  cd $currpath;
-  chmod -R +w $workpath > /dev/null 2> /dev/null;
-  rm -rvf $workpath > /dev/null 2> /dev/null;
+  # moving tarball
+  mv $PACKAGE-*.tar.gz $currpath/$PACKAGE-${numversion}_src.tgz;
 
 }
 
@@ -176,16 +152,7 @@ makeSrcDist() {
 # -------------------------------------------------------------
 makeBinDist() {
 
-  # local variables
-  currpath=$(pwd);
-  workpath=/tmp/$PACKAGE-${numversion}
-
-  # obtaining a clean environement
-  chmod -R +w $workpath > /dev/null 2> /dev/null;
-  rm -rvf $workpath > /dev/null 2> /dev/null;
-  checkout $workpath;
-  prepare $workpath;
-  cd $workpath;
+  cd $1;
 
   # removing specific flag
   sed "s/-mtune=native//" configure.ac > configure.ac.new
@@ -203,13 +170,12 @@ makeBinDist() {
   # dropping unused files
   bin/src2bin.sh -y;
 
-  # creating tarball
-  cd /tmp/;
+  # creating and moving tarball
+  cd ..;
+  mv $1 $PACKAGE-${numversion};
   tar -cvzf $PACKAGE-${numversion}_bin.tgz $PACKAGE-${numversion};
   mv $PACKAGE-${numversion}_bin.tgz $currpath;
-  cd $currpath;
-  chmod -R +w $workpath > /dev/null 2> /dev/null;
-  rm -rvf $workpath > /dev/null 2> /dev/null;
+  mv $PACKAGE-${numversion} $1;
 
 }
 
@@ -219,8 +185,6 @@ makeBinDist() {
 makeWinDist() {
 
   # local variables
-  currpath=$(pwd);
-  workpath=/tmp/$PACKAGE-${numversion}
   winfiles="ccruncher-gui.exe
             ccruncher-cmd.exe
             pthreadGC2.dll
@@ -234,20 +198,16 @@ makeWinDist() {
             qwt.dll"
 
   # obtaining a clean environement
-  chmod -R +w $workpath > /dev/null 2> /dev/null;
-  rm -rvf $workpath > /dev/null 2> /dev/null;
-  checkout $workpath;
-  prepare $workpath;
-  cd $workpath;
+  cd $1;
 
   # copying binaries
   for file in $winfiles
   do
-    if [ ! -f $pathexes/$file ]; then 
-      echo "error: file $pathexes/$file not found" 
+    if [ ! -f $winexes/$file ]; then 
+      echo "error: file $winexes/$file not found" 
       exit 1;
     else
-      cp $pathexes/$file bin/
+      cp $winexes/$file bin/
     fi
   done
 
@@ -267,17 +227,16 @@ makeWinDist() {
   unix2dos samples/*.txt;
   unix2dos doc/html/*.html;
   unix2dos doc/html/*.css;
-  unix2dos doc/html/*.csv;
+  unix2dos doc/html/*.js;
   unix2dos doc/html/*.xml;
   unix2dos data/readme.txt;
 
   # creating tarball
-  cd /tmp/;
-  zip -r  $PACKAGE-${numversion}_win.zip $PACKAGE-${numversion};
+  cd ..;
+  mv $1 $PACKAGE-${numversion};
+  zip -r $PACKAGE-${numversion}_win.zip $PACKAGE-${numversion};
   mv $PACKAGE-${numversion}_win.zip $currpath;
-  cd $currpath;
-  chmod -R +w $workpath > /dev/null 2> /dev/null;
-  rm -rvf $workpath > /dev/null 2> /dev/null;
+  mv $PACKAGE-${numversion} $1;
 
 }
 
@@ -286,22 +245,32 @@ makeWinDist() {
 #-------------------------------------------------------------
 
 readconf $@;
-shift `expr $OPTIND - 1`
 
-case $disttype in
+currpath=$(pwd);
+# automake don't add missing files if a parent dir content them
+workpath=/tmp/$PACKAGE-${numversion}
 
-  'src') copyright;
-         makeSrcDist;;
-  'bin') copyright;
-         makeBinDist;;
-  'win') copyright;
-         makeWinDist;;
-  'xxx') echo "please, specify the distribution type";
-         echo "use -h option for more information";
-         exit 1;;
-      *) echo "unexpected error. Please report this bug sending";
-         echo "$progname version and arguments at gtorrent@ccruncher.net";
-         exit 1;;
+# obtaining a clean environement
+chmod -R +w $workpath > /dev/null 2> /dev/null;
+rm -rvf $workpath > /dev/null 2> /dev/null;
+mkdir $workpath;
+checkout $workpath/base;
+prepare $workpath/base;
 
-esac
+#create win package
+cp -rvf $workpath/base $workpath/win;
+makeWinDist $workpath/win;
 
+# create src package
+cp -rvf $workpath/base $workpath/src;
+makeSrcDist $workpath/src;
+
+# create bin package
+cp -rvf $workpath/base $workpath/bin;
+makeBinDist $workpath/bin;
+
+# remove build files
+chmod -R +w $workpath > /dev/null 2> /dev/null;
+rm -rvf $workpath > /dev/null 2> /dev/null;
+
+cd $currpath;

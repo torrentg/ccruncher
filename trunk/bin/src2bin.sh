@@ -46,7 +46,7 @@ rm -f  $CCRUNCHER/config*;
 rm -f  $CCRUNCHER/depcomp;
 rm -f  $CCRUNCHER/install-sh;
 rm -f  $CCRUNCHER/missing;
-rm -r  $CCRUNCHER/test-driver;
+rm -rf $CCRUNCHER/test-driver;
 rm -rf $CCRUNCHER/autom4te.cache;
 rm -f  $CCRUNCHER/Makefile*;
 rm -rf $CCRUNCHER/src;
