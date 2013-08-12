@@ -23,9 +23,9 @@
 all: pdf
 
 pdf: ccruncher.tex structure.tex bibliography.bib
-	pdflatex ccruncher
+	pdflatex -draftmode ccruncher
 	bibtex ccruncher
-	pdflatex ccruncher
+	pdflatex -draftmode ccruncher
 	pdflatex ccruncher
 
 rtf: ccruncher.tex bibliography.bib
@@ -56,10 +56,10 @@ rtf: ccruncher.tex bibliography.bib
 	sed -i -e "s/\\\begin{alltt}/\\\begin{verbatim}/g" ccruncher-iso88591.tex
 	sed -i -e "s/\\\end{alltt}/\\\end{verbatim}/g" ccruncher-iso88591.tex
 	# create bibtex entries
-	pdflatex ccruncher-iso88591
+	pdflatex -draftmode ccruncher-iso88591
 	bibtex ccruncher-iso88591
-	pdflatex ccruncher-iso88591
-	pdflatex ccruncher-iso88591
+	pdflatex -draftmode ccruncher-iso88591
+	pdflatex -draftmode ccruncher-iso88591
 	# create rtf document
 	latex2rtf -Z9 -S -M2 -M4 -t2 -f0 -E2 ccruncher-iso88591 2>&1 | tee ccruncher-iso88591.out
 	mv ccruncher-iso88591.rtf ccruncher.rtf

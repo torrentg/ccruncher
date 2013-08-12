@@ -163,7 +163,6 @@ fi
 
 if [ "$cver" = "true" ]; then
   replace "s/AC_INIT(ccruncher,\([^,]*\),\(.*\))/AC_INIT(ccruncher, $gloversion,\\2)/g" $CCRUNCHERPATH/configure.ac
-  replace "s/numversion=\"\(.*\)\"/numversion=\"$gloversion\"/g" $CCRUNCHERPATH/bin/makedist.sh
   replace "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$gloversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
   echo "you need to run autoconf to take effect some changes";
 fi
