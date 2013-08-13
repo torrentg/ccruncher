@@ -20,7 +20,18 @@
 progname=makedist.sh
 numversion="xxx"
 PACKAGE="ccruncher"
-winexes="."
+winexes="xxx"
+winfiles="ccruncher-gui.exe
+          ccruncher-cmd.exe
+          pthreadGC2.dll
+          mingwm10.dll
+          libgcc_s_dw2-1.dll
+          QtCore4.dll
+          QtGui4.dll
+          QtNetwork4.dll
+          QtOpenGL4.dll
+          QtSvg4.dll
+          qwt.dll"
 
 #-------------------------------------------------------------
 # usage function
@@ -35,7 +46,6 @@ usage() {
     packages in CCruncher project. This script is only 
     used by developers.
   options
-    -n       set version identifier (eg. "2.3")
     -w       windows files directory
     -h       show this message and exit
   return codes:
@@ -55,32 +65,48 @@ readconf() {
 
   OPTIND=0
 
-  while getopts 'n:w:h' opt
+  while getopts 'w:h' opt
   do
     case $opt in
-      n) numversion=$OPTARG;;
       w) winexes=$OPTARG;;
       h) usage; 
          exit 0;;
-     \?) echo "unknow option. use -h for more information"; 
+     \?) echo "error: unknow option."; 
+         echo "use -h for more information"; 
          exit 1;;
-      *) echo "unexpected error parsing arguments.";
+      *) echo "error: unexpected error parsing arguments.";
+         echo "use -h for more information"; 
          exit 1;;
     esac
   done
 
+  if [ $winexes = "xxx" ]; then
+    echo "error: -w argument not set";
+    echo "use -h for more information"; 
+    exit 1;
+  fi
+
   shift `expr $OPTIND - 1`
 
+  # more arguments?
   if [ "$*" != "" ]; then
     for arg in "$@"
     do
-      echo "unexpected argument: $arg";
+      echo "error: unexpected argument '$arg'";
       echo "use -h for more information"; 
       exit 1;
     done
   fi
 
-  #TODO: check win dir
+  # check winfiles
+  for file in $winfiles
+  do
+    if [ ! -f $winexes/$file ]; then 
+      echo "error: file $winexes/$file not found" 
+      exit 1;
+    fi
+  done
+
 }
 
 # -------------------------------------------------------------
@@ -121,6 +147,7 @@ prepare() {
   rm $1/bin/rollversion.sh
   rm $1/bin/tests.sh;
   rm $1/bin/tests.R;
+  rm $1/doc/html/version;
   rm $1/doc/html/robots.txt;
   rm $1/doc/html/.repo.xsl;
   rm -rvf $1/doc/tex;
@@ -183,19 +210,6 @@ makeBinDist() {
 # make win dist
 # -------------------------------------------------------------
 makeWinDist() {
-
-  # local variables
-  winfiles="ccruncher-gui.exe
-            ccruncher-cmd.exe
-            pthreadGC2.dll
-            mingwm10.dll
-            libgcc_s_dw2-1.dll
-            QtCore4.dll
-            QtGui4.dll
-            QtNetwork4.dll
-            QtOpenGL4.dll
-            QtSvg4.dll
-            qwt.dll"
 
   # obtaining a clean environement
   cd $1;
@@ -274,3 +288,7 @@ chmod -R +w $workpath > /dev/null 2> /dev/null;
 rm -rvf $workpath > /dev/null 2> /dev/null;
 
 cd $currpath;
+echo ""
+echo "1. check pdf doc (date, version, images, ...)";
+echo "2. check TODO and CHANGELOG files";
+
