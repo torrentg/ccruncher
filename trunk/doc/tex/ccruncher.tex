@@ -53,6 +53,10 @@
 \usepackage[utf8]{inputenc} % Required for including letters with accents
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
 
+% glossary (GTG)
+\usepackage{glossaries}
+\makeglossaries
+
 % Bibliography
 \usepackage[hidelinks,hyperfootnotes=false]{hyperref} %added by GTG
 \usepackage[all]{hypcap} % needed to help hyperlinks direct correctly
@@ -80,7 +84,7 @@
 % \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1127}
+\def\svnversion{R1129}
 
 %----------------------------------------------------------------------------------------
 
@@ -185,6 +189,36 @@ please cite it when using it for credit risk analysis.
 \cleardoublepage
 \pagestyle{fancy}
 
+%==============================================================================
+% GLOSSARY
+%==============================================================================
+%\chapterimage{chapter_head_1.pdf}
+%\pagestyle{empty}
+%\setcounter{tocdepth}{1}
+\newglossaryentry{computer} {
+  name=computer,
+  description={is a programmable machine that receives input,
+               stores and manipulates data, and provides
+               output in a useful format}
+}
+\newglossaryentry{naiive}
+{
+  name=na\"{\i}ve,
+  description={is a French loanword (adjective, form of naïf)
+               indicating having or showing a lack of experience,
+               understanding or sophistication},
+  sort=naive
+}
+\newglossaryentry{pi}
+{
+  name={\ensuremath{\pi}},
+  description={ratio of circumference of circle to its
+               diameter},
+  sort=pi
+}
+\printglossaries
+% \cleardoublepage
+% \pagestyle{fancy}
 
 %==============================================================================
 % INTRODUCTION
@@ -207,8 +241,8 @@ identifier should be mentioned when referring to the project name
 
 This document provides a comprehensible view of portfolio credit risk modeling 
 using the copula approach (t-Student case). This document emphasizes the 
-practical aspects, including short introductions of methods and concepts, 
-examples, and a discussion of the implementation details. 
+practical aspects, including short introductions of methods, examples, and 
+a discussion of the implementation details. 
 
 Portfolio credit risk tries to respond to questions such as: ``What is the 
 expected portfolio loss for the next year?'' and ``How much could I 
@@ -237,11 +271,10 @@ model~\cite{kmv:2003}.
 These two approaches achieve similar results in simple cases~\cite{koyluoglu:1998}
 but differ when there is more than one underlying factor~\cite{bluhm:2001}, 
 i.e., when the dependence between obligors stops being simple.
-This is a paradoxical situation because when we evaluate the portfolio credit 
-risk, the \underline{key point} should be the dependence between obligors. 
 Circa 2000, the copula approach appeared \textit{en scene}, placing the focus 
-on the dependence structure. This approach was first introduced by Embrechts, 
-McNeil and Straumann~\cite{embrechts:2002}, popularized by David X. Li~\cite{li:2000}, 
+on the dependence structure, the \underline{key point} in the quantification of
+portfolio credit risk. This approach was first introduced by Embrechts, McNeil 
+and Straumann~\cite{embrechts:2002}, popularized by David X. Li~\cite{li:2000}, 
 and then unfairly demonized by Salmon~\cite{salmon:2009} in 2009, who blamed 
 the copula approach for causing the sub-prime crisis.
 
@@ -255,7 +288,7 @@ the Gaussian case in the copula approach context~\cite{li:2000}.
 The CCruncher quantification model adheres to the copula approach, 
 implementing the t-Student multi-factor copula even for high-dimensional 
 portfolios. CCruncher is formulated according to the Basel II concepts 
-(PD, EAD, and LGD) and developed considering portfolios of credits to SMEs;
+(PD, EAD, LGD) and developed considering portfolios of credits to SMEs;
 CCruncher can also be used to evaluate other types of portfolios such as 
 portfolios of bonds.
 
@@ -329,15 +362,13 @@ of the multivariate model can skip this chapter. Finally, the
 third chapter describes how to obtain the portfolio loss distribution and 
 quantify the credit risk. It is recommended reading, although those who are 
 not concerned with the estimation of parameters and their effect on credit 
-risk measures can skip the last section referring to parameters’ uncertainty. 
+risk measures can skip the last section referring to parameters' uncertainty. 
 
-Four short appendices cover issues addressed in the first chapter (the 
-multivariate time-until-default model). These appendices are recommended 
-reading because they contain key statements and establish the utilized 
-notation. The proofs for some results presented in this document are located 
-at the end of this document to facilitate the reading.
-
-%TODO: identificar els suposits (cicle econ., rating 1-year, etc.)
+% Four short appendices cover issues addressed in the first chapter (the 
+% multivariate time-until-default model). These appendices are recommended 
+% reading because they contain key statements and establish the utilized 
+% notation. The proofs for some results presented in this document are located 
+% at the end of this document to facilitate the reading.
 
 
 %==============================================================================
@@ -397,7 +428,7 @@ matrix because it is used in all three cases.
 		\end{array}
 		\right)
 		\qquad
-		m_{ij} = \Pr(r_i \to r_j\ ;\ T)
+		m_{ij} = \Pr\left\{r_i \to r_j\ ;\ T\right\}
 	\end{displaymath}\par}
 	in which $n$ is the number of ratings and $m_{ij}$ is the probability that 
 	an obligor with rating $r_i$ ends up having the rating $r_j$ after $T$ years.
@@ -457,12 +488,11 @@ The next section (\ref{pdftm}) explains how to derive the PD's curves from a
 transition matrix. However, this simplified case has a closed-form solution 
 stated by the following proposition.
 
-\begin{proposition}[Exponential distribution]
+\begin{proposition}[PDs derived from single values]
 	\label{prop:pdfsv}
-	A diagonal transition matrix such as the one above leads to 
-	time-until-default with exponential distributions.
-	If $T_.$ is the time-until-default of an obligor with the i-th rating,
-	and $p_i$ is the 1-year probability of default of the i-th rating, then: 
+	If the time-until-default of an obligor is a Markov process that
+	only depends on the 1-year probability of default $p_i$, then this
+	time-until-default follows the exponential distribution.
 	\begin{displaymath}
 		F_i(t) = \Pr\{T_. \le t\} = 1 - e^{-\lambda_i \cdot t} 
 		\quad \text{ where } \lambda = -\ln(1-p_i)
@@ -549,8 +579,9 @@ from~\cite{kreinin:2001}.
 		then stop: the row is regularized.
 		\item Adjust any negative row element to zero and go to Step 1.
 	\end{enumerate}
-	Apply the previous algorithm to every row. The algorithm stops after $m$ 
-	steps, where $m \le n$. The final matrix is a regularized matrix. 
+	The algorithm stops after $m$ steps, where $m \le n$. 
+	Apply the previous algorithm to every row.
+	The final matrix is a regularized matrix. 
 \end{algorithm}
 
 \begin{proposition}[PDs derived from transition matrix]
@@ -750,8 +781,8 @@ reduced number $k$ of industrial sectors exists and that each obligor belongs
 to a single sector. In addition, we assume that obligors' time-until-default 
 dependence only relies on the involved industrials sectors. With these 
 restrictions and by sorting the obligors by sector, we see that the obligors' 
-time-until-default Spearman's correlation is an $n {\times} n$ block matrix 
-$\bar{R}_S = B_k(\vec{n},\vec{1},M_S)$.
+time-until-default Spearman's rank correlation is an $n {\times} n$ block 
+matrix $\bar{R}_S = B_k(\vec{n},\vec{1},M_S)$.
 
 \begin{displaymath}
 	\bar{R}_S = B_k(\vec{n},\vec{1},M_S) = 
@@ -788,7 +819,7 @@ $\bar{R}_S = B_k(\vec{n},\vec{1},M_S)$.
 We use the Spearman's rank correlation because it is a measure of dependence 
 that does not depend on marginals ($F_i$ in our case), unlike the usual
 Pearson's correlation, which does depend on marginals. t-Student copulas 
-with Spearman's correlation block matrix are those that come from a 
+with Spearman's rank correlation block matrix are those that come from a 
 multivariate t-Student $t_n(\nu,\bar{R})$ in which 
 $\bar{R} = B_k(\vec{n},\vec{1},M)$~\footnote{ In the Gaussian case, the 
 relation between Spearman's and Pearson's correlations is 
