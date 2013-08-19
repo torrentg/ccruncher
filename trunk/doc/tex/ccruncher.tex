@@ -80,7 +80,7 @@
 % \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1126}
+\def\svnversion{R1127}
 
 %----------------------------------------------------------------------------------------
 
@@ -2168,18 +2168,16 @@ times that the incomplete beta (numerically costly to obtain) is evaluated.
 	The Expected Shortfall (aka Conditional VaR, aka Conditional Tail 
 	Expectation) of a portfolio at time horizon $T$ and 
 	confidence level $\beta$ is the average of the worst $\beta\%$ portfolio 
-	losses at time $T$.
+	losses at time $T$,
 	\begin{displaymath}
 		\text{ES}_\beta(L_T) = \text{E}(L_t \mid L_t \ge \text{VaR}_\beta(L_T))
 	\end{displaymath}
 \end{definition}
 
-VaR is not a coherent risk measure because it doesn't fulfill the sub-additive 
-property~\cite{var:varbad}, $\text{VaR}(A+B) \nleq \text{VaR}(A)+\text{VaR}(B)$. 
-Expected Shortfall is a coherent risk measure similar to VaR~\cite{var:eshortfall}.
-We note as 
-$\{y_1, \ldots, y_K\} = \{x_i \mid x_i \ge \text{VaR}_{\beta} \}_{i=1,\dots,N}$ 
-the simulated portfolio losses that are bigger than $\text{VaR}_{\beta}$.
+VaR is not a coherent risk measure because it does not fulfill the 
+sub-additive property~\cite{var:varbad}. Expected Shortfall is a coherent 
+risk measure similar to VaR~\cite{var:eshortfall}. Consider the following
+statistic:
 \begin{displaymath}
 	\text{ES}_{\beta} = \widehat{\mu} \pm \Phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma}}{\sqrt{K}}
 	\quad \text{ being } \quad
@@ -2194,51 +2192,54 @@ the simulated portfolio losses that are bigger than $\text{VaR}_{\beta}$.
 	\end{array}
 	\right.
 \end{displaymath}
-where $y_i$ are the simulated portfolio losses bigger than $\text{VaR}_{\beta}$, 
+in which 
+$\{y_1, \ldots, y_K\} = \{x_i \mid x_i \ge \text{VaR}_{\beta} \}_{i=1,\dots,N}$ 
+are the simulated portfolio losses larger than $\text{VaR}_{\beta}$, 
 $\alpha$ is the error confidence level, $\Phi^{-1}$ is the $N(0,1)$ 
 inverse cumulative distribution function, and $\widehat{\mu}$ and 
 $\widehat{\sigma}$ are the mean and standard deviation estimators.
-Honestly, this estimator is not the best one because it assumes that
-the estimated $\text{VaR}_{\beta}$ value is the right one. Despite this, 
-if the sample size is high enough then the estimated value is good enough.
+This estimator assumes that the estimated $\text{VaR}_{\beta}$ has the 
+exact value. Despite this, if the sample size is high enough, then the 
+estimated value is good enough.
 
 %------------------------------------------------------------------------------
 % SIMULATION INTERNALS
 %------------------------------------------------------------------------------
 \section{Simulation Internals}
 
-\textbf{PD functions approximation}. CCruncher allows defining the PDs
+\textbf{PD functions approximation}. CCruncher allows defining the PD
 functions using the transition matrix or defining explicitly the values
 at some fixed points. When PDs are defined using the transition matrix, 
-CCruncher uses the proposition~\ref{prop:pdftm} to derive $F_i$ for each 
-month and intermediate values are interpolated using cubic splines. 
+CCruncher uses proposition~\ref{prop:pdftm} to derive $F_i$ for each 
+month, and intermediate values are interpolated using cubic splines. 
 When PDs are defined explicitly at some fixed points, then intermediate 
-values are interpolated using cubic splines, but if the resulting function 
-is not strictly increasing then CCruncher uses linear splines.
+values are interpolated using cubic splines; however, if the resulting 
+function is not strictly increasing, then CCruncher uses linear splines.
 
 \textbf{EAD and LGD interpolation}. Given an asset, CCruncher knows its EAD 
-and LGD values at fixed times $\{t_1,\dots,t_n\}$ provided by user. When 
-we evaluate these functions in a time value distinct than those provided we 
+and LGD values at fixed times $\{t_1,\dots,t_n\}$ provided by the user. When 
+we evaluate these functions in a time value distinct from those provided, we 
 use the following piecewise constant interpolation:
 \begin{displaymath}
 	F(t) = F(t_k) \quad \text{where} \quad t_{k-1} < t \le t_{k}
 \end{displaymath}
 
-\textbf{Function composition}. In order to speed-up the evaluation of the
-function $t=F_r^{-1}(t_{\nu}(x))$ involved in the simulation of obligors 
-default times, we interpolate it using linear splines on a selected set of 
-points $\mathbb{S} = \left\{(x_1,d_1),\dots,(x_s,d_s)\right\}$. 
-Let $\{t_1,\dots,t_n\}$ the days where $F_r$ has known values (not 
-interpolated), and let $t=P(x)$ the function $t=F_r^{-1}(t_{\nu}(x))$ 
-linearly interpolated using the current points of $\mathbb{S}$. 
-CCruncher determines the set $\mathbb{S}$ using the following procedure:
+\textbf{Function composition}. To speed up the evaluation of the function 
+$t=F_r^{-1}(t_{\nu}(x))$ involved in the simulation of obligors' default 
+times, we interpolate the function using linear splines on a selected set 
+of points $\mathbb{S} = \left\{(x_1,d_1),\dots,(x_s,d_s)\right\}$. 
+Let $\{t_1,\dots,t_n\}$ represent the days in which $F_r$ has known values 
+(not interpolated), and let $t=P(x)$ represent the function 
+$t=F_r^{-1}(t_{\nu}(x))$ linearly interpolated using the current points 
+of $\mathbb{S}$. CCruncher determines the set $\mathbb{S}$ using the 
+following procedure:
 \begin{itemize}
 	\item Add the first day of the simulation time range to $\mathbb{S}$, $d_1$.
 	\item Add the last day of the simulation time range to $\mathbb{S}$, $d_T$.
 	\item Repeat until $\displaystyle \max_{d_1 \le d \le d_T}\left|d - P(t_{\nu}^{-1}(F_r(d)))\right| < 1$ hour
 	\begin{itemize}
-		\item Let $d$ be the day where maximum error is achieved
-		\item Let $t_i \le d \le t_{i+1}$ be the nearest days where $F_r$ is defined
+		\item Let $d$ be the day on which maximum error is achieved
+		\item Let $t_i \le d \le t_{i+1}$ be the nearest days on which $F_r$ is defined
 		\item If $t_i$ is not contained in $\mathbb{S}$, add $t_i$ to $\mathbb{S}$
 		\item Else if $t_{i+1}$ is not contained in $\mathbb{S}$, add $t_{i+1}$ to $\mathbb{S}$
 		\item Else add $d$ to $\mathbb{S}$
@@ -2248,8 +2249,9 @@ CCruncher determines the set $\mathbb{S}$ using the following procedure:
 \textbf{Interest rate}. CCruncher allows considering the Net Present Value 
 of the simulated losses. This is computed using an interest rate curve 
 defined at fixed times and interpolated using linear or cubic splines 
-(selected by user). Allowed methods are simple interest, compound interest 
-and continuous interest. The formulas used to compute the present value are:
+(selected by user). Allowable methods are simple interest, compound interest 
+and continuous interest. The formulas used to compute the present value are
+as follows:
 \begin{center}
 	\begin{tabular}{ccccc}
 		$V_0 = \frac{V_t}{1+r \cdot \Delta t}$ & $\qquad$ &
@@ -2258,109 +2260,113 @@ and continuous interest. The formulas used to compute the present value are:
 		(Simple) & $\qquad$ & (Compound) & $\qquad$ & (Continuous)
 	\end{tabular}
 \end{center}
-where $V_t$ is the value at time $t$, and $r$ is the interest rate given 
-by the interest curve at time $t$. This option does not make much sense
-if your EAD are the sum of cash flows at distinct dates. In this case we 
-recommend fill the input file with the EAD's present value and to set to 
-$0$ the interest rate curve.
+in which $V_t$ is the value at time $t$ and $r$ is the interest rate given 
+by the interest curve at time $t$. Don't consider this option if your EADs
+are the sum of cash flow on distinct dates. In this case, we recommend 
+filling the input file with the EADs' present value and setting to $0$ the 
+interest rate curve.
 
 \textbf{Risk aggregation}. 
 \label{ss:ra}
-CCruncher simulates the whole portfolio loss at time $T$. It also allows (in 
-the same execution) the simulation of sub-portfolios losses. The name to refer
-a sub-portfolio is \emph{segment}. Segmentation is the disjoint union of some 
-segments that constitutes the whole portfolio so that an asset belongs to only 
-one segment of a given segmentation. By example, we can define a segmentation
-of assets where the segments are bonds, loans, leases, etc. Each asset
-belongs to only one segment. When an obligor defaults, the loss of its assets
-are aggregated to the whole portfolio loss, and the loss of each of its assets
-is aggregated to the corresponding segment. CCruncher allows defining and 
-managing multiple segmentations simultaneously. The segmentations can be 
-composed of obligors or assets. In the first case, the obligor loss is 
-aggregated to segment loss when the obligor defaults. In the second case, the 
-asset losses are aggregated to segments losses when the obligor defaults.
+CCruncher simulates the entire portfolio loss at time $T$. It also allows 
+(in the same execution) the simulation of sub-portfolios losses. In CCruncher, 
+a sub-portfolio is called a \emph{segment}. The disjoint union of segments 
+covering the entire portfolio is called a \emph{segmentation}, i.e., a 
+segmentation is composed by non-overlapped segments that constitute the 
+entire portfolio. For example, we define the segmentation of geographic
+areas where the bank operates composed by four segments \{N, S, E, W\}.
+When an obligor defaults, the loss of its assets is added into the 
+entire portfolio loss and into the segment loss where the obligor resides.
+CCruncher allows defining and managing multiple segmentations simultaneously. 
+The segmentations can be composed of obligors or assets. In the first case, 
+the obligor loss is aggregated to segment loss when the obligor defaults. 
+In the second case, the asset losses are aggregated to segment losses when 
+the obligor defaults.
 
 \textbf{Parallel computing}. 
-CCruncher parallelizes the portfolio loss sampling spawning multiple simulation
-threads, each of them with its own Mersenne twister Random Number Generator 
-seeded with consecutive values. When the number of obligors is high, data 
-don't fit in the cache memory L1 and L2. The memory transfer is a time expensive
-operation that must be minimized. To achieve this, CCruncher simulates each 
-obligor \emph{blocksize} times (each of them with the corresponding $\nu$ and 
-$\vec{z}$) before moving to the next obligor.
+CCruncher parallelizes the portfolio loss sampling, spawning multiple 
+simulation threads, each with its own Mersenne twister Random Number 
+Generator seeded with consecutive values. When the number of obligors is 
+high, data do not fit in the cache memory L1 and L2. The memory transfer is 
+a time-consuming operation that must be minimized. To achieve this, CCruncher 
+simulates each obligor \emph{blocksize} times (each of them with the 
+corresponding $\nu$ and $\vec{z}$) before moving to the next obligor.
 
 \textbf{Parameterization}. 
 The CCruncher input file contains the data required to simulate the portfolio
 losses (obligors, assets, EADs, LGDs, ratings, factor correlations, factor
 loadings, copula to use, interest rates, segmentations, etc.). This file can 
-be quite large (e.g., 1GB). When we do stress-testing or we evaluate the impact 
-of parameters uncertainty, then we need to modify slightly the input file and 
-reevaluate the portfolio loss multiple times. To simplify this task CCruncher 
-provides the macros mechanism that allows using variables that are replaced by 
-the user-defined values anywhere they are located in the input file. CCruncher 
-also allows the automatic evaluation of numerical expressions. These two 
-features combined, macros and evaluation of numerical expressions, gives a 
-flexible way to parameterize your input file (e.g., 2000*\$EUR2USD). 
+be quite large (e.g., 1GB). When we do stress-testing or evaluate the effect 
+of parameters' uncertainty, we must slightly modify the input file and 
+reevaluate the portfolio loss distribution multiple times. To simplify this 
+task, CCruncher provides the macro mechanism, that allows using variables 
+that are replaced by the user-defined values anywhere they are located in 
+the input file, and the automatic evaluation of numerical expressions. 
+Combining these two features, macros and the evaluation of numerical 
+expressions, provides a flexible manner in which to parameterize one's input 
+file (e.g., 2000*\$EUR2USD). 
 
 %------------------------------------------------------------------------------
 % VARIANCE REDUCTION
 %------------------------------------------------------------------------------
 \section{Variance Reduction}
 
-Monte Carlo method consists on sampling a distribution and averages these
-values to approximate the mean of this distribution. The main drawback 
-of this method is the low rate of convergence that is of order $1/\sqrt{N}$.
+The Monte Carlo method consists of sampling a distribution and averaging 
+these values to approximate the mean of this distribution. The main drawback 
+of this method is the low rate of convergence, on the order $1/\sqrt{N}$.
 Variance reduction methods are procedures used to increase the precision 
-of the estimates of the Monte Carlo method. The main ones are: common random 
-numbers, antithetic variates, control variates, importance sampling and 
-stratified sampling.
+of the estimates of the Monte Carlo method. The main procedures are common 
+random numbers, antithetic variates, control variates, importance sampling 
+and stratified sampling.
 
 CCruncher generates random samples from the portfolio loss distribution.
 This sample is used to estimate the risk measures (e.g., VaR) using the 
 statistics described in section~\ref{sec:riskm} or any other required 
-by the analyst. Anyone of these measures, considered one by one, can be 
-formulated as a Monte Carlo problem and apply some variance 
+by the analyst. Any one of these measures, considered individually, can be 
+formulated as a Monte Carlo problem and can apply some variance 
 reduction techniques, but not simultaneously. 
 
-For this reason the variance reduction techniques used in CCruncher 
-don't aims the increase of precision, but improve the overall result in 
-some manner. The applied variance reduction procedures implemented in
-CCruncher are antithetic variates and latin hypercube sampling.
+For this reason, the variance reduction techniques used in CCruncher 
+do not seek an increase in precision, but an improvement in the overall 
+results in some manner. The applied variance reduction procedures 
+implemented in CCruncher are antithetic variates and Latin hypercube 
+sampling.
 
 \subsection{Antithetic variates}
-We are estimating $E(g(X))$ using the Monte 
-Carlo method. Let $Y_1$ and $Y_2$ random variables with the same distribution
-$g(X)$. This means that $E(g(X)) = E(Y_1) = E(Y_2) = E(\frac{Y_1+Y_2}{2})$ and
+We estimate $E(g(X))$ using the Monte Carlo method. Assume $Y_1$ and 
+$Y_2$ as random variables with the identical distribution $g(X)$. 
+This indicates that $E(g(X)) = E(Y_1) = E(Y_2) = E(\frac{Y_1+Y_2}{2})$ and
 $\text{Var}\left(\frac{Y_1+Y_2}{2}\right) = 
 \frac{\text{Var}(Y_1)+\text{Cov}(Y_1,Y_2)}{2}$.
-If $Y_1$ and $Y_2$ are negatively correlated then the variance of $N$ 
+If $Y_1$ and $Y_2$ are negatively correlated, then the variance of $N$ 
 simulated values from $\frac{Y_1+Y_2}{2}$ is smaller than the variance 
 of $2{\times}N$ simulated values from $Y_1$ or $Y_2$.
 
 In CCruncher the random sampling of the portfolio loss distribution is 
-performed doing $g(X)$ where $X$ is a multivariate t-Student distribution 
+performed using $g(X)$ in which $X$ is a multivariate t-Student distribution 
 and $g(x) = F^{-1}(t_{\nu}(x))$. We use the fact that the multivariate 
 t-Student distribution $X$ is symmetrical, that is, $(x_1,\dots,x_n)$ is 
 equiprobable to $(-x_1,\dots,-x_n)$, to apply the antithetic method. 
 Expected Loss is the unique statistic that benefits from the variance 
-reduction. But rather than reducing the variance we are interested 
+reduction. However, rather than reducing the variance, we are interested 
 in the reusing of the simulated random numbers to increase the simulation 
-speed. Please note that when we use the antithetic method to sample the 
-default times and there is some stochastic EADs or LGDs, we use distinct 
-EADs and LGDs random values for each variate.
+speed. It is notable that when we use the antithetic method to sample the 
+default times and there are some stochastic EADs or LGDs, we use distinct 
+EADs' and LGDs' random values for each variate.
 
 \begin{example}
-	In this example we show how the antithetical method works and how it 
+	In this example, we show how the antithetical method works and how it 
 	is used by CCruncher. We would like to estimate the following integral 
 	using the Monte Carlo method\footnote{Example extracted from 
 	\href{http://en.wikipedia.org/wiki/Antithetic_variates}{Wikipedia}.}:
 	\begin{displaymath}
 	I = \displaystyle \int_0^1 \frac{1}{1+x} \ud x
 	\end{displaymath}
-	In this case the random variable is $U \sim \text{Uniform}[0,1]$ and its variate 
-	is $1-U$. Listing~\ref{sc:antithetic} computes the integral value using plain Monte 
-	Carlo, Monte Carlo with antithetic variates, and Monte Carlo with antithetic but only
-	to reduce the number of simulated values as CCruncher does.
+	In this case the random variable is $U \sim \text{Uniform}[0,1]$, and 
+	its variate is $1-U$. Listing~\ref{sc:antithetic} computes the integral 
+	value using plain Monte Carlo, Monte Carlo with antithetic method, and 
+	Monte Carlo with antithetic variates but only to reduce the number of 
+	simulated values as CCruncher does.
 
 	\begin{lstlisting}[language=R, label=sc:antithetic, caption=Antithetic example (R script)]
 
@@ -2420,21 +2426,21 @@ EADs and LGDs random values for each variate.
 
 \subsection{Latin Hypercube Sampling (LHS)}
 This variance reduction technique 
-belongs to the stratified sampling family. It consists in dividing the total 
+belongs to the stratified sampling family. It consists of dividing the total 
 probability range [0,1] in $N$ equispaced segments. Then we create a 
 sample of size $N$ picking a random value from each segment using a uniform 
 distribution and applying the inverse transform sampling. Finally we shuffle 
 the sample to obtain the desired distribution random values. When we have 
 two independent random variables, we repeat the above procedure for each of 
-them obtaining the Latin Square effect: the generated random points are in
-a reticle where each row and column has only one point. The procedure for
-three or more independent variables is exactly the same and its named Latin 
+them, obtaining the Latin Square effect: the generated random points are in
+a reticle in which each row and column has only one point. The procedure for
+three or more independent variables is identical, and it is called Latin 
 Hypercube Sampling~\cite{glasserman:1997}.
 
-When the random variables are dependent the previous schema doesn't work 
-and it is reformulated recurring to copulas and the rank statistic 
-\cite{wolfgang:2008}. In this case the number of bins has impact in the 
-quality of the generated values, the bigger the better.
+When the random variables are dependent, the previous schema does not work, 
+and it is reformulated recurring to copulas and the rank statistic~\cite{wolfgang:2008}. 
+In this case, the number of bins affects the quality of the generated values, 
+the larger the better.
 
 In CCruncher, the random variables that can be sampled using the LHS 
 technique are the degrees of freedom $\nu$, and the factors $\vec{z}$. 
@@ -2442,8 +2448,8 @@ The aim is to ensure a uniform scanning of these variables so that the
 extreme cases are represented.
 
 \begin{example}
-	In this example we estimate the density of $N(0,1)$ using a sample of 
-	100 simulated values. Listing~\ref{sc:lhs} exposes the R script and 
+	In this example, we estimate the density of $N(0,1)$ using a sample of 
+	100 simulated values. Listing~\ref{sc:lhs} exposes the R script, and 
 	figure~\ref{fig:lhs} displays the results.
 
 	\begin{lstlisting}[language=R, label=sc:lhs, caption=Latin Hypercube Sampling example (R script)]
@@ -2488,65 +2494,65 @@ extreme cases are represented.
 
 The estimation of dependence parameters (degrees of freedom $\nu$, factor
 loadings $\vec{w}$, and factors correlation $R$) has an uncertainty that 
-cannot be ignored~\cite{tarashev:2010,gossl:2005}. The example~\ref{ex:calib} 
+cannot be ignored~\cite{tarashev:2010,gossl:2005}. Example~\ref{ex:calib} 
 illustrates this phenomenon and its magnitude (see the 20 observations case).
 
 The CCruncher framework encourages incorporating the parameter uncertainty 
-in the credit risk valuation. This means that credit risk measures
+into the credit risk valuation. This indicates that credit risk measures
 (e.g., $\text{VaR}_{99\%}$, $\text{ES}_{99\%}$) are regarded as distributions 
-instead of values. As example, in the case of the Value at Risk, we 
-consider it as a function $\text{VaR}_{99\%}(L_T(\nu,\vec{w},R))$ that 
-depends on multivariate random variables $\nu, \vec{w}$ and $R$.
+instead of values. For example, in the case of the Value at Risk, we 
+the function $\text{VaR}_{99\%}(L_T(\nu,\vec{w},R))$ that depends on 
+the multivariate random variables $\nu, \vec{w}$ and $R$.
 Note that the EL measure is not affected by the uncertainty of dependence 
 parameters because the expectation satisfies $E(X+Y)=E(X)+E(Y)$ even if $X$ 
 is not statistically independent of $Y$.
 
-The solution recommended by CCruncher to determine the distribution of a
-credit risk measure is the obvious. It is based in the same procedure 
-used to determine the distribution of the portfolio loss, or the distribution 
+The solution recommended by CCruncher to determine the credit risk measure 
+distribution is the obvious one and is based on the identical procedure 
+used to determine the distribution of the portfolio loss or the distribution 
 of the parameters: the random sampling of the risk measure distribution. 
 
-On one hand we have a procedure that generates random samples from the 
+On one hand, we have a procedure that generates random samples from the 
 multivariate parameters distribution (see proposition~\ref{prop:pemh}).
-These samples can be filtered in order to obtain a sample of independent
-parameters values.
+These samples can be filtered to obtain a sample of independent parameters 
+values.
 
-On the other hand we are able to measure the credit risk of a portfolio 
-considering that dependence parameters are fixed values. This is done 
+On the other hand, we are able to measure the credit risk of a portfolio 
+considering that dependence parameters are fixed values. This is performed 
 sampling the portfolio loss (see algorithm~\ref{alg:pldmc}) and computing 
 the credit risk measure using the appropriate statistic (see 
 section~\ref{sec:riskm}).
 
-We combine both parts to define an algorithm that samples the desired
+We combine both components to define an algorithm that samples the desired
 credit risk measure. The empirical density given by this sample 
 approximates the risk measure distribution and allows evaluating the 
-impact of the parameter uncertainty. \ul{Caution}, this procedure unveils 
-the parameter uncertainty but other uncertainties remain under covered:
+effect of the parameter uncertainty. \ul{One must be cautious} because this 
+procedure unveils the parameter uncertainty, but other uncertainties remain 
+hidden:
 \begin{inparaenum}[1)]
-	\item copula selection, 
-	\item PDs uncertainty,
-	\item factors/sectors selection,
-	\item EAD and LGD models accuracy,
-	\item and so on.
+	\item copula selection; 
+	\item PDs uncertainty;
+	\item factors/sectors selection; and
+	\item EAD and LGD models accuracy.
 \end{inparaenum}
 
 \begin{algorithm}[Credit risk measure distribution]
 	\label{alg:crmd}
-	Let a portfolio be (ratings, sectors, PDs, EADs, LGDs) and the numbers 
-	of defaults observed by sector-rating in the previous years. We can
+	Assume a portfolio (ratings, sectors, PDs, EADs, LGDs) and the number 
+	of defaults observed by sector rating in the previous years. We can
 	determine the distribution of a credit risk measure 
-	(e.g., $\text{VaR}_{99\%}$) doing:
+	(e.g., $\text{VaR}_{99\%}$) by performing the following:
 	\begin{enumerate}
 		\item Obtain an ergodic sample of the parameters applying the
 		Metropolis-Hastings algorithm (see proposition~\ref{prop:pemh}).
-		\item Remove the first iterations (burn-in period) and determine
+		\item Remove the first iterations (burn-in period), and determine
 		the minimum common length $B$ at which the autocorrelation is $0$.
-		\item Let $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$ the subsample
+		\item Let $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$ be the subsample
 		of the parameters distribution composed by the indexes multiples 
 		of $B$.
-		\item For each simulated parameters simulate the portfolio loss 
+		\item For each simulated parameter, simulate the portfolio loss 
 		distribution $L_T(\nu^t,\vec{w}^t,R^t)$ using the algorithm~\ref{alg:pldmc}.
-		\item For each simulated portfolio loss distribution compute its 
+		\item For each simulated portfolio loss distribution, compute its 
 		risk measure using the statistic described in section~\ref{sec:riskm}:
 		$\{\text{VaR}_{99\%}(L_T(\nu^t,\vec{w}^t,R^t))\}_{t=1,\dots,N}$.
 	\end{enumerate}
@@ -2554,20 +2560,20 @@ the parameter uncertainty but other uncertainties remain under covered:
 
 \begin{example}[Credit risk considering parameters uncertainty]
 	\label{ex:paramu}
-	We use the same scenario that is described in the example~\ref{ex:test05} 
+	We use the identical scenario as that described in example~\ref{ex:test05} 
 	and that corresponds to CCruncher input file 
 	\texttt{\$CCRUNCHER/samples/test05.xml}. 
 	We generate 20 observations of annual numbers of defaults using the 
-	algorithm~\ref{alg:snod} (in the real world these observations are 
+	algorithm~\ref{alg:snod} (in the real world, these observations are 
 	extracted from the historical records). 
-	In the following lines we apply the algorithm~\ref{alg:crmd} to estimate 
-	the $\text{ES}_{99\%}$ distribution taking into account the parameters 
+	In the following lines, we apply algorithm~\ref{alg:crmd} to estimate 
+	the $\text{ES}_{99\%}$ distribution, considering the parameters' 
 	uncertainty. 
 
-	The first step consists in the generation of a sample of the parameters 
-	distribution using the Metropolis-Hastings algorithm. We perform 1000000
-	of iterations. Figure~\ref{fig:paramu1} displays the marginals of this 
-	distribution.
+	The first step includes the generation of a sample of the parameters' 
+	distribution using the Metropolis-Hastings algorithm. We performed 
+	\num{1000000} iterations. Figure~\ref{fig:paramu1} displays the 
+	marginals of this distribution.
 	\begin{figure}[!ht]
 		\centering
 		\includegraphics[width=0.98\textwidth]{paramu-1}
@@ -2575,9 +2581,9 @@ the parameter uncertainty but other uncertainties remain under covered:
 		\label{fig:paramu1}
 	\end{figure}
 	
-	The second step consists in determine the thin interval using the 
-	autocorrelation functions. Figure~\ref{fig:paramu2} shows the ACF for 
-	each parameter. A thin interval of 3000 is sufficient in this example. 
+	The second step is determining the thin interval using the autocorrelation 
+	functions. Figure~\ref{fig:paramu2} shows the ACF for each parameter. 
+	A thin interval of \num{3000} is sufficient in this example. 
 	\begin{figure}[ht]
 		\centering
 		\includegraphics[width=0.98\textwidth]{paramu-2}
@@ -2585,8 +2591,8 @@ the parameter uncertainty but other uncertainties remain under covered:
 		\label{fig:paramu2}
 	\end{figure}
 	
-	The third step consist in pruning the parameters sample preserving 
-	only the simulated values whose index is a multiple of 3000. 
+	The third step is pruning the parameters sample preserving 
+	only the simulated values whose index is a multiple of \num{3000}. 
 	Table~\ref{tab:paramu3} displays part of the simulated values.
 	\begin{table}[!ht]
 		\centering
@@ -2608,13 +2614,13 @@ the parameter uncertainty but other uncertainties remain under covered:
 	\end{table}
 
 	The fourth step is the simulation of the portfolio loss distribution
-	for each simulated parameters. This is a very intensive computation.
+	for each simulated parameter. This is quite an intensive computation.
 	The CCruncher's command line execution and the input file macro expansion
-	can help to do this step. If you have a cluster, a cloud or grid, you can 
-	consider to execute multiple task in parallel using a framework like 
-	MakeFlow\footnote{\url{http://www3.nd.edu/~ccl/software/makeflow/}} 
-	or similar. Listing~\ref{sc:paramu4} displays a very simple batch
-	script to execute sequentially the required simulations.
+	can assist in performing this step. Those who have a cluster, a cloud or 
+	a grid may consider to executing multiple parallel tasks using a framework 
+	such as MakeFlow\footnote{\url{http://www3.nd.edu/~ccl/software/makeflow/}} 
+	or something similar. Listing~\ref{sc:paramu4} displays a simple batch
+	script to sequentially execute the required simulations.
 	\begin{lstlisting}[language=bash, label={sc:paramu4}, caption={Execution of multiple CCrunchers (bash script)}]
  
  mkdir data/MH001;
@@ -2636,7 +2642,7 @@ the parameter uncertainty but other uncertainties remain under covered:
 	Finally, the fifth step is the computation of the risk statistic
 	for each portfolio loss distribution. The density of the $\text{ES}_{99\%}$ 
 	can be approximated using the empirical density. Listing~\ref{sc:paramu5}
-	provides an R script to do this task. 
+	provides an R script to perform this task. 
 	\begin{lstlisting}[language=R, label={sc:paramu5}, caption={$ES_{99\%}$ distribution (R script)}]
 
  getRisk <- function(dir)
@@ -2668,13 +2674,13 @@ the parameter uncertainty but other uncertainties remain under covered:
 		\label{fig:paramu5}
 	\end{figure}
 	The exact value of the $\text{ES}_{99\%}$ assuming that parameters 
-	are fixed and known is $\approx 385$\ \euro. If we don't assume that 
-	parameters are known and we infer it from 20 observations of the
-	numbers of defaults, then we obtain the distribution displayed in
-	figure~\ref{fig:paramu5}. 
+	are fixed and known is $\approx 385$\ \euro. If we do not assume that 
+	parameters are known and we infer the parameters from 20 observations 
+	of the numbers of defaults, then we obtain the distribution displayed 
+	in figure~\ref{fig:paramu5}. 
 	The key point is to dispose a distribution indicating the 
 	feasible values that can take the risk measure $\text{ES}_{99\%}$.
-	In this example it's not crazy to consider that 
+	In this example, it is reasonable to consider that 
 	$\text{ES}_{99\%} < 450$ \euro.
 \end{example}
 \begin{comment}
@@ -2712,28 +2718,29 @@ export(rcount, "paramu.txt")
 		\includegraphics[width=0.48\textwidth]{ercim78}
 	\end{center}
 	\vspace{-10pt}
-	\caption{Dependence structure impact}
+	\caption{Dependence structure effect}
 	\vspace{-10pt}
-	\label{fig:copula_impact}
+	\label{fig:copula_effect}
 \end{wrapfigure}
 It is common to use correlation as a measure of dependency between random 
 variables. In most cases, this measure does not fully reflect the structure 
-of dependence between them. Figure~\ref{fig:copula_impact} displays two
-cases with the same mean, marginals and correlations but a distinct risk
-profile because its underlying  dependence structure is distinct (Gaussian 
-copula vs.\ t-Student(3) copula). The mathematical concept that does reflect 
-the structure of dependence between random variables, however, is the copula, 
-which we define below. The world of copulas is vast and very interesting. 
-See~\cite[chap. 5]{mcneil:2005} for a pleasant introduction to copulas.
+of dependence between the variables. Figure~\ref{fig:copula_effect} displays 
+two cases with the identical mean, marginals and correlations but a distinct 
+risk profile because the two cases' underlying  dependence structure is 
+distinct (Gaussian copula vs.\ t-Student(3) copula). The mathematical concept 
+that does reflect the structure of dependence between random variables, 
+however, is the copula, which we define below. The world of copulas is vast 
+and quite interesting. See~\cite[chap. 5]{mcneil:2005} for a pleasant 
+introduction to copulas.
 
 \begin{definition}[Copula]
-	A copula function $C$, is a multivariate distribution defined on the 
+	A copula function $C$ is a multivariate distribution defined on the 
 	unit hypercube $[0,1]^d$ with standard uniform marginals. 
 	More precisely,
 	\begin{displaymath}
 		C(u_1, \dots, u_d) = \Pr\{U_1 \le u_1, \dots, U_d \le u_d\}
 	\end{displaymath}
-	where $U_i \sim \text{Uniform}(0,1) \text{ for } i = 1,\dots, d$.
+	in which $U_i \sim \text{Uniform}(0,1) \text{ for } i = 1,\dots, d$.
 \end{definition}
 
 Sklar's theorem~\cite{sklar:1959} states that any multivariate 
@@ -2743,23 +2750,24 @@ use this statement to define and simulate the t-Student copula.
 
 \begin{theorem}[Sklar's theorem]
 	\label{thm:sklar}
-	Let $F$ be an $d$-dimensional distribution function with margins $F_1,\dots,F_d$.
-	Then there exists an $d$-copula $C$ such that for all $x \in \mathbb{R}^d$,
+	Let $F$ be a $d$-dimensional distribution function with margins 
+	$F_1,\dots,F_d$. Then there is a $d$-copula $C$ such that for all 
+	$x \in \mathbb{R}^d$,
 	\begin{displaymath}
 		F(x_1,\dots,x_d) = C(F_1(x_1),\dots,F_d(x_d))
 	\end{displaymath}
-	If $F_1,\dots,F_d$ are all continuous, the $C$ is unique; otherwise $C$ is uniquely
-	determined on $\text{Ran}F_1 \times \cdots \times \text{Ran}F_d$.
-	Conversely, if $C$ is an $d$-copula and $F_1,\dots,F_d$ are distributions functions,
-	then the function $F$ defined above is an $d$-dimensional distribution function
-	with margins $F_1,\dots,F_d$.
+	If $F_1,\dots,F_d$ are all continuous, the $C$ is unique; otherwise, $C$ is 
+	uniquely determined on $\text{Ran}F_1 \times \cdots \times \text{Ran}F_d$.
+	Conversely, if $C$ is a $d$-copula and $F_1,\dots,F_d$ are distribution 
+	functions, then the function $F$ defined above is a $d$-dimensional 
+	distribution function with margins $F_1,\dots,F_d$.
 \end{theorem}
 
 \begin{corollary}[Copula of a multivariate distribution]
 	\label{cor:cop1}
 	Let $X=(X_1, \dots, X_d)$ be a random vector with a multivariate 
 	distribution $F$ and continuous marginals $F_1, \dots, F_d$. 
-	Then its copula is:
+	Then its copula is
 	\begin{displaymath}
 		C(u_1,\dots,u_d) = F(F_1^{-1}(u_1), \dots, F_d^{-1}(u_d))
 	\end{displaymath}
@@ -2777,27 +2785,27 @@ use this statement to define and simulate the t-Student copula.
 	\label{cor:cop2}
 	Let $X=(X_1, \dots, X_d)$ be a random vector with a multivariate 
 	distribution $F$ and continuous marginals $F_1, \dots, F_d$.
-	If we have a procedure to simulate $X$ then we can simulate 
+	If we have a procedure to simulate $X$, then we can simulate 
 	its copula $C$ using:
 	\begin{displaymath}
 		(U_1, \dots, U_d) = (F_1(X_1), \dots, F_d(X_d))
 	\end{displaymath}
-	where $U_i$ are the copula components.
+	in which $U_i$ are the copula components.
 \end{corollary}
 
 \begin{corollary}[Multivariate distribution simulation]
 	\label{cor:cop3}
-	Let $X=(X_1, \dots, X_d)$ a random vector with a copula $C$
+	Let $X=(X_1, \dots, X_d)$ be a random vector with a copula $C$
 	and continuous marginals $F_1, \dots, F_d$. If we have a
-	procedure to simulate $C$ then we can simulate $X$ using:
+	procedure to simulate $C$, then we can simulate $X$ using
 	\begin{displaymath}
 		(X_1, \dots, X_d) = (F_1^{-1}(U_1), \dots, F_d^{-1}(U_d))
 	\end{displaymath}
-	where $U_i$ are the copula components.
+	in which $U_i$ are the copula components.
 \end{corollary}
 
 \begin{definition}
-	Spearman's rho is a measure of the linear relationship between two 
+	Spearman's rho is a measure of the linear relation between the two 
 	variables $X$ and $Y$, and it is defined as the Pearson's correlation 
 	coefficient between the ranked variables, $x$ and $y$:
 	\begin{displaymath}
@@ -2805,7 +2813,7 @@ use this statement to define and simulate the t-Student copula.
 		{\sqrt{\displaystyle \sum_i (x_i-\bar{x})^2 \sum_i (y_i-\bar{y})^2}}
 	\end{displaymath}
 	It has the important property that its value only relies on the underlying 
-	copula $C$, not on marginals. It can be written as:
+	copula $C$, not on marginals. It can be written as
 	\begin{displaymath}
 		\rho_s = 12 \displaystyle \int_0^1 \int_0^1 C(u,v) \ud u \ud v -3
 	\end{displaymath}
@@ -2817,7 +2825,8 @@ use this statement to define and simulate the t-Student copula.
 \section{Multivariate t-Student Distribution}
 \label{ap:mtsd}
 
-Most of the results set out below have been extracted from~\cite{kotz:2004,demarta:2005}.
+The majority of the results presented below have been extracted 
+from~\cite{kotz:2004,demarta:2005}.
 
 \begin{definition}[Multivariate t-Student distribution]
 	The $d$-dimensional random vector $X=(X_1,\dots,X_d)$ is said to have a 
@@ -2830,12 +2839,12 @@ Most of the results set out below have been extracted from~\cite{kotz:2004,demar
 		1+ \frac{(x-\mu)^\top\Sigma^{-1}(x-\mu)}{\nu}
 		\right)^{-\frac{\nu+d}{2}}
 	\end{displaymath}
-	\noindent where $\Gamma$ is the gamma function, and $|\Sigma|$ is the 
+	in which $\Gamma$ is the gamma function and $|\Sigma|$ is the 
 	determinant of the matrix.
 \end{definition}
 
 \begin{proposition}[t-Student covariance]
-	The covariance matrix of the $X \sim t_d(\nu,\mu,\Sigma)$ is:
+	The covariance matrix of the $X \sim t_d(\nu,\mu,\Sigma)$ is
 	\begin{displaymath}
 		\text{Cov}(X) = \frac{\nu}{\nu-2} \cdot \Sigma \quad \text{if} \quad \nu > 2
 	\end{displaymath}
@@ -2843,7 +2852,7 @@ Most of the results set out below have been extracted from~\cite{kotz:2004,demar
 
 \begin{proposition}[Gaussian as limit of the t-Student]
 	The t-Student distribution converges to a Gaussian distribution 
-	when $\nu$ tend to $\infty$.
+	when $\nu$ tends to $\infty$.
 	\begin{displaymath}
 		\lim_{\nu \to \infty} t_d(\nu,\mu,\Sigma) = N(\mu,\Sigma)
 	\end{displaymath}
@@ -2859,7 +2868,7 @@ Most of the results set out below have been extracted from~\cite{kotz:2004,demar
 \end{proposition}
 
 \begin{proposition}[Multivariate t-Student marginals]
-	Let $X \sim t_d(\nu,\vec{0},\Sigma)$. Then, its i-th marginal is 
+	Assume $X \sim t_d(\nu,\vec{0},\Sigma)$. Then its i-th marginal is 
 	$X_i \sim t_1(\nu,0,\sigma_{ii})$.
 \end{proposition}
 
@@ -2869,20 +2878,21 @@ Most of the results set out below have been extracted from~\cite{kotz:2004,demar
 \end{definition}
 
 \begin{proposition}[t-Student copula equivalence]
-	The copula of $t_d(\nu,\mu,\Sigma)$ is identical of that of $t_d(\nu,\vec{0},R)$
-	where $R$ is the correlation matrix implied by the dispersion matrix $\Sigma$.
+	The copula of $t_d(\nu,\mu,\Sigma)$ is identical to that of 
+	$t_d(\nu,\vec{0},R)$ in which $R$ is the correlation matrix implied by 
+	the dispersion matrix $\Sigma$.
 \end{proposition}
 
 \begin{proposition}[t-Student copula density]
-	The t-Student copula, $C_{\nu,R}^t$, where $R$ is a correlation matrix,
-	has the following distribution function:
+	The t-Student copula, $C_{\nu,R}^t$, in which $R$ is a correlation 
+	matrix, has the following distribution function:
 	\begin{displaymath}
 		C_{\nu,R}^t(u_1, \dots, u_d) = 
 		\int_{-\infty}^{t_\nu^{-1}(u_1)} \dots \int_{-\infty}^{t_\nu^{-1}(u_d)} f(x) \ud x
 	\end{displaymath}
-	where $f(x)$ is the density function of $t_d(\nu,\vec{0},R)$, and $t_{\nu}^{-1}$ 
-	denotes the quantile function of the univariate distribution $t_1(\nu,0,1)$. 
-	The copula density is:
+	in which $f(x)$ is the density function of $t_d(\nu,\vec{0},R)$ and 
+	$t_{\nu}^{-1}$ denotes the quantile function of the univariate distribution 
+	$t_1(\nu,0,1)$. The copula density is
 	\begin{displaymath}
 		\label{eq:density}
 		c_{\nu,R}^t(u_1,\dots,u_d) =
@@ -2892,8 +2902,8 @@ Most of the results set out below have been extracted from~\cite{kotz:2004,demar
 		\frac{\displaystyle\left( 1+\frac{\zeta' R^{-1} \zeta}{\nu}\right)^{-\frac{\nu+d}{2}}}{\displaystyle\prod_{i=1}^d \left( 1+\frac{\zeta_i^2}{\nu} \right)^{-\frac{\nu+1}{2}}}
 	\end{displaymath}
 	\noindent
-	where $\zeta=(t_\nu^{-1}(u_1), \dots, t_\nu^{-1}(u_d))$ is the vector of 
-	the t-Student univariate inverse distribution functions.
+	in which $\zeta=(t_\nu^{-1}(u_1), \dots, t_\nu^{-1}(u_d))$ is the vector 
+	of the t-Student univariate inverse distribution functions.
 \end{proposition}
 
 %------------------------------------------------------------------------------
@@ -2906,18 +2916,18 @@ The content presented in this appendix is detailed and extended
 in~\cite{torrent:2011}.
 
 \begin{definition}[Covariance block matrix]
-	We say that a matrix $A$ is a covariance block matrix $B_k(\vec{n},\vec{d},M)$
-	where:
+	A matrix $A$ is a covariance block matrix $B_k(\vec{n},\vec{d},M)$
+	in which:
 	\begin{itemize}
 		\item $\vec{n}=(n_1,\dots,n_k)$ with $n_i \in \mathbb{N}$ and $1 \le n_i$ (number of elements per block),
 		\item $\vec{d}=(d_1,\dots,d_k)$ with $d_i \in \mathbb{R}$ (diagonal block values), and
-		\item $M$ is a $k {\times} k$ symmetric matrix with values $m_{ij} \in \mathbb{R}$ (block values).
+		\item $M$ is a $k {\times} k$ symmetric matrix with values $m_{ij} \in \mathbb{R}$ (block values)
 	\end{itemize}
 	when
 	\begin{itemize}
 		\item each block $B_{ij}$ is an $n_i {\times} n_j$ constant matrix with value $m_{ij}$
 		\item diagonal blocks $B_{ii}$ have diagonal values $d_i$
-		\item A is definite-positive
+		\item A is definite-positive.
 	\end{itemize}
 \end{definition}
 
@@ -2926,7 +2936,7 @@ in~\cite{torrent:2011}.
 	We have $6$ obligors sorted by sector. The first three belong to the 
 	banking sector, the next two belong to the energy sector 
 	and the last one belongs to the services sector. Obligors default time
-	dependence is determined only by sectors. Then, the correlation matrix 
+	dependence is determined only by sectors. Thus, the correlation matrix 
 	of the underlying elliptical copula is a correlation block matrix.
 	\small
 	\begin{displaymath}
@@ -2997,7 +3007,7 @@ in~\cite{torrent:2011}.
 \begin{definition}[Gaussian multi-factor model]
 	\label{def:gmfm}
 	We say that a multivariate distribution $X$ follows a Gaussian multi-factor
-	model if it can be expressed in the form:
+	model if it can be expressed in this form:
 	\begin{displaymath}
 		X_i^j = w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j
 		\quad \text{ where } \left\{
@@ -3011,7 +3021,7 @@ in~\cite{torrent:2011}.
 		\end{array}
 		\right.
 	\end{displaymath}
-	An alternative definition based on the covariance matrix is:
+	An alternative definition based on the covariance matrix is
 	\begin{displaymath}
 		X_i^j = Z_i + \sqrt{1-m_{ii}^2} \cdot \epsilon_i^j
 		\quad \text{ where } \left\{
@@ -3038,7 +3048,7 @@ in~\cite{torrent:2011}.
 \end{proposition}
 \begin{proof}
 	We check that the correlation between Gaussian multi-factor model
-	components is a matrix composed by blocks that fulfill the equivalence.
+	components is a matrix comprising blocks that fulfill the equivalence.
 	\begin{displaymath}
 		\begin{array}{rl}
 			\text{Var}(X_i^j) =                       &
@@ -3056,23 +3066,23 @@ in~\cite{torrent:2011}.
 		\end{array}
 	\end{displaymath}
 	The characterization of the multivariate Gaussian~\cite[thm. 2.6.2]{anderson:1984}
-	states that if every linear combination of the components of a 
+	posits that if every linear combination of the components of a 
 	vector $X$ is normally distributed, then $X$ is normally distributed.
 	It is straightforward to check that the multi-factor Gaussian model 
-	fulfills this property and consequently it is a multivariate Normal.
+	fulfills this property and consequently is a multivariate Normal.
 \end{proof}
 
 \begin{proposition}[Gaussian multi-factor model $\subsetneq$ multivariate Gaussian block]
 	\label{prop:ibne}
 	Any multi-factor model can be expressed as a multivariate Gaussian 
-	block, but there are multivariate Gaussian blocks that cannot be 
+	block; however, there are multivariate Gaussian blocks that cannot be 
 	expressed as a Gaussian multi-factor model.
 \end{proposition}
 \begin{proof}
 	Proposition~\ref{prop:gmfigs} states that any multi-factor model 
-	is a multivariate Gaussian composed by blocks.
-	Next we see that reciprocal is false. Let 
-	$\bar{R} = B_k(\vec{n},\vec{1},M)$ the Gaussian distribution 
+	is a multivariate Gaussian composed of blocks.
+	Next we see that the reciprocal is false. Let 
+	$\bar{R} = B_k(\vec{n},\vec{1},M)$, the Gaussian distribution 
 	correlation matrix. We use the equivalence 
 	$M_{ij} = w_i \cdot w_i \cdot R_{ij}$ stated in 
 	proposition~\ref{prop:gmfigs} to determine the cases that cannot be 
@@ -3083,7 +3093,7 @@ in~\cite{torrent:2011}.
 		M_{ii} = w_i \cdot w_i \cdot R_{ii} = w_i^2
 	\end{displaymath}
 	If $M_{ii}$ is negative, then $w_i$ has an imaginary value.
-	By example:
+	For example,
 	\begin{displaymath}
 		\bar{R} = \left(
 		\begin{array}{cc|c}
@@ -3112,8 +3122,8 @@ in~\cite{torrent:2011}.
 		\frac{M_{ij}}{\sqrt{M_{ii} \cdot M_{jj}}}
 	\end{displaymath}
 	If $M_{ij}^2 > M_{ii} \cdot M_{jj}$, then $R_{ij}$ has an absolute value
-	bigger than 1, which is not possible because $R_{ij}$ is a correlation
-	value. By example:
+	larger than 1, which is not possible because $R_{ij}$ is a correlation
+	value. For example,
 	\begin{displaymath}
 		\bar{R} = \left(
 		\begin{array}{cc|cc}
@@ -3137,10 +3147,10 @@ in~\cite{torrent:2011}.
 	\end{displaymath}
 \end{proof}
 
-It's disturbing that exist multivariate block Gaussian distributions 
-that can't be expressed as a multi-factor model. Fortunately the 
-cases where that occur haven't practical interest in credit risk
-modeling where the number of obligors in each block is higher. 
+It is disturbing that multivariate block Gaussian distributions exist
+that cannot be expressed as a multi-factor model. Fortunately, the 
+cases in which this occurs have no practical application to credit risk
+modeling in which the number of obligors in each block is higher. 
 The following proposition clarifies this theme.
 
 \begin{proposition}[Gaussian multi-factor model $\approx$ multivariate Gaussian block]
@@ -3150,15 +3160,15 @@ The following proposition clarifies this theme.
 	Gaussian model if $n_i$ values are large enough.
 \end{proposition}
 \begin{proof}
-	We revise the cases where the multivariate Gaussian distribution can't
-	be expressed as a multi-factor model and we use the proposition~\ref{prop1}
-	to check that if $n_i$ values are large enough, then 
+	We revise the cases in which the multivariate Gaussian distribution cannot
+	be expressed as a multi-factor model, and we use proposition~\ref{prop1}
+	to ascertain that if $n_i$ values are large enough, then 
 	that is indeed a valid multi-factor model.
 	
 	\textbf{Case 1}. Factor loading $w_i$ with imaginary value is caused by 
 	a negative $m_{ii}$ value ($m_{ii} = w_i^2$). We use the 
-	proposition~\ref{prop1} to determine the restrictions about $m_{ii}$. 
-	Because $\bar{R}$ is covariance block matrix definite-positive, the 
+	proposition~\ref{prop1} to determine the restrictions regarding $m_{ii}$. 
+	Because $\bar{R}$ is a covariance block matrix definite-positive, the 
 	deflated matrix has a positive determinant. Then,
 	\begin{displaymath}
 		\begin{array}{l}
@@ -3175,12 +3185,12 @@ The following proposition clarifies this theme.
 		\end{array}
 	\end{displaymath}
 	
-	\textbf{Case 2}. Multi-factor model correlation bigger than $1$ is caused
+	\textbf{Case 2}. A multi-factor model correlation larger than $1$ is caused
 	by $m_{12} = w_1 \cdot w_2 \cdot R_{12} = \sqrt{m_{11}} \cdot \sqrt{m_{22}} \cdot R_{12}$
 	causing $R_{12} = \frac{m_{12}}{\sqrt{m_{11} \cdot m_{22}}}$.
-	We use the proposition~\ref{prop1} to determine the restrictions about $m_{ij}$. 
-	Because $\bar{R}$ is covariance block matrix definite-positive, the deflated 
-	matrix has a positive determinant. Then,
+	We use the proposition~\ref{prop1} to determine the restrictions regarding 
+	$m_{ij}$. Because $\bar{R}$ is covariance block matrix definite-positive, 
+	the deflated matrix has a positive determinant. Then,
 	\begin{displaymath}
 		\begin{array}{l}
 			1 + (n_1-1) \cdot m_{11} + (n_2-1) \cdot m_{22} +                     
@@ -3214,7 +3224,7 @@ The following proposition clarifies this theme.
 
 \subsection{Proposition~\ref{prop:pdfsv} --~\nameref{prop:pdfsv} (page~\pageref{prop:pdfsv})}
 \begin{proof}
-	We note that ratings are detached from each other. We use 
+	We note that ratings are detached from one another. We use 
 	proposition~\ref{prop:pdftm} to obtain the time-until-default distribution 
 	of the i-th rating:
 	\small
@@ -3262,8 +3272,8 @@ The following proposition clarifies this theme.
 
 \subsection{Proposition~\ref{prop:dtd} --~\nameref{prop:dtd} (page~\pageref{prop:dtd})}
 \begin{proof}
-	We note as $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
-	distribution $t_n(\nu,\bar{R})$, and $(U_1,\dots,U_n)$ to represent
+	We note that $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
+	distribution $t_n(\nu,\bar{R})$ and $(U_1,\dots,U_n)$ to represent
 	the components of the copula $C_{\nu,\bar{R}}^t$.
 	\begin{displaymath}
 		\begin{array}{rl}
@@ -3283,11 +3293,11 @@ The following proposition clarifies this theme.
 
 \subsection{Proposition~\ref{prop:tmfm} --~\nameref{prop:tmfm} (page~\pageref{prop:tmfm})}
 \begin{proof}
-	We use the t-Student characterization (proposition~\ref{prop:mtschar}),
-	$X = \sqrt{\frac{\nu}{V}} \cdot Z$, where $V \sim \chi_{\nu}^2$ and 
-	$Z \sim N(0,\bar{R})$ expressing $Z$ as a Gaussian multi-factor model 
+	We use the t-Student characterization (proposition~\ref{prop:mtschar})
+	$X = \sqrt{\frac{\nu}{V}} \cdot Z$ in which $V \sim \chi_{\nu}^2$ and 
+	$Z \sim N(0,\bar{R})$, expressing $Z$ as a Gaussian multi-factor model 
 	(definition~\ref{def:gmfm}). The determination of $R$ and $w_1,\dots,w_n$
-	values can be found at proposition~\ref{prop:gmfigs}. The tag line 
+	values can be observed in proposition~\ref{prop:gmfigs}. The tag line 
 	``$n_i$ sizes are high-enough'' is justified in 
 	proposition~\ref{prop:gmfamgb}.
 \end{proof}
@@ -3308,7 +3318,7 @@ The following proposition clarifies this theme.
 		\Pr\{ X_k \le t_{\nu}^{-1}(F_j(1)) \mid \upsilon, z_i\} = 
 		\Pr\{ X_k \le t_{\nu}^{-1}(p_j) \mid \upsilon, z_i\}
 	\end{displaymath}
-	where $T_k$ is the k-th component of the multivariate default times, 
+	in which $T_k$ is the k-th component of the multivariate default times 
 	and $X_k$ is the k-th component of the multivariate t-Student. 
 	Now we express $X$ in the multi-factor form:
 	\begin{displaymath}
@@ -3317,13 +3327,14 @@ The following proposition clarifies this theme.
 		\le t_{\nu}^{-1}(p_j) \mid \upsilon, z_i
 		\right\}
 	\end{displaymath}
-	Because $\upsilon$ and $z_i$ are fixed and independent from $\epsilon_i^j \sim N(0,1)$, we obtain:
+	Because $\upsilon$ and $z_i$ are fixed and independent from 
+	$\epsilon_i^j \sim N(0,1)$, we obtain
 	\begin{displaymath}
 		H_{ij}(\upsilon,z_i) = \Phi\left(  
 		\frac{\sqrt{\frac{\upsilon}{\nu}} \cdot t_{\nu}^{-1}(p_j) - w_i\cdot z_i}{\sqrt{1-w_i^2}}
 		\right)
 	\end{displaymath}
-	$H_{ij}$ is the probability that an obligor defaults in 1-year. The 
+	$H_{ij}$ is the probability that an obligor defaults in 1 year. The 
 	probability of observing $k_{ij}$ failures in a set of $n_{ij}$ independent
 	obligors follows a binomial distribution:
 	\begin{displaymath}
