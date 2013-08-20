@@ -53,10 +53,6 @@
 \usepackage[utf8]{inputenc} % Required for including letters with accents
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
 
-% glossary (GTG)
-\usepackage{glossaries}
-\makeglossaries
-
 % Bibliography
 \usepackage[hidelinks,hyperfootnotes=false]{hyperref} %added by GTG
 \usepackage[all]{hypcap} % needed to help hyperlinks direct correctly
@@ -79,18 +75,40 @@
 \usepackage{datetime}
 \usepackage[group-separator={,}]{siunitx}
 
-% \usepackage[firstpage]{draftwatermark}
-% \SetWatermarkText{DRAFT COPY}
-% \SetWatermarkScale{0.75}
+% glossary (GTG)
+\usepackage[nonumberlist,toc]{glossaries}
+\makeglossaries
+
+% draft info
+\usepackage[firstpage]{draftwatermark}
+\SetWatermarkText{DRAFT COPY}
+\SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1129}
+\def\svnversion{R1130}
 
 %----------------------------------------------------------------------------------------
 
 \input{structure}
 
 \hyphenation{CCruncher obli-gors}
+
+\newglossarystyle{super3colleft}{%
+  \renewenvironment{theglossary}%
+    {\tablehead{}\tabletail{}%
+     \def\arraystretch{1.4}%
+     \begin{supertabular}{@{}>{\bfseries}lp{13cm}p{\glspagelistwidth}}}%
+    {\end{supertabular}}%
+  \renewcommand*{\glossaryheader}{}%
+  \renewcommand*{\glsgroupheading}[1]{}%
+  \renewcommand*{\glossaryentryfield}[5]{%
+    \glsentryitem{##1}\glstarget{##1}{##2} & ##3 & ##5\\}%
+  \renewcommand*{\glossarysubentryfield}[6]{%
+     &
+     \glssubentryitem{##2}%
+     \glstarget{##2}{\strut}##4 & ##6\\}%
+  \renewcommand*{\glsgroupskip}{}% replaced {& &\\} by {}
+}
 
 \begin{document}
 
@@ -111,7 +129,7 @@ Using CCruncher\par
 \vspace*{2cm}
 {\huge Gerard Torrent-Gironella}\par
 \vspace*{2cm}
-\par\normalfont\fontsize{14}{14}\sffamily\selectfont
+\par\normalfont\fontsize{16}{16}\sffamily\selectfont
 Version \numversion\par
 \endgroup
 
@@ -191,34 +209,66 @@ please cite it when using it for credit risk analysis.
 
 %==============================================================================
 % GLOSSARY
+% http://en.wikibooks.org/wiki/LaTeX/Glossary
 %==============================================================================
-%\chapterimage{chapter_head_1.pdf}
-%\pagestyle{empty}
-%\setcounter{tocdepth}{1}
-\newglossaryentry{computer} {
-  name=computer,
-  description={is a programmable machine that receives input,
-               stores and manipulates data, and provides
-               output in a useful format}
+\chapterimage{chapter_head_1.pdf}
+\pagestyle{empty}
+\setcounter{tocdepth}{1}
+
+\newglossaryentry{glos:pdf} {name=pdf,
+  description={probability density function}
 }
-\newglossaryentry{naiive}
-{
-  name=na\"{\i}ve,
-  description={is a French loanword (adjective, form of naïf)
-               indicating having or showing a lack of experience,
-               understanding or sophistication},
-  sort=naive
+\newglossaryentry{glos:cdf} {name=cdf,
+  description={cumulative distribution function}
 }
-\newglossaryentry{pi}
-{
-  name={\ensuremath{\pi}},
-  description={ratio of circumference of circle to its
-               diameter},
-  sort=pi
+\newglossaryentry{glos:n}{name=$n$,
+  description={number of obligors in the portfolio}
 }
-\printglossaries
-% \cleardoublepage
-% \pagestyle{fancy}
+\newglossaryentry{glos:ni}{name=$n_i$,
+  description={number of obligors in the i-th sector/factor}
+}
+\newglossaryentry{glos:k}{name=$k$,
+  description={number of factors/sectors}
+}
+\newglossaryentry{glos:r}{name=$r$,
+  description={number of ratings}
+}
+\newglossaryentry{glos:Ti}{name=$T_i$,
+  description={default time, or time-until-default, of the i-th obligor}
+}
+\newglossaryentry{glos:F}{name=$F$,
+  description={multivariate distribution of default times or time-until-default}
+}
+\newglossaryentry{glos:Fi}{name=$F_i$,
+  description={probability of default distribution of the i-th obligor or i-th rating}
+}
+\newglossaryentry{glos:pi}{name=$p_i$,
+  description={1-year probability of default of the i-th rating}
+}
+\newglossaryentry{glos:tdist}{name={\ensuremath{t_d(\nu,\mu,\Sigma)}},
+  description={multivariate t-Student distribution of dimension $d$ with $\nu$ 
+  degrees of freedom, mean vector $\mu$, and dispersion or scatter matrix $\Sigma$}
+}
+\newglossaryentry{glos:cbm}{name=\ensuremath{B_k(\vec{n},\vec{d},M)},
+  description={covariance $k {\times} k$ block matrix in which $\vec{n}$ are the
+  number of individuals per factor, $\vec{d}$ are the diagonal values, and $M$ are
+  the non-diagonal block values}
+}
+\newglossaryentry{glos:ct}{name=$C_{\nu,R}^t$,
+  description={t-Student copula with $\nu$ degrees of freedom and correlation matrix $R$}
+}
+\newglossaryentry{glos:ctm}{name=$C_{\nu,\vec{w},R}^t$,
+  description={multi-factor t-Student copula with $\nu$ degrees of freedom, 
+  factor loadings $\vec{w}$, and factor correlation matrix $R$}
+}
+
+%TODO: R, \bar{R}, \vec{w}, \nu, K_{ij}^t, PD, EAD, LGD, N, T
+%TODO: organitzar glossaries
+
+\glsaddall
+\printglossary[style=super3colleft]
+\cleardoublepage
+\pagestyle{fancy}
 
 %==============================================================================
 % INTRODUCTION
