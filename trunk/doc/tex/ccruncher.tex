@@ -76,6 +76,7 @@
 \usepackage[hang,flushmargin]{footmisc} 
 \usepackage{datetime}
 \usepackage[group-separator={,}]{siunitx}
+\usepackage{listliketab}
 
 \input{structure}
 
@@ -89,7 +90,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1132}
+\def\svnversion{R1133}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -97,7 +98,7 @@
   \renewenvironment{theglossary}%
     {\tablehead{}\tabletail{}%
      \def\arraystretch{1.4}%
-     \begin{supertabular}{@{}>{\bfseries}lp{13cm}p{\glspagelistwidth}}}%
+     \begin{supertabular}{@{}>{\bfseries}lp{12.5cm}p{\glspagelistwidth}}}%
     {\end{supertabular}}%
   \renewcommand*{\glossaryheader}{}%
   \renewcommand*{\glsgroupheading}[1]{}%
@@ -117,19 +118,19 @@
 %==============================================================================
 \begingroup
 \thispagestyle{empty}
-%\AddToShipoutPicture*{\put(6,5){\includegraphics[scale=1]{background}}}
+\AddToShipoutPicture*{\put(6,5){\includegraphics[scale=1]{background1}}}
 \vspace*{-2.5cm}
 \centerline{\includegraphics[angle=0]{./Pictures/logo.png}}
 \centering
-\vspace*{0.5cm}
+\vspace*{1.0cm}
 \par\normalfont\fontsize{35}{55}\sffamily\selectfont
 Quantifying\par 
 Portfolio Credit Risk\par
 Using CCruncher\par
-\vspace*{2cm}
+\vspace*{0.5cm}
 {\huge Gerard Torrent-Gironella}\par
-\vspace*{2cm}
-\par\normalfont\fontsize{16}{16}\sffamily\selectfont
+\vspace*{1cm}
+\par\normalfont\fontsize{18}{18}\sffamily\selectfont
 Version \numversion\par
 \endgroup
 
@@ -207,14 +208,11 @@ please cite it when using it for credit risk analysis.
 \cleardoublepage
 \pagestyle{fancy}
 
+
 %==============================================================================
 % GLOSSARY
 % http://en.wikibooks.org/wiki/LaTeX/Glossary
 %==============================================================================
-\chapterimage{chapter_head_1.pdf}
-\pagestyle{empty}
-\setcounter{tocdepth}{1}
-
 \newglossaryentry{glos:n}{name=$n$,
 	description={number of obligors in the portfolio.},
 	sort=10
@@ -228,7 +226,9 @@ please cite it when using it for credit risk analysis.
 	sort=30
 }
 \newglossaryentry{glos:ni}{name=$n_i$,
-	description={number of obligors in the i-th sector/factor.},
+	description={number of obligors in the i-th sector/factor. 
+	It is a component of vector $\vec{n}$ that satisfies
+	$\displaystyle \sum_{i=1}^s n_i = n$.},
 	sort=40
 }
 \newglossaryentry{glos:nijt}{name=$n_{ij}^t$,
@@ -242,16 +242,18 @@ please cite it when using it for credit risk analysis.
 	sort=60
 }
 \newglossaryentry{glos:Ti}{name=$T_i$,
-	description={default time, or time-until-default, of the i-th obligor.},
+	description={default time (aka time-until-default, aka time-to-default,
+	aka survival time) of the i-th obligor.},
 	sort=70
 }
 \newglossaryentry{glos:F}{name=$F$,
 	description={multivariate distribution of default times or 
-	time-until-default.},
+	time-until-default. It has $n$ components with marginal 
+	distributions $F_i$.},
 	sort=80
 }
 \newglossaryentry{glos:Fi}{name=$F_i$,
-	description={probability of default (PD) distribution of the i-th obligor 
+	description={default time distribution of the i-th obligor 
 	or the i-th rating. The obligor's $F_i$ depends on his rating.},
 	sort=90
 }
@@ -275,13 +277,14 @@ please cite it when using it for credit risk analysis.
 \newglossaryentry{glos:cbm}{name={\ensuremath{B_s(\vec{n},\vec{d},M)}},
 	description={covariance $s {\times} s$ block matrix in which $\vec{n}$ 
 	are the number of individuals per block, $\vec{d}$ are the 
-	diagonal values, and $M$ are the non-diagonal block values.},
+	diagonal values, and $M$ are the non-diagonal block values.
+	See appendix \ref{ap:cbm}.},
 	sort=140
 }
-\newglossaryentry{glos:mvt}{name={\ensuremath{t_d(\nu,\mu,\Sigma)}},
+\newglossaryentry{glos:mvt}{name={\ensuremath{t_d(\nu,\vec{\mu},\Sigma)}},
 	description={multivariate t-Student distribution of dimension $d$ with 
-	$\nu$ degrees of freedom, mean vector $\mu$, and dispersion or scatter 
-	matrix $\Sigma$.},
+	$\nu$ degrees of freedom, mean vector $\vec{\mu}$, and dispersion or 
+	scatter matrix $\Sigma$.},
 	sort=150
 }
 \newglossaryentry{glos:cg}{name=$C_{R}^{\text{Ga}}$,
@@ -299,31 +302,22 @@ please cite it when using it for credit risk analysis.
 	It is merely a t-Student copula.},
 	sort=180
 }
-% \newglossaryentry{glos:pd}{name=PD,
-% 	plural=PDs,
-% 	description={Probability of Default}
-% }
-% \newglossaryentry{glos:ead}{name=EAD,
-% 	plural=EADs,
-% 	description={Exposure at Default}
-% }
-% \newglossaryentry{glos:lgd}{name=LGD,
-% 	plural=LGDs,
-% 	description={Loss Given Default}
-% }
-% \newglossaryentry{glos:pdf}{name=pdf,
-% 	description={probability density function}
-% }
-% \newglossaryentry{glos:cdf}{name=cdf,
-% 	description={cumulative distribution function}
-% }
 
 \glsaddall
 \printglossary[style=super3colleft]
 ~\vfill
-TODO: set additional info here.
+\section*{Notes}
+\begin{enumerate}[leftmargin=*]
+	\itemsep 0.5em
+	\item Time unit. We use the 1-year time unit without loss of generality 
+	in order to simplify the exposition.
+	\item Factors = Sectors. CCruncher considers that dependence between 
+	obligors is determined by obligor's industrial sectors causing that 
+	sectors and factors be equivalents. This text uses sectors and factors 
+	indistinctly to refer to factors.
+\end{enumerate}
 \cleardoublepage
-\pagestyle{fancy}
+
 
 %==============================================================================
 % INTRODUCTION
@@ -390,12 +384,11 @@ exposure at the end of their lifetimes provides the portfolio loss
 distribution. The CreditMetrics\texttrademark{} model can be interpreted as 
 the Gaussian case in the copula approach context~\cite{li:2000}.
 
-The CCruncher quantification model adheres to the copula approach, 
-implementing the t-Student multi-factor copula even for high-dimensional 
-portfolios. CCruncher is formulated according to the Basel II concepts 
-(PD, EAD, LGD) and developed considering portfolios of credits to SMEs;
-CCruncher can also be used to evaluate other types of portfolios such as 
-portfolios of bonds.
+The CCruncher model adheres to the copula approach, implementing the 
+t-Student multi-factor copula even for high-dimensional portfolios. 
+CCruncher is formulated according to the Basel II concepts (PD, EAD, LGD) 
+and developed considering portfolios of credits to SMEs; CCruncher can also 
+be used to evaluate other types of portfolios such as portfolios of bonds.
 
 CCruncher quantifies the portfolio credit risk by sampling the portfolio loss
 distribution and computing the appropriate statistics (EL, VaR, ES). The 
@@ -436,9 +429,9 @@ The disadvantages of CCruncher are as follows:
 	\item it is computationally intensive;
 	\item the convergence rate of the Monte Carlo method is rather slow;
 	\item obligors cannot belong to a weighted sum of factors;
-	\item correlations are constant over time;
 	\item dependence only relies on sectors;
-	\item only Gaussian and t-Student copulas are supported; and
+	\item correlations are constant over time;
+	\item currently only Gaussian and t-Student copulas are supported; and
 	\item mark-to-market is not supported.
 \end{inparaenum}
 
@@ -496,8 +489,8 @@ can skip this section and go directly to the multivariate model section.
 
 \begin{definition}[Probability of Default (PD)]
 	$T_i$ is the random variable that represents the default time 
-	(aka time-until-default, aka survival time) of the i-th obligor. 
-	Let $F_i(t)$ denote the distribution function of $T_i$:
+	(aka time-until-default, aka survival time, aka time-to-default) of the 
+	i-th obligor. Let $F_i(t)$ denote the distribution function of $T_i$:
 	\begin{displaymath}
 		F_i(t) = \Pr\{T_i \le t\} = 
 		\Pr\{\text{ i-th obligor defaults before $t$ years }\}
@@ -785,12 +778,19 @@ term.
 
 CCruncher allows description of the PDs derived from advanced models specifying 
 the PDs' values at given time points. These must fulfill the cdf conditions:
-\begin{itemize}
-	\item $F_i(0) = 0 \quad i=1,\dots,r \quad i \ne \text{default}$
-	\item $F_i(t)$ strictly increasing $i=1,\dots,r \quad i \ne \text{default}$
-	\item $F_i(\infty) = 1 \quad i=1,\dots,r$
-	\item $F_{\text{default}}(t) = 1 \quad \forall\ t \ge 0$
-\end{itemize}
+~\\
+~\\
+\begin{listliketab} 
+	\storestyleof{itemize} 
+	\begin{tabular}{Lll}
+		\textbullet & $F_i(0) = 0$                 & $i=1,\dots,r \quad i \ne \text{default}$ \\
+		\textbullet & $F_i(t)$ strictly increasing & $i=1,\dots,r \quad i \ne \text{default}$ \\
+		\textbullet & $F_i(\infty) = 1$            & $i=1,\dots,r$ \\
+		\textbullet & $F_{\text{default}}(t) = 1$  & $\forall\ t \ge 0$ \\
+	\end{tabular} 
+\end{listliketab}
+~\\
+~\\
 The functions specified in this manner are interpolated using cubic splines
 when the above conditions are preserved and are interpolated using linear 
 splines when they are not.
@@ -976,7 +976,7 @@ multivariate t-Student distribution.
 	$\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$ is
 	\begin{displaymath}
 		\begin{array}{ll}
-			R_{ij} = \frac{\sqrt{\Sigma_{ij}}}{\sqrt{\Sigma_{ii}} \cdot \sqrt{\Sigma_{jj}}} & \forall\ i,j \\
+			R_{ij} = \frac{\sqrt{\Sigma_{ij}}}{\sqrt{\Sigma_{ii} \cdot \Sigma_{jj}}} & \forall\ i,j \\
 			w_i = \sqrt{\Sigma_{ii}} & i = 1,\dots,s \\
 		\end{array}
 	\end{displaymath}
@@ -2838,7 +2838,6 @@ export(rcount, "paramu.txt")
 % APPENDICES
 %==============================================================================
 \appendix
-\chapterimage{chapter_head_1.pdf}
 \chapter{Appendices}
 
 %------------------------------------------------------------------------------
@@ -2965,13 +2964,15 @@ from~\cite{kotz:2004,demarta:2005}.
 
 \begin{definition}[Multivariate t-Student distribution]
 	The $d$-dimensional random vector $X=(X_1,\dots,X_d)$ is said to have a 
-	(non-singular) multivariate t-Student distribution with $\nu$ degrees of freedom, 
-	mean vector $\mu$ and positive-definite dispersion or scatter matrix $\Sigma$, 
-	denoted $t_d(\nu,\mu,\Sigma)$, if its density is given by
+	(non-singular) multivariate t-Student distribution with $\nu$ degrees of 
+	freedom, mean vector $\vec{\mu}$ and positive-definite dispersion or 
+	scatter matrix $\Sigma$, denoted $t_d(\nu,\vec{\mu},\Sigma)$, if its 
+	density is given by
 	\begin{displaymath}
-		f(x)=\frac{\Gamma\left(\frac{\nu+d}{2}\right)}{\Gamma\left(\frac{\nu}{2}\right)\sqrt{(\pi \nu)^d |\Sigma|}}
+		f(\vec{x})=\frac{\Gamma\left(\frac{\nu+d}{2}\right)}
+		{\Gamma\left(\frac{\nu}{2}\right)\sqrt{(\pi \nu)^d |\Sigma|}}
 		\left(
-		1+ \frac{(x-\mu)^\top\Sigma^{-1}(x-\mu)}{\nu}
+		1+ \frac{(\vec{x}-\vec{\mu})^\top\Sigma^{-1}(\vec{x}-\vec{\mu})}{\nu}
 		\right)^{-\frac{\nu+d}{2}}
 	\end{displaymath}
 	in which $\Gamma$ is the gamma function and $|\Sigma|$ is the 
@@ -2979,9 +2980,10 @@ from~\cite{kotz:2004,demarta:2005}.
 \end{definition}
 
 \begin{proposition}[t-Student covariance]
-	The covariance matrix of the $X \sim t_d(\nu,\mu,\Sigma)$ is
+	The covariance matrix of the $X \sim t_d(\nu,\vec{\mu},\Sigma)$ is
 	\begin{displaymath}
-		\text{Cov}(X) = \frac{\nu}{\nu-2} \cdot \Sigma \quad \text{if} \quad \nu > 2
+		\text{Cov}(X) = \frac{\nu}{\nu-2} \cdot \Sigma \quad \text{if} 
+		\quad \nu > 2
 	\end{displaymath}
 \end{proposition}
 
@@ -2989,15 +2991,15 @@ from~\cite{kotz:2004,demarta:2005}.
 	The t-Student distribution converges to a Gaussian distribution 
 	when $\nu$ tends to $\infty$.
 	\begin{displaymath}
-		\lim_{\nu \to \infty} t_d(\nu,\mu,\Sigma) = N(\mu,\Sigma)
+		\lim_{\nu \to \infty} t_d(\nu,\vec{\mu},\Sigma) = N(\vec{\mu},\Sigma)
 	\end{displaymath}
 \end{proposition}
 
 \begin{proposition}[Multivariate t-Student characterization]
 	\label{prop:mtschar}
-	A random vector $T \sim t_d(\nu,\mu,\Sigma)$ can be expressed as:
+	A random vector $T \sim t_d(\nu,\vec{\mu},\Sigma)$ can be expressed as:
 	\begin{displaymath}
-		T \stackrel{d}{=} \mu + \sqrt{\frac{\nu}{V}}\cdot Z
+		T \stackrel{d}{=} \vec{\mu} + \sqrt{\frac{\nu}{V}}\cdot Z
 		\quad \text{ where } Z \sim N(0,\Sigma) \text{ and } V \sim \chi_{\nu}^2
 	\end{displaymath}
 \end{proposition}
@@ -3009,11 +3011,11 @@ from~\cite{kotz:2004,demarta:2005}.
 
 \begin{definition}[t-Student copula]
 	The t-Student copula, $C_{\nu,\Sigma}^{\text{t}}$, is the copula of the 
-	multivariate t-Student distribution $t_d(\nu,\mu,\Sigma)$.
+	multivariate t-Student distribution $t_d(\nu,\vec{\mu},\Sigma)$.
 \end{definition}
 
 \begin{proposition}[t-Student copula equivalence]
-	The copula of $t_d(\nu,\mu,\Sigma)$ is identical to that of 
+	The copula of $t_d(\nu,\vec{\mu},\Sigma)$ is identical to that of 
 	$t_d(\nu,\vec{0},R)$ in which $R$ is the correlation matrix implied by 
 	the dispersion matrix $\Sigma$.
 \end{proposition}
@@ -3357,7 +3359,6 @@ The following proposition clarifies this theme.
 %==============================================================================
 % PROOFS
 %==============================================================================
-\chapterimage{chapter_head_1.pdf}
 \chapter{Proofs}
 
 %------------------------------------------------------------------------------
@@ -3439,10 +3440,11 @@ The following proposition clarifies this theme.
 	We use the t-Student characterization (proposition~\ref{prop:mtschar})
 	$X = \sqrt{\frac{\nu}{V}} \cdot Z$ in which $V \sim \chi_{\nu}^2$ and 
 	$Z \sim N(0,\widehat{R})$, expressing $Z$ as a Gaussian multi-factor model 
-	(definition~\ref{def:gmfm}). The determination of $R$ and $w_1,\dots,w_n$
+	(definition~\ref{def:gmfm}). The determination of $R$ and $w_1,\dots,w_s$
 	values can be observed in proposition~\ref{prop:gmfigs}. The tag line 
-	``$n_i$ sizes are high-enough'' is justified in 
+	``$n_i$ sizes are high enough'' is justified in 
 	proposition~\ref{prop:gmfamgb}.
+	\\
 \end{proof}
 
 %------------------------------------------------------------------------------
@@ -3487,6 +3489,7 @@ The following proposition clarifies this theme.
 	\end{displaymath}
 	The product for all sectors and ratings gives the stated formula. 
 	We can do the product because $\upsilon$ and $z_i$ are fixed.
+	\\
 \end{proof}
 
 
