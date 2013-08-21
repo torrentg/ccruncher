@@ -57,6 +57,8 @@
 \usepackage[hidelinks,hyperfootnotes=false]{hyperref} %added by GTG
 \usepackage[all]{hypcap} % needed to help hyperlinks direct correctly
 
+%----------------------------------------------------------------------------------------
+
 % added by GTG
 \usepackage{verbatim}
 \usepackage{alltt}
@@ -75,8 +77,10 @@
 \usepackage{datetime}
 \usepackage[group-separator={,}]{siunitx}
 
-% glossary (GTG)
-\usepackage[acronym,nonumberlist,toc]{glossaries}
+\input{structure}
+
+% glossary
+\usepackage[nonumberlist,toc]{glossaries}
 \makeglossaries
 
 % draft info
@@ -85,11 +89,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1131}
-
-%----------------------------------------------------------------------------------------
-
-\input{structure}
+\def\svnversion{R1132}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -109,9 +109,6 @@
      \glstarget{##2}{\strut}##4 & ##6\\}%
   \renewcommand*{\glsgroupskip}{}% replaced {& &\\} by {}
 }
-
-\renewcommand*{\glossaryname}{List of Symbols}
-\deftranslation{Glossary}{List of Symbols}
 
 \begin{document}
 
@@ -218,78 +215,113 @@ please cite it when using it for credit risk analysis.
 \pagestyle{empty}
 \setcounter{tocdepth}{1}
 
-\newacronym{glos:pdf}{pdf}{probability density function}
-\newacronym{glos:cdf}{cdf}{cumulative distribution function}
-\newacronym[longplural=PDs]{glos:pd}{PD}{Probability of Default}
-\newacronym[longplural=EADs]{glos:ead}{EAD}{Exposure at Default}
-\newacronym[longplural=LGDs]{glos:lgd}{LGD}{Loss Given Default}
-
 \newglossaryentry{glos:n}{name=$n$,
-	description={number of obligors in the portfolio}
-}
-\newglossaryentry{glos:ni}{name=$n_i$,
-	description={number of obligors in the i-th sector/factor}
+	description={number of obligors in the portfolio.},
+	sort=10
 }
 \newglossaryentry{glos:s}{name=$s$,
-	description={number of sectors/factors}
+	description={number of sectors/factors.},
+	sort=20
 }
 \newglossaryentry{glos:r}{name=$r$,
-	description={number of ratings}
+	description={number of ratings.},
+	sort=30
 }
-\newglossaryentry{glos:Ti}{name=$T_i$,
-	description={default time, or time-until-default, of the i-th obligor}
-}
-\newglossaryentry{glos:F}{name=$F$,
-	description={multivariate distribution of default times or 
-	time-until-default}
-}
-\newglossaryentry{glos:Fi}{name=$F_i$,
-	description={probability of default distribution of the i-th obligor 
-	or the i-th rating}
-}
-\newglossaryentry{glos:pi}{name=$p_i$,
-	description={probability that i-th obligor/rating defaults within the 
-	next 1-year}
-}
-\newglossaryentry{glos:tdist}{name={\ensuremath{t_d(\nu,\mu,\Sigma)}},
-	description={multivariate t-Student distribution of dimension $d$ with 
-	$\nu$ degrees of freedom, mean vector $\mu$, and dispersion or scatter 
-	matrix $\Sigma$}
-}
-\newglossaryentry{glos:cbm}{name={\ensuremath{B_s(\vec{n},\vec{d},M)}},
-	description={covariance $s {\times} s$ block matrix in which $\vec{n}$ 
-	are the number of individuals per sector/factor, $\vec{d}$ are the 
-	diagonal values, and $M$ are the non-diagonal block values}
-}
-\newglossaryentry{glos:ct}{name=$C_{\nu,R}^t$,
-	description={t-Student copula with $\nu$ degrees of freedom and 
-	correlation matrix $R$}
-}
-\newglossaryentry{glos:ctm}{name=$C_{\nu,\vec{w},R}^t$,
-	description={multi-factor t-Student copula with $\nu$ degrees of freedom, 
-	factor loadings $\vec{w}$, and factor correlation matrix $R$}
-}
-\newglossaryentry{glos:Rbar}{name={\ensuremath{\widehat{R}}},
-	description={correlation block matrix of dimension $n {\times} n$}
-}
-\newglossaryentry{glos:R}{name=$R$,
-	description={factor correlation matrix of dimension $s {\times} s$}
-}
-\newglossaryentry{glos:w}{name={\ensuremath{\vec{w}}},
-	description={factor loadings, vector of dimension $s$}
+\newglossaryentry{glos:ni}{name=$n_i$,
+	description={number of obligors in the i-th sector/factor.},
+	sort=40
 }
 \newglossaryentry{glos:nijt}{name=$n_{ij}^t$,
 	description={number of obligors in the i-th sector/factor having the 
-	j-th rating at the beginning of the t-th period}
+	j-th rating at the beginning of the t-th period.},
+	sort=50
 }
 \newglossaryentry{glos:kijt}{name=$k_{ij}^t$,
 	description={number of defaults in the i-th sector/factor having the 
-	j-th rating at the beginning of the t-th period}
+	j-th rating at the beginning of the t-th period.},
+	sort=60
 }
+\newglossaryentry{glos:Ti}{name=$T_i$,
+	description={default time, or time-until-default, of the i-th obligor.},
+	sort=70
+}
+\newglossaryentry{glos:F}{name=$F$,
+	description={multivariate distribution of default times or 
+	time-until-default.},
+	sort=80
+}
+\newglossaryentry{glos:Fi}{name=$F_i$,
+	description={probability of default (PD) distribution of the i-th obligor 
+	or the i-th rating. The obligor's $F_i$ depends on his rating.},
+	sort=90
+}
+\newglossaryentry{glos:pi}{name=$p_i$,
+	description={probability that i-th obligor/rating defaults within the 
+	next 1-year, i.e., $F_i(1)$.},
+	sort=100
+}
+\newglossaryentry{glos:Rbar}{name={\ensuremath{\widehat{R}}},
+	description={correlation block matrix of dimension $n {\times} n$.},
+	sort=110
+}
+\newglossaryentry{glos:R}{name=$R$,
+	description={factor correlation matrix of dimension $s {\times} s$.},
+	sort=120
+}
+\newglossaryentry{glos:w}{name={\ensuremath{\vec{w}}},
+	description={factor loadings, vector of dimension $s$.},
+	sort=130
+}
+\newglossaryentry{glos:cbm}{name={\ensuremath{B_s(\vec{n},\vec{d},M)}},
+	description={covariance $s {\times} s$ block matrix in which $\vec{n}$ 
+	are the number of individuals per block, $\vec{d}$ are the 
+	diagonal values, and $M$ are the non-diagonal block values.},
+	sort=140
+}
+\newglossaryentry{glos:mvt}{name={\ensuremath{t_d(\nu,\mu,\Sigma)}},
+	description={multivariate t-Student distribution of dimension $d$ with 
+	$\nu$ degrees of freedom, mean vector $\mu$, and dispersion or scatter 
+	matrix $\Sigma$.},
+	sort=150
+}
+\newglossaryentry{glos:cg}{name=$C_{R}^{\text{Ga}}$,
+	description={Gaussian copula with correlation matrix $R$.},
+	sort=160
+}
+\newglossaryentry{glos:ct}{name=$C_{\nu,R}^{\text{t}}$,
+	description={t-Student copula with $\nu$ degrees of freedom and 
+	correlation matrix $R$.},
+	sort=170
+}
+\newglossaryentry{glos:ctm}{name=$C_{\nu,\vec{w},R}^{\text{t}}$,
+	description={multi-factor t-Student copula with $\nu$ degrees of freedom, 
+	factor loadings $\vec{w}$, and factor correlation matrix $R$.
+	It is merely a t-Student copula.},
+	sort=180
+}
+% \newglossaryentry{glos:pd}{name=PD,
+% 	plural=PDs,
+% 	description={Probability of Default}
+% }
+% \newglossaryentry{glos:ead}{name=EAD,
+% 	plural=EADs,
+% 	description={Exposure at Default}
+% }
+% \newglossaryentry{glos:lgd}{name=LGD,
+% 	plural=LGDs,
+% 	description={Loss Given Default}
+% }
+% \newglossaryentry{glos:pdf}{name=pdf,
+% 	description={probability density function}
+% }
+% \newglossaryentry{glos:cdf}{name=cdf,
+% 	description={cumulative distribution function}
+% }
 
 \glsaddall
-\printglossary[style=super3colleft,type=\acronymtype]
 \printglossary[style=super3colleft]
+~\vfill
+TODO: set additional info here.
 \cleardoublepage
 \pagestyle{fancy}
 
@@ -813,7 +845,7 @@ parameters.
 \begin{proposition}[Multivariate default times distribution]
 	\label{prop:dtd}
 	Let $T=(T_1,\dots,T_n)$, the time-until-default of obligors with marginals 
-	$F_i$ and a t-Student copula $C_{\nu,\widehat{R}}^t$. Then its distribution 
+	$F_i$ and a t-Student copula $C_{\nu,\widehat{R}}^{\text{t}}$. Then its distribution 
 	$F$ is
 	\begin{displaymath}
 		F(t_1,\dots,t_n) = H\left(t_\nu^{-1}(F_1(t_1)), \dots, t_\nu^{-1}(F_n(t_n))\right)
@@ -826,7 +858,7 @@ parameters.
 \begin{corollary}[Default times simulation (I)]
 	\label{cor:dts1}
 	Let $T=(T_1, \dots, T_n)$, a random vector with marginals 
-	$F_1, \dots, F_n$ and a t-Student copula $C_{\nu,\widehat{R}}^t$. 
+	$F_1, \dots, F_n$ and a t-Student copula $C_{\nu,\widehat{R}}^{\text{t}}$. 
 	Then we can simulate this distribution using a multivariate t-Student 
 	distribution $X \sim t_n(\nu,\widehat{R})$:
 	\begin{displaymath}
@@ -896,8 +928,8 @@ $\widehat{R} = B_s(\vec{n},\vec{1},M)$~\footnote{ In the Gaussian case, the
 relation between Spearman's and Pearson's correlations is 
 $\rho_S = \frac{6}{\pi}\cdot \arcsin(\frac{\rho}{2})$.}. Consequently, 
 the multivariate time-until-default distribution $F$ can be expressed by 
-its marginals $F_i$ and a t-Student copula $C_{\nu,\widehat{R}}^t$ in 
-which $\widehat{R} = B_s(\vec{n},\vec{1},M)$.
+its marginals $F_i$ and a t-Student copula $C_{\nu,\widehat{R}}^{\text{t}}$ 
+in which $\widehat{R} = B_s(\vec{n},\vec{1},M)$.
 
 As we have observed, proposition~\ref{prop:dtd} establishes the link between 
 the t-Student copula and the multivariate t-Student distribution. For this 
@@ -952,7 +984,8 @@ multivariate t-Student distribution.
 
 We call t-Student multi-factor copula to the copula of the t-Student 
 multi-factor model. As we have observed, the t-Student multi-factor copula 
-($C_{\nu,\vec{w},R}^t$) is merely a t-Student copula ($C_{\nu,\widehat{R}}^t$).
+($C_{\nu,\vec{w},R}^{\text{t}}$) is merely a t-Student copula 
+($C_{\nu,\widehat{R}}^{\text{t}}$).
 
 Note that we expressed the multi-factor model in terms of the factor loadings 
 and the factor correlation matrix instead of the more concise form based on 
@@ -1063,7 +1096,7 @@ test the parameters estimation procedures.
 	\label{alg:snod}
 	Let a multivariate default times distribution with annual probabilities of
 	default $p_j$ in which $j=1,\dots,r$ and a t-Student multi-factor copula 
-	$C_{\nu,\vec{w},R}^t$. Then we can simulate a sample of size $T$ of 
+	$C_{\nu,\vec{w},R}^{\text{t}}$. Then we can simulate a sample of size $T$ of 
 	the annual number of defaults by factor and rating doing the following:
 	\begin{enumerate}
 		\item Compute the Cholesky decomposition of $R = L \cdot L^\intercal$
@@ -1223,7 +1256,8 @@ in~\cite{gordy:2002,roncalli:2004}.
 \begin{proposition}[Density of the annual number of defaults (I)]
 	The density of the annual number of defaults, assuming that multivariate 
 	default times have marginals $F_1,\dots,F_r$ and a t-Student copula 
-	$C_{\nu,\widehat{R}}^t$ with $\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$, is
+	$C_{\nu,\widehat{R}}^{\text{t}}$ with 
+	$\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$, is
 	\begin{displaymath}
 		\begin{array}{l}
 			K(k_{11},\dots,k_{sr}\ ;\ \nu, \widehat{R}) = 
@@ -1258,7 +1292,7 @@ number of defaults.
 	\label{prop:cdand}
 	The conditional density of the annual number of defaults, assuming 
 	that multivariate default times have marginals $F_1,\dots,F_r$ and a 
-	t-Student multi-factor copula $C_{\nu,\vec{w},R}^t$, is
+	t-Student multi-factor copula $C_{\nu,\vec{w},R}^{\text{t}}$, is
 	\begin{displaymath}
 		\begin{array}{l}
 			K(k_{11},\dots,k_{sr} \mid \upsilon,\vec{z}\ ;\ \nu,\vec{w}, R) = 
@@ -2023,7 +2057,7 @@ appropriate statistics.
 	\label{alg:pldmc}
 	Let a portfolio be categorized in $s$ sectors and $r$ ratings.
 	Assume a multivariate default times distribution with marginals $F_i$
-	and a t-Student multi-factor copula $C_{\nu,\vec{w},R}^t$.
+	and a t-Student multi-factor copula $C_{\nu,\vec{w},R}^{\text{t}}$.
 	We can then simulate a sample of size $M$ of the portfolio loss distribution
 	at time $t$ by performing the following:
 	\begin{enumerate}
@@ -2974,8 +3008,8 @@ from~\cite{kotz:2004,demarta:2005}.
 \end{proposition}
 
 \begin{definition}[t-Student copula]
-	The t-Student copula, $C_{\nu,\Sigma}^t$, is the copula of the multivariate 
-	t-Student distribution $t_d(\nu,\mu,\Sigma)$.
+	The t-Student copula, $C_{\nu,\Sigma}^{\text{t}}$, is the copula of the 
+	multivariate t-Student distribution $t_d(\nu,\mu,\Sigma)$.
 \end{definition}
 
 \begin{proposition}[t-Student copula equivalence]
@@ -2985,10 +3019,10 @@ from~\cite{kotz:2004,demarta:2005}.
 \end{proposition}
 
 \begin{proposition}[t-Student copula density]
-	The t-Student copula, $C_{\nu,R}^t$, in which $R$ is a correlation 
-	matrix, has the following distribution function:
+	The t-Student copula, $C_{\nu,R}^{\text{t}}$, in which $R$ is a 
+	correlation matrix, has the following distribution function:
 	\begin{displaymath}
-		C_{\nu,R}^t(u_1, \dots, u_d) = 
+		C_{\nu,R}^{\text{t}}(u_1, \dots, u_d) = 
 		\int_{-\infty}^{t_\nu^{-1}(u_1)} \dots \int_{-\infty}^{t_\nu^{-1}(u_d)} f(x) \ud x
 	\end{displaymath}
 	in which $f(x)$ is the density function of $t_d(\nu,\vec{0},R)$ and 
@@ -2996,7 +3030,7 @@ from~\cite{kotz:2004,demarta:2005}.
 	$t_1(\nu,0,1)$. The copula density is
 	\begin{displaymath}
 		\label{eq:density}
-		c_{\nu,R}^t(u_1,\dots,u_d) =
+		c_{\nu,R}^{\text{t}}(u_1,\dots,u_d) =
 		|R|^{-\frac{1}{2}} 
 		\displaystyle\frac{\Gamma{\left(\frac{\nu+d}{2}\right)}}{\Gamma{\left(\frac{\nu}{2}\right)}}
 		\displaystyle\left[ \frac{\Gamma{\left(\frac{\nu}{2}\right)}}{\Gamma{\left(\frac{\nu+1}{2}\right)}} \right]^d
@@ -3383,7 +3417,7 @@ The following proposition clarifies this theme.
 \begin{proof}
 	We note that $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
 	distribution $t_n(\nu,0,\widehat{R})$ and $(U_1,\dots,U_n)$ to represent
-	the components of the copula $C_{\nu,\widehat{R}}^t$.
+	the components of the copula $C_{\nu,\widehat{R}}^{\text{t}}$.
 	\begin{displaymath}
 		\begin{array}{rl}
 			F(t_1,\dots,t_n) = & \Pr\{ T_1 \le t_1 , \dots, T_n \le t_n \} = \\
