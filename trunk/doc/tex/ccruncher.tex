@@ -90,7 +90,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1133}
+\def\svnversion{R1134}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -228,7 +228,7 @@ please cite it when using it for credit risk analysis.
 \newglossaryentry{glos:ni}{name=$n_i$,
 	description={number of obligors in the i-th sector/factor. 
 	It is a component of vector $\vec{n}$ that satisfies
-	$\displaystyle \sum_{i=1}^s n_i = n$.},
+	$\sum_{i=1}^s n_i = n$.},
 	sort=40
 }
 \newglossaryentry{glos:nijt}{name=$n_{ij}^t$,
@@ -278,7 +278,7 @@ please cite it when using it for credit risk analysis.
 	description={covariance $s {\times} s$ block matrix in which $\vec{n}$ 
 	are the number of individuals per block, $\vec{d}$ are the 
 	diagonal values, and $M$ are the non-diagonal block values.
-	See appendix \ref{ap:cbm}.},
+	See section \ref{ap:cbm}.},
 	sort=140
 }
 \newglossaryentry{glos:mvt}{name={\ensuremath{t_d(\nu,\vec{\mu},\Sigma)}},
@@ -287,10 +287,10 @@ please cite it when using it for credit risk analysis.
 	scatter matrix $\Sigma$.},
 	sort=150
 }
-\newglossaryentry{glos:cg}{name=$C_{R}^{\text{Ga}}$,
-	description={Gaussian copula with correlation matrix $R$.},
-	sort=160
-}
+% \newglossaryentry{glos:cg}{name=$C_{R}^{\text{Ga}}$,
+% 	description={Gaussian copula with correlation matrix $R$.},
+% 	sort=160
+% }
 \newglossaryentry{glos:ct}{name=$C_{\nu,R}^{\text{t}}$,
 	description={t-Student copula with $\nu$ degrees of freedom and 
 	correlation matrix $R$.},
@@ -309,12 +309,12 @@ please cite it when using it for credit risk analysis.
 \section*{Notes}
 \begin{enumerate}[leftmargin=*]
 	\itemsep 0.5em
-	\item Time unit. We use the 1-year time unit without loss of generality 
-	in order to simplify the exposition.
 	\item Factors = Sectors. CCruncher considers that dependence between 
 	obligors is determined by obligor's industrial sectors causing that 
 	sectors and factors be equivalents. This text uses sectors and factors 
 	indistinctly to refer to factors.
+	\item Time unit. We use the 1-year time unit without loss of generality 
+	in order to simplify the exposition.
 \end{enumerate}
 \cleardoublepage
 
@@ -780,8 +780,8 @@ CCruncher allows description of the PDs derived from advanced models specifying
 the PDs' values at given time points. These must fulfill the cdf conditions:
 ~\\
 ~\\
+\storestyleof{itemize}
 \begin{listliketab} 
-	\storestyleof{itemize} 
 	\begin{tabular}{Lll}
 		\textbullet & $F_i(0) = 0$                 & $i=1,\dots,r \quad i \ne \text{default}$ \\
 		\textbullet & $F_i(t)$ strictly increasing & $i=1,\dots,r \quad i \ne \text{default}$ \\
@@ -1156,7 +1156,7 @@ in~\cite{nagpal:2001} to define a basic covariance estimator.
 
  pri <- function(i, K, N)
  {
-   if (sum(dim(K)!=dim(N))) stop("K and N dim differs")
+   if (sum(dim(K) != dim(N))) stop("K and N dim differs")
    if (i <= 0 | ncol(K) < i) stop("i out-of-range")
    ret = sum(K[,i])/sum(N[,i])
    return(ret)
@@ -1164,7 +1164,7 @@ in~\cite{nagpal:2001} to define a basic covariance estimator.
 
  prij <- function(i, j, K, N)
  {
-   if (sum(dim(K)!=dim(N))) stop("K and N dim differs")
+   if (sum(dim(K) != dim(N))) stop("K and N dim differs")
    if (i <= 0 | ncol(K) < i) stop("i out-of-range")
    if (j <= 0 | ncol(K) < j) stop("j out-of-range")
    if (i != j) {
@@ -1188,7 +1188,7 @@ in~\cite{nagpal:2001} to define a basic covariance estimator.
 
  quick_and_dirty_correl <- function(nu, K, N)
  {
-   if (sum(dim(K)!=dim(N))) stop("K and N dim differs")
+   if (sum(dim(K) != dim(N))) stop("K and N dim differs")
    n = ncol(K)
    ret = matrix(nrow=n, ncol=n, 0)
    for(i in 1:n) {
@@ -1650,17 +1650,23 @@ independent of one another; in fact, they form a multivariate distribution.
 	We can estimate the parameters of the t-Student multi-factor copula from 
 	the observed annual number of defaults using the Metropolis-Hastings 
 	algorithm (see algorithm~\ref{alg:bimh}), considering
-	\begin{itemize}
-		\item parameters $\theta \equiv \{ \nu,\vec{w},R,\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\}$
-		\item observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$
-		\item likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid  \upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$
-		\item proposal distributions $q_j(\theta_j \mid \theta_j') \equiv N(\theta,\sigma_j)$
-		\item prior distribution $\nu \equiv \text{Unif}(2,1000)$
-		\item prior distribution $w_i \equiv \text{Unif}(0,1) \quad i=1,\dots,s$
-		\item prior distribution $r_{ij} \equiv \Xi_{ij}(\vec{z}^1,\dots,\vec{z}^T,R) \quad i=1,\dots,s, \quad j=(i+1),\dots,s$
-		\item prior distribution $\vec{z}^t \equiv N(\vec{0},R) \quad t=1,\dots,T$
-		\item prior distribution $\upsilon^t \equiv \chi_{\nu}^2 \quad t=1,\dots,T$
-	\end{itemize}
+~\\
+~\\
+\begin{listliketab} 
+	\begin{tabular}{Lll}
+		\textbullet & parameters $\theta \equiv \{ \nu,\vec{w},R,\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\}$ & \\
+		\textbullet & observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$ & \\
+		\textbullet & likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid \upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$ & \\
+		\textbullet & proposal distributions $q_j(\theta_j \mid \theta_j') \equiv N(\theta,\sigma_j)$ & all parameters\\
+		\textbullet & prior distribution $\nu \equiv \text{Unif}(2,1000)$ & \\
+		\textbullet & prior distribution $w_i \equiv \text{Unif}(0,1)$ & $i=1,\dots,s$ \\
+		\textbullet & prior distribution $r_{ij} \equiv \Xi_{ij}(\vec{z}^1,\dots,\vec{z}^T,R)$ & $i=1,\dots,s \quad j>i$ \\ %, 
+		\textbullet & prior distribution $\vec{z}^t \equiv N(\vec{0},R)$ & $t=1,\dots,T$ \\
+		\textbullet & prior distribution $\upsilon^t \equiv \chi_{\nu}^2$ & $t=1,\dots,T$ \\
+	\end{tabular}
+\end{listliketab}
+~\\
+~\\
 	For the prior distributions of $r_{ij}$, we set the likelihood distribution
 	of the latent variables $\vec{z}^t$. The pdf of the distribution 
 	$\Xi_{ij}(\vec{z}^1,\dots,\vec{z}^T,R)$ is
@@ -2661,7 +2667,7 @@ section~\ref{sec:riskm}).
 We combine both components to define an algorithm that samples the desired
 credit risk measure. The empirical density given by this sample 
 approximates the risk measure distribution and allows evaluating the 
-effect of the parameter uncertainty. \ul{One must be cautious} because this 
+effect of the parameter uncertainty. One \ul{must be cautious} because this 
 procedure unveils the parameter uncertainty, but other uncertainties remain 
 hidden such as:
 \begin{inparaenum}[1)]
@@ -3206,6 +3212,7 @@ in~\cite{torrent:2011}.
 	vector $X$ is normally distributed, then $X$ is normally distributed.
 	It is straightforward to check that the multi-factor Gaussian model 
 	fulfills this property and consequently is a multivariate Normal.
+	\\
 \end{proof}
 
 \begin{proposition}[Gaussian multi-factor model $\subsetneq$ multivariate Gaussian block]
@@ -3308,7 +3315,7 @@ The following proposition clarifies this theme.
 	
 	\textbf{Case 1}. Factor loadings with imaginary values.
 	\begin{adjustwidth}{1cm}{0pt}
-		Factor loading $w_i$ with imaginary value is caused by $\Sigma_{ii} < 1$. 
+		Factor loading $w_i$ with imaginary value is caused by $\Sigma_{ii} < 0$. 
 		We use proposition~\ref{prop1} to determine the restrictions regarding 
 		$\Sigma_{ii}$. We assume a unique factor.
 		Because $\widehat{R}$ is a covariance block matrix definite-positive, 
