@@ -90,7 +90,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1134}
+\def\svnversion{R1135}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -886,7 +886,6 @@ dependence only relies on the involved industrials sectors. With these
 restrictions and by sorting the obligors by sector, we see that the obligors' 
 time-until-default Spearman's rank correlation is an $n {\times} n$ correlation
 block matrix $\widetilde{R} = B_s(\vec{n},\vec{1},\widetilde{M})$.
-
 \begin{displaymath}
 	\widetilde{R} = B_s(\vec{n},\vec{1},\widetilde{M}) = 
 	\left(
@@ -918,7 +917,6 @@ block matrix $\widetilde{R} = B_s(\vec{n},\vec{1},\widetilde{M})$.
 		n = \displaystyle \sum_{i=1}^{s} n_i
 	\end{array}
 \end{displaymath}
-
 We use the Spearman's rank correlation because it is a measure of dependence 
 that does not depend on marginals ($F_i$ in our case), unlike the usual
 Pearson's correlation, which does depend on marginals. t-Student copulas 
@@ -1413,7 +1411,7 @@ distribution.
 
 \begin{definition}[Markov chain]
 	A Markov chain is a stochastic process 
-	$\left\{\theta^{(1)},\theta^{(2)},\dots,\theta^{(T)}\right\}$ such that
+	$\left\{\theta^{(1)},\dots,\theta^{(T)}\right\}$ such that
 	\begin{displaymath}
 		f\left(\theta^{(t+1)} \mid \theta^{(t)},\dots,\theta^{(1)}\right) = 
 		f\left(\theta^{(t+1)} \mid \theta^{(t)}\right)
@@ -1667,9 +1665,7 @@ independent of one another; in fact, they form a multivariate distribution.
 \end{listliketab}
 ~\\
 ~\\
-	For the prior distributions of $r_{ij}$, we set the likelihood distribution
-	of the latent variables $\vec{z}^t$. The pdf of the distribution 
-	$\Xi_{ij}(\vec{z}^1,\dots,\vec{z}^T,R)$ is
+	The pdf of the distribution $\Xi_{ij}(\vec{z}^1,\dots,\vec{z}^T,R)$ is
 	\begin{displaymath}
 		\xi_{ij}(r_{ij}\ ;\ \vec{z}^1,\dots,\vec{z}^T,R) = \frac
 		{\displaystyle \prod_{t=1}^{T} \phi\left( \vec{z}^t\ ;\ \vec{0}, R(r_{ij},i,j) \right)}
@@ -2702,8 +2698,7 @@ hidden such as:
 \begin{example}[Credit risk considering parameters uncertainty]
 	\label{ex:paramu}
 	We use the identical scenario as that described in example~\ref{ex:test05} 
-	and that corresponds to CCruncher input file 
-	\texttt{\$CCRUNCHER/samples/test05.xml}. 
+	and that corresponds to CCruncher input file \texttt{test05.xml}. 
 	We generate 20 observations of annual numbers of defaults using the 
 	algorithm~\ref{alg:snod} (in the real world, these observations are 
 	extracted from the historical records). 
