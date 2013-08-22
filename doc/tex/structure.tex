@@ -140,70 +140,86 @@
 
 % Defines the theorem text style for each type of theorem to one of the three styles above
 \theoremstyle{ocrenum}
-\newtheorem{theoremeT}{Theorem}[chapter]
-\newtheorem{proposition}{Proposition}[chapter]
-\newtheorem{problem}{Problem}[chapter]
-\newtheorem{exerciseT}{Exercise}[chapter]
-\theoremstyle{blacknumex}
-\newtheorem{exampleT}{Example}[chapter]
-\theoremstyle{blacknum}
-\newtheorem{vocabulary}{Vocabulary}[chapter]
 \newtheorem{definitionT}{Definition}[chapter]
+\newtheorem{theoremeT}{Theorem}[chapter]
+\newtheorem{propositionT}{Proposition}[chapter]
 \newtheorem{corollaryT}{Corollary}[chapter]
+\theoremstyle{blacknumex}
+\theoremstyle{blacknum}
+\newtheorem{algorithmT}{Algorithm}[chapter]
+\newtheorem{exampleT}{Example}[chapter]
 
 %----------------------------------------------------------------------------------------
 %	DEFINITION OF COLORED BOXES
 %----------------------------------------------------------------------------------------
 
-\RequirePackage[framemethod=default]{mdframed} % Required for creating the theorem, definition, exercise and corollary boxes
+\RequirePackage[framemethod=default]{mdframed} % Required for creating the definition, theorem, proposition and corollary boxes
 
-% Theorem box
-\newmdenv[skipabove=7pt,
+% Definition box
+\newmdenv[skipabove=-7pt,
 skipbelow=7pt,
-backgroundcolor=black!5,
-linecolor=ocre,
-innerleftmargin=5pt,
-innerrightmargin=5pt,
-innertopmargin=5pt,
-leftmargin=0cm,
-rightmargin=0cm,
-innerbottommargin=5pt]{tBox}
-
-% Exercise box
-\newmdenv[skipabove=7pt,
-skipbelow=7pt,
-rightline=false,
-leftline=true,
-topline=false,
-bottomline=false,
-backgroundcolor=ocre!10,
+backgroundcolor=ocre!5,
 linecolor=ocre,
 innerleftmargin=5pt,
 innerrightmargin=5pt,
 innertopmargin=5pt,
 innerbottommargin=5pt,
 leftmargin=0cm,
-rightmargin=0cm,
-linewidth=4pt]{eBox}
+rightmargin=0cm]{dBox}
 
-% Definition box
-\newmdenv[skipabove=10pt,
-skipbelow=10pt,
+% Theorem box
+\newmdenv[skipabove=-7pt,
+skipbelow=7pt,
 rightline=false,
 leftline=true,
 topline=false,
 bottomline=false,
 linecolor=ocre,
+backgroundcolor=ocre!5,
 innerleftmargin=5pt,
 innerrightmargin=5pt,
-innertopmargin=0pt,
+innertopmargin=5pt,
+innerbottommargin=5pt,
 leftmargin=0cm,
 rightmargin=0cm,
-linewidth=4pt,
-innerbottommargin=0pt]{dBox}
+linewidth=4pt]{tBox}
+
+% Proposition box
+\newmdenv[skipabove=-7pt,
+skipbelow=7pt,
+rightline=false,
+leftline=true,
+topline=false,
+bottomline=false,
+linecolor=ocre,
+backgroundcolor=ocre!5,
+innerleftmargin=5pt,
+innerrightmargin=5pt,
+innertopmargin=5pt,
+innerbottommargin=5pt,
+leftmargin=0cm,
+rightmargin=0cm,
+linewidth=4pt]{pBox}
 
 % Corollary box
-\newmdenv[skipabove=7pt,
+\newmdenv[skipabove=-7pt,
+skipbelow=7pt,
+rightline=false,
+leftline=true,
+topline=false,
+bottomline=false,
+linecolor=ocre,
+backgroundcolor=ocre!5,
+innerleftmargin=5pt,
+innerrightmargin=5pt,
+innertopmargin=5pt,
+innerbottommargin=5pt,
+leftmargin=0cm,
+rightmargin=0cm,
+linewidth=4pt]{cBox}
+
+% Algorithm box
+\newmdenv[skipabove=-7pt,
 skipbelow=7pt,
 rightline=false,
 leftline=true,
@@ -214,37 +230,36 @@ backgroundcolor=black!5,
 innerleftmargin=5pt,
 innerrightmargin=5pt,
 innertopmargin=5pt,
+innerbottommargin=5pt,
 leftmargin=0cm,
 rightmargin=0cm,
-linewidth=4pt,
-innerbottommargin=5pt]{cBox}
+linewidth=4pt]{aBox}
 
-% added by GTG
-% algorithm box
-\newmdenv[skipabove=7pt,
+% Example box
+\newmdenv[skipabove=-7pt,
 skipbelow=7pt,
 rightline=false,
 leftline=true,
 topline=false,
 bottomline=false,
-backgroundcolor=ocre!10,
-linecolor=ocre,
+linecolor=gray,
+%backgroundcolor=black!5,
 innerleftmargin=5pt,
 innerrightmargin=5pt,
 innertopmargin=5pt,
 innerbottommargin=5pt,
 leftmargin=0cm,
 rightmargin=0cm,
-linewidth=4pt]{aBox}
-\newtheorem{algorithmT}{Algorithm}[chapter]
-\newenvironment{algorithm}{\begin{aBox}\begin{algorithmT}}{\hfill{\color{ocre}}\end{algorithmT}\end{aBox}}
+linewidth=4pt]{eBox}
 
-% Creates an environment for each type of theorem and assigns it a theorem text style from the "Theorem Styles" section above and a colored box from above
-\newenvironment{theorem}{\begin{tBox}\begin{theoremeT}}{\end{theoremeT}\end{tBox}}
-\newenvironment{exercise}{\begin{eBox}\begin{exerciseT}}{\hfill{\color{ocre}\tiny\ensuremath{\blacksquare}}\end{exerciseT}\end{eBox}}
+% Creates an environment for each type of theorem 
 \newenvironment{definition}{\begin{dBox}\begin{definitionT}}{\end{definitionT}\end{dBox}}
-\newenvironment{example}{\begin{exampleT}}{\hfill{\tiny\ensuremath{\blacksquare}}\end{exampleT}}
+\newenvironment{theorem}{\begin{tBox}\begin{theoremeT}}{\end{theoremeT}\end{tBox}}
+\newenvironment{proposition}{\begin{pBox}\begin{propositionT}}{\hfill{\color{ocre}}\end{propositionT}\end{pBox}}
 \newenvironment{corollary}{\begin{cBox}\begin{corollaryT}}{\end{corollaryT}\end{cBox}}
+\newenvironment{algorithm}{\begin{aBox}\begin{algorithmT}}{\hfill{\color{ocre}}\end{algorithmT}\end{aBox}}
+\newenvironment{example}{\begin{exampleT}}{\hfill{}\end{exampleT}}
+%\newenvironment{example}{\begin{eBox}\begin{exampleT}}{\hfill{}\end{exampleT}\end{eBox}}
 
 %----------------------------------------------------------------------------------------
 %	REMARK ENVIRONMENT
