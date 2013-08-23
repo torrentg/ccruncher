@@ -90,7 +90,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1136}
+\def\svnversion{R1137}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -828,7 +828,6 @@ following \ul{practical} reasons:
 
 \begin{itemize}
 	\item it is determined by the correlation matrix (elliptical). 
-	\item it is determined by the Spearman's rank correlation (elliptical). 
 	\item it is symmetrical (elliptical), allowing application of the 
 	antithetic reduction variance technique in the Monte Carlo simulation.
 	\item it allows a wide range of dependence structures by parameter $\nu$.
@@ -847,14 +846,15 @@ parameters.
 \begin{proposition}[Multivariate default times distribution]
 	\label{prop:dtd}
 	Let $T=(T_1,\dots,T_n)$, the time-until-default of obligors with marginals 
-	$F_i$ and a t-Student copula $C_{\nu,\widehat{R}}^{\text{t}}$. Then its distribution 
-	$F$ is
+	$F_1, \dots, F_n$ and a t-Student copula $C_{\nu,\widehat{R}}^{\text{t}}$. 
+	Then its distribution $F$ is
 	\begin{displaymath}
-		F(t_1,\dots,t_n) = H\left(t_\nu^{-1}(F_1(t_1)), \dots, t_\nu^{-1}(F_n(t_n))\right)
+		F(t_1,\dots,t_n) = 
+		H\left(t_\nu^{-1}(F_1(t_1)), \dots, t_\nu^{-1}(F_n(t_n))\right)
 	\end{displaymath}
 	in which $H$ is the cdf of the multivariate t-Student distribution 
-	$t_n(\nu,0,\widehat{R})$, and $t_\nu^{-1}$ is the inverse of the univariate 
-	t-Student distribution $t_1(\nu,0,1)$.
+	$t_n(\nu,\vec{0},\widehat{R})$, and $t_\nu^{-1}$ is the inverse of the 
+	univariate t-Student distribution $t_1(\nu,0,1)$.
 \end{proposition}
 
 \begin{corollary}[Default times simulation (I)]
@@ -862,9 +862,11 @@ parameters.
 	Let $T=(T_1, \dots, T_n)$, a random vector with marginals 
 	$F_1, \dots, F_n$ and a t-Student copula $C_{\nu,\widehat{R}}^{\text{t}}$. 
 	Then we can simulate this distribution using a multivariate t-Student 
-	distribution $X \sim t_n(\nu,\widehat{R})$:
+	distribution $X \sim t_n(\nu,\vec{0},\widehat{R})$:
 	\begin{displaymath}
-		(T_1, \dots, T_n) = \left(F_1^{-1}\left(t_{\nu}(X_1)\right), \dots, F_n^{-1}\left(t_{\nu}(X_n)\right)\right)
+		(T_1, \dots, T_n) = \left(
+		F_1^{-1}\left(t_{\nu}(X_1)\right), \dots, F_n^{-1}\left(t_{\nu}(X_n)\right)
+		\right)
 	\end{displaymath}
 	in which $t_\nu$ is the cdf of the univariate t-Student distribution 
 	$t_1(\nu,0,1)$.
@@ -923,7 +925,7 @@ We use the Spearman's rank correlation because it is a measure of dependence
 that does not depend on marginals ($F_i$ in our case), unlike the usual
 Pearson's correlation, which does depend on marginals. t-Student copulas 
 with Spearman's rank correlation block matrix are those that come from a 
-multivariate t-Student $t_n(\nu,0,\widehat{R})$ in which 
+multivariate t-Student $t_n(\nu,\vec{0},\widehat{R})$ in which 
 $\widehat{R} = B_s(\vec{n},\vec{1},M)$~\footnote{ In the Gaussian case, the 
 relation between Spearman's and Pearson's correlations is 
 $\rho_S = \frac{6}{\pi}\cdot \arcsin(\frac{\rho}{2})$.}. Consequently, 
@@ -934,8 +936,8 @@ in which $\widehat{R} = B_s(\vec{n},\vec{1},M)$.
 As we have observed, proposition~\ref{prop:dtd} establishes the link between 
 the t-Student copula and the multivariate t-Student distribution. For this 
 reason, we are interested in formulating the multivariate t-Student distribution 
-$t_n(\nu,0,\widehat{R})$ in which $\widehat{R} = B_s(\vec{n},\vec{1},M)$ as 
-a t-Student multi-factor model.
+$t_n(\nu,\vec{0},\widehat{R})$ in which $\widehat{R} = B_s(\vec{n},\vec{1},M)$ 
+as a t-Student multi-factor model.
 
 The multivariate t-Student distribution relies on the multivariate Gaussian
 distribution (see proposition~\ref{prop:mtschar}). The multivariate Gaussian 
@@ -952,7 +954,7 @@ multivariate t-Student distribution.
 \begin{proposition}[t-Student distr.\ as a multi-factor model]
 	\label{prop:tmfm}
 	Let a random vector $X=(X_1,\dots,X_n)$ be with a multivariate t-Student 
-	distribution $t_n(\nu,0,\widehat{R})$ in which 
+	distribution $t_n(\nu,\vec{0},\widehat{R})$ in which 
 	$\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$ is a correlation block matrix 
 	and $n_i$ sizes are high enough. Then $X$ can be written as a t-Student 
 	multi-factor model as follows:
@@ -1061,7 +1063,7 @@ matrix $R$.
 	Suppose that our portfolio has two sectors, S1 and S2, and four ratings, 
 	A, B, C, and D, in which D is the \emph{defaulted} status. We collected 
 	the number of defaults by sector and rating from the past 20 years. We 
-	organized the collected data as displayed:
+	organized the collected data as follows:
 
 	\centering
 	\begin{tabular}{cc|c|c|c||c|c|c|  c  |c|c|c||c|c|c|}
@@ -1091,16 +1093,16 @@ test the parameters estimation procedures.
 
 \begin{algorithm}[Annual number of defaults simulation]
 	\label{alg:snod}
-	Let a multivariate default times distribution with annual probabilities of
-	default $p_j$ in which $j=1,\dots,r$ and a t-Student multi-factor copula 
-	$C_{\nu,\vec{w},R}^{\text{t}}$. Then we can simulate a sample of size $T$ of 
-	the annual number of defaults by factor and rating doing the following:
+	Let a multivariate default times distribution with annual probabilities 
+	of default $p_1,\dots,p_r$ and a t-Student multi-factor copula 
+	$C_{\nu,\vec{w},R}^{\text{t}}$. Then we can simulate a sample of size $T$ 
+	of the annual number of defaults by factor and rating doing the following:
 	\begin{enumerate}
 		\item Compute the Cholesky decomposition of $R = L \cdot L^\intercal$
 		\item For $t=1,\dots,T$ repeat the following steps:
 		\begin{itemize}
-			\item Simulate $s$ independent $N(0,1)$, $\vec{z}'$
-			\item Simulate factors doing $\vec{z} = L \cdot \vec{z}'$
+			\item Simulate $s$ independent $N(0,1)$, $\vec{y}$
+			\item Simulate factors doing $\vec{z} = L \cdot \vec{y}$
 			\item Simulate $\upsilon \sim \chi_{\nu}^2$
 			\item For $i=1,\dots,s$ and $j=1,\dots,r$ repeat the following steps:
 			\begin{itemize}
@@ -1122,7 +1124,7 @@ and $p_{ij}$ (probability that two obligors default simultaneously) indicated
 in~\cite{nagpal:2001} to define a basic covariance estimator. 
 
 \begin{definition}[Quick-and-dirty covariance estimator]
-	We assume that all obligors in a sector are exchangeable (the same rating 
+	We assume that all obligors in a sector are exchangeable (identical rating 
 	per sector) and that we know the degrees of freedom of the t-Student 
 	multi-factor copula. We define the estimator of the factors' covariance, 
 	$\sigma_{ij} = w_i \cdot w_j \cdot R_{ij}$, as that value 
@@ -1133,13 +1135,13 @@ in~\cite{nagpal:2001} to define a basic covariance estimator.
 		\quad \text{ where } \quad
 		\left\{
 			\begin{array}{ll}
-				p_i = \frac{\sum K_i^t}{\sum N_i^t} & \forall\ i \\
-				p_{ii} = \frac{\sum K_i^t \cdot (K_i^t-1)}{\sum N_i^t \cdot (N_i^t-1)} & \forall\ i \\
-				p_{ij} = \frac{\sum K_i^t \cdot K_j^t}{\sum N_i^t \cdot N_j^t} & i \ne j \\
+				p_i = \frac{\sum k_i^t}{\sum n_i^t} & \forall\ i \\
+				p_{ii} = \frac{\sum k_i^t \cdot (k_i^t-1)}{\sum n_i^t \cdot (n_i^t-1)} & \forall\ i \\
+				p_{ij} = \frac{\sum k_i^t \cdot k_j^t}{\sum n_i^t \cdot n_j^t} & i \ne j \\
 			\end{array}
 		\right.
 	\end{displaymath}
-	in which $N_i^t$ and $K_i^t$ are respectively the number of obligors and 
+	in which $n_i^t$ and $k_i^t$ are respectively the number of obligors and 
 	defaults in the i-th sector and t-th year, $f(x,y\ ;\ \nu,\sigma_{ij})$ 
 	is the pdf of the bivariate t-Student, and $t_{\nu}^{-1}$ is the inverse 
 	of the cdf of the univariate t-Student. Listing~\ref{sc:qadc} implements 
@@ -1273,9 +1275,9 @@ in~\cite{gordy:2002,roncalli:2004}.
 	in which $n_{ij}$ and $k_{ij}$ are respectively the number of obligors and 
 	defaults in the i-th sector with the j-th rating, $p_j = F_j(1)$ is the 
 	probability of default within 1 year of the j-th rating, $f(\vec{x})$ 
-	is the pdf of $t_n(\nu,0,\widehat{R})$, and $t_{\nu}^{-1}$ is the inverse of 
-	the cdf of the univariate t-Student. The combinatorial coefficients 
-	consider all combinations of exchangeable obligors.
+	is the pdf of $t_n(\nu,\vec{0},\widehat{R})$, and $t_{\nu}^{-1}$ is the 
+	inverse of the cdf of the univariate t-Student. The combinatorial 
+	coefficients consider all combinations of exchangeable obligors.
 \end{proposition}
 
 We are not aware of an analytical expression for the density of the annual 
@@ -1318,11 +1320,15 @@ number of defaults.
 	We can express the density of the annual number of defaults using 
 	the conditional density:
 	\begin{displaymath}
+		\begin{array}{l}
 			K(k_{11},\dots,k_{sr}\ ;\ \nu, \vec{w}, R) = 
-			\displaystyle \int_2^{\infty} \int_{\mathbb{R}^s}
+			\Pr\{K_{11}=k_{11},\dots,K_{sr}=k_{sr} \mid \upsilon,\vec{z}\ ;\ \nu, \vec{w}, R\} = \\
+			\\
+			= \displaystyle \int_2^{\infty} \int_{\mathbb{R}^s}
 			\psi(\upsilon) \cdot \phi(\vec{z}) \cdot
 			K(k_{11},\dots,k_{sr} \mid \upsilon,\vec{z}\ ;\ \nu,\vec{w}, R) 
 			\ud z_1 \dots \ud z_s \ud \upsilon
+		\end{array}
 	\end{displaymath}
 	in which $\psi$ is the pdf of $\chi_{\nu}^2$ and $\phi$ is the pdf 
 	of $N(0,R)$.
@@ -2069,8 +2075,8 @@ appropriate statistics.
 		\item For $m=1,\dots,M$ repeat the following steps:
 		\begin{itemize}
 			\item $\text{Loss}^m = 0$
-			\item Simulate $s$ independent $N(0,1)$, $\vec{z}'$
-			\item Simulate factors doing $\vec{z} = L \cdot \vec{z}'$
+			\item Simulate $s$ independent $N(0,1)$, $\vec{y}$
+			\item Simulate factors doing $\vec{z} = L \cdot \vec{y}$
 			\item Simulate $\upsilon \sim \chi_{\nu}^2$
 			\item For $i=1,\dots,n$ repeat the following steps:
 			\begin{itemize}
@@ -2493,6 +2499,18 @@ extreme cases are represented.
 	figure~\ref{fig:lhs} displays the results.
 \end{example}
 
+\begin{figure}[!ht]
+	\centering
+	\subcaptionbox{Empirical cdf (without lhs)}{
+		\includegraphics[width=7cm]{lhs1}
+	}
+	\subcaptionbox{Empirical cdf (using lhs)}{
+		\includegraphics[width=7cm]{lhs2}
+	}
+	\caption{Latin Hypercube Sampling example (1-dim)}
+	\label{fig:lhs} 
+\end{figure}
+
 \begin{lstlisting}[language=R, label=sc:lhs, caption=Latin Hypercube Sampling example (R script)]
 
  rlhs <- function(nblocks, icdf, ...) 
@@ -2515,18 +2533,6 @@ extreme cases are represented.
  plot(cdf2, verticals=TRUE, pch=-1, ylab="prob", main="");
  
 \end{lstlisting}
-
-\begin{figure}[!ht]
-	\centering
-	\subcaptionbox{Empirical cdf (without lhs)}{
-		\includegraphics[width=7cm]{lhs1}
-	}
-	\subcaptionbox{Empirical cdf (using lhs)}{
-		\includegraphics[width=7cm]{lhs2}
-	}
-	\caption{Latin Hypercube Sampling example (1-dim)}
-	\label{fig:lhs} 
-\end{figure}
 
 %------------------------------------------------------------------------------
 % SIMULATION INTERNALS
@@ -2645,12 +2651,12 @@ illustrates this phenomenon and its magnitude (see the 20 observations case).
 The CCruncher framework encourages incorporating the parameter uncertainty 
 into the credit risk valuation. This indicates that credit risk measures
 (e.g., $\text{VaR}_{99\%}$, $\text{ES}_{99\%}$) are regarded as distributions 
-instead of values. For example, in the case of the Value at Risk, we 
+instead of values. For example, in the case of the Value at Risk, we consider
 the function $\text{VaR}_{99\%}(L_T(\nu,\vec{w},R))$ that depends on 
 the multivariate random variables $\nu, \vec{w}$ and $R$.
-Note that the EL measure is not affected by the uncertainty of dependence 
-parameters because the expectation satisfies $E(X+Y)=E(X)+E(Y)$ even if $X$ 
-is not statistically independent of $Y$.
+Note that EL is not affected by the uncertainty of dependence parameters 
+because the expectation satisfies $E(X+Y)=E(X)+E(Y)$ even if $X$ is not 
+statistically independent of $Y$.
 
 The solution recommended by CCruncher to determine the credit risk measure 
 distribution is the obvious one and is based on the identical procedure 
@@ -3431,8 +3437,8 @@ The following proposition clarifies this theme.
 \subsection{Proposition~\ref{prop:dtd} --~\nameref{prop:dtd} (page~\pageref{prop:dtd})}
 \begin{proof}
 	We note that $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
-	distribution $t_n(\nu,0,\widehat{R})$ and $(U_1,\dots,U_n)$ to represent
-	the components of the copula $C_{\nu,\widehat{R}}^{\text{t}}$.
+	distribution $t_n(\nu,\vec{0},\widehat{R})$ and $(U_1,\dots,U_n)$ to 
+	represent the components of the copula $C_{\nu,\widehat{R}}^{\text{t}}$.
 	\begin{displaymath}
 		\begin{array}{rl}
 			F(t_1,\dots,t_n) = & \Pr\{ T_1 \le t_1 , \dots, T_n \le t_n \} = \\
