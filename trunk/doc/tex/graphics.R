@@ -484,7 +484,7 @@ for(i in 1:nrow(Y)) {
 
  pri <- function(i, K, N)
  {
-   if (sum(dim(K)!=dim(N))) stop("K and N dim differs")
+   if (sum(dim(K) != dim(N))) stop("K and N dim differs")
    if (i <= 0 | ncol(K) < i) stop("i out-of-range")
    ret = sum(K[,i])/sum(N[,i])
    return(ret)
@@ -492,7 +492,7 @@ for(i in 1:nrow(Y)) {
 
  prij <- function(i, j, K, N)
  {
-   if (sum(dim(K)!=dim(N))) stop("K and N dim differs")
+   if (sum(dim(K) != dim(N))) stop("K and N dim differs")
    if (i <= 0 | ncol(K) < i) stop("i out-of-range")
    if (j <= 0 | ncol(K) < j) stop("j out-of-range")
    if (i != j) {
@@ -516,7 +516,7 @@ for(i in 1:nrow(Y)) {
 
  quick_and_dirty_correl <- function(nu, K, N)
  {
-   if (sum(dim(K)!=dim(N))) stop("K and N dim differs")
+   if (sum(dim(K) != dim(N))) stop("K and N dim differs")
    n = ncol(K)
    ret = matrix(nrow=n, ncol=n, 0)
    for(i in 1:n) {
@@ -552,6 +552,14 @@ w = c(0.3, 0.25)
 D = matrix(ncol=1, nrow=2, data=c(750, 750))
 R = matrix(ncol=2, nrow=2, data=c(1.0,0.1,0.1,1.0))
 nu = 10000
+rcount = ccruncher.rcount(1000, p, D, w, R, nu)
+
+# 2-FACTORS, 2-RATINGS, NON-GAUSSIAN
+p = c(0.025, 0.07)
+w = c(0.3, 0.25)
+D = diag(c(1250,750))
+R = matrix(ncol=2, nrow=2, data=c(1.0,0.1,0.1,1.0))
+nu = 15
 rcount = ccruncher.rcount(1000, p, D, w, R, nu)
 
 # 4-FACTORS, 4-RATINGS, NON-GAUSSIAN

@@ -90,7 +90,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1137}
+\def\svnversion{R1138}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -1145,7 +1145,7 @@ in~\cite{nagpal:2001} to define a basic covariance estimator.
 	defaults in the i-th sector and t-th year, $f(x,y\ ;\ \nu,\sigma_{ij})$ 
 	is the pdf of the bivariate t-Student, and $t_{\nu}^{-1}$ is the inverse 
 	of the cdf of the univariate t-Student. Listing~\ref{sc:qadc} implements 
-	this estimator in the $R$ language.
+	this estimator in the R programming language.
 \end{definition}
 
 \begin{lstlisting}[language=R, label=sc:qadc, caption=Quick-and-dirty correlation (R script)]
@@ -1207,12 +1207,14 @@ in~\cite{nagpal:2001} to define a basic covariance estimator.
 \begin{example}
 	Consider the following scenario:
 	\begin{itemize}
-		\item Gaussian case ($\nu = \infty$).
-		\item One non-defaulted rating A, with 1-year default probability $p_A=5\%$
-		\item Two factors \{S1, S2\}, with factor loadings $\vec{w} = (0.3, 0.25)$, 
-		factors correlation $R_{12} = 0.1$, and number of obligors $\vec{n} = (750, 750)$.
+		\item Two sectors \{S1, S2\}
+		\item Number of obligors by sector $\vec{n} = (1250, 750)$
+		\item Default probability by sector $p_{S1} = 2.5\%$ and $p_{S2} = 7\%$
+		\item Degrees of freedom $\nu = 15$
+		\item Factor loadings $\vec{w} = (0.3, 0.25)$
+		\item Factors correlation $R_{12} = 0.1$
 	\end{itemize}
-	We simulate the number of defaults of this scenario 1000 times using 
+	We simulate the number of defaults of this scenario \num{1000} times using 
 	algorithm~\ref{alg:snod}. Then, we compute the quick-and-dirty estimator 
 	and display the results in the table below.
 
@@ -1221,11 +1223,11 @@ in~\cite{nagpal:2001} to define a basic covariance estimator.
 		\hline
 		Exact & Estimated \\
 		\hline
-		$w_1^2 = 0.09$ & $w_1^2 \approx \widetilde{\sigma_{11}} = 0.0963$ \\
+		$w_1^2 = 0.09$ & $w_1^2 \approx \widetilde{\sigma_{11}} = 0.0882$ \\
 		\hline
-		$w_2^2 = 0.0625$ & $w_2^2 \approx \widetilde{\sigma_{22}} = 0.0657$ \\
+		$w_2^2 = 0.0625$ & $w_2^2 \approx \widetilde{\sigma_{22}} = 0.0662$ \\
 		\hline
-		$w_1 \cdot w_2 \cdot R_{12} = 0.0075$ & $w_1 \cdot w_2 \cdot R_{12} \approx \widetilde{\sigma_{12}} = 0.0079$ \\
+		$w_1 \cdot w_2 \cdot R_{12} = 0.0075$ & $w_1 \cdot w_2 \cdot R_{12} \approx \widetilde{\sigma_{12}} = 0.0072$ \\
 		\hline
 	\end{tabular}
 \end{example}
@@ -2317,7 +2319,7 @@ times that the incomplete beta (numerically costly to obtain) is evaluated.
 	confidence level $\beta$ is the average of the worst $\beta\%$ portfolio 
 	losses at time $T$,
 	\begin{displaymath}
-		\text{ES}_\beta(L_T) = \text{E}(L_t \mid L_t \ge \text{VaR}_\beta(L_T))
+		\text{ES}_\beta(L_T) = \text{E}(L_T \mid L_T \ge \text{VaR}_\beta(L_T))
 	\end{displaymath}
 \end{definition}
 
@@ -2682,8 +2684,8 @@ procedure unveils the parameter uncertainty, but other uncertainties remain
 hidden such as:
 \begin{inparaenum}[1)]
 	\item copula selection, 
-	\item PDs uncertainty,
-	\item factors/sectors selection and assignation, and
+	\item factors/sectors selection and assignation,
+	\item PDs uncertainty, and
 	\item EAD and LGD models accuracy.
 \end{inparaenum}
 
@@ -2752,11 +2754,11 @@ hidden such as:
 	The fourth step is the simulation of the portfolio loss distribution
 	for each simulated parameter. This is quite an intensive computation.
 	The CCruncher's command line execution and the input file macro expansion
-	can assist in performing this step. Those who have a cluster, a cloud or 
-	a grid may consider to executing multiple parallel tasks using a framework 
-	such as MakeFlow\footnotemark[1]
-	or something similar. Listing~\ref{sc:paramu4} displays a simple batch
-	script to sequentially execute the required simulations.
+	can assist in performing this step. Listing~\ref{sc:paramu4} displays a 
+	simple batch script to sequentially execute the required simulations.
+	Those who have a cluster, a cloud or a grid may consider to executing 
+	multiple parallel tasks using a framework such as MakeFlow\footnotemark[1]
+	or something similar. 
 
 	Finally, the fifth step is the computation of the risk statistic
 	for each portfolio loss distribution. The density of the $\text{ES}_{99\%}$ 
