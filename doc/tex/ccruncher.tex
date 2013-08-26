@@ -90,7 +90,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1138}
+\def\svnversion{R1139}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -371,11 +371,11 @@ These two approaches achieve similar results in simple cases~\cite{koyluoglu:199
 but differ when there is more than one underlying factor~\cite{bluhm:2001}, 
 i.e., when the dependence between obligors stops being simple.
 Circa 2000, the copula approach appeared \textit{en scene}, placing the focus 
-on the dependence structure, the \underline{key point} in the quantification of
-portfolio credit risk. This approach was first introduced by Embrechts, McNeil 
-and Straumann~\cite{embrechts:2002}, popularized by David X. Li~\cite{li:2000}, 
-and then unfairly demonized by Salmon~\cite{salmon:2009} in 2009, who blamed 
-the copula approach for causing the sub-prime crisis.
+on the dependence structure, the \underline{key point} in the quantification 
+of portfolio credit risk. This approach was introduced by David X. Li~\cite{li:2000}
+and Embrechts, McNeil and Straumann~\cite{embrechts:2002}, and then 
+unfairly demonized by Salmon~\cite{salmon:2009} in 2009, who blamed the 
+copula approach for causing the sub-prime crisis.
 
 \textbf{The copula approach} considers that the lifetimes of obligors are
 the proper manner in which to explain observed defaults. The dependence between 
@@ -587,9 +587,10 @@ stated by the following proposition.
 
 \begin{proposition}[PDs derived from single values]
 	\label{prop:pdfsv}
-	If the time-until-default of an obligor is a Markov process that
-	only depends on the 1-year probability of default $p_i$, then this
-	time-until-default follows the exponential distribution.
+	If the time-until-default of an obligor satisfies a transition matrix 
+	and only depends on the 1-year probability of default $p_i$, then this
+	time-until-default follows the exponential distribution, i.e.,
+	$T_i \sim \text{Exp}(-\ln(1-p_i))$.
 	\begin{displaymath}
 		F_i(t) = \Pr\{T_. \le t\} = 1 - e^{-\lambda_i \cdot t} 
 		\quad \text{ where } \lambda = -\ln(1-p_i)
@@ -600,8 +601,8 @@ stated by the following proposition.
 \begin{example}
 	\label{ex:pdfsv}
 	Suppose that we only know the annual probabilities of default and that these 
-	values are those from the 1-year regularized transition matrix of 
-	example~\ref{ex:1ytm}. In this case, the 1-year diagonal transition matrix 
+	values are those from the 1-year regularized transition matrix displayed in
+	table~\ref{tmatrix1}. In this case, the 1-year diagonal transition matrix 
 	is
 	{\small
 	\begin{displaymath}
@@ -698,7 +699,7 @@ from~\cite{kreinin:2001}.
 \begin{example}
 	\label{ex:pdftm}
 	We derive the time-until-default distribution for each rating induced by the 
-	transition matrix presented in example~\ref{ex:1ytm}. As a first step, we 
+	transition matrix presented in table~\ref{tmatrix1}. As a first step, we 
 	scale the 1-year transition matrix $M_1$ to the 1-month transition matrix 
 	$M_{\frac{1}{12}}$.
 	{\small
@@ -827,12 +828,12 @@ is a copula. CCruncher considers that $C$ is a t-Student copula for the
 following \ul{practical} reasons:
 
 \begin{itemize}
-	\item it is determined by the correlation matrix (elliptical). 
-	\item it is symmetrical (elliptical), allowing application of the 
+	\item it is determined by the correlation matrix (elliptical property). 
+	\item it is symmetrical (elliptical property), allowing application of the 
 	antithetic reduction variance technique in the Monte Carlo simulation.
 	\item it allows a wide range of dependence structures by parameter $\nu$.
 	\item it exhibits tail dependence when $\nu \ne \infty$.
-	\item it can be expressed as a multi-factor model.
+	\item it can be expressed as a t-Student multi-factor copula.
 	\item an efficient simulation algorithm exists.
 	\item the Gaussian case ($\nu = \infty$) leads to the 
 	CreditMetrics\texttrademark{} model.
@@ -966,7 +967,7 @@ multivariate t-Student distribution.
 			i = 1, \dots, s & \text{$s$ is the number of factors} \\
 			j = 1, \dots, n_i & \text{$n_i$ is i-th factor size} \\
 			V \sim \chi_{\nu}^2 & 2 \le \nu \text{ degrees of freedom} \\
-			Z \sim N(0,R) & \text{$R$ a $s {\times} s$ correlation matrix} \\
+			Z \sim N(\vec{0},R) & \text{$R$ a $s {\times} s$ correlation matrix} \\
 			w_i \in (0,1) & \text{the factor loadings } \\
 			\epsilon_i^j \sim N(0,1) \text { iid } & \forall\ i,j \\
 			V, Z, \epsilon_i^j \text{ indep. } & \forall\ i,j \\
@@ -1006,7 +1007,7 @@ the portfolio losses.
 	$\nu$ degrees of freedom, factor loadings $\vec{w}$, and factor correlation 
 	matrix $R$. Then we can simulate this distribution:
 	\begin{enumerate}
-		\item Simulate the factors, $\vec{z} \sim N(0,R)$.
+		\item Simulate the factors, $\vec{z} \sim N(\vec{0},R)$.
 		\item Simulate the degrees of freedom, $\upsilon \sim \chi_{\nu}^2$.
 		\item For each obligor, repeat the following steps:
 		\begin{enumerate}
@@ -1324,7 +1325,7 @@ number of defaults.
 	\begin{displaymath}
 		\begin{array}{l}
 			K(k_{11},\dots,k_{sr}\ ;\ \nu, \vec{w}, R) = 
-			\Pr\{K_{11}=k_{11},\dots,K_{sr}=k_{sr} \mid \upsilon,\vec{z}\ ;\ \nu, \vec{w}, R\} = \\
+			\Pr\{K_{11}=k_{11},\dots,K_{sr}=k_{sr}\ ;\ \nu, \vec{w}, R\} = \\
 			\\
 			= \displaystyle \int_2^{\infty} \int_{\mathbb{R}^s}
 			\psi(\upsilon) \cdot \phi(\vec{z}) \cdot
@@ -1333,7 +1334,7 @@ number of defaults.
 		\end{array}
 	\end{displaymath}
 	in which $\psi$ is the pdf of $\chi_{\nu}^2$ and $\phi$ is the pdf 
-	of $N(0,R)$.
+	of $N(\vec{0},R)$.
 \end{corollary}
 
 This expression has a dimension significantly less than before. Despite 
@@ -1750,7 +1751,7 @@ not independent of one another; in fact, they form a multivariate distribution.
 	uncertainty to the assessment of portfolio risk.
 \end{example}
 
-\begin{figure}[!ht]
+\begin{figure}[!h]
 	\centering
 	\subcaptionbox{Simulated defaults}{
 		%\small
@@ -1788,7 +1789,7 @@ not independent of one another; in fact, they form a multivariate distribution.
 	\label{fig:calib1}
 \end{figure}
 
-	\begin{figure}[!ht]
+\begin{figure}[!h]
 	\centering
 	\subcaptionbox{Simulated defaults}{
 		%\small
@@ -1879,10 +1880,11 @@ In example~\ref{ex:calib}, the averaged 1-year PDs by sectors are
 
 \textbf{Constrained model}. When we have a significant number of factors 
 (e.g., 10) and a reduced set of observations (e.g., 20), then the uncertainty 
-of the factor correlation matrix can be high. In these cases, one can consider 
-a constrained model~\cite{roncalli:2004} that assumes that all factor
+of the factor correlation matrix can be high. In these cases, one may consider 
+a constrained model~\cite{roncalli:2004} that assumes that all factor 
 correlations have the identical value or similar assumptions that reduce the 
-number of correlations from which to estimate $s \cdot(s-1)/2$ to only a few.
+number of correlations from which to estimate $s{\times}(s-1)/2$ to only a 
+few.
 % \begin{displaymath}
 % 	R = \left(
 % 	\begin{array}{cccc}
@@ -2071,7 +2073,7 @@ appropriate statistics.
 	Assume a multivariate default times distribution with marginals $F_i$
 	and a t-Student multi-factor copula $C_{\nu,\vec{w},R}^{\text{t}}$.
 	We can then simulate a sample of size $M$ of the portfolio loss distribution
-	at time $t$ by performing the following:
+	at time $T$ by performing the following:
 	\begin{enumerate}
 		\item Compute the Cholesky decomposition of $R = L \cdot L^\intercal$
 		\item For $m=1,\dots,M$ repeat the following steps:
@@ -2087,7 +2089,7 @@ appropriate statistics.
 				\item Simulate $\epsilon \sim N(0,1)$
 				\item Compute $x_i = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_{si} \cdot z_{si} + \sqrt{1-w_{si}^2} \cdot \epsilon \right)$
 				\item Compute $t_i = F_{ri}^{-1}\left(t_{\nu}(x_i)\right)$
-				\item if $t_i \le t$, then for each asset $j$ belonging to i-th obligor
+				\item if $t_i \le T$, then for each asset $j$ belonging to i-th obligor
 				\begin{itemize}
 					\item Evaluate or simulate $\text{EAD}_i^j(t_i)$
 					\item Evaluate or simulate $\text{LGD}_i^j(t_i)$
@@ -2187,7 +2189,7 @@ appropriate statistics.
 	estimating the parameters $\nu, \vec{w}$, and $R$ with the first \num{1000} 
 	simulations using the procedure described in chapter~\ref{chap:estimation}. 
 	If the estimated parameters match the parameters of the example, we have
-	consistent simulation and estimation algorithms. It is notable that in 
+	consistent simulation and estimation algorithms. Observe that in 
 	this case, the simulated losses can be equated to the number of defaults 
 	because each defaulted obligor is computed as a 1\euro\ loss.
 \end{example}
@@ -2656,9 +2658,9 @@ into the credit risk valuation. This indicates that credit risk measures
 instead of values. For example, in the case of the Value at Risk, we consider
 the function $\text{VaR}_{99\%}(L_T(\nu,\vec{w},R))$ that depends on 
 the multivariate random variables $\nu, \vec{w}$ and $R$.
-Note that EL is not affected by the uncertainty of dependence parameters 
-because the expectation satisfies $E(X+Y)=E(X)+E(Y)$ even if $X$ is not 
-statistically independent of $Y$.
+Note that Expected Loss is not affected by the uncertainty of dependence 
+parameters because the expectation satisfies $E(X+Y)=E(X)+E(Y)$ even if 
+$X$ is not statistically independent of $Y$.
 
 The solution recommended by CCruncher to determine the credit risk measure 
 distribution is the obvious one and is based on the identical procedure 
@@ -2855,6 +2857,7 @@ export(rcount, "paramu.txt")
 	\label{fig:paramu5}
 \end{figure}
 
+
 %==============================================================================
 % APPENDICES
 %==============================================================================
@@ -3021,7 +3024,8 @@ from~\cite{kotz:2004,demarta:2005}.
 	A random vector $T \sim t_d(\nu,\vec{\mu},\Sigma)$ can be expressed as:
 	\begin{displaymath}
 		T \stackrel{d}{=} \vec{\mu} + \sqrt{\frac{\nu}{V}}\cdot Z
-		\quad \text{ where } Z \sim N(0,\Sigma) \text{ and } V \sim \chi_{\nu}^2
+		\quad \text{ where } Z \sim N(\vec{0},\Sigma) 
+		\text{ and } V \sim \chi_{\nu}^2
 	\end{displaymath}
 \end{proposition}
 
@@ -3170,12 +3174,12 @@ in~\cite{torrent:2011}.
 		X_i^j = w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j
 		\quad \text{ where } \left\{
 		\begin{array}{ll}
-			i = 1, \dots, k & \text{$k$ is the number of factors}    \\
-			j = 1, \dots, n_i & \text{$n_i$ is i-th factor size}     \\
-			Z \sim N(0,R) & \text{$R$ is a $k {\times} k$ correlation matrix} \\
-			w_i \in (0,1) & \text{the factor loadings }                  \\
-			\epsilon_i^j \sim N(0,1) \text { iid } & \forall\ i,j               \\
-			Z, \epsilon_i^j \text{ independents } & \forall\ i,j                \\
+			i = 1, \dots, k & \text{$k$ is the number of factors} \\
+			j = 1, \dots, n_i & \text{$n_i$ is i-th factor size} \\
+			Z \sim N(\vec{0},R) & \text{$R$ is a $k {\times} k$ correlation matrix} \\
+			w_i \in (0,1) & \text{the factor loadings } \\
+			\epsilon_i^j \sim N(0,1) \text { iid } & \forall\ i,j \\
+			Z, \epsilon_i^j \text{ independents } & \forall\ i,j \\
 		\end{array}
 		\right.
 	\end{displaymath}
@@ -3184,12 +3188,12 @@ in~\cite{torrent:2011}.
 		X_i^j = Z_i + \sqrt{1-\sigma_{ii}} \cdot \epsilon_i^j
 		\quad \text{ where } \left\{
 		\begin{array}{ll}
-			i = 1, \dots, k   & \text{$k$ is the number of factors} \\
+			i = 1, \dots, k & \text{$k$ is the number of factors} \\
 			j = 1, \dots, n_i & \text{$n_i$ is i-th factor size} \\
-			Z \sim N(0,\Sigma)     & \text{$\Sigma$ is a $k {\times} k$ covariance matrix} \\
-			\sigma_{ii} \in (0,1)  & \text{diagonal values of $\Sigma$} \\
+			Z \sim N(\vec{0},\Sigma) & \text{$\Sigma$ is a $k {\times} k$ covariance matrix} \\
+			\sigma_{ii} \in (0,1) & \text{diagonal values of $\Sigma$} \\
 			\epsilon_i^j \sim N(0,1) \text { iid } & \forall\ i,j \\
-			Z, \epsilon_i^j \text{ independents }  & \forall\ i,j \\
+			Z, \epsilon_i^j \text{ independents } & \forall\ i,j \\
 		\end{array}
 		\right.
 	\end{displaymath}
@@ -3317,7 +3321,7 @@ The following proposition clarifies this theme.
 
 \begin{proposition}[Gaussian multi-factor model $\approx$ multivariate Gaussian block]
 	\label{prop:gmfamgb}
-	Assume $X \sim N(0,\widehat{R})$ in which 
+	Assume $X \sim N(\vec{0},\widehat{R})$ in which 
 	$\widehat{R}=B_k(\vec{n},\vec{1},\Sigma)$ is a correlation block matrix. 
 	Then $X$ can be expressed as a multi-factor Gaussian model if $n_i$ 
 	values are large enough.
@@ -3461,7 +3465,7 @@ The following proposition clarifies this theme.
 \begin{proof}
 	We use the t-Student characterization (proposition~\ref{prop:mtschar})
 	$X = \sqrt{\frac{\nu}{V}} \cdot Z$ in which $V \sim \chi_{\nu}^2$ and 
-	$Z \sim N(0,\widehat{R})$, expressing $Z$ as a Gaussian multi-factor model 
+	$Z \sim N(\vec{0},\widehat{R})$, expressing $Z$ as a Gaussian multi-factor model 
 	(definition~\ref{def:gmfm}). The determination of $R$ and $w_1,\dots,w_s$
 	values can be observed in proposition~\ref{prop:gmfigs}. The tag line 
 	``$n_i$ sizes are high enough'' is justified in 
