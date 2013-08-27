@@ -114,7 +114,11 @@ readconf() {
 # -------------------------------------------------------------
 checkout() {
 
-  svn export http://www.ccruncher.net/svn/trunk;
+  svn export http://www.ccruncher.net/svn/trunk > /dev/null;
+  if [ $? -ne 0 ]; then
+    echo "error retrieving project from svn";
+    exit 1;
+  fi
   chmod -R +w trunk
   mv trunk $1;
 
@@ -131,12 +135,16 @@ prepare() {
   # update subversion revision info
   $1/bin/rollversion.sh -s;
   if [ $? != 0 ]; then
-    echo "aborting: error setting version";
+    echo "error setting current svn version";
     exit 1;
   fi
 
   # compile pdf documentation
-  make -C $1/doc/tex
+  make -C $1/doc/tex > /dev/null
+  if [ $? -ne 0 ]; then
+    echo "error creating pdf technical document";
+    exit 1;
+  fi
   cp $1/doc/tex/ccruncher.pdf $1/doc/
 
   # redirect html document
@@ -150,8 +158,8 @@ prepare() {
   rm $1/doc/html/version;
   rm $1/doc/html/robots.txt;
   rm $1/doc/html/.repo.xsl;
-  rm -rvf $1/doc/tex;
-  rm -rvf `find $1/ -name \.svn\*`;
+  rm -rf $1/doc/tex;
+  rm -rf `find $1/ -name \.svn\*`;
 
 }
 
@@ -229,21 +237,21 @@ makeWinDist() {
   bin/src2bin.sh -y;
 
   # setting windows end-line
-  unix2dos doc/AUTHORS;
-  unix2dos doc/README;
-  unix2dos doc/TODO;
-  unix2dos doc/COPYING;
-  unix2dos doc/ChangeLog;
-  unix2dos doc/index.html;
-  unix2dos samples/*.xml;
-  unix2dos samples/*.dtd;
-  unix2dos samples/*.xsd;
-  unix2dos samples/*.txt;
-  unix2dos doc/html/*.html;
-  unix2dos doc/html/*.css;
-  unix2dos doc/html/*.js;
-  unix2dos doc/html/*.xml;
-  unix2dos data/readme.txt;
+  unix2dos -q doc/AUTHORS;
+  unix2dos -q doc/README;
+  unix2dos -q doc/TODO;
+  unix2dos -q doc/COPYING;
+  unix2dos -q doc/ChangeLog;
+  unix2dos -q doc/index.html;
+  unix2dos -q samples/*.xml;
+  unix2dos -q samples/*.dtd;
+  unix2dos -q samples/*.xsd;
+  unix2dos -q samples/*.txt;
+  unix2dos -q doc/html/*.html;
+  unix2dos -q doc/html/*.css;
+  unix2dos -q doc/html/*.js;
+  unix2dos -q doc/html/*.xml;
+  unix2dos -q data/readme.txt;
 
   # creating tarball
   cd ..;
@@ -272,15 +280,15 @@ checkout $workpath/base;
 prepare $workpath/base;
 
 #create win package
-cp -rvf $workpath/base $workpath/win;
+cp -rf $workpath/base $workpath/win;
 makeWinDist $workpath/win;
 
 # create src package
-cp -rvf $workpath/base $workpath/src;
+cp -rf $workpath/base $workpath/src;
 makeSrcDist $workpath/src;
 
 # create bin package
-cp -rvf $workpath/base $workpath/bin;
+cp -rf $workpath/base $workpath/bin;
 makeBinDist $workpath/bin;
 
 # remove build files

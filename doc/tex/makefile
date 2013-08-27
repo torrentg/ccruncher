@@ -23,11 +23,11 @@
 all: pdf
 
 pdf: ccruncher.tex structure.tex bibliography.bib
-	pdflatex -draftmode ccruncher
+	pdflatex -halt-on-error -draftmode ccruncher
 	bibtex ccruncher
 	makeglossaries ccruncher
-	pdflatex -draftmode ccruncher
-	pdflatex ccruncher
+	pdflatex -halt-on-error -draftmode ccruncher
+	pdflatex -halt-on-error ccruncher
 
 rtf: ccruncher.tex bibliography.bib
 	# remove existent files
@@ -57,10 +57,10 @@ rtf: ccruncher.tex bibliography.bib
 	sed -i -e "s/\\\begin{alltt}/\\\begin{verbatim}/g" ccruncher-iso88591.tex
 	sed -i -e "s/\\\end{alltt}/\\\end{verbatim}/g" ccruncher-iso88591.tex
 	# create bibtex entries
-	pdflatex -draftmode ccruncher-iso88591
+	pdflatex -halt-on-error -draftmode ccruncher-iso88591
 	bibtex ccruncher-iso88591
-	pdflatex -draftmode ccruncher-iso88591
-	pdflatex -draftmode ccruncher-iso88591
+	pdflatex -halt-on-error -draftmode ccruncher-iso88591
+	pdflatex -halt-on-error -draftmode ccruncher-iso88591
 	# create rtf document
 	latex2rtf -Z9 -S -M2 -M4 -t2 -f0 -E2 ccruncher-iso88591 2>&1 | tee ccruncher-iso88591.out
 	mv ccruncher-iso88591.rtf ccruncher.rtf

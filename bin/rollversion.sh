@@ -51,21 +51,6 @@ _EOF_
 }
 
 #-------------------------------------------------------------
-# copyright function
-#-------------------------------------------------------------
-copyright() {
-
-  cat << _EOF_
-
-   $progname is Copyright (C) 2004-2013 Gerard Torrent and licensed
-     under the GNU General Public License, version 2. More info at
-                   http://www.ccruncher.net
-
-_EOF_
-
-}
-
-#-------------------------------------------------------------
 # readconf function
 #-------------------------------------------------------------
 readconf() {
@@ -129,8 +114,6 @@ getSvnVersion() {
 #-------------------------------------------------------------
 
 readconf $@;
-
-copyright;
 
 getPath;
 
