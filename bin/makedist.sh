@@ -173,9 +173,9 @@ makeSrcDist() {
   # creating tarball
   aclocal;
   autoconf;
-  automake -avcf;
-  ./configure --prefix=$PWD;
-  make -j4 distcheck;
+  automake -acf 2> /dev/null;
+  ./configure -q --prefix=$PWD;
+  make -j4 distcheck > /dev/null;
 
   # moving tarball
   mv $PACKAGE-*.tar.gz $currpath/$PACKAGE-${numversion}_src.tgz;
@@ -196,11 +196,11 @@ makeBinDist() {
   # creating binaries
   aclocal;
   autoconf;
-  automake -avcf;
-  ./configure --prefix=$PWD;
-  make -j4;
+  automake -acf 2> /dev/null;
+  ./configure -q --prefix=$PWD;
+  make -j4 > /dev/null;
   qmake-qt4 ccruncher-gui.pro;
-  make -j4;
+  make -j4 > /dev/null;
   
   # dropping unused files
   bin/src2bin.sh -y;
@@ -208,7 +208,7 @@ makeBinDist() {
   # creating and moving tarball
   cd ..;
   mv $1 $PACKAGE-${numversion};
-  tar -cvzf $PACKAGE-${numversion}_bin.tgz $PACKAGE-${numversion};
+  tar -czf $PACKAGE-${numversion}_bin.tgz $PACKAGE-${numversion};
   mv $PACKAGE-${numversion}_bin.tgz $currpath;
   mv $PACKAGE-${numversion} $1;
 
@@ -256,7 +256,7 @@ makeWinDist() {
   # creating tarball
   cd ..;
   mv $1 $PACKAGE-${numversion};
-  zip -r $PACKAGE-${numversion}_win.zip $PACKAGE-${numversion};
+  zip -q -r $PACKAGE-${numversion}_win.zip $PACKAGE-${numversion};
   mv $PACKAGE-${numversion}_win.zip $currpath;
   mv $PACKAGE-${numversion} $1;
 
@@ -296,7 +296,8 @@ chmod -R +w $workpath > /dev/null 2> /dev/null;
 rm -rvf $workpath > /dev/null 2> /dev/null;
 
 cd $currpath;
-echo ""
-echo "1. check pdf doc (date, version, images, ...)";
+echo "1. check $PACKAGE-${numversion}_* packages";
 echo "2. check TODO and CHANGELOG files";
+echo "3. check pdf technical document";
+echo "2. check html files";
 
