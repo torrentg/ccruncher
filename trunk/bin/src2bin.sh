@@ -34,7 +34,10 @@ fi
 #-------------------------------------------------------------
 # copy executables to bin directory (if exists)
 #-------------------------------------------------------------
-cp `find $CCRUNCHER/build -name ccruncher-\* -type f -executable` $CCRUNCHER/bin/;
+EXEFILES=$(find $CCRUNCHER/build -name ccruncher-\* -type f -executable);
+if [ ! -z "$EXEFILES" ]; then
+  cp $EXEFILES $CCRUNCHER/bin/;
+fi
 
 #-------------------------------------------------------------
 # drops development files
