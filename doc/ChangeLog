@@ -2,7 +2,7 @@
 CCRUNCHER CHANGELOG
 ===================
 
-version 2.3 (???. 2013)
+version 2.3 (Sep. 2013)
 --------------------------
   * updated site look & feel
   * added technical document
@@ -20,6 +20,7 @@ version 2.3 (???. 2013)
   * parameter 'stopcriteria.maxseconds' renamed to 'maxseconds'
   * parameter 'stopcriteria.maxiterations' renamed to 'maxiterations'
   * parameter 'portfolio.onlyActiveObligors' renamed to 'onlyActiveObligors'
+  * added segment 'All' in analysis tab
 
 version 2.2 (Mar. 2013)
 --------------------------

@@ -160,6 +160,6 @@
 
 
 /* subversion identifier */
-#define SVN_VERSION "R1111"
+#define SVN_VERSION "R1143"
 
 
