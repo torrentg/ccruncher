@@ -61,7 +61,7 @@ ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *
 
   ui->setupUi(this);
 
-  numbins = ui->numbins->value();
+  numbins = (size_t) ui->numbins->value();
   percentile = ui->percentile->value();
   confidence = ui->confidence->value();
 
@@ -126,6 +126,10 @@ ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *
   // open file & display
   task.setFilename(filename);
   vector<string> segments = task.getCsvFile().getHeaders();
+  if (segments.size() > 1) {
+    ui->segments->addItem("All");
+    ui->segments->insertSeparator(1);
+  }
   for(size_t i=0; i<segments.size(); i++) {
     ui->segments->addItem(segments[i].c_str());
   }
@@ -200,14 +204,22 @@ void ccruncher_gui::AnalysisWidget::reset()
 //===========================================================================
 // submit task
 //===========================================================================
-void ccruncher_gui::AnalysisWidget::submit(size_t numbins)
+void ccruncher_gui::AnalysisWidget::submit()
 {
   mutex.lock();
   if (task.isRunning()) task.stop();
 
   int isegment = ui->segments->currentIndex();
   int iview = ui->view->currentIndex();
-  if (isegment < 0 || iview < 0) return;
+
+  // combobox with no items
+  if (isegment < 0 || iview < 0) {
+    return;
+  }
+  if (ui->segments->count() > 1) {
+    // substract 'All' segment. 'All' index = -1
+    isegment -= 2;
+  }
 
   task.wait();
   reset();
@@ -216,7 +228,7 @@ void ccruncher_gui::AnalysisWidget::submit(size_t numbins)
   switch(iview)
   {
     case 0:
-      task.setData(AnalysisTask::histogram, isegment, numbins);
+      task.setData(AnalysisTask::histogram, isegment, ui->numbins->value());
       break;
     case 1:
       task.setData(AnalysisTask::expected_loss, isegment);
@@ -298,8 +310,7 @@ void ccruncher_gui::AnalysisWidget::drawHistogram()
 
   const gsl_histogram *hist = task.getHistogram();
   if (hist == NULL) return;
-  size_t numbins = gsl_histogram_bins(hist);
-  this->numbins = numbins;
+  numbins = gsl_histogram_bins(hist);
   ui->numbins->setValue(numbins);
 
   QVector<QwtIntervalSample> samples(numbins);
@@ -463,8 +474,8 @@ void ccruncher_gui::AnalysisWidget::changeConfidence()
 void ccruncher_gui::AnalysisWidget::changeNumbins()
 {
   if (ui->numbins->value() != (int)numbins) {
-    numbins = ui->numbins->value();
-    submit(ui->numbins->value());
+    numbins = (size_t) ui->numbins->value();
+    submit();
   }
 }
 

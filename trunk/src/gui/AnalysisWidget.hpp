@@ -92,7 +92,7 @@ class AnalysisWidget: public MdiChildWidget
     // draw statistic
     void drawStatistic();
     // submit task
-    void submit(size_t numbins=0);
+    void submit();
 
   public:
 

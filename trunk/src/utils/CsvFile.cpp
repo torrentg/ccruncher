@@ -304,6 +304,58 @@ void ccruncher::CsvFile::getValues(size_t col, vector<double> &ret, bool *stop) 
 }
 
 //===========================================================================
+// return row sums
+//===========================================================================
+void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Exception)
+{
+  int rc;
+  size_t numlines = 0;
+
+  ret.clear();
+  open(filename, separators);
+
+  try
+  {
+    // skip headers
+    while(read() == 1);
+    numlines++;
+
+    // read lines
+    do
+    {
+      // read first field
+      rc = read();
+      if (rc != 1) {
+        char *ptr = trim(ptr0);
+        if (*ptr == 0) {
+          // skip blank line
+          numlines++;
+          continue;
+        }
+      }
+      double val = parse(trim(ptr0));
+
+      // reading the rest of fields
+      while (rc == 1) {
+        rc = read();
+        val += parse(trim(ptr0));
+      }
+
+      ret.push_back(val);
+      numlines++;
+
+      // check stop flag
+      if (stop != NULL && *stop) break;
+    }
+    while(rc != 3);
+  }
+  catch(Exception &e)
+  {
+    throw Exception(e.toString() + " at line " + Format::toString(numlines+1));
+  }
+}
+
+//===========================================================================
 // returns file size (in bytes)
 //===========================================================================
 size_t ccruncher::CsvFile::getFileSize() const

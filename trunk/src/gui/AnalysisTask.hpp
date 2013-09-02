@@ -96,8 +96,8 @@ class AnalysisTask : public QThread
 
     // csv file
     ccruncher::CsvFile csv;
-    // segment index
-    size_t isegment;
+    // segment index (-1 means rowSums)
+    int isegment;
     // number of bins (hist)
     size_t numbins;
     // percentile (var, es)
@@ -146,7 +146,7 @@ class AnalysisTask : public QThread
     // set csv filename
     void setFilename(const QString &) throw(ccruncher::Exception);
     // set data
-    void setData(mode m, size_t isegment, double param=0.0);
+    void setData(mode m, int isegment, double param=0.0);
     // return mode
     mode getMode() const;
     // return csvfile object

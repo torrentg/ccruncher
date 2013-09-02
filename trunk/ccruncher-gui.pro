@@ -20,6 +20,8 @@ HEADERS += \
     src/gui/xmlhighlighter.hpp \
     src/gui/MdiChildWidget.hpp \
     src/gui/CodeEditor.hpp \
+    src/gui/QwtPlotCanvasExt.hpp \
+    src/gui/QwtPieChart.hpp \
     src/params/Correlations.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \
@@ -73,6 +75,7 @@ SOURCES += \
     src/gui/XmlEditWidget.cpp \
     src/gui/xmlhighlighter.cpp \
     src/gui/CodeEditor.cpp \
+    src/gui/QwtPieChart.cpp \
     src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \

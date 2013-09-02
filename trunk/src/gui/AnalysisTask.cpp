@@ -64,7 +64,7 @@ void ccruncher_gui::AnalysisTask::setFilename(const QString &filename) throw(Exc
 //===========================================================================
 // set data
 //===========================================================================
-void ccruncher_gui::AnalysisTask::setData(mode m, size_t s, double p)
+void ccruncher_gui::AnalysisTask::setData(mode m, int s, double p)
 {
   //TODO: stop current execution + progress=0
   mode_ = m;
@@ -144,7 +144,12 @@ void ccruncher_gui::AnalysisTask::run()
     setStatus(reading);
     vector<double> values;
     try {
-      csv.getValues(isegment, values, &stop_);
+      if (isegment < 0) {
+        csv.getRowSums(values, &stop_);
+      }
+      else {
+        csv.getValues(isegment, values, &stop_);
+      }
       if (stop_) {
         setStatus(stopped);
         return;

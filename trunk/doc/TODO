@@ -4,8 +4,6 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * factor correlation vary when dimension changes
-  * check that multi-factor model is numerically stable
 
 Future works
 -------------------
