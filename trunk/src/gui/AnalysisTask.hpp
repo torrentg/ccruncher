@@ -40,6 +40,13 @@ struct statval
   statval(size_t n, double v, double e) : iteration(n), value(v), std_err(e) {}
 };
 
+struct contrib
+{
+  std::string name;
+  double value;
+  contrib(std::string n="", double v=0.0) : name(n), value(v) {}
+};
+
 // see http://en.wikipedia.org/wiki/Kahan_summation_algorithm
 class kahan
 {
@@ -77,9 +84,11 @@ class AnalysisTask : public QThread
     {
       none=0,
       histogram=1,
-      expected_loss=2,
-      value_at_risk=3,
-      expected_shortfall=4
+      evolution_el=2,
+      evolution_var=3,
+      evolution_es=4,
+      contribution_el=5,
+      contribution_es=6
     };
 
     // status types
@@ -94,6 +103,11 @@ class AnalysisTask : public QThread
 
   private:
 
+    // stopped task exception
+    class StopException : public ccruncher::Exception { };
+
+  private:
+
     // csv file
     ccruncher::CsvFile csv;
     // segment index (-1 means rowSums)
@@ -102,14 +116,14 @@ class AnalysisTask : public QThread
     size_t numbins;
     // percentile (var, es)
     double percentile;
-    // computed statistics (result)
-    std::vector<statval> statvals;
     // histogram (result)
     gsl_histogram *hist;
-    // number of procesed samples
-    size_t nsamples;
+    // computed statistics (result)
+    std::vector<statval> statvals;
+    // computed contributions (result)
+    std::vector<contrib> contribs;
     // progress (0..100)
-    float progress;
+    volatile float progress;
     // mode
     mode mode_;
     // status
@@ -122,20 +136,28 @@ class AnalysisTask : public QThread
   private:
 
     // value at risk
-    statval valueAtRisk(double percentile, std::vector<double>::iterator first, std::vector<double>::iterator last);
+    static statval valueAtRisk(double percentile, std::vector<double>::iterator first, std::vector<double>::iterator last);
     // expected shortfall
     static statval expectedShortfall(double percentile, std::vector<double>::iterator first, std::vector<double>::iterator last);
 
+    // read csv data
+    void readData(int col, std::vector<double> &ret) throw(ccruncher::Exception);
+    // read csv data
+    void readData(std::vector<std::vector<double> > &ret) throw(ccruncher::Exception);
     // set status
     void setStatus(status);
     // compute histogram
     void runHistogram(const std::vector<double> &);
     // compute EL
-    void runExpectedLoss(const std::vector<double> &);
+    void runEvolutionEL(const std::vector<double> &);
     // compute VaR
-    void runValueAtRisk(std::vector<double> &);
+    void runEvolutionVAR(std::vector<double> &);
     // compute ES
-    void runExpectedShortfall(std::vector<double> &);
+    void runEvolutionES(std::vector<double> &);
+    // contribution EL
+    void runContributionEL(const std::vector<std::vector<double> > &);
+    // contribution ES
+    void runContributionES(std::vector<std::vector<double> > &);
 
   public:
 
@@ -146,7 +168,7 @@ class AnalysisTask : public QThread
     // set csv filename
     void setFilename(const QString &) throw(ccruncher::Exception);
     // set data
-    void setData(mode m, int isegment, double param=0.0);
+    void setData(mode m, int isegment=-1, double param=0.0);
     // return mode
     mode getMode() const;
     // return csvfile object
@@ -155,8 +177,8 @@ class AnalysisTask : public QThread
     const gsl_histogram *getHistogram() const;
     // return statvals
     const std::vector<statval>& getStatVals() const;
-    // return the current number of samples
-    size_t getNumSamples() const;
+    // return contributions
+    const std::vector<contrib>& getContributions() const;
     // task
     void run();
     // stop current execution
@@ -164,7 +186,7 @@ class AnalysisTask : public QThread
     // return status
     status getStatus() const;
     // return progress
-    float getProgress();
+    float getProgress() const;
     // return error
     const std::string &getMsgErr() const;
 

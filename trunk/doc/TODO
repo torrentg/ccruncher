@@ -15,7 +15,6 @@ Future works
   * improve model
      - add grouped t-copula support
      - allow evaluation in multiple time horizons
-     - capital allocation per segment ('Introduction to Credit Risk Modeling - 5.2.3')
      - consider that an obligor could belong to a weighted sum of factors
   * improve functional tests
      - examples based on real data

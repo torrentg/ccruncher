@@ -38,8 +38,7 @@ using namespace ccruncher_gui;
 ccruncher_gui::AnalysisTask::AnalysisTask() : QThread(), hist(NULL)
 {
   mode_ = none;
-  nsamples = 0;
-  progress = 0;
+  progress = 0.0f;
   msgerr = "";
   setStatus(finished);
   setTerminationEnabled(false);
@@ -63,21 +62,31 @@ void ccruncher_gui::AnalysisTask::setFilename(const QString &filename) throw(Exc
 
 //===========================================================================
 // set data
+// caution: assumes that there isn't a current execution
 //===========================================================================
 void ccruncher_gui::AnalysisTask::setData(mode m, int s, double p)
 {
-  //TODO: stop current execution + progress=0
+  // set task data
+  progress = 0.0f;
   mode_ = m;
-  isegment = s;
   switch(m)
   {
     case histogram:
+      isegment = s;
       numbins = (size_t)(p+0.5);
       break;
-    case expected_loss:
+    case evolution_el:
+      isegment = s;
       break;
-    case value_at_risk:
-    case expected_shortfall:
+    case evolution_var:
+    case evolution_es:
+      isegment = s;
+      percentile = p;
+      assert(0.0 < p && p < 1.0);
+      break;
+    case contribution_el:
+      break;
+    case contribution_es:
       percentile = p;
       assert(0.0 < p && p < 1.0);
       break;
@@ -119,13 +128,64 @@ const vector<statval>& ccruncher_gui::AnalysisTask::getStatVals() const
 }
 
 //===========================================================================
-// return the current number of samples
+// return contributions
 //===========================================================================
-size_t ccruncher_gui::AnalysisTask::getNumSamples() const
+const std::vector<contrib>& ccruncher_gui::AnalysisTask::getContributions() const
 {
-  if (mode_ == histogram) return nsamples;
-  else if (!statvals.empty()) return statvals.back().iteration;
-  else return 0;
+  return contribs;
+}
+
+//===========================================================================
+// readData
+//===========================================================================
+void ccruncher_gui::AnalysisTask::readData(int col, vector<double> &ret) throw(Exception)
+{
+  try {
+    setStatus(reading);
+    ret.clear();
+    // if col<0 return rowsums
+    csv.getColumn(col, ret, &stop_);
+    if (stop_) throw StopException();
+  }
+  catch(Exception &e) {
+    if (ret.size() > 100) {
+      // we assume that is caused because ccruncher is
+      // running and file content is not flushed
+      msgerr = e.toString();
+    }
+    else {
+      throw;
+    }
+  }
+  catch(...) {
+    throw;
+  }
+}
+
+//===========================================================================
+// readData
+//===========================================================================
+void ccruncher_gui::AnalysisTask::readData(vector<vector<double> > &content) throw(Exception)
+{
+  try {
+    setStatus(reading);
+    content.clear();
+    csv.getColumns(content, &stop_);
+    if (stop_) throw StopException();
+  }
+  catch(Exception &e) {
+    if (content.size() > 0 && content[0].size() > 100) {
+      // we assume that is caused because ccruncher is
+      // running and file content is not flushed
+      msgerr = e.toString();
+    }
+    else {
+      throw;
+    }
+  }
+  catch(...) {
+    throw;
+  }
 }
 
 //===========================================================================
@@ -136,62 +196,62 @@ void ccruncher_gui::AnalysisTask::run()
   try
   {
     stop_ = false;
-    progress = 0.0;
+    progress = 0.0f;
     statvals.clear();
-    nsamples = 0;
+    contribs.clear();
     msgerr = "";
 
-    setStatus(reading);
-    vector<double> values;
-    try {
-      if (isegment < 0) {
-        csv.getRowSums(values, &stop_);
-      }
-      else {
-        csv.getValues(isegment, values, &stop_);
-      }
-      if (stop_) {
-        setStatus(stopped);
-        return;
-      }
-    }
-    catch(Exception &e) {
-      if (values.size() > 100) {
-        msgerr = e.toString();
-      }
-      else {
-        throw;
-      }
-    }
-    catch(...) {
-      throw;
-    }
-
-    setStatus(running);
     switch(mode_)
     {
-      case histogram:
+      case histogram: {
+        vector<double> values;
+        readData(isegment, values);
         runHistogram(values);
         break;
-      case expected_loss:
-        runExpectedLoss(values);
+      }
+      case evolution_el: {
+        vector<double> values;
+        readData(isegment, values);
+        runEvolutionEL(values);
         break;
-      case value_at_risk:
-        runValueAtRisk(values);
+      }
+      case evolution_var: {
+        vector<double> values;
+        readData(isegment, values);
+        runEvolutionVAR(values);
         break;
-      case expected_shortfall:
-        runExpectedShortfall(values);
+      }
+      case evolution_es: {
+        vector<double> values;
+        readData(isegment, values);
+        runEvolutionES(values);
         break;
+      }
+      case contribution_el: {
+        vector<vector<double> > content;
+        readData(content);
+        runContributionEL(content);
+        break;
+      }
+      case contribution_es: {
+        vector<vector<double> > content;
+        readData(content);
+        runContributionES(content);
+        break;
+      }
       default:
         assert(false);
     }
-    if (stop_) setStatus(stopped);
-    else if (msgerr.empty()) setStatus(finished);
-    else setStatus(failed);
+    setStatus(finished);
   }
-  catch(std::exception &e)
+  catch(StopException &e1)
   {
-    msgerr += (msgerr.empty()?"":"\n") + string(e.what());
+    assert(stop_);
+    setStatus(stopped);
+  }
+  catch(std::exception &e2)
+  {
+    msgerr += (msgerr.empty()?"":"\n") + string(e2.what());
     setStatus(failed);
   }
 }
@@ -201,7 +261,7 @@ void ccruncher_gui::AnalysisTask::run()
 //===========================================================================
 void ccruncher_gui::AnalysisTask::runHistogram(const vector<double> &values)
 {
-  nsamples = 0;
+  setStatus(running);
 
   if (hist != NULL) {
     gsl_histogram_free(hist);
@@ -219,10 +279,10 @@ void ccruncher_gui::AnalysisTask::runHistogram(const vector<double> &values)
     if (areints && fabs(modf(values[i],&intpart)) > 1e-14) areints = false;
     if (values[i] > maxval) maxval = values[i];
     else if (values[i] < minval) minval = values[i];
-    if (stop_) return;
+    if (stop_) throw StopException();
   }
 
-  if (numbins == 0) {
+  if (numbins <= 1) {
     if (areints && maxval-minval+1 < 5000) {
       numbins = maxval - minval + 1;
       minval -= 0.5;
@@ -239,20 +299,20 @@ void ccruncher_gui::AnalysisTask::runHistogram(const vector<double> &values)
   for(size_t i=0; i<values.size(); i++)
   {
     gsl_histogram_increment(hist, values[i]);
-    nsamples++;
     if (i%100 == 0 || stop_) {
-      progress = 100.0*(float)(i+1)/(float)(values.size());
+      progress = 100.0f*(float)(i+1)/(float)(values.size());
     }
-    if (stop_) return;
+    if (stop_) throw StopException();
   }
-  progress = 100.0;
+  progress = 100.0f;
 }
 
 //===========================================================================
-// runExpectedLoss
+// runEvolutionEL
 //===========================================================================
-void ccruncher_gui::AnalysisTask::runExpectedLoss(const vector<double> &values)
+void ccruncher_gui::AnalysisTask::runEvolutionEL(const vector<double> &values)
 {
+  setStatus(running);
   statvals.clear();
 
   size_t numpoints = std::min(values.size(), (size_t)2048);
@@ -278,20 +338,20 @@ void ccruncher_gui::AnalysisTask::runExpectedLoss(const vector<double> &values)
     statvals.push_back(statval(n, mean, stdev/sqrt(n)));
 
     if (i%100 == 0 || stop_) {
-      progress = 100.0*(float)(i+1)/(float)(numpoints);
+      progress = 100.0f*(float)(i+1)/(float)(numpoints);
     }
-    if (stop_) return;
+    if (stop_) throw StopException();
   }
 
-  progress = 100.0;
+  progress = 100.0f;
 }
 
-
 //===========================================================================
-// runValueAtRisk
+// runEvolutionVAR
 //===========================================================================
-void ccruncher_gui::AnalysisTask::runValueAtRisk(vector<double> &values)
+void ccruncher_gui::AnalysisTask::runEvolutionVAR(vector<double> &values)
 {
+  setStatus(running);
   statvals.clear();
 
   size_t numpoints = std::min(values.size(), (size_t)100); //2048
@@ -310,11 +370,11 @@ void ccruncher_gui::AnalysisTask::runValueAtRisk(vector<double> &values)
     var.value = -var.value;
 
     statvals.push_back(var);
-    progress = 100.0*(float)(i+1)/(float)(numpoints);
-    if (stop_) return;
+    progress = 100.0f*(float)(i+1)/(float)(numpoints);
+    if (stop_) throw StopException();
   }
 
-  progress = 100.0;
+  progress = 100.0f;
 }
 
 //===========================================================================
@@ -409,10 +469,11 @@ statval ccruncher_gui::AnalysisTask::valueAtRisk(double percentile, vector<doubl
 }
 
 //===========================================================================
-// runExpectedShortfall
+// runEvolutionES
 //===========================================================================
-void ccruncher_gui::AnalysisTask::runExpectedShortfall(vector<double> &values)
+void ccruncher_gui::AnalysisTask::runEvolutionES(vector<double> &values)
 {
+  setStatus(running);
   statvals.clear();
 
   size_t numpoints = std::min(values.size(), (size_t)100); //2048
@@ -430,10 +491,10 @@ void ccruncher_gui::AnalysisTask::runExpectedShortfall(vector<double> &values)
     statval es = expectedShortfall(1.0-percentile, values.begin(), values.begin()+n);
     es.value = -es.value;
     statvals.push_back(es);
-    progress = 100.0*(float)(i+1)/(float)(numpoints);
-    if (stop_) return;
+    progress = 100.0f*(float)(i+1)/(float)(numpoints);
+    if (stop_) throw StopException();
   }
-  progress = 100.0;
+  progress = 100.0f;
 }
 
 //===========================================================================
@@ -465,10 +526,151 @@ statval ccruncher_gui::AnalysisTask::expectedShortfall(double percentile, vector
   double s2 = sum2.value();
   double mean = s1/m;
   // see http://en.wikipedia.org/wiki/Standard_deviation#Rapid_calculation_methods
-  double stdev = sqrt((m*s2-s1*s1)/(m*(m-1.0)));
+  double stdev = sqrt((m*s2-s1*s1)/double(m*(m-1)));
   double std_err = stdev/sqrt(m);
+  // if stdev near 0 (eg. 1e-307) can cause std_err be NaN
+  if (isnan(std_err)) std_err = 0.0;
 
   return statval(n, mean, std_err);
+}
+
+//===========================================================================
+// runContributionEL
+//===========================================================================
+void ccruncher_gui::AnalysisTask::runContributionEL(const vector<vector<double> > &content)
+{
+  setStatus(running);
+
+  statvals.clear();
+  statvals.reserve(1);
+  contribs.clear();
+  contribs.reserve(content.size());
+
+  vector<string> names = csv.getHeaders();
+  size_t ncols = content.size();
+  size_t nrows = content[0].size();
+
+  // obtain portfolio losses
+  vector<double> portfolio(nrows, 0.0);
+  for(size_t i=0; i<nrows; i++) {
+    for(size_t j=0; j<ncols; j++) {
+      portfolio[i] += content[j][i];
+    }
+  }
+
+  // compute portfolio EL
+  kahan sum1, sum2;
+  for(size_t i=0; i<nrows; i++) {
+    sum1.add(portfolio[i]);
+    sum2.add(portfolio[i]*portfolio[i]);
+  }
+  int n = nrows;
+  double s1 = sum1.value();
+  double s2 = sum2.value();
+  double mean = s1/n;
+  double stdev = sqrt((n*s2-s1*s1)/(n*(n-1.0)));
+  statvals.push_back(statval(n, mean, stdev/sqrt(n)));
+
+  // compute contributions
+  contribs.resize(ncols);
+  for(size_t j=0; j<ncols; j++) {
+    contribs[j].name = names[j];
+    contribs[j].value = 0.0;
+  }
+  vector<kahan> sums(ncols);
+  for(size_t i=0; i<nrows; i++)
+  {
+    for(size_t j=0; j<ncols; j++) {
+      sums[j].add(content[j][i]);
+    }
+
+    if (i%100 == 0 || stop_ || i==(nrows-1)) {
+      for(size_t j=0; j<ncols; j++) {
+        contribs[j].value = sums[j].value()/(i+1.0);
+      }
+      progress = 100.0f*(float)(i+1)/(float)(nrows);
+    }
+
+    if (stop_) throw StopException();
+  }
+
+  progress = 100.0f;
+}
+
+//===========================================================================
+// runContributionES
+//===========================================================================
+void ccruncher_gui::AnalysisTask::runContributionES(vector<vector<double> > &content)
+{
+  setStatus(running);
+
+  statvals.clear();
+  statvals.reserve(1);
+  contribs.clear();
+  contribs.reserve(content.size());
+
+  vector<string> names = csv.getHeaders();
+  size_t ncols = content.size();
+  size_t nrows = content[0].size();
+
+  // obtain portfolio losses
+  vector<double> portfolio(nrows, 0.0);
+  vector<double> aux(nrows, 0.0);
+  for(size_t i=0; i<nrows; i++) {
+    for(size_t j=0; j<ncols; j++) {
+      portfolio[i] += content[j][i];
+    }
+    aux[i] = -portfolio[i];
+  }
+
+  // compute portfolio VaR
+  statval var = valueAtRisk(1.0-percentile, aux.begin(), aux.end());
+  var.value = -var.value;
+
+  // compute portfolio ES
+  for(size_t i=0; i<nrows; i++) {
+    aux[i] = -portfolio[i];
+  }
+  statval es = expectedShortfall(1.0-percentile, aux.begin(), aux.end());
+  es.value = -es.value;
+  statvals.push_back(es);
+
+  // select rows bigger than VaR
+  size_t n = 0;
+  for(size_t i=0; i<nrows; i++) {
+    if (portfolio[i] >= var.value) {
+      for(size_t j=0; j<ncols; j++) {
+        content[j][n] = content[j][i];
+      }
+      n++;
+    }
+  }
+  content.resize(n);
+
+  // compute contributions
+  contribs.resize(ncols);
+  for(size_t j=0; j<ncols; j++) {
+    contribs[j].name = names[j];
+    contribs[j].value = 0.0;
+  }
+  vector<kahan> sums(ncols);
+  for(size_t i=0; i<n; i++)
+  {
+    for(size_t j=0; j<ncols; j++) {
+      sums[j].add(content[j][i]);
+    }
+
+    if (i%100 == 0 || stop_ || i==(n-1)) {
+      for(size_t j=0; j<ncols; j++) {
+        contribs[j].value = sums[j].value()/(i+1.0);
+      }
+      progress = 100.0f*(float)(i+1)/(float)(n);
+    }
+
+    if (stop_) throw StopException();
+  }
+
+  progress = 100.0f;
 }
 
 //===========================================================================
@@ -499,7 +701,7 @@ AnalysisTask::status ccruncher_gui::AnalysisTask::getStatus() const
 //===========================================================================
 // return progress
 //===========================================================================
-float ccruncher_gui::AnalysisTask::getProgress()
+float ccruncher_gui::AnalysisTask::getProgress() const
 {
   return progress;
 }

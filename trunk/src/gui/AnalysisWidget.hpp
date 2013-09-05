@@ -62,8 +62,8 @@ class AnalysisWidget: public MdiChildWidget
     QwtPlotMagnifier *magnifier;
     // plot panner
     QwtPlotPanner *panner;
-    // number of simulations
-    size_t nsamples;
+    // task progress (0..100)
+    float task_progress;
     // mutex
     QMutex mutex;
     // numbins
@@ -89,10 +89,16 @@ class AnalysisWidget: public MdiChildWidget
     void reset();
     // draw histogram
     void drawHistogram();
-    // draw statistic
-    void drawStatistic();
+    // draw curve
+    void drawCurve();
+    // draw piechart
+    void drawPiechart();
     // submit task
     void submit();
+    // mode index
+    int getMode() const;
+    // view index
+    int getView() const;
 
   public:
 
@@ -113,6 +119,8 @@ class AnalysisWidget: public MdiChildWidget
     void setZoomX(bool checked);
     // enable zoom on axis y
     void setZoomY(bool checked);
+    // mode changed
+    void changeMode();
     // segment changed
     void changeSegment();
     // view changed
@@ -129,6 +137,13 @@ class AnalysisWidget: public MdiChildWidget
     void stop();
     // copy data to clipboard
     void copyToClipboard();
+    // show piechart info
+    void showPiechartTooltip(QPoint point);
+
+  signals:
+
+    // post msg in app status bar
+    void newStatusMsg(const QString &);
 
 };
 

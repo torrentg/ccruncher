@@ -26,17 +26,19 @@
 #include <gsl/gsl_cdf.h>
 #include <QMessageBox>
 #include <QClipboard>
+#include <QToolTip>
 #include <QMimeData>
 #include <qwt_plot_grid.h>
 #include <qwt_plot_histogram.h>
 #include <qwt_plot_curve.h>
-#include <qwt_plot_canvas.h>
 #include <qwt_plot_intervalcurve.h>
 #include <qwt_plot_zoomer.h>
 #include <qwt_plot_panner.h>
 #include <qwt_plot_magnifier.h>
 #include <qwt_symbol.h>
 #include "ui_AnalysisWidget.h"
+#include "gui/QwtPlotCanvasExt.hpp"
+#include "gui/QwtPieChart.hpp"
 #include "gui/AnalysisWidget.hpp"
 #include "utils/Format.hpp"
 #include <cassert>
@@ -55,7 +57,7 @@ using namespace ccruncher;
 //===========================================================================
 ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
   MdiChildWidget(parent), ui(new Ui::AnalysisWidget), progress(NULL),
-    magnifier(NULL), panner(NULL), nsamples(0), toolbar(NULL)
+    magnifier(NULL), panner(NULL), task_progress(0.0f), toolbar(NULL)
 {
   blockSignals(true);
 
@@ -70,13 +72,17 @@ ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *
   ui->frame->addLayer(progress);
 
   ui->filename->setText(filename);
-  QwtPlotCanvas *canvas = (QwtPlotCanvas*) ui->plot->canvas();
+  QwtPlotCanvas *canvas = new QwtPlotCanvasExt(ui->plot);
   canvas->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
-  ui->plot->setContextMenuPolicy(Qt::ActionsContextMenu);
+  canvas->setMouseTracking(false);
+  connect(canvas, SIGNAL(mouseMoved(QPoint)), this, SLOT(showPiechartTooltip(QPoint)));
 
-  magnifier = new QwtPlotMagnifier(ui->plot->canvas());
+  ui->plot->setContextMenuPolicy(Qt::ActionsContextMenu);
+  ui->plot->setCanvas(canvas);
+
+  magnifier = new QwtPlotMagnifier(canvas);
   magnifier->setMouseFactor(1.0);
-  panner = new QwtPlotPanner(ui->plot->canvas());
+  panner = new QwtPlotPanner(canvas);
 
   // magnify x-axis
   actionZoomX = new QAction(tr("Zoom axis X"), this);
@@ -124,17 +130,29 @@ ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *
   connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
 
   // open file & display
+  ui->segment->blockSignals(true);
   task.setFilename(filename);
   vector<string> segments = task.getCsvFile().getHeaders();
   if (segments.size() > 1) {
-    ui->segments->addItem("All");
-    ui->segments->insertSeparator(1);
+    ui->segment->addItem("All");
+    ui->segment->insertSeparator(1);
   }
   for(size_t i=0; i<segments.size(); i++) {
-    ui->segments->addItem(segments[i].c_str());
+    ui->segment->addItem(segments[i].c_str());
   }
+  ui->segment->blockSignals(false);
+
+  // set modes
+  ui->mode->blockSignals(true);
+  ui->mode->clear();
+  if (segments.size() > 1) {
+    ui->mode->addItem("Segmentation", 0);
+  }
+  ui->mode->addItem("Segments", 1);
+  ui->mode->blockSignals(false);
 
   blockSignals(false);
+  changeMode();
 }
 
 //===========================================================================
@@ -168,30 +186,12 @@ void ccruncher_gui::AnalysisWidget::setZoomY(bool checked)
 //===========================================================================
 void ccruncher_gui::AnalysisWidget::reset()
 {
-  int iview = ui->view->currentIndex();
-  if (iview < 0) return;
-
-  ui->percentile->setVisible(iview<=1?false:true);
-  ui->percentile_str->setVisible(iview<=1?false:true);
-  ui->confidence->setVisible(iview==0?false:true);
-  ui->confidence_str->setVisible(iview==0?false:true);
-  ui->numbins->setVisible(iview==0?true:false);
-  ui->numbins_str->setVisible(iview==0?true:false);
-
-  ui->statistic->setVisible(iview==0?false:true);
-  ui->statistic_str->setVisible(iview==0?false:true);
-  ui->interval->setVisible(iview==0?false:true);
-  ui->interval_str->setVisible(iview==0?false:true);
-  ui->std_err->setVisible(iview==0?false:true);
-  ui->std_err_str->setVisible(iview==0?false:true);
-
-  ui->statistic_str->setText(ui->view->currentText() + ":");
-
   ui->plot->detachItems();
   ui->plot->setAxisAutoScale(QwtPlot::xBottom);
   ui->plot->setAxisAutoScale(QwtPlot::yLeft);
   ui->plot->setAxisTitle(QwtPlot::yLeft, "");
   ui->plot->setAxisTitle(QwtPlot::xBottom, "");
+  ui->plot->setTitle("");
 
   ui->numiterations->setText("");
   ui->statistic->setText("");
@@ -209,40 +209,59 @@ void ccruncher_gui::AnalysisWidget::submit()
   mutex.lock();
   if (task.isRunning()) task.stop();
 
-  int isegment = ui->segments->currentIndex();
-  int iview = ui->view->currentIndex();
+  int imode = getMode();
+  int iview = getView();
+  int isegment = ui->segment->currentIndex();
 
   // combobox with no items
-  if (isegment < 0 || iview < 0) {
+  if (imode < 0 || iview < 0 || isegment < 0) {
+    mutex.unlock();
     return;
   }
-  if (ui->segments->count() > 1) {
-    // substract 'All' segment. 'All' index = -1
-    isegment -= 2;
+  if (ui->segment->count() > 1) {
+    // substract 'All' and separator items. 'All' index = -1
+    isegment = isegment - (isegment==0?1:2);
   }
 
   task.wait();
   reset();
-  nsamples = 0;
 
-  switch(iview)
+  if (imode == 0)
   {
-    case 0:
-      task.setData(AnalysisTask::histogram, isegment, ui->numbins->value());
-      break;
-    case 1:
-      task.setData(AnalysisTask::expected_loss, isegment);
-      break;
-    case 2:
-      task.setData(AnalysisTask::value_at_risk, isegment, ui->percentile->value()/100.0);
-      break;
-    case 3:
-      task.setData(AnalysisTask::expected_shortfall, isegment, ui->percentile->value()/100.0);
-      break;
-    default:
-      assert(false);
+    switch(iview)
+    {
+      case 1:
+        task.setData(AnalysisTask::contribution_el);
+        break;
+      case 3:
+        task.setData(AnalysisTask::contribution_es, -1, ui->percentile->value()/100.0);
+        break;
+      default:
+        assert(false);
+    }
+  }
+  else if (imode == 1)
+  {
+    switch(iview)
+    {
+      case 0:
+        task.setData(AnalysisTask::histogram, isegment, ui->numbins->value());
+        break;
+      case 1:
+        task.setData(AnalysisTask::evolution_el, isegment);
+        break;
+      case 2:
+        task.setData(AnalysisTask::evolution_var, isegment, ui->percentile->value()/100.0);
+        break;
+      case 3:
+        task.setData(AnalysisTask::evolution_es, isegment, ui->percentile->value()/100.0);
+        break;
+      default:
+        assert(false);
+    }
   }
 
+  task_progress = task.getProgress();
   task.start();
   mutex.unlock();
 }
@@ -265,22 +284,30 @@ void ccruncher_gui::AnalysisWidget::draw()
   }
   else
   {
-    if (nsamples == task.getNumSamples())
+    if (task_progress == task.getProgress())
     {
       // nothing to do
     }
     else
     {
       ui->plot->setEnabled(true);
-      nsamples = task.getNumSamples();
+      task_progress = task.getProgress();
       switch(task.getMode())
       {
         case AnalysisTask::histogram:
           drawHistogram();
           break;
-        default:
-          drawStatistic();
+        case AnalysisTask::evolution_el:
+        case AnalysisTask::evolution_var:
+        case AnalysisTask::evolution_es:
+          drawCurve();
           break;
+        case AnalysisTask::contribution_el:
+        case AnalysisTask::contribution_es:
+          drawPiechart();
+          break;
+        default:
+          assert(false);
       }
     }
   }
@@ -311,7 +338,9 @@ void ccruncher_gui::AnalysisWidget::drawHistogram()
   const gsl_histogram *hist = task.getHistogram();
   if (hist == NULL) return;
   numbins = gsl_histogram_bins(hist);
+  ui->numbins->blockSignals(true);
   ui->numbins->setValue(numbins);
+  ui->numbins->blockSignals(false);
 
   QVector<QwtIntervalSample> samples(numbins);
   size_t numiterations = 0;
@@ -354,7 +383,7 @@ void ccruncher_gui::AnalysisWidget::drawHistogram()
 //===========================================================================
 // draw statistic
 //===========================================================================
-void ccruncher_gui::AnalysisWidget::drawStatistic()
+void ccruncher_gui::AnalysisWidget::drawCurve()
 {
   ui->plot->detachItems();
   strdata.clear();
@@ -432,10 +461,51 @@ void ccruncher_gui::AnalysisWidget::drawStatistic()
 }
 
 //===========================================================================
+// draw piechart
+//===========================================================================
+void ccruncher_gui::AnalysisWidget::drawPiechart()
+{
+  ui->plot->detachItems();
+  strdata.clear();
+  strdata.append("SEGMENT\tVAL\n");
+
+  const vector<statval> &statvals = task.getStatVals();
+  if (statvals.empty()) return;
+
+  QString name = ui->view->currentText();
+  ui->statistic_str->setText(name + ":");
+  ui->numiterations->setText(QString::number(statvals.back().iteration));
+  ui->statistic->setText(QString::number(statvals.back().value, 'f', 2));
+  ui->std_err->setText(QString::number(statvals.back().std_err, 'f', 2));
+
+  const vector<contrib> &contribs = task.getContributions();
+  if (contribs.empty()) return;
+
+  vector<double> values(contribs.size());
+  vector<string> names(contribs.size());
+  for(size_t i=0; i<contribs.size(); i++) {
+    names[i] = contribs[i].name;
+    values[i] = contribs[i].value;
+    strdata.append(QString(names[i].c_str()) + "\t" +
+                   QString::number(values[i]) + "\n");
+  }
+
+  ui->plot->setTitle(name + " Disaggregation");
+  QwtPieChart *piechart = new QwtPieChart();
+  piechart->setSamples(values, names);
+  piechart->attach(ui->plot);
+  ui->plot->replot();
+}
+
+//===========================================================================
 // refresh
 //===========================================================================
 void ccruncher_gui::AnalysisWidget::refresh()
 {
+  numbins = 1;
+  ui->numbins->blockSignals(true);
+  ui->numbins->setValue(1);
+  ui->numbins->blockSignals(false);
   submit();
 }
 
@@ -452,7 +522,78 @@ void ccruncher_gui::AnalysisWidget::changeSegment()
 //===========================================================================
 void ccruncher_gui::AnalysisWidget::changeView()
 {
+  int imode = getMode();
+  int iview = getView();
+
+  ui->percentile->setVisible(iview<=1?false:true);
+  ui->percentile_str->setVisible(iview<=1?false:true);
+
+  ui->confidence->setVisible((imode==1 && iview>0)?true:false);
+  ui->confidence_str->setVisible((imode==1 && iview>0)?true:false);
+
+  ui->numbins->setVisible((imode==1 && iview==0)?true:false);
+  ui->numbins_str->setVisible((imode==1 && iview==0)?true:false);
+
+  ui->statistic->setVisible(iview==0?false:true);
+  ui->statistic_str->setVisible(iview==0?false:true);
+  ui->statistic_str->setText(ui->view->currentText() + ":");
+
+  ui->interval->setVisible((imode==1 && iview>0)?true:false);
+  ui->interval_str->setVisible((imode==1 && iview>0)?true:false);
+
+  ui->std_err->setVisible(iview==0?false:true);
+  ui->std_err_str->setVisible(iview==0?false:true);
+
   submit();
+}
+
+//===========================================================================
+// mode changed
+//===========================================================================
+void ccruncher_gui::AnalysisWidget::changeMode()
+{
+  int imode = getMode();
+
+  // adapting plot zone
+  ui->plot->canvas()->setMouseTracking(imode==0);
+  ui->plot->enableAxis(QwtPlot::xBottom, imode==1);
+  ui->plot->enableAxis(QwtPlot::yLeft, imode==1);
+  magnifier->setEnabled(imode==1);
+  panner->setEnabled(imode==1);
+  actionZoomX->setEnabled(imode==1);
+  actionZoomY->setEnabled(imode==1);
+
+  // show/hide controls
+  ui->segment->setVisible(imode==1);
+  ui->segment_str->setVisible(imode==1);
+
+  // filling view combobox
+  int iview = getView();
+  ui->view->blockSignals(true);
+  ui->view->clear();
+  if (imode == 0) {
+    ui->view->addItem("Expected Loss", 1);
+    ui->view->addItem("Expected Shortfall", 3);
+  }
+  else {
+    ui->view->addItem("Histogram", 0);
+    ui->view->addItem("Expected Loss", 1);
+    ui->view->addItem("Value at Risk", 2);
+    ui->view->addItem("Expected Shortfall", 3);
+    // set segment All (because we come from mode=0)
+    ui->segment->blockSignals(true);
+    ui->segment->setCurrentIndex(0);
+    ui->segment->blockSignals(false);
+  }
+  for(int i=0; i<ui->view->count(); i++) {
+    if (ui->view->itemData(i).toInt() == iview) {
+      ui->view->setCurrentIndex(i);
+      break;
+    }
+  }
+  ui->view->blockSignals(false);
+
+  changeView();
 }
 
 //===========================================================================
@@ -463,7 +604,7 @@ void ccruncher_gui::AnalysisWidget::changeConfidence()
   if (ui->confidence->value() != confidence) {
     mutex.lock();
     confidence = ui->confidence->value();
-    drawStatistic();
+    drawCurve();
     mutex.unlock();
   }
 }
@@ -498,6 +639,7 @@ void ccruncher_gui::AnalysisWidget::setStatus(int val)
   switch(val)
   {
     case AnalysisTask::reading:
+      emit newStatusMsg("reading ...");
       actionStop->setEnabled(true);
       ui->plot->setEnabled(false);
       progress->ui->progress->setFormat("");
@@ -506,6 +648,7 @@ void ccruncher_gui::AnalysisWidget::setStatus(int val)
       timer.start(REFRESH_MS);
       break;
     case AnalysisTask::running: {
+      emit newStatusMsg("analyzing ...");
       size_t readedbytes = task.getCsvFile().getReadedSize();
       QString str = Format::bytes(readedbytes).c_str();
       progress->ui->progress->setFormat(str);
@@ -516,14 +659,29 @@ void ccruncher_gui::AnalysisWidget::setStatus(int val)
     }
     case AnalysisTask::failed:
       QMessageBox::warning(this, "CCruncher", QString("Error reading data.\n") + task.getMsgErr().c_str());
+      actionStop->setEnabled(false);
+      progress->fadeout();
+      ui->plot->setEnabled(true);
+      timer.stop();
+      draw();
+      emit newStatusMsg("error: " + QString(task.getMsgErr().c_str()));
+      break;
     case AnalysisTask::stopped:
-      //TODO: indicates that user stoped
+      actionStop->setEnabled(false);
+      progress->fadeout();
+      ui->plot->setEnabled(true);
+      timer.stop();
+      draw();
+      emit newStatusMsg("stopped");
+      break;
     case AnalysisTask::finished:
       actionStop->setEnabled(false);
       progress->fadeout();
       ui->plot->setEnabled(true);
       timer.stop();
       draw();
+      if (task.getMsgErr().empty()) emit newStatusMsg("done");
+      else emit newStatusMsg("warning: " + QString(task.getMsgErr().c_str()));
       break;
     default:
       assert(false);
@@ -546,5 +704,65 @@ void ccruncher_gui::AnalysisWidget::copyToClipboard()
   QMimeData *mimeData = new QMimeData();
   mimeData->setData("text/plain", strdata);
   QApplication::clipboard()->setMimeData(mimeData);
+}
+
+//===========================================================================
+// showPiechartTooltip
+//===========================================================================
+void ccruncher_gui::AnalysisWidget::showPiechartTooltip(QPoint point)
+{
+  mutex.lock();
+
+  if (ui->plot->itemList().size() == 0 ||
+      ui->plot->itemList().at(0)->rtti() != QwtPlotItem::Rtti_PlotUserItem) {
+    mutex.unlock();
+    return;
+  }
+
+  static bool status=false;
+  QwtPieChart *piechart = (QwtPieChart *) ui->plot->itemList().at(0);
+
+  string name;
+  double val, pct;
+  bool valid = piechart->getInfo(point, name, val, pct);
+  if (valid) {
+    QString msg = QString(name.c_str()) + "\n";
+    msg += QString::number(val, 'f', 2) + "\n";
+    msg += QString::number(pct*100, 'f', 2) + (status?"%":"% ");
+    QToolTip::showText(QCursor::pos(), msg, ui->plot->canvas(), ui->plot->canvas()->rect());
+    status = !status;
+  }
+  else {
+    QToolTip::hideText();
+  }
+  mutex.unlock();
+}
+
+//===========================================================================
+// mode index
+// return: -1=undefined, 0=segmentation, 1=segments
+//===========================================================================
+int ccruncher_gui::AnalysisWidget::getMode() const
+{
+  int row = ui->mode->currentIndex();
+  if (row < 0) return -1;
+  bool ok = true;
+  int ret = ui->mode->itemData(row).toInt(&ok);
+  if (ok) return ret;
+  else return -1;
+}
+
+//===========================================================================
+// view index
+// iview: -1=undefined, 0=histogram, 1=EL, 2=VaR, 3=ES
+//===========================================================================
+int ccruncher_gui::AnalysisWidget::getView() const
+{
+  int row = ui->view->currentIndex();
+  if (row < 0) return -1;
+  bool ok = true;
+  int ret = ui->view->itemData(row).toInt(&ok);
+  if (ok) return ret;
+  else return -1;
 }
 

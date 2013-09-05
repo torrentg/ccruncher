@@ -68,6 +68,8 @@ class CsvFile
     size_t getChunk(char *ptr);
     // parse a field
     int read() throw(Exception);
+    // returns row sums
+    void getRowSums(std::vector<double> &ret, bool *stop=NULL) throw(Exception);
     // parse a double
     static double parse(const char *) throw(Exception);
     // trim a string
@@ -85,10 +87,10 @@ class CsvFile
     void close();
     // returns headers
     const std::vector<std::string>& getHeaders();
-    // returns column values
-    void getValues(size_t col, std::vector<double> &ret, bool *stop=NULL) throw(Exception);
-    // return row sums
-    void getRowSums(std::vector<double> &ret, bool *stop=NULL) throw(Exception);
+    // returns column values (if col<0 returns rowSum)
+    void getColumn(int col, std::vector<double> &ret, bool *stop=NULL) throw(Exception);
+    // returns file values
+    void getColumns(std::vector<std::vector<double> > &ret, bool *stop=NULL) throw(Exception);
     // returns file size (in bytes)
     size_t getFileSize() const;
     // returns readed bytes

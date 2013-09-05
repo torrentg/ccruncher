@@ -21,6 +21,7 @@ version 2.3 (Sep. 2013)
   * parameter 'stopcriteria.maxiterations' renamed to 'maxiterations'
   * parameter 'portfolio.onlyActiveObligors' renamed to 'onlyActiveObligors'
   * added segment 'All' in analysis tab
+  * added segmentation analysis (piechart graphics)
 
 version 2.2 (Mar. 2013)
 --------------------------
