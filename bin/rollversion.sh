@@ -18,7 +18,8 @@
 # variables declaration
 #-------------------------------------------------------------
 progname=rollversion.sh
-gloversion=X.X
+gloversion=X.Y.Z
+gloversion_short=X.Y
 retcode=0
 cver=false
 csvn=false
@@ -62,7 +63,8 @@ readconf() {
     case $opt in
       s) csvn=true;;
       g) cver=true;
-         gloversion=$OPTARG;;
+         gloversion=$OPTARG;
+         gloversion_short=$(echo $OPTARG | sed -r 's/([0-9]+\.[0-9]+).*/\1/g');;
       h) usage; 
          exit 0;;
      \?) echo "unknow option. use -h for more information"; 
@@ -127,7 +129,7 @@ fi
 
 if [ "$cver" = "true" ]; then
   sed -i -e "s/AC_INIT(ccruncher,\([^,]*\),\(.*\))/AC_INIT(ccruncher, $gloversion,\\2)/g" $CCRUNCHERPATH/configure.ac
-  sed -i -e "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$gloversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
+  sed -i -e "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$gloversion_short}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
   sed -i -e "s/<span class=\"version\">.*<\/span>/<span class=\"version\">$gloversion<\/span>/g" $CCRUNCHERPATH/doc/html/*.html
   sed -i -e "s/version\:.*/version\: XXX/g" $CCRUNCHERPATH/doc/html/version
   echo "you need to run autoconf to take effect some changes";
