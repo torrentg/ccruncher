@@ -27,6 +27,10 @@
 #include <string>
 #include <qwt_plot_seriesitem.h>
 
+#if QWT_VERSION < 0x060100
+  #error "Qwt library version needs to be higher or equal to 6.1.0"
+#endif
+
 class QwtPieChart : public QwtPlotSeriesItem
 {
 
@@ -41,7 +45,7 @@ class QwtPieChart : public QwtPlotSeriesItem
         // ending angle in drawPie() units (2PI = 5760)
         int angle;
         // less-than operator
-        const bool operator <(int val) const { return (angle < val); }
+        bool operator <(int val) const { return (angle < val); }
     };
 
   private:

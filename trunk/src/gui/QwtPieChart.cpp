@@ -42,8 +42,8 @@ QwtPieChart::~QwtPieChart()
 //          If to < 0 the curve will be painted to its last point.
 //===========================================================================
 void QwtPieChart::drawSeries( QPainter *painter,
-    const QwtScaleMap &xMap, const QwtScaleMap &yMap,
-    const QRectF &rect, int from, int to ) const
+    const QwtScaleMap & /*xMap*/, const QwtScaleMap &/*yMap*/,
+    const QRectF &rect, int /*from*/, int /*to*/ ) const
 {
   int margin = 5;
   qreal side = std::min(rect.width(), rect.height()) - 2*margin;
