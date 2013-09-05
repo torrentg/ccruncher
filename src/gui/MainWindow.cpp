@@ -66,6 +66,7 @@ ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidge
   connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
   connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
   connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateToolBars(QMdiSubWindow*)));
+  connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(setStatusMsg()));
 
   // sending http request
   QUrl url("http://www.ccruncher.net/version?m=gui&v=" VERSION);
@@ -215,6 +216,7 @@ void ccruncher_gui::MainWindow::openFile(const QUrl &url)
       }
       else {
         child = new AnalysisWidget(filename, this);
+        connect(child, SIGNAL(newStatusMsg(const QString &)), this, SLOT(setStatusMsg(const QString &)));
       }
       //TODO: unrecognized filename -> send to system
     }
@@ -305,5 +307,13 @@ void ccruncher_gui::MainWindow::processHttpRequest(QNetworkReply *reply)
     if (msg != "") str += msg;
     QMessageBox::information(this, "CCruncher", str);
   }
+}
+
+//===========================================================================
+// post a message in the status bar
+//===========================================================================
+void ccruncher_gui::MainWindow::setStatusMsg(const QString &msg)
+{
+  statusBar()->showMessage(msg);
 }
 

@@ -14,61 +14,82 @@
    <iconset resource="ccruncher.qrc">
     <normaloff>:/images/chart.png</normaloff>:/images/chart.png</iconset>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3">
-   <item row="0" column="0" colspan="2">
-    <layout class="QGridLayout" name="gridLayout">
-     <property name="bottomMargin">
-      <number>10</number>
-     </property>
+  <layout class="QGridLayout" name="gridLayout_4">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout_3">
      <item row="0" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>File:</string>
+      <layout class="QGridLayout" name="gridLayout">
+       <property name="bottomMargin">
+        <number>10</number>
        </property>
-      </widget>
+       <item row="0" column="0">
+        <widget class="QLineEdit" name="filename">
+         <property name="styleSheet">
+          <string notr="true">border: 1px solid gray</string>
+         </property>
+         <property name="frame">
+          <bool>false</bool>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="filename">
-       <property name="styleSheet">
-        <string notr="true">border: 1px solid gray</string>
+     <item row="1" column="0">
+      <widget class="FrameOverlay" name="frame">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
        </property>
-       <property name="frame">
-        <bool>false</bool>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
        </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QwtPlot" name="plot">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
-    <widget class="FrameOverlay" name="frame">
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <property name="margin">
-       <number>0</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QwtPlot" name="plot">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item row="0" column="1">
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="leftMargin">
+        <number>9</number>
+       </property>
+       <property name="rightMargin">
+        <number>9</number>
+       </property>
+       <item>
+        <widget class="QComboBox" name="mode">
+         <item>
+          <property name="text">
+           <string>Segmentation</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Segments</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
      <item>
       <widget class="QGroupBox" name="params">
        <property name="sizePolicy">
@@ -88,14 +109,14 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="segment_str">
           <property name="text">
            <string>Segment:</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="segments">
+         <widget class="QComboBox" name="segment">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -108,7 +129,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="view_str">
           <property name="text">
            <string>View:</string>
           </property>
@@ -153,6 +174,9 @@
           <property name="suffix">
            <string>%</string>
           </property>
+          <property name="minimum">
+           <double>0.010000000000000</double>
+          </property>
           <property name="singleStep">
            <double>0.010000000000000</double>
           </property>
@@ -175,6 +199,9 @@
           </property>
           <property name="suffix">
            <string>%</string>
+          </property>
+          <property name="minimum">
+           <double>0.010000000000000</double>
           </property>
           <property name="singleStep">
            <double>0.010000000000000</double>
@@ -381,7 +408,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Std. Error</string>
+           <string>Std. Error:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -475,7 +502,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>segments</sender>
+   <sender>segment</sender>
    <signal>currentIndexChanged(int)</signal>
    <receiver>AnalysisWidget</receiver>
    <slot>changeSegment()</slot>
@@ -538,6 +565,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>mode</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>AnalysisWidget</receiver>
+   <slot>changeMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>571</x>
+     <y>23</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>655</x>
+     <y>21</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>changeNumbins()</slot>
@@ -545,5 +588,6 @@
   <slot>changeSegment()</slot>
   <slot>changeConfidence()</slot>
   <slot>changeView()</slot>
+  <slot>changeMode()</slot>
  </slots>
 </ui>

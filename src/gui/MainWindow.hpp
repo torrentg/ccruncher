@@ -89,6 +89,8 @@ class MainWindow : public QMainWindow
     void updateToolBars(QMdiSubWindow *window);
     // process http request
     void processHttpRequest(QNetworkReply *);
+    // post a message in the status bar
+    void setStatusMsg(const QString &msg="");
 
 };
 

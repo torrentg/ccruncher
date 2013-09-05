@@ -244,8 +244,12 @@ char* ccruncher::CsvFile::trim(char *ptr)
 //===========================================================================
 // returns column values
 //===========================================================================
-void ccruncher::CsvFile::getValues(size_t col, vector<double> &ret, bool *stop) throw(Exception)
+void ccruncher::CsvFile::getColumn(int col, vector<double> &ret, bool *stop) throw(Exception)
 {
+  if (col < 0) {
+    return getRowSums(ret, stop);
+  }
+
   int rc;
   size_t numlines = 0;
 
@@ -276,7 +280,7 @@ void ccruncher::CsvFile::getValues(size_t col, vector<double> &ret, bool *stop) 
       }
 
       // read previous fields
-      for(size_t i=1; i<=col; i++)
+      for(int i=1; i<=col; i++)
       {
         rc = read();
         if (rc != 1 && i<col) {
@@ -310,6 +314,8 @@ void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Excep
 {
   int rc;
   size_t numlines = 0;
+  int numcols = 1;
+  int curcol = 0;
 
   ret.clear();
   open(filename, separators);
@@ -317,14 +323,16 @@ void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Excep
   try
   {
     // skip headers
-    while(read() == 1);
+    while(read() == 1) numcols++;
     numlines++;
 
     // read lines
     do
     {
       // read first field
+      curcol = -1;
       rc = read();
+      curcol = 0;
       if (rc != 1) {
         char *ptr = trim(ptr0);
         if (*ptr == 0) {
@@ -338,9 +346,12 @@ void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Excep
       // reading the rest of fields
       while (rc == 1) {
         rc = read();
+        curcol++;
         val += parse(trim(ptr0));
       }
-
+      if (curcol+1 != numcols) {
+        throw Exception("invalid file format");
+      }
       ret.push_back(val);
       numlines++;
 
@@ -351,6 +362,79 @@ void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Excep
   }
   catch(Exception &e)
   {
+    throw Exception(e.toString() + " at line " + Format::toString(numlines+1));
+  }
+}
+
+//===========================================================================
+// returns file content
+//===========================================================================
+void ccruncher::CsvFile::getColumns(vector<vector<double> > &ret, bool *stop) throw(Exception)
+{
+  int rc;
+  size_t numlines = 0;
+  int numcols = 1;
+  int curcol = 0;
+
+  ret.clear();
+  open(filename, separators);
+
+  try
+  {
+    // skip headers
+    while(read() == 1) numcols++;
+    numlines++;
+
+    ret.resize(numcols);
+
+    // read lines
+    do
+    {
+      // read first field
+      curcol = -1;
+      rc = read();
+      curcol = 0;
+      if (rc != 1) {
+        char *ptr = trim(ptr0);
+        if (*ptr == 0) {
+          // skip blank line
+          numlines++;
+          continue;
+        }
+      }
+      ret[curcol].push_back(parse(trim(ptr0)));
+
+      // reading the rest of fields
+      while (rc == 1) {
+        rc = read();
+        curcol++;
+        if (curcol >= numcols) {
+          throw Exception("unexpected value");
+        }
+        ret[curcol].push_back(parse(trim(ptr0)));
+      }
+
+      if (curcol+1 != numcols) {
+        throw Exception("expected value not found");
+      }
+
+      numlines++;
+
+      // check stop flag
+      if (stop != NULL && *stop) break;
+    }
+    while(rc != 3);
+  }
+  catch(Exception &e)
+  {
+    // remove last line
+    if (curcol+1 != numcols && ret.size() > 0) {
+      for(int i=0; i<curcol; i++) {
+        if (ret[i].size() > 0) {
+          ret[i].erase(ret[i].end()-1);
+        }
+      }
+    }
     throw Exception(e.toString() + " at line " + Format::toString(numlines+1));
   }
 }

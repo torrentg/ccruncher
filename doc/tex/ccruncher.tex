@@ -90,7 +90,7 @@
 % \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1143}
+\def\svnversion{R1144}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -149,8 +149,8 @@ topic with whom to discuss the issues raised in this document. Therefore,
 I thank Josep Fortiana for the indications and for those afternoons when I 
 could explain to someone what I was doing without looking crazy.
 
-I thank all those who write documents that open our minds and make us dream,
-people such as Gupton, Finger and Bhatia for \emph{CreditMetrics Technical 
+I thank all those who write documents that open our minds, people such as 
+Gupton, Finger and Bhatia for \emph{CreditMetrics Technical 
 Document}~\cite{cmetrics:1997}, Embrechts, McNeil and Straumann for
 \emph{Correlation and Dependence in Risk Management: Properties and 
 Pitfalls}~\cite{embrechts:2002}, Ntzoufras for his book \emph{Bayesian Modeling 
@@ -979,7 +979,7 @@ multivariate t-Student distribution.
 	$\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$ is
 	\begin{displaymath}
 		\begin{array}{ll}
-			R_{ij} = \frac{\sqrt{\Sigma_{ij}}}{\sqrt{\Sigma_{ii} \cdot \Sigma_{jj}}} & \forall\ i,j \\
+			R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \cdot \Sigma_{jj}}} & \forall\ i,j \\
 			w_i = \sqrt{\Sigma_{ii}} & i = 1,\dots,s \\
 		\end{array}
 	\end{displaymath}
