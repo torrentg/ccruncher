@@ -90,7 +90,7 @@
 % \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1147}
+\def\svnversion{R1148}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -144,17 +144,14 @@ Version \numversion\par
 I want to thank my wife Marga for loving me just as I am and for supporting 
 the decision to dedicate more than a year to this project.
 
-It is difficult to find people with mathematical skills and interest in the 
-topic with whom to discuss the issues raised in this document. Therefore, 
 I thank Josep Fortiana for the indications and for those afternoons when I 
-could explain to someone what I was doing without looking crazy.
+could explain to someone what I was doing.
 
 I thank all those who write documents that open our minds, people such as 
 Gupton, Finger and Bhatia for \emph{CreditMetrics Technical 
 Document}~\cite{cmetrics:1997}, Embrechts, McNeil and Straumann for
 \emph{Correlation and Dependence in Risk Management: Properties and 
-Pitfalls}~\cite{embrechts:2002}, Ntzoufras for his book \emph{Bayesian Modeling 
-Using WinBUGS}~\cite{ntzoufras:2009}, and Bluhm, Overbeck and Wagner for their 
+Pitfalls}~\cite{embrechts:2002}, and Bluhm, Overbeck and Wagner for their 
 book \emph{An Introduction to Credit Risk Modeling}~\cite{bluhm:2002}.
 
 Finally, I want to thank my mother for making me believe that anything is 
@@ -1383,6 +1380,7 @@ parameters to be inferred are $\nu,\vec{w},R$ \ul{and the latent variables
 $\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T$}.
 
 \begin{definition}[Conditional likelihood]
+	\label{def:clik}
 	Assume a set of observations $\{K^t, N^t\}_{t=1,\dots,T}$ in which $N^t$ 
 	and $K^t$ are vectors representing the number of obligors and defaulted 
 	obligors in each sector-rating bucket. We define the conditional 
@@ -1656,14 +1654,14 @@ not independent of one another; in fact, they form a multivariate distribution.
 	\label{prop:pemh}
 	We can estimate the parameters of the t-Student multi-factor copula from 
 	the observed annual number of defaults using the Metropolis-Hastings 
-	algorithm (see algorithm~\ref{alg:bimh}), considering
+	algorithm detailed in algorithm~\ref{alg:bimh}, considering
 ~\\
 ~\\
 \begin{listliketab} 
 	\begin{tabular}{Lll}
 		\textbullet & parameters $\theta \equiv \{ \nu,\vec{w},R,\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\}$ & \\
 		\textbullet & observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$ & \\
-		\textbullet & likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid \upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$ & \\
+		\textbullet & likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid \upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$ & see definition \ref{def:clik} \\
 		\textbullet & proposal distributions $q_j(\theta_j \mid \theta_j') \equiv N(\theta,\sigma_j)$ & all parameters\\
 		\textbullet & prior distribution $\nu \equiv \text{Unif}(2,1000)$ & \\
 		\textbullet & prior distribution $w_i \equiv \text{Unif}(0,1)$ & $i=1,\dots,s$ \\
@@ -1685,6 +1683,12 @@ not independent of one another; in fact, they form a multivariate distribution.
 	replaced by $x$. We do not need to know the limits of the integral
 	because this is constant and cancels into the M-H algorithm.
 \end{proposition}
+
+If you are interested in the Maximum Likelihood estimator, you can obtain an
+approximation of it taking the simulated parameter $\theta^{(0)}$ that maximizes
+$L(\theta^{(0)}) \cdot \prod_{t=1}^{T} \psi(\theta^{(0)}) \cdot \phi(\theta^{(0)})$ 
+in which $L$ is the conditional likelihood defined in definition \ref{def:clik},
+$\psi$ is the pdf of $\chi_{\nu}^2$, and $\phi$ is the pdf of $N(\vec{0},R)$.
 
 \begin{example}[Model parameters estimation]
 	\label{ex:calib}
@@ -2354,6 +2358,94 @@ exact value. Despite this, if the sample size is high enough, then the
 estimated value is good enough.
 
 %------------------------------------------------------------------------------
+% RISK DISAGGREGATION
+%------------------------------------------------------------------------------
+\section{Risk Disaggregation}
+\label{ss:ra}
+
+Once we have measured the credit risk, naturally arises the question 
+``how much of this risk corresponds to the business unit X?''. CCruncher
+allows to define and simulate sub-portfolio losses in order to respond
+this question.
+
+CCruncher simulates the entire portfolio loss at time $T$. It also allows 
+(in the same execution) the simulation of sub-portfolios losses. In CCruncher, 
+a sub-portfolio is called a \emph{segment}. The disjoint union of segments 
+covering the entire portfolio is called a \emph{segmentation}, i.e., a 
+segmentation is composed by non-overlapped segments that constitute the 
+entire portfolio. For example, we can define the segmentation of geographic
+areas where the bank operates composed by four segments \{N, S, E, W\}.
+When an obligor defaults, the loss of its assets is added into the 
+entire portfolio loss and into the segment loss where the obligor resides.
+CCruncher allows defining and managing multiple segmentations simultaneously. 
+The segmentations can be composed of obligors or assets. In the first case, 
+the obligor loss is aggregated to segment loss when the obligor defaults. 
+In the second case, the asset losses are aggregated to segment losses when 
+the obligor defaults.
+
+\begin{example}
+	We use the identical scenario as that described in example~\ref{ex:test05} 
+	and that corresponds to CCruncher input file 
+	\texttt{\$CCRUNCHER/samples/test05.xml}. This example defines a 
+	segmentation named \emph{sector-rating} with segments S1-A, S1-B, S1-C, 
+	S2-A, S2-B, S2-C. Segment X-Y is composed by the obligors located at sector
+	X with the rating Y; each segment has $\approx 166$ obligors.
+	Figure~\ref{fig:disaggregation} displays the risk disaggregated respect
+	this segmentation.
+\end{example}
+
+\begin{figure}[!h]
+	\centering
+	\subcaptionbox{EL disaggregation}{
+		\includegraphics[width=7cm]{disaggregation1}
+	}
+	\subcaptionbox{$\text{ES}_{99\%}$ disaggregation}{
+		\includegraphics[width=7cm]{disaggregation2}
+	}
+	\caption{Risk disaggregation}
+	\label{fig:disaggregation} 
+\end{figure}
+
+\subsection{Expected Loss}
+Expected Loss is additive respect the portfolio composition, i.e., if 
+$L$, $L_1$, and $L_2$ are respectively the portfolio, sub-portfolio 1, 
+and sub-portfolio 2 loss distributions in which $L=L_1+L_2$, then 
+$\text{EL}(L_1) + \text{EL}(L_2) = \text{EL}(L)$. The EL attributable
+to the k-th segment, in cash, is given by the following statistic:
+\begin{displaymath}
+	\text{EL}_k = \frac{1}{N} \displaystyle \sum_{i=1}^{N} x_i^k
+\end{displaymath}
+in which $x_i^k$ are the simulated losses of the k-th sub-portfolio.
+Dividing $\text{EL}_k$ by the portfolio EL gives the percentage of EL 
+consumed by this sub-portfolio.
+
+\subsection{Value at Risk}
+Value at Risk is not additive, it is not even sub-additive~\cite{var:varbad}.
+As mentioned in~\cite[chap. 5.2.2]{bluhm:2002}, calculating VaR risk 
+measure contributions is a natural but difficult attempt. In the CCruncher 
+case, problems arise when we try to estimate 
+$E\left(L_k \mid L = \text{VaR}_{\beta}(L)\right)$ because the subsample of 
+simulated sub-portfolio losses having a portfolio loss equal to 
+$\text{VaR}_{\beta}$ has a very small size. For this reason, CCruncher 
+don't provides support for VaR disaggregation.
+
+\subsection{Expected Shortfall}
+Expected Shortfall can be disaggregated using the simulated losses of the 
+portfolio and its sub-portfolios. As indicated 
+in~\cite[chap. 5.2.3]{bluhm:2002}, the contribution of k-th sub-portfolio 
+to ES is given by $E\left(L_k \mid L \ge \text{VaR}_{\beta}(L)\right)$.
+The ES attributable to the k-th segment, in cash, is given by the 
+following statistic:
+\begin{displaymath}
+	\text{ES}_k = \frac{1}{K} \displaystyle \sum_{i=1}^{K} y_i^k
+\end{displaymath}
+in which $x_i$ are the simulates portfolio losses, $x_i^k$ are the simulated 
+losses of the k-th sub-portfolio, and
+$\{y_1^k,\dots,y_K^k\} = \{x_i^k \mid x_i \ge \text{VaR}_{\beta}\}_{i=1\dots N}$ 
+are the simulated sub-portfolio losses having a portfolio loss large than 
+$\text{VaR}_{\beta}$.
+
+%------------------------------------------------------------------------------
 % VARIANCE REDUCTION
 %------------------------------------------------------------------------------
 \section{Variance Reduction}
@@ -2543,6 +2635,14 @@ extreme cases are represented.
 %------------------------------------------------------------------------------
 \section{Simulation Internals}
 
+\textbf{EAD and LGD interpolation}. Given an asset, CCruncher knows its EAD 
+and LGD values at fixed times $\{t_1,\dots,t_n\}$ provided by the user. When 
+we evaluate these functions in a time value distinct from those provided, we 
+use the following piecewise constant interpolation:
+\begin{displaymath}
+	F(t) = F(t_k) \quad \text{where} \quad t_{k-1} < t \le t_{k}
+\end{displaymath}
+
 \textbf{PD functions approximation}. CCruncher allows defining the PD
 functions using the transition matrix or defining explicitly the values
 at some fixed points. When PDs are defined using the transition matrix, 
@@ -2551,14 +2651,6 @@ month, and intermediate values are interpolated using cubic splines.
 When PDs are defined explicitly at some fixed points, then intermediate 
 values are interpolated using cubic splines; however, if the resulting 
 function is not strictly increasing, then CCruncher uses linear splines.
-
-\textbf{EAD and LGD interpolation}. Given an asset, CCruncher knows its EAD 
-and LGD values at fixed times $\{t_1,\dots,t_n\}$ provided by the user. When 
-we evaluate these functions in a time value distinct from those provided, we 
-use the following piecewise constant interpolation:
-\begin{displaymath}
-	F(t) = F(t_k) \quad \text{where} \quad t_{k-1} < t \le t_{k}
-\end{displaymath}
 
 \textbf{Function composition}. To speed up the evaluation of the function 
 $t=F_r^{-1}(t_{\nu}(x))$ involved in the simulation of obligors' default 
@@ -2601,23 +2693,6 @@ by the interest curve at time $t$. Don't consider this option if your EADs
 are the sum of cash flow on distinct dates. In this case, we recommend 
 filling the input file with the EADs' present value and setting to $0$ the 
 interest rate curve.
-
-\textbf{Risk aggregation}. 
-\label{ss:ra}
-CCruncher simulates the entire portfolio loss at time $T$. It also allows 
-(in the same execution) the simulation of sub-portfolios losses. In CCruncher, 
-a sub-portfolio is called a \emph{segment}. The disjoint union of segments 
-covering the entire portfolio is called a \emph{segmentation}, i.e., a 
-segmentation is composed by non-overlapped segments that constitute the 
-entire portfolio. For example, we define the segmentation of geographic
-areas where the bank operates composed by four segments \{N, S, E, W\}.
-When an obligor defaults, the loss of its assets is added into the 
-entire portfolio loss and into the segment loss where the obligor resides.
-CCruncher allows defining and managing multiple segmentations simultaneously. 
-The segmentations can be composed of obligors or assets. In the first case, 
-the obligor loss is aggregated to segment loss when the obligor defaults. 
-In the second case, the asset losses are aggregated to segment losses when 
-the obligor defaults.
 
 \textbf{Parallel computing}. 
 CCruncher parallelizes the portfolio loss sampling, spawning multiple 

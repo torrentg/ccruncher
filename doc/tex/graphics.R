@@ -585,3 +585,30 @@ for(i in 1:n) {
 # computing estimators
 exact(rcount)
 quick_and_dirty_correl(rcount$nu, K, N)
+
+# ================================================
+# risk disaggregation
+# ================================================
+names = c("S1-A", "S1-B", "S1-C", "S2-A", "S2-B", "S2-C")
+el = c(8.34436, 16.5874, 33.3918, 8.35995, 16.7023, 33.1902)
+es99 = c(48.1333, 66.6505, 90.7877, 40.5039, 58.075, 80.2446)
+
+labels1 = names
+for(i in 1:length(el)) {
+  labels1[i] = paste(names[i], "\n", round(100*el[i]/sum(el),2), "%")
+}
+
+labels2 = names
+for(i in 1:length(el)) {
+  labels2[i] = paste(names[i], "\n", round(100*es99[i]/sum(es99),2), "%")
+}
+
+pdf(file="disaggregation1.pdf", width=7, height=7)
+par(mar=c(0,0,0,0))
+pie(el, labels1, radius=0.8)
+dev.off()
+
+pdf(file="disaggregation2.pdf", width=7, height=7)
+par(mar=c(0,0,0,0))
+pie(es99, labels2, radius=0.8)
+dev.off()
