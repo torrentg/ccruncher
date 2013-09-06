@@ -37,15 +37,14 @@ usage() {
     CCruncher project. This script is only used by developers.
   options
     -s       update svnversion tag
-    -g num   update global version identifier
+    -g num   update svnversion and global version identifier tags
     -h       show this message and exit
   return codes:
     0        OK. finished without errors
     1        KO. finished with errors
   examples:
     $progname -s
-    $progname -g "1.0"
-    $progname -s -g "1.0"
+    $progname -g "2.3.0"
 
 _EOF_
 
@@ -55,6 +54,12 @@ _EOF_
 # readconf function
 #-------------------------------------------------------------
 readconf() {
+
+  if [ $# -eq 0 ]; then
+    echo "error: no arguments supplied.";
+    echo "Use -h for more information";
+    exit 1;
+  fi
 
   OPTIND=0
 
@@ -67,10 +72,10 @@ readconf() {
          gloversion_short=$(echo $OPTARG | sed -r 's/([0-9]+\.[0-9]+).*/\1/g');;
       h) usage; 
          exit 0;;
-     \?) echo "unknow option. use -h for more information"; 
+     \?) echo "error: unknow option.";
+         echo "Use -h for more information"; 
          exit 1;;
-      *) echo "unexpected error parsing arguments. Please report this bug sending";
-         echo "$progname version and arguments at gtorrent@ccruncher.net";
+      *) echo "panic: unexpected error parsing arguments.";
          exit 1;;
     esac
   done
@@ -80,8 +85,8 @@ readconf() {
   if [ "$*" != "" ]; then
     for arg in "$@"
     do
-      echo "unexpected argument: $arg";
-      echo "please, try again";
+      echo "error: unexpected argument '$arg'";
+      echo "Please, try again";
       exit 1;
     done
   fi
@@ -106,7 +111,7 @@ getSvnVersion() {
   svnversion=R$(svn info http://www.ccruncher.net/svn/ | awk '/Revision:/ { print $2 }');
  
   if [ $? != 0 ]; then
-    echo "problems retrieving svnversion";
+    echo "error: problems retrieving svnversion";
     exit 1;
   fi
 }
@@ -119,7 +124,17 @@ readconf $@;
 
 getPath;
 
-if [ "$csvn" = "true" ]; then
+# date en format dd-mmm-yyyy (eg. 01-Jan-2014)
+# observe month 1st letter capitalized
+LANG=en_US.utf8
+DAY=$(date +%d);
+MONTH=$(date +%b);
+MONTH=${MONTH^}
+YEAR=$(date +%Y);
+curdate=$DAY-$MONTH-$YEAR
+
+# update svn version tag
+if [ "$csvn" = "true" ] || [ "$cver" = "true" ]; then
   getSvnVersion;
   sed -i -e "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/configure.ac
   sed -i -e "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h.in
@@ -127,11 +142,14 @@ if [ "$csvn" = "true" ]; then
   sed -i -e "s/\\\def\\\svnversion{.*}/\\\def\\\svnversion{$svnversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
 fi
 
+# update global version tag
 if [ "$cver" = "true" ]; then
   sed -i -e "s/AC_INIT(ccruncher,\([^,]*\),\(.*\))/AC_INIT(ccruncher, $gloversion,\\2)/g" $CCRUNCHERPATH/configure.ac
   sed -i -e "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$gloversion_short}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
   sed -i -e "s/<span class=\"version\">.*<\/span>/<span class=\"version\">$gloversion<\/span>/g" $CCRUNCHERPATH/doc/html/*.html
-  sed -i -e "s/version\:.*/version\: XXX/g" $CCRUNCHERPATH/doc/html/version
+  sed -i -e "s/Last modified: .*/Last modified: $curdate/g" $CCRUNCHERPATH/doc/html/*.html
+  sed -i -e "s/version\:.*/version\: $gloversion/g" $CCRUNCHERPATH/doc/html/version
+  sed -i -e "s/date\:.*/date\: $curdate/g" $CCRUNCHERPATH/doc/html/version
   echo "you need to run autoconf to take effect some changes";
 fi
 
