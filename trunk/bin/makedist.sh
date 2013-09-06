@@ -133,7 +133,7 @@ prepare() {
   numversion=$(grep AC_INIT $1/configure.ac | cut -d"," -f2 | tr -d ' ');
 
   # update subversion revision info
-  $1/bin/rollversion.sh -s;
+  $1/bin/rollversion.sh -g "$numversion";
   if [ $? != 0 ]; then
     echo "error setting current svn version";
     exit 1;
@@ -152,7 +152,7 @@ prepare() {
   
   # remove developers files
   rm $1/bin/makedist.sh;
-  rm $1/bin/rollversion.sh
+  rm $1/bin/rollversion.sh;
   rm $1/bin/tests.sh;
   rm $1/bin/tests.R;
   rm $1/doc/html/version;
