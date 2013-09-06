@@ -8,7 +8,7 @@ dnl -------------------------------------------------------------
 dnl initializing procedures
 dnl -------------------------------------------------------------
 AC_PREREQ(2.59)
-AC_INIT(ccruncher, 2.3, gtorrent@ccruncher.net, ccruncher, http://www.ccruncher.net)
+AC_INIT(ccruncher, 2.3.0, gtorrent@ccruncher.net, ccruncher, http://www.ccruncher.net)
 AC_CONFIG_SRCDIR([src/kernel/MonteCarlo.hpp])
 AC_CONFIG_HEADER([src/utils/config.h],,[src/utils/config.h.in])
 AM_INIT_AUTOMAKE
@@ -132,7 +132,7 @@ dnl -------------------------------------------------------------
 AH_BOTTOM([
 
 /* subversion identifier */
-#define SVN_VERSION "R1111"
+#define SVN_VERSION "R1147"
 
 ])
 
