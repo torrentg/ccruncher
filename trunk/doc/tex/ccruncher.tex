@@ -90,7 +90,7 @@
 % \SetWatermarkScale{0.75}
 
 \def\numversion{2.3}
-\def\svnversion{R1148}
+\def\svnversion{R1149}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -118,18 +118,18 @@
 %==============================================================================
 \begingroup
 \thispagestyle{empty}
-\AddToShipoutPicture*{\put(6,5){\includegraphics[scale=1]{background1}}}
+%\AddToShipoutPicture*{\put(6,5){\includegraphics[scale=1]{background1}}}
 \vspace*{-2.5cm}
 \centerline{\includegraphics[angle=0]{./Pictures/logo.png}}
 \centering
-\vspace*{1.0cm}
+\vspace*{0.0cm}
 \par\normalfont\fontsize{35}{55}\sffamily\selectfont
 Quantifying\par 
 Portfolio Credit Risk\par
 Using CCruncher\par
-\vspace*{0.5cm}
+\vspace*{2.0cm}
 {\huge Gerard Torrent-Gironella}\par
-\vspace*{1cm}
+\vspace*{2.0cm}
 \par\normalfont\fontsize{18}{18}\sffamily\selectfont
 Version \numversion\par
 \endgroup
@@ -141,8 +141,8 @@ Version \numversion\par
 \newpage
 
 \section*{Acknowledgements}
-I want to thank my wife Marga for loving me just as I am and for supporting 
-the decision to dedicate more than a year to this project.
+I want to thank my wife Marga for supporting the decision to dedicate more 
+than a year to this project.
 
 I thank Josep Fortiana for the indications and for those afternoons when I 
 could explain to someone what I was doing.
@@ -479,10 +479,10 @@ risk measures can skip the last section referring to parameters' uncertainty.
 \label{sec:pd}
 
 One pillar of the multivariate time-until-default model is the probability 
-of default over time. In this section, we define and construct these curves 
-using available information such as the 1-year PDs or the ratings 
-transition matrix. Those who already know how to obtain the PDs over time 
-can skip this section and go directly to the multivariate model section.
+of default over time. In this section, we construct these curves using 
+available information such as the 1-year PDs or the ratings transition 
+matrix. Those who already know how to obtain the PDs over time can skip 
+this section and go directly to the multivariate model section.
 
 \begin{definition}[Probability of Default (PD)]
 	$T_i$ is the random variable that represents the default time 

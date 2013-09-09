@@ -251,41 +251,41 @@
     </p>
     <pre>
 
-<b>  > bin/ccruncher-cmd -h</b>
+<b>> bin/ccruncher-cmd -h</b>
 
-  Usage: ccruncher-cmd [OPTION]... -o DIRECTORY [FILE]
+Usage: ccruncher-cmd [OPTION]... -o DIRECTORY [FILE]
 
-  Simule the loss distribution of the credit portfolio described in the xml
-  input FILE using the Monte Carlo method. FILE can be gziped. If no one is
-  given, then STDIN is considered. The input file format description and
-  details of the simulation procedure can be found at http://www.ccruncher.net.
+Simule the loss distribution of the credit portfolio described in the xml
+input FILE using the Monte Carlo method. FILE can be gziped. If no one is
+given, then STDIN is considered. The input file format description and
+details of the simulation procedure can be found at http://www.ccruncher.net.
 
-  Mandatory arguments to long options are mandatory for short options too.
+Mandatory arguments to long options are mandatory for short options too.
 
-    -D, --define=KEY=VAL    replace '$KEY' strings by 'VAL' in input file
-    -a, --append            output data is appended to existing files
-    -w, --overwrite         existing output files are overwritten
-    -o, --output=DIRECTORY  directory where output files will be placed
-    -i, --indexes           create file indexes.csv with info about simulation
-        --nice=NICEVAL      set process priority to NICEVAL (see nice command)
-        --threads=NTHREADS  number of threads to use (default=number of cores)
-        --hash=HASHNUM      print '.' for each HASHNUM simulations (default=1000)
-        --info              show build parameters and exit
-    -h, --help              show this message and exit
-        --version           show version and exit
+  -D, --define=KEY=VAL    replace '$KEY' strings by 'VAL' in input file
+  -a, --append            output data is appended to existing files
+  -w, --overwrite         existing output files are overwritten
+  -o, --output=DIRECTORY  directory where output files will be placed
+  -i, --indexes           create file indexes.csv with info about simulation
+      --nice=NICEVAL      set process priority to NICEVAL (see nice command)
+      --threads=NTHREADS  number of threads to use (default=number of cores)
+      --hash=HASHNUM      print '.' for each HASHNUM simulations (default=1000)
+      --info              show build parameters and exit
+  -h, --help              show this message and exit
+      --version           show version and exit
 
-  Exit status:
-    0   finished without errors
-    1   finished with errors
+Exit status:
+  0   finished without errors
+  1   finished with errors
 
-  Examples:
-    basic example      ccruncher-cmd -o data/ samples/test04.xml
-    forcing overwrite  ccruncher-cmd -w -o data/ samples/test100.xml
-    redefining values  ccruncher-cmd -w -o data/ -D ndf=8 samples/sample.xml
+Examples:
+  basic example      ccruncher-cmd -o data/ samples/test04.xml
+  forcing overwrite  ccruncher-cmd -w -o data/ samples/test100.xml
+  redefining values  ccruncher-cmd -w -o data/ -D ndf=8 samples/sample.xml
 
-  Report bugs to gtorrent@ccruncher.net. Please include the output of
-  'ccruncher-cmd --info' in the body of your report and attach the input
-  file if at all possible.
+Report bugs to gtorrent@ccruncher.net. Please include the output of
+'ccruncher-cmd --info' in the body of your report and attach the input
+file if at all possible.
     </pre>
     <p>
       The following example simulates the input file <code>samples/test05.xml</code> 
@@ -294,77 +294,15 @@
     </p>
     <pre>
 
-<b>  > bin/ccruncher-cmd -w -o data -DNU=12.54 -DW1=0.29 -DW2=0.48 -DR12=0.21 samples/test05.xml</b>
-
-          ccruncher is Copyright (C) 2004-2013 Gerard Torrent and licensed
-           under the GNU General Public License, version 2. More info at
-                              http://www.ccruncher.net
-
-  general information ************************************************************
-    ccruncher version                                                  2.3 (R1039)
-    start time (dd/MM/yyyy hh:mm:ss)                           30/07/2013 13:16:58
-
-  reading input file *************************************************************
-    file name                                                 [samples/test05.xml]
-    file size                                                            276.69 KB
-    define (user defined)                                                 NU=12.54
-    define (user defined)                                                 R12=0.21
-    define (user defined)                                                  W1=0.29
-    define (user defined)                                                  W2=0.48
-    define (input file)                                             numsims=200000
-    define (input file)                                            copula=t(12.54)
-    define (input file)                                            antithetic=true
-    define (input file)                                                   lhs=1000
-    define (input file)                                                     seed=0
-    file checksum (adler32)                                              578526229
-    elapsed time parsing data                                         00:00:00.046
-
-  initialization procedure *******************************************************
-    setting parameters -----------------------------------------------------------
-      initial date                                                      01/01/2013
-      end date                                                          01/01/2014
-      number of ratings                                                          4
-      number of factors                                                          2
-      copula type                                                         t(12.54)
-      transition matrix period (months)                                         12
-      transition matrix regularization error (1M)                                0
-      default probability functions                                       computed
-      default probability splines (linear, cubic, none)                       cccn
-    setting obligors to simulate -------------------------------------------------
-      simulate only active obligors                                           true
-      number of obligors                                                      1000
-      number of simulated obligors                                            1000
-    setting assets to simulate ---------------------------------------------------
-      number of assets                                                        1000
-      number of simulated assets                                              1000
-    initializing aggregators -----------------------------------------------------
-      output data directory                                                 [data]
-      segmentation            [/home/gerard/projects/ccruncher/data/portfolio.csv]
-      segmentation        [/home/gerard/projects/ccruncher/data/sector-rating.csv]
-
-  Monte Carlo ********************************************************************
-    configuration ----------------------------------------------------------------
-      seed used to initialize randomizer                          1375183018300495
-      maximum execution time (seconds)                                       86400
-      maximum number of iterations                                          200000
-      antithetic mode                                                         true
-      latin hypercube sampling                                                1000
-      thread block size                                                        128
-      number of threads                                                          4
-    running Monte Carlo [1000 simulations per hash] ------------------------------
-      ............................................................................
-      ............................................................................
-      ................................................
-      simulations realized                                                  200000
-      elapsed time creating random numbers                            00:00:01.003
-      elapsed time simulating obligors                                00:00:01.423
-      elapsed time writing data to disk                               00:00:00.272
-      total simulation time                                           00:00:02.720
-
-  general information ************************************************************
-    end time (dd/MM/yyyy hh:mm:ss)                             30/07/2013 13:17:01
-    total elapsed time                                                00:00:02.875
-    </pre>
+<b>> bin/ccruncher-cmd -w -o data -DNU=12.54 -DW1=0.29 -DW2=0.48 -DR12=0.21 samples/test05.xml</b>
+  </pre>
+  <p>
+    Command line execution outputs a 80-colum width 
+    <a href="ofileref.html#trace">trace</a> cointaining valuable info. 
+    We recommend to save this trace becasue it contains the file name and its 
+    checksum, the macros values, the RNG seed, and a description of the problem 
+    that is simulated.
+  </p>
 
 <!-- ==================================================== -->
 <!--    flying solo                                       -->

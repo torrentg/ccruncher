@@ -175,17 +175,17 @@
     </p>
     <pre>
 
-  &lt;segmentations&gt;
-    &lt;segmentation name="portfolio" components="obligor"/&gt;
-    &lt;segmentation name="sector-rating" components="asset"&gt;
-      &lt;segment name="S1-A"/&gt;
-      &lt;segment name="S1-B"/&gt;
-      &lt;segment name="S1-C"/&gt;
-      &lt;segment name="S2-A"/&gt;
-      &lt;segment name="S2-B"/&gt;
-      &lt;segment name="S2-C"/&gt;
-    &lt;/segmentation&gt;
-  &lt;/segmentations&gt;
+&lt;segmentations&gt;
+  &lt;segmentation name="portfolio" components="obligor"/&gt;
+  &lt;segmentation name="sector-rating" components="asset"&gt;
+    &lt;segment name="S1-A"/&gt;
+    &lt;segment name="S1-B"/&gt;
+    &lt;segment name="S1-C"/&gt;
+    &lt;segment name="S2-A"/&gt;
+    &lt;segment name="S2-B"/&gt;
+    &lt;segment name="S2-C"/&gt;
+  &lt;/segmentation&gt;
+&lt;/segmentations&gt;
     </pre>
     <p>
       Each row corresponds to a simulation performed by CCruncher, and each column 
@@ -193,20 +193,20 @@
     </p>
     <pre>
 
-  "S1-A", "S1-B", "S1-C", "S2-A", "S2-B", "S2-C"
-  44.00, 46.00, 75.00, 32.00, 39.00, 69.00
-  9.00, 30.00, 41.00, 14.00, 36.00, 35.00
-  0.00, 0.00, 3.00, 1.00, 0.00, 3.00
-  11.00, 21.00, 57.00, 13.00, 28.00, 67.00
-  11.00, 14.00, 37.00, 5.00, 8.00, 16.00
-  5.00, 17.00, 32.00, 13.00, 25.00, 57.00
-  12.00, 19.00, 29.00, 6.00, 9.00, 24.00
-  13.00, 31.00, 39.00, 18.00, 55.00, 71.00
-  1.00, 3.00, 10.00, 2.00, 2.00, 7.00
-  21.00, 30.00, 65.00, 15.00, 37.00, 77.00
-  0.00, 5.00, 8.00, 5.00, 11.00, 29.00
-  ...
-  24.00, 57.00, 76.00, 14.00, 23.00, 40.00
+"S1-A", "S1-B", "S1-C", "S2-A", "S2-B", "S2-C"
+44.00, 46.00, 75.00, 32.00, 39.00, 69.00
+9.00, 30.00, 41.00, 14.00, 36.00, 35.00
+0.00, 0.00, 3.00, 1.00, 0.00, 3.00
+11.00, 21.00, 57.00, 13.00, 28.00, 67.00
+11.00, 14.00, 37.00, 5.00, 8.00, 16.00
+5.00, 17.00, 32.00, 13.00, 25.00, 57.00
+12.00, 19.00, 29.00, 6.00, 9.00, 24.00
+13.00, 31.00, 39.00, 18.00, 55.00, 71.00
+1.00, 3.00, 10.00, 2.00, 2.00, 7.00
+21.00, 30.00, 65.00, 15.00, 37.00, 77.00
+0.00, 5.00, 8.00, 5.00, 11.00, 29.00
+...
+24.00, 57.00, 76.00, 14.00, 23.00, 40.00
     </pre>
     <p>
       When there is more than one segment, the sum of row losses can 
@@ -248,19 +248,19 @@
     </p>
     <pre>
 
-  "thread", "lhs", "antithetic"
-  1, 1, 0
-  1, 1, 0
-  2, 1, 1
-  2, 1, 0
-  1, 1, 1
-  2, 1, 0
-  ...
-  1, 21, 0
-  1, 21, 1
-  ...
-  2, 51, 0
-  2, 51, 1
+"thread", "lhs", "antithetic"
+1, 1, 0
+1, 1, 0
+2, 1, 1
+2, 1, 0
+1, 1, 1
+2, 1, 0
+...
+1, 21, 0
+1, 21, 1
+...
+2, 51, 0
+2, 51, 1
     </pre>
 
 <!-- ==================================================== -->
@@ -281,74 +281,74 @@
     </p>
     <pre>
 
-          ccruncher is Copyright (C) 2004-2013 Gerard Torrent and licensed
-           under the GNU General Public License, version 2. More info at
-                              http://www.ccruncher.net
+        ccruncher is Copyright (C) 2004-2013 Gerard Torrent and licensed        
+         under the GNU General Public License, version 2. More info at          
+                            http://www.ccruncher.net                            
 
-  general information ************************************************************
-    ccruncher version                                                  2.3 (R1039)
-    start time (dd/MM/yyyy hh:mm:ss)                           30/07/2013 13:16:58
+general information ************************************************************
+  ccruncher version                                                2.3.0 (R1147)
+  start time (dd/MM/yyyy hh:mm:ss)                           08/09/2013 08:11:29
 
-  reading input file *************************************************************
-    file name                                                 [samples/test05.xml]
-    file size                                                            276.69 KB
-    define (user defined)                                                 NU=12.54
-    define (user defined)                                                 R12=0.21
-    define (user defined)                                                  W1=0.29
-    define (user defined)                                                  W2=0.48
-    define (input file)                                             numsims=200000
-    define (input file)                                            copula=t(12.54)
-    define (input file)                                            antithetic=true
-    define (input file)                                                   lhs=1000
-    define (input file)                                                     seed=0
-    file checksum (adler32)                                              578526229
-    elapsed time parsing data                                         00:00:00.046
+reading input file *************************************************************
+  file name                                                 [samples/test05.xml]
+  file size                                                            274.74 KB
+  define (user defined)                                                 NU=12.54
+  define (user defined)                                                 R12=0.21
+  define (user defined)                                                  W1=0.29
+  define (user defined)                                                  W2=0.48
+  define (input file)                                             numsims=200000
+  define (input file)                                            copula=t(12.54)
+  define (input file)                                            antithetic=true
+  define (input file)                                                   lhs=1000
+  define (input file)                                                     seed=0
+  file checksum (adler32)                                             4053574356
+  elapsed time parsing data                                         00:00:00.022
 
-  initialization procedure *******************************************************
-    setting parameters -----------------------------------------------------------
-      initial date                                                      01/01/2013
-      end date                                                          01/01/2014
-      number of ratings                                                          4
-      number of factors                                                          2
-      copula type                                                         t(12.54)
-      transition matrix period (months)                                         12
-      transition matrix regularization error (1M)                                0
-      default probability functions                                       computed
-      default probability splines (linear, cubic, none)                       cccn
-    setting obligors to simulate -------------------------------------------------
-      simulate only active obligors                                           true
-      number of obligors                                                      1000
-      number of simulated obligors                                            1000
-    setting assets to simulate ---------------------------------------------------
-      number of assets                                                        1000
-      number of simulated assets                                              1000
-    initializing aggregators -----------------------------------------------------
-      output data directory                                                 [data]
-      segmentation            [/home/gerard/projects/ccruncher/data/portfolio.csv]
-      segmentation        [/home/gerard/projects/ccruncher/data/sector-rating.csv]
+initialization procedure *******************************************************
+  setting parameters -----------------------------------------------------------
+    initial date                                                      01/01/2013
+    end date                                                          01/01/2014
+    number of ratings                                                          4
+    number of factors                                                          2
+    copula type                                                         t(12.54)
+    transition matrix period (months)                                         12
+    transition matrix regularization error (1M)                                0
+    default probability functions                                       computed
+    default probability splines (linear, cubic, none)                       cccn
+  setting obligors to simulate -------------------------------------------------
+    simulate only active obligors                                           true
+    number of obligors                                                      1000
+    number of simulated obligors                                            1000
+  setting assets to simulate ---------------------------------------------------
+    number of assets                                                        1000
+    number of simulated assets                                              1000
+  initializing aggregators -----------------------------------------------------
+    output data directory                                                 [data]
+    segmentation            [/home/gerard/projects/ccruncher/data/portfolio.csv]
+    segmentation        [/home/gerard/projects/ccruncher/data/sector-rating.csv]
 
-  Monte Carlo ********************************************************************
-    configuration ----------------------------------------------------------------
-      seed used to initialize randomizer                          1375183018300495
-      maximum execution time (seconds)                                       86400
-      maximum number of iterations                                          200000
-      antithetic mode                                                         true
-      latin hypercube sampling                                                1000
-      thread block size                                                        128
-      number of threads                                                          4
-    running Monte Carlo [1000 simulations per hash] ------------------------------
-      ............................................................................
-      ............................................................................
-      ................................................
-      simulations realized                                                  200000
-      elapsed time creating random numbers                            00:00:01.003
-      elapsed time simulating obligors                                00:00:01.423
-      elapsed time writing data to disk                               00:00:00.272
-      total simulation time                                           00:00:02.720
+Monte Carlo ********************************************************************
+  configuration ----------------------------------------------------------------
+    seed used to initialize randomizer                          1378620689362757
+    maximum execution time (seconds)                                       86400
+    maximum number of iterations                                          200000
+    antithetic mode                                                         true
+    latin hypercube sampling                                                1000
+    thread block size                                                        128
+    number of threads                                                          4
+  running Monte Carlo [1000 simulations per hash] ------------------------------
+    ............................................................................
+    ............................................................................
+    ................................................
+    simulations realized                                                  200000
+    elapsed time creating random numbers                            00:00:01.055
+    elapsed time simulating obligors                                00:00:01.482
+    elapsed time writing data to disk                               00:00:00.292
+    total simulation time                                           00:00:02.844
 
-  general information ************************************************************
-    end time (dd/MM/yyyy hh:mm:ss)                             30/07/2013 13:17:01
-    total elapsed time                                                00:00:02.875
+general information ************************************************************
+  end time (dd/MM/yyyy hh:mm:ss)                             08/09/2013 08:11:32
+  total elapsed time                                                00:00:02.880
     </pre>
 
     <div id="page-footer">
