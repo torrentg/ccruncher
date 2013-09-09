@@ -21,6 +21,7 @@ version 2.3.0 (Sep. 2013)
   * parameter 'portfolio.onlyActiveObligors' renamed to 'onlyActiveObligors'
   * added segment 'All' in analysis tab
   * added segmentation analysis (piechart graphics)
+  * implemented file drag-and-drop
 
 version 2.2 (Mar. 2013)
 --------------------------

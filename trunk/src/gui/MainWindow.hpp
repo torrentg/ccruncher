@@ -29,6 +29,10 @@
 #include <QUrl>
 #include <QMap>
 #include <QCloseEvent>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDragLeaveEvent>
+#include <QDropEvent>
 #include <QToolBar>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -67,6 +71,14 @@ class MainWindow : public QMainWindow
 
     // close event
     void closeEvent(QCloseEvent *event);
+     // this event is called when the mouse enters the widgets area during a drag/drop operation
+    void dragEnterEvent(QDragEnterEvent *event);
+    // this event is called when the mouse moves inside the widgets area during a drag/drop operation
+    void dragMoveEvent(QDragMoveEvent *event);
+    // this event is called when the mouse leaves the widgets area during a drag/drop operation
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    // this event is called when the drop operation is initiated at the widget
+    void dropEvent(QDropEvent *event);
 
   public:
 
