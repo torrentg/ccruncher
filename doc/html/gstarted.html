@@ -77,7 +77,7 @@
 
     <ol>
       <li><a href="#first_steps">First steps</a></li>
-      <li><a href="#segmentations">Using segmentations</a></li>
+      <li><a href="#analysis">Risk analysis</a></li>
       <li><a href="#macros">Using macros</a></li>
       <li><a href="#command_line">Using command line</a></li>
       <li><a href="#flying_solo">Flying solo</a></li>
@@ -89,7 +89,7 @@
     <a name="first_steps"></a>
     <h2>1. First steps</h2>
     <p>
-      Follow these steps to install CCruncher and discover its capabilities.
+      Follow these steps to install CCruncher and perform your first simulation.
     </p>
     <ol>
       <li>
@@ -111,10 +111,7 @@
         Open file <code>samples/test05.xml</code>.
       </li>
       <li>
-        Click on the 'Edit' button, or the 'Edit' icon, to view the input file content.
-      </li>
-      <li>
-        Return to the simulation tab.
+        Click on the 'Monte Carlo' button.
       </li>
       <li>
         Set <code>data/</code> as output directory.
@@ -127,64 +124,54 @@
       </li>
       <li>
         Open a file browser and review the content of the <code>data/</code> directory.
-        Observe the new file named <code>portfolio.csv</code>. Open it and inspect
-        its content. The values are the simulated portfolio losses.
-      </li>
-      <li>
-        Return to CCruncher.
-      </li>
-      <li>
-        Open output data files clicking the links in the trace, or clicking the 
-        'Data analysis' icon, or using the 'File > Open file' dialog.
-      </li>
-      <li>
-        Do your risk analysis.
+        Observe the output files named <code>portfolio.csv</code> and 
+        <code>sector-rating.csv</code>. Open it and inspect its content. 
+        The values are the simulated portfolio losses. The output file format
+        is described <a href="ofileref.html#segmentation">here</a>.
       </li>
     </ol>
 
 <!-- ==================================================== -->
-<!--    segmentations                                     -->
+<!--    analysis                                          -->
 <!-- ==================================================== -->
-    <a name="segmentations"></a>
-    <h2>2. Using segmentations</h2>
+    <a name="analysis"></a>
+    <h2>2. Risk analysis</h2>
     <p>
-      Segmentations are a powerful mechanism to define sub-portfolios.
-      This feature can be used to disaggregate the risk of the whole
-      portfolio. CCruncher simulates all the sub-portfolios defined 
-      in the <code>&lt;segmentations&gt;</code> section of the input
-      file and creates an output file for each one of them.
+      Output files contain the simulated portfolio and sub-portfolios 
+      losses. The <a href="ccruncher.pdf">technical document</a> explains 
+      how to use these simulated values to compute the Expected Loss (EL), 
+      Value at Risk (VaR), Expected Shortfall(ES), and how to disaggregate 
+      by sub-portfolios these risk measures. We encourage using your 
+      preferred data analysis tool (Excel, R, SAS, SPSS, etc.) to compute 
+      these values using the simulated losses. The following lines explain
+      how you can do the credit risk analysis using CCruncher:
     </p>
     <ol>
       <li>
-        Open file <code>samples/test03.xml</code>.
+        Open <code>sector-rating.csv</code> output data file. You can use 
+        the 'File > Open file' dialog, or click the output file link in the 
+        simulation trace, or click the 'Data analysis' icon.
       </li>
       <li>
-        Set <code>data/</code> as output directory.
+        CCruncher display the analysis tab. The top-right combobox 
+        indicates the analysis mode. There are two analysis modes:
+        'Segmentation' and 'Segments'.
       </li>
       <li>
-        Edit the input file pressing the 'Edit' button.
+        Set the 'Segmentation' mode. In this mode, CCruncher displays
+        the risk disaggregation when there is more than a segment
+        defined. The pie chart values indicate the percentage of risk 
+        attributable to the given sub-portfolio (right-click or ctrl-C
+        to copy values to clipboard). The 'Results' section shows the 
+        whole portfolio risk measure.
       </li>
       <li>
-        Locate the <code>&lt;segmentations&gt;</code> sections.
-      </li>
-      <li>
-        Enable the 'offices' segmentation.
-      </li>
-      <li>
-        Save the changes made in input file.
-      </li>
-      <li>
-        Click the 'Run' button, or the 'Run' icon, to execute the Monte Carlo simulation. 
-      </li>
-      <li>
-        Open a file browser and review the content of the <code>data/</code> directory.
-        Observe the new file named <code>offices.csv</code>. Open it and inspect its 
-        content. Each column is a segment of the segmentation 'offices'. The 'unassigned' 
-        segment appears because the obligor '100' isn't assigned to any segment of the 
-        'offices' segmentation.
-      </li>
-      <li>
-        Click the 'Data analysis' icon to analyze the risk of the segmentations.
+        Set the 'Segments' mode. In this mode, CCruncher performs 
+        the risk analysis of the indicated segment. If you are analyzing 
+        a segment/sub-portfolio distinct than the whole portfolio, remain 
+        that risk measures distinct than EL aren't additives. The curve plot 
+        displays the risk measure evolution depending on the number of samples
+        (right-click or ctrl-C to copy values to clipboard).
       </li>
     </ol>
     
@@ -200,13 +187,7 @@
     </p>
     <ol>
       <li>
-        Open file <code>samples/test03.xml</code>.
-      </li>
-      <li>
-        Set <code>data/</code> as output directory.
-      </li>
-      <li>
-        Edit the input file pressing the 'Edit' button.
+        Open file <code>samples/test05.xml</code>.
       </li>
       <li>
         Create a new define adding the following line into the <code>&lt;defines&gt;</code> tag:<br/>
@@ -218,6 +199,12 @@
       </li>
       <li>
         Save the changes made in input file.
+      </li>
+      <li>
+        Click on the 'Monte Carlo' button. 
+      </li>
+      <li>
+        Set <code>data/</code> as output directory.
       </li>
       <li>
         Click on the 'Set ...' defines button.
@@ -334,7 +321,7 @@ file if at all possible.
         Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
       </span>
       <span id="modified">
-        Last modified: 06-Sep-2013
+        Last modified: 09-Sep-2013
       </span>
     </div>
 

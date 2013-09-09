@@ -43,6 +43,7 @@ ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidge
   network(this)
 {
   ui->setupUi(this);
+  setAcceptDrops(true);
 
   // setting mdi area
   mdiArea = new QMdiArea;
@@ -95,6 +96,38 @@ void ccruncher_gui::MainWindow::closeEvent(QCloseEvent *event)
   } else {
     //TODO: save settings
     event->accept();
+  }
+}
+
+//===========================================================================
+// drag-and-drop event
+// see http://qt-project.org/wiki/Drag_and_Drop_of_files
+//===========================================================================
+void ccruncher_gui::MainWindow::dragEnterEvent(QDragEnterEvent* event) {
+  // if some actions should not be usable, like move, this code must be adopted
+  event->acceptProposedAction();
+}
+
+void ccruncher_gui::MainWindow::dragMoveEvent(QDragMoveEvent* event) {
+  // if some actions should not be usable, like move, this code must be adopted
+  event->acceptProposedAction();
+}
+
+void ccruncher_gui::MainWindow::dragLeaveEvent(QDragLeaveEvent* event) {
+  event->accept();
+}
+
+void ccruncher_gui::MainWindow::dropEvent(QDropEvent* event)
+{
+  const QMimeData* mimeData = event->mimeData();
+
+  // check for our needed mime type, here a file or a list of files
+  if (mimeData->hasUrls()) {
+    QList<QUrl> urlList = mimeData->urls();
+    // extract the local paths of the files
+    for (int i=0; i<urlList.size() && i<32; ++i) {
+      openFile(urlList.at(i));
+    }
   }
 }
 
@@ -172,7 +205,7 @@ void ccruncher_gui::MainWindow::selectFile()
     QUrl url = QUrl::fromLocalFile(filename);
     if (!filename.toLower().endsWith("csv")) {
       url.setPath(url.toLocalFile());
-      url.setScheme("exec");
+      //url.setScheme("exec");
     }
     openFile(url);
   }
