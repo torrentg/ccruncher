@@ -109,21 +109,21 @@
 
     <pre>
 
-  &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-  &lt;ccruncher&gt;
-    &lt;title&gt;<i>your simulation title here</i>&lt;/title&gt;
-    &lt;description&gt;<i>your simulation description here</i>&lt;/description&gt;
-    <a href="#defines">&lt;defines&gt;</a>        ...        <a href="#defines">&lt;/defines&gt;</a>
-    <a href="#parameters">&lt;paramaters&gt;</a>     ...     <a href="#parameters">&lt;/parameters&gt;</a>
-    <a href="#interest">&lt;interest&gt;</a>       ...       <a href="#interest">&lt;/interest&gt;</a>
-    <a href="#ratings">&lt;ratings&gt;</a>        ...        <a href="#ratings">&lt;/ratings&gt;</a>
-    <a href="#transitions">&lt;transitions&gt;</a>    ...    <a href="#transitions">&lt;/transitions&gt;</a>
-    <a href="#factors">&lt;factors&gt;</a>        ...        <a href="#factors">&lt;/factors&gt;</a>
-    <a href="#correlations">&lt;correlations&gt;</a>   ...   <a href="#correlations">&lt;/correlations&gt;</a>
-    <a href="#segmentations">&lt;segmentations&gt;</a>  ...  <a href="#segmentations">&lt;/segmentations&gt;</a>
-    <a href="#portfolio">&lt;portfolio&gt;</a>      ...      <a href="#portfolio">&lt;/portfolio&gt;</a>
-  &lt;/ccruncher&gt;
-    </pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;ccruncher&gt;
+  &lt;title&gt;<i>your simulation title here</i>&lt;/title&gt;
+  &lt;description&gt;<i>your simulation description here</i>&lt;/description&gt;
+  <a href="#defines">&lt;defines&gt;</a>        ...        <a href="#defines">&lt;/defines&gt;</a>
+  <a href="#parameters">&lt;paramaters&gt;</a>     ...     <a href="#parameters">&lt;/parameters&gt;</a>
+  <a href="#interest">&lt;interest&gt;</a>       ...       <a href="#interest">&lt;/interest&gt;</a>
+  <a href="#ratings">&lt;ratings&gt;</a>        ...        <a href="#ratings">&lt;/ratings&gt;</a>
+  <a href="#transitions">&lt;transitions&gt;</a>    ...    <a href="#transitions">&lt;/transitions&gt;</a>
+  <a href="#factors">&lt;factors&gt;</a>        ...        <a href="#factors">&lt;/factors&gt;</a>
+  <a href="#correlations">&lt;correlations&gt;</a>   ...   <a href="#correlations">&lt;/correlations&gt;</a>
+  <a href="#segmentations">&lt;segmentations&gt;</a>  ...  <a href="#segmentations">&lt;/segmentations&gt;</a>
+  <a href="#portfolio">&lt;portfolio&gt;</a>      ...      <a href="#portfolio">&lt;/portfolio&gt;</a>
+&lt;/ccruncher&gt;
+  </pre>
 
     <p>
       The encoding attribute can be one of these values: 
@@ -163,10 +163,10 @@
 
     <pre>
 
-  &lt;defines&gt;
-    &lt;define name="numsims" value="30000"/&gt;
-    &lt;define name="ndf" value="5"/&gt;
-  &lt;/defines&gt;
+&lt;defines&gt;
+  &lt;define name="numsims" value="30000"/&gt;
+  &lt;define name="ndf" value="5"/&gt;
+&lt;/defines&gt;
     </pre>
 
     <h3>Define Attributes</h3>
@@ -211,18 +211,18 @@
 
     <pre>
 
-  &lt;parameters&gt;
-    &lt;parameter name="time.0" value="18/10/2009"/&gt;
-    &lt;parameter name="time.T" value="15/07/2015"/&gt;
-    &lt;parameter name="maxiterations" value="$numsims"/&gt;
-    &lt;parameter name="maxseconds" value="3600"/&gt;
-    &lt;parameter name="copula.type" value="t($ndf)"/&gt;
-    &lt;parameter name="rng.seed" value="0"/&gt;
-    &lt;parameter name="antithetic" value="true"/&gt;
-    &lt;parameter name="lhs" value="false"/&gt;
-    &lt;parameter name="blocksize" value="128"/&gt;
-    &lt;parameter name="onlyActiveObligors" value="true"/&gt;
-  &lt;/parameters&gt;
+&lt;parameters&gt;
+  &lt;parameter name="time.0" value="18/10/2009"/&gt;
+  &lt;parameter name="time.T" value="15/07/2015"/&gt;
+  &lt;parameter name="maxiterations" value="$numsims"/&gt;
+  &lt;parameter name="maxseconds" value="3600"/&gt;
+  &lt;parameter name="copula.type" value="t($ndf)"/&gt;
+  &lt;parameter name="rng.seed" value="0"/&gt;
+  &lt;parameter name="antithetic" value="true"/&gt;
+  &lt;parameter name="lhs" value="false"/&gt;
+  &lt;parameter name="blocksize" value="128"/&gt;
+  &lt;parameter name="onlyActiveObligors" value="true"/&gt;
+&lt;/parameters&gt;
     </pre>
 
     <h3>Parameters List</h3>
@@ -369,17 +369,17 @@
 
     <pre>
 
-  &lt;interest type="compound"&gt;
-    &lt;rate t="1D" r="3.99%"/&gt;
-    &lt;rate t="1M" r="4.0%"/&gt;
-    &lt;rate t="2M" r="4.1%"/&gt;
-    &lt;rate t="3M" r="4.5%"/&gt;
-    &lt;rate t="6M" r="4.55%"/&gt;
-    &lt;rate t="1Y" r="4.8%"/&gt;
-    &lt;rate t="2Y" r="4.9%"/&gt;
-    &lt;rate t="5Y" r="5.0%"/&gt;
-    &lt;rate t="10Y" r="5.2%"/&gt;
-  &lt;/interest&gt;
+&lt;interest type="compound"&gt;
+  &lt;rate t="1D" r="3.99%"/&gt;
+  &lt;rate t="1M" r="4.0%"/&gt;
+  &lt;rate t="2M" r="4.1%"/&gt;
+  &lt;rate t="3M" r="4.5%"/&gt;
+  &lt;rate t="6M" r="4.55%"/&gt;
+  &lt;rate t="1Y" r="4.8%"/&gt;
+  &lt;rate t="2Y" r="4.9%"/&gt;
+  &lt;rate t="5Y" r="5.0%"/&gt;
+  &lt;rate t="10Y" r="5.2%"/&gt;
+&lt;/interest&gt;
     </pre>
 
     <h3>Interest Attributes</h3>
@@ -452,16 +452,16 @@
 
     <pre>
 
-  &lt;ratings&gt;
-    &lt;rating name="AAA" description="prime"/&gt;
-    &lt;rating name="AA" description="high grade"/&gt;
-    &lt;rating name="A" description="upper medium grade"/&gt;
-    &lt;rating name="BBB" description="lower medium grade"/&gt;
-    &lt;rating name="BB" description="non-investment grade speculative"/&gt;
-    &lt;rating name="B" description="highly speculative"/&gt;
-    &lt;rating name="CCC" description="extremely speculative"/&gt;
-    &lt;rating name="D" description="in default"/&gt;
-  &lt;/ratings&gt;
+&lt;ratings&gt;
+  &lt;rating name="AAA" description="prime"/&gt;
+  &lt;rating name="AA" description="high grade"/&gt;
+  &lt;rating name="A" description="upper medium grade"/&gt;
+  &lt;rating name="BBB" description="lower medium grade"/&gt;
+  &lt;rating name="BB" description="non-investment grade speculative"/&gt;
+  &lt;rating name="B" description="highly speculative"/&gt;
+  &lt;rating name="CCC" description="extremely speculative"/&gt;
+  &lt;rating name="D" description="in default"/&gt;
+&lt;/ratings&gt;
     </pre>
 
     <h3>Rating Attributes</h3>
@@ -510,72 +510,72 @@
 
     <pre>
 
-  &lt;transitions period="12"&gt;
-    &lt;transition from="AAA" to="AAA" value="92.83%" /&gt;
-    &lt;transition from="AAA" to="AA" value="6.5%" /&gt;
-    &lt;transition from="AAA" to="A" value="0.56%" /&gt;
-    &lt;transition from="AAA" to="BBB" value="0.06%" /&gt;
-    &lt;transition from="AAA" to="BB" value="0.05%" /&gt;
-    &lt;transition from="AAA" to="B" value="0.0%" /&gt;
-    &lt;transition from="AAA" to="CCC" value="0.0%" /&gt;
-    &lt;transition from="AAA" to="D" value="0.0%" /&gt;
-    &lt;transition from="AA" to="AAA" value="0.63%" /&gt;
-    &lt;transition from="AA" to="AA" value="91.87%" /&gt;
-    &lt;transition from="AA" to="A" value="6.64%" /&gt;
-    &lt;transition from="AA" to="BBB" value="0.65%" /&gt;
-    &lt;transition from="AA" to="BB" value="0.06%" /&gt;
-    &lt;transition from="AA" to="B" value="0.11%" /&gt;
-    &lt;transition from="AA" to="CCC" value="0.04%" /&gt;
-    &lt;transition from="AA" to="D" value="0.0%" /&gt;
-    &lt;transition from="A" to="AAA" value="0.08%" /&gt;
-    &lt;transition from="A" to="AA" value="2.26%" /&gt;
-    &lt;transition from="A" to="A" value="91.65%" /&gt;
-    &lt;transition from="A" to="BBB" value="5.11%" /&gt;
-    &lt;transition from="A" to="BB" value="0.61%" /&gt;
-    &lt;transition from="A" to="B" value="0.23%" /&gt;
-    &lt;transition from="A" to="CCC" value="0.02%" /&gt;
-    &lt;transition from="A" to="D" value="0.04%" /&gt;
-    &lt;transition from="BBB" to="AAA" value="0.05%" /&gt;
-    &lt;transition from="BBB" to="AA" value="0.27%" /&gt;
-    &lt;transition from="BBB" to="A" value="5.84%" /&gt;
-    &lt;transition from="BBB" to="BBB" value="87.76%" /&gt;
-    &lt;transition from="BBB" to="BB" value="4.74%" /&gt;
-    &lt;transition from="BBB" to="B" value="0.98%" /&gt;
-    &lt;transition from="BBB" to="CCC" value="0.15%" /&gt;
-    &lt;transition from="BBB" to="D" value="0.21%" /&gt;
-    &lt;transition from="BB" to="AAA" value="0.04%" /&gt;
-    &lt;transition from="BB" to="AA" value="0.11%" /&gt;
-    &lt;transition from="BB" to="A" value="0.64%" /&gt;
-    &lt;transition from="BB" to="BBB" value="7.85%" /&gt;
-    &lt;transition from="BB" to="BB" value="81.13%" /&gt;
-    &lt;transition from="BB" to="B" value="8.27%" /&gt;
-    &lt;transition from="BB" to="CCC" value="0.89%" /&gt;
-    &lt;transition from="BB" to="D" value="1.07%" /&gt;
-    &lt;transition from="B" to="AAA" value="0.0%" /&gt;
-    &lt;transition from="B" to="AA" value="0.11%" /&gt;
-    &lt;transition from="B" to="A" value="0.3%" /&gt;
-    &lt;transition from="B" to="BBB" value="0.42%" /&gt;
-    &lt;transition from="B" to="BB" value="6.75%" /&gt;
-    &lt;transition from="B" to="B" value="83.08%" /&gt;
-    &lt;transition from="B" to="CCC" value="3.86%" /&gt;
-    &lt;transition from="B" to="D" value="5.48%" /&gt;
-    &lt;transition from="CCC" to="AAA" value="0.19%" /&gt;
-    &lt;transition from="CCC" to="AA" value="0.0%" /&gt;
-    &lt;transition from="CCC" to="A" value="0.38%" /&gt;
-    &lt;transition from="CCC" to="BBB" value="0.75%" /&gt;
-    &lt;transition from="CCC" to="BB" value="2.44%" /&gt;
-    &lt;transition from="CCC" to="B" value="12.03%" /&gt;
-    &lt;transition from="CCC" to="CCC" value="60.71%" /&gt;
-    &lt;transition from="CCC" to="D" value="23.5%" /&gt;
-    &lt;transition from="D" to="AAA" value="0.0%" /&gt;
-    &lt;transition from="D" to="AA" value="0.0%" /&gt;
-    &lt;transition from="D" to="A" value="0.0%" /&gt;
-    &lt;transition from="D" to="BBB" value="0.0%" /&gt;
-    &lt;transition from="D" to="BB" value="0.0%" /&gt;
-    &lt;transition from="D" to="B" value="0.0%" /&gt;
-    &lt;transition from="D" to="CCC" value="0.0%" /&gt;
-    &lt;transition from="D" to="D" value="100%" /&gt;
-  &lt;/transitions&gt;
+&lt;transitions period="12"&gt;
+  &lt;transition from="AAA" to="AAA" value="92.83%" /&gt;
+  &lt;transition from="AAA" to="AA" value="6.5%" /&gt;
+  &lt;transition from="AAA" to="A" value="0.56%" /&gt;
+  &lt;transition from="AAA" to="BBB" value="0.06%" /&gt;
+  &lt;transition from="AAA" to="BB" value="0.05%" /&gt;
+  &lt;transition from="AAA" to="B" value="0.0%" /&gt;
+  &lt;transition from="AAA" to="CCC" value="0.0%" /&gt;
+  &lt;transition from="AAA" to="D" value="0.0%" /&gt;
+  &lt;transition from="AA" to="AAA" value="0.63%" /&gt;
+  &lt;transition from="AA" to="AA" value="91.87%" /&gt;
+  &lt;transition from="AA" to="A" value="6.64%" /&gt;
+  &lt;transition from="AA" to="BBB" value="0.65%" /&gt;
+  &lt;transition from="AA" to="BB" value="0.06%" /&gt;
+  &lt;transition from="AA" to="B" value="0.11%" /&gt;
+  &lt;transition from="AA" to="CCC" value="0.04%" /&gt;
+  &lt;transition from="AA" to="D" value="0.0%" /&gt;
+  &lt;transition from="A" to="AAA" value="0.08%" /&gt;
+  &lt;transition from="A" to="AA" value="2.26%" /&gt;
+  &lt;transition from="A" to="A" value="91.65%" /&gt;
+  &lt;transition from="A" to="BBB" value="5.11%" /&gt;
+  &lt;transition from="A" to="BB" value="0.61%" /&gt;
+  &lt;transition from="A" to="B" value="0.23%" /&gt;
+  &lt;transition from="A" to="CCC" value="0.02%" /&gt;
+  &lt;transition from="A" to="D" value="0.04%" /&gt;
+  &lt;transition from="BBB" to="AAA" value="0.05%" /&gt;
+  &lt;transition from="BBB" to="AA" value="0.27%" /&gt;
+  &lt;transition from="BBB" to="A" value="5.84%" /&gt;
+  &lt;transition from="BBB" to="BBB" value="87.76%" /&gt;
+  &lt;transition from="BBB" to="BB" value="4.74%" /&gt;
+  &lt;transition from="BBB" to="B" value="0.98%" /&gt;
+  &lt;transition from="BBB" to="CCC" value="0.15%" /&gt;
+  &lt;transition from="BBB" to="D" value="0.21%" /&gt;
+  &lt;transition from="BB" to="AAA" value="0.04%" /&gt;
+  &lt;transition from="BB" to="AA" value="0.11%" /&gt;
+  &lt;transition from="BB" to="A" value="0.64%" /&gt;
+  &lt;transition from="BB" to="BBB" value="7.85%" /&gt;
+  &lt;transition from="BB" to="BB" value="81.13%" /&gt;
+  &lt;transition from="BB" to="B" value="8.27%" /&gt;
+  &lt;transition from="BB" to="CCC" value="0.89%" /&gt;
+  &lt;transition from="BB" to="D" value="1.07%" /&gt;
+  &lt;transition from="B" to="AAA" value="0.0%" /&gt;
+  &lt;transition from="B" to="AA" value="0.11%" /&gt;
+  &lt;transition from="B" to="A" value="0.3%" /&gt;
+  &lt;transition from="B" to="BBB" value="0.42%" /&gt;
+  &lt;transition from="B" to="BB" value="6.75%" /&gt;
+  &lt;transition from="B" to="B" value="83.08%" /&gt;
+  &lt;transition from="B" to="CCC" value="3.86%" /&gt;
+  &lt;transition from="B" to="D" value="5.48%" /&gt;
+  &lt;transition from="CCC" to="AAA" value="0.19%" /&gt;
+  &lt;transition from="CCC" to="AA" value="0.0%" /&gt;
+  &lt;transition from="CCC" to="A" value="0.38%" /&gt;
+  &lt;transition from="CCC" to="BBB" value="0.75%" /&gt;
+  &lt;transition from="CCC" to="BB" value="2.44%" /&gt;
+  &lt;transition from="CCC" to="B" value="12.03%" /&gt;
+  &lt;transition from="CCC" to="CCC" value="60.71%" /&gt;
+  &lt;transition from="CCC" to="D" value="23.5%" /&gt;
+  &lt;transition from="D" to="AAA" value="0.0%" /&gt;
+  &lt;transition from="D" to="AA" value="0.0%" /&gt;
+  &lt;transition from="D" to="A" value="0.0%" /&gt;
+  &lt;transition from="D" to="BBB" value="0.0%" /&gt;
+  &lt;transition from="D" to="BB" value="0.0%" /&gt;
+  &lt;transition from="D" to="B" value="0.0%" /&gt;
+  &lt;transition from="D" to="CCC" value="0.0%" /&gt;
+  &lt;transition from="D" to="D" value="100%" /&gt;
+&lt;/transitions&gt;
     </pre>
 
   <p>
@@ -650,13 +650,13 @@
 
     <pre>
 
-  &lt;factors&gt;
-    &lt;factor name="S1" loading="15.1%" description="Consumer/service sector"/&gt;
-    &lt;factor name="S2" loading="17.9%" description="Forest/building products"/&gt;
-    &lt;factor name="S3" loading="17.5%" description="High technology"/&gt;
-    &lt;factor name="S4" loading="12.8%" description="Utilities"/&gt;
-    &lt;factor name="S5" loading="15.0%" description="Other sectors"/&gt;
-  &lt;/factors&gt;
+&lt;factors&gt;
+  &lt;factor name="S1" loading="15.1%" description="Consumer/service sector"/&gt;
+  &lt;factor name="S2" loading="17.9%" description="Forest/building products"/&gt;
+  &lt;factor name="S3" loading="17.5%" description="High technology"/&gt;
+  &lt;factor name="S4" loading="12.8%" description="Utilities"/&gt;
+  &lt;factor name="S5" loading="15.0%" description="Other sectors"/&gt;
+&lt;/factors&gt;
     </pre>
 
     <h3>Factor Attributes</h3>
@@ -713,18 +713,18 @@
 
     <pre>
 
-  &lt;correlations&gt;
-    &lt;correlation factor1="S1" factor2="S2" value="6.2%"/&gt;
-    &lt;correlation factor1="S1" factor2="S3" value="8.6%"/&gt;
-    &lt;correlation factor1="S1" factor2="S4" value="3.9%"/&gt;
-    &lt;correlation factor1="S1" factor2="S5" value="9.1%"/&gt;
-    &lt;correlation factor1="S2" factor2="S3" value="6.3%"/&gt;
-    &lt;correlation factor1="S2" factor2="S4" value="10.2%"/&gt;
-    &lt;correlation factor1="S2" factor2="S5" value="8.8%"/&gt;
-    &lt;correlation factor1="S3" factor2="S4" value="7.3%"/&gt;
-    &lt;correlation factor1="S3" factor2="S5" value="7.1%"/&gt;
-    &lt;correlation factor1="S4" factor2="S5" value="6.4%"/&gt;
-  &lt;/correlations&gt;
+&lt;correlations&gt;
+  &lt;correlation factor1="S1" factor2="S2" value="6.2%"/&gt;
+  &lt;correlation factor1="S1" factor2="S3" value="8.6%"/&gt;
+  &lt;correlation factor1="S1" factor2="S4" value="3.9%"/&gt;
+  &lt;correlation factor1="S1" factor2="S5" value="9.1%"/&gt;
+  &lt;correlation factor1="S2" factor2="S3" value="6.3%"/&gt;
+  &lt;correlation factor1="S2" factor2="S4" value="10.2%"/&gt;
+  &lt;correlation factor1="S2" factor2="S5" value="8.8%"/&gt;
+  &lt;correlation factor1="S3" factor2="S4" value="7.3%"/&gt;
+  &lt;correlation factor1="S3" factor2="S5" value="7.1%"/&gt;
+  &lt;correlation factor1="S4" factor2="S5" value="6.4%"/&gt;
+&lt;/correlations&gt;
     </pre>
 
     <h3>Correlation Attributes</h3>
@@ -788,35 +788,35 @@
 
     <pre>
 
-  &lt;segmentations&gt;
-    &lt;segmentation name="portfolio" components="asset"/&gt;
-    &lt;segmentation name="sectors" components="obligor"&gt;
-      &lt;segment name="S1"/&gt;
-      &lt;segment name="S2"/&gt;
-      &lt;segment name="S3"/&gt;
-      &lt;segment name="S4"/&gt;
-      &lt;segment name="S5"/&gt;
-    &lt;/segmentation&gt;
-    &lt;segmentation name="size" components="obligor"&gt;
-      &lt;segment name="large"/&gt;
-      &lt;segment name="medium"/&gt;
-      &lt;segment name="small"/&gt;
-    &lt;/segmentation&gt;
-    &lt;segmentation name="products" components="asset"&gt;
-      &lt;segment name="bond"/&gt;
-      &lt;segment name="loan"/&gt;
-      &lt;segment name="lease"/&gt;
-      &lt;segment name="mortgage"/&gt;
-      &lt;segment name="line of credit"/&gt;
-      &lt;segment name="bank guarantee"/&gt;
-    &lt;/segmentation&gt;
-    &lt;segmentation name="offices" components="asset"&gt;
-      &lt;segment name="0001"/&gt;
-      &lt;segment name="0002"/&gt;
-      &lt;segment name="0003"/&gt;
-      &lt;segment name="0004"/&gt;
-    &lt;/segmentation&gt;
-  &lt;/segmentations&gt;
+&lt;segmentations&gt;
+  &lt;segmentation name="portfolio" components="asset"/&gt;
+  &lt;segmentation name="sectors" components="obligor"&gt;
+    &lt;segment name="S1"/&gt;
+    &lt;segment name="S2"/&gt;
+    &lt;segment name="S3"/&gt;
+    &lt;segment name="S4"/&gt;
+    &lt;segment name="S5"/&gt;
+  &lt;/segmentation&gt;
+  &lt;segmentation name="size" components="obligor"&gt;
+    &lt;segment name="large"/&gt;
+    &lt;segment name="medium"/&gt;
+    &lt;segment name="small"/&gt;
+  &lt;/segmentation&gt;
+  &lt;segmentation name="products" components="asset"&gt;
+    &lt;segment name="bond"/&gt;
+    &lt;segment name="loan"/&gt;
+    &lt;segment name="lease"/&gt;
+    &lt;segment name="mortgage"/&gt;
+    &lt;segment name="line of credit"/&gt;
+    &lt;segment name="bank guarantee"/&gt;
+  &lt;/segmentation&gt;
+  &lt;segmentation name="offices" components="asset"&gt;
+    &lt;segment name="0001"/&gt;
+    &lt;segment name="0002"/&gt;
+    &lt;segment name="0003"/&gt;
+    &lt;segment name="0004"/&gt;
+  &lt;/segmentation&gt;
+&lt;/segmentations&gt;
     </pre>
 
     <h3>Segmentation Attributes</h3>
@@ -900,78 +900,78 @@
 
     <pre>
 
-  &lt;portfolio&gt;
-    &lt;obligor rating="A" factor="S1" id="000001"&gt;
-      &lt;belongs-to segmentation="sectors" segment="S1"/&gt;
-      &lt;belongs-to segmentation="size" segment="medium"/&gt;
-      &lt;asset id="op1" date="01/01/2005" lgd="20%"&gt;
-        &lt;belongs-to segmentation="products" segment="bond"/&gt;
-        &lt;belongs-to segmentation="offices" segment="0001"/&gt;
-        &lt;data&gt;
-          &lt;values t="01/06/2005" ead="2000.0" /&gt;
-          &lt;values t="01/06/2006" ead="1900.0" /&gt;
-          &lt;values t="01/06/2007" ead="1800.0" /&gt;
-          &lt;values t="01/06/2008" ead="1700.0" /&gt;
-          &lt;values t="01/06/2009" ead="1600.0" /&gt;
-          &lt;values t="01/06/2010" ead="1500.0" /&gt;
-          &lt;values t="01/06/2011" ead="1400.0" /&gt;
-          &lt;values t="01/06/2012" ead="1300.0" /&gt;
-          &lt;values t="01/06/2013" ead="1200.0" /&gt;
-          &lt;values t="01/06/2014" ead="1100.0" /&gt;
-        &lt;/data&gt;
-      &lt;/asset&gt;
-      &lt;asset id="op2" date="01/06/2008"&gt;
-        &lt;belongs-to segmentation="offices" segment="0004"/&gt;
-        &lt;belongs-to segmentation="products" segment="bond"/&gt;
-        &lt;data&gt;
-          &lt;values t="01/07/2009" ead="4400.0" lgd="25%" /&gt;
-          &lt;values t="01/07/2011" ead="3920.0" lgd="30%" /&gt;
-          &lt;values t="01/07/2013" ead="3340.0" lgd="35%" /&gt;
-          &lt;values t="01/07/2015" ead="2960.0" lgd="40%" /&gt;
-          &lt;values t="01/07/2017" ead="2480.0" lgd="45%" /&gt;
-        &lt;/data&gt;
-      &lt;/asset&gt;
-    &lt;/obligor&gt;
-    &lt;obligor rating="B" factor="S2" id="000002" lgd="20%"&gt;
-      &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
-      &lt;belongs-to segmentation="size" segment="large"/&gt;
-      &lt;asset id="op3" date="01/06/2003"&gt;
-        &lt;belongs-to segmentation="offices" segment="0003"/&gt;
-        &lt;belongs-to segmentation="products" segment="bond"/&gt;
-        &lt;data&gt;
-          &lt;values t="01/01/2005" ead="1750.0" /&gt;
-          &lt;values t="01/06/2007" ead="1600.0" /&gt;
-          &lt;values t="01/01/2009" ead="1450.0" /&gt;
-          &lt;values t="01/06/2011" ead="1300.0" /&gt;
-          &lt;values t="01/01/2013" ead="1150.0" /&gt;
-        &lt;/data&gt;
-      &lt;/asset&gt;
-    &lt;/obligor&gt;
-    &lt;obligor rating="CCC" factor="S2" id="000003"&gt;
-      &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
-      &lt;belongs-to segmentation="size" segment="medium"/&gt;
-      &lt;asset id="op4" date="01/01/1999" lgd="beta(2.5,2.7)"&gt;
-        &lt;belongs-to segmentation="offices" segment="0003"/&gt;
-        &lt;belongs-to segmentation="products" segment="bond"/&gt;
-        &lt;data&gt;
-          &lt;values t="01/01/2000" ead="2400.0" /&gt;
-          &lt;values t="01/01/2001" ead="2300.0" /&gt;
-          &lt;values t="01/01/2002" ead="2200.0" /&gt;
-          &lt;values t="01/01/2003" ead="2100.0" /&gt;
-          &lt;values t="01/01/2004" ead="lognormal(6.5,1.0)" /&gt;
-          &lt;values t="01/01/2005" ead="1900.0" /&gt;
-          &lt;values t="01/01/2006" ead="exponential(1800.0)" /&gt;
-          &lt;values t="01/01/2007" ead="1700.0" /&gt;
-          &lt;values t="01/01/2008" ead="uniform(1500.0,1700.0)" /&gt;
-          &lt;values t="01/01/2009" ead="1500.0" /&gt;
-          &lt;values t="01/01/2010" ead="gamma(2800.0,0.5)" /&gt;
-          &lt;values t="01/01/2011" ead="1300.0" /&gt;
-          &lt;values t="01/01/2012" ead="normal(1200.0,100.0)" /&gt;
-          &lt;values t="01/01/2013" ead="1100.0" /&gt;
-        &lt;/data&gt;
-      &lt;/asset&gt;
-    &lt;/obligor&gt;
-  &lt;/portfolio&gt;
+&lt;portfolio&gt;
+  &lt;obligor rating="A" factor="S1" id="000001"&gt;
+    &lt;belongs-to segmentation="sectors" segment="S1"/&gt;
+    &lt;belongs-to segmentation="size" segment="medium"/&gt;
+    &lt;asset id="op1" date="01/01/2005" lgd="20%"&gt;
+      &lt;belongs-to segmentation="products" segment="bond"/&gt;
+      &lt;belongs-to segmentation="offices" segment="0001"/&gt;
+      &lt;data&gt;
+        &lt;values t="01/06/2005" ead="2000.0" /&gt;
+        &lt;values t="01/06/2006" ead="1900.0" /&gt;
+        &lt;values t="01/06/2007" ead="1800.0" /&gt;
+        &lt;values t="01/06/2008" ead="1700.0" /&gt;
+        &lt;values t="01/06/2009" ead="1600.0" /&gt;
+        &lt;values t="01/06/2010" ead="1500.0" /&gt;
+        &lt;values t="01/06/2011" ead="1400.0" /&gt;
+        &lt;values t="01/06/2012" ead="1300.0" /&gt;
+        &lt;values t="01/06/2013" ead="1200.0" /&gt;
+        &lt;values t="01/06/2014" ead="1100.0" /&gt;
+      &lt;/data&gt;
+    &lt;/asset&gt;
+    &lt;asset id="op2" date="01/06/2008"&gt;
+      &lt;belongs-to segmentation="offices" segment="0004"/&gt;
+      &lt;belongs-to segmentation="products" segment="bond"/&gt;
+      &lt;data&gt;
+        &lt;values t="01/07/2009" ead="4400.0" lgd="25%" /&gt;
+        &lt;values t="01/07/2011" ead="3920.0" lgd="30%" /&gt;
+        &lt;values t="01/07/2013" ead="3340.0" lgd="35%" /&gt;
+        &lt;values t="01/07/2015" ead="2960.0" lgd="40%" /&gt;
+        &lt;values t="01/07/2017" ead="2480.0" lgd="45%" /&gt;
+      &lt;/data&gt;
+    &lt;/asset&gt;
+  &lt;/obligor&gt;
+  &lt;obligor rating="B" factor="S2" id="000002" lgd="20%"&gt;
+    &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
+    &lt;belongs-to segmentation="size" segment="large"/&gt;
+    &lt;asset id="op3" date="01/06/2003"&gt;
+      &lt;belongs-to segmentation="offices" segment="0003"/&gt;
+      &lt;belongs-to segmentation="products" segment="bond"/&gt;
+      &lt;data&gt;
+        &lt;values t="01/01/2005" ead="1750.0" /&gt;
+        &lt;values t="01/06/2007" ead="1600.0" /&gt;
+        &lt;values t="01/01/2009" ead="1450.0" /&gt;
+        &lt;values t="01/06/2011" ead="1300.0" /&gt;
+        &lt;values t="01/01/2013" ead="1150.0" /&gt;
+      &lt;/data&gt;
+    &lt;/asset&gt;
+  &lt;/obligor&gt;
+  &lt;obligor rating="CCC" factor="S2" id="000003"&gt;
+    &lt;belongs-to segmentation="sectors" segment="S2"/&gt;
+    &lt;belongs-to segmentation="size" segment="medium"/&gt;
+    &lt;asset id="op4" date="01/01/1999" lgd="beta(2.5,2.7)"&gt;
+      &lt;belongs-to segmentation="offices" segment="0003"/&gt;
+      &lt;belongs-to segmentation="products" segment="bond"/&gt;
+      &lt;data&gt;
+        &lt;values t="01/01/2000" ead="2400.0" /&gt;
+        &lt;values t="01/01/2001" ead="2300.0" /&gt;
+        &lt;values t="01/01/2002" ead="2200.0" /&gt;
+        &lt;values t="01/01/2003" ead="2100.0" /&gt;
+        &lt;values t="01/01/2004" ead="lognormal(6.5,1.0)" /&gt;
+        &lt;values t="01/01/2005" ead="1900.0" /&gt;
+        &lt;values t="01/01/2006" ead="exponential(1800.0)" /&gt;
+        &lt;values t="01/01/2007" ead="1700.0" /&gt;
+        &lt;values t="01/01/2008" ead="uniform(1500.0,1700.0)" /&gt;
+        &lt;values t="01/01/2009" ead="1500.0" /&gt;
+        &lt;values t="01/01/2010" ead="gamma(2800.0,0.5)" /&gt;
+        &lt;values t="01/01/2011" ead="1300.0" /&gt;
+        &lt;values t="01/01/2012" ead="normal(1200.0,100.0)" /&gt;
+        &lt;values t="01/01/2013" ead="1100.0" /&gt;
+      &lt;/data&gt;
+    &lt;/asset&gt;
+  &lt;/obligor&gt;
+&lt;/portfolio&gt;
     </pre>
 
     <h3>Portfolio Attributes</h3>
@@ -1191,26 +1191,26 @@
 
     <pre>
 
-  &lt;dprobs&gt;
-    &lt;dprob rating="AAA" t="0M" value="0.0%"/&gt;
-    &lt;dprob rating="AA" t="0M" value="0.0%"/&gt;
-    &lt;dprob rating="A" t="0M" value="0.0%"/&gt;
-    &lt;dprob rating="BBB" t="0M" value="0.0%"/&gt;
-    &lt;dprob rating="BB" t="0M" value="0.0%"/&gt;
-    &lt;dprob rating="B" t="0M" value="0.0%"/&gt;
-    &lt;dprob rating="CCC" t="0M" value="0.0%"/&gt;
-    &lt;dprob rating="D" t="0M" value="100.0%"/&gt;
+&lt;dprobs&gt;
+  &lt;dprob rating="AAA" t="0M" value="0.0%"/&gt;
+  &lt;dprob rating="AA" t="0M" value="0.0%"/&gt;
+  &lt;dprob rating="A" t="0M" value="0.0%"/&gt;
+  &lt;dprob rating="BBB" t="0M" value="0.0%"/&gt;
+  &lt;dprob rating="BB" t="0M" value="0.0%"/&gt;
+  &lt;dprob rating="B" t="0M" value="0.0%"/&gt;
+  &lt;dprob rating="CCC" t="0M" value="0.0%"/&gt;
+  &lt;dprob rating="D" t="0M" value="100.0%"/&gt;
 
-    &lt;dprob rating="AAA" t="6M" value="0.04%"/&gt;
-    &lt;dprob rating="AA" t="6M" value="1.46%"/&gt;
-    &lt;dprob rating="A" t="6M" value="2.81%"/&gt;
-    &lt;dprob rating="BBB" t="6M" value="4.02%"/&gt;
-    &lt;dprob rating="BB" t="6M" value="7.37%"/&gt;
-    &lt;dprob rating="B" t="6M" value="14.28%"/&gt;
-    &lt;dprob rating="CCC" t="6M" value="21.12%"/&gt;
-    &lt;dprob rating="D" t="6M" value="100.0%"/&gt;
-    ...
-  &lt;/dprobs&gt;
+  &lt;dprob rating="AAA" t="6M" value="0.04%"/&gt;
+  &lt;dprob rating="AA" t="6M" value="1.46%"/&gt;
+  &lt;dprob rating="A" t="6M" value="2.81%"/&gt;
+  &lt;dprob rating="BBB" t="6M" value="4.02%"/&gt;
+  &lt;dprob rating="BB" t="6M" value="7.37%"/&gt;
+  &lt;dprob rating="B" t="6M" value="14.28%"/&gt;
+  &lt;dprob rating="CCC" t="6M" value="21.12%"/&gt;
+  &lt;dprob rating="D" t="6M" value="100.0%"/&gt;
+  ...
+&lt;/dprobs&gt;
     </pre>
 
     <h3>Dprob Attributes</h3>

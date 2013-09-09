@@ -175,6 +175,7 @@ pre {
 	font-size: 80%;
 	font-family: monospace;
 	margin: 0;
+	padding-left: 2em;
 	color: black;
 	background-color: #ddd;
 	border: 1px solid #ddd;
