@@ -1,0 +1,275 @@
+
+CCRUNCHER README
+================
+
+
+Description
+--------------------------------
+
+CCruncher computes the Value At Risk (VAR) of large credit
+portfolios using the Monte Carlo method. It is a command line solver
+that read an xml input file and returns a plain text file with the
+simulated portfolio loss values.
+
+
+Directory structure
+--------------------------------
+
+Directory structure for binary distributions:
+$CCRUNCHER/
+  |- bin/     : executables and scripts directory
+  |- data/    : put your ccruncher outputs here (recomended)
+  |- doc/     : doc directory
+  |- samples/ : samples directory
+
+Directory structure for source distribution:
+$CCRUNCHER/
+  |- bin/     : executables and scripts directory
+  |- build    : directory used to put the *.o files
+  |- data/    : put your ccruncher outputs here (recomended)
+  |- doc/     : doc directory
+  |- samples/ : samples directory
+  |- src/     : ccruncher source code files
+
+
+Required libraries installation
+--------------------------------
+
+1. check that you have libexpat.so in a lib directory and
+   check that you have expat.h in an include directory. If
+   you don't found some of these files you can download 
+   package from http://www.libexpat.org/ and install it. 
+   Also you can install from expat and expat-devel rpm packages.
+
+2. check that you have libz.so in a lib directory and
+   check that you have zlib.h in an include directory. If
+   you don't found some of these files you can download 
+   package from http://www.zlib.net/ and install it. 
+   Also you can install from zlib and zlib-devel rpm packages.
+
+3. check that you have libgsl.so in a lib directory and
+   check that you have gsl_math.h in an include directory. If
+   you don't found some of these files you can download 
+   package from http://www.gnu.org/software/gsl/ and install it. 
+   Also you can install from gsl and gsl-devel rpm packages.
+
+4. (only gui version)
+   check that you have libQtCore.so in a lib directory and
+   check that you have QtCore in an include directory. If
+   you don't found some of these files you can download 
+   package from http://qt-project.org/ and install it. 
+   Also you can install from qt and qt-devel rpm packages.
+   
+5. (only gui version)
+   check that you have libqwt.so in a lib directory and
+   check that you have qwt.h in an include directory. If
+   you don't found some of these files you can download 
+   package from http://qwt.sourceforge.net/ and install it. 
+   Also you can install from qwt and qwt-devel rpm packages.
+
+   
+Installation from source package
+--------------------------------
+
+1. uncompress package
+     > tar -xvzf ccruncher-X.Y_src.tgz
+
+2. install required libraries (explained before)
+
+3. execute commands (read INSTALL file):
+     > cd ccruncher-X.Y
+     > ./configure 
+     > make check
+     > qmake-qt4 ccruncher-gui.pro
+     > make
+     > bin/src2bin.sh
+
+   supported ./configure options:
+     --enable-debug:    add debug instructions
+     --enable-profiler: add profiler instructions
+
+4. you can use the qmake build process instead of the 
+   automake build process doing:
+     > qmake-qt4 ccruncher-xxx.pro
+     > make
+     > bin/src2bin.sh
+
+
+Installation from binary package
+--------------------------------
+
+1. uncompress package
+     > tar -xvzf ccruncher-X.Y_bin.tgz
+
+2. install required libraries (explained before)
+
+
+Using CCruncher
+--------------------------------
+
+1. create your input file. Read documentation to perform this step.
+   Use any file in samples directory as template.
+
+2. run CCruncher (gui version)
+     > # gui version
+     > cd $CCRUNCHER
+     > bin/ccruncher-gui &
+     > # cmd version
+     > cd $CCRUNCHER
+     > bin/ccruncher-cmd --help
+     > bin/ccruncher-cmd -w --output=data samples/test01.xml
+
+3. compute risk indicators:
+     > bin/ccruncher-gui &
+     # open output data file
+
+
+Notes for Windows developers (QT+MINGW)
+---------------------------------------
+
+1. install qt in C:\QtSDK
+   http://qt-project.org/downloads
+
+2. install MSYS+MINGW in C:\mingw\
+   http://www.mingw.org/
+   
+3. open the mingw console and type
+   > mingw-get install pthreads
+   > mingw-get install libz
+   > mingw-get source expat
+   > cd expat-*
+   > ./configure CFLAGS="-fexceptions"
+   > make
+   > make install
+
+4. download gsl source in C:\MinGW\msys\1.0\home\user
+   http://www.gnu.org/software/gsl/
+   
+5. open the mingw console and type
+   > tar -xvzf gsl-x.y.tar.gz
+   > cd gsl-x.y
+   > ./configure CFLAGS="-fexceptions"
+   > make
+   > make install
+
+6. install qwt
+   - download it from http://qwt.sourceforge.net
+   - unpack zip file
+   - open a qt-mingw console and type
+     > cd $DIR_QWT_DOWNLOADED
+     > qmake qwt.pro
+     > mingw32-make
+     > mingw32-make install
+     # check that directory "C:\Qwt-6.1.0\features" is created
+     > qmake -set QMAKEFEATURES "C:\Qwt-6.1.0\features"
+   - in your qmake *.pro file add
+     > CONFIG += qwt
+   - in your qmake *.pro.user file add the following environment variables
+     > QT_PLUGIN_PATH = C:\Qwt-6.1.0\plugins\designer
+     > PATH = C:\Qwt-6.1.0\lib
+   - qtcreator in windows is compiled with msvc. This means that 
+     designer can't use compiled plugin. We suggest to use standalone 
+     designer (C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin). To do this, do the
+     following steps:
+     > cp C:\Qwt-6.1.0\lib\qwt.dll C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin
+     > cp C:\Qwt-6.1.0\plugins\designer\* C:\QtSDK\Desktop\Qt\4.7.4\mingw\plugins\designer
+     > use standalone qtdesigner C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin\designer.exe
+
+7. launch qtcreator
+   > open project ccruncher-gui.pro
+   > review ccruncher-gui.pro libs
+   > compile
+
+
+Developers tips & tricks
+--------------------------------
+
+1. download CCruncher sources from subversion repository
+     > svn checkout http://www.ccruncher.net/svn/trunk/ ccruncher 
+
+2. install required libraries (explained before)
+
+3. create auto-files (run only 1 time)
+     > autoscan (produces preliminary configure.ac)
+     > autoheader (produces config.h.in)
+
+4. create ./configure script
+     > aclocal
+     > autoconf
+     > automake -avcf    (--help --warnings=all)
+
+5. compile project in debug mode
+     > configure --enable-debug --enable-profiler
+     > make
+     > make check
+
+6. executing tests suites
+     > build/tests   # unitary tests
+     > bin/tests.sh  # functional tests
+
+7. checking memory leaks
+     don't enable profiler because can cause problems to valgrind
+     > valgrind --tool=memcheck --leak-check=yes <progname>
+
+8. finding vulnerabilities
+     > flawfinder src/
+     > cppcheck --enable=all -I ./ ./
+
+9. profiling executable (only if configure is called with option --enable-profiler)
+     ccruncher writes gmon.out because we compiled with -pg flag
+     > gprof bin/ccruncher-cmd gmon.out
+     > # with valgrind (not based on sampling, slow, don't require --enable-profiler)
+     > valgrind --tool=callgrind bin/ccruncher-cmd
+     > kcachegrind callgrind.out.99999
+     > # with oprofile (as root)
+     > modprobe oprofile
+     > opcontrol --init
+     > opcontrol --no-vmlinux --start
+     > ./binary
+     > opcontrol --dump
+     > opreport -l ./binary
+     > opcontrol --stop
+     > opcontrol --shutdown
+     > # with sysprof
+     > sysprof
+     > ./binary
+
+10. debuging executable
+     > gdb ./path/progname
+       >> help
+       >> set args arg1 arg2 arg3 ... argn
+       >> run
+       >> backtrace
+       >> quit
+
+11. other minor tasks
+      > # man pages creation
+      > help2man --no-info -n "simule the loss distribution of a credit portfolio using the \
+        Monte Carlo method" ./build/ccruncher-cmd > ccruncher-cmd.1
+      > man -l ccruncher-cmd.1
+      > # lines of code
+      > cloc src
+
+12. using clang compiler (http://clang.llvm.org/)
+      > #using autotools
+      > ./configure CXX=clang++
+      > make
+      > # using qmake
+      > qmake -spec unsupported/linux-clang 
+
+13. making source distribution package
+      > make distcheck
+      > make dist
+    or (better) use script $CCRUNCHER/bin/makedist.sh
+      > $CCRUNCHER/bin/makedist.sh -s
+      > $CCRUNCHER/bin/makedist.sh -b
+      > $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
+
+14. create a tag in subversion repository
+      > svn cp http://www.ccruncher.net/svn/trunk/ \
+             http://www.ccruncher.net/svn/tags/ccruncher-x.y/ \
+             -m "created tag ccruncher-x.y"
+
+
+CCruncher Team
+http://www.ccruncher.net
