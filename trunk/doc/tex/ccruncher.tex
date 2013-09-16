@@ -2313,9 +2313,10 @@ $\widehat{q_{\beta}}$ is the quantile estimator, $\textrm{stderr}(q_{\beta})$
 is the estimation of the standard error using the Maritz-Jarrett method 
 described in~\cite[chap. 3.5.3]{wilcox:2004}, $[x]$ is the integer part of 
 $x$, and $B(a,b,x)$ is the regularized incomplete beta function.
-When the sample size is high, the standard error can be difficult to ascertain 
-because of the convergence of the incomplete beta function and the number of 
-times that the incomplete beta (numerically costly to obtain) is evaluated.
+When the sample size is high, the incomplete beta function can be difficult 
+to ascertain due to convergence problems. Also, a large sample size causes 
+the evaluation of the incomplete beta function multiple being this computation
+numerically costly.
 
 \subsection{Expected Shortfall}
 
@@ -2364,7 +2365,7 @@ estimated value is good enough.
 \label{ss:ra}
 
 Once we have measured the credit risk, naturally arises the question 
-``how much of this risk corresponds to the business unit X?''. CCruncher
+``how much of this risk corresponds to the business unit X?'' CCruncher
 allows to define and simulate sub-portfolio losses in order to respond
 this question.
 

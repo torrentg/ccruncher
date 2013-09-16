@@ -7,25 +7,25 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml" version="1.0">
 
-	<xsl:output method="html" encoding="utf-8" omit-xml-declaration="no" indent="no" 
-		doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
-		doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
+  <xsl:output method="html" encoding="utf-8" omit-xml-declaration="no" indent="no" 
+    doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
+    doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
 
-	<xsl:template match="/">
-		<html xmlns="http://www.w3.org/1999/xhtml">
-			<head>
-				<title>
-					CCruncher repo: 
-					<xsl:value-of select="/svn/index/@path"/>
-				</title>
-					<title>CCruncher repository</title>
-					<link rel="stylesheet" href="/ccruncher.css" type="text/css"/>
-					<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-					<meta name="viewport" content="width=device-width, initial-scale=1"/>
-					<script src="/ccruncher.js" type="text/javascript"></script>
-				<meta name="robots" content="noarchive"/>
-			</head>
-			<body onload="adaptBackground();">
+  <xsl:template match="/">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+      <head>
+        <title>
+          CCruncher repo: 
+          <xsl:value-of select="/svn/index/@path"/>
+        </title>
+          <title>CCruncher repository</title>
+          <link rel="stylesheet" href="/ccruncher.css" type="text/css"/>
+          <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1"/>
+          <script src="/ccruncher.js" type="text/javascript"></script>
+        <meta name="robots" content="noarchive"/>
+      </head>
+      <body onload="adaptBackground();">
     <div id="main-container">
     <div id="page-header" style="background:#005080;">
       <table><tr>
@@ -38,7 +38,7 @@
           <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
         </td>
         <td style="vertical-align:middle; font-size:14pt; color:white; width:100%">
-          Open-Source Tool for<br/>Credit Risk Modeling
+          <span style="display:block">Open-Source Tool for</span>Credit Risk Modeling
         </td>
         <td style="vertical-align: middle;">
           <a href="/index.html">
@@ -107,9 +107,9 @@
 
   </div>
 
-			</body>
-		</html>
-	</xsl:template>
+      </body>
+    </html>
+  </xsl:template>
 
 <xsl:template match="updir">
   <li><a href="{@href}">..</a></li>
