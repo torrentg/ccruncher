@@ -75,6 +75,7 @@ clean:
 	rm -f *.aux *.bbl *.bcf *.blg *.dvi *.idx
 	rm -f *.ilg *.ind *.ptc *.toc *.log
 	rm -f *.run.xml
+	rm -f *.glg *.glo *.gls *.glsdefs *.ist *.out
 	rm -f *~
 
 #

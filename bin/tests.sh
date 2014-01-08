@@ -26,21 +26,6 @@ progname=tests.sh
 TESTS="test01 test02 test03 test04 test05 test06"
 
 #-------------------------------------------------------------
-# copyright function
-#-------------------------------------------------------------
-copyright() {
-
-  cat << _EOF_
-
-   $progname is Copyright (C) 2004-2013 Gerard Torrent and licensed
-     under the GNU General Public License, version 2. More info at
-                   http://www.ccruncher.net
-
-_EOF_
-
-}
-
-#-------------------------------------------------------------
 # check installed apps
 #-------------------------------------------------------------
 checkapps() {
@@ -79,7 +64,6 @@ runcc() {
 #-------------------------------------------------------------
 
 checkapps;
-copyright;
 
 cd $CCRUNCHER;
 

@@ -98,7 +98,7 @@
 </p>
     <div id="page-footer">
       <span id="copyright" >
-        Copyright &copy; 2004-2013 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+        Copyright &copy; 2004-2014 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
       </span>
       <span id="modified">
         Last modified: 07-Aug-2013
