@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2013-09-06 08:41:56+02:00"
+#define BUILD_DATE "2014-01-08 12:45:13+01:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -160,6 +160,6 @@
 
 
 /* subversion identifier */
-#define SVN_VERSION "R1151"
+#define SVN_VERSION "R1147"
 
 
