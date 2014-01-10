@@ -24,63 +24,58 @@
 
 using namespace std;
 
-//===========================================================================
-// default constructor
-//===========================================================================
-ccruncher::Exception::Exception() : exception(), msg("")
+/**************************************************************************//**
+ * @details Creates an Exception with the given message.
+ * @param[in] str Exception message.
+ */
+ccruncher::Exception::Exception(const std::string &str) : exception(), msg(str)
 {
 }
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::Exception::Exception(const string &m) : exception(), msg(m)
-{
-}
-
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @details Creates an Exception from a std::exception.
+ * @param[in] e Base exception.
+ */
 ccruncher::Exception::Exception(const std::exception &e) : exception(e), msg(e.what())
 {
 }
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::Exception::Exception(const std::exception &e, const string &m) : exception(e)
+/**************************************************************************//**
+ * @details Creates an Exception from a std::exception extending the message.
+ * @param[in] e Base exception.
+ * @param[in] str Message clarifying the exception.
+ */
+ccruncher::Exception::Exception(const std::exception &e, const std::string &str) : exception(e)
 {
-  msg = e.what() + string("\n") + m;
+  msg = e.what() + string("\n") + str;
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
-ccruncher::Exception::~Exception() throw()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// toString
-//===========================================================================
+/**************************************************************************//**
+ * @details Returns exception message as string.
+ * @return Exception message as string.
+ */
 const string & ccruncher::Exception::toString() const
 {
   return msg;
 }
 
-//===========================================================================
-// toString
-//===========================================================================
+/**************************************************************************//**
+ * @details Returns exception message as char array.
+ * @see http://www.cplusplus.com/reference/exception/exception/what/
+ * @return Exception message as char array.
+ */
 const char * ccruncher::Exception::what() const throw()
 {
   return msg.c_str();
 }
 
-//===========================================================================
-// output operator
-//===========================================================================
-ostream & ccruncher::operator << (ostream& os, const Exception &e)
+/**************************************************************************//**
+ * @details Prints the exception message in an output stream.
+ * @param[out] os Output stream.
+ * @param [in] e Exception to write.
+ * @return Reference to the output stream.
+ */
+std::ostream & ccruncher::operator << (std::ostream& os, const Exception &e)
 {
   os << e.toString();
   return os;

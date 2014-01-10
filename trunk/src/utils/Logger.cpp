@@ -21,17 +21,20 @@
 //===========================================================================
 
 #include <cstring>
+#include <cassert>
 #include "utils/Logger.hpp"
 #include "utils/Utils.hpp"
-#include <cassert>
 
 using namespace std;
 using namespace ccruncher;
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::Logger::Logger(streambuf *s) : ostream(s)
+/**************************************************************************//**
+ * @details Creates Logger using this given streambuf. If the streambuf is
+ *          not provided (s=NULL), then Logger creates its own.
+ * @see http://www.cplusplus.com/reference/streambuf/streambuf/
+ * @param[in] sb Stream buffer used by this logger. Can be <code>NULL</code>.
+ */
+ccruncher::Logger::Logger(streambuf *sb) : ostream(sb)
 {
   isize = 2;
   ilevel = 0;
@@ -39,34 +42,50 @@ ccruncher::Logger::Logger(streambuf *s) : ostream(s)
   curcol = 0;
 }
 
-//===========================================================================
-// setIndentSize
-//===========================================================================
+/**************************************************************************//**
+ * @details Number of spaces used as indent.
+ *          Default indent size is 2 spaces.
+ * @param[in] v Indent size.
+ */
 void ccruncher::Logger::setIndentSize(size_t v)
 {
   isize = v;
 }
 
-//===========================================================================
-// setNumCols
-//===========================================================================
+/**************************************************************************//**
+ * @details Number of columns. If a line exceeds this size then it is
+ *          printed as-is (exceding the maximum column size). The column
+ *          size is used to center text and apply a flood.
+ *          Default number of columns is 80.
+ * @param[in] v Number of columns.
+ */
 void ccruncher::Logger::setNumCols(size_t v)
 {
   numcols = v;
 }
 
-//===========================================================================
-// indent
-//===========================================================================
+/**************************************************************************//**
+ * @details Indent Number of columns. If a line exceeds this size then it is
+ *          printed as-is (exceding the maximum column size). The column
+ *          size is used to center text and apply a flood.
+ *          Default number of columns is 80.
+ * @param[in] v Number of indentation levels to add (positive) or
+ *          substract (negative).
+ */
 size_t ccruncher::Logger::indent(int v)
 {
   ilevel = std::max(0, (int)(ilevel)+v);
   return ilevel;
 }
 
-//===========================================================================
-// repeat fill char n times
-//===========================================================================
+/**************************************************************************//**
+ * @details Repeat the given char n times. If the fill char is unspecified
+ *          (c=0) then the default fill char is used. Caution, this method
+ *          don't take into account the maximum number of columns.
+ * @see http://www.cplusplus.com/reference/ios/basic_ios/fill/
+ * @param[in] n Number of times that the fill char is printed.
+ * @param[in] c Fill char to use. If c=0 then uses the default fill char.
+ */
 void ccruncher::Logger::repeat(size_t n, char c)
 {
   if (c==0) c = fill();
@@ -76,9 +95,10 @@ void ccruncher::Logger::repeat(size_t n, char c)
   }
 }
 
-//===========================================================================
-// flood
-//===========================================================================
+/**************************************************************************//**
+ * @details Repeat the given char to the maximum number of columns.
+ * @param[in] c Fill char to use.
+ */
 void ccruncher::Logger::flood(char c)
 {
   if (curcol == 0) repeat(ilevel*isize, ' ');
@@ -86,10 +106,12 @@ void ccruncher::Logger::flood(char c)
   repeat(numcols-curcol,c);
 }
 
-//===========================================================================
-// center
-//===========================================================================
-void ccruncher::Logger::center(const string &str)
+/**************************************************************************//**
+ * @details Center the given text taking into account the maximum column
+ *          size. It supports multi-line messages.
+ * @param[in] str Message to print.
+ */
+void ccruncher::Logger::center(const std::string &str)
 {
   vector<string> lines;
   Utils::tokenize(str, lines, "\n");
@@ -110,96 +132,111 @@ void ccruncher::Logger::center(const string &str)
   }
 }
 
-//===========================================================================
-// global function
-//===========================================================================
-Logger& ccruncher::operator<<(Logger& os, char c)
+/**************************************************************************//**
+ * @details Prints a character taking into account the maximum column,
+ *          line breaks and indentation.
+ * @param[in] c Character to print.
+ */
+Logger& ccruncher::Logger::operator<<(char c)
 {
-  if (c != '\n' && os.curcol+1 > os.numcols) {
-    static_cast<ostream&>(os) << '\n';
-    os.curcol = 0;
+  if (c != '\n' && curcol+1 > numcols) {
+    static_cast<ostream&>(*this) << '\n';
+    curcol = 0;
   }
-  if (os.curcol == 0) os.repeat(os.ilevel*os.isize, ' ');
-  static_cast<ostream&>(os) << c;
-  if (c == '\n') os.curcol = 0;
-  else os.curcol++;
-  return os;
+  if (curcol == 0) repeat(ilevel*isize, ' ');
+  static_cast<ostream&>(*this) << c;
+  if (c == '\n') curcol = 0;
+  else curcol++;
+  return *this;
 }
 
-//===========================================================================
-// global function
-//===========================================================================
-Logger& ccruncher::operator<<(Logger& os, const char* s)
+/**************************************************************************//**
+ * @details Prints a character array taking into account the maximum column,
+ *          line breaks and indentation.
+ * @param[in] s String to print (0 terminated).
+ */
+Logger& ccruncher::Logger::operator<<(const char *s)
 {
   const char *ptr = strchr(s, '\n');
 
   while(ptr != NULL)
   {
-    if (os.curcol == 0) os.repeat(os.ilevel*os.isize, ' ');
+    if (curcol == 0) repeat(ilevel*isize, ' ');
     size_t l = ptr - s;
-    static_cast<ostream&>(os) << string(s, l);
-    os.curcol += l;
-    os << '\n';
-    os.curcol = 0;
+    static_cast<ostream&>(*this) << string(s, l);
+    curcol += l;
+    *this << '\n';
+    curcol = 0;
     s = ptr+1;
     ptr = strchr(s, '\n');
   }
 
-  if (os.curcol == 0) os.repeat(os.ilevel*os.isize, ' ');
-  static_cast<ostream&>(os) << string(s);
-  os.curcol += strlen(s);
-  return os;
+  if (curcol == 0) repeat(ilevel*isize, ' ');
+  static_cast<ostream&>(*this) << string(s);
+  curcol += strlen(s);
+  return *this;
 }
 
-//===========================================================================
-// global function
-//===========================================================================
-Logger& ccruncher::operator<<(Logger& os, const string& str)
+/**************************************************************************//**
+ * @details Prints a string taking into account the maximum column,
+ *          line breaks and indentation.
+ * @param[in] str String to print.
+ */
+Logger& ccruncher::Logger::operator<<(const std::string &str)
 {
-  os << str.c_str();
-  return os;
+  *this << str.c_str();
+  return *this;
 }
 
-//===========================================================================
-// global function
-//===========================================================================
-Logger& ccruncher::operator<<(Logger& os, const Date &date)
+/**************************************************************************//**
+ * @details Prints the given Date using the Date::toString() format.
+ * @see Date#toString
+ * @param[in] date Date to print.
+ */
+Logger& ccruncher::Logger::operator<<(const Date &date)
 {
-  os << date.toString().c_str();
-  return os;
+  *this << date.toString().c_str();
+  return *this;
 }
 
-//===========================================================================
-// global function
-//===========================================================================
-Logger& ccruncher::operator<<(Logger& os, Timer &timer)
+/**************************************************************************//**
+ * @details Prints the given Timer using the Timer::format() format.
+ * @see Timer#format
+ * @param[in] timer Timer to print.
+ */
+Logger& ccruncher::Logger::operator<<(Timer &timer)
 {
-  os << Timer::format(timer.read()).c_str();
-  return os;
+  *this << Timer::format(timer.read()).c_str();
+  return *this;
 }
 
-//===========================================================================
-// endl manipulator
-//===========================================================================
-Logger& ccruncher::endl(Logger &os)
+/**************************************************************************//**
+ * @details Prints an end-of-line in the given Logger.
+ * @param[in,out] logger Logger.
+ */
+Logger& ccruncher::endl(Logger &logger)
 {
-  os << '\n';
-  os.flush();
-  return os;
+  logger << '\n';
+  logger.flush();
+  return logger;
 }
 
-//===========================================================================
-// flush manipulator
-//===========================================================================
-Logger& ccruncher::flush(Logger &os)
+/**************************************************************************//**
+ * @details Flush the content of the given Logger.
+ * @param[in,out] logger Logger.
+ */
+Logger& ccruncher::flush(Logger &logger)
 {
-  os.flush();
-  return os;
+  logger.flush();
+  return logger;
 }
 
-//===========================================================================
-// split manipulator
-//===========================================================================
+/**************************************************************************//**
+ * @details Split the content adjusting the next output to right and filling
+ *          with spaces the intermediate columns. It is only allowed 1 split
+ *          per line.
+ * @param[in,out] logger Logger.
+ */
 Logger& ccruncher::split(Logger &logger)
 {
   if (logger.getCurCol() > 0) logger << ' ';
@@ -210,29 +247,32 @@ Logger& ccruncher::split(Logger &logger)
   return logger;
 }
 
-//===========================================================================
-// header manipulator
-//===========================================================================
-Logger& ccruncher::header(Logger &log)
+/**************************************************************************//**
+ * @details Prints the CCruncher header with info about version and
+ *          starting time.
+ * @param[in,out] logger Logger.
+ */
+Logger& ccruncher::header(Logger &logger)
 {
-  log << "general information" << flood('*') << endl;
-  log << indent(+1);
-  log << "ccruncher version" << split << string(PACKAGE_VERSION)+" ("+string(SVN_VERSION)+")" << endl;
-  log << "start time (dd/MM/yyyy hh:mm:ss)" << split << Utils::timestamp() << endl;
-  log << indent(-1);
-  return log;
+  logger << "general information" << flood('*') << endl;
+  logger << indent(+1);
+  logger << "ccruncher version" << split << string(PACKAGE_VERSION)+" ("+string(SVN_VERSION)+")" << endl;
+  logger << "start time (dd/MM/yyyy hh:mm:ss)" << split << Utils::timestamp() << endl;
+  logger << indent(-1);
+  return logger;
 }
 
-//===========================================================================
-// copyright manipulator
-//===========================================================================
-Logger& ccruncher::copyright(Logger &log)
+/**************************************************************************//**
+ * @details Prints the CCruncher multi-line copyright notice.
+ * @param[in,out] logger Logger.
+ */
+Logger& ccruncher::copyright(Logger &logger)
 {
   string str =
     "ccruncher is Copyright (C) 2004-2014 Gerard Torrent and licensed\n"
     "under the GNU General Public License, version 2. More info at\n"
     "http://www.ccruncher.net\n";
-  log.center(str);
-  return log;
+  logger.center(str);
+  return logger;
 }
 
