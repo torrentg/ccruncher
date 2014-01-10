@@ -23,9 +23,6 @@
 #ifndef _Logger_
 #define _Logger_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <ostream>
 #include <streambuf>
@@ -33,92 +30,86 @@
 #include "utils/Timer.hpp"
 #include "utils/Date.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief   CCruncher's trace.
+ *
+ * @details This logger provides methods to manage a 80-columns output
+ *          supporting centered text, multi-level indenting, and 2 columns
+ *          where the former is the description, and the second the value.
+ *          This class extends std::ostream.
+ *
+ * @see     http://www.cplusplus.com/reference/ostream/ostream/
+ *
+ */
 class Logger : public std::ostream
 {
 
   private:
 
-    // indent size;
+    //! Indent size
     size_t isize;
-    // current indentation level
+    //! Current indentation level
     size_t ilevel;
-    // number of columns
+    //! Number of columns
     size_t numcols;
-    // current column
+    //! Current column
     size_t curcol;
 
   public:
 
-    // default constructor
-    explicit Logger(std::streambuf *s=NULL);
-    // indentation size
+    //! Default constructor
+    explicit Logger(std::streambuf *sb=NULL);
+    //! Set indentation size
     void setIndentSize(size_t v);
-    // number of columns
-    void setNumCols(size_t);
-    // return numcols
+    //! Set the number of columns
+    void setNumCols(size_t v);
+    //! Return the number of columns
     size_t getNumCols() const { return numcols; }
-    // return curcol
+    //! Return the current column
     size_t getCurCol() const { return curcol; }
-    // increase/decrease indent levels
+    //! Increase/decrease indent levels
     size_t indent(int v=1);
-    // repeat fill char n times
+    //! Repeat fill char n times
     void repeat(size_t n, char c=0);
-    // flood
+    //! Flood line with the given char
     void flood(char c);
-    // center text
-    void center(const std::string &);
+    //! Center text
+    void center(const std::string &str);
 
     // formated output
+    template <class T> Logger& operator<<(T val) { static_cast<std::ostream&>(*this) << val; return *this; }
     Logger& operator<<(bool val) { static_cast<std::ostream&>(*this) << (val?"true":"false"); return *this; }
-    Logger& operator<<(short val) { static_cast<std::ostream&>(*this) << val; return *this; }
-    Logger& operator<<(unsigned short val) { static_cast<std::ostream&>(*this) << val; return *this; }
-    Logger& operator<<(int val) { static_cast<std::ostream&>(*this) << val; return *this; }
-    Logger& operator<<(unsigned int val) { static_cast<std::ostream&>(*this) << val; return *this; }
-    Logger& operator<<(long val) { static_cast<std::ostream&>(*this) << val; return *this; }
-    Logger& operator<<(unsigned long val) { static_cast<std::ostream&>(*this) << val; return *this; }
-    Logger& operator<<(float val) { static_cast<std::ostream&>(*this) << val; return *this; }
-    Logger& operator<<(double val) { static_cast<std::ostream&>(*this) << val; return *this; }
-    Logger& operator<<(long double val) { static_cast<std::ostream&>(*this) << val; return *this; }
-    Logger& operator<<(const void* val) { static_cast<std::ostream&>(*this) << val; return *this; }
+    Logger& operator<<(const char *s);
+    Logger& operator<<(char c);
+    Logger& operator<<(const std::string &str);
+    Logger& operator<<(const Date &date);
+    Logger& operator<<(Timer &timer);
 
     // manipulators calls
     Logger& operator<<(Logger& ( *pf )(Logger&)) { return pf(*this); }
     Logger& operator<<(std::ios& ( *pf )(std::ios&)) { pf(*this); return *this; }
     Logger& operator<<(std::ios_base& ( *pf )(std::ios_base&)) { pf(*this); return *this; }
 
-    // friend functions
-    friend Logger& operator<<(Logger& os, const char* s);
-    friend Logger& operator<<(Logger& os, char c);
-    friend Logger& operator<<(Logger& os, const std::string &);
-    friend Logger& operator<<(Logger& os, const Date &);
-    friend Logger& operator<<(Logger& os, Timer &);
-
 };
 
-//---------------------------------------------------------------------------
-
-// manipulator
+//! Stream manipulator
 Logger& split(Logger &logger);
 
-// manipulator
+//! Stream manipulator
 Logger& endl(Logger &logger);
 
-// manipulator
+//! Stream manipulator
 Logger& flush(Logger &logger);
 
-// manipulator
-Logger& header(Logger &log);
+//! Stream manipulator
+Logger& header(Logger &logger);
 
-// manipulator
-Logger& copyright(Logger &log);
+//! Stream manipulator
+Logger& copyright(Logger &logger);
 
-// manipulator
+//! Logger stream manipulator
 struct flood
 {
   const char fill ;
@@ -130,7 +121,7 @@ struct flood
   }
 };
 
-// manipulator
+//! Logger stream manipulator
 struct indent
 {
   int delta;
@@ -142,24 +133,24 @@ struct indent
   }
 };
 
-// manipulator
+//! Logger stream manipulator
 struct footer
 {
   Timer &timer;
   explicit footer(Timer &t) : timer(t) {}
-  inline friend Logger& operator<<(Logger& log, const footer& manip)
+  inline friend Logger& operator<<(Logger& logger, const footer& manip)
   {
-    log << "general information" << flood('*') << endl;
-    log << indent(+1);
-    log << "end time (dd/MM/yyyy hh:mm:ss)" << split << Utils::timestamp() << endl;
-    log << "total elapsed time" << split << manip.timer << endl;
-    log << indent(-1);
-    log << endl;
-    return log;
+    logger << "general information" << flood('*') << endl;
+    logger << indent(+1);
+    logger << "end time (dd/MM/yyyy hh:mm:ss)" << split << Utils::timestamp() << endl;
+    logger << "total elapsed time" << split << manip.timer << endl;
+    logger << indent(-1);
+    logger << endl;
+    return logger;
   }
 };
 
-// manipulator
+//! Logger stream manipulator
 struct center
 {
   std::string str;
@@ -171,12 +162,7 @@ struct center
   }
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

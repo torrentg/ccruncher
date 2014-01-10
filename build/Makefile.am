@@ -10,7 +10,8 @@ EXTRA_DIST = \
     ../src\
     ../ccruncher-cmd.pro\
     ../ccruncher-gui.pro\
-    ../ccruncher-tests.pro
+    ../ccruncher-tests.pro\
+    ../Doxyfile
 
 bin_PROGRAMS = ccruncher-cmd
 

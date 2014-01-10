@@ -20,28 +20,30 @@
 //
 //===========================================================================
 
+#include <sys/time.h>
 #include <ctime>
 #include <cctype>
 #include <cstdio>
 #include <algorithm>
-#include "utils/Utils.hpp"
 #include <cassert>
-#include <sys/time.h>
+#include "utils/config.h"
+#include "utils/Utils.hpp"
 
 #ifdef _WIN32
-#include <windows.h>
+  #include <windows.h>
 #elif MACOS
-#include <sys/param.h>
-#include <sys/sysctl.h>
+  #include <sys/param.h>
+  #include <sys/sysctl.h>
 #else
-#include <unistd.h>
+  #include <unistd.h>
 #endif
 
 using namespace std;
 
-//===========================================================================
-// return the current timestamp in format dd/mm/yyyy hh:mm:ss
-//===========================================================================
+/**************************************************************************//**
+ * @details Format current timestamp as <code>'dd/MM/yyyy hh:mm:ss'</code>.
+ * @return Current timestamp formated as string.
+ */
 string ccruncher::Utils::timestamp()
 {
   time_t now = time(NULL);
@@ -50,14 +52,17 @@ string ccruncher::Utils::timestamp()
   char aux[] = "dd/mm/yyyy hh:mm:ss ";
   aux[19] = 0;
 
-  snprintf(aux, 20, "%02d/%02d/%04d %02d:%02d:%02d", lt.tm_mday, lt.tm_mon+1, lt.tm_year+1900, lt.tm_hour, lt.tm_min, lt.tm_sec);
+  snprintf(aux, 20, "%02d/%02d/%04d %02d:%02d:%02d", lt.tm_mday, lt.tm_mon+1,
+           lt.tm_year+1900, lt.tm_hour, lt.tm_min, lt.tm_sec);
 
   return string(aux);
 }
 
-//===========================================================================
-// returns a random value based on current time
-//===========================================================================
+/**************************************************************************//**
+ * @details This value can be used to seed a RNG (random number generator).
+ *          It has microseconds resolution.
+ * @return Value based on current time.
+ */
 unsigned long ccruncher::Utils::trand()
 {
   timeval tv;
@@ -65,9 +70,16 @@ unsigned long ccruncher::Utils::trand()
   return (unsigned long)(tv.tv_sec)*1000000UL + (unsigned long)(tv.tv_usec);
 }
 
-//===========================================================================
-// return a string with compilation options
-//===========================================================================
+/**************************************************************************//**
+ * @details Compilation options are:
+ *          <ul>
+ *            <li> debug. <code>\#define NDEBUG</code></li>
+ *            <li> profiler. <code>\#define PROFILER</code></li>
+ *          </ul>.
+ *          String is formated using this pattern:
+ *          <code>'debug[enabled] | profiler[disabled]'</code>.
+ * @return A string with compilation options.
+ */
 string ccruncher::Utils::getCompilationOptions()
 {
   string ret = "";
@@ -91,9 +103,11 @@ string ccruncher::Utils::getCompilationOptions()
   return ret;
 }
 
-//===========================================================================
-// return the number of cores
-//===========================================================================
+/**************************************************************************//**
+ * @details This method is platform dependent.
+ *          Supported platforms are: Unix/Windows/Mac.
+ * @return The number of cores.
+ */
 int ccruncher::Utils::getNumCores()
 {
 #ifdef WIN32
@@ -119,9 +133,13 @@ int ccruncher::Utils::getNumCores()
 #endif
 }
 
-//===========================================================================
-// tokenize
-//===========================================================================
+/**************************************************************************//**
+ * @details Tokens are delimited by a character, and user can provide more
+ *          than one character.
+ * @param[in] str String to tokenize.
+ * @param[out] tokens List of tokens found.
+ * @param[in] delimiters Set of characters used as delimiters (eg. ',;').
+ */
 void ccruncher::Utils::tokenize(const string& str, vector<string>& tokens, const string& delimiters)
 {
   // Skip delimiters at beginning.
@@ -131,33 +149,35 @@ void ccruncher::Utils::tokenize(const string& str, vector<string>& tokens, const
 
   while (string::npos != pos || string::npos != lastPos)
   {
-     // Found a token, add it to the vector.
-     tokens.push_back(str.substr(lastPos, pos - lastPos));
-     // Skip delimiters.  Note the "not_of"
-     lastPos = str.find_first_not_of(delimiters, pos);
-     // Find next "non-delimiter"
-     pos = str.find_first_of(delimiters, lastPos);
+    // Found a token, add it to the vector.
+    tokens.push_back(str.substr(lastPos, pos - lastPos));
+    // Skip delimiters.  Note the "not_of"
+    lastPos = str.find_first_not_of(delimiters, pos);
+    // Find next "non-delimiter"
+    pos = str.find_first_of(delimiters, lastPos);
   }
 }
 
-//===========================================================================
-// trim
-//===========================================================================
-string ccruncher::Utils::trim(const string &s)
+/**************************************************************************//**
+ * @details Removes starting and ending space characters.
+ * @param[in] str String to be trimmed.
+ * @return String trimmed.
+ */
+string ccruncher::Utils::trim(const string &str)
 {
-  if (s.length() == 0) return "";
+  if (str.length() == 0) return "";
 
-  int pos1 = s.length()-1;
-  for(int i=0; i<(int)s.length(); i++) {
-    if (!isspace(s[i])) {
+  int pos1 = str.length()-1;
+  for(int i=0; i<(int)str.length(); i++) {
+    if (!isspace(str[i])) {
       pos1=i;
       break;
     }
   }
 
   int pos2 = 0;
-  for(int i=(int)s.length()-1; i>=0; i--) {
-    if (!isspace(s[i])) {
+  for(int i=(int)str.length()-1; i>=0; i--) {
+    if (!isspace(str[i])) {
       pos2=i;
       break;
     }
@@ -167,17 +187,18 @@ string ccruncher::Utils::trim(const string &s)
     return "";
   }
   else if (pos1 == pos2) {
-    if (isspace(s[pos1])) return "";
-    else return s.substr(pos1,1);
+    if (isspace(str[pos1])) return "";
+    else return str.substr(pos1,1);
   }
   else {
-    return s.substr(pos1,pos2-pos1+1);
+    return str.substr(pos1,pos2-pos1+1);
   }
 }
 
-//===========================================================================
-// uppercase
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] str String to be uppercased.
+ * @return String uppercased.
+ */
 string ccruncher::Utils::uppercase(const string &str)
 {
   string res = str;
@@ -187,9 +208,10 @@ string ccruncher::Utils::uppercase(const string &str)
   return res;
 }
 
-//===========================================================================
-// lowercase
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] str String to be lowercased.
+ * @return String lowercased.
+ */
 string ccruncher::Utils::lowercase(const string &str)
 {
   string res = str;
@@ -197,21 +219,5 @@ string ccruncher::Utils::lowercase(const string &str)
   transform(res.begin(), res.end(), res.begin(), (int(*)(int)) tolower);
 
   return res;
-}
-
-//===========================================================================
-// filler
-//===========================================================================
-string ccruncher::Utils::filler(int n, char c)
-{
-  return string(n, c);
-}
-
-//===========================================================================
-// blanks
-//===========================================================================
-string ccruncher::Utils::blanks(int n)
-{
-  return filler(n, ' ');
 }
 

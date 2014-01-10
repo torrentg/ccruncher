@@ -235,14 +235,19 @@ Developers tips & tricks
      > ./binary
 
 10. debuging executable
-     > gdb ./path/progname
-       >> help
-       >> set args arg1 arg2 arg3 ... argn
-       >> run
-       >> backtrace
-       >> quit
+      > gdb ./path/progname
+        >> help
+        >> set args arg1 arg2 arg3 ... argn
+        >> run
+        >> backtrace
+        >> quit
 
-11. other minor tasks
+11. creating html code documentation
+      > doxywizard Doxygen
+      > doxygen Doxygen
+      > firefox build/html/index.html
+    
+12. other minor tasks
       > # man pages creation
       > help2man --no-info -n "simule the loss distribution of a credit portfolio using the \
         Monte Carlo method" ./build/ccruncher-cmd > ccruncher-cmd.1
@@ -250,14 +255,14 @@ Developers tips & tricks
       > # lines of code
       > cloc src
 
-12. using clang compiler (http://clang.llvm.org/)
+13. using clang compiler (http://clang.llvm.org/)
       > #using autotools
       > ./configure CXX=clang++
       > make
       > # using qmake
       > qmake -spec unsupported/linux-clang 
 
-13. making source distribution package
+14. making source distribution package
       > make distcheck
       > make dist
     or (better) use script $CCRUNCHER/bin/makedist.sh
@@ -265,7 +270,7 @@ Developers tips & tricks
       > $CCRUNCHER/bin/makedist.sh -b
       > $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
 
-14. create a tag in subversion repository
+15. create a tag in subversion repository
       > svn cp http://www.ccruncher.net/svn/trunk/ \
              http://www.ccruncher.net/svn/tags/ccruncher-x.y/ \
              -m "created tag ccruncher-x.y"

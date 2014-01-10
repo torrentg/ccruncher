@@ -23,57 +23,45 @@
 #ifndef _Utils_
 #define _Utils_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <vector>
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief   Utilities functions.
+ */
 class Utils
 {
 
   private:
   
-    // non-instantiable class
+    //! Constructor. Non-instantiable class
     Utils() {}
 
   public:
 
-    // returns current timestamp in format dd/mm/yyyy hh:mm:ss
+    //! Returns current timestamp as string
     static std::string timestamp();
-    // returns compilation options
+    //! Returns a human-readable string with the compilation options
     static std::string getCompilationOptions();
-    // returns random value based on current time
+    //! Returns a numeric value based on current time
     static unsigned long trand();
-    // return the number of cores
+    //! Returns the number of available processors
     static int getNumCores();
-    // tokenize a string
-    static void tokenize(const std::string& str, std::vector<std::string>& tokens, const std::string& delimiters = " ");
-    // trims a string
-    static std::string trim(const std::string &s);
-    // converts to upper case
+    //! Tokenize a string
+    static void tokenize(const std::string &str, std::vector<std::string> &tokens,
+                         const std::string &delimiters=" ");
+    //! Trims a string
+    static std::string trim(const std::string &str);
+    //! Converts a string to upper case
     static std::string uppercase(const std::string &str);
-    // converts to lower case
+    //! Converts a string to lower case
     static std::string lowercase(const std::string &str);
-    // creates a filler with the given char
-    static std::string filler(int, char);
-    // returns a blank string with the given length
-    static std::string blanks(int);
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

@@ -23,57 +23,50 @@
 #ifndef _Exception_
 #define _Exception_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <stdexcept>
 #include <iostream>
 #include <string>
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief   CCruncher's exception.
+ *
+ * @details It is derived from std::exception an can be instantiate using
+ *          another exception (preserving its message).
+ *
+ * @see     http://www.cplusplus.com/reference/exception/exception/
+ *
+ */
 class Exception : public std::exception
 {
 
   protected:
 
-    // exception message
+    //! Exception message.
     std::string msg;
 
   public:
 
-    // default constructor
-    Exception();
-    // constructor
-    Exception(const std::exception &);
-    // constructor
-    Exception(const std::exception &, const std::string&);
-    // constructor
-    Exception(const std::string &);
-    // destructor
-    ~Exception() throw ();
-    // returns exception message
+    //! Default constructor.
+    Exception(const std::string &str="");
+    //! Constructor.
+    Exception(const std::exception &e);
+    //! Constructor.
+    Exception(const std::exception &e, const std::string &str);
+    //! Destructor.
+    ~Exception() throw () {}
+    //! Returns exception message.
     const char * what() const throw();
-    // returns exception message
+    //! Returns exception message.
     const std::string & toString() const;
 
 };
 
-//---------------------------------------------------------------------------
-
-// output operator
+//! Output operator.
 std::ostream& operator << (std::ostream& os, const Exception &e);
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------
