@@ -23,89 +23,103 @@
 #ifndef _ExpatHandlers_
 #define _ExpatHandlers_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <cstring>
 #include "utils/ExpatUserData.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
-#include <cassert>
-
-//---------------------------------------------------------------------------
 
 namespace ccruncher {
-
-//---------------------------------------------------------------------------
 
 // forward declaration
 class ExpatUserData;
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief   Base class providing methods to interact with the XML parser.
+ *
+ * @details Expat is a stream-oriented parser. You register callback (or
+ *          handler) functions with the parser and then start feeding it the
+ *          document. As the parser recognizes parts of the document, it will
+ *          call the appropriate handler for that part (if you've registered
+ *          one). The document is fed to the parser in pieces, so you can
+ *          start parsing before you have the whole document. This also allows
+ *          you to parse really huge documents that won't fit into memory.
+ *          This class provides support to define these handlers and methods
+ *          to interact with the XML parser.
+ *
+ * @see     http://expat.sourceforge.net/
+ * @see     http://www.xml.com/pub/a/1999/09/expat/index.html
+ */
 class ExpatHandlers
 {
 
   protected:
 
-    // removes current handlers from stack
+    //! Removes current handlers from stack
     void epback(ExpatUserData &eud);
-    // push handlers to stack
+    //! Push new handlers to stack
     void eppush(ExpatUserData &eud, ExpatHandlers *eh, const char *name, const char **atts);
-    // stops the parser
+    //! Stops the parser
     void epstop(ExpatUserData &eud);
-    // string comparison
+    //! String comparison
     bool isEqual(const char *, const char *) const;
-    // returns the number of attributes
+    //! Returns the number of attributes
     int getNumAttributes(const char **atts) const;
-    // returns the value of the given attribute
+    //! Returns the value of the given attribute
     const char * getAttributeValue(const char **atts, const char *attname) const throw(Exception);
+    //! Returns the value of the given attribute
     const char * getAttributeValue(const char **atts, const char *attname, const char *defval) const;
-    // returns attribute value as string
+    //! Returns attribute value as string
     std::string getStringAttribute(const char **atts, const char *attname) const throw(Exception);
+    //! Returns attribute value as string
     std::string getStringAttribute(const char **atts, const char *attname, const std::string &defval) const;
-    // returns attribute value as int
+    //! Returns attribute value as int
     int getIntAttribute(const char **atts, const char *attname) const throw(Exception);
+    //! Returns attribute value as int
     int getIntAttribute(const char **atts, const char *attname, int defval) const;
-    // returns attribute value as long
+    //! Returns attribute value as long
     long getLongAttribute(const char **atts, const char *attname) const throw(Exception);
+    //! Returns attribute value as long
     long getLongAttribute(const char **atts, const char *attname, long defval) const;
-    // returns attribute value as double
+    //! Returns attribute value as double
     double getDoubleAttribute(const char **atts, const char *attname) const throw(Exception);
+    //! Returns attribute value as double
     double getDoubleAttribute(const char **atts, const char *attname, double defval) const;
-    // returns attribute value as date
+    //! Returns attribute value as date
     Date getDateAttribute(const char **atts, const char *attname) const throw(Exception);
+    //! Returns attribute value as date
     Date getDateAttribute(const char **atts, const char *attname, const Date &defval) const;
-    // returns attribute value as boolean
+    //! Returns attribute value as boolean
     bool getBooleanAttribute(const char **atts, const char *attname) const throw(Exception);
+    //! Returns attribute value as boolean
     bool getBooleanAttribute(const char **atts, const char *attname, bool defval) const;
 
   protected:
   
-    // handler for open tag
+    //! Handler for open tag
     virtual void epstart(ExpatUserData &eud, const char *name, const char **atts) = 0;
-    // handler for closed tag
+    //! Handler for closed tag
     virtual void epend(ExpatUserData &/*eud*/, const char */*name*/) {}
-    // handler for data
+    //! Handler for data
     virtual void epdata(ExpatUserData &eud, const char *name, const char *cdata, int len);
-    // constructor
+    //! Constructor
     ExpatHandlers() {}
-    // destructor
-    virtual ~ExpatHandlers();
+    //! Destructor
+    virtual ~ExpatHandlers() {}
     
   public:
   
-    // friend class
+    //! Friend class
     friend class ExpatParser;
 
 };
 
-//---------------------------------------------------------------------------
-
-//===========================================================================
-// isEqual
-//===========================================================================
+/**************************************************************************//**
+ * @details Compares 2 strings taking into accounts NULL values.
+ *          This method is widely used to check parameter names.
+ * @see http://www.cplusplus.com/reference/cstring/strcmp/
+ * @return true=both strings are equal, false=otherwise.
+ */
 inline bool ccruncher::ExpatHandlers::isEqual(const char *pchr, const char *str) const
 {
   if (pchr != NULL && str != NULL)
@@ -118,10 +132,7 @@ inline bool ccruncher::ExpatHandlers::isEqual(const char *pchr, const char *str)
   }
 }
 
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------
