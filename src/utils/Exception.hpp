@@ -36,7 +36,6 @@ namespace ccruncher {
  *          another exception (preserving its message).
  *
  * @see     http://www.cplusplus.com/reference/exception/exception/
- *
  */
 class Exception : public std::exception
 {
