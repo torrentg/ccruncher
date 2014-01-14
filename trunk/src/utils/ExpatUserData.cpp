@@ -21,18 +21,18 @@
 //===========================================================================
 
 #include <cstring>
-#include "utils/ExpatUserData.hpp"
 #include <cassert>
+#include "utils/ExpatUserData.hpp"
+
+#define MAX_STACK_SIZE 10
 
 using namespace std;
 using namespace ccruncher;
 
-//===========================================================================
-// void constructor (don't use)
-//===========================================================================
+/**************************************************************************/
 ccruncher::ExpatUserData::ExpatUserData(size_t buffersize) :
-  xmlparser(NULL), pila(10), pila_pos(-1), current_tag(NULL),
-  buffer(NULL), buffer_size(buffersize), buffer_pos1(NULL), buffer_pos2(NULL)
+  pila(MAX_STACK_SIZE), pila_pos(-1), current_tag(NULL), buffer(NULL),
+  buffer_size(buffersize), buffer_pos1(NULL), buffer_pos2(NULL)
 {
   if (buffer_size == 0) buffer_size = 1;
   buffer = new char[buffer_size];
@@ -40,47 +40,30 @@ ccruncher::ExpatUserData::ExpatUserData(size_t buffersize) :
   buffer_pos2 = buffer + buffer_size + 1;
 }
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::ExpatUserData::ExpatUserData(XML_Parser xmlparser_, size_t buffersize) :
-  xmlparser(NULL), pila(10), pila_pos(-1), current_tag(NULL),
-  buffer(NULL), buffer_size(buffersize), buffer_pos1(NULL), buffer_pos2(NULL)
-{
-  if (buffer_size == 0) buffer_size = 1;
-  xmlparser = xmlparser_;
-  buffer = new char[buffer_size];
-  buffer_pos1 = buffer + buffer_size + 1;
-  buffer_pos2 = buffer + buffer_size + 1;
-}
-
-//===========================================================================
-// copy constructor
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatUserData#operator=
+ * @param[in] o Object to replicate.
+ */
 ccruncher::ExpatUserData::ExpatUserData(const ExpatUserData &o) :
-  xmlparser(NULL), pila(0), pila_pos(-1), current_tag(NULL),
-  buffer(NULL), buffer_size(0), buffer_pos1(NULL), buffer_pos2(NULL)
+  pila(0), pila_pos(-1), current_tag(NULL), buffer(NULL),
+  buffer_size(0), buffer_pos1(NULL), buffer_pos2(NULL)
 {
   *this = o;
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::ExpatUserData::~ExpatUserData()
 {
   if (buffer != NULL) delete [] buffer;
 }
 
-//===========================================================================
-// assignment operator
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] o Object to assign.
+ */
 ExpatUserData & ccruncher::ExpatUserData::operator= (const ExpatUserData &o)
 {
   if (this != &o)
   {
-    xmlparser = o.xmlparser;
-
     pila = o.pila;
     pila_pos = o.pila_pos;
 
@@ -97,21 +80,27 @@ ExpatUserData & ccruncher::ExpatUserData::operator= (const ExpatUserData &o)
   return *this;
 }
 
-//===========================================================================
-// setCurrentHandlers
-//===========================================================================
+/**************************************************************************//**
+ * @details Establishes the handlers to be used in subsequent calls. These
+ *          handlers will be removed when the end element tag be found.
+ * @param[in] name Element name (length < 20).
+ * @param[in] eh Element (and possibly sub-elements) handlers.
+ */
 void ccruncher::ExpatUserData::setCurrentHandlers(const char *name, ExpatHandlers *eh)
 {
   pila_pos++;
-  assert(pila_pos<10);
+  assert(pila_pos<MAX_STACK_SIZE);
   pila[pila_pos].handlers = eh;
   assert(strlen(name)<20);
   strncpy(pila[pila_pos].name, name, 19);
 }
 
-//===========================================================================
-// bufferPush
-//===========================================================================
+/**************************************************************************//**
+ * @details Push content to buffer used to manage defines replacement.
+ * @param[in] str Content to push.
+ * @param[in] n Content length.
+ * @throw Exception Buffer content bigger than buffer size.
+ */
 const char* ccruncher::ExpatUserData::bufferPush(const char *str, size_t n)
 {
   if (buffer_pos2+n+1 < buffer+buffer_size)
@@ -134,9 +123,12 @@ const char* ccruncher::ExpatUserData::bufferPush(const char *str, size_t n)
   return buffer_pos1;
 }
 
-//===========================================================================
-// bufferAppend
-//===========================================================================
+/**************************************************************************//**
+ * @details Append content to buffer used to manage defines replacement.
+ * @param[in] str Content to push.
+ * @param[in] n Content length.
+ * @throw Exception Buffer content bigger than buffer size.
+ */
 const char* ccruncher::ExpatUserData::bufferAppend(const char *str, size_t n)
 {
   if (buffer_pos2+n+1 < buffer+buffer_size)
@@ -162,9 +154,18 @@ const char* ccruncher::ExpatUserData::bufferAppend(const char *str, size_t n)
   return buffer_pos1;
 }
 
-//===========================================================================
-// applyDefines
-//===========================================================================
+/**************************************************************************//**
+ * @details If the string contains defines, then make the replacement in
+ *          a buffer and returns a pointer to this buffer. The content in
+ *          the buffer is valid until another applyDefines call overwrites
+ *          this content. If you experience problems (eg. a lot of parameters
+ *          in the same element) increase the buffer size.
+ * @param[in] str String to apply defines.
+ * @return If not defines are found then returns the input string, otherwise
+ *         returns a pointer to the buffer size.
+ * @throw Exception Buffer content bigger than buffer size.
+ * @throw Exception Define name not found.
+ */
 const char* ccruncher::ExpatUserData::applyDefines(const char *str)
 {
   const char *ret = str;

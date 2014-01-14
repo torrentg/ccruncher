@@ -28,8 +28,8 @@
 #include <cstdio>
 #include <cstring>
 #include <algorithm>
-#include "Expr.hpp"
 #include <cassert>
+#include "Expr.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -38,40 +38,58 @@ using namespace ccruncher;
 #define CHAR_PARENTHESIS_CLOSE ')'
 #define CHAR_ARGUMENT_SEPARATOR ','
 
+//=============================================================
+// supported functions
+//=============================================================
 namespace ccruncher {
 
-//=============================================================
-// supported functions & constants
-//=============================================================
+  //! Minus function (negate)
+  double fminus(double x) { return -x; }
+  //! Plus function (identity)
+  double fplus(double x) { return +x; }
+  //! Sqrt function
+  double fsqrt(double x) { return sqrt(x); }
+  //! Sin function
+  double fsin(double x) { return sin(x); }
+  //! Cos function
+  double fcos(double x) { return cos(x); }
+  //! Tan function
+  double ftan(double x) { return tan(x); }
+  //! Exponential function
+  double fexp(double x) { return exp(x); }
+  //! Logarithm function
+  double flog(double x) { return log(x); }
+  //! Absolute value function
+  double ffabs(double x) { return fabs(x); }
+  //! Addition function
+  double fsum(double x, double y) { return x+y; }
+  //! Subtraction function
+  double frest(double x, double y) { return x-y; }
+  //! Multiplication function
+  double fprod(double x, double y) { return x*y; }
+  //! Division function
+  double fdiv(double x, double y) { return x/y; }
+  //! Pow function
+  double fpow1(double x, double y) { return pow(x,y); }
+  //! Minimum function
+  double fmin(double x, double y) { return min(x,y); }
+  //! Maximum function
+  double fmax(double x, double y) { return max(x,y); }
+  //! If function
+  double fif(double x, double y, double z) { return (x!=0.0?y:z); }
 
-double fminus(double x) { return -x; }
-double fplus(double x) { return +x; }
-double fsqrt(double x) { return sqrt(x); }
-double fsin(double x) { return sin(x); }
-double fcos(double x) { return cos(x); }
-double ftan(double x) { return tan(x); }
-double fexp(double x) { return exp(x); }
-double flog(double x) { return log(x); }
-double ffabs(double x) { return fabs(x); }
-double fsum(double x, double y) { return x+y; }
-double frest(double x, double y) { return x-y; }
-double fprod(double x, double y) { return x*y; }
-double fdiv(double x, double y) { return x/y; }
-double fpow1(double x, double y) { return pow(x,y); }
-double fmin(double x, double y) { return min(x,y); }
-double fmax(double x, double y) { return max(x,y); }
-double fif(double x, double y, double z) { return (x!=0.0?y:z); }
+} // namespace
 
-}
-
-//TODO: consider logical operators (eg. &&, ||, etc.)
+/**
+ * @todo Consider logical operators (eg. &&, ||).
+ */
 const Expr::operador ccruncher::Expr::operators[] =
 {
   { "+", 0, true, &fsum },
   { "-", 0, true, &frest },
   { "*", 1, true, &fprod },
   { "/", 1, true, &fdiv },
-  { "^", 2, true, &fpow1 } // left associativity (like octave) 2^3^4=(2^3)^4
+  { "^", 2, true, &fpow1 }  // left associativity (like octave): 2^3^4=(2^3)^4
 };
 
 #define NUMOPERATORS (sizeof(operators)/sizeof(operador))
@@ -103,9 +121,13 @@ const Expr::constant ccruncher::Expr::constants[] =
 
 #define NUMCONSTANTS (sizeof(constants)/sizeof(constant))
 
-//=============================================================
-// isFunction
-//=============================================================
+/**************************************************************************//**
+ * @details Check if input string starts with a function name.
+ * @param[in] ptr Input string.
+ * @param[out] tok Token to fill if function is identified.
+ * @param[out] endptr Next character after identified function.
+ * @return true = function found, false = function not found
+ */
 bool ccruncher::Expr::isFunction(const char *ptr, token *tok, char **endptr)
 {
   for(int i=0; i<int(NUMFUNCTIONS); i++)
@@ -122,9 +144,13 @@ bool ccruncher::Expr::isFunction(const char *ptr, token *tok, char **endptr)
   return false;
 }
 
-//=============================================================
-// isConstant
-//=============================================================
+/**************************************************************************//**
+ * @details Check if input string starts with a constant identifier.
+ * @param[in] ptr Input string.
+ * @param[out] tok Token to fill if constant is found.
+ * @param[out] endptr Next character after constant.
+ * @return true = constant found, false = constant not found
+ */
 bool ccruncher::Expr::isConstant(const char *ptr, token *tok, char **endptr)
 {
   for(int i=0; i<int(NUMCONSTANTS); i++)
@@ -141,9 +167,13 @@ bool ccruncher::Expr::isConstant(const char *ptr, token *tok, char **endptr)
   return false;
 }
 
-//=============================================================
-// isOperator
-//=============================================================
+/**************************************************************************//**
+ * @details Check if input string starts with an operator.
+ * @param[in] ptr Input string.
+ * @param[out] tok Token to fill if operator is found.
+ * @param[out] endptr Next character after operator.
+ * @return true = operator found, false = operator not found
+ */
 bool ccruncher::Expr::isOperator(const char *ptr, token *tok, char **endptr)
 {
   for(int i=0; i<int(NUMOPERATORS); i++)
@@ -160,9 +190,13 @@ bool ccruncher::Expr::isOperator(const char *ptr, token *tok, char **endptr)
   return false;
 }
 
-//=============================================================
-// isNumber
-//=============================================================
+/**************************************************************************//**
+ * @details Check if input string starts with a number.
+ * @param[in] ptr Input string.
+ * @param[out] tok Token to fill if number is found.
+ * @param[out] endptr Next character after number.
+ * @return true = number found, false = number not found
+ */
 bool ccruncher::Expr::isNumber(const char *ptr, token *tok, char **endptr)
 {
   tok->dat.x = strtod(ptr, endptr);
@@ -178,10 +212,18 @@ bool ccruncher::Expr::isNumber(const char *ptr, token *tok, char **endptr)
   }
 }
 
-//=============================================================
-// isVariable
-//=============================================================
-bool ccruncher::Expr::isVariable(const char *ptr, token *tok, char **endptr, vector<variable> &variables)
+/**************************************************************************//**
+ * @details Check if input string starts with a variable. A variable follows
+ *          the pattern <code>[_a-zA-Z][_a-zA-Z0-9]*</code>.
+ *          If a variable is identified and don't exist in the variables
+ *          list then adds the variable in the list.
+ * @param[in] ptr Input string.
+ * @param[out] tok Token to fill if variable is found.
+ * @param[out] endptr Next character after variable.
+ * @param[in,out] variables List of variables.
+ * @return true = variable found, false = variable not found
+ */
+bool ccruncher::Expr::isVariable(const char *ptr, token *tok, char **endptr, std::vector<variable> &variables)
 {
   for(size_t i=0; i<variables.size(); i++)
   {
@@ -216,10 +258,14 @@ bool ccruncher::Expr::isVariable(const char *ptr, token *tok, char **endptr, vec
   return false;
 }
 
-//=============================================================
-// next
-//=============================================================
-void ccruncher::Expr::next(const char *ptr, token *tok, char **endptr, vector<variable> &variables) throw(Exception)
+/**************************************************************************//**
+ * @param[in] ptr Input string.
+ * @param[out] tok Token to fill.
+ * @param[out] endptr Next character after the identified substring.
+ * @param[in,out] variables List of variables.
+ * @throw Exception Unrecognized text.
+ */
+void ccruncher::Expr::next(const char *ptr, token *tok, char **endptr, std::vector<variable> &variables) throw(Exception)
 {
   while(isspace(*ptr)) ptr++;
 
@@ -258,18 +304,24 @@ void ccruncher::Expr::next(const char *ptr, token *tok, char **endptr, vector<va
   else throw Exception("unrecognized keyword");
 }
 
-//=============================================================
-// isValue
-//=============================================================
+/**************************************************************************//**
+ * @param[in] type Type of token.
+ * @return true if token is a number/variable/constant, false otherwise.
+ */
 inline bool ccruncher::Expr::isValue(TokenType type)
 {
   if (type == NUMBER || type == VARIABLE || type == CONSTANT) return true;
   else return false;
 }
 
-//=============================================================
-// check syntax based on previous token
-//=============================================================
+/**************************************************************************//**
+ * @details Checking is based on previous token analysis. Checks that
+ *         requires additional info (eg. parentesis matching, number of
+ *         arguments) are made directly in the Expr::compile method.
+ * @param[in] prevtok Previous token.
+ * @param[in] curtok Current token.
+ * @throw Exception Syntax error.
+ */
 void ccruncher::Expr::check(token *prevtok, token *curtok) throw(Exception)
 {
   if (prevtok->type == FUNCTION && functions[prevtok->dat.n].args == 0)
@@ -301,11 +353,14 @@ void ccruncher::Expr::check(token *prevtok, token *curtok) throw(Exception)
   throw Exception("unexpected token");
 }
 
-//=============================================================
-// push a token into the stack
-// apply simplification rules
-//=============================================================
-void ccruncher::Expr::push(token &tok, vector<token> &tokens)
+/**************************************************************************//**
+ * @details Apply simplification rules in order to reduce the number of
+ *         tokens in the RPN stack and the steps to perform in the
+ *         expression evaluation.
+ * @param[in] tok Token to push to the RPN stack.
+ * @param[in,out] tokens RPN stack.
+ */
+void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
 {
   tokens.push_back(tok);
   int pos = tokens.size()-1;
@@ -455,20 +510,28 @@ void ccruncher::Expr::push(token &tok, vector<token> &tokens)
   }
 }
 
-//=============================================================
-// compile an expression using the Shunting-yard algorithm
-// see http://es.wikipedia.org/wiki/Algoritmo_shunting_yard
-//=============================================================
-void ccruncher::Expr::compile(const string &str, vector<variable> &variables, vector<token> &tokens) throw(Exception)
+/**************************************************************************//**
+ * @details Compile an expression using the Shunting-yard algorithm.
+ * @see http://en.wikipedia.org/wiki/Shunting-yard_algorithm
+ * @param[in] str Input string containing the expression.
+ * @param[in,out] variables List of variables.
+ * @param[out] tokens RPN stack. Previous tokens are not cleared.
+ * @throw Exception Syntax error.
+ */
+void ccruncher::Expr::compile(const std::string &str, std::vector<variable> &variables, std::vector<token> &tokens) throw(Exception)
 {
   return compile(str.c_str(), variables, tokens);
 }
 
-//=============================================================
-// compile an expression using the Shunting-yard algorithm
-// see http://es.wikipedia.org/wiki/Algoritmo_shunting_yard
-//=============================================================
-void ccruncher::Expr::compile(const char *str, vector<variable> &variables, vector<token> &tokens) throw(Exception)
+/**************************************************************************//**
+ * @details Compile an expression using the Shunting-yard algorithm.
+ * @see http://en.wikipedia.org/wiki/Shunting-yard_algorithm
+ * @param[in] str Input string containing the expression.
+ * @param[in,out] variables List of variables.
+ * @param[out] tokens RPN stack. Previous tokens are not cleared.
+ * @throw Exception Syntax error.
+ */
+void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables, std::vector<token> &tokens) throw(Exception)
 {
   assert(str != NULL);
   token prevtok, curtok;
@@ -611,14 +674,18 @@ void ccruncher::Expr::compile(const char *str, vector<variable> &variables, vect
   }
 }
 
-//=============================================================
-// recode tokens in order to speedup evaluation
-//   * FUNCTION -> FUNCTIONx
-//   * OPERATOR -> OPERATOR
-//   * VARIABLE -> VALREF
-// returns minimum stack size required by eval
-//=============================================================
-int ccruncher::Expr::link(vector<token> &tokens, const vector<variable> &variables) throw(Exception)
+/**************************************************************************//**
+ * @details Recode tokens in order to speedup evaluation:
+ *          - FUNCTION -> FUNCTIONx
+ *          - OPERATOR -> OPERATOR
+ *          - VARIABLE -> VALREF
+ *          Returns minimum stack size required by Expr::eval().
+ * @param[in,out] tokens RPN stack.
+ * @param[in,out] variables List of variables.
+ * @return Minimum evaluation stack size.
+ * @throw Exception Link error.
+ */
+int ccruncher::Expr::link(std::vector<token> &tokens, const std::vector<variable> &variables) throw(Exception)
 {
   int size=0, max_size=0;
 
@@ -680,18 +747,30 @@ int ccruncher::Expr::link(vector<token> &tokens, const vector<variable> &variabl
   else return max_size;
 }
 
-//=============================================================
-// evalue an RPN expression
-//=============================================================
-double ccruncher::Expr::eval(const vector<token> &tokens, size_t maxsize) throw(Exception)
+/**************************************************************************//**
+ * @details The evaluation of a RPN stack requires a stack that Recode tokens in order to speedup evaluation:
+ *          - FUNCTION -> FUNCTIONx
+ *          - OPERATOR -> OPERATOR
+ *          - VARIABLE -> VALREF
+ *          Returns minimum stack size required by Expr::eval().
+ * @param[in] tokens RPN stack.
+ * @param[in] maxsize Evaluation stack size.
+ * @throw Exception Corrupted stack or stack size to low.
+ */
+double ccruncher::Expr::eval(const std::vector<token> &tokens, size_t maxsize) throw(Exception)
 {
   return eval(&tokens[0], maxsize);
 }
 
-//=============================================================
-// evalue an RPN expression
-// multiple tokens can be set in a unique array or vector
-//=============================================================
+/**************************************************************************//**
+ * @todo Use vector::reserve()
+ * @todo Use push_back(), push_pop()
+ * @todo Set maxsize default value to 0.
+ * @todo Allow VARIABLE token?
+ * @param[in] tokens RPN stack.
+ * @param[in] maxsize Evaluation stack size.
+ * @throw Exception Corrupted stack or stack size to low.
+ */
 double ccruncher::Expr::eval(const token *tokens, size_t maxsize) throw(Exception)
 {
   vector<double> values(maxsize);
@@ -740,9 +819,12 @@ double ccruncher::Expr::eval(const token *tokens, size_t maxsize) throw(Exceptio
   }
 }
 
-//=============================================================
-// toString
-//=============================================================
+/**************************************************************************//**
+ * @details Search the name of the function or operator pointed by this
+ *          pointer to function.
+ * @param[in] ptr Pointer to function (see Token#dat.ptr).
+ * @return Function name/identifier. '???' if not found.
+ */
 const char *ccruncher::Expr::getFunctionName(const void *ptr)
 {
   for(int i=0; i<int(NUMFUNCTIONS); i++) {
@@ -760,7 +842,11 @@ const char *ccruncher::Expr::getFunctionName(const void *ptr)
   return "???";
 }
 
-void ccruncher::Expr::debug(const vector<token> &tokens, const vector<variable> &variables)
+/**************************************************************************//**
+ * @param[in] tokens RPN stack.
+ * @param[in] variables List of variables.
+ */
+void ccruncher::Expr::debug(const std::vector<token> &tokens, const std::vector<variable> &variables)
 {
   cout << "number of variables: " << variables.size() << endl;
   for(size_t i=0; i<variables.size(); i++)

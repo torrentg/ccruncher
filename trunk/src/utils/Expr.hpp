@@ -23,77 +23,107 @@
 #ifndef _Expr_
 #define _Expr_
 
-//---------------------------------------------------------------------------
-
 #include <string>
 #include <vector>
 #include "Exception.hpp"
 
 namespace ccruncher {
 
-//=============================================================
-// Expr
-//=============================================================
-
+/**************************************************************************//**
+ * @brief Evaluates mathematical expressions.
+ *
+ * @details This class provides methods to evaluate mathematical expressions
+ *          (eg. 3*x+sin(Pi)). Parse the mathematical expression and compile
+ *          to Reverse Polish Notation (RPN). Supports the following features:
+ *            - parentesis
+ *            - constants
+ *            - variables
+ *            - expression simplification
+ *            - compile / link / eval
+ *            - compile result is an array of tokens
+ */
 class Expr
 {
 
   private:
 
-    // internal typedef's
+    //! Function with 1 argument
     typedef double (*ffunc1)(double);
+    //! Function with 2 arguments
     typedef double (*ffunc2)(double,double);
+    //! Function with 3 arguments
     typedef double (*ffunc3)(double,double,double);
 
   private:
 
-    // internal struct
+    //! Internal struct
     struct constant
     {
+      //! Constant name
       const char id[3];
+      //! Constant value
       double x;
     };
 
-    // internal struct
+    //! Internal struct
     struct operador
     {
-      const char id[2]; // operator identifier
-      char prec; // operator precedence, see http://en.wikipedia.org/wiki/Order_of_operations
-      bool left; // operator associativity, see http://en.wikipedia.org/wiki/Operator_associativity
-      ffunc2 func; // pointer to function
+      //! Operator identifier
+      const char id[2];
+      /**
+       * @brief Operator precedence.
+       * @see http://en.wikipedia.org/wiki/Order_of_operations
+       */
+      char prec;
+      /**
+       * @brief Operator associativity.
+       * @see http://en.wikipedia.org/wiki/Operator_associativity
+       */
+      bool left;
+      //! Pointer to function
+      ffunc2 func;
     };
 
-    // internal struct
+    /**
+     * @brief Internal struct
+     * @todo Add flag force_eval (eg. rand()).
+     */
     struct function
     {
-      const char id[5]; // function identifier
-      int args; // number of arguments, 0 is used for minus and plus signs functions
-      void *ptr; // pointer to function
-      //TODO: add flag force_eval (eg. rand())
+      //! Function name
+      const char id[5];
+      //! Number of arguments. 0 is used for minus and plus signs functions.
+      int args;
+      //! Pointer to function
+      void *ptr;
     };
 
   public:
 
+    //! Type of compiled instruction
     enum TokenType
     {
-      OPERATOR = 0, // usual operators (eg. +,-,*,/,^)
-      NUMBER = 1, // number, only double type is supported (eg. 3.25)
-      VARIABLE = 2, // variable referenced by index (eg. x)
-      CONSTANT = 3, // predefined constants (eg, Pi, E)
-      FUNCTION = 4, // function by index, dat.n = function index (eg. sin(x))
-      PARENTHESIS_OPEN = 5, // only used at parsing stage
-      PARENTHESIS_CLOSE =6, // only used at parsing stage
-      ARGUMENT_SEPARATOR = 7, // only used at parsing stage
-      END = 8,
-      FUNCTION1 = 9, // 1-arg function by ptr (eg. sin(x))
-      FUNCTION2 = 10, // 2-args function by ptr (eg. min(x,y))
-      FUNCTION3 = 11, // 3-args function by ptr (eg. if(x,y,z))
-      VALREF = 12 // variable referenced by ptr (eg. x)
+      OPERATOR = 0,           //!< Usual operators (eg. +,-,*,/,^)
+      NUMBER = 1,             //!< Number, only double type is supported (eg. 3.25)
+      VARIABLE = 2,           //!< Variable referenced by index (eg. x)
+      CONSTANT = 3,           //!< Predefined constants (eg, Pi, E)
+      FUNCTION = 4,           //!< Function by index, dat.n = function index (eg. sin(x))
+      PARENTHESIS_OPEN = 5,   //!< Only used at parsing stage
+      PARENTHESIS_CLOSE =6,   //!< Only used at parsing stage
+      ARGUMENT_SEPARATOR = 7, //!< Only used at parsing stage
+      END = 8,                //!< Last token identifier
+      FUNCTION1 = 9,          //!< 1-arg function by ptr (eg. sin(x))
+      FUNCTION2 = 10,         //!< 2-args function by ptr (eg. min(x,y))
+      FUNCTION3 = 11,         //!< 3-args function by ptr (eg. if(x,y,z))
+      VALREF = 12             //!< Variable referenced by ptr (eg. x)
     };
 
+    //! Compiled instruction
     struct token
     {
+      //! Type of token
       TokenType type;
+      //! Token data
       union
       {
         int n;
@@ -102,71 +132,71 @@ class Expr
       } dat;
     };
 
+    //! Numeric variable
     struct variable
     {
+      //! Variable name
       std::string id;
+      //! Pointer to variable value
       double *ptr;
+      //! Default constructor
       variable() : id("?"), ptr(NULL) {}
+      //! Constructor
       variable(const std::string &s, double *p) : id(s), ptr(p) {}
     };
 
   private:
 
-    // list of operators
+    //! List of operators
     static const operador operators[];
-    // list of functions
+    //! List of functions
     static const function functions[];
-    // list of constants
+    //! List of constants
     static const constant constants[];
 
   private:
 
-    // check if the current token is a function
+    //! Check if the current token is a function
     static bool isFunction(const char *, token *, char **);
-    // check if the current token is a constant
+    //! Check if the current token is a constant
     static bool isConstant(const char *, token *, char **);
-    // check if the current token is a operator
+    //! Check if the current token is a operator
     static bool isOperator(const char *, token *, char **);
-    // check if the current token is a number
+    //! Check if the current token is a number
     static bool isNumber(const char *, token *, char **);
-    // check if the current token is a variable
+    //! Check if the current token is a variable
     static bool isVariable(const char *, token *, char **, std::vector<variable> &);
-    // parse the next token
+    //! Parse the next token
     static void next(const char *, token *, char **, std::vector<variable> &) throw(Exception);
-    // syntax checking
+    //! Syntax checking
     static void check(token *, token *) throw(Exception);
-    // push token to RPN instructions pile
+    //! Push token to RPN instructions pile
     static void push(token &, std::vector<token> &tokens);
-    // check if is a value (number or constant or variable)
+    //! Check if is a value (number or constant or variable)
     static bool isValue(TokenType type);
-    // returns function name by ptr value
+    //! Returns function name by ptr value
     static const char *getFunctionName(const void *ptr);
-    // public constructor not allowed
+    //! Constructor (public constructor not allowed)
     Expr() { }
 
   public:
 
-    // compile an expression
+    //! Compile an expression
     static void compile(const char *, std::vector<variable> &variables, std::vector<token> &tokens) throw(Exception);
-    // compile an expression
+    //! Compile an expression
     static void compile(const std::string &, std::vector<variable> &variables, std::vector<token> &tokens) throw(Exception);
-    // link an expression
+    //! Link an expression
     static int link(std::vector<token> &tokens, const std::vector<variable> &variables) throw(Exception);
-    // evalue an expression
-    static double eval(const std::vector<token> &tokens, size_t) throw(Exception);
-    // evalue an expression
-    static double eval(const token *tok, size_t) throw(Exception);
-    // serialize expression
+    //! Evalue an expression
+    static double eval(const std::vector<token> &tokens, size_t maxsize) throw(Exception);
+    //! Evalue an expression
+    static double eval(const token *tok, size_t maxsize) throw(Exception);
+    //! trace RPN stack to stdout
     static void debug(const std::vector<token> &tokens, const std::vector<variable> &variables);
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

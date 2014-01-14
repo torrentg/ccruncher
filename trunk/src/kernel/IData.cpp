@@ -180,6 +180,10 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
       log << "define (input file)" << split << key+"="+value << endl;
       eu.defines[key] = value;
     }
+    else {
+     // do nothing. User definitions (via command line or via gui)
+     // prevail over input file definitions.
+    }
   }
   else if (isEqual(name_,"parameters") && params.time0 == NAD) {
     eppush(eu, &params, name_, attributes);

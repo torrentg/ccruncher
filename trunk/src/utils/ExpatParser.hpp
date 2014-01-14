@@ -23,72 +23,73 @@
 #ifndef _ExpatParser_
 #define _ExpatParser_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <expat.h>
 #include <zlib.h>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief   Parse an XML file using the Expat parser.
+ *
+ * @details This class parses an XML file using the Expat library providing
+ *          the following features:
+ *            - input file can be gziped
+ *            - support defines
+ *            - stack of handlers
+ *            - file checksum (adler32)
+ *            - stop parser by a variable.
+ *
+ * @see     http://expat.sourceforge.net/
+ * @see     http://www.xml.com/pub/a/1999/09/expat/index.html
+ */
 class ExpatParser
 {
 
   private:
 
-    // parser expat object
+    //! Expat parser object
     XML_Parser xmlparser;
-    // user data
+    //! Expat user data
     ExpatUserData userdata;
-    // checksum value
+    //! File checksum value
     unsigned long checksum;
 
   private:
 
-    // parse xml
-    void parse(gzFile file, char *buf, size_t buffer_size, bool *stop) throw(Exception);
-    // startElement function catcher
+    //! startElement handler
     static void startElement(void *ud, const char *name, const char **atts);
-    // endElement function catcher
+    //! endElement handler
     static void endElement(void *ud, const char *name);
-    // characterData Handler function
-    static void characterData(void *ud, const char *s, int len);
-    // reset internal variables
+    //! characterData Handler
+    static void characterData(void *ud, const char *cdata, int len);
+
+    //! Parse an xml file
+    void parse(gzFile file, char *buf, size_t buffer_size, bool *stop) throw(Exception);
+    //! Reset internal variables
     void reset();
 
   public:
 
-    // constructor
+    //! Constructor
     ExpatParser();
-    // destructor
+    //! Destructor
     ~ExpatParser();
-    // parse xml
+    //! Parse a string containing an xml
     void parse(const std::string &xmlcontent, ExpatHandlers *eh, bool *stop=NULL) throw(Exception);
-    // parse xml
+    //! Parse an xml file
     void parse(gzFile file, ExpatHandlers *eh, bool *stop=NULL) throw(Exception);
-    // returns main object
-    void * getObject();
-    // returns defines
+    //! Returns defines
     const std::map<std::string,std::string>& getDefines() const;
-    // set defines
+    //! Set defines
     void setDefines(const std::map<std::string,std::string>&);
-    // return check value
+    //! returns checksum value
     unsigned long getChecksum() const;
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------
