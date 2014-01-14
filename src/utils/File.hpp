@@ -23,62 +23,56 @@
 #ifndef _File_
 #define _File_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include "utils/Exception.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief   Functions related to file management.
+ *
+ * @details Some of the implemented methods are platform dependent. They
+ *          are tested in the Windows and Linux platform, but no on IOS.
+ */
 class File
 {
 
   public:
 
-    // path separator symbol
+    //! Path separator symbol
     static const std::string pathSeparator;
 
   private:
 
-    // normalize a string
+    //! Normalize a string
     static std::string normalize(const std::string &);
 
   public:
 
-    // normalize path
-    static std::string normalizePath(const std::string &) throw(Exception);
-    // returns working directory
+    //! Normalize a directory path
+    static std::string normalizePath(const std::string &path) throw(Exception);
+    //! Returns working directory
     static std::string getWorkDir() throw(Exception);
-    // indicates if exist a directory
+    //! Indicates if exist a directory
     static bool existDir(const std::string &);
-    // create a directory
+    //! Create a directory
     static void makeDir(const std::string &) throw(Exception);
-    // indicates if a path is absolute
+    //! Indicates if a path is absolute
     static bool isAbsolutePath(const std::string &);
-    // check file status
+    //! Check rw file status
     static void checkFile(const std::string &pathname, const std::string &smode) throw(Exception);
-    // directory part of a filepath
+    //! Directory part of a filepath
     static std::string dirname(const std::string &pathname);
-    // file part of a filepath
+    //! File part of a filepath
     static std::string filename(const std::string &pathname);
-    // create a file path using path and a file name
+    //! Create a file path using path and a file name
     static std::string filepath(const std::string &path, const std::string &name);
-    // return file size in bytes
+    //! Return file size in bytes
     static size_t filesize(const std::string &filename);
-    
+
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

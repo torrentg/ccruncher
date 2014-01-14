@@ -25,9 +25,7 @@
 
 using namespace std;
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::Thread::Thread()
 {
   memset(&thread, 0, sizeof(pthread_t));
@@ -35,9 +33,10 @@ ccruncher::Thread::Thread()
   setStatus(fresh);
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+
+/**************************************************************************//**
+ * @details If there is a running task, this task will be stoped.
+ */
 ccruncher::Thread::~Thread()
 {
   cancel();
@@ -50,9 +49,10 @@ ccruncher::Thread::~Thread()
   pthread_mutex_destroy(&mutex);
 }
 
-//===========================================================================
-// launcher (static)
-//===========================================================================
+/**************************************************************************//**
+ * @details Internal method used to launch thread.
+ * @param[in] d pointer to a Thread instance
+ */
 void* ccruncher::Thread::launcher(void *d)
 {
   Thread *x = static_cast<Thread *>(d);
@@ -74,9 +74,11 @@ void* ccruncher::Thread::launcher(void *d)
   return d;
 }
 
-//===========================================================================
-// start
-//===========================================================================
+/**************************************************************************//**
+ * @details If you want to execute the main class procedure in the current
+ *          execution thread use Thread::run(). This method creates a new
+ *          thread.
+ */
 void ccruncher::Thread::start()
 {
   if (getStatus() == running) return;
@@ -85,9 +87,7 @@ void ccruncher::Thread::start()
   if (rc != 0) setStatus(aborted);
 }
 
-//===========================================================================
-// wait
-//===========================================================================
+/**************************************************************************/
 void ccruncher::Thread::wait()
 {
   if (getStatus() == running)
@@ -98,9 +98,7 @@ void ccruncher::Thread::wait()
   }
 }
 
-//===========================================================================
-// cancel
-//===========================================================================
+/**************************************************************************/
 void ccruncher::Thread::cancel()
 {
   if (getStatus() == running)
@@ -111,9 +109,7 @@ void ccruncher::Thread::cancel()
   }
 }
 
-//===========================================================================
-// getStatus
-//===========================================================================
+/**************************************************************************/
 ccruncher::Thread::ThreadStatus ccruncher::Thread::getStatus() const
 {
   pthread_mutex_lock(&mutex);
@@ -122,9 +118,10 @@ ccruncher::Thread::ThreadStatus ccruncher::Thread::getStatus() const
   return s;
 }
 
-//===========================================================================
-// setStatus
-//===========================================================================
+/**************************************************************************//**
+ * @details This method avoids synchronization problems using a mutex.
+ * @param s New thread status.
+ */
 void ccruncher::Thread::setStatus(ThreadStatus s)
 {
   pthread_mutex_lock(&mutex);

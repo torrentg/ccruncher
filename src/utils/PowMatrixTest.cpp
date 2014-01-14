@@ -217,15 +217,15 @@ void ccruncher_test::PowMatrixTest::test5()
   double x = 2.0;
   double y = 1.0/3.0;
 
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(+2.0, +3.0), +8.0, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(-2.0, +3.0), -8.0, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(+2.0, -3.0), +1.0/8.0, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(-2.0, -3.0), -1.0/8.0, 1E-6);
+  ASSERT_EQUALS_EPSILON(PowMatrix::fpow(+2.0, +3.0), +8.0, 1E-6);
+  ASSERT_EQUALS_EPSILON(PowMatrix::fpow(-2.0, +3.0), -8.0, 1E-6);
+  ASSERT_EQUALS_EPSILON(PowMatrix::fpow(+2.0, -3.0), +1.0/8.0, 1E-6);
+  ASSERT_EQUALS_EPSILON(PowMatrix::fpow(-2.0, -3.0), -1.0/8.0, 1E-6);
 
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(+x, +y), +1.25992115, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(+x, -y), +0.79370115, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(-x, +y), -1.25992115, 1E-6);
-  ASSERT_EQUALS_EPSILON(ccruncher::fpow(-x, -y), -0.79370115, 1E-6);
+  ASSERT_EQUALS_EPSILON(PowMatrix::fpow(+x, +y), +1.25992115, 1E-6);
+  ASSERT_EQUALS_EPSILON(PowMatrix::fpow(+x, -y), +0.79370115, 1E-6);
+  ASSERT_EQUALS_EPSILON(PowMatrix::fpow(-x, +y), -1.25992115, 1E-6);
+  ASSERT_EQUALS_EPSILON(PowMatrix::fpow(-x, -y), -0.79370115, 1E-6);
 
 }
 

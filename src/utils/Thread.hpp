@@ -23,79 +23,77 @@
 #ifndef _Thread_
 #define _Thread_
 
-//---------------------------------------------------------------------------
-
 #include <pthread.h>
-
-//---------------------------------------------------------------------------
 
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief   Base class to create a posix thread class.
+ *
+ * @details User extends this class implementing the procedure to execute
+ *          in a new thread in the Thread::run() method. He launch the task
+ *          in a new thread calling Thread::start(). The rest of methods
+ *          provides support to manage the running thread (stop, getStatus, etc.)
+ */
 class Thread
 {
 
   public:
 
-    // thread status
+    //! Thread status
     enum ThreadStatus
     {
-      fresh,     // thread not started
-      running,   // running thread (see start method)
-      aborted,   // aborted thread (problem during execution)
-      cancelled, // cancelled thread (see cabcel method)
-      finished   // finished thread (run method finish)
+      fresh,     //!< Thread not started
+      running,   //!< Running thread (see start method)
+      aborted,   //!< Aborted thread (problem during execution)
+      cancelled, //!< Cancelled thread (see cabcel method)
+      finished   //!< Finished thread (run method finish)
     };
 
   private:
   
-    // thread object
+    //! Thread object
     pthread_t thread;
-    // thread status
+    //! Thread status
     ThreadStatus status;
-    // ensures data consistence
+    //! Ensures data consistence
     mutable pthread_mutex_t mutex;
 
   private:
 
-    // thread launcher
+    //! Thread launcher
     static void* launcher(void *d);
-    // non-copyable class
+
+    //! Non-copyable class
     Thread(const Thread &);
-    // non-copyable class
+    //! Non-copyable class
     Thread& operator=(const Thread &);
-    // set thread status
+    //! Set thread status
     void setStatus(ThreadStatus s);
 
   protected:
 
-    // constructor
+    //! Constructor
     Thread();
-    // destructor
+    //! Destructor
     virtual ~Thread();
 
   public:
 
-    // executes main procedure as a thread
+    //! Main procedure
     virtual void run() = 0;
-    // starts the thread
+    //! Starts the thread
     void start();
-    // blocks until thread termination
+    //! Blocks until thread termination
     void wait();
-    // cancel the running thread
+    //! Cancel the running thread
     void cancel();
-    // returns thread status
+    //! Returns thread status
     ThreadStatus getStatus() const;
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

@@ -28,24 +28,28 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
+#include <cassert>
 #include "utils/Parser.hpp"
 #include "utils/Expr.hpp"
-#include <cassert>
 
 using namespace std;
 using namespace ccruncher;
 
-//===========================================================================
-// parse an integer
-//===========================================================================
-int ccruncher::Parser::intValue(const string &str) throw(Exception)
+/**************************************************************************//**
+ * @param[in] str String to parse.
+ * @return Value parsed.
+ * @throw Exception Invalid format.
+ */
+int ccruncher::Parser::intValue(const std::string &str) throw(Exception)
 {
   return intValue(str.c_str());
 }
 
-//===========================================================================
-// parse an integer
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] pnum String to parse.
+ * @return Value parsed.
+ * @throw Exception Invalid format.
+ */
 int ccruncher::Parser::intValue(const char *pnum) throw(Exception)
 {
   assert(pnum != NULL);
@@ -73,17 +77,21 @@ int ccruncher::Parser::intValue(const char *pnum) throw(Exception)
   }
 }
 
-//===========================================================================
-// parse a long
-//===========================================================================
-long ccruncher::Parser::longValue(const string &str) throw(Exception)
+/**************************************************************************//**
+ * @param[in] str String to parse.
+ * @return Value parsed.
+ * @throw Exception Invalid format.
+ */
+long ccruncher::Parser::longValue(const std::string &str) throw(Exception)
 {
   return longValue(str.c_str());
 }
 
-//===========================================================================
-// parse a long
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] pnum String to parse.
+ * @return Value parsed.
+ * @throw Exception Invalid format.
+ */
 long ccruncher::Parser::longValue(const char *pnum) throw(Exception)
 {
   assert(pnum != NULL);
@@ -107,18 +115,21 @@ long ccruncher::Parser::longValue(const char *pnum) throw(Exception)
   }
 }
 
-//===========================================================================
-// parse a double
-//===========================================================================
-double ccruncher::Parser::doubleValue(const string &str) throw(Exception)
+/**************************************************************************//**
+ * @param[in] str String to parse.
+ * @return Value parsed.
+ * @throw Exception Invalid format.
+ */
+double ccruncher::Parser::doubleValue(const std::string &str) throw(Exception)
 {
   return doubleValue(str.c_str());
 }
 
-//===========================================================================
-// parse a double
-// if numbers ends with '%' returns the number divided by 100
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] pnum String to parse.
+ * @return Value parsed.
+ * @throw Exception Invalid format.
+ */
 double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
 {
   assert(pnum != NULL);
@@ -149,9 +160,11 @@ double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
   }
 }
 
-//===========================================================================
-// evalue numeric expression without variables
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] pnum String to parse.
+ * @return Expression value.
+ * @throw Exception Invalid format.
+ */
 double ccruncher::Parser::eval(const char *pnum) throw(Exception)
 {
   try
@@ -169,27 +182,33 @@ double ccruncher::Parser::eval(const char *pnum) throw(Exception)
   }
 }
 
-//===========================================================================
-// parse a date
-//===========================================================================
-Date ccruncher::Parser::dateValue(const string &str) throw(Exception)
+/**************************************************************************//**
+ * @param[in] str String to parse.
+ * @return Value parsed.
+ * @throw Exception Invalid format.
+ */
+Date ccruncher::Parser::dateValue(const std::string &str) throw(Exception)
 {
   return Date(str);
 }
 
-//===========================================================================
-// parse a date
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] cstr String to parse.
+ * @return Value parsed.
+ * @throw Exception Invalid format.
+ */
 Date ccruncher::Parser::dateValue(const char *cstr) throw(Exception)
 {
   assert(cstr != NULL);
   return Date(cstr);
 }
 
-//===========================================================================
-// parse a boolean
-//===========================================================================
-bool ccruncher::Parser::boolValue(const string &str) throw(Exception)
+/**************************************************************************//**
+ * @param[in] str String to parse.
+ * @return Value parsed.
+ * @throw Exception Invalid format.
+ */
+bool ccruncher::Parser::boolValue(const std::string &str) throw(Exception)
 {
   if (str == "true")
   {
@@ -205,9 +224,11 @@ bool ccruncher::Parser::boolValue(const string &str) throw(Exception)
   }
 }
 
-//===========================================================================
-// parse a boolean
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] cstr String to parse.
+ * @return Value parsed.
+ * @throw Exception Invalid format.
+ */
 bool ccruncher::Parser::boolValue(const char *cstr) throw(Exception)
 {
   assert(cstr != NULL);

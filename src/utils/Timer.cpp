@@ -20,43 +20,42 @@
 //
 //===========================================================================
 
-#include "utils/Timer.hpp"
 #include <ctime>
 #include <cmath>
 #include <cstdio>
 #include <cassert>
 #include <sys/time.h>
+#include "utils/Timer.hpp"
 
 using namespace std;
 
-//===========================================================================
-// Create an instance of a Stopwatch, with its own internal counter
-//===========================================================================
+/**************************************************************************//**
+ * @details Create a Timer object. Timer can be stoped (default) or started.
+ * @param[in] started Flag indicating if the Timer is automatically started
+ *            just after creation.
+ */
 ccruncher::Timer::Timer(bool started)
 {
   running_ = false;
   start_time_ = 0.0;
   total_ = 0.0;
   if (started) start();
-  //secs_per_tick = 1.0 / CLOCKS_PER_SEC;
 }
 
-//===========================================================================
-// seconds
-// gettimeofday() return system time
-// clock() return cpu process time
-//===========================================================================
+/**************************************************************************//**
+ * @details Internal method.
+ * @return Current time as seconds and floating point value.
+ */
 double ccruncher::Timer::seconds()
 {
   timeval tv;
   gettimeofday(&tv, NULL);
   return double(tv.tv_sec) + double(tv.tv_usec)/1000000.0;
-  //return ( (double) clock() ) * secs_per_tick;
 }
 
-//===========================================================================
-// Start timing from 0.00.
-//===========================================================================
+/**************************************************************************//**
+ * @details Starts timer setting accumulated time to 0.
+ */
 void ccruncher::Timer::start()
 {
   running_ = true;
@@ -64,9 +63,9 @@ void ccruncher::Timer::start()
   start_time_ = seconds();
 }
 
-//===========================================================================
-// Estableix el contador a 0
-//===========================================================================
+/**************************************************************************//**
+ * @details Stops timer (if running) and set acumulated time to 0.
+ */
 void ccruncher::Timer::reset()
 {
   running_ = false;
@@ -74,9 +73,11 @@ void ccruncher::Timer::reset()
   total_ = 0.0;
 }
 
-//===========================================================================
-// Stop timing and return elapsed time (in seconds).
-//===========================================================================
+/**************************************************************************//**
+ * @details Stops timer and adds elapsed time to acumulated time. Returns
+ *          total acumulated time in seconds.
+ * @return Accumulated time in seconds.
+ */
 double ccruncher::Timer::stop()
 {
   if (running_)
@@ -87,10 +88,10 @@ double ccruncher::Timer::stop()
   return total_;
 }
 
-//===========================================================================
-// Resume timing, if currently stopped.  Operation
-// has no effect if Stopwatch is already running_.
-//===========================================================================
+/**************************************************************************//**
+ * @details If timer is running do nothing. If timer is stoped then starts
+ *          timer (preserving accumulated time).
+ */
 void ccruncher::Timer::resume()
 {
   if (!running_)
@@ -100,9 +101,10 @@ void ccruncher::Timer::resume()
   }
 }
 
-//===========================================================================
-// Read current time (in seconds).
-//===========================================================================
+/**************************************************************************//**
+ * @details Return the number of accumulated seconds.
+ * @return Accumulated number of seconds.
+ */
 double ccruncher::Timer::read()
 {
   if (running_)
@@ -113,16 +115,17 @@ double ccruncher::Timer::read()
   return total_;
 }
 
-//===========================================================================
-// returns elapsed time in seconds formated like hh:mm:ss.mmm
-//===========================================================================
-string ccruncher::Timer::format(double val)
+/**************************************************************************//**
+ * @param[in] secs Numbers of elapsed seconds.
+ * @return Elapsed time formated like hh:mm:ss.mmm
+ */
+string ccruncher::Timer::format(double secs)
 {
-  //assert(val >= -1e-14);
-  val = fabs(val);
+  //assert(secs >= -1e-14);
+  secs = fabs(secs);
 
   char buf[20];
-  double cur = val;
+  double cur = secs;
 
   // computing milliseconds
   int ms = int((cur-floor(cur+1.0E-14)+1.0E-14)*1000.0);
@@ -146,3 +149,4 @@ string ccruncher::Timer::format(double val)
   // exit function
   return string(buf);
 }
+
