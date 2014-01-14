@@ -34,9 +34,7 @@
 
 using namespace std;
 
-//=============================================================
-// path separator
-//=============================================================
+// path separator (platform-dependent)
 const string ccruncher::File::pathSeparator =
 #ifdef _WIN32
   string("\\");
@@ -44,11 +42,12 @@ const string ccruncher::File::pathSeparator =
   string("/");
 #endif
 
-//===========================================================================
-// normalize a string
-// in win32 replaces '/' by '\'
-//===========================================================================
-string ccruncher::File::normalize(const string &str)
+/**************************************************************************//**
+ * @details In windows replaces '/' by '\'.
+ * @param[in] str File path to normalize.
+ * @return String normalized.
+ */
+string ccruncher::File::normalize(const std::string &str)
 {
 #ifdef _WIN32
   string ret = str;
@@ -61,10 +60,12 @@ string ccruncher::File::normalize(const string &str)
 #endif
 }
 
-//===========================================================================
-// isAbsolutePath
-//===========================================================================
-bool ccruncher::File::isAbsolutePath(const string &path)
+/**************************************************************************//**
+ * @todo Use function PathIsRelative in windows.h
+ * @param[in] path File path to check.
+ * @return true = is absolute, false = otherwise.
+ */
+bool ccruncher::File::isAbsolutePath(const std::string &path)
 {
   if (path.size() <= 0) {
     return false;
@@ -91,9 +92,10 @@ bool ccruncher::File::isAbsolutePath(const string &path)
 #endif
 }
 
-//===========================================================================
-// getWorkDirectory
-//===========================================================================
+/**************************************************************************//**
+ * @return Working directory ending with pathSeparator (eg. '/').
+ * @throw Exception Error retrieving working directory.
+ */
 string ccruncher::File::getWorkDir() throw(Exception)
 {
   char tempname[1024];
@@ -124,10 +126,16 @@ string ccruncher::File::getWorkDir() throw(Exception)
   }
 }
 
-//===========================================================================
-// normalizePath
-// input=./dir1/dir2 -> output=/workdir/dir1/dir2/
-//===========================================================================
+/**************************************************************************//**
+ * @details Normalize a directory path applying the following rules:
+ *          - replaces incorrect path separator based on platform
+ *          - relative path -> absolute path
+ *          - appends ending path separator
+ *          example: input=./dir1/dir2 -> output=/workdir/dir1/dir2/
+ * @param[in] path Path to a directory.
+ * @return Dir path normalized.
+ * @throw Exception Non valid file path.
+ */
 string ccruncher::File::normalizePath(const string &path) throw(Exception)
 {
   string ret = normalize(path);
@@ -165,10 +173,12 @@ string ccruncher::File::normalizePath(const string &path) throw(Exception)
   return ret;
 }
 
-//===========================================================================
-// existDir
-//===========================================================================
-bool ccruncher::File::existDir(const string &dirname)
+/**************************************************************************//**
+ * @details Check existence trying to acces to directory.
+ * @param[in] dirname Directory path.
+ * @return Flag indicating if directory exist or can be accessed.
+ */
+bool ccruncher::File::existDir(const std::string &dirname)
 {
   DIR *tmp;
 
@@ -193,10 +203,12 @@ bool ccruncher::File::existDir(const string &dirname)
   }
 }
 
-//===========================================================================
-// makeDir
-//===========================================================================
-void ccruncher::File::makeDir(const string &dirname) throw(Exception)
+/**************************************************************************//**
+ * @details In Unix/Linux the directory permissions are '0777'.
+ * @param[in] dirname Directory path.
+ * @throw Exception Error creating directory.
+ */
+void ccruncher::File::makeDir(const std::string &dirname) throw(Exception)
 {
   int aux;
 
@@ -222,10 +234,12 @@ void ccruncher::File::makeDir(const string &dirname) throw(Exception)
   }
 }
 
-//===========================================================================
-// checkFile
-// allowed modes: r, w, rw
-//===========================================================================
+/**************************************************************************//**
+ * @details Check is done accessing to file with the given read-write mode.
+ * @param[in] pathname File path.
+ * @param[in] smode Allowed modes: r=read, w=write, rw=read+write
+ * @throw Exception invalid mode or file access error.
+ */
 void ccruncher::File::checkFile(const string &pathname, const string &smode) throw(Exception)
 {
   int aux;
@@ -250,10 +264,11 @@ void ccruncher::File::checkFile(const string &pathname, const string &smode) thr
   }
 }
 
-//===========================================================================
-// dirname
-// given a filepath returns the directory part
-//===========================================================================
+/**************************************************************************//**
+ * @details Strip last component from file name.
+ * @param[in] pathname Path to file.
+ * @result Directory path.
+ */
 string ccruncher::File::dirname(const string &pathname)
 {
 #ifdef _WIN32
@@ -270,10 +285,11 @@ string ccruncher::File::dirname(const string &pathname)
 #endif
 }
 
-//===========================================================================
-// basename
-// given a filepath returns the filename part
-//===========================================================================
+/**************************************************************************//**
+ * @details Strip directory from filepath.
+ * @param[in] pathname Path to file.
+ * @result File name (with extension).
+ */
 string ccruncher::File::filename(const string &pathname)
 {
 #ifdef _WIN32
@@ -290,10 +306,11 @@ string ccruncher::File::filename(const string &pathname)
 #endif
 }
 
-//===========================================================================
-// filepath
-// create a file path using path and a file name
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] path Path to file.
+ * @param[in] name File name.
+ * @result Filepath.
+ */
 string ccruncher::File::filepath(const string &path, const string &name)
 {
   if (isAbsolutePath(name))
@@ -312,10 +329,10 @@ string ccruncher::File::filepath(const string &path, const string &name)
   }
 }
 
-//===========================================================================
-// filesize
-// returns file size in bytes
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] filename Path to file.
+ * @result File size in bytes (0 if not found).
+ */
 size_t ccruncher::File::filesize(const string &filename)
 {
   std::ifstream f;

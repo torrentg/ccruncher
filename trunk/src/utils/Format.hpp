@@ -23,51 +23,37 @@
 #ifndef _Format_
 #define _Format_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include "utils/Date.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief   Functions to format usual types (int, double, date, etc.)
+ */
 class Format
 {
 
-  private:
-
-    // non-instantiable class
-    Format() {}
-
   public:
 
-    // converts int to string
+    //! Converts int to string
     static std::string toString(const int val);
-    // converts long to string
+    //! Converts long to string
     static std::string toString(const long val);
-    // converts double to string
+    //! Converts double to string
     static std::string toString(const double val, int n=-1);
-    // converts date to string
+    //! Converts date to string
     static std::string toString(const Date &val);
-    // converts boolean to string
+    //! Converts boolean to string
     static std::string toString(const bool val);
-    // converts size_t to string
+    //! Converts size_t to string
     static std::string toString(const size_t val);
-    // returns bytes as string (B, KB, MB)
+    //! Returns bytes as string (B, KB, MB)
     static std::string bytes(const size_t val);
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

@@ -23,89 +23,86 @@
 #ifndef _CsvFile_
 #define _CsvFile_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <vector>
 #include <cstdio>
 #include <fstream>
 #include "utils/Exception.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief   Object to retrieve data from CSV a file.
+ *
+ * @details This class can open, get column headers, and read data by
+ *          columns or as a whole from a CSV file. It is designed to deal
+ *          with large files. Provides a way to stop a long data read
+ *          changing a variable value and to retrieve the number of
+ *          parsed lines (to compute the parsing progress). Observe
+ *          that CSV can file simultaneously writed by another
+ *          process/thread.
+ *
+ * @see http://en.wikipedia.org/wiki/Comma-separated_values
+ */
 class CsvFile
 {
 
   private:
 
-    // filed separator/s
-    std::string separators;
-    // file name
+    //! File name
     std::string filename;
-    // stream
+    //! File object
     std::FILE *file;
-    // column headers
+    //! Column headers
     std::vector<std::string> headers;
-    // buffer (128KB)
+    //! Buffer (128KB)
     char buffer[128*1024];
-    // current position in buffer
+    //! Current position in buffer
     char *ptr0;
-    // next position in buffer
+    //! Next position in buffer
     char *ptr1;
-    // file size (in bytes)
+    //! File size (in bytes)
     size_t filesize;
 
   private:
 
-    // returns file size
-    size_t getNumBytes();
-    // fills buffer
+    //! Fills buffer
     size_t getChunk(char *ptr);
-    // parse a field
-    int read() throw(Exception);
-    // returns row sums
+    //! Parse a field
+    int next() throw(Exception);
+    //! Returns row sums
     void getRowSums(std::vector<double> &ret, bool *stop=NULL) throw(Exception);
-    // parse a double
+    //! Parse a double
     static double parse(const char *) throw(Exception);
-    // trim a string
+    //! Trim a string
     static char* trim(char *);
 
   public:
 
-    // constructor
-    CsvFile(const std::string &fname="", const std::string &sep=",") throw(Exception);
-    // destructor
+    //! Constructor
+    CsvFile(const std::string &fname="") throw(Exception);
+    //! Destructor
     ~CsvFile();
-    // open a file
-    void open(const std::string &fname, const std::string &sep=",") throw(Exception);
-    // close file
+    //! Open file
+    void open(const std::string &fname) throw(Exception);
+    //! Close file
     void close();
-    // returns headers
+    //! Returns headers
     const std::vector<std::string>& getHeaders();
-    // returns column values (if col<0 returns rowSum)
+    //! Returns column values
     void getColumn(int col, std::vector<double> &ret, bool *stop=NULL) throw(Exception);
-    // returns file values
+    //! Returns file values
     void getColumns(std::vector<std::vector<double> > &ret, bool *stop=NULL) throw(Exception);
-    // returns file size (in bytes)
+    //! Returns file size (in bytes)
     size_t getFileSize() const;
-    // returns readed bytes
+    //! Returns readed bytes
     size_t getReadedSize() const;
-    // returns the number of lines
-    size_t getNumLines();
+    //! Returns the number of lines
+    size_t getNumLines() throw(Exception);
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

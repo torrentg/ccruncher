@@ -23,46 +23,36 @@
 #ifndef _PowMatrix_
 #define _PowMatrix_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <vector>
 #include "utils/Exception.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
 
+/**************************************************************************//**
+ * @brief   Functions to raise a matrix to power.
+ *
+ * @details Matrix must satisfy the following conditions:
+ *          - square
+ *          - invertible
+ *          - real coeficients
+ *          - real eigenvalues
+ */
 class PowMatrix
 {
 
-  private:
-
-    // non-instantiable class
-    PowMatrix() {}
-
   public:
 
-    // matrix pow function
+    //! Improved std::pow() function
+    static double fpow(double base, double exponent) throw(Exception);
+    //! Matrix pow function
     static void pow(double **a, double x, int n, double **ret) throw(Exception);
-    // matrix pow function (using vector instead of arrays)
+    //! Matrix pow function
     static void pow(const std::vector<std::vector<double> > &a, double x, std::vector<std::vector<double> > &ret) throw(Exception);
 
 };
 
-//---------------------------------------------------------------------------
-
-// improved pow() function [belongs to ccruncher namespace]
-double fpow(double, double) throw(Exception);
-
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

@@ -200,7 +200,7 @@ public:
 		if(expected != result)
 		{
 			TestsListener::theInstance().errorsLog() 
-				<< file << ", linia: " << linia << "\n"
+				<< file << ", line: " << linia << "\n"
 				<< errmsgTag_expected() << " " << expected << " "
 				<< errmsgTag_butWas() << " " << result << "\n";
 			TestsListener::theInstance().testHasFailed();

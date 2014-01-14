@@ -37,6 +37,7 @@
 #include "utils/Utils.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
+#include "utils/config.h"
 
 using namespace std;
 using namespace ccruncher;

@@ -28,54 +28,61 @@
 #include "utils/PowMatrix.hpp"
 #include "utils/Format.hpp"
 
-//---------------------------------------------------------------------------
-
 #define EPSILON 1E-14
-
-//---------------------------------------------------------------------------
 
 using namespace std;
 
-//===========================================================================
-// return x^y
-// the difference with std::pow is that allow negatives x
-// example: std::pow(-8.0, 1/3)=nan, ccruncher::fpow(-8.0, 1/3)=-2
-//===========================================================================
-double ccruncher::fpow(double x, double y) throw(Exception)
+/**************************************************************************//**
+ * @details Returns base raised to the power exponent: base^exponent.
+ *          Additional features respect std::pow are:
+ *          - pows negative bases if result is a real.
+ *          - example: pow(-8.0, 1/3)=nan, fpow(-8.0, 1/3)=-2
+ * @param[in] base Base to use.
+ * @param[in] exponent Exponent to raise.
+ * @return base^exponent.
+ * @throw Exception Result value is not a real.
+ */
+double ccruncher::PowMatrix::fpow(double base, double exponent) throw(Exception)
 {
-  if (x >= 0.0)
+  if (base >= 0.0)
   {
-    return std::pow(x, y);
+    return std::pow(base, exponent);
   }
   else
   {
-    if (std::fabs(y) < EPSILON)
+    if (std::fabs(exponent) < EPSILON)
     {
        return 1.0; // x^0 = 1
     }
     else
     {
-      double z = (std::fabs(y)>(1.0-EPSILON) ? y : 1.0/y);
+      double z = (std::fabs(exponent)>(1.0-EPSILON) ? exponent : 1.0/exponent);
       int aux = (int) z;
 
       if (((double) aux - z) < EPSILON)
       {
-        return -std::pow(-x, y);
+        return -std::pow(-base, exponent);
       }
       else
       {
-        throw Exception("unable to pow to this negative number: " + Format::toString(x) + "^" + Format::toString(y));
+        throw Exception("unable to pow to this negative number: " +
+                        Format::toString(base) + "^" + Format::toString(exponent));
       }
     }
   }
 }
 
-//===========================================================================
-// returns a matrix powered to an exponent: ret=a^x (where a is a nxn matrix)
-// ret[0..n-1][0..n-1] = (a[0..n-1][0..n-1])^x
-// atention: use with low dimensions (pe. n < 100)
-// atention: Exception if complex eigenvalues
-//===========================================================================
+/**************************************************************************//**
+ * @details Use the spectral decomposition of M = P·D·P^-1 where P and D
+ *          are the eigenvectors and eigenvalue matrices of M. That is,
+ *          M^x = P · D^x + P^-1
+ *          Use this method with low dimensions (pe. n < 1000)
+ * @param[in] a Square matrix.
+ * @param[in] x Exponent to raise.
+ * @param[in] n Matrix dimension.
+ * @param[out] ret Allocated space to put A^x.
+ * @throw Exception Singular matrix or complex eigenvalues.
+ */
 void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(Exception)
 {
   int rc=0;
@@ -118,7 +125,7 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
       throw Exception("can't pow matrix due to imaginary eigenvalue");
     }
     else {
-      GSL_REAL(z) = ccruncher::fpow(GSL_REAL(z), x);
+      GSL_REAL(z) = PowMatrix::fpow(GSL_REAL(z), x);
       GSL_IMAG(z) = 0.0;
       gsl_matrix_complex_set(VAPS, i, i, z);
     }
@@ -172,10 +179,16 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
   gsl_matrix_complex_free(VAPS);
 }
 
-//===========================================================================
-// matrix pow function (using vector instead of arrays)
-//===========================================================================
-void ccruncher::PowMatrix::pow(const vector<vector<double> > &a, double x, vector<vector<double> > &ret) throw(Exception)
+/**************************************************************************//**
+ * @details This is an incarnation of PowMatrix::pow using std::vector
+ *          instead of an array of doubles.
+ * @param[in] a Square matrix.
+ * @param[in] x Exponent to raise.
+ * @param[out] ret Matrix to set A^x.
+ * @throw Exception Singular matrix or complex eigenvalues.
+ */
+void ccruncher::PowMatrix::pow(const std::vector<std::vector<double> > &a, double x,
+                               std::vector<std::vector<double> > &ret) throw(Exception)
 {
   size_t n = a.size();
   vector<double*> A(n, NULL);

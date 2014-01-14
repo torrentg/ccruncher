@@ -24,56 +24,43 @@
 #include <cstring>
 #include <cctype>
 #include <cerrno>
+#include <cassert>
 #include "utils/CsvFile.hpp"
 #include "utils/Format.hpp"
-#include <cassert>
 
 using namespace std;
 
 #define BUFFER_SIZE 128*1024
 #define MAX_FIELD_SIZE 40
 
-//===========================================================================
-// default constructor
-//===========================================================================
-ccruncher::CsvFile::CsvFile(const string &fname, const string &sep) throw(Exception)
+/**************************************************************************//**
+ * @param[in] fname CSV file path with read permission.
+ * @throw Exception Error opening file.
+ */
+ccruncher::CsvFile::CsvFile(const string &fname) throw(Exception)
     : filename(""), file(NULL), filesize(0)
 {
   if (fname != "") {
-    open(fname, sep);
+    open(fname);
   }
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::CsvFile::~CsvFile()
 {
   close();
 }
 
-//===========================================================================
-// returns file size
-//===========================================================================
-size_t ccruncher::CsvFile::getNumBytes()
-{
-  if (file == NULL) return 0;
-  long pos0 = ftell(file);
-  fseek(file, 0, SEEK_END);
-  size_t size = ftell(file);
-  fseek(file, pos0, SEEK_SET);
-  return size;
-}
-
-//===========================================================================
-// open a file
-//===========================================================================
-void ccruncher::CsvFile::open(const string &fname, const string &sep) throw(Exception)
+/**************************************************************************//**
+ * @details Close previous file (if exist) and opens the given one.
+ * @param[in] fname CSV file path with read permission.
+ * @throw Exception Error opening file.
+ */
+void ccruncher::CsvFile::open(const string &fname) throw(Exception)
 {
   close();
 
   filename = fname;
-  separators = sep;
 
   file = fopen(fname.c_str(), "r");
   if (file == NULL) {
@@ -83,13 +70,15 @@ void ccruncher::CsvFile::open(const string &fname, const string &sep) throw(Exce
   ptr0 = NULL;
   ptr1 = NULL;
   buffer[0] = 0;
-  filesize = getNumBytes();
-  //TODO: move getNumBytes() content here?
+
+  // get current file size
+  long pos0 = ftell(file);
+  fseek(file, 0, SEEK_END);
+  filesize = ftell(file);
+  fseek(file, pos0, SEEK_SET);
 }
 
-//===========================================================================
-// close file
-//===========================================================================
+/**************************************************************************/
 void ccruncher::CsvFile::close()
 {
   if (file != NULL) {
@@ -103,15 +92,15 @@ void ccruncher::CsvFile::close()
   filesize = 0;
 }
 
-//===========================================================================
-// returns headers
-//===========================================================================
+/**************************************************************************//**
+ * @return List of columns headers.
+ */
 const vector<string>& ccruncher::CsvFile::getHeaders()
 {
   if (file != NULL && !headers.empty()) return headers;
 
   headers.clear();
-  open(filename, separators);
+  open(filename);
 
   int rc;
   do
@@ -129,11 +118,14 @@ const vector<string>& ccruncher::CsvFile::getHeaders()
   return headers;
 }
 
-//===========================================================================
-// moves content pointed by ptr to the begining of buffer
-// and appends content to end
-// returns the number of available chars in buffer
-//===========================================================================
+/**************************************************************************//**
+ * @details Internal method.
+ *          Moves content pointed by ptr to the begining of buffer and
+ *          appends new file date just to complete the buffer capacity.
+ *          Returns the number of available chars in buffer.
+ * @param[in] ptr Current position in buffer.
+ * @return Number of available bytes in buffer.
+ */
 size_t ccruncher::CsvFile::getChunk(char *ptr)
 {
   size_t len = 0;
@@ -167,14 +159,16 @@ size_t ccruncher::CsvFile::getChunk(char *ptr)
   }
 }
 
-//===========================================================================
-// read a field to buffer
-// return value is the right-hand character
-//   1: field separator
-//   2: new line
-//   3: end-of-file
-//===========================================================================
-int ccruncher::CsvFile::read() throw(Exception)
+/**************************************************************************//**
+ * @details Internal method.
+ *          Parse next token in buffer. Returns the type of token found:
+ *          - 1: field separator
+ *          - 2: new line
+ *          - 3: end-of-file
+ *          ptr0 points to the identified token.
+ * @return Type of token (1=sep, 2=eol, 3=eof)
+ */
+int ccruncher::CsvFile::next() throw(Exception)
 {
   if (ptr1 == NULL) getChunk(NULL);
   ptr0 = ptr1;
@@ -209,9 +203,11 @@ int ccruncher::CsvFile::read() throw(Exception)
   while(true);
 }
 
-//===========================================================================
-// parse a value
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] str String containing a number.
+ * @return Number as floating point value.
+ * @throw Exception Invalid number.
+ */
 double ccruncher::CsvFile::parse(const char *str) throw(Exception)
 {
   char *endptr;
@@ -225,9 +221,13 @@ double ccruncher::CsvFile::parse(const char *str) throw(Exception)
   }
 }
 
-//===========================================================================
-// trim a string
-//===========================================================================
+/**************************************************************************//**
+ * @details Move str pointer until a non-space is found. Removes ending
+ *          spaces setting a 'o' just after the first ending non-space.
+ *          This method can modify ptr content.
+ * @param[in,out] ptr String to trim spaces.
+ * @return Pointer to first non-space char.
+ */
 char* ccruncher::CsvFile::trim(char *ptr)
 {
   if (ptr == NULL) return ptr;
@@ -241,9 +241,15 @@ char* ccruncher::CsvFile::trim(char *ptr)
   return ret;
 }
 
-//===========================================================================
-// returns column values
-//===========================================================================
+/**************************************************************************//**
+ * @details Returns the column value of col-th column. If col<0 then is
+ *          equivalent to CsvFile::getRowSums(). User can stop current
+ *          parsing modifying the variable stop.
+ * @param[in] col Column index (0-based).
+ * @param[out] ret Data readed.
+ * @param[in] stop Stop flag.
+ * @throw Exception Parser error.
+ */
 void ccruncher::CsvFile::getColumn(int col, vector<double> &ret, bool *stop) throw(Exception)
 {
   if (col < 0) {
@@ -254,19 +260,19 @@ void ccruncher::CsvFile::getColumn(int col, vector<double> &ret, bool *stop) thr
   size_t numlines = 0;
 
   ret.clear();
-  open(filename, separators);
+  open(filename);
 
   try
   {
     // skip headers
-    while(read() == 1);
+    while(next() == 1);
     numlines++;
 
     // read lines
     do
     {
       // read first field
-      rc = read();
+      rc = next();
       if (rc != 1) {
         char *ptr = trim(ptr0);
         if (*ptr == 0) {
@@ -282,7 +288,7 @@ void ccruncher::CsvFile::getColumn(int col, vector<double> &ret, bool *stop) thr
       // read previous fields
       for(int i=1; i<=col; i++)
       {
-        rc = read();
+        rc = next();
         if (rc != 1 && i<col) {
           throw Exception("line with invalid format");
         }
@@ -293,7 +299,7 @@ void ccruncher::CsvFile::getColumn(int col, vector<double> &ret, bool *stop) thr
       ret.push_back(val);
 
       // reading the rest of fields
-      while (rc == 1) rc = read();
+      while (rc == 1) rc = next();
       numlines++;
 
       // check stop flag
@@ -307,9 +313,13 @@ void ccruncher::CsvFile::getColumn(int col, vector<double> &ret, bool *stop) thr
   }
 }
 
-//===========================================================================
-// return row sums
-//===========================================================================
+/**************************************************************************//**
+ * @details Compute column sums across rows. User can stop current parsing
+ *          modifying the variable stop.
+ * @param[out] ret Data readed.
+ * @param[in] stop Stop flag.
+ * @throw Exception Parser error.
+ */
 void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Exception)
 {
   int rc;
@@ -318,12 +328,12 @@ void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Excep
   int curcol = 0;
 
   ret.clear();
-  open(filename, separators);
+  open(filename);
 
   try
   {
     // skip headers
-    while(read() == 1) numcols++;
+    while(next() == 1) numcols++;
     numlines++;
 
     // read lines
@@ -331,7 +341,7 @@ void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Excep
     {
       // read first field
       curcol = -1;
-      rc = read();
+      rc = next();
       curcol = 0;
       if (rc != 1) {
         char *ptr = trim(ptr0);
@@ -345,7 +355,7 @@ void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Excep
 
       // reading the rest of fields
       while (rc == 1) {
-        rc = read();
+        rc = next();
         curcol++;
         val += parse(trim(ptr0));
       }
@@ -366,9 +376,13 @@ void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Excep
   }
 }
 
-//===========================================================================
-// returns file content
-//===========================================================================
+/**************************************************************************//**
+ * @details Read CSV table values. User can stop current parsing
+ *          modifying the variable stop.
+ * @param[out] ret Data readed.
+ * @param[in] stop Stop flag.
+ * @throw Exception Parser error.
+ */
 void ccruncher::CsvFile::getColumns(vector<vector<double> > &ret, bool *stop) throw(Exception)
 {
   int rc;
@@ -377,12 +391,12 @@ void ccruncher::CsvFile::getColumns(vector<vector<double> > &ret, bool *stop) th
   int curcol = 0;
 
   ret.clear();
-  open(filename, separators);
+  open(filename);
 
   try
   {
     // skip headers
-    while(read() == 1) numcols++;
+    while(next() == 1) numcols++;
     numlines++;
 
     ret.resize(numcols);
@@ -392,7 +406,7 @@ void ccruncher::CsvFile::getColumns(vector<vector<double> > &ret, bool *stop) th
     {
       // read first field
       curcol = -1;
-      rc = read();
+      rc = next();
       curcol = 0;
       if (rc != 1) {
         char *ptr = trim(ptr0);
@@ -406,7 +420,7 @@ void ccruncher::CsvFile::getColumns(vector<vector<double> > &ret, bool *stop) th
 
       // reading the rest of fields
       while (rc == 1) {
-        rc = read();
+        rc = next();
         curcol++;
         if (curcol >= numcols) {
           throw Exception("unexpected value");
@@ -439,32 +453,35 @@ void ccruncher::CsvFile::getColumns(vector<vector<double> > &ret, bool *stop) th
   }
 }
 
-//===========================================================================
-// returns file size (in bytes)
-//===========================================================================
+/**************************************************************************/
 size_t ccruncher::CsvFile::getFileSize() const
 {
   return filesize;
 }
 
-//===========================================================================
-// returns readed bytes
-//===========================================================================
+/**************************************************************************//**
+ * @details This method is useful if a thread is reading the CSV file and
+ *          another thread queries about the number of readed bytes to
+ *          display the parsing progress.
+ * @return Readed bytes.
+ */
 size_t ccruncher::CsvFile::getReadedSize() const
 {
   if (file == NULL) return 0;
   else return ftell(file);
 }
 
-//===========================================================================
-// returns the number of lines
-//===========================================================================
-size_t ccruncher::CsvFile::getNumLines()
+/**************************************************************************//**
+ * @details Count the number of eol in the file.
+ * @return Number of lines
+ * @throw Exception If file can not be readed.
+ */
+size_t ccruncher::CsvFile::getNumLines() throw(Exception)
 {
   size_t numlines = 0;
   size_t rc = 0;
 
-  open(filename, separators);
+  open(filename);
 
   do
   {

@@ -23,66 +23,72 @@
 #ifndef _Timer_
 #define _Timer_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
-
-//---------------------------------------------------------------------------
 
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief   Utility class to count time lapses.
+ *
+ * @details Inspired in jama/tnt_stopwatch && boost/timer.
+ *
+ * @see http://math.nist.gov/tnt/download.html
+ *
+ * @code
+ *   Timer timer;
+ *   timer.start();
+ *   // a heavy task here
+ *   timer.stop();
+ *   double t1 = timer.read();
+ *   timer.resume();
+ *   // another a heavy task here
+ *   double t2 = timer.read();
+ * @endcode
+ *
+ */
 class Timer
 {
 
   private:
 
-     // flag indicating if the timer is running
+     //! Flag indicating if the timer is running
      bool running_;
-     // start time (if running)
+     //! Start time (if running)
      double start_time_;
-     // acumulated time in seconds
+     //! Acumulated time in seconds
      double total_;
-     //double secs_per_tick;
 
   private:
   
-     // number of seconds
+     //! Current time in seconds
      double seconds();
 
   public:
   
-     // constructor
+     //! Constructor
      Timer(bool started=false);
-     // starts the timer
+     //! Starts the timer
      void start();
-     // stops the timer
+     //! Stops the timer
      double stop();
-     // returns the elapsed time
+     //! Returns the elapsed time (in seconds)
      double read();
-     // resume timer
+     //! Resume timer
      void resume();
-     // reset the timer
+     //! Reset the timer
      void reset();
-     // indicates if timer is running
+     //! Indicates if timer is running
      bool isRunning() const { return running_; }
-     // format seconds in format hh:mm:ss.mmm
-     static std::string format(double seconds_);
-     // operator overload
+     //! Format seconds in format hh:mm:ss.mmm
+     static std::string format(double secs);
+     //! Adds n seconds to accumulated time
      Timer& operator+=(double secs) { total_ += secs; return *this; }
-     // operator overload
+     //! Subtracts n seconds to accumulated time
      Timer& operator-=(double secs) { total_ -= secs; return *this; }
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

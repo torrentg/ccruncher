@@ -70,7 +70,7 @@ namespace ccruncher {
   //! Division function
   double fdiv(double x, double y) { return x/y; }
   //! Pow function
-  double fpow1(double x, double y) { return pow(x,y); }
+  double fpow(double x, double y) { return pow(x,y); }
   //! Minimum function
   double fmin(double x, double y) { return min(x,y); }
   //! Maximum function
@@ -89,7 +89,7 @@ const Expr::operador ccruncher::Expr::operators[] =
   { "-", 0, true, &frest },
   { "*", 1, true, &fprod },
   { "/", 1, true, &fdiv },
-  { "^", 2, true, &fpow1 }  // left associativity (like octave): 2^3^4=(2^3)^4
+  { "^", 2, true, &fpow }  // left associativity (like octave): 2^3^4=(2^3)^4
 };
 
 #define NUMOPERATORS (sizeof(operators)/sizeof(operador))
@@ -107,7 +107,7 @@ const Expr::function ccruncher::Expr::functions[] =
   { "log", 1, (void*) &flog },
   { "min", 2, (void*) &fmin },
   { "max", 2, (void*) &fmax },
-  { "pow", 2, (void*) &fpow1 },
+  { "pow", 2, (void*) &fpow },
   { "if", 3, (void*) &fif }
 };
 

@@ -27,9 +27,10 @@
 
 using namespace std;
 
-//===========================================================================
-// int
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] val Input value.
+ * @return Value serialized to string.
+ */
 string ccruncher::Format::toString(const int val)
 {
   ostringstream oss;
@@ -37,9 +38,10 @@ string ccruncher::Format::toString(const int val)
   return oss.str();
 }
 
-//===========================================================================
-// long
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] val Input value.
+ * @return Value serialized to string.
+ */
 string ccruncher::Format::toString(const long val)
 {
   ostringstream oss;
@@ -47,9 +49,11 @@ string ccruncher::Format::toString(const long val)
   return oss.str();
 }
 
-//===========================================================================
-// double
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] val Input value.
+ * @param[in] n Decimal precision to be used to format floating-point.
+ * @return Value serialized to string.
+ */
 string ccruncher::Format::toString(const double val, int n)
 {
   ostringstream oss;
@@ -60,9 +64,10 @@ string ccruncher::Format::toString(const double val, int n)
   return oss.str();
 }
 
-//===========================================================================
-// date
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] val Input value.
+ * @return Value serialized to string.
+ */
 string ccruncher::Format::toString(const ccruncher::Date &val)
 {
   ostringstream oss;
@@ -70,9 +75,10 @@ string ccruncher::Format::toString(const ccruncher::Date &val)
   return oss.str();
 }
 
-//===========================================================================
-// bool
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] val Input value.
+ * @return Value serialized to string.
+ */
 string ccruncher::Format::toString(const bool val)
 {
   ostringstream oss;
@@ -80,9 +86,10 @@ string ccruncher::Format::toString(const bool val)
   return oss.str();
 }
 
-//===========================================================================
-// size_t
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] val Input value.
+ * @return Value serialized to string.
+ */
 string ccruncher::Format::toString(const size_t val)
 {
   ostringstream oss;
@@ -90,9 +97,11 @@ string ccruncher::Format::toString(const size_t val)
   return oss.str();
 }
 
-//===========================================================================
-// returns bytes as string (B, KB, MB, GB)
-//===========================================================================
+/**************************************************************************//**
+ * @details Returns bytes as string (B, KB, MB, GB)
+ * @param[in] val Input value.
+ * @return Value serialized to string.
+ */
 string ccruncher::Format::bytes(const size_t val)
 {
   if (val < 1024) {

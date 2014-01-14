@@ -23,61 +23,50 @@
 #ifndef _Parser_
 #define _Parser_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief   Functions to parse usual types (int, double, date, etc.)
+ */
 class Parser
 {
 
   private:
 
-    // non-instantiable class
-    Parser() {}
-    // evalue numeric expression without variables
+    //! Evalue a numeric expression without variables
     static double eval(const char *) throw(Exception);
 
   public:
 
-    // convert string to int
+    //! Convert string to int
     static int intValue(const std::string &) throw(Exception);
-    // convert string to long
+    //! Convert string to long
     static long longValue(const std::string &) throw(Exception);
-    // convert string to double
+    //! Convert string to double
     static double doubleValue(const std::string &) throw(Exception);
-    // convert string to date
+    //! Convert string to date
     static Date dateValue(const std::string &) throw(Exception);
-    // convert string to bool
+    //! Convert string to bool
     static bool boolValue(const std::string &) throw(Exception);
     
-    // convert string to int
+    //! Convert string to int
     static int intValue(const char *) throw(Exception);
-    // convert string to long
+    //! Convert string to long
     static long longValue(const char *) throw(Exception);
-    // convert string to double
+    //! Convert string to double
     static double doubleValue(const char *) throw(Exception);
-    // convert string to date
+    //! Convert string to date
     static Date dateValue(const char *) throw(Exception);
-    // convert string to bool
+    //! Convert string to bool
     static bool boolValue(const char *) throw(Exception);
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

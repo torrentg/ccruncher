@@ -24,6 +24,7 @@
 #include <cassert>
 #include "utils/Logger.hpp"
 #include "utils/Utils.hpp"
+#include "utils/config.h"
 
 using namespace std;
 using namespace ccruncher;
