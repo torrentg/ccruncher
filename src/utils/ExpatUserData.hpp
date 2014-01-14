@@ -23,110 +23,101 @@
 #ifndef _ExpatUserData_
 #define _ExpatUserData_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
-#include "utils/ExpatHandlers.hpp"
 #include <map>
 #include <vector>
 #include <string>
 #include <expat.h>
-
-//---------------------------------------------------------------------------
+#include "utils/ExpatHandlers.hpp"
 
 namespace ccruncher {
-
-//---------------------------------------------------------------------------
 
 // forward declaration
 class ExpatHandlers;
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief   Data relative to an XML parsing.
+ *
+ * @details Expat parser library calls static handlers defined in
+ *          ExpatParser. These methods retrieve current parsing info from
+ *          this class. Data relative to an XML parsing is:
+ *            - stack of ExpatHandlers
+ *            - defines (data and methods)
+ *            - current element name (can differ from ExpatHandlers element)
+ *
+ * @see     http://expat.sourceforge.net/
+ * @see     http://www.xml.com/pub/a/1999/09/expat/index.html
+ */
 class ExpatUserData
 {
 
   private:
 
-    // internal struct
+    //! Internal struct
     struct ExpatUserDataToken
     {
-      // token name related to handler
+      //! Element name
       char name[20];
-      // pointer to class handlers container
+      //! Element handlers
       ExpatHandlers *handlers;
     };
 
   private:
 
-    // expat xml parser
-    XML_Parser xmlparser;
-    // stack of handlers
+    //! Stack of handlers
     std::vector<ExpatUserDataToken> pila;
-    // current handler
+    //! Stack position (current element)
     int pila_pos;
-    // current tag (used by ExpatParser)
+    //! Current element name
     const char *current_tag;
-    // buffer used to apply defines
+    //! Buffer used to apply defines
     char *buffer;
-    // buffer size
+    //! Buffer size
     size_t buffer_size;
-    // points to first char in current buffer
+    //! Points to first char in current buffer
     char *buffer_pos1;
-    // points to last char in current buffer
+    //! Points to last char in current buffer
     char *buffer_pos2;
 
   private:
 
-    // push str to buffer
+    //! Push str to buffer
     const char* bufferPush(const char *str, size_t n);
-    // append str to buffer
+    //! Append str to buffer
     const char* bufferAppend(const char *str, size_t n);
 
   public:
 
-    // user replaces
+    //! List of defines
     std::map<std::string,std::string> defines;
-    // apply defines to the given string
+    //! Apply defines to the given string
     const char* applyDefines(const char *str);
 
   public:
 
-    // void constructor
-    ExpatUserData(size_t buffersize);
-    // contructor
-    ExpatUserData(XML_Parser xmlparser_, size_t buffersize);
-    // copy constructor
+    //! Constructor
+    ExpatUserData(size_t buffersize=4096);
+    //! Copy constructor
     ExpatUserData(const ExpatUserData &);
-    // destructor
+    //! Destructor
     ~ExpatUserData();
-    // assignment operator
+    //! Assignment operator
     ExpatUserData & operator= (const ExpatUserData &);
-    // returns parser
-    XML_Parser getParser() const { return xmlparser; }
-    // set parser
-    void setParser(XML_Parser p) { xmlparser = p; }
-    // returns current handlers
+    //! Returns current handlers
     ExpatHandlers* getCurrentHandlers() const { return pila[pila_pos].handlers; }
-    // returns current name
+    //! Returns current handlers element name
     const char* getCurrentName() const { return pila[pila_pos].name; }
-    // removeCurrentHandlers
+    //! Remove current handlers
     void removeCurrentHandlers() { pila_pos--; }
-    // setCurrentHandlers
+    //! Set current handlers
     void setCurrentHandlers(const char *name, ExpatHandlers *eh);
-    // set current tag name
+    //! Set current tag name
     void setCurrentTag(const char *t) { current_tag = t; }
-    // returns current tag name
+    //! Returns current tag name
     const char *getCurrentTag() const { return current_tag; }
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------
