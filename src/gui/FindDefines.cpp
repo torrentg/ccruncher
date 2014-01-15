@@ -46,9 +46,12 @@ ccruncher_gui::FindDefines::FindDefines(const string &filename)
   }
 }
 
-//===========================================================================
-// epstart - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epstart
+ * @param[in] name Element name.
+ * @param[in] attributes Element attributes.
+ * @throw Exception Error processing xml data.
+ */
 void ccruncher_gui::FindDefines::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"ccruncher")) {
@@ -77,24 +80,25 @@ void ccruncher_gui::FindDefines::epstart(ExpatUserData &eu, const char *name_, c
   }
 }
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epend
+ * @param[in] name Element name.
+ */
 void ccruncher_gui::FindDefines::epend(ExpatUserData &, const char *)
 {
   // nothing to do
 }
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epdata
+ */
 void ccruncher_gui::FindDefines::epdata(ExpatUserData &, const char *, const char *, int)
 {
   // nothing to do
 }
 
 //===========================================================================
-// epend - ExpatHandlers method implementation
+// getDefines
 //===========================================================================
 const map<string,string>& ccruncher_gui::FindDefines::getDefines() const
 {

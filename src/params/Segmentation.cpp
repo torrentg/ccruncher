@@ -20,34 +20,31 @@
 //
 //===========================================================================
 
+#include <cassert>
 #include "params/Segmentation.hpp"
 #include "utils/File.hpp"
-#include <cassert>
 
 #define UNASSIGNED "unassigned"
 
 using namespace std;
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::Segmentation::Segmentation()
 {
-  // default values
   reset();
 }
 
-//===========================================================================
-// size
-//===========================================================================
+/**************************************************************************//**
+ * @return Number of segments.
+ */
 int ccruncher::Segmentation::size() const
 {
   return segments.size();
 }
 
-//===========================================================================
-// returns i-th segment
-//===========================================================================
+/**************************************************************************//**
+ * @return The i-th segment name.
+ */
 const string& ccruncher::Segmentation::getSegment(int i) const
 {
   // assertions
@@ -57,10 +54,12 @@ const string& ccruncher::Segmentation::getSegment(int i) const
   return segments[i];
 }
 
-//===========================================================================
-// return the index of the given segment
-//===========================================================================
-int ccruncher::Segmentation::indexOfSegment(const string &sname) const throw(Exception)
+/**************************************************************************//**
+ * @param[in] sname Segment name.
+ * @return The index of the given segment.
+ * @throw Exception Segment name not found.
+ */
+int ccruncher::Segmentation::indexOfSegment(const std::string &sname) const throw(Exception)
 {
   for (unsigned int i=0; i<segments.size(); i++)
   {
@@ -73,9 +72,11 @@ int ccruncher::Segmentation::indexOfSegment(const string &sname) const throw(Exc
   throw Exception("segment '" + sname + "' not found");
 }
 
-//===========================================================================
-// return the index of the given segment
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] sname Segment name.
+ * @return The index of the given segment.
+ * @throw Exception Segment name not found.
+ */
 int ccruncher::Segmentation::indexOfSegment(const char *sname) const throw(Exception)
 {
   assert(sname != NULL);
@@ -91,9 +92,10 @@ int ccruncher::Segmentation::indexOfSegment(const char *sname) const throw(Excep
   throw Exception("segment '" + string(sname) + "' not found");
 }
 
-//===========================================================================
-// reset
-//===========================================================================
+/**************************************************************************//**
+ * @details Set default values that are valids. Defines the UNASSIGNED
+ *          segment.
+ */
 void ccruncher::Segmentation::reset()
 {
   segments.clear();
@@ -105,10 +107,18 @@ void ccruncher::Segmentation::reset()
   components = obligor;
 }
 
-//===========================================================================
-// isValidIdentifier
-//===========================================================================
-bool ccruncher::Segmentation::isValidName(const string &str)
+/**************************************************************************//**
+ * @details Check if the string is a valid segmentation or segment
+ *          identifier:<br/>
+ *          Name pattern: [a-zA-Z0-9+-._]+<br/>
+ *          We need to check the segmentation name because it is used
+ *          to create the simulation output files. we need to check the
+ *          segments name because they appear in the CSV column headers
+ *          and can be used as variable identifiers.
+ * @param[in] str Segmentation name.
+ * @return true = valid name, false = otherwise.
+ */
+bool ccruncher::Segmentation::isValidName(const std::string &str)
 {
   if (str.length() == 0) return false;
   for(size_t i=0; i<str.length(); i++) {
@@ -119,14 +129,15 @@ bool ccruncher::Segmentation::isValidName(const string &str)
   return true;
 }
 
-//===========================================================================
-// insertSegment
-//===========================================================================
-int ccruncher::Segmentation::insertSegment(const string &sname) throw(Exception)
+/**************************************************************************//**
+ * @param[in] sname Segment name.
+ * @throw Exception Invalid name or segment name repeated.
+ */
+void ccruncher::Segmentation::insertSegment(const std::string &sname) throw(Exception)
 {
-  if (sname == "")
+  if (isValidName(sname))
   {
-    throw Exception("trying to insert a segment with invalid name (void name)");
+    throw Exception("segment '" + sname + "' has an invalid name");
   }
 
   // checking coherence
@@ -143,7 +154,6 @@ int ccruncher::Segmentation::insertSegment(const string &sname) throw(Exception)
   {
     segments.push_back(sname);
     numcomponents.push_back(0);
-    return segments.size()-1;
   }
   catch(std::exception &e)
   {
@@ -151,9 +161,12 @@ int ccruncher::Segmentation::insertSegment(const string &sname) throw(Exception)
   }
 }
 
-//===========================================================================
-// epstart - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epstart
+ * @param[in] name_ Element name.
+ * @param[in] attributes Element attributes.
+ * @throw Exception Error processing xml data.
+ */
 void ccruncher::Segmentation::epstart(ExpatUserData &, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"segmentation")) {
@@ -186,9 +199,10 @@ void ccruncher::Segmentation::epstart(ExpatUserData &, const char *name_, const 
   }
 }
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epend
+ * @param[in] name_ Element name.
+ */
 void ccruncher::Segmentation::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"segmentation")) {
@@ -198,25 +212,22 @@ void ccruncher::Segmentation::epend(ExpatUserData &, const char *name_)
   }
 }
 
-//===========================================================================
-// returns enabled flag
-//===========================================================================
-bool ccruncher::Segmentation::isEnabled() const
-{
-  return enabled;
-}
-
-//===========================================================================
-// return filename
-//===========================================================================
+/**************************************************************************//**
+ * @details Create filename concatenating path/name.csv.
+ * @param[in] path Dir path.
+ * @return File path.
+ */
 string ccruncher::Segmentation::getFilename(const string &path) const
 {
   return File::normalizePath(path) + name + ".csv";
 }
 
-//===========================================================================
-// add components to segmentation stats
-//===========================================================================
+/**************************************************************************//**
+ * @details Adds a component to the i-th segment. Thus reports that segment
+ *          is used by someone and don't be removed by method
+ *          Segmentation::removeUnusedSegments().
+ * @param[in] isegment Segment index.
+ */
 void ccruncher::Segmentation::addComponent(int isegment)
 {
   assert(0 <= isegment && isegment < (int)numcomponents.size());
@@ -225,9 +236,13 @@ void ccruncher::Segmentation::addComponent(int isegment)
   }
 }
 
-//===========================================================================
-// remove unused segments
-//===========================================================================
+/**************************************************************************//**
+ * @details Removes unused segments (recoding indexes when necessary) in
+ *          order to minimize the memory allocation/access in the
+ *          simulation stage. Before call this method you need to inform
+ *          about segment usage calling method
+ *          Segmentation::addComponent(int isegment) for each component.
+ */
 void ccruncher::Segmentation::removeUnusedSegments()
 {
   assert(segments.size() == numcomponents.size());
@@ -262,9 +277,11 @@ void ccruncher::Segmentation::removeUnusedSegments()
   }
 }
 
-//===========================================================================
-// recode segments removing unused segments
-//===========================================================================
+/**************************************************************************//**
+ * @details This method is public for test purposes.
+ * @param[in] isegment Segment index.
+ * @return New segment index.
+ */
 int ccruncher::Segmentation::recode(int isegment) const
 {
   assert(0 <= isegment && isegment < (int)recode_map.size());

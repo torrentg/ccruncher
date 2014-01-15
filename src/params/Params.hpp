@@ -23,83 +23,70 @@
 #ifndef _Params_
 #define _Params_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief Parameters of the simulation.
+ *
+ * @see http://ccruncher.net/ifileref.html#parameters
+ */
 class Params : public ExpatHandlers
 {
 
   private:
 
-    // initialize variables
-    void init();
-    // parse a parameter
+    //! Parse a parameter
     void parseParameter(ExpatUserData &, const char **) throw(Exception);
-    // validate object content
+    //! Validate object content
     void validate() const throw(Exception);
 
   public:
 
-    // time.0 param value
+    //! time.0 param value
     Date time0;
-    // time.T param value
+    //! time.T param value
     Date timeT;
-    // maxiterations param value
+    //! maxiterations param value
     int maxiterations;
-    // maxseconds param value
+    //! maxseconds param value
     int maxseconds;
-    // copula.type param value
-    std::string copula_type; // gaussian, t(4)
-    // rng.seed param value
+    //! copula.type param value
+    std::string copula_type;
+    //! rng.seed param value
     unsigned long rng_seed;
-    // antithetic param value
+    //! antithetic param value
     bool antithetic;
-    // lhs size param value
+    //! lhs param value
     unsigned short lhs_size;
-    // onlyActiveObligors param value
+    //! onlyActiveObligors param value
     bool onlyactive;
-    // simulation block size
+    //! blocksize param value
     unsigned short blocksize;
 
   protected:
 
-    // ExpatHandlers method
+    //! Directives to process an xml start tag element
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
+    //! Directives to process an xml end tag element
     void epend(ExpatUserData &, const char *);
   
   public:
   
-    // constructor
+    //! Constructor
     Params();
-    // returns copula type as string (gaussian or t)
-    static std::string getCopulaType(const std::string &str) throw(Exception);
-    // returns copula type as string (gaussian or t)
+    //! Returns copula type as string (gaussian or t)
     std::string getCopulaType() const throw(Exception);
-    // returns copula param (if exists)
-    static double getCopulaParam(const std::string &str) throw(Exception);
-    // returns copula param (if exists)
+    //! Returns copula param (only t-copula)
     double getCopulaParam() const throw(Exception);
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

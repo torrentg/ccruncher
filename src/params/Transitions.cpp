@@ -130,9 +130,12 @@ void ccruncher::Transitions::insertTransition(const string &rating1, const strin
   matrix[row][col] = value;
 }
 
-//===========================================================================
-// epstart - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epstart
+ * @param[in] name Element name.
+ * @param[in] attributes Element attributes.
+ * @throw Exception Error processing xml data.
+ */
 void ccruncher::Transitions::epstart(ExpatUserData &, const char *name, const char **attributes)
 {
   if (isEqual(name,"transitions")) {
@@ -155,9 +158,10 @@ void ccruncher::Transitions::epstart(ExpatUserData &, const char *name, const ch
   }
 }
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epend
+ * @param[in] name Element name.
+ */
 void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
 {
   if (isEqual(name,"transitions"))

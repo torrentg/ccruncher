@@ -63,9 +63,9 @@ class Asset : public ExpatHandlers
 
   protected:
   
-    // ExpatHandlers method
+    //! Directives to process an xml start tag element
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
+    //! Directives to process an xml end tag element
     void epend(ExpatUserData &, const char *);
 
   public:

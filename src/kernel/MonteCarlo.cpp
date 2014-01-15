@@ -233,7 +233,7 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
   // model parameters
   inverses.init(ndf, timeT, dprobs);
   chol = idata.getCorrelations().getCholesky();
-  floadings1 = idata.getCorrelations().getFactorLoadings();
+  floadings1 = idata.getFactors().getLoadings();
 
   // performance tip: contaings sqrt(1-w^2) (to avoid sqrt and multiplication)
   floadings2 = floadings1;

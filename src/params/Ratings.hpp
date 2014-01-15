@@ -23,77 +23,69 @@
 #ifndef _Ratings_
 #define _Ratings_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief List of ratings.
+ *
+ * @see http://ccruncher.net/ifileref.html#ratings
+ */
 class Ratings : public ExpatHandlers
 {
 
   private:
 
-    // internal struct
+    //! Internal struct
     struct Rating
     {
-        // rating name
+        //! Rating name
         std::string name;
-        // rating description
+        //! Rating description
         std::string desc;
-        // constructor
+        //! Constructor
         Rating(const std::string &n="", const std::string &d="") : name(n), desc(d) {}
     };
 
   private:
 
-    // ratings list
+    //! Ratings list
     std::vector<Rating> vratings;
 
   private:
   
-    // insert a rating in the list
+    //! insert a rating in the list
     void insertRating(const Rating &) throw(Exception);
-    // validate object content
-    void validations() throw(Exception);
 
   protected:
   
-    // ExpatHandlers method
+    //! Directives to process an xml start tag element
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
+    //! Directives to process an xml end tag element
     void epend(ExpatUserData &, const char *);
 
   public:
 
-    // constructor
-    Ratings();
-    // return the number of ratings
+    //! Default constructor
+    Ratings() {}
+    //! Number of ratings
     int size() const;
-    // return the index of the rating
+    //! Return the index of the rating
     int getIndex(const char *name) const;
+    //! Return the index of the rating
     int getIndex(const std::string &name) const;
-    // return rating name
+    //! Return i-th rating name
     const std::string& getName(int i) const;
-    // return rating description
+    //! Return i-th rating description
     const std::string& getDescription(int i) const;
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

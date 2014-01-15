@@ -22,16 +22,14 @@
 #include <cmath>
 #include <climits>
 #include <algorithm>
+#include <cassert>
 #include <gsl/gsl_roots.h>
 #include <gsl/gsl_errno.h>
 #include "params/DefaultProbabilities.hpp"
 #include "utils/Format.hpp"
-#include <cassert>
 
 using namespace std;
 using namespace ccruncher;
-
-// --------------------------------------------------------------------------
 
 #define EPSILON 1e-12
 #define MAX_ITER_BISECTION 100
@@ -39,39 +37,48 @@ using namespace ccruncher;
 // absolute error less than 1 sec (1/(24*60*60)=1.16e-5)
 #define ABS_ERR_ROOT 1e-7
 
-//===========================================================================
-// default constructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::DefaultProbabilities::DefaultProbabilities()
 {
   indexdefault = -1;
   date = NAD;
 }
 
-//===========================================================================
-// copy constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] o Object to copy.
+ * @see DefaultProbabilities::operator=
+ */
 ccruncher::DefaultProbabilities::DefaultProbabilities(const DefaultProbabilities &o)
 {
   *this = o;
 }
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_, const Date &d) throw(Exception)
+/**************************************************************************//**
+ * @param[in] ratings_ List of ratings.
+ * @param[in] d Initial date.
+ * @throw Exception Invalid rating list.
+ */
+ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_,
+           const Date &d) throw(Exception)
 {
   indexdefault = -1;
   date = d;
   setRatings(ratings_);
 }
 
-//===========================================================================
-// constructor
-// used by Transitions class
-//===========================================================================
-ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_, const Date &d,
-           const vector<Date> &dates, const vector<vector<double> > &values) throw(Exception)
+/**************************************************************************//**
+ * @details This constructor is used to create the default probabilities
+ *          from a transition matrix.
+ * @see Class Transitions
+ * @param[in] ratings_ List of ratings.
+ * @param[in] d Initial date.
+ * @param[in] dates List of dates where PD values are defined.
+ * @param[in] values List of PD values per rating.
+ * @throw Exception Invalid data.
+ */
+ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_,
+           const Date &d, const std::vector<Date> &dates,
+           const std::vector<std::vector<double> > &values) throw(Exception)
 {
   indexdefault = -1;
   date = d;
@@ -90,29 +97,47 @@ ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_, c
   setSplines();
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::DefaultProbabilities::~DefaultProbabilities()
 {
+  reset();
+}
+
+/**************************************************************************//**
+ * @details Free allocated memory and set internal variables to its
+ *          default value.
+ */
+void ccruncher::DefaultProbabilities::reset()
+{
+  ratings = Ratings();
+  indexdefault = -1;
+  date = NAD;
+
   for(size_t i=0; i<splines.size(); i++) {
     if (splines[i] != NULL) {
       gsl_spline_free(splines[i]);
     }
   }
+  splines.clear();
 
   for(size_t i=0; i<accels.size(); i++) {
     if (accels[i] != NULL) {
       gsl_interp_accel_free(accels[i]);
     }
   }
+  accels.clear();
+
+  ddata.clear();
 }
 
-//===========================================================================
-// assignment operator
-//===========================================================================
+/**************************************************************************//**
+ * @details Assign the given object reallocating its own objects.
+ * @param[in] o Object to assign.
+ */
 DefaultProbabilities & ccruncher::DefaultProbabilities::operator=(const DefaultProbabilities &o)
 {
+  reset();
+
   date = o.date;
   ddata = o.ddata;
   ratings = o.ratings;
@@ -139,9 +164,10 @@ DefaultProbabilities & ccruncher::DefaultProbabilities::operator=(const DefaultP
   return *this;
 }
 
-//===========================================================================
-// set ratings
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] ratings_ List of ratings.
+ * @throw Exception Invalid ratings.
+ */
 void ccruncher::DefaultProbabilities::setRatings(const Ratings &ratings_) throw(Exception)
 {
   if (ratings_.size() <= 0)
@@ -155,49 +181,55 @@ void ccruncher::DefaultProbabilities::setRatings(const Ratings &ratings_) throw(
   }
 }
 
-//===========================================================================
-// return ratings
-//===========================================================================
+/**************************************************************************//**
+ * @return The list of ratings.
+ */
 const Ratings & ccruncher::DefaultProbabilities::getRatings() const
 {
   return ratings;
 }
 
-//===========================================================================
-// set date
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] d Initial date.
+ */
 void ccruncher::DefaultProbabilities::setDate(const Date &d)
 {
   date = d;
 }
 
-//===========================================================================
-// return date
-//===========================================================================
+/**************************************************************************//**
+ * @return Initial date.
+ */
 Date ccruncher::DefaultProbabilities::getDate() const
 {
   return date;
 }
 
-//===========================================================================
-// return index of default rating
-//===========================================================================
+/**************************************************************************//**
+ * @return Index (0-based) of the 'default' rating.
+ */
 int ccruncher::DefaultProbabilities::getIndexDefault() const
 {
   return indexdefault;
 }
 
-//===========================================================================
-// number of ratings
-//===========================================================================
+/**************************************************************************//**
+ * @details The number of defined default probabilities function matches
+ *          the number of ratings.
+ * @return Number of DP functions.
+ */
 int ccruncher::DefaultProbabilities::size() const
 {
   return ratings.size();
 }
 
-//===========================================================================
-// return type of interpolation
-//===========================================================================
+/**************************************************************************//**
+ * @details Returned values are:
+ *          - "none": default rating.
+ *          - "linear": linear interpolation.
+ *          - "cspline": cubic spline interpolation.
+ * @return Type of interpolation used in the i-th default probability function.
+ */
 string ccruncher::DefaultProbabilities::getInterpolationType(int i) const
 {
   assert(!splines.empty());
@@ -211,10 +243,15 @@ string ccruncher::DefaultProbabilities::getInterpolationType(int i) const
   }
 }
 
-//===========================================================================
-// insert an element
-//===========================================================================
-void ccruncher::DefaultProbabilities::insertValue(const string &srating, const Date &t, double value) throw(Exception)
+/**************************************************************************//**
+ * @details Inserts a PD(t;r) user defined value.
+ * @param[in] srating Rating identifier.
+ * @param[in] t Date.
+ * @param[in] value Default probability at time t for rating r.
+ * @throw Exception Error inserting element.
+ */
+void ccruncher::DefaultProbabilities::insertValue(const std::string &srating,
+                const Date &t, double value) throw(Exception)
 {
   assert(ratings.size() > 0);
   assert(date != NAD);
@@ -257,9 +294,12 @@ void ccruncher::DefaultProbabilities::insertValue(const string &srating, const D
   ddata[irating].push_back(pd(day,value));
 }
 
-//===========================================================================
-// epstart - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epstart
+ * @param[in] name Element name.
+ * @param[in] attributes Element attributes.
+ * @throw Exception Error processing xml data.
+ */
 void ccruncher::DefaultProbabilities::epstart(ExpatUserData &, const char *name, const char **attributes)
 {
   if (isEqual(name,"dprobs")) {
@@ -285,9 +325,10 @@ void ccruncher::DefaultProbabilities::epstart(ExpatUserData &, const char *name,
   }
 }
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epend
+ * @param[in] name Element name.
+ */
 void ccruncher::DefaultProbabilities::epend(ExpatUserData &, const char *name)
 {
   if (isEqual(name,"dprobs")) {
@@ -296,9 +337,11 @@ void ccruncher::DefaultProbabilities::epend(ExpatUserData &, const char *name)
   }
 }
 
-//===========================================================================
-// validate given values
-//===========================================================================
+/**************************************************************************//**
+ * @details Internal method. Sorts data, identifies default rating, fills
+ *          info not entered by user, and checks data.
+ * @throw Exception Validation error.
+ */
 void ccruncher::DefaultProbabilities::validate() throw(Exception)
 {
   // ranges are checked in insertValue() method. don't rechecked here
@@ -368,16 +411,27 @@ void ccruncher::DefaultProbabilities::validate() throw(Exception)
     {
       if (ddata[i][j].prob < ddata[i][j-1].prob)
       {
-        string msg = "dprob[" + ratings.getName(i) + "] is not monotonically increasing at t=" + Format::toString(ddata[i][j].day) + "D";
+        string msg = "dprob[" + ratings.getName(i) +
+                     "] is not monotonically increasing at t=" +
+                     Format::toString(ddata[i][j].day) + "D";
         throw Exception(msg);
       }
     }
   }
 }
 
-//===========================================================================
-// setSplines
-//===========================================================================
+/**************************************************************************//**
+ * @details Internal method. For each rating default probability data
+ *          creates a spline function. Determines linear/cubic splines
+ *          flowing theses rules:
+ *          - default rating -> none
+ *          - less than 3 values -> linear
+ *          - There are negative derivatives in the cubic spline -> linear
+ *          - otherwise -> cubic
+ *          Although data values are increasing, the cubic spline can be
+ *          a non-increasing in the time range. This is the cause to use
+ *          linear splines in this case.
+ */
 void ccruncher::DefaultProbabilities::setSplines()
 {
   assert(indexdefault >= 0);
@@ -461,10 +515,11 @@ void ccruncher::DefaultProbabilities::setSplines()
   }
 }
 
-//===========================================================================
-// evalue pd[irating][t] where t is the time in days
-// return probability, a value in [0,1]
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] irating Index (0-based) of rating.
+ * @param[in] t Time in days from starting date.
+ * @return Probability of default in [0,1].
+ */
 double ccruncher::DefaultProbabilities::evalue(int irating, double t) const
 {
   assert(!splines.empty() && !accels.empty());
@@ -496,24 +551,29 @@ double ccruncher::DefaultProbabilities::evalue(int irating, double t) const
   }
 }
 
-//===========================================================================
-// evalue pd[irating] at date t
-// return probability, a value in [0,1]
-//===========================================================================
-double ccruncher::DefaultProbabilities::evalue(int irating, const Date &t) const
+/**************************************************************************//**
+ * @param[in] irating Index (0-based) of rating.
+ * @param[in] d Date to determine time (t = d - startg date).
+ * @return Probability of default in [0,1].
+ */
+double ccruncher::DefaultProbabilities::evalue(int irating, const Date &d) const
 {
-  return evalue(irating, t-date);
+  return evalue(irating, d-date);
 }
 
-//===========================================================================
-// evalue inv_pd[irating][prob], where prob is the probability (value in [0,1])
-// returns the default time in days
-// obs: inverse of a spline isn't a spline
-// obs: inv(spline(x,y)) != spline(y,x)
-// caution: this method is not concurrent
-// caution: this is not a high-performance method
-//===========================================================================
-double ccruncher::DefaultProbabilities::inverse(int irating, double val) const
+/**************************************************************************//**
+ * @details Evalue inv_pd(prob;r), where prob is the probability. Returns
+ *          the time in days from starting date. Default probability
+ *          are invertible because they are strictly increasing functions.
+ *          Inverse value is obtained by root-finding methods.
+ * @note    Inverse of a spline isn't a spline.
+ * @note    inv(spline(x,y)) != spline(y,x)
+ * @note    This is not a high-performance method
+ * @param[in] irating Index (0-based) of rating.
+ * @param[in] prob Probability, value in range [0,1].
+ * @return Days from starting date.
+ */
+double ccruncher::DefaultProbabilities::inverse(int irating, double prob) const
 {
   assert(!splines.empty() && !accels.empty());
   assert(splines.size() == accels.size());
@@ -523,22 +583,22 @@ double ccruncher::DefaultProbabilities::inverse(int irating, double val) const
     return 0.0;
   }
 
-  if (val < 0.0) {
+  if (prob < 0.0 || prob > 1.0) {
     assert(false);
     return 0.0;
   }
 
   assert(splines[irating] != NULL && splines[irating]->size > 0);
 
-  if (ddata[irating].back().prob < val) {
+  if (ddata[irating].back().prob < prob) {
     return ddata[irating].back().day + 1.0;
   }
   else {
     if (splines[irating]->interp->type == gsl_interp_cspline) {
-      return inverse_cspline(splines[irating], val, accels[irating]);
+      return inverse_cspline(splines[irating], prob, accels[irating]);
     }
     else if (splines[irating]->interp->type == gsl_interp_linear) {
-      return inverse_linear(splines[irating], val, accels[irating]);
+      return inverse_linear(splines[irating], prob, accels[irating]);
     }
     else {
       assert(false);
@@ -547,9 +607,13 @@ double ccruncher::DefaultProbabilities::inverse(int irating, double val) const
   }
 }
 
-//===========================================================================
-// root-finding solver functions
-//===========================================================================
+/**************************************************************************//**
+ * @details Evaluate PD(x;r) taking care in the extremes.
+ * @see http://www.gnu.org/software/gsl/manual/html_node/One-dimensional-Root_002dFinding.html
+ * @param[in] x Time from starting date.
+ * @param[in] params Root-finding function parameters (includes splines to use).
+ * @return PD evaluated at time x.
+ */
 double ccruncher::DefaultProbabilities::f(double x, void *params)
 {
   fparams *p = static_cast<fparams *>(params);
@@ -570,6 +634,13 @@ double ccruncher::DefaultProbabilities::f(double x, void *params)
   }
 }
 
+/**************************************************************************//**
+ * @details Evaluate the derivative of PD(x;r) taking care in the extremes.
+ * @see http://www.gnu.org/software/gsl/manual/html_node/One-dimensional-Root_002dFinding.html
+ * @param[in] x Time from starting date.
+ * @param[in] params Root-finding function parameters (includes splines to use).
+ * @return PD evaluated at time x.
+ */
 double ccruncher::DefaultProbabilities::df(double x, void *params)
 {
   fparams *p = static_cast<fparams *>(params);
@@ -582,16 +653,29 @@ double ccruncher::DefaultProbabilities::df(double x, void *params)
   return gsl_spline_eval_deriv(p->spline, x, p->accel);
 }
 
+/**************************************************************************//**
+ * @details Evaluate PD(x;r) and its derievative simultaneously.
+ * @see http://www.gnu.org/software/gsl/manual/html_node/One-dimensional-Root_002dFinding.html
+ * @param[in] x Time from starting date.
+ * @param[in] params Root-finding function parameters (includes splines to use).
+ * @param[out] y Function PD(,r) evaluated at time x.
+ * @param[out] dy Derivative of PD(;r) at time x
+ */
 void ccruncher::DefaultProbabilities::fdf (double x, void *params, double *y, double *dy)
 {
   *y = f(x, params);
   *dy = df(x, params);
 }
 
-//===========================================================================
-// inverse by root finding (bracketing method)
-//===========================================================================
-double ccruncher::DefaultProbabilities::inverse_linear(gsl_spline *spline, double y, gsl_interp_accel *accel) const
+/**************************************************************************//**
+ * @see http://www.gnu.org/software/gsl/manual/html_node/One-dimensional-Root_002dFinding.html
+ * @param[in] spline Default probability function spline to use.
+ * @param[in] y Probability in [0,1].
+ * @param[in,out] accel Spline accelerator.
+ * @return Value x satisfying PD(x,r)=y
+ */
+double ccruncher::DefaultProbabilities::inverse_linear(gsl_spline *spline, double y,
+                  gsl_interp_accel *accel) const
 {
   assert(spline != NULL);
   assert(accel != NULL);
@@ -627,10 +711,15 @@ double ccruncher::DefaultProbabilities::inverse_linear(gsl_spline *spline, doubl
 }
 
 
-//===========================================================================
-// inverse by root finding (bracketing method)
-//===========================================================================
-double ccruncher::DefaultProbabilities::inverse_cspline(gsl_spline *spline, double y, gsl_interp_accel *accel) const
+/**************************************************************************//**
+ * @see http://www.gnu.org/software/gsl/manual/html_node/One-dimensional-Root_002dFinding.html
+ * @param[in] spline Default probability function spline to use.
+ * @param[in] y Probability in [0,1].
+ * @param[in,out] accel Spline accelerator.
+ * @return Value x satisfying PD(x,r)=y
+ */
+double ccruncher::DefaultProbabilities::inverse_cspline(gsl_spline *spline, double y,
+                  gsl_interp_accel *accel) const
 {
   assert(spline != NULL);
   assert(accel != NULL);
@@ -670,9 +759,10 @@ double ccruncher::DefaultProbabilities::inverse_cspline(gsl_spline *spline, doub
   }
 }
 
-//===========================================================================
-// getMaxDate
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] irating Index (0-based) of rating.
+ * @return Maximum user defined date.
+ */
 Date ccruncher::DefaultProbabilities::getMaxDate(int irating) const
 {
   assert(date != NAD);
@@ -685,9 +775,11 @@ Date ccruncher::DefaultProbabilities::getMaxDate(int irating) const
   }
 }
 
-//===========================================================================
-// return days where dprob is defined
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] irating Index (0-based) of rating.
+ * @return List of times (in days from starting date) where PD(t;r) is
+ *         user defined.
+ */
 vector<int> ccruncher::DefaultProbabilities::getDays(int irating) const
 {
   assert(!splines.empty());

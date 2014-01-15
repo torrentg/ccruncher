@@ -68,9 +68,9 @@ class Transitions : public ExpatHandlers
 
   protected:
 
-    // ExpatHandler method
+    //! Directives to process an xml start tag element
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandler method
+    //! Directives to process an xml end tag element
     void epend(ExpatUserData &, const char *);
 
   public:

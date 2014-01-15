@@ -20,57 +20,66 @@
 //
 //===========================================================================
 
-#include "params/Factors.hpp"
 #include <cassert>
+#include "params/Factors.hpp"
 
 using namespace std;
 
-//===========================================================================
-// private constructor
-//===========================================================================
-ccruncher::Factors::Factors()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// size
-//===========================================================================
+/**************************************************************************//**
+ * @return Number of factors.
+ */
 int ccruncher::Factors::size() const
 {
   return vfactors.size();
 }
 
-//===========================================================================
-// return rating name
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] i Index of the factor.
+ * @return Factor name.
+ */
 const string& ccruncher::Factors::getName(int i) const
 {
   assert(i >= 0 && i < (int) vfactors.size());
   return vfactors[i].name;
 }
 
-//===========================================================================
-// return rating description
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] i Index of the factor.
+ * @return Factor description.
+ */
 const string& ccruncher::Factors::getDescription(int i) const
 {
   assert(i >= 0 && i < (int) vfactors.size());
   return vfactors[i].desc;
 }
 
-//===========================================================================
-// return factor loading
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] i Index of the factor.
+ * @return Factor loading in range [0,1].
+ */
 double ccruncher::Factors::getLoading(int i) const
 {
   assert(i >= 0 && i < (int) vfactors.size());
   return vfactors[i].loading;
 }
 
-//===========================================================================
-// return the index of the factor (-1 if not found)
-//===========================================================================
+/**************************************************************************//**
+ * @return Factor loadings list.
+ */
+vector<double> ccruncher::Factors::getLoadings() const
+{
+  vector<double> w(vfactors.size(), NAN);
+  for(size_t i=0; i<vfactors.size(); i++)
+  {
+    w[i] = vfactors[i].loading;
+  }
+  return w;
+}
+
+/**************************************************************************//**
+ * @param[in] name Factor name.
+ * @return Index of the given factor, -1 if not found.
+ */
 int ccruncher::Factors::getIndex(const char *name) const
 {
   assert(name != NULL);
@@ -84,17 +93,19 @@ int ccruncher::Factors::getIndex(const char *name) const
   return -1;
 }
 
-//===========================================================================
-// return the index of the factor (-1 if not found)
-//===========================================================================
-int ccruncher::Factors::getIndex(const string &name) const
+/**************************************************************************//**
+ * @param[in] name Factor name.
+ * @return Index of the given factor, -1 if not found.
+ */
+int ccruncher::Factors::getIndex(const std::string &name) const
 {
   return getIndex(name.c_str());
 }
 
-//===========================================================================
-// inserts a factor in list
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] val Factor to insert.
+ * @throw Exception Factor repeated or loading out-of-range.
+ */
 void ccruncher::Factors::insertFactor(const Factor &val) throw(Exception)
 {
   // checking coherence
@@ -125,9 +136,12 @@ void ccruncher::Factors::insertFactor(const Factor &val) throw(Exception)
   }
 }
 
-//===========================================================================
-// epstart - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epstart
+ * @param[in] name_ Element name.
+ * @param[in] attributes Element attributes.
+ * @throw Exception Error processing xml data.
+ */
 void ccruncher::Factors::epstart(ExpatUserData &, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"factors")) {
@@ -151,25 +165,16 @@ void ccruncher::Factors::epstart(ExpatUserData &, const char *name_, const char 
   }
 }
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epend
+ * @param[in] name_ Element name.
+ */
 void ccruncher::Factors::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"factors")) {
-    validations();
-  }
-}
-
-//===========================================================================
-// validations
-//===========================================================================
-void ccruncher::Factors::validations() throw(Exception)
-{
-  // checking number of factors
-  if (vfactors.empty())
-  {
-    throw Exception("'factors' have no elements");
+    if (vfactors.empty()) {
+      throw Exception("'factors' have no elements");
+    }
   }
 }
 

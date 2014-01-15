@@ -72,9 +72,9 @@ class Portfolio : public ExpatHandlers
 
   private:
   
-    // inserts a obligor in the portfolio
+    //! Directives to process an xml start tag element
     void insertObligor(Obligor *) throw(Exception);
-    // validate portfolio
+    //! Directives to process an xml end tag element
     void validations() throw(Exception);
 
   protected:

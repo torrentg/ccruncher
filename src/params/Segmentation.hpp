@@ -23,96 +23,94 @@
 #ifndef _Segmentation_
 #define _Segmentation_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <vector>
 #include "utils/ExpatHandlers.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief Portfolio segmentation.
+ *
+ * @details This class provides methods to read a segmentation from the
+ *          xml input file. Offers a method to remove the unused segments
+ *          in order to minimize the memory allocation/access in the simulation.
+ *
+ * @see http://ccruncher.net/ifileref.html#segmentations
+ */
 class Segmentation : public ExpatHandlers
 {
 
   public:
 
+    //! Type of segmentation's components
     enum ComponentsType
     {
-      asset,
-      obligor,
-      undefined
+      asset,     //!< Segmentation of assets
+      obligor,   //!< Segmentation of obligors
+      undefined  //!< Not defined
     };
 
   private:
 
-    // list of segments
+    //! List of segments
     std::vector<std::string> segments;
-    // number of components per segments
+    //! Number of components per segment
     std::vector<size_t> numcomponents;
-    // recode map
+    //! Recode map
     std::vector<int> recode_map;
-    // enabled flag (true by default)
+    //! Enabled flag (true by default)
     bool enabled;
 
   private:
   
-    // inserts a segment into the list
-    int insertSegment(const std::string &) throw(Exception);
-    // check name
+    //! Inserts a segment into the list
+    void insertSegment(const std::string &) throw(Exception);
+    //! Check name
     bool isValidName(const std::string &);
 
   protected:
   
-    // ExpatHandlers method
+    //! Directives to process an xml start tag element
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
+    //! Directives to process an xml end tag element
     void epend(ExpatUserData &, const char *);
 
   public:
 
-    // segmentation name
+    //! Segmentation name
     std::string name;
-    // type of components (obligors/assets)
+    //! Type of components (obligors/assets)
     ComponentsType components;
 
   public:
   
-    // constructor
+    //! Constructor
     Segmentation();
-    // return the number of segments
+    //! Number of segments
     int size() const;
-    // returns i-th segment
+    //! Returns i-th segment name
     const std::string& getSegment(int i) const;
-    // return the index of the given segment
+    //! Return the index of the given segment
     int indexOfSegment(const std::string &sname) const throw(Exception);
-    // return the index of the given segment
+    //! Return the index of the given segment
     int indexOfSegment(const char *sname) const throw(Exception);
-    // reset object content
+    //! Reset object content
     void reset();
-    // returns enabled flag
-    bool isEnabled() const;
-    // return filename
+    //! Returns enabled flag
+    bool isEnabled() const { return enabled; }
+    //! Return filename
     std::string getFilename(const std::string &path) const;
-    // add components to segmentations stats
+    //! Add components to segmentations stats
     void addComponent(int);
-    // remove unused segments
+    //! Remove unused segments
     void removeUnusedSegments();
-    // recode segments removing unused segments
+    //! Recode segments removing unused segments
     int recode(int) const;
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

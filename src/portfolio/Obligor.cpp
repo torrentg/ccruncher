@@ -131,9 +131,12 @@ void ccruncher::Obligor::prepareLastAsset() throw(Exception)
   }
 }
 
-//===========================================================================
-// epstart - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epstart
+ * @param[in] name Element name.
+ * @param[in] attributes Element attributes.
+ * @throw Exception Error processing xml data.
+ */
 void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"asset"))
@@ -176,9 +179,10 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
   }
 }
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epend
+ * @param[in] name Element name.
+ */
 void ccruncher::Obligor::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"asset")) {
