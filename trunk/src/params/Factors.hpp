@@ -23,82 +23,76 @@
 #ifndef _Factors_
 #define _Factors_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <vector>
 #include <cmath>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief List of factors.
+ *
+ * @see http://ccruncher.net/ifileref.html#factors
+ */
 class Factors : public ExpatHandlers
 {
 
   private:
 
-    // internal struct
+    //! Internal struct
     struct Factor
     {
-        // factor name
+        //! Factor name
         std::string name;
-        // factor description
+        //! Factor description
         std::string desc;
-        // factor loading
+        //! Factor loading
         double loading;
-        // constructor
+        //! Constructor
         Factor(const std::string &n="", const std::string &d="", double v=NAN) : name(n), desc(d), loading(v) {}
     };
 
   private:
 
-    // list of factors
+    //! List of factors
     std::vector<Factor> vfactors;
 
   private:
   
-    // add a factor to list
+    //! Add a factor to list
     void insertFactor(const Factor &) throw(Exception);
-    // validate list
-    void validations() throw(Exception);
 
   protected:
   
-    // ExpatHandlers method
+    //! Directives to process an xml start tag element
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
+    //! Directives to process an xml end tag element
     void epend(ExpatUserData &, const char *);
   
   public:
 
-    // default constructor
-    Factors();
-    // return the number of factors
+    //! Default constructor
+    Factors() {}
+    //! Return the number of factors
     int size() const;
-    // return the index of the factor
+    //! Return the index of the factor
     int getIndex(const char *name) const;
+    //! Return the index of the factor
     int getIndex(const std::string &name) const;
-    // return factor name
+    //! Return the i-th factor name
     const std::string& getName(int i) const;
-    // return factor description
+    //! Return the i-th factor description
     const std::string& getDescription(int i) const;
-    // return factor loading
+    //! Return the i-th factor loading
     double getLoading(int i) const;
+    //! Return factor loadings
+    std::vector<double> getLoadings() const;
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

@@ -168,9 +168,12 @@ int ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Except
   }
 }
 
-//===========================================================================
-// epstart - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epstart
+ * @param[in] name Element name.
+ * @param[in] attributes Element attributes.
+ * @throw Exception Error processing xml data.
+ */
 void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"segmentations")) {
@@ -187,9 +190,10 @@ void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *name_, con
   }
 }
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epend
+ * @param[in] name Element name.
+ */
 void ccruncher::Segmentations::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"segmentation")) {

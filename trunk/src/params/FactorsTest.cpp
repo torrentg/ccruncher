@@ -56,6 +56,11 @@ void ccruncher_test::FactorsTest::test1()
   ASSERT_EQUALS_EPSILON(factors.getLoading(0), 0.1, 1e-14)
   ASSERT_EQUALS_EPSILON(factors.getLoading(1), 0.2, 1e-14)
 
+  vector<double> v = factors.getLoadings();
+  ASSERT(v.size() == 2);
+  ASSERT_EQUALS_EPSILON(v[0], 0.1, 1e-14)
+  ASSERT_EQUALS_EPSILON(v[1], 0.2, 1e-14)
+
   ASSERT("retail" == factors.getDescription(0));
   ASSERT("" == factors.getDescription(1));
 

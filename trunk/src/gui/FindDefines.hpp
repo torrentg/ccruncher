@@ -40,11 +40,11 @@ class FindDefines : public ccruncher::ExpatHandlers
 
   protected:
 
-    // ExpatHandlers method
+    //! Directives to process an xml start tag element
     void epstart(ccruncher::ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
+    //! Directives to process an xml end tag element
     void epend(ccruncher::ExpatUserData &, const char *);
-    // ExpatHandlers method
+    //! Directives to process xml data element
     void epdata(ccruncher::ExpatUserData &, const char *, const char *, int);
 
   public:

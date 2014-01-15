@@ -23,72 +23,69 @@
 #ifndef _Correlations_
 #define _Correlations_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <gsl/gsl_matrix.h>
+#include "params/Factors.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
-#include "params/Factors.hpp"
-
-//---------------------------------------------------------------------------
 
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief Matrix of correlations between factors.
+ *
+ * @details This object represents the factor correlation matrix and
+ *          provides the following functionalities:
+ *            - Acces to matrix elements (read-only)
+ *            - Xml parsing (extending ExpatHandlers)
+ *            - Cholesky matrix computation
+ *
+ * @see http://ccruncher.net/ifileref.html#correlations
+ */
 class Correlations : public ExpatHandlers
 {
 
   private:
 
-    // list of factors
+    //! List of factors
     Factors factors;
-    // matrix values
+    //! Correlation matrix
     std::vector<std::vector<double> > matrix;
 
   private:
 
-    // insert a new matrix value
-    void insertCorrelation(const std::string &r1, const std::string &r2, double val) throw(Exception);
-    // validate object content
+    //! Insert a new matrix value
+    void insertCorrelation(const std::string &, const std::string &, double) throw(Exception);
+    //! Validate matrix values
     void validate() throw(Exception);
 
   protected:
-  
-    // ExpatHandler method
+
+    //! Directives to process an xml start tag element
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandler method
+    //! Directives to process an xml end tag element
     void epend(ExpatUserData &, const char *);
-  
+
   public:
 
-    // constructor
-    Correlations();
-    // constructor
+    //! Default constructor
+    Correlations() {}
+    //! Constructor
     Correlations(const Factors &) throw(Exception);
-    // initialize object
+    //! Set factors
     void setFactors(const Factors &) throw(Exception);
-    // return factors
-    const Factors &getFactors() const;
-    // matrix size (= number of factors)
+    //! Return factors
+    const Factors& getFactors() const;
+    //! Matrix dimension
     int size() const;
-    // matrix element access
+    //! Matrix element access
     const std::vector<double>& operator[] (int row) const;
-    // return cholesky matrix of factors
-    gsl_matrix * getCholesky() const throw(Exception);
-    // return factor loadings
-    std::vector<double> getFactorLoadings() const;
+    //! Return Cholesky matrix
+    gsl_matrix* getCholesky() const throw(Exception);
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

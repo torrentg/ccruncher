@@ -152,9 +152,12 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m) throw(Exc
   }
 }
 
-//===========================================================================
-// epstart - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epstart
+ * @param[in] name Element name.
+ * @param[in] attributes Element attributes.
+ * @throw Exception Error processing xml data.
+ */
 void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"ccruncher") && !hasmaintag) {
@@ -223,10 +226,14 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
   }
 }
 
-//===========================================================================
-// epdata - ExpatHandlers method implementation
-// TODO: catch cdata sections using XML_SetCdataSectionHandler
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epdata
+ * @todo Catch cdata sections using XML_SetCdataSectionHandler.
+ * @param[in,out] eu Xml parsing data.
+ * @param[in] name_ Element name.
+ * @param[in] data Chunck of data.
+ * @param[in] len Data length.
+ */
 void ccruncher::IData::epdata(ExpatUserData &eu, const char *name_, const char *data, int len)
 {
   if (isEqual(name_,"title")) {
@@ -240,9 +247,10 @@ void ccruncher::IData::epdata(ExpatUserData &eu, const char *name_, const char *
   }
 }
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epend
+ * @param[in] name Element name.
+ */
 void ccruncher::IData::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"ccruncher")) {

@@ -20,48 +20,43 @@
 //
 //===========================================================================
 
-#include "params/Ratings.hpp"
 #include <cassert>
+#include "params/Ratings.hpp"
 
 using namespace std;
 
-//===========================================================================
-// constructor privat
-//===========================================================================
-ccruncher::Ratings::Ratings()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// size
-//===========================================================================
+/**************************************************************************//**
+ * @return Number of ratings.
+ */
 int ccruncher::Ratings::size() const
 {
   return vratings.size();
 }
 
-//===========================================================================
-// return rating name
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] i Index (0-based) rating.
+ * @return Name of the i-th rating.
+ */
 const string& ccruncher::Ratings::getName(int i) const
 {
   assert(i >= 0 && i < (int) vratings.size());
   return vratings[i].name;
 }
 
-//===========================================================================
-// return rating description
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] i Index (0-based) rating.
+ * @return Description of the i-th rating.
+ */
 const string& ccruncher::Ratings::getDescription(int i) const
 {
   assert(i >= 0 && i < (int) vratings.size());
   return vratings[i].desc;
 }
 
-//===========================================================================
-// return the index of the rating (-1 if rating not found)
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] name Rating name.
+ * @return Index of the rating (-1 if rating not found).
+ */
 int ccruncher::Ratings::getIndex(const char *name) const
 {
   assert(name != NULL);
@@ -75,17 +70,19 @@ int ccruncher::Ratings::getIndex(const char *name) const
   return -1;
 }
 
-//===========================================================================
-// return the index of the rating (-1 if rating not found)
-//===========================================================================
-int ccruncher::Ratings::getIndex(const string &name) const
+/**************************************************************************//**
+ * @param[in] name Rating name.
+ * @return Index of the rating (-1 if rating not found).
+ */
+int ccruncher::Ratings::getIndex(const std::string &name) const
 {
   return getIndex(name.c_str());
 }
 
-//===========================================================================
-// insert a rating into list
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] val Rating to insert.
+ * @throw Exception Rating repeated.
+ */
 void ccruncher::Ratings::insertRating(const Rating &val) throw(Exception)
 {
   // checking coherence
@@ -109,9 +106,12 @@ void ccruncher::Ratings::insertRating(const Rating &val) throw(Exception)
   }
 }
 
-//===========================================================================
-// epstart - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epstart
+ * @param[in] name_ Element name.
+ * @param[in] attributes Element attributes.
+ * @throw Exception Error processing xml data.
+ */
 void ccruncher::Ratings::epstart(ExpatUserData &, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"ratings")) {
@@ -134,25 +134,17 @@ void ccruncher::Ratings::epstart(ExpatUserData &, const char *name_, const char 
   }
 }
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epend
+ * @param[in] name_ Element name.
+ */
 void ccruncher::Ratings::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"ratings")) {
-    validations();
-  }
-}
-
-//===========================================================================
-// global validations
-//===========================================================================
-void ccruncher::Ratings::validations() throw(Exception)
-{
-  // checking number of ratings (minimum: default+non-default)
-  if (vratings.size() < 2)
-  {
-    throw Exception("required a minimum of 2 ratings");
+    // minimum number of rating: default+non-default
+    if (vratings.size() < 2) {
+      throw Exception("required a minimum of 2 ratings");
+    }
   }
 }
 

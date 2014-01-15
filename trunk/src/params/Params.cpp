@@ -20,26 +20,19 @@
 //
 //===========================================================================
 
-#include "params/Params.hpp"
-#include "utils/Parser.hpp"
 #include <climits>
 #include <cassert>
+#include "params/Params.hpp"
+#include "utils/Parser.hpp"
+#include "utils/Format.hpp"
 
 using namespace std;
 using namespace ccruncher;
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @details Set parameters to non-valid values.
+ */
 ccruncher::Params::Params()
-{
-  init();
-}
-
-//===========================================================================
-// init
-//===========================================================================
-void ccruncher::Params::init()
 {
   time0 = NAD;
   timeT = NAD;
@@ -53,13 +46,16 @@ void ccruncher::Params::init()
   blocksize = 128;
 }
 
-//===========================================================================
-// epstart - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epstart
+ * @param[in] eu Xml parsing data.
+ * @param[in] name Element name.
+ * @param[in] atrs Element attributes.
+ * @throw Exception Error processing xml data.
+ */
 void ccruncher::Params::epstart(ExpatUserData &eu, const char *name, const char **atrs)
 {
   if (isEqual(name,"parameters")) {
-    // checking that don't have attributes
     if (getNumAttributes(atrs) > 0) {
       throw Exception("attributes are not allowed in tag parameters");
     }
@@ -72,9 +68,10 @@ void ccruncher::Params::epstart(ExpatUserData &eu, const char *name, const char 
   }
 }
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epend
+ * @param[in] name Element name.
+ */
 void ccruncher::Params::epend(ExpatUserData &, const char *name)
 {
   if (isEqual(name,"parameters")) {
@@ -82,46 +79,43 @@ void ccruncher::Params::epend(ExpatUserData &, const char *name)
   }
 }
 
-//===========================================================================
-// checks copula type string
-//===========================================================================
-string ccruncher::Params::getCopulaType(const string &str) throw(Exception)
+/**************************************************************************//**
+ * @return Copula type ('gaussian' or 't').
+ * @throw Exception Invalid copula identifier.
+ */
+string ccruncher::Params::getCopulaType() const throw(Exception)
 {
   // gaussian case
-  if (str == "gaussian") {
+  if (copula_type == "gaussian") {
     return "gaussian";
   }
   // t-student case t(x)
-  else if (str.length() >= 3 && str.substr(0,2) == "t(" && str.at(str.length()-1) == ')') {
+  else if (copula_type.length() >= 3 &&
+           copula_type.substr(0,2) == "t(" &&
+           copula_type.at(copula_type.length()-1) == ')') {
     return "t";
   }
   // non-valid copula type
   else {
-    throw Exception("invalid copula type: '" + str + "'");
+    throw Exception("invalid copula type: '" + copula_type + "'");
   }
 }
 
-//===========================================================================
-// checks copula type string
-//===========================================================================
-string ccruncher::Params::getCopulaType() const throw(Exception)
-{
-  return getCopulaType(copula_type);
-}
 
-//===========================================================================
-// checks copula type string
-//===========================================================================
-double ccruncher::Params::getCopulaParam(const string &str) throw(Exception)
+/**************************************************************************//**
+ * @return Degrees of freedom of the t-copula (ndf>=2).
+ * @throw Exception Invalid copula or copula params.
+ */
+double ccruncher::Params::getCopulaParam() const throw(Exception)
 {
-  if (getCopulaType(str) != "t") {
+  if (getCopulaType() != "t") {
     throw Exception("copula without params");
   }
   // t-student case t(x), where x is a integer
   else {
-    string val = str.substr(2, str.length()-3);
+    string val = copula_type.substr(2, copula_type.length()-3);
     double ndf = Parser::doubleValue(val);
-    if (ndf < 2.0) 
+    if (ndf < 2.0)
     {
       throw Exception("t-student copula requires ndf >= 2");
     }
@@ -129,17 +123,10 @@ double ccruncher::Params::getCopulaParam(const string &str) throw(Exception)
   }
 }
 
-//===========================================================================
-// checks copula type string
-//===========================================================================
-double ccruncher::Params::getCopulaParam() const throw(Exception)
-{
-  return getCopulaParam(copula_type);
-}
-
-//===========================================================================
-// parse a XML parameter
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] attributes Xml element attributes.
+ * @throw Exception Error processing xml data.
+ */
 void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes) throw(Exception)
 {
   // reading attribute name
@@ -195,11 +182,12 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
         lhs_size = 1000;
       }
     }
-    catch(Exception &e)
+    catch(Exception &)
     {
       int aux = getIntAttribute(attributes, "value");
       if (aux <= 0 || USHRT_MAX < aux) {
-        throw Exception("parameter lhs out of range");
+        throw Exception("parameter lhs out of range [1," +
+                        Format::toString((int)USHRT_MAX) + "]");
       }
       else {
         lhs_size = aux;
@@ -214,7 +202,8 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
   {
     int aux = getIntAttribute(attributes, "value");
     if (aux <= 0 || USHRT_MAX < aux) {
-      throw Exception("parameter blocksize out of range");
+      throw Exception("parameter blocksize out of range [1," +
+                      Format::toString((int)USHRT_MAX) + "]");
     }
     else {
       blocksize = (unsigned short)(aux);
@@ -226,9 +215,10 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
   }
 }
 
-//===========================================================================
-// check class content
-//===========================================================================
+/**************************************************************************//**
+ * @details Check that all variables are defined and have a valid value.
+ * @throw Exception Error validating parameters.
+ */
 void ccruncher::Params::validate() const throw(Exception)
 {
 

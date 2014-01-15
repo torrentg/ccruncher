@@ -22,17 +22,18 @@
 
 #include <cmath>
 #include <algorithm>
+#include <cassert>
 #include "params/Interest.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Format.hpp"
-#include <cassert>
 
 using namespace std;
 using namespace ccruncher;
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] date_ Date on wich the curve is defined.
+ * @param[in] type_ Type of interest to apply.
+ */
 ccruncher::Interest::Interest(const Date &date_, InterestType type_) :
     spline(NULL), accel(NULL)
 {
@@ -41,17 +42,16 @@ ccruncher::Interest::Interest(const Date &date_, InterestType type_) :
   is_cubic_spline = false;
 }
 
-//===========================================================================
-// copy constructor
-//===========================================================================
+/**************************************************************************//**
+ * @see Interest::operator=
+ * @param[in] o Object to copy.
+ */
 ccruncher::Interest::Interest(const Interest &o)
 {
   *this = o;
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::Interest::~Interest()
 {
   if (spline != NULL) {
@@ -63,15 +63,24 @@ ccruncher::Interest::~Interest()
   }
 }
 
-//===========================================================================
-// assignment operator
-//===========================================================================
+/**************************************************************************//**
+ * @details Assign the given object reallocating its own objects.
+ * @param[in] o Object to assign.
+ */
 Interest & ccruncher::Interest::operator=(const Interest &o)
 {
   type = o.type;
   date = o.date;
   rates = o.rates;
   is_cubic_spline = o.is_cubic_spline;
+
+  if (spline != NULL) {
+    gsl_spline_free(spline);
+  }
+
+  if (accel != NULL) {
+    gsl_interp_accel_free(accel);
+  }
 
   if (o.spline != NULL) {
     spline = gsl_spline_alloc(o.spline->interp->type, o.spline->size);
@@ -92,34 +101,38 @@ Interest & ccruncher::Interest::operator=(const Interest &o)
   return *this;
 }
 
-//===========================================================================
-// set date
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] d Initial date.
+ * @throw Exception Invalid date.
+ */
 void ccruncher::Interest::setDate(const Date &d)
 {
   if (d == NAD) throw Exception("invalid date");
   date = d;
 }
 
-//===========================================================================
-// return interest type
-//===========================================================================
+/**************************************************************************//**
+ * @return The interest type.
+ */
 ccruncher::Interest::InterestType ccruncher::Interest::getType() const
 {
   return type;
 }
 
-//===========================================================================
-// returns the numbers of rates
-//===========================================================================
+/**************************************************************************//**
+ * @return Number of user-defined rates.
+ */
 int ccruncher::Interest::size() const
 {
   return (int) rates.size();
 }
 
-//===========================================================================
-// returns interpolated interest rate at day d from date
-//===========================================================================
+/**************************************************************************//**
+ * @details Returns interpolated interest rate at d-th day from initial date.
+ * @param[in] d Day from initial date.
+ * @param[out] t Time in years.
+ * @param[out] r Rate to apply.
+ */
 void ccruncher::Interest::getValues(int d, double *t, double *r) const
 {
   assert(0 <= d);
@@ -143,9 +156,11 @@ void ccruncher::Interest::getValues(int d, double *t, double *r) const
   }
 }
 
-//===========================================================================
-// returns rate at date
-//===========================================================================
+/**************************************************************************//**
+ * @details Compute rate at day d-date0, where date0 is the curve's date.
+ * @param[in] d Date.
+ * @return Rate to apply. 0 if d <= date0.
+ */
 double ccruncher::Interest::getValue(const Date &d) const
 {
   if (date == NAD || rates.size() == 0 || d <= date) return 0.0;
@@ -155,10 +170,13 @@ double ccruncher::Interest::getValue(const Date &d) const
   return r;
 }
 
-//===========================================================================
-// returns factor to aply to transport a money value from date1 to date0
-// where date0 is the interest curve date
-//===========================================================================
+/**************************************************************************//**
+ * @details This factor transport a money value from date1 to date0
+ *          where date0 is the interest curve date. Factor is computed
+ *          according to interest type (simple/compound/continuous)
+ * @param[in] d Date.
+ * @return Factor to apply.
+ */
 double ccruncher::Interest::getFactor(const Date &d) const
 {
   if (date == NAD || rates.size() == 0 || d <= date) return 1.0;
@@ -185,9 +203,12 @@ double ccruncher::Interest::getFactor(const Date &d) const
   }
 }
 
-//===========================================================================
-// insertRate
-//===========================================================================
+/**************************************************************************//**
+ * @details Previous to insertion check that it is a valid rate,
+ *          non-repeated time, etc.
+ * @param[in] val User-defined rate to insert.
+ * @throw Exception Error validating rate.
+ */
 void ccruncher::Interest::insertRate(const Rate &val) throw(Exception)
 {
   assert(date != NAD);
@@ -210,6 +231,13 @@ void ccruncher::Interest::insertRate(const Rate &val) throw(Exception)
     }
   }
 
+  // checking interest rate value
+  if (val.r < -0.5 || 1.0 < val.r)
+  {
+    throw Exception("rate value '" + Format::toString(val.r) +
+                    "' out of range [-0.5, +1.0]");
+  }
+
   // inserting value
   try
   {
@@ -221,10 +249,12 @@ void ccruncher::Interest::insertRate(const Rate &val) throw(Exception)
   }
 }
 
-//===========================================================================
-// setSpline
-// assumed than rates are sorted by date
-//===========================================================================
+/**************************************************************************//**
+ * @details Internal method. Assume than rates are sorted by date.
+ *          Create the interpolation function using the user preference
+ *          (linear/cubic splines).
+ * @throw Exception Lack of data to create interpolation function.
+ */
 void ccruncher::Interest::setSpline() throw(Exception)
 {
   assert(spline == NULL && accel == NULL);
@@ -258,9 +288,12 @@ void ccruncher::Interest::setSpline() throw(Exception)
   accel = gsl_interp_accel_alloc();
 }
 
-//===========================================================================
-// epstart - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epstart
+ * @param[in] name_ Element name.
+ * @param[in] attributes Element attributes.
+ * @throw Exception Error processing xml data.
+ */
 void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"interest"))
@@ -313,10 +346,6 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char
     int d = t - date;
 
     double r = getDoubleAttribute(attributes, "r");
-    if (r < -0.5 || 1.0 < r)
-    {
-      throw Exception("rate value " + Format::toString(r) + " out of range [-0.5, +1.0]");
-    }
 
     insertRate(Rate(d, diff(date, t, 'Y'), r, str));
   }
@@ -326,9 +355,10 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char
   }
 }
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epend
+ * @param[in] name_ Element name.
+ */
 void ccruncher::Interest::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"interest")) {

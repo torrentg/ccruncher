@@ -23,9 +23,6 @@
 #ifndef _DefaultProbabilities_
 #define _DefaultProbabilities_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <vector>
 #include <gsl/gsl_spline.h>
@@ -34,29 +31,39 @@
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief Default probabilities functions.
+ *
+ * @details These functions provides the probability of default (PD) at
+ *          a given time (t) for a fixed rating (r): PD(t;r).
+ *          This class provides methods to retrieve them from the xml
+ *          input file, and evaluate them using spline interpolation.
+ *
+ * @see http://ccruncher.net/ifileref.html#dprobs
+ */
 class DefaultProbabilities : public ExpatHandlers
 {
 
   private:
 
+    //! Internal struct
     struct pd
     {
+      //! Time in days from starting date
       int day;
+      //! Probability of default
       double prob;
-      // constructor
+      //! Constructor
       pd(int d, double p) : day(d), prob(p) {}
-      // less-than operator
+      //! Less-than operator
       bool operator < (const pd &obj) const {
        return day < obj.day;
       }
     };
 
+    //! Internal struct (root-finding)
     struct fparams
     {
       gsl_spline *spline;
@@ -66,90 +73,90 @@ class DefaultProbabilities : public ExpatHandlers
 
   private:
 
-    // initial date
+    //! Initial date
     Date date;
-    // default probabilities for each rating
+    //! Default probabilities for each rating
     std::vector<std::vector<pd> > ddata;
-    // ratings table
+    //! List of ratings
     Ratings ratings;
-    // index of default rating
+    //! Index of the default rating
     int indexdefault;
-    // cubic spline engines
+    //! Spline for each rating
     std::vector<gsl_spline *> splines;
-    // splines accelerators
+    //! Splines accelerators
     std::vector<gsl_interp_accel *> accels;
 
   private:
 
-    // insert a data value
-    void insertValue(const std::string &r1, const Date &t, double val) throw(Exception);
-    // validate object content
-    void validate() throw(Exception);
-    // set splines
-    void setSplines();
-    // inverse by root finding (derivative method)
-    double inverse_cspline(gsl_spline *, double, gsl_interp_accel *) const;
-    // inverse by root finding (bracketing method)
-    double inverse_linear(gsl_spline *, double, gsl_interp_accel *) const;
-    // root-finding function
+    //! Root finding solver function
     static double f(double x, void *params);
-    // root-finding function
+    //! Root finding solver function
     static double df(double x, void *params);
-    // root-finding function
+    //! Root finding solver function
     static void fdf (double x, void *params, double *y, double *dy);
+
+    //! Reset object content
+    void reset();
+    //! Insert a data value
+    void insertValue(const std::string &r1, const Date &t, double val) throw(Exception);
+    //! Validate object content
+    void validate() throw(Exception);
+    //! Set splines
+    void setSplines();
+    //! Inverse by root finding (bisection method)
+    double inverse_linear(gsl_spline *, double, gsl_interp_accel *) const;
+    //! Inverse by root finding (Newton method)
+    double inverse_cspline(gsl_spline *, double, gsl_interp_accel *) const;
 
   protected:
 
-    // ExpatHandlers method
+    //! Directives to process an xml start tag element
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
+    //! Directives to process an xml end tag element
     void epend(ExpatUserData &, const char *);
 
   public:
 
-    // defaults constructor
+    //! Default constructor
     DefaultProbabilities();
-    // copy constructor
+    //! Copy constructor
     DefaultProbabilities(const DefaultProbabilities &);
-    // constructor
+    //! Constructor
     DefaultProbabilities(const Ratings &, const Date &d) throw(Exception);
-    // constructor
+    //! Constructor
     DefaultProbabilities(const Ratings &, const Date &d, const std::vector<Date> &dates, const std::vector<std::vector<double> > &values) throw(Exception);
-    // destructor
+    //! Destructor
     ~DefaultProbabilities();
-    // assignment operator
+    //! Assignment operator
     DefaultProbabilities & operator=(const DefaultProbabilities &);
-    // returns ratings size
+    //! Number of default probabilities functions
     int size() const;
-    // set date
+    //! Set initial date
     void setDate(const Date &);
-    // return date
+    //! Return initial date
     Date getDate() const;
-    // set ratings
+    //! Set ratings
     void setRatings(const Ratings &) throw(Exception);
-    // return ratings
+    //! Return ratings
     const Ratings & getRatings() const;
-    // return index of default rating
+    //! Return index of default rating
     int getIndexDefault() const;
-    // evalue pd for irating at t
+    //! Evalue pd for i-th rating at t
     double evalue(int irating, double t) const;
-    // evalue pd for irating at t
-    double evalue(int irating, const Date &t) const;
-    // evalue pd inverse for irating at t
+    //! Evalue pd for i-th rating at t
+    double evalue(int irating, const Date &d) const;
+    //! Evalue pd inverse for i-th rating at given probability
     double inverse(int irating, double val) const;
-    // return maximum defined date
+    //! Return maximum defined date
     Date getMaxDate(int irating) const;
-    // return days where dprob is defined
+    //! Return list of days where dprob is defined
     std::vector<int> getDays(int irating) const;
-    // return type of interpolation
+    //! Return type of interpolation
     std::string getInterpolationType(int i) const;
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
+

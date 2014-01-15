@@ -23,116 +23,115 @@
 #ifndef _Interest_
 #define _Interest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <vector>
 #include <gsl/gsl_spline.h>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief Yield curve.
+ *
+ * @details This class provides methods to retrieve the curve from the
+ *          xml input file, and evaluate it using spline interpolation.
+ *
+ * @see http://ccruncher.net/ifileref.html#interest
+ */
 class Interest : public ExpatHandlers
 {
 
   public:
 
+    //! Type of interest
     enum InterestType
     {
-      Simple,
-      Compound,
-      Continuous
+      Simple,    //!< Simple interest
+      Compound,  //!< Compounded (yearly) interest
+      Continuous //!< Continuous interest
     };
 
   private:
 
+    //! Internal class
     class Rate
     {
       public:
 
-        // time (as string)
+        //! Time (as string)
         std::string t_str;
-        // time (in days from interest curve date)
+        //! Time (in days from interest curve date)
         int d;
-        // time (in years from interest curve date)
+        //! Time (in years from interest curve date)
         double y;
-        // yearly rate value (0.025 -> 2.5% per year)
+        //! Yearly rate value (0.025 -> 2.5% per year)
         double r;
 
       public:
 
-        // constructor
-        Rate(int d_, double y_=0.0, double r_=0.0, const std::string &str="") : t_str(str), d(d_), y(y_), r(r_) {}
-        // comparator
-        bool operator< (const Rate &right ) const { return (d < right.d); }
+        //! Constructor
+        Rate(int d_, double y_=0.0, double r_=0.0, const std::string &str="") :
+             t_str(str), d(d_), y(y_), r(r_) {}
+        //! Less-than operator
+        bool operator<(const Rate &right ) const { return (d < right.d); }
     };
 
   private:
 
-    // interest type
+    //! Interest type
     InterestType type;
-    // interest curve date
+    //! Interest curve date
     Date date;
-    // rate values
+    //! Rate values
     std::vector<Rate> rates;
-    // spline type
+    //! Spline type
     bool is_cubic_spline;
-    // spline curve
+    //! Spline curve
     gsl_spline *spline;
-    // spline accelerator
+    //! Spline accelerator
     gsl_interp_accel *accel;
 
   private:
 
-    // insert a rate to list
+    //! Insert a rate to list
     void insertRate(const Rate &) throw(Exception);
-    // given a time, returns the rate (interpolated)
+    //! Given a time, returns the rate (interpolated)
     void getValues(int, double *, double *) const;
-    // set spline
+    //! Create spline curve
     void setSpline() throw(Exception);
 
   protected:
   
-    // ExpatHandlers method
+    //! Directives to process an xml start tag element
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
+    //! Directives to process an xml end tag element
     void epend(ExpatUserData &, const char *);
 
   public:
 
-    // default constructor
+    //! Constructor
     explicit Interest(const Date &date_=NAD, InterestType type=Compound);
-    // copy constructor
+    //! Copy constructor
     Interest(const Interest &);
-    // destructor
+    //! Destructor
     ~Interest();
-    // assignment operator
+    //! Assignment operator
     Interest & operator=(const Interest &);
-    // return interest type
+    //! Return interest type
     InterestType getType() const;
-    // numbers of rates
+    //! Numbers of user-defined rates
     int size() const;
-    // set date
+    //! Set initial date
     void setDate(const Date &d);
-    // returns rate at date
+    //! Returns rate at date
     double getValue(const Date &date1) const;
-    // returns upsilon value
+    //! Returns factor to apply Net Present Value at time date1
     double getFactor(const Date &date1) const;
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

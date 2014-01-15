@@ -110,12 +110,12 @@ class IData : public ExpatHandlers
     void checkDefine(const std::string &key, const std::string &value) const throw(Exception);
 
   protected:
-  
-    // ExpatHandlers method
+
+    //! Directives to process an xml start tag element
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
+    //! Directives to process an xml end tag element
     void epend(ExpatUserData &, const char *);
-    // ExpatHandlers method
+    //! Directives to process xml data element
     void epdata(ExpatUserData &, const char *, const char *, int);
 
   public:

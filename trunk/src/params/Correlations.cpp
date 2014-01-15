@@ -21,33 +21,27 @@
 //===========================================================================
 
 #include <cmath>
+#include <cassert>
 #include <gsl/gsl_linalg.h>
 #include "params/Correlations.hpp"
 #include "utils/Format.hpp"
-#include <cassert>
 
 using namespace std;
 using namespace ccruncher;
 
-//===========================================================================
-// default constructor
-//===========================================================================
-ccruncher::Correlations::Correlations()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] factors_ List of defined factors.
+ * @throw Exception Void list of factors.
+ */
 ccruncher::Correlations::Correlations(const Factors &factors_) throw(Exception)
 {
   setFactors(factors_);
 }
 
-//===========================================================================
-// set factors
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] factors_ List of defined factors.
+ * @throw Exception Void list of factors.
+ */
 void ccruncher::Correlations::setFactors(const Factors &factors_) throw(Exception)
 {
   if (factors_.size() <= 0) {
@@ -62,26 +56,32 @@ void ccruncher::Correlations::setFactors(const Factors &factors_) throw(Exceptio
   }
 }
 
-//===========================================================================
-// return factors
-//===========================================================================
-const Factors & ccruncher::Correlations::getFactors() const
+/**************************************************************************/
+const Factors& ccruncher::Correlations::getFactors() const
 {
   return factors;
 }
 
-//===========================================================================
-// returns size (number of factors)
-//===========================================================================
+/**************************************************************************//**
+ * @details The correlation matrix is a square matrix nxn where n is
+ *          number of factors.
+ * @return The number of factors.
+ */
 int ccruncher::Correlations::size() const
 {
   return factors.size();
 }
 
-//===========================================================================
-// inserts an element into matrix
-//===========================================================================
-void ccruncher::Correlations::insertCorrelation(const string &factor1, const string &factor2, double value) throw(Exception)
+/**************************************************************************//**
+ * @details Decodes factor identifiers, check value range and inserts
+ *          value in the matrix.
+ * @param[in] factor1 Factor identifier.
+ * @param[in] factor2 Factor identifier.
+ * @param[in] value Correlation between factor1 and factor2.
+ * @throw Exception Factor not found, repeated element, or invalid value.
+ */
+void ccruncher::Correlations::insertCorrelation(const std::string &factor1,
+    const std::string &factor2, double value) throw(Exception)
 {
   int row = factors.getIndex(factor1);
   int col = factors.getIndex(factor2);
@@ -123,9 +123,12 @@ void ccruncher::Correlations::insertCorrelation(const string &factor1, const str
   matrix[col][row] = value;
 }
 
-//===========================================================================
-// epstart - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epstart
+ * @param[in] name Element name.
+ * @param[in] attributes Element attributes.
+ * @throw Exception Error processing xml data.
+ */
 void ccruncher::Correlations::epstart(ExpatUserData &, const char *name, const char **attributes)
 {
   if (isEqual(name,"correlations")) {
@@ -144,9 +147,10 @@ void ccruncher::Correlations::epstart(ExpatUserData &, const char *name, const c
   }
 }
 
-//===========================================================================
-// epend - ExpatHandlers method implementation
-//===========================================================================
+/**************************************************************************//**
+ * @see ExpatHandlers::epend
+ * @param[in] name Element name.
+ */
 void ccruncher::Correlations::epend(ExpatUserData &, const char *name)
 {
   if (isEqual(name,"correlations")) {
@@ -154,9 +158,10 @@ void ccruncher::Correlations::epend(ExpatUserData &, const char *name)
   }
 }
 
-//===========================================================================
-// validate class content
-//===========================================================================
+/**************************************************************************//**
+ * @details Check that all matrix elements are set.
+ * @throw Exception Correlation element not defined.
+ */
 void ccruncher::Correlations::validate() throw(Exception)
 {
   // checking that all matrix elements exists
@@ -173,18 +178,23 @@ void ccruncher::Correlations::validate() throw(Exception)
   }
 }
 
-//===========================================================================
-// matrix element access
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] row Row index (0-based).
+ * @return Row values.
+ */
 const vector<double>& ccruncher::Correlations::operator[] (int row) const
 {
   assert(row >= 0 && row < (int)matrix.size());
   return matrix[row];
 }
 
-//===========================================================================
-// cholesky matrix
-//===========================================================================
+/**************************************************************************//**
+ * @details Computes the Cholesky decomposition, L,  of the correlation
+ *          matrix M. That is, M = L·L', where L is a lower triangular
+ *          matrix.
+ * @return Cholesky matrix.
+ * @throw Exception Correlation matrix is not definite-posivite.
+ */
 gsl_matrix * ccruncher::Correlations::getCholesky() const throw(Exception)
 {
   assert(size() > 0);
@@ -211,18 +221,5 @@ gsl_matrix * ccruncher::Correlations::getCholesky() const throw(Exception)
   }
 
   return chol;
-}
-
-//===========================================================================
-// return factor loadings
-//===========================================================================
-vector<double> ccruncher::Correlations::getFactorLoadings() const
-{
-  vector<double> w(size(), NAN);
-  for(int i=0; i<size(); i++)
-  {
-    w[i] = factors.getLoading(i);
-  }
-  return w;
 }
 

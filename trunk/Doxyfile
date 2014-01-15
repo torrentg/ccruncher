@@ -753,7 +753,21 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = src/utils
+INPUT                  = src/utils \
+                         src/params/Correlations.hpp \
+                         src/params/Correlations.cpp \
+                         src/params/DefaultProbabilities.hpp \
+                         src/params/DefaultProbabilities.cpp \
+                         src/params/Factors.hpp \
+                         src/params/Factors.cpp \
+                         src/params/Interest.hpp \
+                         src/params/Interest.cpp \
+                         src/params/Params.hpp \
+                         src/params/Params.cpp \
+                         src/params/Ratings.cpp \
+                         src/params/Ratings.hpp \
+                         src/params/Segmentation.hpp \
+                         src/params/Segmentation.cpp
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
