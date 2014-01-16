@@ -20,35 +20,30 @@
 //
 //===========================================================================
 
+#include <cassert>
 #include "params/Segmentations.hpp"
 #include "portfolio/Asset.hpp"
-#include <cassert>
 
 using namespace std;
 using namespace ccruncher;
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::Segmentations::Segmentations()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// size
-//===========================================================================
+/**************************************************************************//**
+ * @return Number of enabled segmentations
+ */
 int ccruncher::Segmentations::size() const
 {
   return enabled.size();
 }
 
-//===========================================================================
-// [] operator
-//===========================================================================
+/**************************************************************************//**
+ * @details Index with negative values (i<0) refers to disabled
+ *          segmentations. Index with positive values (>=0) refers to
+ *          enabled segmentations.
+ * @param[in] i Index of the segmentation.
+ * @return Requested segmentation.
+ */
 const Segmentation& ccruncher::Segmentations::getSegmentation(int i) const
 {
-  // assertions
   if (i >= 0) {
     assert(i < (int) enabled.size());
     return enabled[i];
@@ -59,31 +54,21 @@ const Segmentation& ccruncher::Segmentations::getSegmentation(int i) const
   }
 }
 
-//===========================================================================
-// return the index of the given segmentation
-//===========================================================================
-int ccruncher::Segmentations::indexOfSegmentation(const string &sname) const throw(Exception)
+/**************************************************************************//**
+ * @param[in] sname Segmentation name.
+ * @return Index of the segmentation (negative if disabled, positive otherwise).
+ * @throw Exception Segmentation not found.
+ */
+int ccruncher::Segmentations::indexOfSegmentation(const std::string &sname) const throw(Exception)
 {
-  for (size_t i=0; i<enabled.size(); i++)
-  {
-    if (enabled[i].name == sname)
-    {
-      return (int)i;
-    }
-  }
-  for (size_t i=0; i<disabled.size(); i++)
-  {
-    if (disabled[i].name == sname)
-    {
-      return -(int)(i+1);
-    }
-  }
-  throw Exception("segmentation '" + sname + "' not found");
+  return indexOfSegmentation(sname.c_str());
 }
 
-//===========================================================================
-// return the index of the given segmentation
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] sname Segmentation name.
+ * @return Index of the segmentation (negative if disabled, positive otherwise).
+ * @throw Exception Segmentation not found.
+ */
 int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const throw(Exception)
 {
   for (size_t i=0; i<enabled.size(); i++)
@@ -103,17 +88,19 @@ int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const throw
   throw Exception("segmentation '" + string(sname) + "' not found");
 }
 
-//===========================================================================
-// validate
-//===========================================================================
+/**************************************************************************//**
+ * @details Check that exist enabled segmentations. Also checks that at
+ *          most there is only one basic segmentation (segmentation with
+ *          only the unassigned segment). In this case results are the same
+ *          regardless of the type of components.
+ * @throw Exception Validation error.
+ */
 void ccruncher::Segmentations::validate() throw(Exception)
 {
-  if (enabled.empty())
-  {
+  if (enabled.empty()) {
     throw Exception("don't found active segmentations");
   }
 
-  // checking duplicates
   string str;
   int nbasic = 0;
   for (size_t i=0; i<enabled.size(); i++) {
@@ -134,9 +121,10 @@ void ccruncher::Segmentations::validate() throw(Exception)
   }
 }
 
-//===========================================================================
-// insert a new segmentation in list
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] val Segmentation to insert.
+ * @throw Exception Repeated segmentation name.
+ */
 int ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Exception)
 {
   // checking coherence
@@ -170,7 +158,8 @@ int ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Except
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] name Element name.
+ * @param[in] eu Xml parsing data.
+ * @param[in] name_ Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
@@ -192,7 +181,7 @@ void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *name_, con
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name Element name.
+ * @param[in] name_ Element name.
  */
 void ccruncher::Segmentations::epend(ExpatUserData &, const char *name_)
 {
@@ -205,9 +194,11 @@ void ccruncher::Segmentations::epend(ExpatUserData &, const char *name_)
   }
 }
 
-//===========================================================================
-// add components to segmentations stats
-//===========================================================================
+/**************************************************************************//**
+ * @details Calls method Segmentation::addComponent() for each segment
+ *          adscribed to the given asset.
+ * @param[in] asset Asset.
+ */
 void ccruncher::Segmentations::addComponents(const Asset *asset)
 {
   assert(asset != NULL);
@@ -217,9 +208,10 @@ void ccruncher::Segmentations::addComponents(const Asset *asset)
   }
 }
 
-//===========================================================================
-// remove unused segments
-//===========================================================================
+/**************************************************************************//**
+ * @details Calls method Segmentation::removeUnusedSegments() for each
+ *          enabled segmentation.
+ */
 void ccruncher::Segmentations::removeUnusedSegments()
 {
   for(size_t i=0; i<enabled.size(); i++)
@@ -228,9 +220,10 @@ void ccruncher::Segmentations::removeUnusedSegments()
   }
 }
 
-//===========================================================================
-// recode segments removing unused segments
-//===========================================================================
+/**************************************************************************//**
+ * @details Calls method Segmentation::recodeSegments() for each segment
+ *          adscribed to the given asset.
+ */
 void ccruncher::Segmentations::recodeSegments(Asset *asset)
 {
   assert(asset != NULL);

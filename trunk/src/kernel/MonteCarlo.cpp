@@ -26,12 +26,12 @@
 #include <cstdlib>
 #include <cstring>
 #include <algorithm>
+#include <cassert>
 #include "kernel/MonteCarlo.hpp"
 #include "portfolio/DateValues.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Format.hpp"
 #include "utils/File.hpp"
-#include <cassert>
 
 using namespace std;
 using namespace ccruncher;

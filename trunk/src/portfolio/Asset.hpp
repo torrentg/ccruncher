@@ -23,42 +23,46 @@
 #ifndef _Asset_
 #define _Asset_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <vector>
+#include "portfolio/LGD.hpp"
+#include "portfolio/DateValues.hpp"
 #include "params/Interest.hpp"
 #include "params/Segmentations.hpp"
-#include "utils/Exception.hpp"
 #include "utils/Date.hpp"
+#include "utils/Exception.hpp"
 #include "utils/ExpatHandlers.hpp"
-#include "portfolio/DateValues.hpp"
-#include "portfolio/LGD.hpp"
-
-//---------------------------------------------------------------------------
 
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief Asset with credit risk.
+ *
+ * @details Asset is described in terms of LGD and EAD. If the number of
+ *          assets is high (eg. 10000) then memory is used to preserve
+ *          unused data (like DateValues out of the analyzed range or
+ *          data that is duplicated). For this reason, unused data is
+ *          deleted when they are no longer needed.
+ *
+ * @see http://ccruncher.net/ifileref.html#portfolio
+ */
 class Asset : public ExpatHandlers
 {
 
   private:
 
-    // segmentation-segment relations
+    //! Segmentation-segment relations
     std::vector<int> vsegments;
-    // asset identifier
+    //! Asset identifier
     std::string id;
-    // asset creation date
+    //! Asset creation date
     Date date;
-    // ead-lgd values
+    //! EAD-LGD values
     std::vector<DateValues> data;
-    // default lgd
+    //! Default LGD
     LGD dlgd;
-    // pointer to segmentations list (used by parser)
+    //! Pointer to segmentations list (used by parser)
     Segmentations *segmentations;
-    // auxiliary variable (used by parser)
+    //! Auxiliary variable (used by parser)
     bool have_data;
 
   protected:
@@ -70,51 +74,38 @@ class Asset : public ExpatHandlers
 
   public:
 
-    // constructor
+    //! Constructor
     Asset(Segmentations *);
-    // return asset id
-    const std::string& getId() const;
-    // add a segmentation-segment relation
+    //! Return asset identifier
+    const std::string& getId() const { return id; }
+    //! Add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
-    // precpare data
+    //! Prepare data
     void prepare(const Date &d1, const Date &d2, const Interest &interest);
-    // check if belongs to segmentation-segment
+    //! Check if this asset belongs to segmentation-segment
     bool belongsTo(int isegmentation, int isegment) const;
-    // given a segmentation returns the segment
+    //! Return the asset's segment of the given segmentation
     int getSegment(int isegmentation) const;
-    // set the given segment to segmentation
+    //! Set the given segment to segmentation
     void setSegment(int isegmentation, int isegment);
-    // indicates if this asset has info in date1-date2
-    bool isActive(const Date &, const Date &) throw(Exception);
-    // returns minimum event date (restricted to precomputed events)
+    //! Indicates if this asset has info in date1-date2
+    bool isActive(const Date &, const Date &);
+    //! Returns minimum event date (restricted to prepared events)
     Date getMinDate() const;
-    // returns maximum event date (restricted to precomputed events)
+    //! Returns maximum event date (restricted to prepared events)
     Date getMaxDate() const;
-    // used to test SimulationThread::simule lower_bound
+    //! Used to test SimulationThread::simule lower_bound
     const DateValues& getValues(const Date t) const;
-    // says if use obligor lgd
+    //! Indicates if this asset use obligor lgd
     bool hasObligorLGD() const;
-    // returns reference to data
+    //! Returns reference to data
     const std::vector<DateValues>& getData() const;
-    // clears data
+    //! Clears data
     void clearData();
 
 };
 
-//---------------------------------------------------------------------------
-
-//===========================================================================
-// getId
-//===========================================================================
-inline const std::string& ccruncher::Asset::getId() const
-{
-  return id;
-}
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

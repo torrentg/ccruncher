@@ -21,19 +21,17 @@
 //===========================================================================
 
 #include <cmath>
+#include <cassert>
 #include "params/Transitions.hpp"
 #include "utils/Format.hpp"
 #include "utils/PowMatrix.hpp"
-#include <cassert>
 
 using namespace std;
 using namespace ccruncher;
 
 #define EPSILON 1e-14
 
-//===========================================================================
-// default constructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::Transitions::Transitions()
 {
   period = -1;
@@ -41,9 +39,10 @@ ccruncher::Transitions::Transitions()
   rerror = 0.0;
 }
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] ratings_ List of ratings.
+ * @throw Exception Void ratings list.
+ */
 ccruncher::Transitions::Transitions(const Ratings &ratings_) throw(Exception)
 {
   setRatings(ratings_);
@@ -52,10 +51,15 @@ ccruncher::Transitions::Transitions(const Ratings &ratings_) throw(Exception)
   rerror = 0.0;
 }
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::Transitions::Transitions(const Ratings &ratings_, const vector<vector<double> > &matrix_, int period_) throw(Exception)
+/**************************************************************************//**
+ * @details Create a transition matrix providing matrix values as a whole.
+ * @param[in] ratings_ List of ratings.
+ * @param[in] matrix_ Matrix values.
+ * @param[in] period_ Period (in months) covered by this matrix.
+ * @throw Exception Error validating data.
+ */
+ccruncher::Transitions::Transitions(const Ratings &ratings_,
+   const std::vector<std::vector<double> > &matrix_, int period_) throw(Exception)
 {
   assert(period_ > 0);
   assert(ratings_.size() == (int)matrix_.size());
@@ -66,9 +70,10 @@ ccruncher::Transitions::Transitions(const Ratings &ratings_, const vector<vector
   validate();
 }
 
-//===========================================================================
-// setRatings
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] ratings_ List of ratings.
+ * @throw Exception Void ratings list.
+ */
 void ccruncher::Transitions::setRatings(const Ratings &ratings_)
 {
   if (ratings_.size() <= 0) {
@@ -79,26 +84,32 @@ void ccruncher::Transitions::setRatings(const Ratings &ratings_)
   matrix.assign(size(), vector<double>(size(), NAN));
 }
 
-//===========================================================================
-// size
-//===========================================================================
+/**************************************************************************//**
+ * @return Matrix dimension.
+ */
 size_t ccruncher::Transitions::size() const
 {
   return ratings.size();
 }
 
-//===========================================================================
-// getPeriod
-//===========================================================================
+/**************************************************************************//**
+ * @return Period in months.
+ */
 int ccruncher::Transitions::getPeriod() const
 {
   return period;
 }
 
-//===========================================================================
-// inserts an element into transition matrix
-//===========================================================================
-void ccruncher::Transitions::insertTransition(const string &rating1, const string &rating2, double value) throw(Exception)
+/**************************************************************************//**
+ * @details Create a transition matrix providing matrix values as a whole.
+ * @param[in] rating1 Starting rating identifier.
+ * @param[in] rating2 Ending rating identifier.
+ * @param[in] value Probability to migrate from rating1 to rating2 in period
+ *                  months. Value in range [0,1].
+ * @throw Exception Error validating data.
+ */
+void ccruncher::Transitions::insertTransition(const std::string &rating1,
+    const std::string &rating2, double value) throw(Exception)
 {
   assert(size() > 0);
 
@@ -178,14 +189,15 @@ void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
       }
     }
 
-    // validations
     validate();
   }
 }
 
-//===========================================================================
-// validate class content
-//===========================================================================
+/**************************************************************************//**
+ * @details The validation process includes to determine the index of
+ *          default rating.
+ * @throw Exception Transition matrix is invalid.
+ */
 void ccruncher::Transitions::validate() throw(Exception)
 {
   // checking that all rows sum 1
@@ -249,22 +261,24 @@ void ccruncher::Transitions::validate() throw(Exception)
   }
 }
 
-//===========================================================================
-// return default rating index
-//===========================================================================
+/**************************************************************************//**
+ * @return Index of default rating.
+ */
 int ccruncher::Transitions::getIndexDefault() const
 {
   return indexdefault;
 }
 
-//===========================================================================
-// regularize the transition matrix using QOM (Quasi Optimizacion of the root Matrix)
-// algorithm extracted from paper:
-// title = 'Regularization Algorithms for Transition Matrices'
-// authors = Alezander Kreinin, Marina Sidelnikova
-// editor = Algo Research Quarterly, Vol. 4, Nos. 1/2, March/June 2001
-//===========================================================================
-void ccruncher::Transitions::regularize() throw(Exception)
+/**************************************************************************//**
+ * @details Regularize the transition matrix using QOM (Quasi Optimizacion of
+ *          the root Matrix). Algorithm extracted from paper:
+ *          - title: 'Regularization Algorithms for Transition Matrices'
+ *          - authors: Alezander Kreinin, Marina Sidelnikova
+ *          - editor: Algo Research Quarterly, Vol. 4, Nos. 1/2, March/June 2001.
+ *          Computes the regularization error using the sub-inf matrix norm.
+ * @see http://en.wikipedia.org/wiki/Matrix_norm
+ */
+void ccruncher::Transitions::regularize()
 {
   // computes the regularization error (sub-inf matrix norm)
   // note: regularized matrix has sub-inf norm = 1
@@ -318,12 +332,13 @@ void ccruncher::Transitions::regularize() throw(Exception)
   }
 }
 
-//===========================================================================
-// given the transition matrix for time T1, compute the transition
-// matrix for a new time, t
-// @param t period (in months) of the new transition matrix
-// @return transition matrix for period t
-//===========================================================================
+/**************************************************************************//**
+ * @details Given the transition matrix for period T1, compute the transition
+ *          matrix for a new period, t.
+ * @param t Period (in months) of the new transition matrix.
+ * @return Transition matrix for period t.
+ * @throw Exception Error scaling matrix.
+ */
 Transitions ccruncher::Transitions::scale(int t) const throw(Exception)
 {
   try
@@ -340,10 +355,14 @@ Transitions ccruncher::Transitions::scale(int t) const throw(Exception)
   }
 }
 
-//===========================================================================
-// Given a transition matrix return the Cumulated Forward Default Rate
-//===========================================================================
-void ccruncher::Transitions::cdfr(size_t numrows, vector<vector<double> > &ret) const throw(Exception)
+/**************************************************************************//**
+ * @details Obtains the PD functions for each rating from the transition
+ *          matrix doing M^t.
+ * @see http://en.wikipedia.org/wiki/Matrix_norm
+ * @param numrows Number of steps (step size = period).
+ * @param ret Matrix of return values (ratings-PD).
+ */
+void ccruncher::Transitions::cdfr(size_t numrows, std::vector<std::vector<double> > &ret) const
 {
   // making assertions
   assert(indexdefault >= 0);
@@ -379,14 +398,19 @@ void ccruncher::Transitions::cdfr(size_t numrows, vector<vector<double> > &ret) 
       ret[i][t] = tmp[i][indexdefault];
     }
 
-    for(size_t i=0; i<size(); i++) for(size_t j=0; j<size(); j++) aux[i][j] = tmp[i][j];
+    for(size_t i=0; i<size(); i++) {
+      for(size_t j=0; j<size(); j++) {
+        aux[i][j] = tmp[i][j];
+      }
+    }
   }
 }
 
 //===========================================================================
 // computes default probabilities functions related to this transition matrix
 //===========================================================================
-DefaultProbabilities ccruncher::Transitions::getDefaultProbabilities(const Date &date, int numrows) const throw(Exception)
+DefaultProbabilities ccruncher::Transitions::getDefaultProbabilities(const Date &date,
+       int numrows) const throw(Exception)
 {
   // computing CDFR
   vector<vector<double> > values(size(), vector<double>(numrows,NAN));
@@ -410,7 +434,8 @@ double ccruncher::Transitions::getRegularizationError() const
 //===========================================================================
 // matrix product (M3 = M1·M2)
 //===========================================================================
-void ccruncher::Transitions::prod(const vector<vector<double> > &M1, const vector<vector<double> > &M2, vector<vector<double> > &M3)
+void ccruncher::Transitions::prod(const vector<vector<double> > &M1,
+                const vector<vector<double> > &M2, vector<vector<double> > &M3)
 {
   assert(M1.size() > 0 && M1[0].size() > 0);
   assert(M1.size() == M2.size() && M1[0].size() == M2[0].size());

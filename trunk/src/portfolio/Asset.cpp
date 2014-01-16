@@ -22,15 +22,15 @@
 
 #include <cmath>
 #include <algorithm>
-#include "portfolio/Asset.hpp"
 #include <cassert>
+#include "portfolio/Asset.hpp"
 
 using namespace std;
 using namespace ccruncher;
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] segs List of segmentations.
+ */
 ccruncher::Asset::Asset(Segmentations *segs) : vsegments(), data()
 {
   assert(segs != NULL);
@@ -44,34 +44,39 @@ ccruncher::Asset::Asset(Segmentations *segs) : vsegments(), data()
   data.reserve(256);
 }
 
-//===========================================================================
-// prepare data
-// assumes that data is sorted
-//===========================================================================
+/**************************************************************************//**
+ * @details Prepare data once they have been readed from input file.
+ *          Data preparation consist on:
+ *          - Remove data previous to starting date analysis.
+ *          - Remove data just after ending analysis date (except the first one).
+ *          - Compute Current Net Value of EAD's at starting date analysis.
+ * @param[in] d1 Initial analysis date.
+ * @param[in] d2 Ending analysis date.
+ * @param[in] interest Yield curve in the analyzed time range.
+ */
 void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &interest)
 {
   int pos1=-1, pos2=-1;
 
   assert(d1 <= d2);
 
+  // assumes that data is sorted.
   for (int i=0; i<(int)data.size(); i++) 
   {
     if (d1 <= data[i].date)
     {
-      if (pos1 < 0)
-      {
+      if (pos1 < 0) {
         pos1 = i;
       }
       pos2 = i;
-      if (d2 <= data[i].date)
-      {
+      if (d2 <= data[i].date) {
         break;
       }
     }
   }
-  
+
   assert(pos1 <= pos2);
-  
+
   // memory shrink
   if (pos1 < 0) {
     vector<DateValues>(0).swap(data);
@@ -89,7 +94,7 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] name Element name.
+ * @param[in] name_ Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
@@ -150,7 +155,7 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name Element name.
+ * @param[in] name_ Element name.
  */
 void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
 {
@@ -181,9 +186,11 @@ void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
   }
 }
 
-//===========================================================================
-// addBelongsTo
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] isegmentation Segmentation index.
+ * @param[in] isegment Segment index.
+ * @throw Exception Redefined relation.
+ */
 void ccruncher::Asset::addBelongsTo(int isegmentation, int isegment) throw(Exception)
 {
   assert(isegmentation < (int) vsegments.size());
@@ -199,17 +206,21 @@ void ccruncher::Asset::addBelongsTo(int isegmentation, int isegment) throw(Excep
   vsegments[isegmentation] = isegment;
 }
 
-//===========================================================================
-// belongsTo
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] isegmentation Segmentation index.
+ * @param[in] isegment Segment index.
+ * @return true if this asset belongs to the indicated segmentation-segment.
+ */
 bool ccruncher::Asset::belongsTo(int isegmentation, int isegment) const
 {
+  assert(0 <= isegmentation && isegmentation < (int)vsegments.size());
   return (vsegments[isegmentation]==isegment);
 }
 
-//===========================================================================
-// getSegment
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] isegmentation Segmentation index.
+ * @return Segment index.
+ */
 int ccruncher::Asset::getSegment(int isegmentation) const
 {
   assert(isegmentation >= 0);
@@ -217,37 +228,41 @@ int ccruncher::Asset::getSegment(int isegmentation) const
   return vsegments[isegmentation];
 }
 
-//===========================================================================
-// set the given segment to segmentation
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] isegmentation Segmentation index.
+ * @param[in] isegment Segment index.
+ */
 void ccruncher::Asset::setSegment(int isegmentation, int isegment)
 {
   assert(0 <= isegmentation && isegmentation < (int)vsegments.size());
   vsegments[isegmentation] = isegment;
 }
 
-//===========================================================================
-// getMinDate
-// be sure that prepare() is called before the execution of this method
-//===========================================================================
+/**************************************************************************//**
+ * @note Be sure that Asset::prepare() is called before this method call.
+ * @return Minimum date.
+ */
 Date ccruncher::Asset::getMinDate() const
 {
   return date;
 }
 
-//===========================================================================
-// getMaxDate
-// be sure that prepare() is called before the execution of this method
-//===========================================================================
+/**************************************************************************//**
+ * @note Be sure that Asset::prepare() is called before this method call.
+ * @return Maximum date.
+ */
 Date ccruncher::Asset::getMaxDate() const
 {
   return data.back().date;
 }
 
-//===========================================================================
-// isActive
-//===========================================================================
-bool ccruncher::Asset::isActive(const Date &from, const Date &to) throw(Exception)
+/**************************************************************************//**
+ * @param[in] from Starting analysis date.
+ * @param[in] to Ending analysis date.
+ * @return True if this asset has credit risk in the given time range,
+ *         false otherwise.
+ */
+bool ccruncher::Asset::isActive(const Date &from, const Date &to)
 {
   if (data.empty())
   {
@@ -271,9 +286,12 @@ bool ccruncher::Asset::isActive(const Date &from, const Date &to) throw(Exceptio
   }
 }
 
-//===========================================================================
-// says if use obligor lgd
-//===========================================================================
+/**************************************************************************//**
+ * @details Check if all asset's DateValues have defined the LGD. If exist
+ *          a DateValue without LGD this means that obligor's LGD will be
+ *          used.
+ * @return true = exist a DateValue that requires obligor LGD, false otherwise.
+ */
 bool ccruncher::Asset::hasObligorLGD() const
 {
   for(unsigned int i=0; i<data.size(); i++)
@@ -287,30 +305,31 @@ bool ccruncher::Asset::hasObligorLGD() const
   return false;
 }
 
-//===========================================================================
-// returns reference to data
-//===========================================================================
+/**************************************************************************/
 const vector<DateValues>& ccruncher::Asset::getData() const
 {
   return data;
 }
 
-//===========================================================================
-// clears data
-//===========================================================================
+/**************************************************************************//**
+ * @details Free remaining data.
+ * @see http://www.cplusplus.com/reference/vector/vector/clear/
+ */
 void ccruncher::Asset::clearData()
 {
   vector<DateValues>(0).swap(data);
 }
 
-//===========================================================================
-// getValues
-// returns:
-//    > (NAD,0,1) if t <= asset creation date
-//    > (NAD,0,1) if asset has 0 date-values
-//    > (NAD,0,1) if t > last date-values
-//    > otherwise, returns the smallest date-values that is not less than t
-//===========================================================================
+/**************************************************************************//**
+ * @details Currently this method is unused in the simulation. This task
+ *          is done in the SimulationThread::simuleObligorLoss(). The
+ *          method is preserved to test the procedure.
+ * @return The DateValue at given date:
+ *         - (NAD,0,1) if t <= asset creation date
+ *         - (NAD,0,1) if asset has 0 date-values
+ *         - (NAD,0,1) if t > last date-values
+ *         - otherwise, returns the smallest date-values that is not less than t
+ */
 const DateValues& ccruncher::Asset::getValues(const Date t) const
 {
   static const DateValues dvnf(NAD, EAD(EAD::Fixed,0.0), LGD(LGD::Fixed,1.0));

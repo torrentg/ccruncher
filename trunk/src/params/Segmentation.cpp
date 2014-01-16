@@ -135,7 +135,7 @@ bool ccruncher::Segmentation::isValidName(const std::string &str)
  */
 void ccruncher::Segmentation::insertSegment(const std::string &sname) throw(Exception)
 {
-  if (isValidName(sname))
+  if (!isValidName(sname))
   {
     throw Exception("segment '" + sname + "' has an invalid name");
   }
@@ -278,7 +278,7 @@ void ccruncher::Segmentation::removeUnusedSegments()
 }
 
 /**************************************************************************//**
- * @details This method is public for test purposes.
+ * @details This method is used to recode assets' segments.
  * @param[in] isegment Segment index.
  * @return New segment index.
  */

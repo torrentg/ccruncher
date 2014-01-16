@@ -105,7 +105,7 @@ class Segmentation : public ExpatHandlers
     void addComponent(int);
     //! Remove unused segments
     void removeUnusedSegments();
-    //! Recode segments removing unused segments
+    //! Recode segment (all segments -> removed unused segments)
     int recode(int) const;
 
 };

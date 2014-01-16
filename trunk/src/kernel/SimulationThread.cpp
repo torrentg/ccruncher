@@ -22,11 +22,11 @@
 
 #include <numeric>
 #include <algorithm>
+#include <cassert>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_blas.h>
 #include "kernel/SimulationThread.hpp"
 #include "portfolio/DateValues.hpp"
-#include <cassert>
 
 using namespace std;
 using namespace ccruncher;
