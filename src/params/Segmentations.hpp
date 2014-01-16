@@ -23,41 +23,39 @@
 #ifndef _Segmentations_
 #define _Segmentations_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <vector>
 #include "params/Segmentation.hpp"
 #include "utils/Exception.hpp"
 #include "utils/ExpatHandlers.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
-
-//---------------------------------------------------------------------------
 
 // forward declaration
 class Asset;
 
+/**************************************************************************//**
+ * @brief List of segmentations.
+ *
+ * @see http://ccruncher.net/ifileref.html#segmentations
+ */
 class Segmentations : public ExpatHandlers
 {
 
   private:
 
-    // list of enabled segmentations
+    //! List of enabled segmentations
     std::vector<Segmentation> enabled;
-    // list of disabled segmentations
+    //! List of disabled segmentations
     std::vector<Segmentation> disabled;
-    // auxiliary variable (used by parser)
+    //! Auxiliary variable (used by parser)
     Segmentation auxsegmentation;
 
   private:
   
-    // insert a segmentation to list
+    //! Insert a segmentation to list
     int insertSegmentation(Segmentation &) throw(Exception);
-    // validate object content
+    //! Validate object content
     void validate() throw(Exception);
 
   protected:
@@ -69,31 +67,26 @@ class Segmentations : public ExpatHandlers
   
   public:
 
-    // constructor
-    Segmentations();
-    // return the number of enabled segmentations
+    //! Constructor
+    Segmentations() {}
+    //! Number of enabled segmentations
     int size() const;
-    // [] operator (i>=0 -> enabled, i<0 -> disabled)
+    //! [] operator (i>=0 -> enabled, i<0 -> disabled)
     const Segmentation& getSegmentation(int i) const;
-    // return the index of the given segmentation
+    //! Return the index of the given segmentation
     int indexOfSegmentation(const std::string &sname) const throw(Exception);
-    // return the index of the given segmentation
+    //! Return the index of the given segmentation
     int indexOfSegmentation(const char *sname) const throw(Exception);
-    // add components to segmentations stats
+    //! Add components to segmentations stats
     void addComponents(const Asset *);
-    // remove unused segments
+    //! Remove unused segments
     void removeUnusedSegments();
-    // recode segments removing unused segments
+    //! Recode segments removing unused segments
     void recodeSegments(Asset *);
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

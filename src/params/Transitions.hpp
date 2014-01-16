@@ -23,48 +23,53 @@
 #ifndef _Transitions_
 #define _Transitions_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <vector>
-#include "utils/ExpatHandlers.hpp"
-#include "utils/Exception.hpp"
 #include "params/Ratings.hpp"
 #include "params/DefaultProbabilities.hpp"
-
-//---------------------------------------------------------------------------
+#include "utils/ExpatHandlers.hpp"
+#include "utils/Exception.hpp"
 
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief Matrix of transitions between ratings.
+ *
+ * @details This class provides methods to read the transition matrix
+ *          from the xml input file. Also offers a method to scale this
+ *          matrix to another time period.
+ *
+ * @see http://ccruncher.net/ifileref.html#transitions
+ */
 class Transitions : public ExpatHandlers
 {
 
   private:
 
-    // period (in months) that this transition matrix covers
+    //! Period (in months) that this transition matrix covers
     int period;
-    // matrix values
+    //! Matrix values
     std::vector<std::vector<double> > matrix;
-    // list of ratings
+    //! List of ratings
     Ratings ratings;
-    // index of default rating
+    //! Index of default rating
     int indexdefault;
-    // regularization error
+    //! Regularization error
     double rerror;
 
   private:
 
-    // matrix product (M12 = M1·M2)
-    static void prod(const std::vector<std::vector<double> > &M1, const std::vector<std::vector<double> > &M2, std::vector<std::vector<double> > &M12);
-    // insert a transition value into the matrix
+    //! Matrix product (M12 = M1·M2)
+    static void prod(const std::vector<std::vector<double> > &M1,
+                     const std::vector<std::vector<double> > &M2,
+                     std::vector<std::vector<double> > &M12);
+
+    //! Insert a transition value into the matrix
     void insertTransition(const std::string &r1, const std::string &r2, double val) throw(Exception);
-    // validate object content
+    //! Validate object content
     void validate() throw(Exception);
-    // computes Cumulated Default Forward Rate
-    void cdfr(size_t numrows, std::vector<std::vector<double> > &ret) const throw(Exception);
+    //! Computes Cumulated Default Forward Rate
+    void cdfr(size_t numrows, std::vector<std::vector<double> > &ret) const;
 
   protected:
 
@@ -75,39 +80,34 @@ class Transitions : public ExpatHandlers
 
   public:
 
-    // default constructor
+    //! Default constructor
     Transitions();
-    // constructor
+    //! Constructor
     Transitions(const Ratings &) throw(Exception);
-    // constructor
+    //! Constructor
     Transitions(const Ratings &, const std::vector<std::vector<double> > &, int) throw(Exception);
-    // set ratings
+    //! Set ratings
     void setRatings(const Ratings &);
-    // returns n (number of ratings)
+    //! Matrix dimension (=number of ratings)
     size_t size() const;
-    // returns period that covers this matrix
+    //! Returns period (in months) that covers this matrix
     int getPeriod() const;
-    // returns default rating index
+    //! Returns default rating index
     int getIndexDefault() const;
-    // regularize the transition matrix
-    void regularize() throw(Exception);
-    // returns equivalent transition matrix that covers t months
+    //! Regularize the transition matrix
+    void regularize();
+    //! Returns equivalent transition matrix that covers t months
     Transitions scale(int t) const throw(Exception);
-    // computes default probabilities functions related to this transition matrix
+    //! Computes default probabilities functions related to this transition matrix
     DefaultProbabilities getDefaultProbabilities(const Date &date, int numrows) const throw(Exception);
-    // regularization error (|non_regularized| - |regularized|)
+    //! Regularization error (|non_regularized| - |regularized|)
     double getRegularizationError() const;
-    // matrix element access
+    //! Matrix element access
     const std::vector<double>& operator[] (int row) const;
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------
