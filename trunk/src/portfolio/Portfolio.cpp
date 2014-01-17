@@ -21,15 +21,13 @@
 //===========================================================================
 
 #include <cmath>
-#include "portfolio/Portfolio.hpp"
 #include <cassert>
+#include "portfolio/Portfolio.hpp"
 
 using namespace std;
 using namespace ccruncher;
 
-//===========================================================================
-// default constructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::Portfolio::Portfolio() : ratings(NULL), factors(NULL),
     segmentations(NULL), interest(NULL), auxobligor(NULL)
 {
@@ -37,9 +35,14 @@ ccruncher::Portfolio::Portfolio() : ratings(NULL), factors(NULL),
   date2 = NAD;
 }
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] ratings_ List of ratings.
+ * @param[in] factors_ List of factors.
+ * @param[in] segmentations_ List of segmentations.
+ * @param[in] interest_ Yield curve.
+ * @param[in] date1_ Starting simulation date.
+ * @param[in] date2_ Ending simulation date.
+ */
 ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Factors &factors_,
              Segmentations &segmentations_, const Interest &interest_, 
              const Date &date1_, const Date &date2_) : ratings(NULL), factors(NULL),
@@ -48,25 +51,27 @@ ccruncher::Portfolio::Portfolio(const Ratings &ratings_, const Factors &factors_
   init(ratings_, factors_, segmentations_, interest_, date1_, date2_);
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::Portfolio::~Portfolio()
 {
   if (auxobligor != NULL) {
     delete auxobligor;
   }
 
-  // dropping obligors
   for(unsigned int i=0;i<vobligors.size();i++)
   {
     delete vobligors[i];
   }
 }
 
-//===========================================================================
-// init
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] ratings_ List of ratings.
+ * @param[in] factors_ List of factors.
+ * @param[in] segmentations_ List of segmentations.
+ * @param[in] interest_ Yield curve.
+ * @param[in] date1_ Starting simulation date.
+ * @param[in] date2_ Ending simulation date.
+ */
 void ccruncher::Portfolio::init(const Ratings &ratings_, const Factors &factors_,
              Segmentations &segmentations_, const Interest &interest_,
              const Date &date1_, const Date &date2_)
@@ -87,17 +92,19 @@ void ccruncher::Portfolio::init(const Ratings &ratings_, const Factors &factors_
   else date2 = date2_;
 }
 
-//===========================================================================
-// returns obligor list
-//===========================================================================
+/**************************************************************************//**
+ * @return Obligors list.
+ */
 vector<Obligor *> & ccruncher::Portfolio::getObligors()
 {
   return vobligors;
 }
 
-//===========================================================================
-// inserting a obligor into list
-//===========================================================================
+/**************************************************************************//**
+ * @details Checks if obligors and assets identifiers are uniques.
+ * @param[in] val Obligor to insert.
+ * @throw Exception Repeated identifier.
+ */
 void ccruncher::Portfolio::insertObligor(Obligor *val) throw(Exception)
 {
   // checking if obligor id is previously defined
@@ -137,20 +144,10 @@ void ccruncher::Portfolio::insertObligor(Obligor *val) throw(Exception)
   }
 }
 
-//===========================================================================
-// validations
-//===========================================================================
-void ccruncher::Portfolio::validations() throw(Exception)
-{
-  if (vobligors.empty())
-  {
-    throw Exception("portfolio without obligors");
-  }
-}
-
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] name Element name.
+ * @param[in] eu Xml parsing data.
+ * @param[in] name_ Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
@@ -173,13 +170,15 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_, const c
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name Element name.
+ * @param[in] name_ Element name.
  */
 void ccruncher::Portfolio::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"portfolio")) {
     assert(auxobligor == NULL);
-    validations();
+    if (vobligors.empty()) {
+      throw Exception("portfolio without obligors");
+    }
   }
   else if (isEqual(name_,"obligor")) {
     assert(auxobligor != NULL);

@@ -23,88 +23,83 @@
 #ifndef _Portfolio_
 #define _Portfolio_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <vector>
 #include <map>
-#include "utils/Exception.hpp"
-#include "utils/ExpatHandlers.hpp"
-#include "utils/Date.hpp"
-#include "params/Ratings.hpp"
-#include "params/Factors.hpp"
-#include "params/Interest.hpp"
-#include "params/Segmentations.hpp"
 #include "portfolio/Obligor.hpp"
-
-//---------------------------------------------------------------------------
+#include "params/Segmentations.hpp"
+#include "params/Factors.hpp"
+#include "params/Ratings.hpp"
+#include "params/Interest.hpp"
+#include "utils/ExpatHandlers.hpp"
+#include "utils/Exception.hpp"
+#include "utils/Date.hpp"
 
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief  List of obligors.
+ *
+ * @see http://ccruncher.net/ifileref.html#portfolio
+ */
 class Portfolio : public ExpatHandlers
 {
 
   private:
 
-    // list of obligors
+    //! List of obligors
     std::vector<Obligor *> vobligors;
-    // list of ratings (used by parser)
+    //! List of ratings (used by parser)
     const Ratings *ratings;
-    // list of factors (used by parser)
+    //! List of factors (used by parser)
     const Factors *factors;
-    // list of segmentations (used by parser)
+    //! List of segmentations (used by parser)
     Segmentations *segmentations;
-    // list of interest (used by parser)
+    //! List of interest (used by parser)
     const Interest *interest;
-    // initial simulation date
+    //! Initial simulation date
     Date date1;
-    // final simulation date
+    //! Final simulation date
     Date date2;
-    // auxiliar obligor (used by parser)
+    //! Auxiliar obligor (used by parser)
     Obligor *auxobligor;
-    // map used to check id obligor oneness
+    //! Map used to check id obligor oneness
     std::map<std::string,bool> idobligors;
-    // map used to check id asset oneness
+    //! Map used to check id asset oneness
     std::map<std::string,bool> idassets;
 
   private:
   
-    //! Directives to process an xml start tag element
+      //! Copy constructor (currently forbidden)
+    Portfolio(const Portfolio &);
+    //! Assignment operator (currently forbidden)
+    Portfolio& operator=(const Portfolio &);
+    //! Inserts an obligor in the list
     void insertObligor(Obligor *) throw(Exception);
-    //! Directives to process an xml end tag element
-    void validations() throw(Exception);
 
   protected:
   
-    // ExpatHandlers method
+    //! Directives to process an xml start tag element
     void epstart(ExpatUserData &, const char *, const char **);
-    // ExpatHandlers method
+    //! Directives to process an xml end tag element
     void epend(ExpatUserData &, const char *);
 
   public:
 
-    // default constructor
+    //! Default constructor
     Portfolio();
-    // constructor
+    //! Constructor
     Portfolio(const Ratings &, const Factors &, Segmentations &, const Interest &, const Date &date1, const Date &date2);
-    // initialize portfolio object
+    //! initialize portfolio object
     void init(const Ratings &, const Factors &, Segmentations &, const Interest &, const Date &date1, const Date &date2);
-    // destructor
+    //! Destructor
     ~Portfolio();
-    // returns the obligors list
+    //! Returns the obligors list
     std::vector<Obligor *> &getObligors();
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

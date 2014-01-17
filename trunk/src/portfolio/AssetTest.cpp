@@ -128,7 +128,7 @@ void ccruncher_test::AssetTest::test1()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
   // doing assertions
-  ASSERT(!asset.hasObligorLGD());
+  ASSERT(!asset.requiresObligorLGD());
   
   ASSERT(asset.belongsTo(0, 0)); // portfolio-rest
   ASSERT(asset.belongsTo(3, 1)); // product-bond
@@ -275,7 +275,7 @@ void ccruncher_test::AssetTest::test4()
   asset.prepare(time0, timeT, interest);
   
   // doing assertions
-  ASSERT(asset.hasObligorLGD());
+  ASSERT(asset.requiresObligorLGD());
   ASSERT(!LGD::isvalid(asset.getValues(Date("10/01/2007")).lgd));
   ASSERT(!LGD::isvalid(asset.getValues(Date("15/01/2007")).lgd));
   ASSERT(LGD::isvalid(asset.getValues(Date("10/01/2008")).lgd));
@@ -315,7 +315,7 @@ void ccruncher_test::AssetTest::test5()
   Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
   
-  ASSERT(!asset.hasObligorLGD());
+  ASSERT(!asset.requiresObligorLGD());
 
   ASSERT_NO_THROW(asset.prepare(time0, timeT, interest));
   
@@ -380,7 +380,7 @@ void ccruncher_test::AssetTest::test7()
   // asset object creation
   Asset asset(&segs);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
-  ASSERT(asset.hasObligorLGD());
+  ASSERT(asset.requiresObligorLGD());
 }
 
 //===========================================================================

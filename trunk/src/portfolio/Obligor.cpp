@@ -21,23 +21,29 @@
 //===========================================================================
 
 #include <cmath>
-#include "portfolio/Obligor.hpp"
 #include <cassert>
+#include "portfolio/Obligor.hpp"
 
 using namespace std;
 using namespace ccruncher;
 
-//===========================================================================
-// copy constructor
-//===========================================================================
+/**************************************************************************//**
+ * @see Obligor::operator=()
+ * @param[in] o Object to copy.
+ */
 ccruncher::Obligor::Obligor(const Obligor &o)
 {
   *this = o;
 }
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] ratings_ List of ratings.
+ * @param[in] factors_ List of factors.
+ * @param[in] segmentations_ List of segmentations.
+ * @param[in] interest_ Yield curve.
+ * @param[in] d1 Starting simulation date.
+ * @param[in] d2 Ending simulation date.
+ */
 ccruncher::Obligor::Obligor(const Ratings &ratings_, const Factors &factors_,
                Segmentations &segmentations_, const Interest &interest_,
                const Date &d1, const Date &d2) :
@@ -58,9 +64,7 @@ ccruncher::Obligor::Obligor(const Ratings &ratings_, const Factors &factors_,
   lgd = LGD(LGD::Fixed,NAN);
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::Obligor::~Obligor()
 {
   for(unsigned int i=0; i<vassets.size(); i++)
@@ -70,9 +74,10 @@ ccruncher::Obligor::~Obligor()
   vassets.clear();
 }
 
-//===========================================================================
-// assignment operator
-//===========================================================================
+/**************************************************************************//**
+ * @see Obligor::operator=()
+ * @param[in] o Object to assign.
+ */
 Obligor& ccruncher::Obligor::operator=(const Obligor &o)
 {
   irating = o.irating;
@@ -104,10 +109,11 @@ Obligor& ccruncher::Obligor::operator=(const Obligor &o)
   return *this;
 }
 
-//===========================================================================
-// check last asset
-//===========================================================================
-void ccruncher::Obligor::prepareLastAsset() throw(Exception)
+/**************************************************************************//**
+ * @details Checks that asset identifier is not repeated.
+ * @throw Exception Error inserting asset.
+ */
+void ccruncher::Obligor::insertAsset() throw(Exception)
 {
   int ila = vassets.size()-1;
 
@@ -133,7 +139,8 @@ void ccruncher::Obligor::prepareLastAsset() throw(Exception)
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] name Element name.
+ * @param[in] eu Xml parsing data.
+ * @param[in] name_ Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
@@ -181,12 +188,12 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name Element name.
+ * @param[in] name_ Element name.
  */
 void ccruncher::Obligor::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"asset")) {
-    prepareLastAsset();
+    insertAsset();
   }
   else if (isEqual(name_,"obligor")) {
 
@@ -209,10 +216,12 @@ void ccruncher::Obligor::epend(ExpatUserData &, const char *name_)
   }
 }
 
-//===========================================================================
-// isActive
-//===========================================================================
-bool ccruncher::Obligor::isActive(const Date &from, const Date &to) throw(Exception)
+/**************************************************************************//**
+ * Checks if any of its assets is active in the given time range.
+ * @param[in] from Starting simulation date.
+ * @param[in] to Ending simulation date.
+ */
+bool ccruncher::Obligor::isActive(const Date &from, const Date &to)
 {
   for(unsigned int i=0;i<vassets.size();i++)
   {
@@ -225,9 +234,11 @@ bool ccruncher::Obligor::isActive(const Date &from, const Date &to) throw(Except
   return false;
 }
 
-//===========================================================================
-// addBelongsTo
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] isegmentation Segmentation index.
+ * @param[in] isegment Segment index.
+ * @throw Exception Redefined relation.
+ */
 void ccruncher::Obligor::addBelongsTo(int isegmentation, int isegment) throw(Exception)
 {
   assert(isegmentation < (int) vsegments.size());
@@ -243,25 +254,20 @@ void ccruncher::Obligor::addBelongsTo(int isegmentation, int isegment) throw(Exc
   vsegments[isegmentation] = isegment;
 }
 
-//===========================================================================
-// belongsTo
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] isegmentation Segmentation index.
+ * @param[in] isegment Segment index.
+ * @return true if this asset belongs to the indicated segmentation-segment.
+ */
 bool ccruncher::Obligor::belongsTo(int isegmentation, int isegment)
 {
   return (vsegments[isegmentation]==isegment);
 }
 
-//===========================================================================
-// getAssets
-//===========================================================================
-vector<Asset *> & ccruncher::Obligor::getAssets()
-{
-  return vassets;
-}
-
-//===========================================================================
-// getSegment
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] isegmentation Segmentation index.
+ * @return Segment index.
+ */
 int ccruncher::Obligor::getSegment(int isegmentation)
 {
   assert(isegmentation >= 0);
@@ -269,14 +275,23 @@ int ccruncher::Obligor::getSegment(int isegmentation)
   return vsegments[isegmentation];
 }
 
-//===========================================================================
-// hasLGD
-//===========================================================================
+/**************************************************************************//**
+ * @return List of assets.
+ */
+vector<Asset *> & ccruncher::Obligor::getAssets()
+{
+  return vassets;
+}
+
+/**************************************************************************//**
+ * @return True = exist an asset that requires the obligor lgd,
+ *         false = otherwise.
+ */
 bool ccruncher::Obligor::hasLGD() const
 {
   for(unsigned int i=0; i<vassets.size(); i++)
   {
-    if (vassets[i]->hasObligorLGD())
+    if (vassets[i]->requiresObligorLGD())
     {
       return true;
     }

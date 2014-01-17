@@ -23,113 +23,111 @@
 #ifndef _EAD_
 #define _EAD_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <cmath>
+#include <cassert>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 #include "utils/Exception.hpp"
-#include <cassert>
-
-//---------------------------------------------------------------------------
 
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief  Exposure at default.
+ *
+ * @details Exposure at default can be a fixed value or a random variable
+ *          with positive values.
+ *
+ * @see http://ccruncher.net/ifileref.html#portfolio
+ */
 class EAD
 {
 
   public:
 
-    // exposure types
+    //! Exposure types
     enum Type
     { 
-      Fixed=1,
-      Lognormal=2,
-      Exponential=3,
-      Uniform=4,
-      Gamma=5,
-      Normal=6
+      Fixed=1,       //!< Fixed value ($)
+      Lognormal=2,   //!< Lognormal distribution
+      Exponential=3, //!< Exponential distribution
+      Uniform=4,     //!< Uniform distribution
+      Gamma=5,       //!< Gamma distribution
+      Normal=6       //!< Truncated Gaussian distribution
     };
 
   private:
 
-    // internal struct
+    //! Internal struct
     struct Distr
     {
+      //! Distribution name
       const char *str;
+      //! Name length
       int len;
+      //! Number of arguments
       size_t nargs;
+      //! Exposure type
       EAD::Type type;
       //TODO: add gsl_ran_* function ref?
     };
 
-    // supported distributions
+    //! List of supported distributions
     static const Distr distrs[];
 
   private:
 
-    // exposure type
+    //! Exposure type
     Type type;
-    // depends on type
+    //! Distribution parameter
     double value1;
-    // depends on type
+    //! Distribution parameter
     double value2;
 
   private:
   
-    // set values
+    //! Initialize content
     void init(Type, double, double) throw(Exception);
-    // check params
+    //! Check distribution parameters
     static bool valid(Type, double, double);
 
   public:
   
-    // default constructor
+    //! Default constructor
     EAD();
-    // constructor
+    //! Constructor
     EAD(const char *) throw(Exception);
-    // constructor
+    //! Constructor
     EAD(const std::string &) throw(Exception);
-    // constructor
+    //! Constructor
     EAD(Type, double a, double b=NAN) throw(Exception);
-    // returns type
+    //! Exposure type
     Type getType() const;
-    // retuns value1
+    //! Returns distribution parameter
     double getValue1() const;
-    // returns value2
+    //! Returns distribution parameter
     double getValue2() const;
-    // returns exposure
+    //! Returns exposure
     double getValue(const gsl_rng *rng=NULL) const;
-    // check if is a Non-A-EAD value
-    static bool isvalid(const EAD &);
-    // apply current net value factor
+    //! Apply current net value factor
     void mult(double);
+
+    //! Check if it is a Non-A-EAD value
+    static bool isvalid(const EAD &);
 
 };
 
-//---------------------------------------------------------------------------
-
-//===========================================================================
-// default constructor
-//===========================================================================
+/**************************************************************************//**
+ * @details Create a EAD with invalid values.
+ */
 inline ccruncher::EAD::EAD() : type(Fixed), value1(NAN), value2(NAN)
 {
+  // nothing to do
 }
 
-//===========================================================================
-// returns type
-//===========================================================================
-inline ccruncher::EAD::Type ccruncher::EAD::getType() const
-{
-  return type;
-}
-
-//===========================================================================
-// getValue
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] rng Random number generator.
+ * @return Exposure value (if fixed) or simulated value (if distribution).
+ */
 inline double ccruncher::EAD::getValue(const gsl_rng *rng) const
 {
   switch(type)
@@ -163,12 +161,7 @@ inline double ccruncher::EAD::getValue(const gsl_rng *rng) const
   }
 }
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------
