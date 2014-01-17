@@ -23,107 +23,103 @@
 #ifndef _LGD_
 #define _LGD_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <cmath>
+#include <cassert>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 #include "utils/Exception.hpp"
-#include <cassert>
-
-//---------------------------------------------------------------------------
 
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief  Loss given default.
+ *
+ * @details Loss given default is a percentage and can be a fixed value or
+ *          a random variable with values in range [0,1].
+ *
+ * @see http://ccruncher.net/ifileref.html#portfolio
+ */
 class LGD
 {
 
   public:
 
-    // loss given default types
+    //! Loss given default types
     enum Type
     { 
-      Fixed=1,
-      Uniform=2,
-      Beta=3
+      Fixed=1,   //!< Fixed value in [0,1]
+      Uniform=2, //!< Uniform distribution
+      Beta=3     //!< Beta distribution
     };
 
   private:
 
-    // internal struct
+    //! Internal struct
     struct Distr
     {
+      //! Distribution name
       const char *str;
+      //! Name length
       int len;
+      //! Exposure type
       LGD::Type type;
       //TODO: add gsl_ran_* function ref?
     };
 
-    // supported distributions
+    //! List of supported distributions
     static const Distr distrs[];
 
   private:
 
-    // lgd type
+    //! Lgd type
     Type type;
-    // depends on type
+    //! Distribution parameter
     double value1;
-    // depends on type
+    //! Distribution parameter
     double value2;
 
   private:
   
-    // set values
+    //! Initialize content
     void init(Type, double, double) throw(Exception);
-    // check params
+    //! Check distribution parameters
     static bool valid(Type, double, double);
 
   public:
 
-    // default constructor
+    //! Default constructor
     LGD();
-    // constructor
+    //! Constructor
     LGD(const char *) throw(Exception);
-    // constructor
+    //! Constructor
     LGD(const std::string &) throw(Exception);
-    // constructor
+    //! Constructor
     LGD(Type, double a, double b=NAN) throw(Exception);
-    // returns type
+    //! Returns type
     Type getType() const;
-    // retuns value1
+    //! Returns distribution parameter
     double getValue1() const;
-    // returns value2
+    //! Returns distribution parameter
     double getValue2() const;
-    // returns lgd
+    //! Returns lgd
     double getValue(const gsl_rng *rng=NULL) const;
-    // check if is a Non-A-LGD value
+    //! Check if it is a Non-A-LGD value
     static bool isvalid(const LGD &);
 
 };
 
-//---------------------------------------------------------------------------
-
-//===========================================================================
-// default constructor
-//===========================================================================
+/**************************************************************************//**
+ * @details Create a LGD with invalid values.
+ */
 inline ccruncher::LGD::LGD() : type(Fixed), value1(NAN), value2(NAN)
 {
+  // nothing to do
 }
 
-//===========================================================================
-// returns type
-//===========================================================================
-inline ccruncher::LGD::Type ccruncher::LGD::getType() const
-{
-  return type;
-}
-
-//===========================================================================
-// getValue
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] rng Random number generator.
+ * @return LGD value (if fixed) or simulated value (if distribution).
+ */
 inline double ccruncher::LGD::getValue(const gsl_rng *rng) const
 {
   switch(type)
@@ -145,12 +141,7 @@ inline double ccruncher::LGD::getValue(const gsl_rng *rng) const
   }
 }
 
-//---------------------------------------------------------------------------
-
 }
-
-//---------------------------------------------------------------------------
 
 #endif
 
-//---------------------------------------------------------------------------

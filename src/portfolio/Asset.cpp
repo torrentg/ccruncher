@@ -292,7 +292,7 @@ bool ccruncher::Asset::isActive(const Date &from, const Date &to)
  *          used.
  * @return true = exist a DateValue that requires obligor LGD, false otherwise.
  */
-bool ccruncher::Asset::hasObligorLGD() const
+bool ccruncher::Asset::requiresObligorLGD() const
 {
   for(unsigned int i=0; i<data.size(); i++)
   {

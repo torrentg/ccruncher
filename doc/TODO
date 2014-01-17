@@ -5,6 +5,9 @@ CCRUNCHER TODO
 Current works
 -------------------
   * Documenting code using Doxygen
+  * Add Interest,ratings,factors,segmentations,date1,date2 in ExpatUserData
+    and simplify objects Obligor,Asset,Portfolio.
+  * Update Date class to new Todd's version (v2.0)
 
 Future works
 -------------------
@@ -13,7 +16,6 @@ Future works
      - input file in binary format
      - force equal number of sims by thread
      - PD functions can mix transition matrix and dprobs
-     - update Date class to new Todd's version (v2.0)
   * improve model
      - add grouped t-copula support
      - allow evaluation in multiple time horizons

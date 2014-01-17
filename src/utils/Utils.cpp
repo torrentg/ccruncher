@@ -26,7 +26,6 @@
 #include <cstdio>
 #include <algorithm>
 #include <cassert>
-#include "utils/config.h"
 #include "utils/Utils.hpp"
 
 #ifdef _WIN32

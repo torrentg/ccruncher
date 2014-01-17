@@ -25,9 +25,9 @@
 #include <cstring>
 #include <cstdio>
 #include <cmath>
+#include <cassert>
 #include "portfolio/EAD.hpp"
 #include "utils/Parser.hpp"
-#include <cassert>
 
 using namespace std;
 using namespace ccruncher;
@@ -45,9 +45,10 @@ const ccruncher::EAD::Distr ccruncher::EAD::distrs[] = {
 
 #define NUMDISTRS (sizeof(distrs)/sizeof(Distr))
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] cstr String with exposure value/distribution.
+ * @throw Exception Invalid exposure.
+ */
 ccruncher::EAD::EAD(const char *cstr) throw(Exception)
 {
   assert(cstr != NULL);
@@ -101,51 +102,58 @@ ccruncher::EAD::EAD(const char *cstr) throw(Exception)
   init(Fixed, value1, NAN);
 }
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::EAD::EAD(const string &str) throw(Exception)
+/**************************************************************************//**
+ * @param[in] str String with exposure value/distribution.
+ * @throw Exception Invalid exposure.
+ */
+ccruncher::EAD::EAD(const std::string &str) throw(Exception)
 {
   *this = EAD(str.c_str());
 }
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] t Type of exposure.
+ * @param[in] a Distribution parameter.
+ * @param[in] b Distribution parameter.
+ * @throw Exception Invalid exposure.
+ */
 ccruncher::EAD::EAD(Type t, double a, double b) throw(Exception)
 {
   init(t, a, b);
 }
 
-//===========================================================================
-// valid
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] t Type of exposure.
+ * @param[in] a Distribution parameter.
+ * @param[in] b Distribution parameter.
+ * @return true=valid, false=invalid.
+ */
 bool ccruncher::EAD::valid(Type t, double a, double b)
 {
   switch(t)
   {
     case Fixed:
-      if (a < 0.0 || isnan(a)) return false;
+      if (isnan(a) || a < 0.0) return false;
       else return true;
 
     case Lognormal:
-      if (a < 0.0 || b <= 0.0 || isnan(a) || isnan(b)) return false;
+      if (isnan(a) || isnan(b) || a < 0.0 || b <= 0.0) return false;
       else return true;
 
     case Exponential:
-      if (a <= 0.0 || isnan(a)) return false;
+      if (isnan(a) || a <= 0.0) return false;
       else return true;
 
     case Uniform:
-      if (a < 0.0 || b <= a || isnan(a) || isnan(b)) return false;
+      if (isnan(a) || isnan(b) || a < 0.0 || b <= a) return false;
       else return true;
 
     case Gamma:
-      if (a <= 0.0 || b <= 0.0 || isnan(a) || isnan(b)) return false;
+      if (isnan(a) || isnan(b) || a <= 0.0 || b <= 0.0) return false;
       else return true;
 
     case Normal:
-      if (a <= 0.0 || b <= 0.0 || isnan(a) || isnan(b)) return false;
+      if (isnan(a) || isnan(b) || a <= 0.0 || b <= 0.0) return false;
       else return true;
 
     default:
@@ -154,9 +162,12 @@ bool ccruncher::EAD::valid(Type t, double a, double b)
   }
 }
 
-//===========================================================================
-// init
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] t Type of exposure.
+ * @param[in] a Distribution parameter.
+ * @param[in] b Distribution parameter.
+ * @throw Exception Invalid exposure.
+ */
 void ccruncher::EAD::init(Type t, double a, double b) throw(Exception)
 {
   if (t != Fixed || !isnan(a))
@@ -169,33 +180,45 @@ void ccruncher::EAD::init(Type t, double a, double b) throw(Exception)
   value2 = b;
 }
 
-//===========================================================================
-// retuns value1
-//===========================================================================
+/**************************************************************************//**
+ * @return Exposure type.
+ */
+ccruncher::EAD::Type ccruncher::EAD::getType() const
+{
+  return type;
+}
+
+/**************************************************************************//**
+ * @return Distribution parameter.
+ */
 double ccruncher::EAD::getValue1() const
 {
   return value1;
 }
 
-//===========================================================================
-// returns value2
-//===========================================================================
+/**************************************************************************//**
+ * @return Distribution parameter.
+ */
 double ccruncher::EAD::getValue2() const
 {
   return value2;
 }
 
-//===========================================================================
-// check if is a Non-A-EAD value
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] x EAD to check.
+ * @return true=valid, false=invalid.
+ */
 bool ccruncher::EAD::isvalid(const EAD &x)
 {
   return valid(x.type, x.value1, x.value2);
 }
 
-//===========================================================================
-// apply current net value factor to ead
-//===========================================================================
+/**************************************************************************//**
+ * @details Apply multiplicative factor directly if ead is of fixed type,
+ *          if it is a distribution, modifies parameters in order to achieve
+ *          the same effect.
+ * @param[in] factor Multiplicative factor.
+ */
 void ccruncher::EAD::mult(double factor)
 {
   switch(type)

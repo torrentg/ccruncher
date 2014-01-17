@@ -35,7 +35,7 @@
 namespace ccruncher {
 
 /**************************************************************************//**
- * @brief Asset with credit risk.
+ * @brief Financial asset with credit risk.
  *
  * @details Asset is described in terms of LGD and EAD. If the number of
  *          assets is high (eg. 10000) then memory is used to preserve
@@ -97,7 +97,7 @@ class Asset : public ExpatHandlers
     //! Used to test SimulationThread::simule lower_bound
     const DateValues& getValues(const Date t) const;
     //! Indicates if this asset use obligor lgd
-    bool hasObligorLGD() const;
+    bool requiresObligorLGD() const;
     //! Returns reference to data
     const std::vector<DateValues>& getData() const;
     //! Clears data

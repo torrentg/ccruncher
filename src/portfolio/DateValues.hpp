@@ -23,76 +23,78 @@
 #ifndef _DateValues_
 #define _DateValues_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <cmath>
-#include "utils/Date.hpp"
 #include "portfolio/EAD.hpp"
 #include "portfolio/LGD.hpp"
-
-//---------------------------------------------------------------------------
+#include "utils/Date.hpp"
 
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief Triplet (Date, EAD, LGD).
+ *
+ * @details Exposure At Default ($) and Loss Given Default (%) values
+ *          estimated at fixed data.
+ *
+ * @see http://ccruncher.net/ifileref.html#portfolio (element values)
+ */
 class DateValues
 {
 
   public:
 
-    // date where values take place
+    //! Date where values take place
     Date date;
-    // exposure at default
+    //! Exposure at default
     EAD ead;
-    // loss given default
+    //! Loss given default
     LGD lgd;
 
   public:
 
-    // constructor
+    //! Constructor
     explicit DateValues(Date d=Date(), const EAD &e=EAD(), const LGD &r=LGD());
-    // less-than operator
+    //! Less-than operator
     bool operator<(const DateValues &) const;
-    // less-than operator
+    //! Less-than operator
     bool operator<(const Date &) const;
 
 };
 
-//---------------------------------------------------------------------------
-
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @details Operator required by sort functions.
+ * @param[in] d DateValue date.
+ * @param[in] e DateValue exposure.
+ * @param[in] r DateValue loss given default.
+ */
 inline ccruncher::DateValues::DateValues(Date d, const EAD &e, const LGD &r) :
     date(d), ead(e), lgd(r)
 {
   // nothing to do
 }
 
-//===========================================================================
-// less-than operador (needed by sort functions)
-//===========================================================================
+/**************************************************************************//**
+ * @details Operator required by sort functions.
+ * @param[in] right Objecto to compare.
+ * @return true if date < object's date.
+ */
 inline bool ccruncher::DateValues::operator<(const DateValues &right) const
 {
   return (date < right.date);
 }
 
-//===========================================================================
-// less-than operador (needed by sort functions)
-//===========================================================================
+/**************************************************************************//**
+ * @details Operator required by sort functions.
+ * @param[in] right Object to compare.
+ * @return true if date < object's date.
+ */
 inline bool ccruncher::DateValues::operator<(const Date &right) const
 {
   return (date < right);
 }
 
-//---------------------------------------------------------------------------
+} // namespace
 
-}
-
-//---------------------------------------------------------------------------
 
 #endif
 
-//---------------------------------------------------------------------------

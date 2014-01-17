@@ -23,52 +23,54 @@
 #ifndef _Obligor_
 #define _Obligor_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <vector>
 #include "portfolio/Asset.hpp"
 #include "portfolio/LGD.hpp"
-#include "utils/Exception.hpp"
-#include "utils/Date.hpp"
-#include "utils/ExpatHandlers.hpp"
+#include "params/Segmentations.hpp"
+#include "params/Interest.hpp"
 #include "params/Ratings.hpp"
 #include "params/Factors.hpp"
-#include "params/Interest.hpp"
-#include "params/Segmentations.hpp"
-
-//---------------------------------------------------------------------------
+#include "utils/ExpatHandlers.hpp"
+#include "utils/Exception.hpp"
+#include "utils/Date.hpp"
 
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief  Obligor with a rating and a list of assets.
+ *
+ * @details Obligors are adscribed to one segment in every segmentation that
+ *          has obligors as components. Internally, obligors implements this
+ *          assigning his assets to the adscribed obligors segmentations.
+ *
+ * @see http://ccruncher.net/ifileref.html#portfolio
+ */
 class Obligor : public ExpatHandlers
 {
 
   private:
 
-    // segmentation-segment relations
+    //! Segmentation-segment relations
     std::vector<int> vsegments;
-    // obligor assets list
+    //! Obligor assets list
     std::vector<Asset *> vassets;
-    // pointer to ratings object (used by parser)
+    //! Pointer to ratings object (used by parser)
     const Ratings *ratings;
-    // pointer to factors object (used by parser)
+    //! Pointer to factors object (used by parser)
     const Factors *factors;
-    // pointer to segmentations object (used by parser)
+    //! Pointer to segmentations object (used by parser)
     Segmentations *segmentations;
-    // pointer to interest object (used by parser)
+    //! Pointer to interest object (used by parser)
     const Interest *interest;
-    // initial simulation date
+    //! Initial simulation date
     Date date1;
-    // ending simulation date
+    //! Ending simulation date
     Date date2;
 
   private: 
-  
-    // insert a asset
-    void prepareLastAsset() throw(Exception);
+
+    //! Insert an asset
+    void insertAsset() throw(Exception);
 
   protected:
   
@@ -79,46 +81,41 @@ class Obligor : public ExpatHandlers
 
   public:
 
-    // obligor rating
+    //! Obligor rating
     int irating;
-    // obligor factor
+    //! Obligor factor
     int ifactor;
-    // obligor identifier
+    //! Obligor identifier
     std::string id;
-    // default lgd
+    //! Default lgd
     LGD lgd;
 
   public:
-  
-    // copy constructor
+
+    //! Copy constructor
     Obligor(const Obligor &);
-    // constructor
+    //! Constructor
     Obligor(const Ratings &, const Factors &, Segmentations &, const Interest &, const Date &d1, const Date &d2);
-    // destructor
+    //! Destructor
     ~Obligor();
-    // assignment operator
+    //! Assignment operator
     Obligor& operator=(const Obligor &);
-    // return the asset list
+    //! Return the asset list
     std::vector<Asset *> & getAssets();
-    // indicates if this obligor has values in date1-date2
-    bool isActive(const Date &, const Date &) throw(Exception);
-    // add a segmentation-segment relation
+    //! Indicates if this obligor has values in date1-date2
+    bool isActive(const Date &, const Date &);
+    //! Add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment) throw(Exception);
-    // check if belongs to segmentation-segment
+    //! Check if belongs to segmentation-segment
     bool belongsTo(int isegmentation, int isegment);
-    // given a segmentation returns the segment
+    //! Given a segmentation returns the segment
     int getSegment(int isegmentation);
-    // says if this obligor has an asset that use obligor's lgd
+    //! Says if this obligor has an asset that use obligor's lgd
     bool hasLGD() const;
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------
