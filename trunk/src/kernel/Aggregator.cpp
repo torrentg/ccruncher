@@ -20,21 +20,30 @@
 //
 //===========================================================================
 
+#include <cassert>
 #include <unistd.h>
 #include "kernel/Aggregator.hpp"
 #include "kernel/SimulatedData.hpp"
 #include "utils/File.hpp"
-#include <cassert>
 
 using namespace std;
 
-//===========================================================================
-// constructor
-// note: we don't diferentiate between asset-segmentations or obligor-segmentations
-// because obligor segments has been recoded as asset segments (see Obligor code)
-//===========================================================================
+/**************************************************************************//**
+ * @details We don't diferentiate between segmentation composed by assets
+ *          or obligors because obligor segments has been recoded as asset
+ *          segments (see Obligor code). File creation mode:
+ *          - 'a': Append content to file.
+ *          - 'c': Create. Fails if file exist.
+ *          - 'w': overwrites previous file content (if exist)
+ * @see http://ccruncher.net/ofileref.html#segmentation
+ * @param[in] isegmentation Segmentation index.
+ * @param[in] segmentations List of segmentations.
+ * @param[in] filename_ Filename.
+ * @param[in] mode a=append, w=overwrite, c=create
+ * @throw Exception Error creating file.
+ */
 ccruncher::Aggregator::Aggregator(int isegmentation, const Segmentations &segmentations,
-    const string &filename_, char mode) throw(Exception)
+    const std::string &filename_, char mode) throw(Exception)
 {
   assert(mode=='a' || mode=='w' || mode=='c');
   assert(0 <= isegmentation && isegmentation < segmentations.size());
@@ -79,9 +88,7 @@ ccruncher::Aggregator::Aggregator(int isegmentation, const Segmentations &segmen
 
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::Aggregator::~Aggregator()
 {
   try
@@ -94,9 +101,11 @@ ccruncher::Aggregator::~Aggregator()
   }
 }
 
-//===========================================================================
-// append
-//===========================================================================
+/**************************************************************************//**
+ * @details Append a row to file.
+ * @param[in] losses List of losses (length=numsegments).
+ * @throw Exception Error writing data to file.
+ */
 void ccruncher::Aggregator::append(const double *losses) throw(Exception)
 {
   assert(losses != NULL);
@@ -108,7 +117,8 @@ void ccruncher::Aggregator::append(const double *losses) throw(Exception)
     {
       fout << losses[i] << ", ";
     }
-    fout << losses[numsegments-1] << "\n"; // endl not used because force to flush in disk
+    // endl not used because force to flush in disk
+    fout << losses[numsegments-1] << "\n";
   }
   catch(std::exception &e)
   {
@@ -116,9 +126,10 @@ void ccruncher::Aggregator::append(const double *losses) throw(Exception)
   }
 }
 
-//===========================================================================
-// flush
-//===========================================================================
+/**************************************************************************//**
+ * @details Synchronizes disk file and the associated stream buffer.
+ * @throw Exception Error writing data to file.
+ */
 void ccruncher::Aggregator::flush() throw(Exception)
 {
   try
@@ -131,9 +142,9 @@ void ccruncher::Aggregator::flush() throw(Exception)
   }
 }
 
-//===========================================================================
-// return the number of segments
-//===========================================================================
+/**************************************************************************//**
+ * @return The number of segments.
+ */
 int ccruncher::Aggregator::size() const
 {
   return numsegments;

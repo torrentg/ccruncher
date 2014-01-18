@@ -23,77 +23,98 @@
 #ifndef _SimulatedData_
 #define _SimulatedData_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
+#include "portfolio/DateValues.hpp"
 #include "portfolio/Obligor.hpp"
 #include "portfolio/LGD.hpp"
-#include "portfolio/DateValues.hpp"
 #include "utils/Date.hpp"
-
-//---------------------------------------------------------------------------
 
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief Simulated asset.
+ *
+ * @details Unlike Asset class, this class only contains the strictly
+ *          required data to do the simulation. The real size of this
+ *          object is bigger than reported by sizeof(). Segments variable
+ *          is not a unique value but a list of n elements (n = number of
+ *          segmentations). The length is only know in execution time.
+ *          We don't use allocated memory (eg. vector) for performance
+ *          reasons.
+ */
 class SimulatedAsset
 {
 
+  private:
+
+    //! Constructor (non-instanciable)
+    SimulatedAsset() {}
+
   public:
 
-    // minimum event date (restricted to simulation time horizon)
+    //! Minimum event date
     Date mindate;
-    // maximum event date (restricted to simulation time horizon)
+    //! Maximum event date
     Date maxdate;
-    // allocated datevalues
+    //! Allocated datevalues
     DateValues *begin;
-    // allocated datevalues
+    //! Allocated datevalues
     DateValues *end;
-    // segmentations indexes
+    //! Segmentations indexes
     unsigned short segments;
+
+  public:
+
+    //! Initialize content
+    void init(Asset *asset);
+    //! Deallocate memory
+    void free();
 
 };
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief Simulated obligor.
+ *
+ * @details Unlike Obligor class, this class only contains the strictly
+ *          required data to do the simulation. Variable ref contains
+ *          (in the initialization stage) a reference to the obligor.
+ *          Later, in the simulation stage, contains a reference to the first
+ *          SimulatedAsset belonging by this Obligor. It is a void pointer
+ *          to avoid the temptation to increase it (p++) -remind that
+ *          SimulatedAsset has a real size distinct than reported by
+ *          sizeof-.
+ */
 class SimulatedObligor
 {
 
   public:
 
-    // obligor's factor index
+    //! Obligor's factor index
     unsigned char ifactor;
-    // obligor's rating index
+    //! Obligor's rating index
     unsigned char irating;
-    // obligor's lgd
+    //! Obligor's lgd
     LGD lgd;
-    // number of assets
+    //! Number of assets
     unsigned short numassets;
-    // pointer
+    //! Data pointer
     union
     {
-      // obligor
+      //! obligor
       Obligor *obligor;
-      // simulated assets
+      //! simulated assets
       void *assets;
     } ref;
 
   public:
 
-    // constructor
+    //! Constructor
     SimulatedObligor(Obligor *obligor=NULL);
-    // less-than operator
-    bool operator < (const SimulatedObligor &obj) const;
+    //! Less-than operator
+    bool operator<(const SimulatedObligor &obj) const;
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

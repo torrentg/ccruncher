@@ -20,12 +20,59 @@
 //
 //===========================================================================
 
-#include "kernel/SimulatedData.hpp"
+#include <cstring>
 #include <cassert>
+#include "kernel/SimulatedData.hpp"
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @details Initialize object content using asset data.
+ * @param[in] asset Asset to use.
+ */
+void ccruncher::SimulatedAsset::init(Asset *asset)
+{
+  assert(asset != NULL);
+
+  mindate = asset->getMinDate();
+  maxdate = asset->getMaxDate();
+
+  size_t len = asset->getData().size();
+  if (len > 0)
+  {
+    begin = new DateValues[len];
+    end = begin + len;
+    memcpy(begin, &(asset->getData()[0]), len*sizeof(DateValues));
+  }
+  else
+  {
+    begin = NULL;
+    end = NULL;
+  }
+
+  segments = 0;
+  unsigned short *ptr = &(segments);
+  for(size_t i=0; i<asset->getSegments().size(); i++)
+  {
+    ptr[i] = static_cast<unsigned short>(asset->getSegment(i));
+  }
+}
+
+/**************************************************************************//**
+ * @details Deallocates memory pointed by begin.
+ */
+void ccruncher::SimulatedAsset::free()
+{
+  if (begin != NULL)
+  {
+    assert(end != NULL);
+    delete [] begin;
+    begin = NULL;
+    end = NULL;
+  }
+}
+
+/**************************************************************************//**
+ * @param[in] obligor Obligor to use.
+ */
 ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
 {
   if (obligor != NULL) {
@@ -42,12 +89,13 @@ ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
   ref.obligor = obligor;
 }
 
-//===========================================================================
-// less-than operator
-// sort SimulatedObligor by factor and rating
-// caution: ref contains obligor, not assets
-//===========================================================================
-bool ccruncher::SimulatedObligor::operator < (const SimulatedObligor &c) const
+/**************************************************************************//**
+ * @details Compare by factor and rating (in this order). This method can
+ *          be used to sort SimulatedObligor.
+ * @param[in] c Object to compare.
+ * @return true = less than c, false = otherwise
+ */
+bool ccruncher::SimulatedObligor::operator<(const SimulatedObligor &c) const
 {
   if (ifactor < c.ifactor)
   {

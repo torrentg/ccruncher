@@ -105,7 +105,7 @@ const vector<string>& ccruncher::CsvFile::getHeaders()
   int rc;
   do
   {
-    rc = read();
+    rc = next();
     char *str = trim(ptr0);
     if (*str == '"') str++;
     size_t l = strlen(str);

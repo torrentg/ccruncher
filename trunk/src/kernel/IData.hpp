@@ -23,14 +23,12 @@
 #ifndef _IData_
 #define _IData_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
-#include <streambuf>
-#include <string>
 #include <map>
-#include <pthread.h>
+#include <string>
+#include <streambuf>
 #include <zlib.h>
+#include <pthread.h>
+#include "portfolio/Portfolio.hpp"
 #include "params/Params.hpp"
 #include "params/Interest.hpp"
 #include "params/Ratings.hpp"
@@ -39,74 +37,82 @@
 #include "params/DefaultProbabilities.hpp"
 #include "params/Correlations.hpp"
 #include "params/Segmentations.hpp"
-#include "portfolio/Portfolio.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Logger.hpp"
-
-//---------------------------------------------------------------------------
 
 #define STDIN_FILENAME "<stdin>"
 
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief CCruncher input file.
+ *
+ * @details Does the following things:
+ *          - input file open/close/stdin/gzip
+ *          - manages log trace
+ *          - defines management
+ *          - parse xml using an ExpatParser
+ *          - manages sub-files (see attribute include in portfolio)
+ *          - provides mechanism to stop parsing
+ *
+ * @see http://ccruncher.net/ifileref.html
+ */
 class IData : public ExpatHandlers
 {
 
   private:
 
-    // logger
+    //! Logger
     Logger log;
-    // configuration filename
+    //! Input filename
     std::string filename;
-    // simulation title
+    //! Simulation title
     std::string title;
-    // simulation description
+    //! Simulation description
     std::string description;
-    // simulation parameters
+    //! Simulation parameters
     Params params;
-    // simulation yield interest
+    //! Simulation yield curve
     Interest interest;
-    // simulation ratings
+    //! Simulation ratings
     Ratings ratings;
-    // simulation transition matrix
+    //! Simulation transition matrix
     Transitions transitions;
-    // inverse functions
+    //! Default probabilities functions
     DefaultProbabilities dprobs;
-    // simulation factors
+    //! Simulation factors
     Factors factors;
-    // simulation correlations
+    //! Simulation correlations
     Correlations correlations;
-    // simulation segmentations
+    //! Simulation segmentations
     Segmentations segmentations;
-    // simulation portfolio
+    //! Simulation portfolio
     Portfolio portfolio;
-    // indicates if root tag exists
+    //! Root tag existence (parsing aux)
     bool hasmaintag;
-    // defines flag (0=none, 1=current, 2=done)
+    //! Defines status (0=none, 1=current, 2=done) [parsing aux]
     int hasdefinestag;
-    // stop flag
+    //! Variable to stop parser
     bool *stop;
-    // ensures data consistence
+    //! Ensures data consistence
     mutable pthread_mutex_t mutex;
-    // current file
+    //! Input file
     gzFile curfile;
-    // current file size
+    //! Input file size
     size_t cursize;
-    // parse portfolio flag
+    //! Parse portfolio flag
     bool parse_portfolio;
 
   private:
   
-    // validate simulation data
+    //! Validate simulation data
     void validate() throw(Exception);
-    // parse data
+    //! Parse main input file
     void parse(gzFile file, const std::map<std::string,std::string> &m) throw(Exception);
-    // parse portfolio
+    //! Parse portfolio
     void parsePortfolio(ExpatUserData &, const char *, const char **) throw(Exception);
-    // check define
+    //! Check define
     void checkDefine(const std::string &key, const std::string &value) const throw(Exception);
 
   protected:
@@ -120,49 +126,44 @@ class IData : public ExpatHandlers
 
   public:
 
-    // default constructor
+    //! Default constructor
     IData(std::streambuf *s=NULL);
-    // destructor
+    //! Destructor
     ~IData();
-    // initialize content
+    //! Initialize content
     void init(const std::string &f, const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *stop_=NULL, bool parse_portfolio_=true) throw(Exception);
-    // returns simulation title
+    //! Returns simulation title
     const std::string &getTitle() const;
-    // returns simulation description
+    //! Returns simulation description
     const std::string & getDescription() const;
-    // returns simulation params
+    //! Returns simulation params
     Params & getParams();
-    // returns simulation yield interest
+    //! Returns simulation yield curve
     Interest & getInterest();
-    // returns simulation ratings
+    //! Returns simulation ratings
     Ratings & getRatings();
-    // returns simulation transition matrix
+    //! Returns simulation transition matrix
     Transitions & getTransitions();
-    // returns default probabilities functions
+    //! Returns default probabilities functions
     DefaultProbabilities & getDefaultProbabilities();
-    // returns simulation factors
+    //! Returns simulation factors
     Factors & getFactors();
-    // returns simulation correlation matrix
+    //! Returns simulation correlation matrix
     Correlations & getCorrelations();
-    // returns simulation correlations
+    //! Returns simulation correlations
     Segmentations & getSegmentations();
-    // returns simulation portfolio
+    //! Returns simulation portfolio
     Portfolio & getPortfolio();
-    // indicates if dprobs tag is defined
+    //! Indicates if dprobs tag is defined
     bool hasDefaultProbabilities() const;
-    // returns file size (in bytes)
+    //! Returns input file size (in bytes)
     size_t getFileSize() const;
-    // returns readed bytes
+    //! Returns readed bytes
     size_t getReadedSize() const;
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

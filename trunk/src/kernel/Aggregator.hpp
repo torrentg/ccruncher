@@ -23,62 +23,60 @@
 #ifndef _Aggregator_
 #define _Aggregator_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <string>
 #include <vector>
 #include <fstream>
-#include "utils/Exception.hpp"
-#include "params/Segmentation.hpp"
 #include "params/Segmentations.hpp"
-
-//---------------------------------------------------------------------------
+#include "params/Segmentation.hpp"
+#include "utils/Exception.hpp"
 
 namespace ccruncher {
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief Simulated values of a segmentation.
+ *
+ * @details Manages the CSV file containing the simulated values for a
+ *          given segmentation. First line contains columns header (segment
+ *          names). Every row corresponds to the simulated losses of a
+ *          segmentation.
+ *
+ * @see http://ccruncher.net/ofileref.html#segmentation
+ */
 class Aggregator
 {
 
   private:
 
-    // segmentation name
+    //! Segmentation name
     std::string filename;
-    // output file stream
+    //! Output file stream
     std::ofstream fout;
-    // number of segments
+    //! Number of segments
     int numsegments;
 
   private:
 
-    // non-copyable class
+    //! Non-copyable class
     Aggregator(const Aggregator &);
-    // non-copyable class
+    //! Non-copyable class
     Aggregator & operator=(const Aggregator &);
 
   public:
 
-    // constructor
+    //! Constructor
     Aggregator(int , const Segmentations &, const std::string &, char) throw(Exception);
-    // destructor
+    //! Destructor
     ~Aggregator();
-    // append data to aggregator
+    //! Append data to aggregator
     void append(const double *) throw(Exception);
-    // force flush data to disk
+    //! Force flush data to disk
     void flush() throw(Exception);
-    // return the number of segments
+    //! Return the number of segments
     int size() const;
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------
