@@ -755,7 +755,13 @@ WARN_LOGFILE           =
 
 INPUT                  = src/utils \
                          src/params \
-                         src/portfolio
+                         src/portfolio \
+                         src/kernel/IData.hpp \
+                         src/kernel/IData.cpp \
+                         src/kernel/SimulatedData.hpp \
+                         src/kernel/SimulatedData.cpp \
+                         src/kernel/Aggregator.cpp \
+                         src/kernel/Aggregator.hpp
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -2104,7 +2110,7 @@ HIDE_UNDOC_RELATIONS   = YES
 # set to NO
 # The default value is: NO.
 
-HAVE_DOT               = YES
+HAVE_DOT               = NO
 
 # The DOT_NUM_THREADS specifies the number of dot invocations doxygen is allowed
 # to run in parallel. When set to 0 doxygen will base this on the number of

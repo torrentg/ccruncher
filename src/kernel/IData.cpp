@@ -21,22 +21,23 @@
 //===========================================================================
 
 #include <cstdio>
+#include <cassert>
 #include "kernel/IData.hpp"
 #include "utils/Logger.hpp"
 #include "utils/File.hpp"
 #include "utils/Format.hpp"
 #include "utils/Timer.hpp"
 #include "utils/ExpatParser.hpp"
-#include <cassert>
 
 using namespace std;
 using namespace ccruncher;
 
 #define BUFFER_SIZE 128*1024
 
-//===========================================================================
-// default constructor
-//===========================================================================
+/**************************************************************************//**
+ * @see http://www.cplusplus.com/reference/streambuf/streambuf/
+ * @param[in] s Streambuf where the trace will be written.
+ */
 ccruncher::IData::IData(streambuf *s) : log(s), curfile(NULL)
 {
   pthread_mutex_init(&mutex, NULL);
@@ -49,9 +50,7 @@ ccruncher::IData::IData(streambuf *s) : log(s), curfile(NULL)
   parse_portfolio = true;
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::IData::~IData()
 {
   assert(curfile == NULL);
@@ -59,10 +58,15 @@ ccruncher::IData::~IData()
   pthread_mutex_destroy(&mutex);
 }
 
-//===========================================================================
-// init
-//===========================================================================
-void ccruncher::IData::init(const string &f, const map<string,string> &m, bool *s, bool p) throw(Exception)
+/**************************************************************************//**
+ * @param[in] f File name (including path).
+ * @param[in] m List of defines defined by user (eg. using cmd or gui).
+ * @param[in] s Variable to stop parser.
+ * @param[in] p Parse whole input file (true), or exclude portfolio (false)
+ * @throw Exception Error parsing input file.
+ */
+void ccruncher::IData::init(const std::string &f,
+    const std::map<std::string,std::string> &m, bool *s, bool p) throw(Exception)
 {
   gzFile file = NULL;
   size_t bytes = 0;
@@ -83,7 +87,7 @@ void ccruncher::IData::init(const string &f, const map<string,string> &m, bool *
     }
 
     if (file == NULL) {
-        throw Exception("can't open file '" + filename + "'");
+      throw Exception("can't open file '" + filename + "'");
     }
 
     pthread_mutex_lock(&mutex);
@@ -112,9 +116,11 @@ void ccruncher::IData::init(const string &f, const map<string,string> &m, bool *
   }
 }
 
-//===========================================================================
-// parse
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] file File to parse.
+ * @param[in] m List of defines defined by user (eg. using cmd or gui).
+ * @throw Exception Error parsing input file.
+ */
 void ccruncher::IData::parse(gzFile file, const map<string,string> &m) throw(Exception)
 {
   try
@@ -154,7 +160,8 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m) throw(Exc
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] name Element name.
+ * @param[in] eu Xml parsing data.
+ * @param[in] name_ Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
@@ -249,7 +256,7 @@ void ccruncher::IData::epdata(ExpatUserData &eu, const char *name_, const char *
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name Element name.
+ * @param[in] name_ Element name.
  */
 void ccruncher::IData::epend(ExpatUserData &, const char *name_)
 {
@@ -261,9 +268,12 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
   }
 }
 
-//===========================================================================
-// parsePortfolio
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] eu Xml parsing data.
+ * @param[in] name_ Element name.
+ * @param[in] attributes Element attributes.
+ * @throw Exception Error parsing input file.
+ */
 void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, const char **attributes) throw(Exception)
 {
   portfolio.init(ratings, factors, segmentations, interest, params.time0, params.timeT);
@@ -324,9 +334,9 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
   }
 }
 
-//===========================================================================
-// validate
-//===========================================================================
+/**************************************************************************//**
+ * @throw Exception Input file section not found.
+ */
 void ccruncher::IData::validate() throw(Exception)
 {
   if (params.maxiterations < 0) {
@@ -352,106 +362,114 @@ void ccruncher::IData::validate() throw(Exception)
   }
 }
 
-//===========================================================================
-// getTitle
-//===========================================================================
+/**************************************************************************//**
+ * @return Simulation title.
+ */
 const string & ccruncher::IData::getTitle() const
 {
   return title;
 }
 
-//===========================================================================
-// getDescription
-//===========================================================================
+/**************************************************************************//**
+ * @return Simulation description.
+ */
 const string & ccruncher::IData::getDescription() const
 {
   return description;
 }
 
-//===========================================================================
-// getParams
-//===========================================================================
+/**************************************************************************//**
+ * @return Simulation parameters.
+ */
 Params & ccruncher::IData::getParams()
 {
   return params;
 }
 
-//===========================================================================
-// getInterest
-//===========================================================================
+/**************************************************************************//**
+ * @return Simulation yield curve.
+ */
 Interest & ccruncher::IData::getInterest()
 {
   return interest;
 }
 
-//===========================================================================
-// getRatings
-//===========================================================================
+/**************************************************************************//**
+ * @return Simulation ratings.
+ */
 Ratings & ccruncher::IData::getRatings()
 {
   return ratings;
 }
 
-//===========================================================================
-// getTransitions
-//===========================================================================
+/**************************************************************************//**
+ * @return Simulation transition matrix.
+ */
 Transitions & ccruncher::IData::getTransitions()
 {
   return transitions;
 }
 
-//===========================================================================
-// getDefaultProbabilities
-//===========================================================================
+/**************************************************************************//**
+ * @return Simulation default probabilities functions.
+ */
 DefaultProbabilities &ccruncher::IData::getDefaultProbabilities()
 {
   return dprobs;
 }
 
-//===========================================================================
-// getFactors
-//===========================================================================
+/**************************************************************************//**
+ * @return Simulation factors.
+ */
 Factors & ccruncher::IData::getFactors()
 {
   return factors;
 }
 
-//===========================================================================
-// getCorrelations
-//===========================================================================
+/**************************************************************************//**
+ * @return Simulation factor correlations matrix.
+ */
 Correlations & ccruncher::IData::getCorrelations()
 {
   return correlations;
 }
 
-//===========================================================================
-// getSegmentations
-//===========================================================================
+/**************************************************************************//**
+ * @return Simulation segmentations.
+ */
 Segmentations & ccruncher::IData::getSegmentations()
 {
   return segmentations;
 }
 
-//===========================================================================
-// getPortfolio
-//===========================================================================
+/**************************************************************************//**
+ * @return Simulation portfolio.
+ */
 Portfolio & ccruncher::IData::getPortfolio()
 {
   return portfolio;
 }
 
-//===========================================================================
-// hasDefaultProbabilities
-//===========================================================================
+/**************************************************************************//**
+ * @details User can define Default probabilities functions explicitly OR
+ *          transition matrix. This method indicates wich one has been
+ *          entered by user.
+ * @return true = exist dprobs defined, false = exist transition matrix.
+ */
 bool ccruncher::IData::hasDefaultProbabilities() const
 {
   if (dprobs.size() > 0) return true;
   else return false;
 }
 
-//===========================================================================
-// check define
-//===========================================================================
+/**************************************************************************//**
+ * @details Check the following rules:
+ *          - define name has pattern [A-Za-z0-9_]+
+ *          - define value don't contains [&<>\"'"]
+ * @param[in] key Define key.
+ * @param[in] value Define value.
+ * @throw Exception Invalid define.
+ */
 void ccruncher::IData::checkDefine(const string &key, const string &value) const throw(Exception)
 {
   if (key.length() == 0) throw Exception("invalid macro name");
@@ -468,17 +486,17 @@ void ccruncher::IData::checkDefine(const string &key, const string &value) const
   }
 }
 
-//===========================================================================
-// returns file size (in bytes)
-//===========================================================================
+/**************************************************************************//**
+ * @return Current file size in bytes.
+ */
 size_t ccruncher::IData::getFileSize() const
 {
   return cursize;
 }
 
-//===========================================================================
-// returns readed bytes
-//===========================================================================
+/**************************************************************************//**
+ * @return Readed bytes in the current file.
+ */
 size_t ccruncher::IData::getReadedSize() const
 {
   size_t ret = 0;

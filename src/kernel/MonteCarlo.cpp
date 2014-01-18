@@ -90,8 +90,7 @@ void ccruncher::MonteCarlo::release()
   {
     for (size_t i=0; i<numassets; i++) {
       SimulatedAsset *p = reinterpret_cast<SimulatedAsset*>(assets+i*assetsize);
-      delete [] p->begin;
-      p->begin = NULL;
+      p->free();
     }
     delete [] assets;
     assets = NULL;
@@ -303,7 +302,7 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
     }
   }
   
-  // important: sorting obligors list by factor and rating
+  // sorting obligors list by factor and rating
   sort(obligors.begin(), obligors.end());
   log << "number of simulated obligors" << split << obligors.size() << endl;
 
@@ -388,23 +387,9 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
         // setting asset
         SimulatedAsset *p = reinterpret_cast<SimulatedAsset *>(assets+numassets*assetsize);
 
-        // creating asset
-        p->mindate = vassets[j]->getMinDate();
-        p->maxdate = vassets[j]->getMaxDate();
-        size_t len = vassets[j]->getData().size();
-        if (len > 0) {
-          p->begin = new DateValues[len];
-          p->end = p->begin + len;
-          memcpy(p->begin, &(vassets[j]->getData()[0]), len*sizeof(DateValues));
-          vassets[j]->clearData(); // too avoid memory exhaustion
-        }
-
-        // setting asset segments
-        unsigned short *segments = &(p->segments);
-        for(int k=0; k<idata.getSegmentations().size(); k++)
-        {
-          segments[k] = static_cast<unsigned short>(vassets[j]->getSegment(k));
-        }
+        // filling simulated asset
+        p->init(vassets[j]);
+        vassets[j]->clearData();
 
         // assigning obligor.assets to first asset
         if (obligors[i].ref.assets == NULL)

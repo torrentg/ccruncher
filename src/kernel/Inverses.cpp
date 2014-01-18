@@ -22,11 +22,11 @@
 
 #include <cmath>
 #include <algorithm>
+#include <cassert>
 #include <gsl/gsl_cdf.h>
 #include "kernel/Inverses.hpp"
 #include "utils/Format.hpp"
 #include "utils/Timer.hpp"
-#include <cassert>
 
 using namespace std;
 using namespace ccruncher;

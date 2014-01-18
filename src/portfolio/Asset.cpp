@@ -229,6 +229,14 @@ int ccruncher::Asset::getSegment(int isegmentation) const
 }
 
 /**************************************************************************//**
+ * @return List of segments adscribed to this asset.
+ */
+const std::vector<int>& ccruncher::Asset::getSegments() const
+{
+  return vsegments;
+}
+
+/**************************************************************************//**
  * @param[in] isegmentation Segmentation index.
  * @param[in] isegment Segment index.
  */
