@@ -23,9 +23,6 @@
 #ifndef _ObligorTest_
 #define _ObligorTest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <vector>
 #include "utils/MiniCppUnit.hxx"
 #include "params/Ratings.hpp"
@@ -34,11 +31,7 @@
 #include "utils/Date.hpp"
 #include "params/Segmentations.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_test {
-
-//---------------------------------------------------------------------------
 
 class ObligorTest : public TestFixture<ObligorTest>
 {
@@ -70,12 +63,7 @@ class ObligorTest : public TestFixture<ObligorTest>
 
 REGISTER_FIXTURE(ObligorTest)
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

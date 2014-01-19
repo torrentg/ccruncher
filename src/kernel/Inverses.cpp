@@ -34,9 +34,7 @@ using namespace ccruncher;
 // maximum error = 1 hour
 #define MAX_ERROR 1.0/24.0
 
-//===========================================================================
-// default constructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::Inverses::Inverses()
 {
   ndf = NAN;
@@ -44,26 +42,28 @@ ccruncher::Inverses::Inverses()
   t1 = NAD;
 }
 
-//===========================================================================
-// constructor
-// if ndf <= 0 then gaussian, t-Student otherwise
-//===========================================================================
-ccruncher::Inverses::Inverses(double ndf_, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception)
+/**************************************************************************//**
+ * @param[in] ndf_ Degrees of freedom of the t-student distribution. If
+ *            ndf_ <= 0 then gaussian, t-student otherwise.
+ * @param[in] maxdate Simulation ending date.
+ * @param[in] dprobs Default probabilities functions.
+ * @throw Exception Error creating inverse functions.
+ */
+ccruncher::Inverses::Inverses(double ndf_, const Date &maxdate,
+    const DefaultProbabilities &dprobs) throw(Exception)
 {
   init(ndf_, maxdate, dprobs);
 }
 
-//===========================================================================
-// copy constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] o Object to copy.
+ */
 ccruncher::Inverses::Inverses(const Inverses &o)
 {
   *this = o;
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::Inverses::~Inverses()
 {
   for(size_t i=0; i<splines.size(); i++) {
@@ -73,9 +73,10 @@ ccruncher::Inverses::~Inverses()
   }
 }
 
-//===========================================================================
-// assignment operator
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] o Object to assign.
+ * @return Reference to the current instance.
+ */
 Inverses & ccruncher::Inverses::operator=(const Inverses &o)
 {
   t0 = o.t0;
@@ -94,10 +95,13 @@ Inverses & ccruncher::Inverses::operator=(const Inverses &o)
   return *this;
 }
 
-//===========================================================================
-// initialize
-// if ndf <= 0 then gaussian, t-Student otherwise
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] ndf_ Degrees of freedom of the t-student distribution. If
+ *            ndf_ <= 0 then gaussian, t-student otherwise.
+ * @param[in] maxdate Simulation ending date.
+ * @param[in] dprobs Default probabilities functions.
+ * @throw Exception Error creating inverse functions.
+ */
 void ccruncher::Inverses::init(double ndf_, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception)
 {
   ndf = ndf_;
@@ -111,10 +115,12 @@ void ccruncher::Inverses::init(double ndf_, const Date &maxdate, const DefaultPr
   setSplines(dprobs);
 }
 
-//===========================================================================
-// return minimum day
-// return the first day bigger than 0 where dprobs(day) > 0
-//===========================================================================
+/**************************************************************************//**
+ * @details Return the first day bigger than 0 where dprobs(day) > 0.
+ * @param[in] irating Rating index.
+ * @param[in] dprobs Default probabilities functions.
+ * @return First day having DP > 0.
+ */
 int ccruncher::Inverses::getMinDay(int irating, const DefaultProbabilities &dprobs) const
 {
   for(int day=1; day<t1-t0; day++)
@@ -127,9 +133,10 @@ int ccruncher::Inverses::getMinDay(int irating, const DefaultProbabilities &dpro
   return t1-t0;
 }
 
-//===========================================================================
-// inverse cumulative distribution function (gaussian/t-student)
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] u Probability value in [0,1].
+ * @return Quantile fo the gaussian/-Student distribution.
+ */
 double ccruncher::Inverses::icdf(double u) const
 {
   assert(0.0 <= u && u <= 1.0);
@@ -137,11 +144,15 @@ double ccruncher::Inverses::icdf(double u) const
   else return gsl_cdf_tdist_Pinv(u, ndf);
 }
 
-//===========================================================================
-// set splines
-// try to determine a splines with the minimum number of nodes
-// nodes coming from dprobs have precedence over other points
-//===========================================================================
+/**************************************************************************//**
+ * @details Computes x=icdf(dp(t)) with 1h and then create spline functions
+ *          using (y,x) -observe that are reversed-.
+ *          For each rating, determines the spline with the minimum number
+ *          of nodes. Nodes coming from dprobs have precedence over
+ *          interpolated value.
+ * @param[in] dprobs Default probabilities functions.
+ * @throw Exception Error creating spline functions.
+ */
 void ccruncher::Inverses::setSplines(const DefaultProbabilities &dprobs) throw(Exception)
 {
   int nratings = dprobs.getRatings().size();
@@ -225,9 +236,11 @@ void ccruncher::Inverses::setSplines(const DefaultProbabilities &dprobs) throw(E
   }
 }
 
-//===========================================================================
-// set spline
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] irating Rating index.
+ * @param[in] days List of days ().
+ * @param[in] cache icdf(dp(t)) values evaluated at days.
+ */
 void ccruncher::Inverses::setSpline(int irating, vector<int> &days, vector<double> &cache)
 {
   assert(days.size() >= 2);
@@ -255,10 +268,12 @@ void ccruncher::Inverses::setSpline(int irating, vector<int> &days, vector<doubl
   gsl_spline_init(splines[irating], &(x[0]), &(y[0]), x.size());
 }
 
-//===========================================================================
-// return the worst unaccurate day
-// if all days are accurate, returns 0
-//===========================================================================
+/**************************************************************************//**
+ * @details Evaluate current spline at returns worst accurate day.
+ * @param[in] irating Rating index.
+ * @param[in] cache icdf(dp(t)) values evaluated at days.
+ * @return Worst day, if all days are accurate, returns 0.
+ */
 int ccruncher::Inverses::getWorstDay(int irating, vector<double> &cache)
 {
   int ret=0;

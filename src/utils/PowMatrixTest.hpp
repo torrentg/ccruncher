@@ -23,16 +23,9 @@
 #ifndef _PowMatrixTest_
 #define _PowMatrixTest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include "utils/MiniCppUnit.hxx"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_test {
-
-//---------------------------------------------------------------------------
 
 class PowMatrixTest : public TestFixture<PowMatrixTest>
 {
@@ -62,12 +55,7 @@ class PowMatrixTest : public TestFixture<PowMatrixTest>
 
 REGISTER_FIXTURE(PowMatrixTest)
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

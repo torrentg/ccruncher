@@ -23,17 +23,10 @@
 #ifndef _TransitionsTest_
 #define _TransitionsTest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include "utils/MiniCppUnit.hxx"
 #include "params/Ratings.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_test {
-
-//---------------------------------------------------------------------------
 
 class TransitionsTest : public TestFixture<TransitionsTest>
 {
@@ -68,12 +61,7 @@ class TransitionsTest : public TestFixture<TransitionsTest>
 
 REGISTER_FIXTURE(TransitionsTest)
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

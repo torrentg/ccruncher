@@ -23,18 +23,11 @@
 #ifndef _AssetTest_
 #define _AssetTest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include "utils/MiniCppUnit.hxx"
 #include "params/Segmentations.hpp"
 #include "params/Interest.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_test {
-
-//---------------------------------------------------------------------------
 
 class AssetTest : public TestFixture<AssetTest>
 {
@@ -74,12 +67,7 @@ class AssetTest : public TestFixture<AssetTest>
 
 REGISTER_FIXTURE(AssetTest)
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

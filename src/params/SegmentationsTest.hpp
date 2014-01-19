@@ -23,16 +23,9 @@
 #ifndef _SegmentationsTest_
 #define _SegmentationsTest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include "utils/MiniCppUnit.hxx"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_test {
-
-//---------------------------------------------------------------------------
 
 class SegmentationsTest : public TestFixture<SegmentationsTest>
 {
@@ -53,12 +46,7 @@ class SegmentationsTest : public TestFixture<SegmentationsTest>
 
 REGISTER_FIXTURE(SegmentationsTest)
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

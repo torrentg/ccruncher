@@ -23,17 +23,10 @@
 #ifndef _DefaultProbabilitiesTest_
 #define _DefaultProbabilitiesTest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include "utils/MiniCppUnit.hxx"
 #include "params/Ratings.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_test {
-
-//---------------------------------------------------------------------------
 
 class DefaultProbabilitiesTest : public TestFixture<DefaultProbabilitiesTest>
 {
@@ -70,13 +63,7 @@ class DefaultProbabilitiesTest : public TestFixture<DefaultProbabilitiesTest>
 
 REGISTER_FIXTURE(DefaultProbabilitiesTest)
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
-
-//---------------------------------------------------------------------------
 

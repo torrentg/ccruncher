@@ -23,18 +23,11 @@
 #ifndef _InversesTest_
 #define _InversesTest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include "params/Ratings.hpp"
 #include "params/DefaultProbabilities.hpp"
 #include "utils/MiniCppUnit.hxx"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_test {
-
-//---------------------------------------------------------------------------
 
 class InversesTest : public TestFixture<InversesTest>
 {
@@ -61,12 +54,7 @@ class InversesTest : public TestFixture<InversesTest>
 
 REGISTER_FIXTURE(InversesTest)
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

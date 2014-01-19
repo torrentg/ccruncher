@@ -27,8 +27,6 @@
 using namespace std;
 using namespace ccruncher;
 
-//---------------------------------------------------------------------------
-
 #define EPSILON 1E-14
 #define NUMOPS 50000000
 

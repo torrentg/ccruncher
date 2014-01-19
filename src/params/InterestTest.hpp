@@ -23,16 +23,9 @@
 #ifndef _InterestTest_
 #define _InterestTest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include "utils/MiniCppUnit.hxx"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_test {
-
-//---------------------------------------------------------------------------
 
 class InterestTest : public TestFixture<InterestTest>
 {
@@ -59,12 +52,7 @@ class InterestTest : public TestFixture<InterestTest>
 
 REGISTER_FIXTURE(InterestTest)
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

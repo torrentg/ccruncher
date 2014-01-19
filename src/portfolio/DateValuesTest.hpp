@@ -23,16 +23,9 @@
 #ifndef _DateValuesTest_
 #define _DateValuesTest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include "utils/MiniCppUnit.hxx"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_test {
-
-//---------------------------------------------------------------------------
 
 class DateValuesTest : public TestFixture<DateValuesTest>
 {
@@ -53,12 +46,7 @@ class DateValuesTest : public TestFixture<DateValuesTest>
 
 REGISTER_FIXTURE(DateValuesTest)
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

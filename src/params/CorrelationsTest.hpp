@@ -23,17 +23,10 @@
 #ifndef _CorrelationsTest_
 #define _CorrelationsTest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include "utils/MiniCppUnit.hxx"
 #include "params/Factors.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_test {
-
-//---------------------------------------------------------------------------
 
 class CorrelationsTest : public TestFixture<CorrelationsTest>
 {
@@ -62,12 +55,7 @@ class CorrelationsTest : public TestFixture<CorrelationsTest>
 
 REGISTER_FIXTURE(CorrelationsTest)
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------
