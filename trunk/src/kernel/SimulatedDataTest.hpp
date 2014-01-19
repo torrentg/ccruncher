@@ -23,9 +23,6 @@
 #ifndef _SimulatedDataTest_
 #define _SimulatedDataTest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <vector>
 #include "utils/MiniCppUnit.hxx"
 #include "utils/Date.hpp"
@@ -35,11 +32,7 @@
 #include "portfolio/Obligor.hpp"
 #include "params/Segmentations.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_test {
-
-//---------------------------------------------------------------------------
 
 class SimulatedDataTest : public TestFixture<SimulatedDataTest>
 {
@@ -66,12 +59,7 @@ class SimulatedDataTest : public TestFixture<SimulatedDataTest>
 
 REGISTER_FIXTURE(SimulatedDataTest)
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

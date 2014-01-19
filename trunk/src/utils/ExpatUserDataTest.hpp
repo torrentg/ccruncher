@@ -23,16 +23,9 @@
 #ifndef _ExpatUserDataTest_
 #define _ExpatUserDataTest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include "utils/MiniCppUnit.hxx"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_test {
-
-//---------------------------------------------------------------------------
 
 class ExpatUserDataTest : public TestFixture<ExpatUserDataTest>
 {
@@ -53,12 +46,7 @@ class ExpatUserDataTest : public TestFixture<ExpatUserDataTest>
 
 REGISTER_FIXTURE(ExpatUserDataTest)
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

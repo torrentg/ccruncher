@@ -34,7 +34,20 @@
 namespace ccruncher {
 
 /**************************************************************************//**
- * @brief
+ * @brief Functions used to simulate the default dates.
+ *
+ * @details Functions (one per rating) PDinv(t(x)) where:
+ *          - t(x) is the cdf of the univariate t-student with ndf degrees
+ *            of freedom.
+ *          - PD_inv is the inverse of the default probability function of
+ *            rating r.
+ *          - x is the i-th component of a simulated multivariate t-student
+ *            variable.
+ *          the evaluation of theses functions is expensive. For this
+ *          reason we compose it, and create a spline functions in order to
+ *          speed-up the evaluation.
+ *
+ * @see CCruncher's Technical Document. (section Simulation internals).
  */
 class Inverses
 {
@@ -85,12 +98,14 @@ class Inverses
 };
 
 /**************************************************************************//**
- * @details Evalue PD_inv(t(x),r)the function for the given rating and
- * @return
+ * @details Evalue function at x.
+ * @param[in] irating Rating index.
+ * @param[in] val Component of the multivariate t-student corresponding
+ *            to the obligors factor.
+ * @return Simulated default date as days from initial simulation date. If
+ *         simulated default date is far from ending simulation date then
+ *         this method returns ending simulation 'date + 100 days'.
  */
-//===========================================================================
-// evalue
-//===========================================================================
 inline double ccruncher::Inverses::evalue(int irating, double val) const
 {
   assert(irating < (int)splines.size());
@@ -121,9 +136,13 @@ inline double ccruncher::Inverses::evalue(int irating, double val) const
   }
 }
 
-//===========================================================================
-// evalueAsDate
-//===========================================================================
+/**************************************************************************//**
+ * @see Inverses::evalue()
+ * @param[in] irating Rating index.
+ * @param[in] val Component of the multivariate t-student corresponding
+ *            to the obligors factor.
+ * @return Simulated default date.
+ */
 inline Date ccruncher::Inverses::evalueAsDate(int irating, double val) const
 {
   double days = evalue(irating, val);

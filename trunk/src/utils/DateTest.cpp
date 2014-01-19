@@ -24,8 +24,6 @@
 #include "utils/Date.hpp"
 #include "utils/DateTest.hpp"
 
-//---------------------------------------------------------------------------
-
 #define EPSILON 1E-14
 
 using namespace ccruncher;

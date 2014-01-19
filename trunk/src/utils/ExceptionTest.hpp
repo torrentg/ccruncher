@@ -23,17 +23,10 @@
 #ifndef _ExceptionTest_
 #define _ExceptionTest_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include "utils/MiniCppUnit.hxx"
 #include "utils/Exception.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_test {
-
-//---------------------------------------------------------------------------
 
 class ExceptionTest : public TestFixture<ExceptionTest>
 {
@@ -59,12 +52,7 @@ class ExceptionTest : public TestFixture<ExceptionTest>
 
 REGISTER_FIXTURE(ExceptionTest)
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------
