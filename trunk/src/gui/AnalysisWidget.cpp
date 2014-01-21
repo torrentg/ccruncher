@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include <vector>
+#include <cassert>
 #include <gsl/gsl_histogram.h>
 #include <gsl/gsl_cdf.h>
 #include <QMessageBox>
@@ -41,7 +42,6 @@
 #include "gui/QwtPieChart.hpp"
 #include "gui/AnalysisWidget.hpp"
 #include "utils/Format.hpp"
-#include <cassert>
 
 #if QWT_VERSION < 0x060100
   #define setMajorPen setMajPen
@@ -52,9 +52,10 @@
 using namespace std;
 using namespace ccruncher;
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] filename Csv file name.
+ * @param[in] parent Widget parent.
+ */
 ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
   MdiChildWidget(parent), ui(new Ui::AnalysisWidget), progress(NULL),
     magnifier(NULL), panner(NULL), task_progress(0.0f), toolbar(NULL)
@@ -155,9 +156,7 @@ ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *
   changeMode();
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher_gui::AnalysisWidget::~AnalysisWidget()
 {
   blockSignals(true);
@@ -167,23 +166,25 @@ ccruncher_gui::AnalysisWidget::~AnalysisWidget()
   delete ui;
 }
 
-//===========================================================================
-// set zoom on axis
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] checked Enable/disable zoom on x-axis.
+ */
 void ccruncher_gui::AnalysisWidget::setZoomX(bool checked)
 {
   assert(magnifier != NULL);
   magnifier->setAxisEnabled(QwtPlot::xBottom, checked);
 }
+
+/**************************************************************************//**
+ * @param[in] checked Enable/disable zoom on y-axis.
+ */
 void ccruncher_gui::AnalysisWidget::setZoomY(bool checked)
 {
   assert(magnifier != NULL);
   magnifier->setAxisEnabled(QwtPlot::yLeft, checked);
 }
 
-//===========================================================================
-// reset results
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisWidget::reset()
 {
   ui->plot->detachItems();
@@ -201,9 +202,9 @@ void ccruncher_gui::AnalysisWidget::reset()
   strdata.clear();
 }
 
-//===========================================================================
-// submit task
-//===========================================================================
+/**************************************************************************//**
+ * @details Submit an analysis task in background using AnalysisTask.
+ */
 void ccruncher_gui::AnalysisWidget::submit()
 {
   mutex.lock();
@@ -266,9 +267,10 @@ void ccruncher_gui::AnalysisWidget::submit()
   mutex.unlock();
 }
 
-//===========================================================================
-// draw
-//===========================================================================
+/**************************************************************************//**
+ * @details Output analysis results (can be parcials because task is still
+ *          running).
+ */
 void ccruncher_gui::AnalysisWidget::draw()
 {
   mutex.lock();
@@ -315,9 +317,7 @@ void ccruncher_gui::AnalysisWidget::draw()
   mutex.unlock();
 }
 
-//===========================================================================
-// draw histogram
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisWidget::drawHistogram()
 {
   ui->plot->detachItems();
@@ -380,9 +380,7 @@ void ccruncher_gui::AnalysisWidget::drawHistogram()
   ui->numiterations->setText(QString::number(numiterations));
 }
 
-//===========================================================================
-// draw statistic
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisWidget::drawCurve()
 {
   ui->plot->detachItems();
@@ -460,9 +458,7 @@ void ccruncher_gui::AnalysisWidget::drawCurve()
   ui->std_err->setText(QString::number(statvals.back().std_err, 'f', 2));
 }
 
-//===========================================================================
-// draw piechart
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisWidget::drawPiechart()
 {
   ui->plot->detachItems();
@@ -497,29 +493,25 @@ void ccruncher_gui::AnalysisWidget::drawPiechart()
   ui->plot->replot();
 }
 
-//===========================================================================
-// refresh
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisWidget::refresh()
 {
   numbins = 1;
   ui->numbins->blockSignals(true);
+  // reset the number of bins forcing to recompute the number of
+  // bins based on the amount of available new data.
   ui->numbins->setValue(1);
   ui->numbins->blockSignals(false);
   submit();
 }
 
-//===========================================================================
-// segment changed
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisWidget::changeSegment()
 {
   submit();
 }
 
-//===========================================================================
-// view changed
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisWidget::changeView()
 {
   int imode = getMode();
@@ -547,9 +539,7 @@ void ccruncher_gui::AnalysisWidget::changeView()
   submit();
 }
 
-//===========================================================================
-// mode changed
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisWidget::changeMode()
 {
   int imode = getMode();
@@ -596,9 +586,7 @@ void ccruncher_gui::AnalysisWidget::changeMode()
   changeView();
 }
 
-//===========================================================================
-// confidence changed
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisWidget::changeConfidence()
 {
   if (ui->confidence->value() != confidence) {
@@ -609,9 +597,7 @@ void ccruncher_gui::AnalysisWidget::changeConfidence()
   }
 }
 
-//===========================================================================
-// numbins changed
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisWidget::changeNumbins()
 {
   if (ui->numbins->value() != (int)numbins) {
@@ -620,9 +606,7 @@ void ccruncher_gui::AnalysisWidget::changeNumbins()
   }
 }
 
-//===========================================================================
-// percentile changed
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisWidget::changePercentile()
 {
   if (ui->percentile->value() != percentile) {
@@ -631,9 +615,9 @@ void ccruncher_gui::AnalysisWidget::changePercentile()
   }
 }
 
-//===========================================================================
-// set status
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] val New Status.
+ */
 void ccruncher_gui::AnalysisWidget::setStatus(int val)
 {
   switch(val)
@@ -688,17 +672,13 @@ void ccruncher_gui::AnalysisWidget::setStatus(int val)
   }
 }
 
-//===========================================================================
-// stop current action
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisWidget::stop()
 {
   task.stop();
 }
 
-//===========================================================================
-// copyToClipboard
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisWidget::copyToClipboard()
 {
   QMimeData *mimeData = new QMimeData();
@@ -706,9 +686,10 @@ void ccruncher_gui::AnalysisWidget::copyToClipboard()
   QApplication::clipboard()->setMimeData(mimeData);
 }
 
-//===========================================================================
-// showPiechartTooltip
-//===========================================================================
+/**************************************************************************//**
+ * @details Show info just under the given point.
+ * @param[in] point Point in the pie chart.
+ */
 void ccruncher_gui::AnalysisWidget::showPiechartTooltip(QPoint point)
 {
   mutex.lock();
@@ -738,10 +719,9 @@ void ccruncher_gui::AnalysisWidget::showPiechartTooltip(QPoint point)
   mutex.unlock();
 }
 
-//===========================================================================
-// mode index
-// return: -1=undefined, 0=segmentation, 1=segments
-//===========================================================================
+/**************************************************************************//**
+ * @return Mode index. -1=undefined, 0=segmentation, 1=segments.
+ */
 int ccruncher_gui::AnalysisWidget::getMode() const
 {
   int row = ui->mode->currentIndex();
@@ -752,10 +732,9 @@ int ccruncher_gui::AnalysisWidget::getMode() const
   else return -1;
 }
 
-//===========================================================================
-// view index
-// iview: -1=undefined, 0=histogram, 1=EL, 2=VaR, 3=ES
-//===========================================================================
+/**************************************************************************//**
+ * @return View index. -1=undefined, 0=histogram, 1=EL, 2=VaR, 3=ES.
+ */
 int ccruncher_gui::AnalysisWidget::getView() const
 {
   int row = ui->view->currentIndex();

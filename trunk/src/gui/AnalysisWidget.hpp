@@ -44,109 +44,117 @@ namespace Ui {
 class AnalysisWidget;
 }
 
+/**************************************************************************//**
+ * @brief Data analysis widget.
+ */
 class AnalysisWidget: public MdiChildWidget
 {
     Q_OBJECT
 
   private:
 
-    // interface widget
+    //! Interface widget
     Ui::AnalysisWidget *ui;
-    // progress widget
+    //! Progress widget
     ProgressWidget *progress;
-    // internal timer
+    //! Internal timer
     QTimer timer;
-    // task thread
+    //! Task thread
     AnalysisTask task;
-    // plot magnifier
+    //! Plot magnifier
     QwtPlotMagnifier *magnifier;
-    // plot panner
+    //! Plot panner
     QwtPlotPanner *panner;
-    // task progress (0..100)
+    //! Task progress (0..100)
     float task_progress;
-    // mutex
+    //! Mutex
     QMutex mutex;
-    // numbins
+    //! Numbins
     size_t numbins;
-    // percentile
+    //! Percentile
     double percentile;
-    // confidence
+    //! Confidence
     double confidence;
-    // toolbar
+    //! Toolbar
     QToolBar *toolbar;
-    // actions
+    //! Action zoom x-axis
     QAction *actionZoomX;
+    //! Action zoom y-axis
     QAction *actionZoomY;
+    //! Action refresh content
     QAction *actionRefresh;
+    //! Action stops execution
     QAction *actionStop;
+    //! Action copy to clipboard
     QAction *actionCopy;
-    // plotted data as string
+    //! Plotted data as string
     QByteArray strdata;
 
   private:
 
-    // reset results
+    //! Reset results
     void reset();
-    // draw histogram
+    //! Draw histogram
     void drawHistogram();
-    // draw curve
+    //! Draw curve
     void drawCurve();
-    // draw piechart
+    //! Draw piechart
     void drawPiechart();
-    // submit task
+    //! Submit task
     void submit();
-    // mode index
+    //! Returns current mode
     int getMode() const;
-    // view index
+    //! Return current view index
     int getView() const;
 
   public:
 
-    // constructor
+    //! Constructor
     AnalysisWidget(const QString &filename, QWidget *parent=0);
-    // destructor
+    //! Destructor
     ~AnalysisWidget();
-    // virtual method implementation
+    //! Virtual method implementation
     QToolBar* getToolBar() { return toolbar; }
 
   public slots:
 
-    // refresh
+    //! Refresh content
     void refresh();
-    // draw results
+    //! Draw results
     void draw();
-    // enable zoom on axis x
+    //! Enable zoom on axis x
     void setZoomX(bool checked);
-    // enable zoom on axis y
+    //! Enable zoom on axis y
     void setZoomY(bool checked);
-    // mode changed
+    //! Change mode
     void changeMode();
-    // segment changed
+    //! Change segment
     void changeSegment();
-    // view changed
+    //! Change view
     void changeView();
-    // numbins changed
+    //! Change numbins
     void changeNumbins();
-    // percentile changed
+    //! Change percentile
     void changePercentile();
-    // confidence changed
+    //! Change confidence
     void changeConfidence();
-    // set status
+    //! Set status
     void setStatus(int);
-    // stop current action
+    //! Stop current action
     void stop();
-    // copy data to clipboard
+    //! Copy data to clipboard
     void copyToClipboard();
-    // show piechart info
+    //! Show piechart info
     void showPiechartTooltip(QPoint point);
 
   signals:
 
-    // post msg in app status bar
+    //! Post msg in app status bar
     void newStatusMsg(const QString &);
 
 };
 
-}
+} // namespace
 
 #endif
+

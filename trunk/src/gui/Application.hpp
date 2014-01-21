@@ -27,9 +27,9 @@
 
 namespace ccruncher_gui {
 
-//===========================================================================
-// Application class (used to catch exceptions)
-//===========================================================================
+/**************************************************************************//**
+ * @brief Qt application that traps unexpected exceptions.
+ */
 class Application : public QApplication
 {
 
@@ -37,14 +37,14 @@ class Application : public QApplication
 
   public:
 
-    // constructor
+    //! Constructor
     explicit Application(int &argc, char** argv);
-    // notify method
+    //! Notify method
     bool notify(QObject *rec, QEvent *ev);
 
 };
 
-}
+} // namespace
 
 #endif
 

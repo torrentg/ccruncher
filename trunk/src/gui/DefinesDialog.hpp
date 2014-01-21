@@ -33,36 +33,39 @@ namespace Ui {
 class DefinesDialog;
 }
 
+/**************************************************************************//**
+ * @brief Dialog to manage user-defined macros.
+ */
 class DefinesDialog : public QDialog
 {
     Q_OBJECT
 
   private:
 
-    // dialog widgets
+    //! Dialog widgets
     Ui::DefinesDialog *ui;
-    // defines
+    //! Defines
     std::map<std::string,std::string> defines;
 
   public:
 
-    // constructor
+    //! Constructor
     explicit DefinesDialog(QWidget *parent, const std::map<std::string, std::string> &);
-    // destructor
+    //! Destructor
     ~DefinesDialog();
-    // return content
+    //! Return content
     const std::map<std::string,std::string> & getDefines() const;
 
   public slots:
 
-    // cell content changed
+    //! Cell content changed
     void cellChanged(int, int);
-    // submit dialog content
+    //! Submit dialog content
     void submit();
 
 };
 
-}
+} // namespace
 
 #endif
 

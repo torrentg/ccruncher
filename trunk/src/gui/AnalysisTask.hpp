@@ -32,47 +32,66 @@
 
 namespace ccruncher_gui {
 
+/**************************************************************************//**
+ * @brief Statistic value (eg. VaR).
+ */
 struct statval
 {
+  //! Number of samples
   size_t iteration;
+  //! statistic value
   double value;
+  //! Standard error
   double std_err;
+  //! Constructor
   statval(size_t n, double v, double e) : iteration(n), value(v), std_err(e) {}
 };
 
+/**************************************************************************//**
+ * @brief Contribution to risk (segmentation pie).
+ */
 struct contrib
 {
+  //! Segment name
   std::string name;
+  //! Value
   double value;
+  //! Constructor
   contrib(std::string n="", double v=0.0) : name(n), value(v) {}
 };
 
-// see http://en.wikipedia.org/wiki/Kahan_summation_algorithm
+/**************************************************************************//**
+ * @brief Kahan summation algorithm.
+ * @see http://en.wikipedia.org/wiki/Kahan_summation_algorithm
+ */
 class kahan
 {
   private:
 
-    // current working sum
+    //! Current working sum
     double sum;
-    // carry from the previous operation
+    //! Carry from the previous operation
     double carry;
 
   public:
 
-    // constructor
+    //! Constructor
     kahan(double val=0.0) : sum(val), carry(0.0) {}
-    // add value
+    //! Add value
     void add(double val) {
       double y = val - carry;
       double t = sum + y;
       carry = (t - sum) - y;
       sum = t;
     }
-    // return value
+    //! Return value
     double value() const { return sum; }
 
 };
 
+/**************************************************************************//**
+ * @brief Thread that performs the data analysis.
+ */
 class AnalysisTask : public QThread
 {
     Q_OBJECT
@@ -82,122 +101,122 @@ class AnalysisTask : public QThread
     // enum operation modes
     enum mode
     {
-      none=0,
-      histogram=1,
-      evolution_el=2,
-      evolution_var=3,
-      evolution_es=4,
-      contribution_el=5,
-      contribution_es=6
+      none=0,             //!< None
+      histogram=1,        //!< Histogram
+      evolution_el=2,     //!< Statistic evolution (EL)
+      evolution_var=3,    //!< Statistic evolution (VaR)
+      evolution_es=4,     //!< Statistic evolution (ES)
+      contribution_el=5,  //!< Segmentation pie chart (EL)
+      contribution_es=6   //!< Segmentation pie chart (ES)
     };
 
     // status types
     enum status
     {
-      reading=1,
-      running=2,
-      stopped=3,
-      failed=4,
-      finished=5
+      reading=1,   //!< Readind data
+      running=2,   //!< Doing data analysis
+      stopped=3,   //!< Task stopped by user
+      failed=4,    //!< Task failes
+      finished=5   //!< Task finished
     };
 
   private:
 
-    // stopped task exception
+    //! Stopped task exception
     class StopException : public ccruncher::Exception { };
 
   private:
 
-    // csv file
+    //! Csv file
     ccruncher::CsvFile csv;
-    // segment index (-1 means rowSums)
+    //! Segment index (-1 means rowSums)
     int isegment;
-    // number of bins (hist)
+    //! Number of bins (hist)
     size_t numbins;
-    // percentile (var, es)
+    //! Percentile (var, es)
     double percentile;
-    // histogram (result)
+    //! Histogram (result)
     gsl_histogram *hist;
-    // computed statistics (result)
+    //! Computed statistics (result)
     std::vector<statval> statvals;
-    // computed contributions (result)
+    //! Computed contributions (result)
     std::vector<contrib> contribs;
-    // progress (0..100)
+    //! Progress (0..100)
     volatile float progress;
-    // mode
+    //! Execution mode
     mode mode_;
-    // status
+    //! Execution status
     status status_;
-    // stop flag
+    //! Stop flag
     bool stop_;
-    // message error (if any)
+    //! Error message error (if any)
     std::string msgerr;
 
   private:
 
-    // value at risk
+    //! Value at Risk
     static statval valueAtRisk(double percentile, std::vector<double>::iterator first, std::vector<double>::iterator last);
-    // expected shortfall
+    //! Expected shortfall
     static statval expectedShortfall(double percentile, std::vector<double>::iterator first, std::vector<double>::iterator last);
 
-    // read csv data
+    //! Read csv data
     void readData(int col, std::vector<double> &ret) throw(ccruncher::Exception);
-    // read csv data
+    //! Read csv data
     void readData(std::vector<std::vector<double> > &ret) throw(ccruncher::Exception);
-    // set status
+    //! Set status
     void setStatus(status);
-    // compute histogram
+    //! Compute histogram
     void runHistogram(const std::vector<double> &);
-    // compute EL
+    //! Compute EL
     void runEvolutionEL(const std::vector<double> &);
-    // compute VaR
+    //! Compute VaR
     void runEvolutionVAR(std::vector<double> &);
-    // compute ES
+    //! Compute ES
     void runEvolutionES(std::vector<double> &);
-    // contribution EL
+    //! Contribution EL
     void runContributionEL(const std::vector<std::vector<double> > &);
-    // contribution ES
+    //! Contribution ES
     void runContributionES(std::vector<std::vector<double> > &);
 
   public:
 
-    // constructor
+    //! Constructor
     AnalysisTask();
-    // destructor
+    //! Destructor
     ~AnalysisTask();
-    // set csv filename
+    //! Set csv filename
     void setFilename(const QString &) throw(ccruncher::Exception);
-    // set data
+    //! Set data
     void setData(mode m, int isegment=-1, double param=0.0);
-    // return mode
+    //! Return mode
     mode getMode() const;
-    // return csvfile object
+    //! Return csvfile object
     ccruncher::CsvFile& getCsvFile();
-    // return histogram
+    //! Return histogram
     const gsl_histogram *getHistogram() const;
-    // return statvals
+    //! Return statvals
     const std::vector<statval>& getStatVals() const;
-    // return contributions
+    //! Return contributions
     const std::vector<contrib>& getContributions() const;
-    // task
+    //! Thread task
     void run();
-    // stop current execution
+    //! Stop current execution
     void stop();
-    // return status
+    //! Return status
     status getStatus() const;
-    // return progress
+    //! Return progress
     float getProgress() const;
-    // return error
+    //! Return error
     const std::string &getMsgErr() const;
 
   signals:
 
-    // status updated
+    //! Status updated
     void statusChanged(int);
 
 };
 
-}
+} // namespace
 
 #endif
 

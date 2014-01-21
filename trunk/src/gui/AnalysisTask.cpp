@@ -22,9 +22,9 @@
 
 #include <cmath>
 #include <algorithm>
+#include <cassert>
 #include <gsl/gsl_sf_gamma.h>
 #include "gui/AnalysisTask.hpp"
-#include <cassert>
 
 using namespace std;
 using namespace ccruncher;
@@ -32,9 +32,7 @@ using namespace ccruncher_gui;
 
 #define MJ_EPSILON 1e-12
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************/
 ccruncher_gui::AnalysisTask::AnalysisTask() : QThread(), hist(NULL)
 {
   mode_ = none;
@@ -44,26 +42,26 @@ ccruncher_gui::AnalysisTask::AnalysisTask() : QThread(), hist(NULL)
   setTerminationEnabled(false);
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher_gui::AnalysisTask::~AnalysisTask()
 {
   if (hist != NULL) gsl_histogram_free(hist);
 }
 
-//===========================================================================
-// set csv filename
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] filename CSV filename.
+ */
 void ccruncher_gui::AnalysisTask::setFilename(const QString &filename) throw(Exception)
 {
   csv.open(filename.toStdString());
 }
 
-//===========================================================================
-// set data
-// caution: assumes that there isn't a current execution
-//===========================================================================
+/**************************************************************************//**
+ * @note Assumes that there isn't a current execution.
+ * @param[in] m Execution mode.
+ * @param[in] s Segment (if required).
+ * @param[in] p Percentile or number of bins (if required).
+ */
 void ccruncher_gui::AnalysisTask::setData(mode m, int s, double p)
 {
   // set task data
@@ -95,50 +93,52 @@ void ccruncher_gui::AnalysisTask::setData(mode m, int s, double p)
   }
 }
 
-//===========================================================================
-// return mode
-//===========================================================================
+/**************************************************************************//**
+ * @return Exceution mode.
+ */
 AnalysisTask::mode ccruncher_gui::AnalysisTask::getMode() const
 {
   return mode_;
 }
 
-//===========================================================================
-// return csvfile object
-//===========================================================================
+/**************************************************************************//**
+ * @return Csv file.
+ */
 CsvFile& ccruncher_gui::AnalysisTask::getCsvFile()
 {
   return csv;
 }
 
-//===========================================================================
-// return histogram
-//===========================================================================
+/**************************************************************************//**
+ * @return Computed histogram, NULL if histogram not computed.
+ */
 const gsl_histogram* ccruncher_gui::AnalysisTask::getHistogram() const
 {
   return hist;
 }
 
-//===========================================================================
-// return statvals
-//===========================================================================
+/**************************************************************************//**
+ * @return Computed statistic.
+ */
 const vector<statval>& ccruncher_gui::AnalysisTask::getStatVals() const
 {
   return statvals;
 }
 
-//===========================================================================
-// return contributions
-//===========================================================================
+/**************************************************************************//**
+ * @return Segmentation values.
+ */
 const std::vector<contrib>& ccruncher_gui::AnalysisTask::getContributions() const
 {
   return contribs;
 }
 
-//===========================================================================
-// readData
-//===========================================================================
-void ccruncher_gui::AnalysisTask::readData(int col, vector<double> &ret) throw(Exception)
+/**************************************************************************//**
+ * @param[in] col Column index (if <0 return rowsum).
+ * @param[out] ret Data readed (rowsum if col negative).
+ * @throw Exception Error reading data.
+ */
+void ccruncher_gui::AnalysisTask::readData(int col, std::vector<double> &ret) throw(Exception)
 {
   try {
     setStatus(reading);
@@ -162,10 +162,11 @@ void ccruncher_gui::AnalysisTask::readData(int col, vector<double> &ret) throw(E
   }
 }
 
-//===========================================================================
-// readData
-//===========================================================================
-void ccruncher_gui::AnalysisTask::readData(vector<vector<double> > &content) throw(Exception)
+/**************************************************************************//**
+ * @param[out] content Csv data.
+ * @throw Exception Error reading data.
+ */
+void ccruncher_gui::AnalysisTask::readData(std::vector<std::vector<double> > &content) throw(Exception)
 {
   try {
     setStatus(reading);
@@ -188,9 +189,9 @@ void ccruncher_gui::AnalysisTask::readData(vector<vector<double> > &content) thr
   }
 }
 
-//===========================================================================
-// run
-//===========================================================================
+/**************************************************************************//**
+ * @details Execute data analysis.
+ */
 void ccruncher_gui::AnalysisTask::run()
 {
   try
@@ -256,10 +257,11 @@ void ccruncher_gui::AnalysisTask::run()
   }
 }
 
-//===========================================================================
-// run histogram
-//===========================================================================
-void ccruncher_gui::AnalysisTask::runHistogram(const vector<double> &values)
+/**************************************************************************//**
+ * @details Result is set in variable hist.
+ * @param[in] values Data values to computed histogram.
+ */
+void ccruncher_gui::AnalysisTask::runHistogram(const std::vector<double> &values)
 {
   setStatus(running);
 
@@ -307,10 +309,12 @@ void ccruncher_gui::AnalysisTask::runHistogram(const vector<double> &values)
   progress = 100.0f;
 }
 
-//===========================================================================
-// runEvolutionEL
-//===========================================================================
-void ccruncher_gui::AnalysisTask::runEvolutionEL(const vector<double> &values)
+/**************************************************************************//**
+ * @details Given a list of values compute EL at regular steps. Let result
+ *          in variable statvals.
+ * @param[in] values Data values.
+ */
+void ccruncher_gui::AnalysisTask::runEvolutionEL(const std::vector<double> &values)
 {
   setStatus(running);
   statvals.clear();
@@ -346,10 +350,12 @@ void ccruncher_gui::AnalysisTask::runEvolutionEL(const vector<double> &values)
   progress = 100.0f;
 }
 
-//===========================================================================
-// runEvolutionVAR
-//===========================================================================
-void ccruncher_gui::AnalysisTask::runEvolutionVAR(vector<double> &values)
+/**************************************************************************//**
+ * @details Given a list of values compute VaR at regular steps. Let result
+ *          in variable statvals.
+ * @param[in] values Data values.
+ */
+void ccruncher_gui::AnalysisTask::runEvolutionVAR(std::vector<double> &values)
 {
   setStatus(running);
   statvals.clear();
@@ -377,10 +383,15 @@ void ccruncher_gui::AnalysisTask::runEvolutionVAR(vector<double> &values)
   progress = 100.0f;
 }
 
-//===========================================================================
-// Value at Risk of range [first,last)
-//===========================================================================
-statval ccruncher_gui::AnalysisTask::valueAtRisk(double percentile, vector<double>::iterator first, vector<double>::iterator last)
+/**************************************************************************//**
+ * @details Compute the VaR in range [first, last).
+ * @param[in] percentile Percentile in [0,1].
+ * @param[in] first Iterator to the first element to consider in a list.
+ * @param[in] last Iterator to the last element to consider in a list.
+ * @return VaR value.
+ */
+statval ccruncher_gui::AnalysisTask::valueAtRisk(double percentile,
+    std::vector<double>::iterator first, std::vector<double>::iterator last)
 {
   assert(0.0 < percentile && percentile < 1.0);
   assert(first < last);
@@ -417,7 +428,8 @@ statval ccruncher_gui::AnalysisTask::valueAtRisk(double percentile, vector<doubl
   for(int i=m-1; i>=0; i--) {
     try {
       // ibeta(x,a,b) = 1-ibeta(1-x,b,a)
-      w =  gsl_sf_beta_inc(a, b, (double)(i+2)/(double)(n)) - gsl_sf_beta_inc(a, b, (double)(i+1)/(double)(n));
+      w =  gsl_sf_beta_inc(a, b, (double)(i+2)/(double)(n)) -
+           gsl_sf_beta_inc(a, b, (double)(i+1)/(double)(n));
     }
     catch(Exception &e) {
       // ibeta convergence not achieved
@@ -437,7 +449,8 @@ statval ccruncher_gui::AnalysisTask::valueAtRisk(double percentile, vector<doubl
   for(int i=m; i<n; i++) {
     try {
       // ibeta(x,a,b) = 1-ibeta(1-x,b,a)
-      w =  gsl_sf_beta_inc(a, b, (double)(i+2)/(double)(n)) - gsl_sf_beta_inc(a, b, (double)(i+1)/(double)(n));
+      w =  gsl_sf_beta_inc(a, b, (double)(i+2)/(double)(n)) -
+           gsl_sf_beta_inc(a, b, (double)(i+1)/(double)(n));
       ws.push_back(w);
     }
     catch(Exception &e) {
@@ -468,10 +481,12 @@ statval ccruncher_gui::AnalysisTask::valueAtRisk(double percentile, vector<doubl
   return statval(n, var, std_err);
 }
 
-//===========================================================================
-// runEvolutionES
-//===========================================================================
-void ccruncher_gui::AnalysisTask::runEvolutionES(vector<double> &values)
+/**************************************************************************//**
+ * @details Given a list of values compute ES at regular steps. Let result
+ *          in variable statvals.
+ * @param[in] values Data values.
+ */
+void ccruncher_gui::AnalysisTask::runEvolutionES(std::vector<double> &values)
 {
   setStatus(running);
   statvals.clear();
@@ -497,10 +512,15 @@ void ccruncher_gui::AnalysisTask::runEvolutionES(vector<double> &values)
   progress = 100.0f;
 }
 
-//===========================================================================
-// Expected Shortfall of range [first,last)
-//===========================================================================
-statval ccruncher_gui::AnalysisTask::expectedShortfall(double percentile, vector<double>::iterator first, vector<double>::iterator last)
+/**************************************************************************//**
+ * @details Compute the Expected Shortfall in range [first, last).
+ * @param[in] percentile Percentile in [0,1].
+ * @param[in] first Iterator to the first element to consider in a list.
+ * @param[in] last Iterator to the last element to consider in a list.
+ * @return ES value.
+ */
+statval ccruncher_gui::AnalysisTask::expectedShortfall(double percentile,
+    std::vector<double>::iterator first, std::vector<double>::iterator last)
 {
   assert(0.0 < percentile && percentile < 1.0);
   assert(first < last);
@@ -534,10 +554,11 @@ statval ccruncher_gui::AnalysisTask::expectedShortfall(double percentile, vector
   return statval(n, mean, std_err);
 }
 
-//===========================================================================
-// runContributionEL
-//===========================================================================
-void ccruncher_gui::AnalysisTask::runContributionEL(const vector<vector<double> > &content)
+/**************************************************************************//**
+ * @details Compute risk contribution. Let result in variable contribs.
+ * @param[in] content Csv data (columns = segments).
+ */
+void ccruncher_gui::AnalysisTask::runContributionEL(const std::vector<std::vector<double> > &content)
 {
   setStatus(running);
 
@@ -597,10 +618,11 @@ void ccruncher_gui::AnalysisTask::runContributionEL(const vector<vector<double> 
   progress = 100.0f;
 }
 
-//===========================================================================
-// runContributionES
-//===========================================================================
-void ccruncher_gui::AnalysisTask::runContributionES(vector<vector<double> > &content)
+/**************************************************************************//**
+ * @details Compute risk contribution. Let result in variable contribs.
+ * @param[in] content Csv data (columns = segments).
+ */
+void ccruncher_gui::AnalysisTask::runContributionES(std::vector<std::vector<double> > &content)
 {
   setStatus(running);
 
@@ -673,42 +695,40 @@ void ccruncher_gui::AnalysisTask::runContributionES(vector<vector<double> > &con
   progress = 100.0f;
 }
 
-//===========================================================================
-// stop
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::AnalysisTask::stop()
 {
   stop_ = true;
 }
 
-//===========================================================================
-// setStatus
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] s New status.
+ */
 void ccruncher_gui::AnalysisTask::setStatus(status s)
 {
   status_ = s;
   emit statusChanged((int)s);
 }
 
-//===========================================================================
-// return status
-//===========================================================================
+/**************************************************************************//**
+ * @return Execution status.
+ */
 AnalysisTask::status ccruncher_gui::AnalysisTask::getStatus() const
 {
   return status_;
 }
 
-//===========================================================================
-// return progress
-//===========================================================================
+/**************************************************************************//**
+ * @return Current progress (0..100).
+ */
 float ccruncher_gui::AnalysisTask::getProgress() const
 {
   return progress;
 }
 
-//===========================================================================
-// return error
-//===========================================================================
+/**************************************************************************//**
+ * @return Error message (if any).
+ */
 const string & ccruncher_gui::AnalysisTask::getMsgErr() const
 {
   return msgerr;

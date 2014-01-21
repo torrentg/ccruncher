@@ -340,7 +340,6 @@ void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Excep
     do
     {
       // read first field
-      curcol = -1;
       rc = next();
       curcol = 0;
       if (rc != 1) {
@@ -405,7 +404,6 @@ void ccruncher::CsvFile::getColumns(vector<vector<double> > &ret, bool *stop) th
     do
     {
       // read first field
-      curcol = -1;
       rc = next();
       curcol = 0;
       if (rc != 1) {
