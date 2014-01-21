@@ -26,10 +26,12 @@
 
 using namespace std;
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher_gui::DefinesDialog::DefinesDialog(QWidget *parent, const map<string,string> &defines_) :
+/**************************************************************************//**
+ * @param[in] parent Widget parent.
+ * @param[in] defines_ List of defines.
+ */
+ccruncher_gui::DefinesDialog::DefinesDialog(QWidget *parent,
+    const std::map<std::string,std::string> &defines_) :
     QDialog(parent), ui(new Ui::DefinesDialog)
 {
   ui->setupUi(this);
@@ -56,25 +58,26 @@ ccruncher_gui::DefinesDialog::DefinesDialog(QWidget *parent, const map<string,st
   ui->table->blockSignals(false);
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher_gui::DefinesDialog::~DefinesDialog()
 {
   delete ui;
 }
 
-//===========================================================================
-// return content
-//===========================================================================
+/**************************************************************************//**
+ * @return Defines modified by user.
+ */
 const map<string,string> & ccruncher_gui::DefinesDialog::getDefines() const
 {
   return defines;
 }
 
-//===========================================================================
-// cell content changed
-//===========================================================================
+/**************************************************************************//**
+ * @details Modifies rows (removes unused rows, add row if don't exist
+ *          a blank row to enter a new macro).
+ * @param[in] row Row index.
+ * @param[in] col Column index.
+ */
 void ccruncher_gui::DefinesDialog::cellChanged(int row, int col)
 {
   Q_UNUSED(row)
@@ -107,9 +110,9 @@ void ccruncher_gui::DefinesDialog::cellChanged(int row, int col)
 }
 
 
-//===========================================================================
-// submit dialog content
-//===========================================================================
+/**************************************************************************//**
+ * @details Validate dialog content and close dialog.
+ */
 void ccruncher_gui::DefinesDialog::submit()
 {
   defines.clear();

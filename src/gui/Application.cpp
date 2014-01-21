@@ -26,17 +26,18 @@
 
 using namespace std;
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @see http://qt-project.org/doc/qt-4.8/qapplication.html
+ */
 ccruncher_gui::Application::Application(int &argc, char** argv) : QApplication(argc, argv)
 {
   // nothing to do
 }
 
-//===========================================================================
-// notify method
-//===========================================================================
+/**************************************************************************//**
+ * @details Prints exception info and close application.
+ * @see http://qt-project.org/doc/qt-4.8/qapplication.html#notify
+ */
 bool ccruncher_gui::Application::notify(QObject *rec, QEvent *ev)
 {
   try
