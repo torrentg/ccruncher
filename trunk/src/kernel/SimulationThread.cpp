@@ -31,63 +31,37 @@
 using namespace std;
 using namespace ccruncher;
 
-/*
-   Note on LHS method
-   ------------------
-   We allow LHS variance reduction technique only on random variables
-   S and Z. We don't do LHS in X (all the obligors) because:
-   - we can exhaust memory when num_obligors and lhs_size  are high
-   - lhs with dependence is ineficient (beta eval)
-   - if we use quick version (0.5 instead of beta) gives discrete values
-
-   Observe that lhs_size=1 means that LHS is disabled.
-
-   Variance reduction papers
-   -------------------------
-   * 'Monte Carlo methods for security pricing'
-      by Phelim Boyle, Mark Broadie, Paul Glasserman
-   * 'A user's guide to LHS: Sandia's Latin Hypercube Sampling Software'
-      by Gregory D. Wyss, Kelly H. Jorgensen
-   * 'Latin hypercube sampling with dependence and applications in finance'
-      by Natalie Packham, Wolfgang Schmidt
-
- */
-
-// --------------------------------------------------------------------------
-
 #define GAUSSIAN_POOL_SIZE 512
 #define LHS_VALUES_Z(i,j) lhs_values_z[(i)*numfactors+(j)]
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned long seed, unsigned short bs) :
+/**************************************************************************//**
+ * @param[in] ti Thread identifier.
+ * @param[in] mc MonteCarlo manager.
+ * @param[in] seed RNG seed.
+ */
+ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned long seed) :
   Thread(), montecarlo(mc), obligors(mc.obligors), numSegmentsBySegmentation(mc.numSegmentsBySegmentation),
   chol(mc.chol), floadings1(mc.floadings1), floadings2(mc.floadings2), inverses(mc.inverses),
-  rng(NULL), losses(0)
+  numfactors(mc.chol->size1), ndf(mc.ndf), time0(mc.time0), timeT(mc.timeT),
+  antithetic(mc.antithetic), numsegments(mc.numsegments), assetsize(mc.assetsize),
+  blocksize(mc.blocksize), lhs_size(mc.lhs_size), rng(NULL), losses(0)
 {
   assert(chol != NULL);
-  assert(bs > 0);
+  assert(blocksize > 0);
+  assert(numfactors == floadings1.size());
+  assert(antithetic?(blocksize%2!=0?false:true):true);
 
   id = ti;
+
   rng = gsl_rng_alloc(gsl_rng_mt19937);
   gsl_rng_set(rng, seed);
-  numfactors = chol->size1;
-  ndf = mc.ndf;
-  time0 = mc.time0;
-  timeT = mc.timeT;
-  antithetic = mc.antithetic;
-  assetsize = mc.assetsize;
-  numsegments = mc.numsegments;
-  blocksize = bs;
-
-  assert(antithetic?(blocksize%2!=0?false:true):true);
+  rngpool.resize(GAUSSIAN_POOL_SIZE);
+  rngpool_pos = GAUSSIAN_POOL_SIZE;
 
   losses.resize(numsegments*blocksize, 0.0);
   indexes.resize(blocksize);
 
   lhs_num = 0;
-  lhs_size = mc.lhs_size;
   lhs_pos = lhs_size;
   lhs_values_z.resize(lhs_size*numfactors);
   lhs_values_s.resize(lhs_size);
@@ -95,25 +69,22 @@ ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned l
     lhs_aux.resize(lhs_size);
   }
 
-  rngpool.resize(GAUSSIAN_POOL_SIZE);
-  rngpool_pos = GAUSSIAN_POOL_SIZE;
-
   x.resize(blocksize/(antithetic?2:1));
   z.resize((blocksize*numfactors)/(antithetic?2:1));
   s.resize(blocksize/(antithetic?2:1));
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::SimulationThread::~SimulationThread()
 {
   if (rng != NULL) gsl_rng_free(rng);
 }
 
-//===========================================================================
-// thread method
-//===========================================================================
+/**************************************************************************//**
+ * @details Does simulations sending results to master until it indicates
+ *          to stop.
+ * @see Thread::run()
+ */
 void ccruncher::SimulationThread::run()
 {
   bool more = true;
@@ -186,10 +157,11 @@ void ccruncher::SimulationThread::run()
   }
 }
 
-//===========================================================================
-// rlatent
-// fills z and s arrays
-//===========================================================================
+/**************************************************************************//**
+ * @details Simulate blocksize times (only half when antithetic) the latent
+ *          variables: factors (z), chi-square (s). Sets simulation info in
+ *          indexes array.
+ */
 inline void ccruncher::SimulationThread::simuleLatentVars()
 {
   double *ptrz = &(z[0]);
@@ -231,17 +203,21 @@ inline void ccruncher::SimulationThread::simuleLatentVars()
   }
 }
 
-//===========================================================================
-// comparator used to obtain rank
-//===========================================================================
-inline bool ccruncher::SimulationThread::pcomparator(const pair<double,size_t> &o1, const pair<double,size_t> &o2)
+/**************************************************************************//**
+ * @param[in] o1 First pair (value-position).
+ * @param[in] o2 Second pair (value-position).
+ * @return true if o1.value < o2.value, false otherwise
+ */
+inline bool ccruncher::SimulationThread::pcomparator(const std::pair<double,size_t> &o1,
+    const std::pair<double,size_t> &o2)
 {
   return o1.first < o2.first;
 }
 
-//===========================================================================
-// generate lhs_size random chi-square values
-//===========================================================================
+/**************************************************************************//**
+ * @details Generate a sample of lhs_size random chi-square values.
+ *          Let values in lhs_values_s.
+ */
 void ccruncher::SimulationThread::rchisq()
 {
   if (ndf > 0.0)
@@ -268,9 +244,11 @@ void ccruncher::SimulationThread::rchisq()
   }
 }
 
-//===========================================================================
-// generate lhs_size random factors
-//===========================================================================
+/**************************************************************************//**
+ * @details Generate a sample of lhs_size random multivariate Gaussian
+ *          corresponding to factors.
+ *          Let values in lhs_values_z.
+ */
 void ccruncher::SimulationThread::rmvnorm()
 {
   if (numfactors == 1 && lhs_size > 1)
@@ -354,10 +332,15 @@ void ccruncher::SimulationThread::rmvnorm()
   }
 }
 
-//===========================================================================
-// simule obligor losses at dtime and adds it to ptr_losses
-//===========================================================================
-void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obligor, Date dtime, double *ptr_losses) const throw()
+/**************************************************************************//**
+ * @details Given a default time simulates obligors losses and aggregates
+ *          them in the corresponding segmentation-segment.
+ * @param[in] obligor Obligor to simulate.
+ * @param[in] dtime Default time.
+ * @param[out] ptr_losses Cumulated losses by segmentation-segment.
+ */
+void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obligor,
+    Date dtime, double *ptr_losses) const throw()
 {
   assert(ptr_losses != NULL);
 
@@ -404,35 +387,33 @@ void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obli
   }
 }
 
-//===========================================================================
-// returns elapsed time creating random numbers
-//===========================================================================
+/**************************************************************************//**
+ * @return Elapsed time creating random numbers (in seconds).
+ */
 double ccruncher::SimulationThread::getElapsedTime1()
 {
   return timer1.read();
 }
 
-//===========================================================================
-// returns elapsed time simulating default times
-//===========================================================================
+/**************************************************************************//**
+ * @return Elapsed time simulating losses (in seconds).
+ */
 double ccruncher::SimulationThread::getElapsedTime2()
 {
   return timer2.read();
 }
 
-//===========================================================================
-// returns elapsed time writing to disk
-//===========================================================================
+/**************************************************************************//**
+ * @return Elapsed time writing to disk (in seconds).
+ */
 double ccruncher::SimulationThread::getElapsedTime3()
 {
   return timer3.read();
 }
 
-//===========================================================================
-// returns a uniform gaussian variate
-// we use the ziggurat algorithm because is very fast but only if it is
-// called consecutively
-//===========================================================================
+/**************************************************************************//**
+ * @return Simulated N(0,1) value.
+ */
 inline double ccruncher::SimulationThread::rnorm()
 {
   rngpool_pos++;
@@ -440,9 +421,10 @@ inline double ccruncher::SimulationThread::rnorm()
   return rngpool[rngpool_pos];
 }
 
-//===========================================================================
-// fills gaussian variates pool
-//===========================================================================
+/**************************************************************************//**
+ * @details We use the ziggurat algorithm because is very fast but only if
+ *          it is called consecutively.
+ */
 void ccruncher::SimulationThread::fillGaussianPool()
 {
   Timer timer(false);

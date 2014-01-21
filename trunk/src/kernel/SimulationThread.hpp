@@ -23,9 +23,6 @@
 #ifndef _SimulationThread_
 #define _SimulationThread_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <vector>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_rng.h>
@@ -37,147 +34,177 @@
 #include "utils/Thread.hpp"
 #include "utils/Exception.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
-
-//---------------------------------------------------------------------------
 
 // forward declaration
 class MonteCarlo;
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief Monte Carlo simulation
+ *
+ * @details This class does the following tasks:
+ *          - RNG management
+ *          - RNG gaussian pool (performance reasons)
+ *          - Blocksize (simultaneous simulations, performance reasons)
+ *          - Latin Hypercube Sampling management (LHS)
+ *          - Antithetic management
+ *          - Simulate obligors default times
+ *          - Simulate asset losses
+ *          - Losses aggregation (by segmentation)
+ *          Simulation parameters are constants and shared with other
+ *          threads.
+ *
+ * @see MonteCarlo
+ *
+ * @note Note on LHS method
+ *       We allow LHS variance reduction technique only on random variables
+ *       S and Z. We don't do LHS in X (all the obligors) because:
+ *       - we can exhaust memory when num_obligors and lhs_size  are high
+ *       - lhs with dependence is ineficient (beta eval)
+ *       - if we use quick version (0.5 instead of beta) gives discrete values
+ *       Observe that lhs_size=1 means that LHS is disabled.
+ *
+ * @note Variance reduction papers
+ *       - 'Monte Carlo methods for security pricing'
+ *         by Phelim Boyle, Mark Broadie, Paul Glasserman
+ *       - 'A user's guide to LHS: Sandia's Latin Hypercube Sampling Software'
+ *         by Gregory D. Wyss, Kelly H. Jorgensen
+ *       - 'Latin hypercube sampling with dependence and applications in finance'
+ *         by Natalie Packham, Wolfgang Schmidt
+ */
 class SimulationThread : public Thread
 {
 
   private:
 
-    // used by random_shuffle function
+    /**
+     * @brief Internal struct (RNG functor)
+     * @details Used by random_shuffle function
+     */
     struct frand
     {
+      //! RNG object
       const gsl_rng *rng;
+      //! Constructor
       frand(const gsl_rng *r) : rng(r) {}
+      //!  Return a non-negative value less than its argument
       int operator()(int limit) const { return gsl_rng_uniform_int(rng, limit); }
     };
 
   private:
 
-    // Monte Carlo parent
+    //! Monte Carlo parent
     MonteCarlo &montecarlo;
-    // list of simulated obligors
+    //! List of simulated obligors
     const std::vector<SimulatedObligor> &obligors;
-    // number of segments for each segmentation
+    //! Number of segments for each segmentation
     const std::vector<unsigned short> &numSegmentsBySegmentation;
-    // cholesky matrix
+    //! Cholesky matrix (see MonteCarlo::initModel())
     const gsl_matrix *chol;
-    // factor loadings [w_i]
+    //! Factor loadings [w_i]
     const std::vector<double> &floadings1;
-    // factor loadings [sqrt(1-w_i^2)]
+    //! Factor loadings [sqrt(1-w_i^2)]
     const std::vector<double> &floadings2;
-    // inverse functions
+    //! Inverse functions
     const Inverses &inverses;
+    //! Number of factors
+    const size_t &numfactors;
+    //! Degrees of freedom
+    const double &ndf;
+    //! starting simulation date
+    const Date &time0;
+    //! ending simulation date
+    const Date &timeT;
+    //! Antithetic method flag
+    const bool &antithetic;
+    //! Total number of segments
+    const size_t &numsegments;
+    //! Asset size (in bytes)
+    const size_t &assetsize;
+    //! Block size
+    const unsigned short &blocksize;
+    //! Lhs sample size
+    const unsigned short &lhs_size;
 
-    // thread identifier
+    //! Thread identifier
     int id;
-    // random number generator
+
+    //! Random number generator
     gsl_rng *rng;
-    // number of factors
-    size_t numfactors;
-    // degrees of freedom
-    double ndf;
-    // initial date
-    Date time0;
-    // date where risk is computed
-    Date timeT;
-    // antithetic method flag
-    bool antithetic;
-    // total number of segments
-    size_t numsegments;
-    // asset size
-    size_t assetsize;
-    // block size
-    unsigned short blocksize;
-    // asset loss values
-    std::vector<double> losses;
-    // factors values
-    std::vector<double> z;
-    // chi square factors
-    std::vector<double> s;
-    // multivariate values
-    std::vector<double> x;
-    // indexes
-    std::vector<short> indexes;
-
-    // lhs sample size
-    size_t lhs_size;
-    // lhs current trial
-    size_t lhs_pos;
-    // number of lhs samples
-    size_t lhs_num;
-    // lhs sample multivariate normal (factors)
-    std::vector<double> lhs_values_z;
-    // lhs sample chi square
-    std::vector<double> lhs_values_s;
-    // auxiliar vector
-    std::vector<std::pair<double,size_t> > lhs_aux;
-
-    // gaussian random values pool
+    //! Gaussian random values pool
     std::vector<double> rngpool;
-    // current position in rnorm pool
+    //! Current position in rngpool
     size_t rngpool_pos;
 
-    // elapsed time creating random numbers
+    //! Asset loss values
+    std::vector<double> losses;
+    //! Simulated factors
+    std::vector<double> z;
+    //! Simulated Chi-square values
+    std::vector<double> s;
+    //! Gaussian/T-Student values
+    std::vector<double> x;
+    //! Indexes
+    std::vector<short> indexes;
+
+    //! Lhs current trial
+    size_t lhs_pos;
+    //! Number of lhs samples
+    size_t lhs_num;
+    //! Lhs sample multivariate normal (factors)
+    std::vector<double> lhs_values_z;
+    //! Lhs sample chi square
+    std::vector<double> lhs_values_s;
+    //! Auxiliar vector
+    std::vector<std::pair<double,size_t> > lhs_aux;
+
+    //! Elapsed time creating random numbers
     Timer timer1;
-    // elapsed time simulating obligors & segmentations
+    //! Elapsed time simulating obligors & segmentations
     Timer timer2;
-    // elapsed time writing to disk
+    //! Elapsed time writing to disk
     Timer timer3;
 
   private:
 
-    // comparator used to obtain ranks
-    static bool pcomparator(const std::pair<double,size_t> &o1, const std::pair<double,size_t> &o2);
-    // simule latent variables
+    //! Comparator used to obtain ranks
+    static bool pcomparator(const std::pair<double,size_t> &, const std::pair<double,size_t> &);
+
+    //! Simule latent variables
     void simuleLatentVars();
-    // simule obligor
-    void simuleObligorLoss(const SimulatedObligor &obligor, Date, double *) const throw();
-    // chi-square random generation
+    //! Simule obligor
+    void simuleObligorLoss(const SimulatedObligor &, Date, double *) const throw();
+    //! Chi-square random generation
     void rchisq();
-    // factors random generation
+    //! Factors random generation
     void rmvnorm();
-    // returns a uniform gaussian variate
+    //! Returns a univariate gaussian from rngpool
     double rnorm();
-    // fills gaussian variates pool
+    //! Fills gaussian variates pool
     void fillGaussianPool();
-    // non-copyable class
+    //! Non-copyable class
     SimulationThread(const SimulationThread &);
-    // non-copyable class
+    //! Non-copyable class
     SimulationThread & operator=(const SimulationThread &);
 
   public:
 
-    // constructor
-    SimulationThread(int, MonteCarlo &, unsigned long seed, unsigned short);
-    // destructor
+    //! Constructor
+    SimulationThread(int, MonteCarlo &, unsigned long seed);
+    //! Destructor
     ~SimulationThread();
-    // thread main function
+    //! Thread main function
     void run();
-    // returns elapsed time creating random numbers
+    //! Returns elapsed time creating random numbers
     double getElapsedTime1();
-    // returns elapsed time simulating default times
+    //! Returns elapsed time simulating default times
     double getElapsedTime2();
-    // returns elapsed time writting to disk
+    //! Returns elapsed time writting to disk
     double getElapsedTime3();
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

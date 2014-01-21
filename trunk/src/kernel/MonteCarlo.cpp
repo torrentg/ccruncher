@@ -36,10 +36,10 @@
 using namespace std;
 using namespace ccruncher;
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), assets(NULL), chol(NULL), stop(NULL)
+/**************************************************************************//**
+ * @param[in] s Streambuf where the trace will be written.
+ */
+ccruncher::MonteCarlo::MonteCarlo(std::streambuf *s) : log(s), assets(NULL), chol(NULL), stop(NULL)
 {
   pthread_mutex_init(&mutex, NULL);
   maxseconds = 0;
@@ -61,18 +61,14 @@ ccruncher::MonteCarlo::MonteCarlo(streambuf *s) : log(s), assets(NULL), chol(NUL
   numsegments = 0;
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher::MonteCarlo::~MonteCarlo()
 {
   release();
   pthread_mutex_destroy(&mutex);
 }
 
-//===========================================================================
-// release
-//===========================================================================
+/**************************************************************************/
 void ccruncher::MonteCarlo::release()
 {
   // removing threads
@@ -88,6 +84,7 @@ void ccruncher::MonteCarlo::release()
   // deallocating assets
   if (assets != NULL)
   {
+    assert(assetsize >= sizeof(SimulatedAsset));
     for (size_t i=0; i<numassets; i++) {
       SimulatedAsset *p = reinterpret_cast<SimulatedAsset*>(assets+i*assetsize);
       p->free();
@@ -118,9 +115,10 @@ void ccruncher::MonteCarlo::release()
   floadings2.clear();
 }
 
-//===========================================================================
-// initialize
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] idata CCruncher input data.
+ * @throw Exception Error initializing object.
+ */
 void ccruncher::MonteCarlo::setData(IData &idata) throw(Exception)
 {
   if (numiterations != 0)
@@ -160,9 +158,13 @@ void ccruncher::MonteCarlo::setData(IData &idata) throw(Exception)
   }
 }
 
-//===========================================================================
-// initModel
-//===========================================================================
+/**************************************************************************//**
+ * @details This method constructs the inverse functions. If default
+ *          probabilities are not user-defined, it inferes these functions
+ *          from the transition matrix.
+ * @param[in] idata CCruncher input data.
+ * @throw Exception Error initializing object.
+ */
 void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
 {
   // setting logger header
@@ -259,9 +261,13 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
   log << indent(-1);
 }
 
-//===========================================================================
-// initObligors
-//===========================================================================
+/**************************************************************************//**
+ * @details Creates the list of simulated obligors. In this initialization
+ *          stage, the SimulatedObligor::ref contains a reference to
+ *          Obligor.
+ * @param[in] idata CCruncher input data.
+ * @throw Exception Error initializing object.
+ */
 void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
 {
   // doing assertions
@@ -316,9 +322,12 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
   log << indent(-1);
 }
 
-//===========================================================================
-// initAssets
-//===========================================================================
+/**************************************************************************//**
+ * @details Creates the list of simulated assets. This initialization stage
+ *          sets SimulatedObligor::ref to the simulated asset.
+ * @param[in] idata CCruncher input data.
+ * @throw Exception Error initializing object.
+ */
 void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
 {
   // setting logger header
@@ -360,6 +369,7 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
 
   // creating the simulated assets array
   assert(assets == NULL);
+  assert(idata.getSegmentations().size() >= 1);
   assetsize = sizeof(SimulatedAsset) + sizeof(unsigned short)*(idata.getSegmentations().size()-1);
   assets = new char[assetsize*numassets];
   memset(assets, 0, assetsize*numassets); // set pointers to NULL
@@ -408,6 +418,11 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   log << indent(-1);
 }
 
+/**************************************************************************//**
+ * @details Initializes output files.
+ * @param[in] idata CCruncher input data.
+ * @throw Exception Error initializing object.
+ */
 //===========================================================================
 // initAggregators
 //===========================================================================
@@ -448,9 +463,14 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   log << indent(-1);
 }
 
-//===========================================================================
-// execute
-//===========================================================================
+/**************************************************************************//**
+ * @details Starts the simulation procedure. If there is only 1 thread,
+ *          then uses the current thread (simplifies debug), otherwise
+ *          creates one simulation per thread.
+ * @param[in] numthreads Number of threads to use.
+ * @param[in] nhash Number of simulation per hash (0 = no hash trace).
+ * @param[in] stop_ Variable to stop simulation from outside.
+ */
 void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *stop_)
 {
   stop = stop_;
@@ -494,7 +514,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   threads.assign(numthreads, static_cast<SimulationThread*>(NULL));
   for(int i=0; i<numthreads; i++)
   {
-    threads[i] = new SimulationThread(i+1, *this, seed+i, blocksize);
+    threads[i] = new SimulationThread(i+1, *this, seed+i);
     if (numthreads == 1) {
       threads[i]->run();
     }
@@ -535,16 +555,26 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   if (nhash > 0) log << endl;
   log << "simulations realized" << split <<numiterations << endl;
   log << "elapsed time creating random numbers" << split << Timer::format(etime1/numthreads) << endl;
-  log << "elapsed time simulating obligors" << split << Timer::format(etime2/numthreads) << endl;
+  log << "elapsed time simulating losses" << split << Timer::format(etime2/numthreads) << endl;
   log << "elapsed time writing data to disk" << split << Timer::format(etime3/numthreads) << endl;
   log << "total simulation time" << split << timer << endl;
   log << indent(-2) << endl;
 }
 
-//===========================================================================
-// append a simulation result
-//===========================================================================
-bool ccruncher::MonteCarlo::append(int ithread, const vector<short> &vi, const double *losses) throw()
+/**************************************************************************//**
+ * @param[in] ithread Thread identifier.
+ * @param[in] vi Vector of indexes (info related to lhs & antithetic usage).
+ * @param[in] losses Simulated data. This is an array with the following
+ *            structure: X1, X2, X3, ..., Xk where Xi is an array containing
+ *            the data of the i-th simulation (k = blocksize). Xi has the
+ *            following structure: S1, S2, ..., Sm where Si are the segments
+ *            losses of the i-th segmentation (m=number of segmentations).
+ *            Finally, Si has the following structure: L1, L2, ..., Ln where
+ *            Li is the simulated loss of the i-th segment (n = number of
+ *            segments of the segmentation).
+ */
+bool ccruncher::MonteCarlo::append(int ithread, const std::vector<short> &vi,
+    const double *losses) throw()
 {
   assert(losses != NULL);
   assert(vi.size() == blocksize);
@@ -606,9 +636,13 @@ bool ccruncher::MonteCarlo::append(int ithread, const vector<short> &vi, const d
   return(more);
 }
 
-//===========================================================================
-// setFilePath
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] path Path to oputput directory.
+ * @param[in] mode Output file mode (a=append, w=overwrite, c=create).
+ * @param[in] indexes Create file indexes.csv containing info about simulation
+ *            procedure.
+ * @throw std::exception Error creating files.
+ */
 void ccruncher::MonteCarlo::setFilePath(const string &path, char mode, bool indexes) throw(std::exception)
 {
   fpath = path;
@@ -625,17 +659,17 @@ void ccruncher::MonteCarlo::setFilePath(const string &path, char mode, bool inde
   }
 }
 
-//===========================================================================
-// returns iterations done
-//===========================================================================
+/**************************************************************************//**
+ * @return Number of iterations done.
+ */
 int ccruncher::MonteCarlo::getNumIterations() const
 {
   return numiterations;
 }
 
-//===========================================================================
-// returns maximum number of iterations
-//===========================================================================
+/**************************************************************************//**
+ * @return Maximum number of iterations to do/done.
+ */
 int ccruncher::MonteCarlo::getMaxIterations() const
 {
   return maxiterations;

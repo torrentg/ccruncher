@@ -20,17 +20,16 @@
 //
 //===========================================================================
 
-#include "utils/config.h"
-
 #ifndef _WIN32
   #include <sys/resource.h>
 #endif
 
-#include <getopt.h>
 #include <cerrno>
 #include <iostream>
 #include <csignal>
 #include <map>
+#include <cassert>
+#include <getopt.h>
 #include <gsl/gsl_errno.h>
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/IData.hpp"
@@ -40,23 +39,19 @@
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
 #include "utils/Timer.hpp"
-#include <cassert>
-
-//---------------------------------------------------------------------------
+#include "utils/config.h"
 
 using namespace std;
 using namespace ccruncher;
 
-//---------------------------------------------------------------------------
-
+// functions declaration
 void help();
 void info();
 void version();
 void setnice(int) throw(Exception);
 void run() throw(Exception);
 
-//---------------------------------------------------------------------------
-
+// shared variables
 string sfilename = "";
 string spath = "";
 char cmode = 'c';
@@ -67,17 +62,20 @@ map<string,string> defines;
 bool indexes = false;
 bool stop = false;
 
-//===========================================================================
-// catchsignal
-//===========================================================================
+/**************************************************************************//**
+ * @details Default action when a signal is trapped is to stop current
+ *          parsing/simulation.
+ */
 void catchsignal(int)
 {
   stop = true;
 } 
 
-//===========================================================================
-// gsl error handler
-//===========================================================================
+/**************************************************************************//**
+ * @brief Error handler for the GSL library.
+ * @details Throws a ccruncher Exception.
+ * @see http://www.gnu.org/software/gsl/
+ */
 void gsl_handler(const char * reason, const char *file, int line, int gsl_errno)
 {
   string msg = reason;
@@ -88,9 +86,9 @@ void gsl_handler(const char * reason, const char *file, int line, int gsl_errno)
   throw Exception(gsl_exception, "gsl exception");
 }
 
-//===========================================================================
-// main
-//===========================================================================
+/**************************************************************************//**
+ * @brief ccruncher-cmd main procedure.
+ */
 int main(int argc, char *argv[])
 {
   // short options
@@ -299,9 +297,10 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-//===========================================================================
-// run
-//===========================================================================
+/**************************************************************************//**
+ * @brief Executes parsing and simulation.
+ * @throw Exception Error parsing or simulating.
+ */
 void run() throw(Exception)
 {
   Timer timer(true);
@@ -354,9 +353,12 @@ void run() throw(Exception)
   }
 }
 
-//===========================================================================
-// setnice
-//===========================================================================
+/**************************************************************************//**
+ * @brief Modifies program scheduling priority.
+ * @see nice unix command
+ * @param[in] niceval New priority.
+ * @throw Exception Invalid nice value.
+ */
 void setnice(int niceval) throw(Exception)
 {
 #if !defined(_WIN32)
@@ -380,12 +382,12 @@ void setnice(int niceval) throw(Exception)
 #endif
 }
 
-//===========================================================================
-// help
-// follows POSIX guidelines as described in:
-// http://www.gnu.org/prep/standards/standards.html#Command_002dLine-Interfaces
-// you can create man pages using help2man (http://www.gnu.org/software/help2man/)
-//===========================================================================
+/**************************************************************************//**
+ * @brief Displays program help.
+ * @details Follows POSIX guidelines. You can create man pages using help2man.
+ * @see http://www.gnu.org/prep/standards/standards.html#Command_002dLine-Interfaces
+ * @see http://www.gnu.org/software/help2man/
+ */
 void help()
 {
   cout <<
@@ -427,12 +429,12 @@ void help()
   << endl;
 }
 
-//===========================================================================
-// version
-// follows POSIX guidelines as described in:
-// http://www.gnu.org/prep/standards/standards.html#Command_002dLine-Interfaces
-// you can create man pages using help2man (http://www.gnu.org/software/help2man/)
-//===========================================================================
+/**************************************************************************//**
+ * @brief Displays program version.
+ * @details Follows POSIX guidelines. You can create man pages using help2man.
+ * @see http://www.gnu.org/prep/standards/standards.html#Command_002dLine-Interfaces
+ * @see http://www.gnu.org/software/help2man/
+ */
 void version()
 {
   cout <<
@@ -445,9 +447,9 @@ void version()
   << endl;
 }
 
-//===========================================================================
-// info
-//===========================================================================
+/**************************************************************************//**
+ * @brief Displays program info.
+ */
 void info()
 {
   cout << "ccruncher-cmd " << PACKAGE_VERSION << " (" << SVN_VERSION << ")" << endl;
@@ -456,8 +458,8 @@ void info()
   cout << "build author: " << BUILD_USER << endl;
   cout << "build options: " << Utils::getCompilationOptions() << endl;
 #if !defined(_WIN32)
-  cout << "nice value: default=" << getpriority(PRIO_PROCESS,0) << ", min=" << PRIO_MIN << ", max=" << PRIO_MAX << endl;
+  cout << "nice value: default=" << getpriority(PRIO_PROCESS,0) << 
+          ", min=" << PRIO_MIN << ", max=" << PRIO_MAX << endl;
 #endif
   cout << "num cores: " << Utils::getNumCores() << endl;
 }
-

@@ -22,12 +22,11 @@
 
 #include "utils/MiniCppUnit.hxx"
 
-//===========================================================================
-// see MiniCppUnit project
-// http://sourceforge.net/projects/minicppunit/
-//===========================================================================
+/**************************************************************************//**
+ * @brief ccruncher-test main function.
+ * @see http://sourceforge.net/projects/minicppunit/
+ */
 int main(int argc, char *argv[])
 {
   return TestFixtureFactory::theInstance().runTests(argc, argv) ? 0 : -1;
 }
-
