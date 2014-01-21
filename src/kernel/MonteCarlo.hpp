@@ -23,9 +23,6 @@
 #ifndef _MonteCarlo_
 #define _MonteCarlo_
 
-//---------------------------------------------------------------------------
-
-#include "utils/config.h"
 #include <vector>
 #include <fstream>
 #include <streambuf>
@@ -40,136 +37,139 @@
 #include "utils/Logger.hpp"
 #include "utils/Exception.hpp"
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher {
-
-//---------------------------------------------------------------------------
 
 // forward declaration
 class SimulationThread;
 
-//---------------------------------------------------------------------------
-
+/**************************************************************************//**
+ * @brief Monte Carlo simulation.
+ *
+ * @details This object manages the Monte Carlo simulation. Efective
+ *          simulation steps are done in the SimulationThread objects.
+ *          IData object used to initialize this class can be removed just
+ *          after this class initialization.
+ *          Caution: assets is the list of simulated asset. The size of these
+ *          objects depends on the number of segmentations and its size is
+ *          fixed at execution time. We do it this way for performance
+ *          reasons (to avoid a dereference).
+ *
+ * @see SimulationThread
+ */
 class MonteCarlo
 {
 
   private:
 
-    // logger
+    //! Logger
     Logger log;
-    // list of simulated obligors
+    //! List of simulated obligors
     std::vector<SimulatedObligor> obligors;
-    // list of simulated assets
+    //! List of simulated assets
     char *assets;
-    // simulated asset size
+    //! Simulated asset size (in bytes)
     size_t assetsize;
-    // number of simulated assets
+    //! Number of simulated assets
     size_t numassets;
-    // number of segments for each segmentation
+    //! Number of segments for each segmentation
     std::vector<unsigned short> numSegmentsBySegmentation;
-    // total number of segments
+    //! Total number of segments (included in all segmentations)
     size_t numsegments;
-    // list of aggregators
+    //! List of aggregators
     std::vector<Aggregator *> aggregators;
-    // maximum number of iterations
+    //! Maximum number of iterations
     int maxiterations;
-    // maximum execution time
+    //! Maximum execution time
     int maxseconds;
-    // initial date
+    //! Initial date
     Date time0;
-    // date where risk is computed
+    //! Ending date
     Date timeT;
-    // degrees of freedom
+    //! Degrees of freedom
     double ndf;
-    // inverse functions
+    //! Inverse functions
     Inverses inverses;
-    // factors cholesky matrix
+    //! Cholesky matrix (factor correlations)
     gsl_matrix *chol;
-    // factor loadings (w_i)
+    //! Factor loadings (w_i)
     std::vector<double> floadings1;
-    // factor loadings (sqrt(1-w_i^2))
+    //! Factor loadings (sqrt(1-w_i^2))
     std::vector<double> floadings2;
-    // antithetic method flag
+    //! Antithetic method flag
     bool antithetic;
-    // latin hypercube sample size
+    //! Latin hypercube sample size
     unsigned short lhs_size;
-    // block size
+    //! Block size
     unsigned short blocksize;
-    // rng seed
+    //! RNG seed
     unsigned long seed;
-    // hash (0=non show hashes) (default=0)
+    //! Hash (0=non show hashes) (default=0)
     size_t hash;
-    // directory for output files
+    //! Directory for output files
     std::string fpath;
-    // output file mode (a=append, w=overwrite, c=create)
+    //! Output file mode (a=append, w=overwrite, c=create)
     char fmode;
-    // time account
+    //! Time account
     Timer timer;
-    // simulation threads
+    //! Simulation threads
     std::vector<SimulationThread*> threads;
-    // number of iterations done
+    //! Number of iterations done
     int numiterations;
-    // number of finished threads
+    //! Number of finished threads
     int nfthreads;
-    // ensures data consistence
+    //! Ensures data consistence
     pthread_mutex_t mutex;
-    // stop flag
+    //! Stop flag
     bool *stop;
-    // indexes.csv file
+    //! File indexes.csv
     std::ofstream findexes;
 
   private:
   
-    // deallocate memory
+    //! Deallocate memory
     void release();
-    // initialize params
+    //! Initialize params
     void initParams(IData &) throw(Exception);
-    // initialize obligors
+    //! Initialize obligors
     void initObligors(IData &) throw(Exception);
-    // initialize assets
+    //! Initialize assets
     void initAssets(IData &) throw(Exception);
-    // initialize survivals functions
+    //! Initialize simulation parameters
     void initModel(IData &) throw(Exception);
-    // initialize aggregators
+    //! Initialize aggregators
     void initAggregators(IData &) throw(Exception);
-    // append simulation result
+    //! Append simulation result
     bool append(int ithread, const std::vector<short> &, const double *) throw();
-    // non-copyable class
+    //! Non-copyable class
     MonteCarlo(const MonteCarlo &);
-    // non-copyable class
+    //! Non-copyable class
     MonteCarlo & operator=(const MonteCarlo &);
 
   public:
 
-    // constructor
+    //! Constructor
     MonteCarlo(std::streambuf *s=NULL);
-    // destructor
+    //! Destructor
     ~MonteCarlo();
-    // set path for output files
+    //! Set path for output files
     void setFilePath(const std::string &path, char mode, bool indexes=false) throw(std::exception);
-    // initiliaze this class
+    //! Initiliaze this class
     void setData(IData &) throw(Exception);
-    // execute Monte Carlo
+    //! Execute Monte Carlo
     void run(unsigned char numthreads, size_t nhash, bool *stop_=NULL);
-    // returns iterations done
+    //! Returns number of iterations done
     int getNumIterations() const;
-    // returns iterations done
+    //! Returns maximum number of iterations to do
     int getMaxIterations() const;
 
   public:
   
-    // friend class
+    //! Friend class
     friend class SimulationThread;
 
 };
 
-//---------------------------------------------------------------------------
-
-}
-
-//---------------------------------------------------------------------------
+} // namespace
 
 #endif
 
-//---------------------------------------------------------------------------

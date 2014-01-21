@@ -329,7 +329,7 @@ void ccruncher::Asset::clearData()
 }
 
 /**************************************************************************//**
- * @details Currently this method is unused in the simulation. This task
+ * @deprecated Currently this method is unused in the simulation. This task
  *          is done in the SimulationThread::simuleObligorLoss(). The
  *          method is preserved to test the procedure.
  * @return The DateValue at given date:
