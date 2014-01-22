@@ -4,7 +4,6 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * Documenting code using Doxygen
   * Add Interest,ratings,factors,segmentations,date1,date2 in ExpatUserData
     and simplify objects Obligor,Asset,Portfolio.
   * Update Date class to new Todd's version (v2.0)
@@ -15,6 +14,7 @@ Current works
   * how ccruncher-gui opens a file > 1MB?.
   * 'ccruncher-gui file.xml' -> click Monte Carlo button -> 
     opens a new simulation window !!!
+  * update ccruncher output in html doc.
 
 Future works
 -------------------
