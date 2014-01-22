@@ -22,26 +22,29 @@
 
 #include "QStreamBuf.hpp"
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] parent Object parent.
+ */
 ccruncher_gui::QStreamBuf::QStreamBuf(QObject *parent) : QObject(parent), std::basic_streambuf<char>()
 {
   // nothing to do
 }
 
-//===========================================================================
-// inherited from streambuf
-//===========================================================================
+/**************************************************************************//**
+ * @details Inherited from streambuf.
+ * @param[in] v Character to be put.
+ */
 int ccruncher_gui::QStreamBuf::overflow(int v)
 {
   emit print(QString(QChar(v)));
   return v;
 }
 
-//===========================================================================
-// inherited from streambuf
-//===========================================================================
+/**************************************************************************//**
+ * @details Inherited from streambuf.
+ * @param[in] p Pointer to the sequence of characters to be written.
+ * @param[in] n Number of characters to write.
+ */
 std::streamsize ccruncher_gui::QStreamBuf::xsputn(const char *p, std::streamsize n)
 {
   emit print(QString::fromUtf8(p,n));

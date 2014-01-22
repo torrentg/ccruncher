@@ -43,69 +43,75 @@ namespace Ui {
 class MainWindow;
 }
 
+/**************************************************************************//**
+ * @brief Main window in the gui application.
+ *
+ * @details CCruncher options are indicated with a properties map.
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
   private:
 
-    // interface widget
+    //! Interface widget
     Ui::MainWindow *ui;
-    // mdi area
+    //! Mdi area
     QMdiArea *mdiArea;
-    // main tool bar
+    //! Main tool bar
     QToolBar *mainToolBar;
-    // child tool bar
+    //! Child tool bar
     QToolBar *childToolBar;
-    // dedfault properties
+    //! Default properties
     QMap<QString,QVariant> properties;
-    // network manager
+    //! Network manager
     QNetworkAccessManager network;
 
   private:
 
-    // find mdi child
+    //! Find mdi child
     QMdiSubWindow *findMdiChild(const QString &filename);
 
   protected:
 
-    // close event
+    //! Close event
     void closeEvent(QCloseEvent *event);
-     // this event is called when the mouse enters the widgets area during a drag/drop operation
+     //! This event is called when the mouse enters the widgets area during a drag/drop operation
     void dragEnterEvent(QDragEnterEvent *event);
-    // this event is called when the mouse moves inside the widgets area during a drag/drop operation
+    //! This event is called when the mouse moves inside the widgets area during a drag/drop operation
     void dragMoveEvent(QDragMoveEvent *event);
-    // this event is called when the mouse leaves the widgets area during a drag/drop operation
+    //! This event is called when the mouse leaves the widgets area during a drag/drop operation
     void dragLeaveEvent(QDragLeaveEvent *event);
-    // this event is called when the drop operation is initiated at the widget
+    //! This event is called when the drop operation is initiated at the widget
     void dropEvent(QDropEvent *event);
 
   public:
 
-    // constructor
+    //! Constructor
     explicit MainWindow(const QMap<QString, QVariant> &properties = QMap<QString,QVariant>(), QWidget *parent = 0);
-    // destructor
+    //! Destructor
     ~MainWindow();
-    // return properties
+    //! Return properties
     const QMap<QString, QVariant> &getProperties() const;
 
   public slots:
 
-    // about dialog
+    //! Shows about dialog
     void about();
-    // select file
+    //! Select a file
     void selectFile();
-    // open file
+    //! Open a file
     void openFile(const QUrl &url);
-    // update tool bars
+    //! Update tool bars
     void updateToolBars(QMdiSubWindow *window);
-    // process http request
+    //! Process http request
     void processHttpRequest(QNetworkReply *);
-    // post a message in the status bar
+    //! Post a message in the status bar
     void setStatusMsg(const QString &msg="");
 
 };
 
-}
+} // namespace
 
 #endif
+

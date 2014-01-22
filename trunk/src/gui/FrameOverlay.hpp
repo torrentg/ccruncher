@@ -30,17 +30,20 @@
 
 namespace ccruncher_gui {
 
+/**************************************************************************//**
+ * @brief Invisible layer over a widget used to overlaps additional info.
+ */
 class FrameOverlay : public QFrame
 {
 
   private:
 
-    // layers
+    //! Layers
     std::vector<QWidget*> layers;
 
   protected:
 
-    // resize event
+    //! Resize event
     void resizeEvent(QResizeEvent *event)
     {
       for(size_t i=0; i<layers.size(); i++) {
@@ -51,14 +54,14 @@ class FrameOverlay : public QFrame
 
   public:
 
-    // constructor
+    //! Constructor
     explicit FrameOverlay(QWidget *parent = 0) : QFrame(parent) {}
-    // add a layer
+    //! Add a layer
     void addLayer(QWidget *w) { layers.push_back(w); }
 
 };
 
-}
+} // namespace
 
 #endif
 

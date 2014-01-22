@@ -46,100 +46,108 @@ namespace Ui {
 class SimulationWidget;
 }
 
+/**************************************************************************//**
+ * @brief Monte Carlo simulation widget.
+ */
 class SimulationWidget : public MdiChildWidget
 {
     Q_OBJECT
 
   private:
 
-    // interface widget
+    //! Interface widget
     Ui::SimulationWidget *ui;
-    // internal timer
+    //! Internal timer
     QTimer timer;
-    // task thread
+    //! Task thread
     SimulationTask task;
-    // defines
+    //! Defines
     std::map<std::string,std::string> defines;
-    // stdout redirect
+    //! Stdout redirect
     QStreamBuf qstream;
-    // progress widget
+    //! Progress widget
     ProgressWidget *progress;
-    // mutex
+    //! Mutex
     QMutex mutex;
-    // log line
+    //! Log line
     QString logline;
-    // log cursor
+    //! Log cursor
     QTextCursor logcursor;
-    // toolbar
+    //! Toolbar
     QToolBar *toolbar;
-    // actions
+    //! Action edit file
     QAction *actionEdit;
+    //! Action manage defines
     QAction *actionDefines;
+    //! Action run simulation
     QAction *actionRun;
+    //! Action stop analysis/simulation
     QAction *actionStop;
+    //! Action analyze data
     QAction *actionAnal;
-    // output directory
+    //! Output directory
     QString odir;
-    // log file output
+    //! Log file output
     std::ofstream fout;
-    // default properties
+    //! User defined properties
     QMap<QString,QVariant> properties;
 
   private:
 
-    // set input file
+    //! Set input file
     void setFile();
-    // fill widget defines
+    //! Fill widget defines
     void setDefines();
-    // update widgets status
+    //! Update widgets status
     void updateControls();
-    // clear log area
+    //! Clear log area
     void clearLog();
-    // linkify a token
+    //! Linkify a token
     void linkify(QString &);
 
   protected:
 
-    // override close
+    //! Override close
     void closeEvent(QCloseEvent *event);
 
   public:
 
-    // constructor
+    //! Constructor
     explicit SimulationWidget(const QString &filename, QWidget *parent=0);
-    // destructor
+    //! Destructor
     ~SimulationWidget();
-    // virtual method implementation
+    //! Virtual method implementation
     QToolBar* getToolBar() { return toolbar; }
 
   public slots:
 
-    // edit current file
+    //! Edit current file
     void editFile();
-    // selects output directory
+    //! Selects output directory
     void selectDir();
-    // set output directory
+    //! Set output directory
     void setDir();
-    // submit task
+    //! Submit task
     void submit();
-    // print message to log
+    //! Print message to log
     void log(const QString &);
-    // draw widget
+    //! Draw widget
     void draw();
-    // defines dialog
+    //! Defines dialog
     void showDefines();
-    // set status
+    //! Set status
     void setStatus(int);
-    // open csv files
+    //! Open csv files
     void openData();
 
   signals:
 
-    // anchor clicked
+    //! Anchor clicked
     void anchorClicked(const QUrl &);
 
 };
 
-}
+} // namespace
 
 #endif
+

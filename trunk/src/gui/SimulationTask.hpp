@@ -36,93 +36,99 @@ namespace ccruncher {
 
 namespace ccruncher_gui {
 
+/**************************************************************************//**
+ * @brief Thread that manages the Monte Carlo simulation.
+ */
 class SimulationTask : public QThread
 {
     Q_OBJECT
 
   public:
 
-    // status types
+    //! Status types
     enum status
     {
-      reading=1,
-      simulating=2,
-      stopped=3,
-      failed=4,
-      finished=5
+      reading=1,    //!< Reading input file
+      simulating=2, //!< Doing Monte Carlo
+      stopped=3,    //!< Stopped by user
+      failed=4,     //!< Execution failed
+      finished=5    //!< Execution finished
     };
 
   private:
 
-    // logger
-    ccruncher::Logger log;
-    // input filename
-    std::string ifile;
-    // output directory
-    std::string odir;
-    // defines
-    std::map<std::string,std::string> defines;
-    // output file creation mode
-    char fmode;
-    // indexes creation flag
-    bool indexes;
-    // number of threads
-    unsigned char ithreads;
-    // data
-    ccruncher::IData *idata;
-    // simulator
-    ccruncher::MonteCarlo *montecarlo;
-    // status
-    volatile status status_;
-    // stop flag
-    bool stop_;
-    // number of running simulations
+    //! Total number of running simulations
     static size_t num_running_sims;
+
+    //! Logger
+    ccruncher::Logger log;
+    //! Input filename
+    std::string ifile;
+    //! Output directory
+    std::string odir;
+    //! Defines
+    std::map<std::string,std::string> defines;
+    //! Output file creation mode
+    char fmode;
+    //! Indexes creation flag
+    bool indexes;
+    //! Number of threads
+    unsigned char ithreads;
+    //! Input data
+    ccruncher::IData *idata;
+    //! Simulator
+    ccruncher::MonteCarlo *montecarlo;
+    //! Status
+    volatile status status_;
+    //! Stop variable
+    bool stop_;
 
   private:
 
-    // set status
+    //! Set status
     void setStatus(status);
-    // delete montecarlo object
+    //! Delete montecarlo object
     void deletemc();
 
   public:
 
-    // constructor
+    //! Constructor
     SimulationTask(std::streambuf *s=NULL);
-    // destructor
+    //! Destructor
     ~SimulationTask();
-    // set streambuf
+    //! Set streambuf
     void setStreamBuf(std::streambuf *);
-    // set data info
-    void setData(const std::string &, const std::map<std::string,std::string> &, const std::string &, unsigned char, bool );
-    // task
+    //! Set data info
+    void setData(const std::string &, const std::map<std::string,std::string> &,
+                 const std::string &, unsigned char, bool );
+    //! Thread task
     void run();
-    // stop current execution
+    //! Stop current execution
     void stop();
-    // return status
+    //! Return status
     status getStatus() const;
-    // return idata
+    //! Return idata
     ccruncher::IData* getIData();
-    // return MonteCarlo
+    //! Return MonteCarlo
     ccruncher::MonteCarlo* getMonteCarlo();
-    // free memory (1=idata, 2=montecarlo, other=all)
+    //! Free memory (1=idata, 2=montecarlo, other=all)
     void free(int obj=0);
-    // return logger
+    //! Return logger
     ccruncher::Logger& getLogger();
-    // number of running simulations
-    static size_t getNumRunningSims();
-    // check conflicts
+    //! Check conflicts
     bool checkConflicts();
+
+    //! Number of running simulations
+    static size_t getNumRunningSims();
 
   signals:
 
-    // status updated
+    //! Status updated
     void statusChanged(int);
 
 };
 
-}
+} // namespace
 
 #endif
 

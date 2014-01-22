@@ -23,9 +23,9 @@
 #include <QGraphicsOpacityEffect>
 #include "gui/ProgressWidget.hpp"
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] parent Widget parent.
+ */
 ccruncher_gui::ProgressWidget::ProgressWidget(QWidget *parent) :
     QWidget(parent), ui(new Ui::ProgressWidget)
 {
@@ -41,17 +41,16 @@ ccruncher_gui::ProgressWidget::ProgressWidget(QWidget *parent) :
   connect(&timer, SIGNAL(timeout()), this, SLOT(changeOpacity()));
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher_gui::ProgressWidget::~ProgressWidget()
 {
   delete ui;
 }
 
-//===========================================================================
-// fadein (0->1)
-//===========================================================================
+/**************************************************************************//**
+ * @details From non-visible to visible.
+ * @param[in] millis Transition duration in millis.
+ */
 void ccruncher_gui::ProgressWidget::fadein(size_t millis)
 {
   mutex.lock();
@@ -83,9 +82,10 @@ void ccruncher_gui::ProgressWidget::fadein(size_t millis)
   mutex.unlock();
 }
 
-//===========================================================================
-// fadeout (1->0)
-//===========================================================================
+/**************************************************************************//**
+ * @details From visible to non-visible.
+ * @param[in] millis Transition duration in millis.
+ */
 void ccruncher_gui::ProgressWidget::fadeout(size_t millis)
 {
   mutex.lock();
@@ -115,9 +115,7 @@ void ccruncher_gui::ProgressWidget::fadeout(size_t millis)
   mutex.unlock();
 }
 
-//===========================================================================
-// changeOpacity
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::ProgressWidget::changeOpacity()
 {
   mutex.lock();
@@ -137,9 +135,9 @@ void ccruncher_gui::ProgressWidget::changeOpacity()
   mutex.unlock();
 }
 
-//===========================================================================
-// setOpacity
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] val New opacity value (0=non-visible, 1=full-visible).
+ */
 void ccruncher_gui::ProgressWidget::setOpacity(double val)
 {
   opacity = val;

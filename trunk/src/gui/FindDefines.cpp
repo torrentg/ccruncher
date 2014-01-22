@@ -27,10 +27,10 @@
 using namespace std;
 using namespace ccruncher;
 
-//===========================================================================
-// constructor
-//===========================================================================
-ccruncher_gui::FindDefines::FindDefines(const string &filename)
+/**************************************************************************//**
+ * @param[in] filename Input file.
+ */
+ccruncher_gui::FindDefines::FindDefines(const std::string &filename)
 {
   gzFile file = NULL;
 
@@ -48,7 +48,8 @@ ccruncher_gui::FindDefines::FindDefines(const string &filename)
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] name Element name.
+ * @param[in] eu Xml parsing data.
+ * @param[in] name_ Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
@@ -82,7 +83,6 @@ void ccruncher_gui::FindDefines::epstart(ExpatUserData &eu, const char *name_, c
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name Element name.
  */
 void ccruncher_gui::FindDefines::epend(ExpatUserData &, const char *)
 {
@@ -97,9 +97,9 @@ void ccruncher_gui::FindDefines::epdata(ExpatUserData &, const char *, const cha
   // nothing to do
 }
 
-//===========================================================================
-// getDefines
-//===========================================================================
+/**************************************************************************//**
+ * @return List of defines.
+ */
 const map<string,string>& ccruncher_gui::FindDefines::getDefines() const
 {
   return defines;

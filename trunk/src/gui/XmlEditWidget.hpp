@@ -38,66 +38,72 @@ namespace Ui {
 class XmlEditWidget;
 }
 
+/**************************************************************************//**
+ * @brief XML editor widget.
+ */
 class XmlEditWidget : public MdiChildWidget
 {
     Q_OBJECT
 
   private:
 
-    // interface
+    //! Interface
     Ui::XmlEditWidget *ui;
-    // highlisghter
+    //! Highlighter
     XmlHighlighter *highlighter;
-    // filename
+    //! Filename
     QString filename;
-    // toolbar
+    //! Toolbar
     QToolBar *toolbar;
-    // actions
+    //! Action save
     QAction* actionSave;
+    //! Action undo
     QAction *actionUndo;
+    //! Action reload
     QAction *actionReload;
+    //! Action run
     QAction *actionRun;
 
   private:
 
-    // set filename
+    //! Set filename
     void setCurrentFile(const QString &fileName);
-    // returns xml encoding
+    //! Returns xml encoding
     QString getEncoding(const QString &txt) const;
 
   protected:
 
-    // close event
+    //! Close event
     void closeEvent(QCloseEvent *event);
 
   public:
 
-    // constructor
+    //! Constructor
     explicit XmlEditWidget(const QString &filename, QWidget *parent=0);
-    // destructor
+    //! Destructor
     ~XmlEditWidget();
-    // virtual method implementation
+    //! Virtual method implementation
     QToolBar* getToolBar() { return toolbar; }
 
   public slots:
 
-    // set modified flag
+    //! Set modified flag
     void documentWasModified();
-    // load file
+    //! Load file
     bool load(const QString &fileName=QString());
-    // save file
+    //! Save file
     bool save(const QString &fileName=QString());
-    // simule current file
+    //! Simule current file
     void runFile();
 
   signals:
 
-    // anchor clicked
+    //! Anchor clicked
     void anchorClicked(const QUrl &);
 
 };
 
-}
+} // namespace
 
 #endif
 

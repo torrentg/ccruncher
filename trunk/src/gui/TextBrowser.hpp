@@ -27,23 +27,29 @@
 
 namespace ccruncher_gui {
 
-// referenced in SimulationWidget.ui
+/**************************************************************************//**
+ * @brief CCruncher trace widget.
+ *
+ * @details Referenced in SimulationWidget.ui.
+ *          Overrides setSource() method to avoid unwanted behavior when
+ *          clicking in links.
+ */
 class TextBrowser : public QTextBrowser
 {
 
   protected:
 
-    // overrided method
+    //! Method overrided
     void setSource(const QUrl &) {}
 
   public:
 
-    // constructor
+    //! Constructor
     TextBrowser(QWidget *parent=0) : QTextBrowser(parent) {}
 
 };
 
-}
+} // namespace
 
 #endif
 

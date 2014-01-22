@@ -20,6 +20,7 @@
 //
 //===========================================================================
 
+#include <cassert>
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
@@ -27,13 +28,13 @@
 #include "gui/XmlEditWidget.hpp"
 #include "utils/Exception.hpp"
 #include "ui_XmlEditWidget.h"
-#include <cassert>
 
 using namespace ccruncher;
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] f Input filename.
+ * @param[in] parent Widget parent.
+ */
 ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
     MdiChildWidget(parent), ui(new Ui::XmlEditWidget), highlighter(NULL),
     toolbar(NULL)
@@ -81,9 +82,7 @@ ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
   highlighter->setDocument(ui->editor->document());
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher_gui::XmlEditWidget::~XmlEditWidget()
 {
   if (toolbar != NULL) delete toolbar;
@@ -91,9 +90,7 @@ ccruncher_gui::XmlEditWidget::~XmlEditWidget()
   delete ui;
 }
 
-//===========================================================================
-// documentWasModified
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::XmlEditWidget::documentWasModified()
 {
   setWindowModified(ui->editor->document()->isModified());
@@ -101,9 +98,10 @@ void ccruncher_gui::XmlEditWidget::documentWasModified()
   actionUndo->setEnabled(ui->editor->document()->availableUndoSteps()>0);
 }
 
-//===========================================================================
-// setCurrentFile
-//===========================================================================
+/**************************************************************************//**
+ * @details Update info related to filename.
+ * @param[in] fileName Input filename.
+ */
 void ccruncher_gui::XmlEditWidget::setCurrentFile(const QString &fileName)
 {
   filename = QFileInfo(fileName).canonicalFilePath();
@@ -115,9 +113,10 @@ void ccruncher_gui::XmlEditWidget::setCurrentFile(const QString &fileName)
   setWindowTitle(name + " [*]");
 }
 
-//===========================================================================
-// load file
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] str Input filename.
+ * @return true = file loaded, false = otherwise.
+ */
 bool ccruncher_gui::XmlEditWidget::load(const QString &str)
 {
   QString fileName = str;
@@ -188,9 +187,10 @@ bool ccruncher_gui::XmlEditWidget::load(const QString &str)
   return true;
 }
 
-//===========================================================================
-// save current content to file
-//===========================================================================
+/**************************************************************************//**
+ * @details Save current content to file.
+ * @param[in] str Filename.
+ */
 bool ccruncher_gui::XmlEditWidget::save(const QString &str)
 {
   QString fileName = str;
@@ -222,9 +222,9 @@ bool ccruncher_gui::XmlEditWidget::save(const QString &str)
   return true;
 }
 
-//===========================================================================
-// close
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] event Event info.
+ */
 void ccruncher_gui::XmlEditWidget::closeEvent(QCloseEvent *event)
 {
   if (ui->editor->document()->isModified())
@@ -254,9 +254,9 @@ void ccruncher_gui::XmlEditWidget::closeEvent(QCloseEvent *event)
   }
 }
 
-//===========================================================================
-// run current file
-//===========================================================================
+/**************************************************************************//**
+ * @details Switch to Execute dialog.
+ */
 void ccruncher_gui::XmlEditWidget::runFile()
 {
   QUrl url = QUrl::fromLocalFile(filename);
@@ -265,9 +265,11 @@ void ccruncher_gui::XmlEditWidget::runFile()
   emit anchorClicked(url);
 }
 
-//===========================================================================
-// getEncoding
-//===========================================================================
+/**************************************************************************//**
+ * @details Returns encoding set in the XML.
+ * @param[in] txt XML content.
+ * @return XML encoding (default = UTF-8).
+ */
 QString ccruncher_gui::XmlEditWidget::getEncoding(const QString &txt) const
 {
   QRegExp regexp("encoding\\s*=\\s*[\"']([^\"']+)[\"']");

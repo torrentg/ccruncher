@@ -30,12 +30,15 @@
 
 namespace ccruncher_gui {
 
+/**************************************************************************//**
+ * @brief Retrieve the defines from a CCruncher input file.
+ */
 class FindDefines : public ccruncher::ExpatHandlers
 {
 
   private:
 
-    // defines found
+    //! List of defines
     std::map<std::string,std::string> defines;
 
   protected:
@@ -49,14 +52,14 @@ class FindDefines : public ccruncher::ExpatHandlers
 
   public:
 
-    // constructor
+    //! Constructor
     FindDefines(const std::string &);
-    // return defines
+    //! Return defines
     const std::map<std::string,std::string> &getDefines() const;
 
 };
 
-}
+} // namespace
 
 #endif
 

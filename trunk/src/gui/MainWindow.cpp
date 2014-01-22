@@ -35,9 +35,10 @@
 
 using namespace std;
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] map List of CCruncher options defined by user (eg. num threads).
+ * @param[in] parent Widget parent.
+ */
 ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidget *parent) : QMainWindow(parent),
   ui(new Ui::MainWindow), mainToolBar(NULL), childToolBar(NULL), properties(map),
   network(this)
@@ -76,18 +77,16 @@ ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidge
   statusBar()->showMessage(tr("Ready"));
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher_gui::MainWindow::~MainWindow()
 {
   delete ui;
   delete mdiArea;
 }
 
-//===========================================================================
-// close event
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] event Event info.
+ */
 void ccruncher_gui::MainWindow::closeEvent(QCloseEvent *event)
 {
   mdiArea->closeAllSubWindows();
@@ -99,24 +98,36 @@ void ccruncher_gui::MainWindow::closeEvent(QCloseEvent *event)
   }
 }
 
-//===========================================================================
-// drag-and-drop event
-// see http://qt-project.org/wiki/Drag_and_Drop_of_files
-//===========================================================================
+/**************************************************************************//**
+ * @see http://qt-project.org/wiki/Drag_and_Drop_of_files
+ * @param[in] event Event info.
+ */
 void ccruncher_gui::MainWindow::dragEnterEvent(QDragEnterEvent* event) {
   // if some actions should not be usable, like move, this code must be adopted
   event->acceptProposedAction();
 }
 
+/**************************************************************************//**
+ * @see http://qt-project.org/wiki/Drag_and_Drop_of_files
+ * @param[in] event Event info.
+ */
 void ccruncher_gui::MainWindow::dragMoveEvent(QDragMoveEvent* event) {
   // if some actions should not be usable, like move, this code must be adopted
   event->acceptProposedAction();
 }
 
+/**************************************************************************//**
+ * @see http://qt-project.org/wiki/Drag_and_Drop_of_files
+ * @param[in] event Event info.
+ */
 void ccruncher_gui::MainWindow::dragLeaveEvent(QDragLeaveEvent* event) {
   event->accept();
 }
 
+/**************************************************************************//**
+ * @see http://qt-project.org/wiki/Drag_and_Drop_of_files
+ * @param[in] event Event info.
+ */
 void ccruncher_gui::MainWindow::dropEvent(QDropEvent* event)
 {
   const QMimeData* mimeData = event->mimeData();
@@ -131,9 +142,10 @@ void ccruncher_gui::MainWindow::dropEvent(QDropEvent* event)
   }
 }
 
-//===========================================================================
-// updateToolBars
-//===========================================================================
+/**************************************************************************//**
+ * @details Main tool bar depend on current mdi sub-windows.
+ * @param[in] window Current sub-window.
+ */
 void ccruncher_gui::MainWindow::updateToolBars(QMdiSubWindow *window)
 {
   if (window == NULL)
@@ -165,9 +177,7 @@ void ccruncher_gui::MainWindow::updateToolBars(QMdiSubWindow *window)
   }
 }
 
-//===========================================================================
-// about dialog
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::MainWindow::about()
 {
   QMessageBox about;
@@ -187,9 +197,7 @@ void ccruncher_gui::MainWindow::about()
   about.exec();
 }
 
-//===========================================================================
-// select file
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::MainWindow::selectFile()
 {
   QString filename = QFileDialog::getOpenFileName(
@@ -211,9 +219,15 @@ void ccruncher_gui::MainWindow::selectFile()
   }
 }
 
-//===========================================================================
-// open file
-//===========================================================================
+/**************************************************************************//**
+ * @details Open a file following these rules:
+ *          - file://dirpath -> opens directory in a file browser.
+ *          - file://filepath opened in a mdi-window -> active mdi-window
+ *          - file://file.csv -> opens analysis window
+ *          - file://file.xml -> opens xml editor
+ *          - exec://filepath -> opens simulation window
+ * @param[in] url Url to open.
+ */
 void ccruncher_gui::MainWindow::openFile(const QUrl &url)
 {
   QString filename = url.path();
@@ -275,9 +289,11 @@ void ccruncher_gui::MainWindow::openFile(const QUrl &url)
   }
 }
 
-//===========================================================================
-// find mdi child
-//===========================================================================
+/**************************************************************************//**
+ * @details Finds a MDI-child with the given filename.
+ * @param[in] filename Filename to found.
+ * @return MDI-child, NULL if not found.
+ */
 QMdiSubWindow* ccruncher_gui::MainWindow::findMdiChild(const QString &filename)
 {
   foreach (QMdiSubWindow *child, mdiArea->subWindowList()) {
@@ -288,17 +304,19 @@ QMdiSubWindow* ccruncher_gui::MainWindow::findMdiChild(const QString &filename)
   return NULL;
 }
 
-//===========================================================================
-// return properties
-//===========================================================================
+/**************************************************************************//**
+ * @return List of properties.
+ */
 const QMap<QString,QVariant>& ccruncher_gui::MainWindow::getProperties() const
 {
   return properties;
 }
 
-//===========================================================================
-// process http request
-//===========================================================================
+/**************************************************************************//**
+ * @details Process http request to determine if a new CCruncher version
+ *          is available. In this case shows a dialog.
+ * @param[in] reply Http stuff.
+ */
 void ccruncher_gui::MainWindow::processHttpRequest(QNetworkReply *reply)
 {
   // catching redirection
@@ -342,9 +360,9 @@ void ccruncher_gui::MainWindow::processHttpRequest(QNetworkReply *reply)
   }
 }
 
-//===========================================================================
-// post a message in the status bar
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] msg Message to post.
+ */
 void ccruncher_gui::MainWindow::setStatusMsg(const QString &msg)
 {
   statusBar()->showMessage(msg);

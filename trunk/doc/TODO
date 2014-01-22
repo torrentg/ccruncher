@@ -13,6 +13,8 @@ Current works
   * segment name with spaces (eg. 'line of credit') cause problems.
     review samples and file sample.xml. Change documentation?
   * how ccruncher-gui opens a file > 1MB?.
+  * 'ccruncher-gui file.xml' -> click Monte Carlo button -> 
+    opens a new simulation window !!!
 
 Future works
 -------------------

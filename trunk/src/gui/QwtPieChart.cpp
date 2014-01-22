@@ -1,3 +1,25 @@
+
+//===========================================================================
+//
+// CreditCruncher - A portfolio credit risk valorator
+// Copyright (C) 2004-2014 Gerard Torrent
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+//===========================================================================
+
 #include <cmath>
 #include <cstdlib>
 #include <algorithm>
@@ -5,9 +27,9 @@
 
 using namespace std;
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] title Chart title.
+ */
 QwtPieChart::QwtPieChart(const QString &title) : QwtPlotSeriesItem(title),
     items(0), palette(256)
 {
@@ -23,24 +45,16 @@ QwtPieChart::QwtPieChart(const QString &title) : QwtPlotSeriesItem(title),
   }
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
-QwtPieChart::~QwtPieChart()
-{
-  // nothing to do
-}
-
-//===========================================================================
-// Draw a subset of the samples
-// param painter Painter
-// param xMap Maps x-values into pixel coordinates.
-// param yMap Maps y-values into pixel coordinates.
-// param canvasRect Contents rectangle of the canvas
-// param from Index of the first point to be painted
-// param to Index of the last point to be painted.
-//          If to < 0 the curve will be painted to its last point.
-//===========================================================================
+/**************************************************************************//**
+ * @details Draw a subset of the samples.
+ * @param[in] painter Painter
+ * @param[in] xMap Maps x-values into pixel coordinates.
+ * @param[in] yMap Maps y-values into pixel coordinates.
+ * @param[in] rect Contents rectangle of the canvas
+ * @param[in] from Index of the first point to be painted
+ * @param[in] to Index of the last point to be painted.
+ *            If to < 0 the curve will be painted to its last point.
+ */
 void QwtPieChart::drawSeries( QPainter *painter,
     const QwtScaleMap & /*xMap*/, const QwtScaleMap &/*yMap*/,
     const QRectF &rect, int /*from*/, int /*to*/ ) const
@@ -73,19 +87,19 @@ void QwtPieChart::drawSeries( QPainter *painter,
   painter->restore();
 }
 
-//===========================================================================
-// simple congruential RNG
-// extracted from Numerical Recipes in C
-//===========================================================================
+/**************************************************************************//**
+ * @details Extracted from 'Numerical Recipes in C'.
+ * @return Random number.
+ */
 int QwtPieChart::rand() const
 {
   seed = seed*1103515245 + 12345;
   return (unsigned int)(seed/65536) % 32768;
 }
 
-//===========================================================================
-// getRandomColor
-//===========================================================================
+/**************************************************************************//**
+ * @return Random color.
+ */
 QColor QwtPieChart::getRandomColor() const
 {
   QColor mix(255, 255, 255);
@@ -102,9 +116,13 @@ QColor QwtPieChart::getRandomColor() const
   return QColor(red, green, blue);
 }
 
-//===========================================================================
-// getInfo
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] point Position in the canvas.
+ * @param[out] name Name of the sector.
+ * @param[out] val Value of the sector.
+ * @param[out] pct Value of the sector (in percentage).
+ * @return true = there is a sector, false = otherwise.
+ */
 bool QwtPieChart::getInfo(QPoint point, string &name, double &val, double &pct) const
 {
   QPoint v = point-center;
@@ -130,10 +148,12 @@ bool QwtPieChart::getInfo(QPoint point, string &name, double &val, double &pct) 
   }
 }
 
-//===========================================================================
-// setSamples
-//===========================================================================
-void QwtPieChart::setSamples(const vector<double> &values, const vector<string> &names)
+/**************************************************************************//**
+ * @param[in] values Values to plot.
+ * @param[in] names Sector names.
+ */
+void QwtPieChart::setSamples(const std::vector<double> &values,
+    const std::vector<std::string> &names)
 {
   //TODO: check that values and names size are equals
 

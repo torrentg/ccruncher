@@ -35,9 +35,9 @@ using namespace ccruncher_gui;
 
 size_t ccruncher_gui::SimulationTask::num_running_sims = 0;
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] s CCruncher execution trace destination.
+ */
 ccruncher_gui::SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s),
     idata(NULL), montecarlo(NULL)
 {
@@ -51,9 +51,7 @@ ccruncher_gui::SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s),
   setTerminationEnabled(false);
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher_gui::SimulationTask::~SimulationTask()
 {
   if (isRunning()) {
@@ -63,17 +61,17 @@ ccruncher_gui::SimulationTask::~SimulationTask()
   free();
 }
 
-//===========================================================================
-// set streambuf
-//===========================================================================
-void ccruncher_gui::SimulationTask::setStreamBuf(streambuf *s)
+/**************************************************************************//**
+ * @param[in] s CCruncher execution trace destination.
+ */
+void ccruncher_gui::SimulationTask::setStreamBuf(std::streambuf *s)
 {
   log.rdbuf(s);
 }
 
-//===========================================================================
-// run
-//===========================================================================
+/**************************************************************************//**
+ * @details Execute CCruncher.
+ */
 void ccruncher_gui::SimulationTask::run()
 {
   Timer timer(true);
@@ -120,18 +118,22 @@ void ccruncher_gui::SimulationTask::run()
   }
 }
 
-//===========================================================================
-// stop
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::SimulationTask::stop()
 {
   stop_ = true;
 }
 
-//===========================================================================
-// set data info
-//===========================================================================
-void ccruncher_gui::SimulationTask::setData(const string &f_, const map<string,string> &m_, const string &d_, unsigned char n, bool i)
+/**************************************************************************//**
+ * @param[in] f_ CCruncher input file.
+ * @param[in] m_ List of defines.
+ * @param[in] d_ Output directory.
+ * @param[in] n Number of threads.
+ * @param[in] i Create file indexes.csv?
+ */
+void ccruncher_gui::SimulationTask::setData(const std::string &f_,
+  const std::map<std::string,std::string> &m_, const std::string &d_,
+  unsigned char n, bool i)
 {
   ifile = f_;
   defines = m_;
@@ -141,9 +143,9 @@ void ccruncher_gui::SimulationTask::setData(const string &f_, const map<string,s
   assert(ithreads > 0);
 }
 
-//===========================================================================
-// setStatus
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] s New status.
+ */
 void ccruncher_gui::SimulationTask::setStatus(status s)
 {
   status_ = s;
@@ -168,41 +170,42 @@ void ccruncher_gui::SimulationTask::setStatus(status s)
   emit statusChanged((int)s);
 }
 
-//===========================================================================
-// return status
-//===========================================================================
+/**************************************************************************//**
+ * @return Execution status.
+ */
 SimulationTask::status ccruncher_gui::SimulationTask::getStatus() const
 {
   return status_;
 }
 
-//===========================================================================
-// return idata
-//===========================================================================
+/**************************************************************************//**
+ * @return CCruncher's input data object.
+ */
 IData* ccruncher_gui::SimulationTask::getIData()
 {
   return idata;
 }
 
-//===========================================================================
-// return MonteCarlo
-//===========================================================================
+/**************************************************************************//**
+ * @return CCruncher's Monte carlo object.
+ */
 MonteCarlo* ccruncher_gui::SimulationTask::getMonteCarlo()
 {
   return  montecarlo;
 }
 
-//===========================================================================
-// return logger
-//===========================================================================
+/**************************************************************************//**
+ * @return CCruncher's logger.
+ */
 Logger& ccruncher_gui::SimulationTask::getLogger()
 {
   return log;
 }
 
-//===========================================================================
-// free memory (1=idata, 2=montecarlo, other=all)
-//===========================================================================
+/**************************************************************************//**
+ * @details If the input file is huge then memory can be a problem.
+ * @param[in] obj Objects to deallocate (1=idata, 2=montecarlo, other=all).
+ */
 void ccruncher_gui::SimulationTask::free(int obj)
 {
   if (obj != 2 && idata != NULL) {
@@ -215,18 +218,19 @@ void ccruncher_gui::SimulationTask::free(int obj)
   }
 }
 
-//===========================================================================
-// number of running simulations
-//===========================================================================
+/**************************************************************************//**
+ * @return Number of current simultaneous running simulations.
+ */
 size_t ccruncher_gui::SimulationTask::getNumRunningSims()
 {
   return num_running_sims;
 }
 
-//===========================================================================
-// check for conflicts
-// return true = continue, false = stop
-//===========================================================================
+/**************************************************************************//**
+ * @details Checks for conflicts related with previous executions before
+ *          to proceed to simule.
+ * @return true = checked, you can do the simulation, false = don't execute.
+ */
 bool ccruncher_gui::SimulationTask::checkConflicts()
 {
   fmode = 'w';
