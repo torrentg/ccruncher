@@ -1,4 +1,4 @@
-/* src/utils/config.h.in.  Generated from configure.in by autoheader.  */
+/* src/utils/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* build date */
 #undef BUILD_DATE
@@ -159,6 +159,6 @@
 
 
 /* subversion identifier */
-#define SVN_VERSION "R1147"
+#define SVN_VERSION "R1169"
 
 

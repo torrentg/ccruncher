@@ -44,7 +44,7 @@ usage() {
     1        KO. finished with errors
   examples:
     $progname -s
-    $progname -g "2.3.0"
+    $progname -g "2.4.0"
 
 _EOF_
 
