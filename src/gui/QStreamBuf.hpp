@@ -27,41 +27,42 @@
 #include <QObject>
 #include <QString>
 
-//---------------------------------------------------------------------------
-
 namespace ccruncher_gui {
 
-/*
-  convert streambuf call to signals
-  based on http://lists.trolltech.com/qt-interest/2005-06/thread00166-0.html
-  caution: it is not performance optimal
-  causes: string usage + string by value as argument
-*/
-
+/**************************************************************************//**
+ * @brief Redirects CCruncher's trace to gui interface.
+ *
+ * @details Convert streambuf call to signals. It is not performance
+ *          optimal because in signal/slot mechanism strings are passed
+ *          by value.
+ *
+ * @see http://lists.trolltech.com/qt-interest/2005-06/thread00166-0.html
+ * @see http://www.cplusplus.com/reference/streambuf/streambuf/
+ */
 class QStreamBuf : public QObject, public std::basic_streambuf<char>
 {
     Q_OBJECT
 
   public:
 
-    // constructor
+    //! Constructor
     QStreamBuf(QObject *parent=NULL);
 
   protected:
 
-    // inherited from streambuf
+    //! Inherited from streambuf
     virtual int overflow(int v);
-    // inherited from streambuf
+    //! Inherited from streambuf
     virtual std::streamsize xsputn(const char *p, std::streamsize n);
 
   signals:
 
-    // print
+    //! Print data
     void print(const QString &);
 
 };
 
-}
+} // namespace
 
 #endif
 

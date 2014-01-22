@@ -42,9 +42,10 @@ using namespace ccruncher_gui;
 
 #define REFRESH_MS 100
 
-//===========================================================================
-// constructor
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] filename CCruncher input file.
+ * @param[in] parent Widget parent.
+ */
 ccruncher_gui::SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
     MdiChildWidget(parent), ui(new Ui::SimulationWidget), progress(NULL),
     toolbar(NULL)
@@ -102,9 +103,7 @@ ccruncher_gui::SimulationWidget::SimulationWidget(const QString &filename, QWidg
   setFile();
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************/
 ccruncher_gui::SimulationWidget::~SimulationWidget()
 {
   task.stop();
@@ -113,18 +112,18 @@ ccruncher_gui::SimulationWidget::~SimulationWidget()
   delete ui;
 }
 
-//===========================================================================
-// edit current file
-//===========================================================================
+/**************************************************************************//**
+ * @details Opens XML editor to edit the input file.
+ */
 void ccruncher_gui::SimulationWidget::editFile()
 {
   QUrl url = QUrl::fromLocalFile(ui->ifile->text());
   emit anchorClicked(url);
 }
 
-//===========================================================================
-// open csv data files
-//===========================================================================
+/**************************************************************************//**
+ * @details Opens data analysis window to analyze a CSV output file.
+ */
 void ccruncher_gui::SimulationWidget::openData()
 {
   QString html = ui->log->document()->toHtml();
@@ -139,9 +138,9 @@ void ccruncher_gui::SimulationWidget::openData()
   }
 }
 
-//===========================================================================
-// set input file
-//===========================================================================
+/**************************************************************************//**
+ * @details Update info related to file.
+ */
 void ccruncher_gui::SimulationWidget::setFile()
 {
   string filename = ui->ifile->text().toStdString();
@@ -152,9 +151,7 @@ void ccruncher_gui::SimulationWidget::setFile()
   clearLog();
 }
 
-//===========================================================================
-// select output directory
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::SimulationWidget::selectDir()
 {
   QString dirpath = QFileDialog::getExistingDirectory(
@@ -169,9 +166,9 @@ void ccruncher_gui::SimulationWidget::selectDir()
   }
 }
 
-//===========================================================================
-// select output directory
-//===========================================================================
+/**************************************************************************//**
+ * @details Update info related to output directory.
+ */
 void ccruncher_gui::SimulationWidget::setDir()
 {
   if (ui->odir->text() == odir) {
@@ -184,9 +181,7 @@ void ccruncher_gui::SimulationWidget::setDir()
   }
 }
 
-//===========================================================================
-// clear log area
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::SimulationWidget::clearLog()
 {
   actionAnal->setEnabled(false);
@@ -201,9 +196,9 @@ void ccruncher_gui::SimulationWidget::clearLog()
   ui->progress->setValue(0);
 }
 
-//===========================================================================
-// review widget enabled/disabled
-//===========================================================================
+/**************************************************************************//**
+ * @details Review widgets enabled/disabled.
+ */
 void ccruncher_gui::SimulationWidget::updateControls()
 {
   if (!QFile::exists(ui->ifile->text()))
@@ -241,9 +236,7 @@ void ccruncher_gui::SimulationWidget::updateControls()
   actionStop->setEnabled(false);
 }
 
-//===========================================================================
-// submit task
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::SimulationWidget::submit()
 {
   if (task.isRunning()) {
@@ -287,9 +280,10 @@ void ccruncher_gui::SimulationWidget::submit()
   }
 }
 
-//===========================================================================
-// linkify
-//===========================================================================
+/**************************************************************************//**
+ * @details Modify log trace in order to set clickable links.
+ * @param[in] line Line to linkify.
+ */
 void ccruncher_gui::SimulationWidget::linkify(QString &line)
 {
   int pos;
@@ -340,9 +334,9 @@ void ccruncher_gui::SimulationWidget::linkify(QString &line)
   }
 }
 
-//===========================================================================
-// log a message
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] str Message to log.
+ */
 void ccruncher_gui::SimulationWidget::log(const QString &str)
 {
   if (str.length() == 0) return;
@@ -370,9 +364,9 @@ void ccruncher_gui::SimulationWidget::log(const QString &str)
   logline += str.mid(pos0);
 }
 
-//===========================================================================
-// draw
-//===========================================================================
+/**************************************************************************//**
+ * @details Update widget status.
+ */
 void ccruncher_gui::SimulationWidget::draw()
 {
   mutex.lock();
@@ -416,9 +410,7 @@ void ccruncher_gui::SimulationWidget::draw()
   mutex.unlock();
 }
 
-//===========================================================================
-// show the defines dialog
-//===========================================================================
+/**************************************************************************/
 void ccruncher_gui::SimulationWidget::showDefines()
 {
   // checking for new defines in xml file ...
@@ -443,23 +435,24 @@ void ccruncher_gui::SimulationWidget::showDefines()
   }
 }
 
-//===========================================================================
-// show the defines dialog
-//===========================================================================
+/**************************************************************************//**
+ * @details Update info related to defines.
+ */
 void ccruncher_gui::SimulationWidget::setDefines()
 {
   QString str;
   map<string,string>::iterator it;
   for (it=defines.begin(); it != defines.end(); ++it)
   {
-    str += QString(str.length()>0?", ":"") + it->first.c_str() + QString("=") + it->second.c_str();
+    str += QString(str.length()>0?", ":"") + it->first.c_str() +
+           QString("=") + it->second.c_str();
   }
   ui->defines->setText(str);
 }
 
-//===========================================================================
-// close
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] event Event info.
+ */
 void ccruncher_gui::SimulationWidget::closeEvent(QCloseEvent *event)
 {
   if (task.isRunning()) {
@@ -474,9 +467,9 @@ void ccruncher_gui::SimulationWidget::closeEvent(QCloseEvent *event)
   event->accept();
 }
 
-//===========================================================================
-// set status
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] val New status.
+ */
 void ccruncher_gui::SimulationWidget::setStatus(int val)
 {
   mutex.lock();

@@ -29,26 +29,31 @@
 
 namespace ccruncher_gui {
 
+/**************************************************************************//**
+ * @brief MDI window with its own toolbar.
+ */
 class MdiChildWidget: public QWidget
 {
 
   public:
 
-    // constructor
+    //! Constructor
     MdiChildWidget(QWidget *parent) : QWidget(parent, Qt::SubWindow) {}
-    // destructor
-/*    virtual ~MdiChildWidget() {
+/*
+    //! Destructor
+    virtual ~MdiChildWidget() {
       QMainWindow *main = dynamic_cast<QMainWindow*>(parent);
       if (main != NULL && getToolBar() != NULL) {
         main->removeToolBar(getToolBar());
       }
-    }*/
-    // widget toolbar
+    }
+*/
+    //! Widget toolbar
     virtual QToolBar* getToolBar() { return NULL; }
 
 };
 
-}
+} // namespace
 
 #endif
 

@@ -26,26 +26,29 @@
 #include <qwt_plot_canvas.h>
 #include <QMouseEvent>
 
+/**************************************************************************//**
+ * @brief Artifact to track mouse on a Qwt plot.
+ */
 class QwtPlotCanvasExt : public QwtPlotCanvas
 {
   Q_OBJECT
 
   public:
 
-    // constructor
+    //! Constructor
     QwtPlotCanvasExt(QwtPlot *p=NULL) : QwtPlotCanvas(p) {
       setMouseTracking(true);
     }
-    // destructor
+    //! Destructor
     virtual ~QwtPlotCanvasExt() {}
-    // mouse moved
+    //! Mouse moved
     void mouseMoveEvent(QMouseEvent* event) {
       emit mouseMoved(event->pos());
     }
 
   signals:
 
-    // status updated
+    //! Status updated
     void mouseMoved(QPoint);
 
 };

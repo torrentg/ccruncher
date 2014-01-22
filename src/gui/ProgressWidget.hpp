@@ -30,45 +30,48 @@
 
 namespace ccruncher_gui {
 
+/**************************************************************************//**
+ * @brief Progress widget with fading.
+ */
 class ProgressWidget : public QWidget
 {
     Q_OBJECT
 
   public:
 
-    // interface widget
+    //! Interface widget
     Ui::ProgressWidget *ui;
-    // fade timer
+    //! Fade timer
     QTimer timer;
-    // fade alpha
+    //! Fade alpha
     double opacity;
-    // fade duration
+    //! Fade duration
     int duration;
-    // fade direction
+    //! Fade direction
     bool isin;
-    // mutex
+    //! Mutex
     QMutex mutex;
 
   public:
 
-    // constructor
+    //! Constructor
     explicit ProgressWidget(QWidget *parent = 0);
-    // destructor
+    //! Destructor
     ~ProgressWidget();
-    // fadein (0->1)
+    //! Fadein (0->1)
     void fadein(size_t millis=0);
-    // fadeout (1->0)
+    //! Fadeout (1->0)
     void fadeout(size_t millis=0);
-    // set opacity
+    //! Set opacity
     void setOpacity(double);
 
   public slots:
 
-    // change opacity
+    //! Change opacity
     void changeOpacity();
 
 };
 
-}
+} // namespace
 
 #endif

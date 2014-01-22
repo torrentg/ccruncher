@@ -31,66 +31,69 @@
   #error "Qwt library version needs to be higher or equal to 6.1.0"
 #endif
 
+/**************************************************************************//**
+ * @brief Qwt pie chart.
+ */
 class QwtPieChart : public QwtPlotSeriesItem
 {
 
   private:
 
-    // internal struct
+    //! Internal struct
     struct item {
-        // item absolute value
+        //! Item absolute value
         double value;
-        // item name
+        //! Item name
         std::string name;
-        // ending angle in drawPie() units (2PI = 5760)
+        //! Ending angle in drawPie() units (2PI = 5760)
         int angle;
-        // less-than operator
+        //! Less-than operator
         bool operator <(int val) const { return (angle < val); }
     };
 
   private:
 
-    // sum values
+    //! Sum values
     double sum;
-    // data to plot
+    //! Data to plot
     std::vector<item> items;
-    // color palette
+    //! Color palette
     std::vector<QColor> palette;
-    // radius (in pixels)
+    //! Radius (in pixels)
     mutable int radius;
-    // center (in pixels)
+    //! Center (in pixels)
     mutable QPoint center;
-    // internal rng seed
+    //! Internal rng seed
     mutable unsigned long seed;
 
   private:
 
-    // generate random color
+    //! Generate random color
     QColor getRandomColor() const;
-    // basic congruential RNG
+    //! Basic congruential RNG
     int rand() const;
 
   public:
 
-    // constructor
+    //! Constructor
     QwtPieChart(const QString &title=QString::null);
-    // destructor
-    virtual ~QwtPieChart();
-    // extended from QwtAbstractSeriesStore
+    //! Destructor
+    virtual ~QwtPieChart() {}
+    //! Extended from QwtAbstractSeriesStore
     virtual void setRectOfInterest( const QRectF & ) {}
-    // extended from QwtAbstractSeriesStore
+    //! Extended from QwtAbstractSeriesStore
     virtual QRectF dataRect() const { return QRectF(); }
-    // extended from QwtAbstractSeriesStore
+    //! Extended from QwtAbstractSeriesStore
     virtual size_t dataSize() const { return items.size(); }
-    // extended from QwtPlotSeriesItem
+    //! Extended from QwtPlotSeriesItem
     virtual void drawSeries( QPainter *painter,
         const QwtScaleMap &xMap, const QwtScaleMap &yMap,
         const QRectF &canvasRect, int from, int to ) const;
-    // extended from QwtPlotItem
+    //! Extended from QwtPlotItem
     virtual int rtti() const { return QwtPlotItem::Rtti_PlotUserItem; }
-    // set data to be ploted
+    //! Set data to be ploted
     void setSamples(const std::vector<double> &, const std::vector<std::string> &);
-    // return name and value under point
+    //! Return name and value under point
     bool getInfo(QPoint point, std::string &name, double &val, double &pct) const;
 
 };
