@@ -170,3 +170,4 @@ void ccruncher_test::IDataTest::test1()
   ASSERT_EQUALS("set your title here", idata.getTitle());
   ASSERT_EQUALS("set your description here", idata.getDescription());
 }
+

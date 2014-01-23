@@ -79,11 +79,9 @@ void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud,
  * @param[in] cdata Fragment of data.
  * @param[in] len Length of the current data fragment.
  */
-void ccruncher::ExpatHandlers::epdata(ExpatUserData &eud, const char *name, const char *cdata, int len)
+void ccruncher::ExpatHandlers::epdata(ExpatUserData &/*eud*/, const char */*name*/,
+    const char *cdata, int len)
 {
-  ((void)eud); // unused variable
-  ((void)name); // unused variable
-
   // default simple rule: character data is not allowed
   for(int i=0; i<len; i++)
   {

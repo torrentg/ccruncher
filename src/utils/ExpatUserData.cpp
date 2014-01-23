@@ -32,7 +32,9 @@ using namespace ccruncher;
 /**************************************************************************/
 ccruncher::ExpatUserData::ExpatUserData(size_t buffersize) :
   pila(MAX_STACK_SIZE), pila_pos(-1), current_tag(NULL), buffer(NULL),
-  buffer_size(buffersize), buffer_pos1(NULL), buffer_pos2(NULL)
+  buffer_size(buffersize), buffer_pos1(NULL), buffer_pos2(NULL),
+  date1(NULL), date2(NULL), interest(NULL), ratings(NULL),
+  factors(NULL), segmentations(NULL)
 {
   if (buffer_size == 0) buffer_size = 1;
   buffer = new char[buffer_size];
@@ -160,6 +162,8 @@ const char* ccruncher::ExpatUserData::bufferAppend(const char *str, size_t n)
  *          the buffer is valid until another applyDefines call overwrites
  *          this content. If you experience problems (eg. a lot of parameters
  *          in the same element) increase the buffer size.
+ * @note This method is defined here instead of ExpatParser because it is
+ *       called from a static method: ExpatParser::startElement().
  * @param[in] str String to apply defines.
  * @return If not defines are found then returns the input string, otherwise
  *         returns a pointer to the buffer size.

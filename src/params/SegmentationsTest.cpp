@@ -76,7 +76,7 @@ void ccruncher_test::SegmentationsTest::test1()
   ASSERT(sobj.getSegmentation(0).name == "sectors");
   ASSERT(sobj.getSegmentation(1).name == "products");
 
-  Asset asset(&sobj);
+  Asset asset(2);
 
   asset.setSegment(0, 2);
   asset.setSegment(1, 0);
@@ -92,3 +92,4 @@ void ccruncher_test::SegmentationsTest::test1()
   ASSERT(asset.getSegment(0) == 0);
   ASSERT(asset.getSegment(1) == 0);
 }
+

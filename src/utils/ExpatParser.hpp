@@ -86,6 +86,8 @@ class ExpatParser
     void setDefines(const std::map<std::string,std::string>&);
     //! returns checksum value
     unsigned long getChecksum() const;
+    //! returns user data
+    ExpatUserData& UserData() { return userdata; }
 
 };
 
