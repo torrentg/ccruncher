@@ -35,7 +35,8 @@ using namespace ccruncher;
  * @param[in] f Input filename.
  * @param[in] parent Widget parent.
  */
-ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
+ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent)
+    throw(NonEditableException, InvalidFormatException, OpenErrorException) :
     MdiChildWidget(parent), ui(new Ui::XmlEditWidget), highlighter(NULL),
     toolbar(NULL)
 {
@@ -72,14 +73,18 @@ ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
   toolbar->addAction(actionUndo);
   toolbar->addAction(actionSave);
 
-  // load file
-  if(!load(f)) {
-    throw Exception("cannot read file " + filename.toStdString());
-  }
-
-  // enable highlighter
+  // creating highlighter
   highlighter = new XmlHighlighter(ui->editor);
   highlighter->setDocument(ui->editor->document());
+
+  try {
+    load(f);
+  }
+  catch(...) {
+    if (toolbar != NULL) delete toolbar;
+    if (highlighter != NULL) delete highlighter;
+    throw;
+  }
 }
 
 /**************************************************************************/
@@ -116,8 +121,12 @@ void ccruncher_gui::XmlEditWidget::setCurrentFile(const QString &fileName)
 /**************************************************************************//**
  * @param[in] str Input filename.
  * @return true = file loaded, false = otherwise.
+ * @throw NonEditableException File too big or gzipped.
+ * @throw InvalidFormatException It is not a CCruncher input file.
+ * @throw OpenErrorException File not found.
  */
 bool ccruncher_gui::XmlEditWidget::load(const QString &str)
+    throw(NonEditableException, InvalidFormatException, OpenErrorException)
 {
   QString fileName = str;
   if (fileName.isEmpty()) {
@@ -128,10 +137,11 @@ bool ccruncher_gui::XmlEditWidget::load(const QString &str)
   if (fileName.endsWith(".gz"))
   {
     QMessageBox::warning(this, tr("CCruncher"),
-        tr("The edition of compressed files is not supported."));
-    return false;
+        tr("Edition of compressed files is not supported."));
+    throw NonEditableException();
   }
 
+  // save current content
   QCloseEvent event;
   closeEvent(&event);
   if (!event.isAccepted()) return false;
@@ -142,19 +152,19 @@ bool ccruncher_gui::XmlEditWidget::load(const QString &str)
   if (!file.open(QFile::ReadOnly | QFile::Text))
   {
     QMessageBox::warning(this, tr("CCruncher"),
-        tr("Cannot read file %1:\n%2.")
+        tr("Cannot open file '%1':\n%2.")
         .arg(fileName)
         .arg(file.errorString()));
-    return false;
+    throw OpenErrorException();
   }
 
   // reject file if bigger than 1 MB
   if (file.size() > 1*1024*1024)
   {
     QMessageBox::warning(this, tr("CCruncher"),
-        tr("File %1 too big.\nTry to open it using an external editor.")
+        tr("File '%1' too big to be edited.\nTry to open it using an external editor.")
         .arg(fileName));
-    return false;
+    throw NonEditableException();
   }
 
   QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -174,9 +184,9 @@ bool ccruncher_gui::XmlEditWidget::load(const QString &str)
   {
     QApplication::restoreOverrideCursor();
     QMessageBox::warning(this, tr("CCruncher"),
-        tr("File %1\nis not a valid input file.")
+        tr("File '%1'\nis not a valid input file.")
         .arg(fileName));
-    return false;
+    throw InvalidFormatException();
   }
 
   ui->editor->setPlainText(content);
@@ -202,7 +212,7 @@ bool ccruncher_gui::XmlEditWidget::save(const QString &str)
   if (!file.open(QFile::WriteOnly | QFile::Text))
   {
      QMessageBox::warning(this, tr("CCruncher"),
-                          tr("Cannot save file %1:\n%2.")
+                          tr("Cannot save file '%1':\n%2.")
                           .arg(fileName)
                           .arg(file.errorString()));
      return false;

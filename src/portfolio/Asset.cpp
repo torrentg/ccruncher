@@ -131,8 +131,13 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     const char *ssegmentation = getAttributeValue(attributes, "segmentation");
     int isegmentation = eu.segmentations->indexOfSegmentation(ssegmentation);
 
+    const Segmentation &segmentation = eu.segmentations->getSegmentation(isegmentation);
+    if (segmentation.components != Segmentation::asset) {
+      throw Exception("trying to assign an asset to a segmentation composed of obligors");
+    }
+
     const char *ssegment = getAttributeValue(attributes, "segment");
-    int isegment = eu.segmentations->getSegmentation(isegmentation).indexOfSegment(ssegment);
+    int isegment = segmentation.indexOfSegment(ssegment);
 
     addBelongsTo(isegmentation, isegment);
   }

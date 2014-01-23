@@ -78,8 +78,18 @@ class XmlEditWidget : public MdiChildWidget
 
   public:
 
+    //! File non-editable (eg. gziped or size > 1MB)
+    class NonEditableException : public std::exception { };
+    //! File non-valid (eg. file.doc)
+    class InvalidFormatException : public std::exception { };
+    //! File not found or non-readable
+    class OpenErrorException : public std::exception { };
+
+  public:
+
     //! Constructor
-    explicit XmlEditWidget(const QString &filename, QWidget *parent=0);
+    explicit XmlEditWidget(const QString &filename, QWidget *parent=0)
+        throw(NonEditableException, InvalidFormatException, OpenErrorException);
     //! Destructor
     ~XmlEditWidget();
     //! Virtual method implementation
@@ -90,7 +100,8 @@ class XmlEditWidget : public MdiChildWidget
     //! Set modified flag
     void documentWasModified();
     //! Load file
-    bool load(const QString &fileName=QString());
+    bool load(const QString &fileName=QString())
+        throw(NonEditableException, InvalidFormatException, OpenErrorException);
     //! Save file
     bool save(const QString &fileName=QString());
     //! Simule current file
