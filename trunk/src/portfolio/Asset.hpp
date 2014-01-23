@@ -27,7 +27,6 @@
 #include "portfolio/LGD.hpp"
 #include "portfolio/DateValues.hpp"
 #include "params/Interest.hpp"
-#include "params/Segmentations.hpp"
 #include "utils/Date.hpp"
 #include "utils/Exception.hpp"
 #include "utils/ExpatHandlers.hpp"
@@ -60,8 +59,6 @@ class Asset : public ExpatHandlers
     std::vector<DateValues> data;
     //! Default LGD
     LGD dlgd;
-    //! Pointer to segmentations list (used by parser)
-    Segmentations *segmentations;
     //! Auxiliary variable (used by parser)
     bool have_data;
 
@@ -75,7 +72,7 @@ class Asset : public ExpatHandlers
   public:
 
     //! Constructor
-    Asset(Segmentations *);
+    Asset(size_t nsegmentations=0);
     //! Return asset identifier
     const std::string& getId() const { return id; }
     //! Add a segmentation-segment relation

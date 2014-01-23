@@ -26,13 +26,8 @@
 #include <vector>
 #include "portfolio/Asset.hpp"
 #include "portfolio/LGD.hpp"
-#include "params/Segmentations.hpp"
-#include "params/Interest.hpp"
-#include "params/Ratings.hpp"
-#include "params/Factors.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
-#include "utils/Date.hpp"
 
 namespace ccruncher {
 
@@ -54,23 +49,11 @@ class Obligor : public ExpatHandlers
     std::vector<int> vsegments;
     //! Obligor assets list
     std::vector<Asset *> vassets;
-    //! Pointer to ratings object (used by parser)
-    const Ratings *ratings;
-    //! Pointer to factors object (used by parser)
-    const Factors *factors;
-    //! Pointer to segmentations object (used by parser)
-    Segmentations *segmentations;
-    //! Pointer to interest object (used by parser)
-    const Interest *interest;
-    //! Initial simulation date
-    Date date1;
-    //! Ending simulation date
-    Date date2;
 
   private: 
 
     //! Insert an asset
-    void insertAsset() throw(Exception);
+    void insertAsset(ExpatUserData &eu) throw(Exception);
 
   protected:
   
@@ -95,7 +78,7 @@ class Obligor : public ExpatHandlers
     //! Copy constructor
     Obligor(const Obligor &);
     //! Constructor
-    Obligor(const Ratings &, const Factors &, Segmentations &, const Interest &, const Date &d1, const Date &d2);
+    Obligor(size_t nsegmentations=0);
     //! Destructor
     ~Obligor();
     //! Assignment operator

@@ -122,7 +122,7 @@ bool ccruncher::Segmentation::isValidName(const std::string &str)
 {
   if (str.length() == 0) return false;
   for(size_t i=0; i<str.length(); i++) {
-    if (!isalnum(str[i]) && strchr("+-._",str[i]) == NULL) {
+    if (!isalnum(str[i]) && strchr("+-._ ",str[i]) == NULL) {
       return false;
     }
   }

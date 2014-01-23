@@ -200,23 +200,31 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
   ExpatParser xmlparser;
   vector<Obligor*> obligors;
   
-  bp = new Obligor(ratings, factors, segmentations, interest, time0, timeT);
+  xmlparser.UserData().segmentations = &segmentations;
+  xmlparser.UserData().ratings = &ratings;
+  xmlparser.UserData().factors = &factors;
+  xmlparser.UserData().segmentations = &segmentations;
+  xmlparser.UserData().interest = &interest;
+  xmlparser.UserData().date1 = &time0;
+  xmlparser.UserData().date2 = &timeT;
+
+  bp = new Obligor(5);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent1, bp));
   obligors.push_back(bp);
   
-  bp = new Obligor(ratings, factors, segmentations, interest, time0, timeT);
+  bp = new Obligor(5);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent2, bp));
   obligors.push_back(bp);
   
-  bp = new Obligor(ratings, factors, segmentations, interest, time0, timeT);
+  bp = new Obligor(5);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent3, bp));
   obligors.push_back(bp);
   
-  bp = new Obligor(ratings, factors, segmentations, interest, time0, timeT);
+  bp = new Obligor(5);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent4, bp));
   obligors.push_back(bp);
   
-  bp = new Obligor(ratings, factors, segmentations, interest, time0, timeT);
+  bp = new Obligor(5);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent5, bp));
   obligors.push_back(bp);
 

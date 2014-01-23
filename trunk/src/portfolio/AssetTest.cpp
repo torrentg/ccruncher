@@ -122,7 +122,8 @@ void ccruncher_test::AssetTest::test1()
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset asset(&segs);
+  Asset asset;
+  xmlparser.UserData().segmentations = &segs;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
 
   // doing assertions
@@ -206,7 +207,8 @@ void ccruncher_test::AssetTest::test2()
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset asset(&segs);
+  Asset asset;
+  xmlparser.UserData().segmentations = &segs;
   ASSERT_THROW(xmlparser.parse(xmlcontent, &asset));
 }
 
@@ -237,7 +239,8 @@ void ccruncher_test::AssetTest::test3()
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset asset(&segs);
+  Asset asset;
+  xmlparser.UserData().segmentations = &segs;
   ASSERT_THROW(xmlparser.parse(xmlcontent, &asset));
 }
 
@@ -266,7 +269,8 @@ void ccruncher_test::AssetTest::test4()
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset asset(&segs);
+  Asset asset;
+  xmlparser.UserData().segmentations = &segs;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
   
   Interest interest = getInterest(time0);
@@ -310,7 +314,8 @@ void ccruncher_test::AssetTest::test5()
   Interest interest = getInterest(time0);
 
   // asset object creation
-  Asset asset(&segs);
+  Asset asset;
+  xmlparser.UserData().segmentations = &segs;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
   
   ASSERT(!asset.requiresObligorLGD());
@@ -345,7 +350,8 @@ void ccruncher_test::AssetTest::test6()
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset asset(&segs);
+  Asset asset;
+  xmlparser.UserData().segmentations = &segs;
   ASSERT_THROW(xmlparser.parse(xmlcontent, &asset));
 }
 
@@ -376,7 +382,8 @@ void ccruncher_test::AssetTest::test7()
   Segmentations segs = getSegmentations();
 
   // asset object creation
-  Asset asset(&segs);
+  Asset asset;
+  xmlparser.UserData().segmentations = &segs;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
   ASSERT(asset.requiresObligorLGD());
 }
@@ -412,7 +419,8 @@ void ccruncher_test::AssetTest::test8()
   Interest interest = getInterest(time0);
 
   // asset object creation
-  Asset asset(&segs);
+  Asset asset;
+  xmlparser.UserData().segmentations = &segs;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
   ASSERT_NO_THROW(asset.prepare(time0, timeT, interest));
 
@@ -480,7 +488,8 @@ void ccruncher_test::AssetTest::test9()
   Interest interest = getInterest(time0);
 
   // asset object creation
-  Asset asset(&segs);
+  Asset asset;
+  xmlparser.UserData().segmentations = &segs;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
   ASSERT_NO_THROW(asset.prepare(time0, timeT, interest));
 

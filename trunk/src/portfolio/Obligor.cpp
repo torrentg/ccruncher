@@ -23,6 +23,11 @@
 #include <cmath>
 #include <cassert>
 #include "portfolio/Obligor.hpp"
+#include "params/Segmentations.hpp"
+#include "params/Interest.hpp"
+#include "params/Ratings.hpp"
+#include "params/Factors.hpp"
+#include "utils/Date.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -37,26 +42,14 @@ ccruncher::Obligor::Obligor(const Obligor &o)
 }
 
 /**************************************************************************//**
- * @param[in] ratings_ List of ratings.
- * @param[in] factors_ List of factors.
- * @param[in] segmentations_ List of segmentations.
- * @param[in] interest_ Yield curve.
- * @param[in] d1 Starting simulation date.
- * @param[in] d2 Ending simulation date.
+ * @param[in] nsegmentations Number of segmentations. If this object is
+ *            initialized using epstart-epend then segmentations will be
+ *            retrieved from the ExpatUserData object. Otherwise you need
+ *            to specify the number of segmentations.
  */
-ccruncher::Obligor::Obligor(const Ratings &ratings_, const Factors &factors_,
-               Segmentations &segmentations_, const Interest &interest_,
-               const Date &d1, const Date &d2) :
-    vsegments(segmentations_.size(), 0), vassets()
+ccruncher::Obligor::Obligor(size_t nsegmentations) :
+    vsegments(nsegmentations, 0), vassets()
 {
-  // setting external objects references
-  ratings = &(ratings_);
-  factors = &(factors_);
-  segmentations = &(segmentations_);
-  interest = &(interest_);
-  date1 = d1;
-  date2 = d2;
-
   // setting default values
   irating = -1;
   ifactor = -1;
@@ -86,12 +79,6 @@ Obligor& ccruncher::Obligor::operator=(const Obligor &o)
   lgd = o.lgd;
 
   vsegments = o.vsegments;
-  ratings = o.ratings;
-  factors = o.factors;
-  segmentations = o.segmentations;
-  interest = o.interest;
-  date1 = o.date1;
-  date2 = o.date2;
 
   for(unsigned int i=0; i<vassets.size(); i++) {
     if (vassets[i] != NULL) delete vassets[i];
@@ -101,7 +88,7 @@ Obligor& ccruncher::Obligor::operator=(const Obligor &o)
   {
     if (o.vassets[i] != NULL)
     {
-      vassets[i] = new Asset(NULL);
+      vassets[i] = new Asset;
       *(vassets[i]) = *(o.vassets[i]);
     }
   }
@@ -113,11 +100,12 @@ Obligor& ccruncher::Obligor::operator=(const Obligor &o)
  * @details Checks that asset identifier is not repeated.
  * @throw Exception Error inserting asset.
  */
-void ccruncher::Obligor::insertAsset() throw(Exception)
+void ccruncher::Obligor::insertAsset(ExpatUserData &eu) throw(Exception)
 {
   int ila = vassets.size()-1;
 
   // checking coherence
+  // TODO: remove this check because Portfolio rechecks
   for (int i=0; i<ila; i++)
   {
     if (vassets[i]->getId() == vassets[ila]->getId())
@@ -129,7 +117,8 @@ void ccruncher::Obligor::insertAsset() throw(Exception)
   // preparing asset
   try
   {
-    vassets[ila]->prepare(date1, date2, *interest);
+    assert(eu.date1 != NULL && eu.date2 != NULL && eu.interest != NULL);
+    vassets[ila]->prepare(*(eu.date1), *(eu.date2), *(eu.interest));
   }
   catch(std::exception &e)
   {
@@ -148,37 +137,44 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
 {
   if (isEqual(name_,"asset"))
   {
-    Asset *asset = new Asset(segmentations);
+    Asset *asset = new Asset;
     vassets.push_back(asset);
     eppush(eu, asset, name_, attributes);
   }
   else if (isEqual(name_,"belongs-to"))
   {
+    assert(eu.segmentations != NULL);
     const char *ssegmentation = getAttributeValue(attributes, "segmentation");
-    int isegmentation = segmentations->indexOfSegmentation(ssegmentation);
+    int isegmentation = eu.segmentations->indexOfSegmentation(ssegmentation);
 
     const char *ssegment = getAttributeValue(attributes, "segment");
-    int isegment = segmentations->getSegmentation(isegmentation).indexOfSegment(ssegment);
+    int isegment = eu.segmentations->getSegmentation(isegmentation).indexOfSegment(ssegment);
 
     addBelongsTo(isegmentation, isegment);
   }
   else if (isEqual(name_,"obligor"))
   {
     const char *str = NULL;
+
     id = getStringAttribute(attributes, "id");
 
+    assert(eu.ratings != NULL);
     str = getAttributeValue(attributes, "rating");
-    irating = ratings->getIndex(str);
+    irating = eu.ratings->getIndex(str);
     if (irating < 0) throw Exception("rating '" + string(str) + "' not found");
 
+    assert(eu.factors != NULL);
     str = getAttributeValue(attributes, "factor");
-    ifactor = factors->getIndex(str);
+    ifactor = eu.factors->getIndex(str);
     if (ifactor < 0) throw Exception("factor '" + string(str) + "' not found");
 
     str = getAttributeValue(attributes, "lgd", NULL);
     if (str != NULL) {
       lgd = LGD(str);
     }
+
+    assert(eu.segmentations != NULL);
+    vsegments.resize(eu.segmentations->size(), 0);
   }
   else
   {
@@ -188,12 +184,13 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
+ * @param[in] eu Xml parsing data.
  * @param[in] name_ Element name.
  */
-void ccruncher::Obligor::epend(ExpatUserData &, const char *name_)
+void ccruncher::Obligor::epend(ExpatUserData &eu, const char *name_)
 {
   if (isEqual(name_,"asset")) {
-    insertAsset();
+    insertAsset(eu);
   }
   else if (isEqual(name_,"obligor")) {
 
@@ -206,8 +203,8 @@ void ccruncher::Obligor::epend(ExpatUserData &, const char *name_)
     vector<Asset*>(vassets.begin(),vassets.end()).swap(vassets);
 
     // important: coding obligor-segments as asset-segments
-    for (int i=0; i<(int)segmentations->size(); i++) {
-      if (segmentations->getSegmentation(i).components == Segmentation::obligor) {
+    for (int i=0; i<(int)eu.segmentations->size(); i++) {
+      if (eu.segmentations->getSegmentation(i).components == Segmentation::obligor) {
         for(int j=0; j<(int)vassets.size(); j++) {
           vassets[j]->addBelongsTo(i, vsegments[i]);
         }

@@ -256,15 +256,32 @@ void ccruncher::IData::epdata(ExpatUserData &eu, const char *name_, const char *
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
+ * @param[in,out] eu Xml parsing data.
  * @param[in] name_ Element name.
  */
-void ccruncher::IData::epend(ExpatUserData &, const char *name_)
+void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
 {
   if (isEqual(name_,"ccruncher")) {
     validate();
   }
   else if (isEqual(name_,"defines")) {
     hasdefinestag = 2;
+  }
+  else if (isEqual(name_,"parameters")) {
+    eu.date1 = &(params.time0);
+    eu.date2 = &(params.timeT);
+  }
+  else if (isEqual(name_,"interest")) {
+    eu.interest = &interest;
+  }
+  else if (isEqual(name_,"ratings")) {
+    eu.ratings = &ratings;
+  }
+  else if (isEqual(name_,"factors")) {
+    eu.factors = &factors;
+  }
+  else if (isEqual(name_,"segmentations")) {
+    eu.segmentations = &segmentations;
   }
 }
 
@@ -276,7 +293,6 @@ void ccruncher::IData::epend(ExpatUserData &, const char *name_)
  */
 void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, const char **attributes) throw(Exception)
 {
-  portfolio.init(ratings, factors, segmentations, interest, params.time0, params.timeT);
   string ref = getStringAttribute(attributes, "include", "");
 
   if (ref == "")
@@ -312,6 +328,12 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
 
       ExpatParser parser;
       parser.setDefines(eu.defines);
+      parser.UserData().date1 = eu.date1;
+      parser.UserData().date2 = eu.date2;
+      parser.UserData().interest = eu.interest;
+      parser.UserData().ratings = eu.ratings;
+      parser.UserData().factors = eu.factors;
+      parser.UserData().segmentations = eu.segmentations;
       parser.parse(file, &portfolio, stop);
 
       log << "included file checksum (adler32)" << split << parser.getChecksum() << endl;

@@ -33,6 +33,11 @@ namespace ccruncher {
 
 // forward declaration
 class ExpatHandlers;
+class Date;
+class Interest;
+class Ratings;
+class Factors;
+class Segmentations;
 
 /**************************************************************************//**
  * @brief   Data relative to an XML parsing.
@@ -89,8 +94,18 @@ class ExpatUserData
 
     //! List of defines
     std::map<std::string,std::string> defines;
-    //! Apply defines to the given string
-    const char* applyDefines(const char *str);
+    //! Initial date
+    ccruncher::Date *date1;
+    //! Ending date
+    ccruncher::Date *date2;
+    //! Yield curve
+    ccruncher::Interest *interest;
+    //! List of ratings
+    ccruncher::Ratings *ratings;
+    //! List of factors
+    ccruncher::Factors *factors;
+    //! List of segmentations
+    ccruncher::Segmentations *segmentations;
 
   public:
 
@@ -114,6 +129,8 @@ class ExpatUserData
     void setCurrentTag(const char *t) { current_tag = t; }
     //! Returns current tag name
     const char *getCurrentTag() const { return current_tag; }
+    //! Apply defines to the given string
+    const char* applyDefines(const char *str);
 
 };
 

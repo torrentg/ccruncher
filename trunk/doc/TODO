@@ -4,13 +4,9 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * Add Interest,ratings,factors,segmentations,date1,date2 in ExpatUserData
-    and simplify objects Obligor,Asset,Portfolio.
   * Update Date class to new Todd's version (v2.0)
   * 'ccruncher-gui file.xml' opens exec dialog instead of edit dialog.
   * change tab size in edit dialog (4 spaces instead of 10)
-  * segment name with spaces (eg. 'line of credit') cause problems.
-    review samples and file sample.xml. Change documentation?
   * how ccruncher-gui opens a file > 1MB?.
   * 'ccruncher-gui file.xml' -> click Monte Carlo button -> 
     opens a new simulation window !!!

@@ -24,19 +24,20 @@
 #include <algorithm>
 #include <cassert>
 #include "portfolio/Asset.hpp"
+#include "params/Segmentations.hpp"
 
 using namespace std;
 using namespace ccruncher;
 
 /**************************************************************************//**
- * @param[in] segs List of segmentations.
+ * @param[in] nsegmentations Number of segmentations. If this object is
+ *            initialized using epstart-epend then segmentations will be
+ *            retrieved from the ExpatUserData object. Otherwise you need
+ *            to specify the number of segmentations.
  */
-ccruncher::Asset::Asset(Segmentations *segs) : vsegments(), data()
+ccruncher::Asset::Asset(size_t nsegmentations) : vsegments(nsegmentations, 0), data()
 {
-  assert(segs != NULL);
   id = "NON_ASSIGNED";
-  segmentations = segs;
-  vsegments = vector<int>(segs->size(), 0);
   have_data = false;
   date = NAD;
   dlgd = LGD(LGD::Fixed,NAN);
@@ -94,11 +95,12 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
+ * @param[in] eu Xml parsing data.
  * @param[in] name_ Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **attributes)
+void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   if (isEqual(name_,"values") && have_data == true)
   {
@@ -125,11 +127,12 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
   }
   else if (isEqual(name_,"belongs-to"))
   {
+    assert(eu.segmentations != NULL);
     const char *ssegmentation = getAttributeValue(attributes, "segmentation");
-    int isegmentation = segmentations->indexOfSegmentation(ssegmentation);
+    int isegmentation = eu.segmentations->indexOfSegmentation(ssegmentation);
 
     const char *ssegment = getAttributeValue(attributes, "segment");
-    int isegment = segmentations->getSegmentation(isegmentation).indexOfSegment(ssegment);
+    int isegment = eu.segmentations->getSegmentation(isegmentation).indexOfSegment(ssegment);
 
     addBelongsTo(isegmentation, isegment);
   }
@@ -141,6 +144,8 @@ void ccruncher::Asset::epstart(ExpatUserData &, const char *name_, const char **
     if (str != NULL) {
       dlgd = LGD(str);
     }
+    assert(eu.segmentations != NULL);
+    vsegments.resize(eu.segmentations->size(), 0);
   }
   else if (isEqual(name_,"data"))
   {

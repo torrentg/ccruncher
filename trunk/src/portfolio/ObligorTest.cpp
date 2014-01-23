@@ -175,9 +175,6 @@ void ccruncher_test::ObligorTest::test1()
       </asset>\n\
     </obligor>";
 
-  // creating xml
-  ExpatParser xmlparser;
-
   // obligor creation
   Date time0("01/01/2000");
   Date timeT("01/01/2005");
@@ -185,7 +182,17 @@ void ccruncher_test::ObligorTest::test1()
   Factors factors = getFactors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest(time0);
-  Obligor obligor(ratings, factors, segmentations, interest, time0, timeT);
+  Obligor obligor(5);
+
+  // creating xml
+  ExpatParser xmlparser;
+  xmlparser.UserData().segmentations = &segmentations;
+  xmlparser.UserData().ratings = &ratings;
+  xmlparser.UserData().factors = &factors;
+  xmlparser.UserData().segmentations = &segmentations;
+  xmlparser.UserData().interest = &interest;
+  xmlparser.UserData().date1 = &time0;
+  xmlparser.UserData().date2 = &timeT;
 
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &obligor));
 
@@ -236,9 +243,6 @@ void ccruncher_test::ObligorTest::test2()
       </asset>\n\
     </obligor>";
 
-  // creating xml
-  ExpatParser xmlparser;
-
   // obligor creation
   Date time0("01/01/2000");
   Date timeT("01/01/2005");
@@ -246,7 +250,18 @@ void ccruncher_test::ObligorTest::test2()
   Factors factors = getFactors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest(time0);
-  Obligor obligor(ratings, factors, segmentations, interest, time0, timeT);
+  Obligor obligor(5);
+
+  // creating xml
+  ExpatParser xmlparser;
+  xmlparser.UserData().segmentations = &segmentations;
+  xmlparser.UserData().ratings = &ratings;
+  xmlparser.UserData().factors = &factors;
+  xmlparser.UserData().segmentations = &segmentations;
+  xmlparser.UserData().interest = &interest;
+  xmlparser.UserData().date1 = &time0;
+  xmlparser.UserData().date2 = &timeT;
+
   ASSERT_THROW(xmlparser.parse(xmlcontent, &obligor));
 }
 
@@ -280,9 +295,6 @@ void ccruncher_test::ObligorTest::test3()
       </asset>\n\
     </obligor>";
 
-  // creating xml
-  ExpatParser xmlparser;
-
   // obligor creation
   Date time0("01/01/2000");
   Date timeT("01/01/2005");
@@ -290,7 +302,18 @@ void ccruncher_test::ObligorTest::test3()
   Factors factors = getFactors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest(time0);
-  Obligor obligor(ratings, factors, segmentations, interest, time0, timeT);
+  Obligor obligor(5);
+
+  // creating xml
+  ExpatParser xmlparser;
+  xmlparser.UserData().segmentations = &segmentations;
+  xmlparser.UserData().ratings = &ratings;
+  xmlparser.UserData().factors = &factors;
+  xmlparser.UserData().segmentations = &segmentations;
+  xmlparser.UserData().interest = &interest;
+  xmlparser.UserData().date1 = &time0;
+  xmlparser.UserData().date2 = &timeT;
+
   ASSERT_THROW(xmlparser.parse(xmlcontent, &obligor));
 }
 
@@ -324,9 +347,6 @@ void ccruncher_test::ObligorTest::test4()
       </asset>\n\
     </obligor>";
 
-  // creating xml
-  ExpatParser xmlparser;
-
   // obligor creation
   Date time0("01/01/2000");
   Date timeT("01/01/2005");
@@ -334,7 +354,17 @@ void ccruncher_test::ObligorTest::test4()
   Factors factors = getFactors();
   Segmentations segmentations = getSegmentations();
   Interest interest = getInterest(time0);
-  Obligor obligor(ratings, factors, segmentations, interest, time0, timeT);
+  Obligor obligor(5);
+
+  // creating xml
+  ExpatParser xmlparser;
+  xmlparser.UserData().segmentations = &segmentations;
+  xmlparser.UserData().ratings = &ratings;
+  xmlparser.UserData().factors = &factors;
+  xmlparser.UserData().segmentations = &segmentations;
+  xmlparser.UserData().interest = &interest;
+  xmlparser.UserData().date1 = &time0;
+  xmlparser.UserData().date2 = &timeT;
 
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &obligor));
 

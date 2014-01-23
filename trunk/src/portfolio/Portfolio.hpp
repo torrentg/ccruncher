@@ -23,17 +23,12 @@
 #ifndef _Portfolio_
 #define _Portfolio_
 
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 #include "portfolio/Obligor.hpp"
-#include "params/Segmentations.hpp"
-#include "params/Factors.hpp"
-#include "params/Ratings.hpp"
-#include "params/Interest.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
-#include "utils/Date.hpp"
 
 namespace ccruncher {
 
@@ -49,20 +44,6 @@ class Portfolio : public ExpatHandlers
 
     //! List of obligors
     std::vector<Obligor *> vobligors;
-    //! List of ratings (used by parser)
-    const Ratings *ratings;
-    //! List of factors (used by parser)
-    const Factors *factors;
-    //! List of segmentations (used by parser)
-    Segmentations *segmentations;
-    //! List of interest (used by parser)
-    const Interest *interest;
-    //! Initial simulation date
-    Date date1;
-    //! Final simulation date
-    Date date2;
-    //! Auxiliar obligor (used by parser)
-    Obligor *auxobligor;
     //! Map used to check id obligor oneness
     std::map<std::string,bool> idobligors;
     //! Map used to check id asset oneness
@@ -74,8 +55,8 @@ class Portfolio : public ExpatHandlers
     Portfolio(const Portfolio &);
     //! Assignment operator (currently forbidden)
     Portfolio& operator=(const Portfolio &);
-    //! Inserts an obligor in the list
-    void insertObligor(Obligor *) throw(Exception);
+    //! Checks an obligor
+    void checkObligor(Obligor *) throw(Exception);
 
   protected:
   
@@ -87,11 +68,7 @@ class Portfolio : public ExpatHandlers
   public:
 
     //! Default constructor
-    Portfolio();
-    //! Constructor
-    Portfolio(const Ratings &, const Factors &, Segmentations &, const Interest &, const Date &date1, const Date &date2);
-    //! initialize portfolio object
-    void init(const Ratings &, const Factors &, Segmentations &, const Interest &, const Date &date1, const Date &date2);
+    Portfolio() {}
     //! Destructor
     ~Portfolio();
     //! Returns the obligors list
