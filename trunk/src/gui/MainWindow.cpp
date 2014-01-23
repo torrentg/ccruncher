@@ -267,9 +267,16 @@ void ccruncher_gui::MainWindow::openFile(const QUrl &url)
       }
       //TODO: unrecognized filename -> send to system
     }
+    catch(XmlEditWidget::NonEditableException &)
+    {
+      QUrl url1 = QUrl::fromLocalFile(filename);
+      url1.setPath(url1.toLocalFile());
+      url1.setScheme("exec");
+      return openFile(url1);
+    }
     catch(std::exception &e)
     {
-      cout << "error opening '" << fileinfo.fileName().toStdString() << "': " << e.what() << endl;
+      cerr << "error opening file '" << fileinfo.fileName().toStdString() << "'" << endl;
       return;
     }
 

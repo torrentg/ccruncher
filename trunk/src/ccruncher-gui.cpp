@@ -32,6 +32,7 @@
 #include <QTextCodec>
 #include <QVariant>
 #include <QMap>
+#include <QFileInfo>
 #include "gui/MainWindow.hpp"
 #include "gui/Application.hpp"
 #include "utils/Utils.hpp"
@@ -183,12 +184,14 @@ int main(int argc, char *argv[])
     // opening files given as argument
     for(int i=optind; i<argc; i++)
     {
-      QString filename(argv[i]);
-      QUrl url = QUrl::fromLocalFile(filename);
+      QFileInfo filename(argv[i]);
+      QUrl url = QUrl::fromLocalFile(filename.canonicalFilePath());
+      /*
       if (!filename.toLower().endsWith("csv")) {
         url.setPath(url.toLocalFile());
         url.setScheme("exec");
       }
+      */
       w.openFile(url);
     }
 
