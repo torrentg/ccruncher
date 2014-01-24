@@ -52,6 +52,9 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
+
+    // setting tab size to 4 spaces (added by gtg)
+    setTabStopWidth(4 * fontMetrics().width(' '));
 }
 
 
@@ -148,3 +151,4 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
         ++blockNumber;
     }
 }
+

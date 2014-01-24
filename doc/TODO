@@ -5,7 +5,6 @@ CCRUNCHER TODO
 Current works
 -------------------
   * Update Date class to new Todd's version (v2.0)
-  * change tab size in edit dialog (4 spaces instead of 10)
   * update ccruncher output in html doc.
 
 Future works
