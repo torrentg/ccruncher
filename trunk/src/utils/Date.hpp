@@ -48,6 +48,7 @@ static const long nad[1] = { 1721026L };
  * @author  Gerard Torrent (minor modifications and updates)
  *
  * @version 1.3 2002-10-18, Todd T. Knarr
+ * @version 2.0 2011-08-16, Todd T. Knarr
  * @version ccruncher, Gerard Torrent
  *
  * @see     http://www.silverglass.org/code/date-class
