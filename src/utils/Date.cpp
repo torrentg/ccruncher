@@ -43,6 +43,9 @@
 // 09/11/1995 - Todd Knarr
 //   . initial release
 //
+// 16/08/2011 - Todd Knarr
+//   . version 2.0
+//
 //===========================================================================
 
 #include <cstdio>
@@ -340,6 +343,17 @@ int ccruncher::Date::getDayOfWorkWeek( void ) const
 bool ccruncher::Date::isLeapYear( const int year )
 {
     return ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0));
+
+    // Todd's original code
+    // more accurate (consider calendar corrections)
+    // but non-optimal for performance.
+    // CCruncher's dates are > 1900.
+    /*
+    long jd1, jd2;
+    jd1 = YmdToJd( iYear, 2, 28 );
+    jd2 = YmdToJd( iYear, 3, 1 );
+    return ( ( jd2 - jd1 ) > 1 );
+    */
 }
 
 /**************************************************************************//**
