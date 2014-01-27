@@ -145,7 +145,7 @@ fi
 # update global version tag
 if [ "$cver" = "true" ]; then
   sed -i -e "s/AC_INIT(ccruncher,\([^,]*\),\(.*\))/AC_INIT(ccruncher, $gloversion,\\2)/g" $CCRUNCHERPATH/configure.ac
-  sed -i -e "s/\(PROJECT_NUMBER[ ]*=[ ]*\)\(.*\)/\\1$gloversion/g " Doxyfile
+  sed -i -e "s/\(PROJECT_NUMBER[ ]*=[ ]*\)\(.*\)/\\1$gloversion/g " $CCRUNCHERPATH/Doxyfile
   sed -i -e "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$gloversion_short}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
   sed -i -e "s/<span class=\"version\">.*<\/span>/<span class=\"version\">$gloversion<\/span>/g" $CCRUNCHERPATH/doc/html/*.html
   sed -i -e "s/Last modified: .*/Last modified: $curdate/g" $CCRUNCHERPATH/doc/html/*.html $CCRUNCHERPATH/doc/html/.repo.xsl
