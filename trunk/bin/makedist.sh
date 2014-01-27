@@ -52,7 +52,7 @@ usage() {
     0        OK. finished without errors
     1        KO. finished with errors
   examples:
-    $progname -n 2.3 -w /c:/temp/ccruncher/bin
+    $progname -w /c:/temp/ccruncher/bin
 
 _EOF_
 
@@ -122,13 +122,6 @@ checkout() {
   chmod -R +w trunk
   mv trunk $1;
 
-}
-
-# -------------------------------------------------------------
-# remove developers files
-# -------------------------------------------------------------
-prepare() {
-
   # get current version
   numversion=$(grep AC_INIT $1/configure.ac | cut -d"," -f2 | tr -d ' ');
 
@@ -146,6 +139,13 @@ prepare() {
     exit 1;
   fi
   cp $1/doc/tex/ccruncher.pdf $1/doc/
+
+}
+
+# -------------------------------------------------------------
+# remove developers files
+# -------------------------------------------------------------
+remDevFiles() {
 
   # redirect html document
   sed -i -e 's/href="ccruncher\.pdf"/href="\.\.\/ccruncher\.pdf"/g' $1/doc/html/*.html
@@ -277,7 +277,14 @@ chmod -R +w $workpath > /dev/null 2> /dev/null;
 rm -rvf $workpath > /dev/null 2> /dev/null;
 mkdir $workpath;
 checkout $workpath/base;
-prepare $workpath/base;
+
+#create web package
+cp -rf $workpath/base/doc/html $workpath/web;
+cp -f $workpath/base/doc/ccruncher.pdf $workpath/web/;
+tar --directory=$workpath/web/ -czf $currpath/$PACKAGE-${numversion}_web.tgz .;
+
+# remove development files
+remDevFiles $workpath/base;
 
 #create win package
 cp -rf $workpath/base $workpath/win;

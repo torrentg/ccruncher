@@ -6,7 +6,6 @@ Current works
 -------------------
   * update ccruncher output in html doc.
   * Add portfolio optimization to technical doc.
-  * makedist.h -> create package ccruncher-x.y.x_web.tgz
 
 Future works
 -------------------
