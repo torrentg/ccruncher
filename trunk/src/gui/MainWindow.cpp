@@ -211,10 +211,12 @@ void ccruncher_gui::MainWindow::selectFile()
 
   if (!filename.isEmpty()) {
     QUrl url = QUrl::fromLocalFile(filename);
+    /*
     if (!filename.toLower().endsWith("csv")) {
       url.setPath(url.toLocalFile());
-      //url.setScheme("exec");
+      url.setScheme("exec");
     }
+    */
     openFile(url);
   }
 }
