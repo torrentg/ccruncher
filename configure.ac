@@ -17,7 +17,6 @@ dnl -------------------------------------------------------------
 dnl check for tools
 dnl -------------------------------------------------------------
 AC_PROG_CXX
-AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 
@@ -85,8 +84,8 @@ AC_ARG_ENABLE(debug,
 
 if test x$debug = xtrue ; then
   CXXFLAGS="-g"
-  AC_SUBST([LDFLAGS], [-rdynamic])
 else
+  # note: consider -flto
   CXXFLAGS="-O2 -mtune=native -DNDEBUG"
 fi
 

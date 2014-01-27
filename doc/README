@@ -210,6 +210,10 @@ Developers tips & tricks
 7. checking memory leaks
      don't enable profiler because can cause problems to valgrind
      > valgrind --tool=memcheck --leak-check=yes <progname>
+     # dealing with Qt errors:
+     valgrind --tool=memcheck --leak-check=yes --gen-suppressions=all <prog> 2>valgrind.stderr
+     sed '/^==/ d' valgrind.stderr > valgrind.supp
+     valgrind --tool=memcheck --leak-check=yes --suppressions=valgrind.supp <prog>
 
 8. finding vulnerabilities
      > flawfinder src/
@@ -233,6 +237,9 @@ Developers tips & tricks
      > # with sysprof
      > sysprof
      > ./binary
+     > # with perf
+     > perf record ./binary arg1 arg2 ...
+     > perf report
 
 10. debuging executable
       > gdb ./path/progname
