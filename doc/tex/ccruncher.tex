@@ -140,22 +140,8 @@ Version \numversion\par
 %==============================================================================
 \newpage
 
-\section*{Acknowledgements}
-I want to thank my wife Marga for supporting the decision to dedicate more 
-than a year to this project.
-
-I thank Josep Fortiana for the indications and for those afternoons when I 
-could explain to someone what I was doing.
-
-I thank all those who write documents that open our minds, people such as 
-Gupton, Finger and Bhatia for \emph{CreditMetrics Technical 
-Document}~\cite{cmetrics:1997}, Embrechts, McNeil and Straumann for
-\emph{Correlation and Dependence in Risk Management: Properties and 
-Pitfalls}~\cite{embrechts:2002}, and Bluhm, Overbeck and Wagner for their 
-book \emph{An Introduction to Credit Risk Modeling}~\cite{bluhm:2002}.
-
-Finally, I want to thank my mother for making me believe that anything is 
-possible.
+ \section*{Abstract}
+TODO: SET ABSTRACT HERE
 
 % ~\vfill
 % \section*{Contributors}
@@ -171,7 +157,7 @@ The BibTeX entry of this document for \LaTeX\ users is
     title = \{\{Quantifying Portfolio Credit Risk Using CCruncher\}\},
     author = \{Torrent-Gironella, Gerard\},
     organization = \{Tatine\},
-    address = \{Barcelona, Catalonia, Spain\},
+    address = \{Barcelona, Catalonia\},
     year = \{\the\year\}, 
     month = \shortmonthname,
     url = \{http://www.ccruncher.net/\},
@@ -182,7 +168,8 @@ The BibTeX entry of this document for \LaTeX\ users is
 
 ~\vfill
 \thispagestyle{empty}
-\noindent Version \numversion\ [\svnversion]\\ 
+\noindent Version \numversion\ [\svnversion] \monthname\ \the\year\\ 
+\noindent Version 2.3 [R1151] September 2013\\ 
 \\
 \noindent Copyright \copyright\ 2013--2014 Gerard Torrent\\
 \\
@@ -323,7 +310,7 @@ please cite it when using it for credit risk analysis.
 
 CCruncher is a project for quantifying portfolio credit risk. 
 It was developed and is maintained by \href{http://www.tatine.es}{Tatine}, a 
-consulting firm located in Barcelona (Catalonia, Spain). The latest version 
+consulting firm located in Barcelona (Catalonia). The latest version 
 of the project can be downloaded from the CCruncher's site, 
 \url{http://www.ccruncher.net}.
 
@@ -348,6 +335,7 @@ approaches~\cite{crouhy:2000}\cite[chap. 2.4]{bluhm:2002}.
 Both attempt to ascertain the portfolio loss distribution and measure 
 the credit risk using a set of selected statistics (e.g., mean, quantile), 
 but they differ in how to obtain this distribution. 
+TODO: ADD NEW APPROACHES \cite{brereton:2012}
 
 \textbf{The actuarial approach} considers that the frequency of defaults 
 (Poisson type distributions) is the proper manner in which to analyze observed 
@@ -432,20 +420,6 @@ The disadvantages of CCruncher are as follows:
 	\item mark-to-market is not supported.
 \end{inparaenum}
 
-The original results claimed by this document are as follows: 
-\begin{inparaenum}[1)]
-	\item identifying the limitations of the t-Student multi-factor model with 
-	respect to the multivariate t-Student distribution;
-	\item proposal for a new covariance estimator for the t-Student multi-factor 
-	copula named \emph{quick-and-dirty};
-	\item estimation of the t-Student multi-factor copula parameters using the 
-	Metropolis-Hastings algorithm; and
-	\item transferring the t-Student multi-factor copula parameters uncertainty 
-	to the credit risk measures.
-\end{inparaenum}
-We intend to publish these results in peer-reviewed journals in the coming 
-years.
-
 The content is organized into three chapters. The first chapter details the 
 distribution used to simulate the obligors' default times. It is easy to 
 understand and is recommended reading, especially the section in which the 
@@ -483,6 +457,7 @@ of default over time. In this section, we construct these curves using
 available information such as the 1-year PDs or the ratings transition 
 matrix. Those who already know how to obtain the PDs over time can skip 
 this section and go directly to the multivariate model section.
+TODO: \cite[sec. 3.2.1]{bindseil:2007}
 
 \begin{definition}[Probability of Default (PD)]
 	$T_i$ is the random variable that represents the default time 
@@ -1120,6 +1095,7 @@ test the parameters estimation procedures.
 Next we use the estimates of $p_i$ (probability that an obligor defaults)
 and $p_{ij}$ (probability that two obligors default simultaneously) indicated 
 in~\cite{nagpal:2001} to define a basic covariance estimator. 
+TODO: \cite[sec. 3.1]{castro:2007}.
 
 \begin{definition}[Quick-and-dirty covariance estimator]
 	We assume that all obligors in a sector are exchangeable (identical rating 
@@ -2932,6 +2908,26 @@ export(rcount, "paramu.txt")
 	\caption{$\text{ES}_{99\%}$ distribution}
 	\label{fig:paramu5}
 \end{figure}
+
+
+%==============================================================================
+% PORTFOLIO OPTIMIZATION
+%==============================================================================
+\chapter{Portfolio Optimization}
+
+%------------------------------------------------------------------------------
+% PROBLEM FORMULATION
+%------------------------------------------------------------------------------
+\section{Problem Formulation}
+
+TODO: Harry Markowitz, efficient frontier
+TODO: Huge enough portfolios -> risk don't depend on size
+TODO: Equivalence modify obligors - change weights
+
+%------------------------------------------------------------------------------
+% ANOTHER SECTION
+%------------------------------------------------------------------------------
+\section{Portfolio Loss Distribution}
 
 
 %==============================================================================
