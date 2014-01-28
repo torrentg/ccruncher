@@ -198,75 +198,76 @@ please cite it when using it for credit risk analysis.
 % http://en.wikibooks.org/wiki/LaTeX/Glossary
 %==============================================================================
 \newglossaryentry{glos:n}{name=$n$,
-	description={number of obligors in the portfolio.},
+	description={Number of obligors in the portfolio.},
 	sort=10
 }
 \newglossaryentry{glos:s}{name=$s$,
-	description={number of sectors/factors.},
+	description={Number of sectors/factors.},
 	sort=20
 }
 \newglossaryentry{glos:r}{name=$r$,
-	description={number of ratings.},
+	description={Number of ratings.},
 	sort=30
 }
 \newglossaryentry{glos:ni}{name=$n_i$,
-	description={number of obligors in the i-th sector/factor. 
+	description={Number of obligors in the i-th sector/factor. 
 	It is a component of vector $\vec{n}$ that satisfies
 	$\sum_{i=1}^s n_i = n$.},
 	sort=40
 }
 \newglossaryentry{glos:nijt}{name=$n_{ij}^t$,
-	description={number of obligors in the i-th sector/factor having the 
+	description={Number of obligors in the i-th sector/factor having the 
 	j-th rating at the beginning of the t-th period.},
 	sort=50
 }
 \newglossaryentry{glos:kijt}{name=$k_{ij}^t$,
-	description={number of defaults in the i-th sector/factor having the 
+	description={Number of defaults in the i-th sector/factor having the 
 	j-th rating at the beginning of the t-th period.},
 	sort=60
 }
 \newglossaryentry{glos:Ti}{name=$T_i$,
-	description={default time (aka time-until-default, aka time-to-default,
+	description={Default time (aka time-until-default, aka time-to-default,
 	aka survival time) of the i-th obligor.},
 	sort=70
 }
 \newglossaryentry{glos:F}{name=$F$,
-	description={multivariate distribution of default times or 
+	description={Multivariate distribution of default times or 
 	time-until-default. It has $n$ components with marginal 
 	distributions $F_i$.},
 	sort=80
 }
 \newglossaryentry{glos:Fi}{name=$F_i$,
-	description={default time distribution of the i-th obligor 
-	or the i-th rating. The obligor's $F_i$ depends on his rating.},
+	description={Default time distribution of the i-th obligor. Sometimes 
+	refers to default time distribution of the i-th rating because obligor's 
+	$F_i$ depends only on his rating.},
 	sort=90
 }
 \newglossaryentry{glos:pi}{name=$p_i$,
-	description={probability that i-th obligor/rating defaults within the 
+	description={Probability that i-th obligor/rating defaults within the 
 	next 1-year, i.e., $F_i(1)$.},
 	sort=100
 }
 \newglossaryentry{glos:Rbar}{name={\ensuremath{\widehat{R}}},
-	description={correlation block matrix of dimension $n {\times} n$.},
+	description={Correlation block matrix of dimension $n {\times} n$.},
 	sort=110
 }
 \newglossaryentry{glos:R}{name=$R$,
-	description={factor correlation matrix of dimension $s {\times} s$.},
+	description={Factor correlation matrix of dimension $s {\times} s$.},
 	sort=120
 }
 \newglossaryentry{glos:w}{name={\ensuremath{\vec{w}}},
-	description={factor loadings, vector of dimension $s$.},
+	description={Factor loadings, vector of dimension $s$.},
 	sort=130
 }
 \newglossaryentry{glos:cbm}{name={\ensuremath{B_s(\vec{n},\vec{d},M)}},
-	description={covariance $s {\times} s$ block matrix in which $\vec{n}$ 
+	description={Covariance $s {\times} s$ block matrix in which $\vec{n}$ 
 	are the number of individuals per block, $\vec{d}$ are the 
 	diagonal values, and $M$ are the non-diagonal block values.
 	See section \ref{ap:cbm}.},
 	sort=140
 }
 \newglossaryentry{glos:mvt}{name={\ensuremath{t_d(\nu,\vec{\mu},\Sigma)}},
-	description={multivariate t-Student distribution of dimension $d$ with 
+	description={Multivariate t-Student distribution of dimension $d$ with 
 	$\nu$ degrees of freedom, mean vector $\vec{\mu}$, and dispersion or 
 	scatter matrix $\Sigma$.},
 	sort=150
@@ -281,7 +282,7 @@ please cite it when using it for credit risk analysis.
 	sort=170
 }
 \newglossaryentry{glos:ctm}{name=$C_{\nu,\vec{w},R}^{\text{t}}$,
-	description={multi-factor t-Student copula with $\nu$ degrees of freedom, 
+	description={Multi-factor t-Student copula with $\nu$ degrees of freedom, 
 	factor loadings $\vec{w}$, and factor correlation matrix $R$.
 	It is merely a t-Student copula.},
 	sort=180
@@ -335,7 +336,23 @@ approaches~\cite{crouhy:2000}\cite[chap. 2.4]{bluhm:2002}.
 Both attempt to ascertain the portfolio loss distribution and measure 
 the credit risk using a set of selected statistics (e.g., mean, quantile), 
 but they differ in how to obtain this distribution. 
+
+%.................................
 TODO: ADD NEW APPROACHES \cite{brereton:2012}
+Bernoulli mixture models, factor models, copula models, and intensity models.
+
+In Bernoulli mixture model, obligors defaults are modeled as Bernoullis 
+conditionally independent given a vector of default probabilities. It is 
+assumed that these default probabilities comes from a random vector with 
+a known density.
+
+In factor models, the i-th obligor defaults when the corresponding random 
+variable $X_i$ crosses a preset threshold. Variables $X_i$ depends on a 
+low-dimensional random vector of common factors $\Psi$.
+
+TODO: CONTINUE HERE
+
+%.................................
 
 \textbf{The actuarial approach} considers that the frequency of defaults 
 (Poisson type distributions) is the proper manner in which to analyze observed 
@@ -420,14 +437,14 @@ The disadvantages of CCruncher are as follows:
 	\item mark-to-market is not supported.
 \end{inparaenum}
 
+TODO: REVISE CONTENT ORGANIZATION (OPTIMIZATION, PARAMETERS UNCERTAINTY).
 The content is organized into three chapters. The first chapter details the 
 distribution used to simulate the obligors' default times. It is easy to 
 understand and is recommended reading, especially the section in which the 
 multivariate model is presented. The second chapter addresses the estimation 
 of parameters. This topic can be difficult for those not familiar with MCMC; 
 therefore the second chapter includes a detailed introduction to the 
-Metropolis-Hastings method. Those who do not need to estimate the parameters 
-of the multivariate model can skip this chapter. Finally, the 
+Metropolis-Hastings method. Finally, the 
 third chapter describes how to obtain the portfolio loss distribution and 
 quantify the credit risk. It is recommended reading, although those who are 
 not concerned with the estimation of parameters and their effect on credit 
@@ -457,7 +474,6 @@ of default over time. In this section, we construct these curves using
 available information such as the 1-year PDs or the ratings transition 
 matrix. Those who already know how to obtain the PDs over time can skip 
 this section and go directly to the multivariate model section.
-TODO: \cite[sec. 3.2.1]{bindseil:2007}
 
 \begin{definition}[Probability of Default (PD)]
 	$T_i$ is the random variable that represents the default time 
@@ -555,6 +571,7 @@ transition matrix such as the following:
 
 The next section (\ref{pdftm}) explains how to derive the PD's curves from a 
 transition matrix. However, this simplified case has a closed-form solution 
+transition matrix. However, this simplified case has a closed-form solution 
 stated by the following proposition.
 
 \begin{proposition}[PDs derived from single values]
@@ -614,7 +631,9 @@ stated by the following proposition.
 
 This alternative implies that transition probabilities remain constant
 over time, undermining the economic cycle effect. In practice, this constancy
-is equivalent to considering an averaged economic cycle.
+is equivalent to considering an averaged economic cycle. 
+See document~\cite[sec. 3.2.1]{bindseil:2007} to obtain additional information
+related with this section and the CreditMetrics\texttrademark{} approach.
 
 \begin{proposition}[Scaled transition matrix]
 	The transition matrix can be scaled in time using the following rules:
@@ -1088,16 +1107,24 @@ test the parameters estimation procedures.
 \end{algorithm}
 
 %------------------------------------------------------------------------------
-% QUICK-AND-DIRTY METHOD
+% IMPLIED COVARIANCE ESTIMATOR
 %------------------------------------------------------------------------------
-\section{Quick-and-Dirty Method}
+\section{Implied Covariance Estimator}
 
-Next we use the estimates of $p_i$ (probability that an obligor defaults)
-and $p_{ij}$ (probability that two obligors default simultaneously) indicated 
-in~\cite{nagpal:2001} to define a basic covariance estimator. 
-TODO: \cite[sec. 3.1]{castro:2007}.
+The nonparametric estimator described by Nagpal \& Bahar~\cite{nagpal:2001} 
+gives erroneous results in the estimation of the model parameters, even in 
+the Gaussian case. This has been verified by simulating a pannel data of 
+defaults (see algorithm~\ref{alg:snod}) and trying to infer the covariance 
+matrix using the nonparametric estimator.
 
-\begin{definition}[Quick-and-dirty covariance estimator]
+The cohort approach provides a parametric estimator~\cite[sec. 3.1]
+{castro:2007} whose estimates are acceptable. As the nonparametric estimator, 
+this estimator is based on estimates $p_i$ (probability that an obligor 
+defaults) and $p_{ij}$ (probability that two obligors default simultaneously).
+We have adapted to the general case (t-Student) assuming the $\nu$ parameter 
+is fixed and known.
+
+\begin{definition}[Implied covariance estimator]
 	We assume that all obligors in a sector are exchangeable (identical rating 
 	per sector) and that we know the degrees of freedom of the t-Student 
 	multi-factor copula. We define the estimator of the factors' covariance, 
@@ -1109,8 +1136,9 @@ TODO: \cite[sec. 3.1]{castro:2007}.
 		\quad \text{ where } \quad
 		\left\{
 			\begin{array}{ll}
-				p_i = \frac{\sum k_i^t}{\sum n_i^t} & \forall\ i \\
-				p_{ii} = \frac{\sum k_i^t \cdot (k_i^t-1)}{\sum n_i^t \cdot (n_i^t-1)} & \forall\ i \\
+				p_i = \frac{\sum k_i^t}{\sum n_i^t} & \\
+				p_j = \frac{\sum k_j^t}{\sum n_j^t} & \\
+				p_{ii} = \frac{\sum k_i^t \cdot (k_i^t-1)}{\sum n_i^t \cdot (n_i^t-1)} & i = j \\
 				p_{ij} = \frac{\sum k_i^t \cdot k_j^t}{\sum n_i^t \cdot n_j^t} & i \ne j \\
 			\end{array}
 		\right.
@@ -1122,7 +1150,7 @@ TODO: \cite[sec. 3.1]{castro:2007}.
 	this estimator in the R programming language.
 \end{definition}
 
-\begin{lstlisting}[language=R, label=sc:qadc, caption=Quick-and-dirty correlation (R script)]
+\begin{lstlisting}[language=R, label=sc:qadc, caption=Implied covariance (R script)]
 
  #install.packages("mvtnorm")
  library(mvtnorm)
@@ -1159,7 +1187,7 @@ TODO: \cite[sec. 3.1]{castro:2007}.
    return(p12-val)
  }
 
- quick_and_dirty_correl <- function(nu, K, N)
+ implied_covariance <- function(nu, K, N)
  {
    if (sum(dim(K) != dim(N))) stop("K and N dim differs")
    n = ncol(K)
@@ -1189,7 +1217,7 @@ TODO: \cite[sec. 3.1]{castro:2007}.
 		\item Factors correlation $R_{12} = 0.1$
 	\end{itemize}
 	We simulate the number of defaults of this scenario \num{1000} times using 
-	algorithm~\ref{alg:snod}. Then, we compute the quick-and-dirty estimator 
+	algorithm~\ref{alg:snod}. Then, we compute the implied covariance estimator 
 	and display the results in the table below.
 
 	\hspace*{1cm}
@@ -1206,7 +1234,7 @@ TODO: \cite[sec. 3.1]{castro:2007}.
 	\end{tabular}
 \end{example}
 
-The drawbacks of the quick-and-dirty covariance estimator are that:
+The drawbacks of the implied covariance estimator are that:
 \begin{inparaenum}[1)]
 	\item it does not consider parameter uncertainty, 
 	\item it requires knowing in advance the value of $\nu$, and
@@ -2617,7 +2645,13 @@ and LGD values at fixed times $\{t_1,\dots,t_n\}$ provided by the user. When
 we evaluate these functions in a time value distinct from those provided, we 
 use the following piecewise constant interpolation:
 \begin{displaymath}
-	F(t) = F(t_k) \quad \text{where} \quad t_{k-1} < t \le t_{k}
+  \left.
+	\begin{array}{rcl}
+		\text{EAD}(t) & = & \text{EAD}(t_k) \\
+		\text{LGD}(t) & = & \text{LGD}(t_k)
+	\end{array}
+	\right\}
+	\quad \text{where} \quad t_{k-1} < t \le t_{k}
 \end{displaymath}
 
 \textbf{PD functions approximation}. CCruncher allows defining the PD
@@ -2693,6 +2727,12 @@ the input file, and the automatic evaluation of numerical expressions.
 Combining these two features, macros and the evaluation of numerical 
 expressions, provides a flexible manner in which to parameterize one's input 
 file (e.g., 2000*\$EUR2USD). 
+
+
+%==============================================================================
+% ADDITIONAL TOPICS
+%==============================================================================
+\chapter{Additional Topics}
 
 %------------------------------------------------------------------------------
 % PARAMETERS UNCERTAINTY
@@ -2909,25 +2949,21 @@ export(rcount, "paramu.txt")
 	\label{fig:paramu5}
 \end{figure}
 
+%------------------------------------------------------------------------------
+% RISK SENSITIVITIES
+%------------------------------------------------------------------------------
+\section{Risk Sensitivities}
 
-%==============================================================================
+TODO: GREEKS
+
+%------------------------------------------------------------------------------
 % PORTFOLIO OPTIMIZATION
-%==============================================================================
-\chapter{Portfolio Optimization}
+%------------------------------------------------------------------------------
+\section{Portfolio Optimization}
 
-%------------------------------------------------------------------------------
-% PROBLEM FORMULATION
-%------------------------------------------------------------------------------
-\section{Problem Formulation}
-
-TODO: Harry Markowitz, efficient frontier
-TODO: Huge enough portfolios -> risk don't depend on size
-TODO: Equivalence modify obligors - change weights
-
-%------------------------------------------------------------------------------
-% ANOTHER SECTION
-%------------------------------------------------------------------------------
-\section{Portfolio Loss Distribution}
+TODO: Harry Markowitz, efficient frontier \\
+TODO: Huge enough portfolios -> risk don't depend on size \\
+TODO: Equivalence modify obligors - change weights \\
 
 
 %==============================================================================

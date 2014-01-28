@@ -479,7 +479,7 @@ for(i in 1:nrow(Y)) {
 
 
 # ================================================
-# quick-and-dirty estimator
+# implied covariance estimator
 # ================================================
 
  pri <- function(i, K, N)
@@ -514,7 +514,7 @@ for(i in 1:nrow(Y)) {
    return(p12-val)
  }
 
- quick_and_dirty_correl <- function(nu, K, N)
+ implied_covariance <- function(nu, K, N)
  {
    if (sum(dim(K) != dim(N))) stop("K and N dim differs")
    n = ncol(K)
@@ -584,7 +584,7 @@ for(i in 1:n) {
 
 # computing estimators
 exact(rcount)
-quick_and_dirty_correl(rcount$nu, K, N)
+implied_covariance(rcount$nu, K, N)
 
 # ================================================
 # risk disaggregation
