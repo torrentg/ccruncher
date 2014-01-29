@@ -338,6 +338,7 @@ the credit risk using a set of selected statistics (e.g., mean, quantile),
 but they differ in how to obtain this distribution. 
 
 %.................................
+
 TODO: ADD NEW APPROACHES \cite{brereton:2012}
 Bernoulli mixture models, factor models, copula models, and intensity models.
 
@@ -348,7 +349,7 @@ a known density.
 
 In factor models, the i-th obligor defaults when the corresponding random 
 variable $X_i$ crosses a preset threshold. Variables $X_i$ depends on a 
-low-dimensional random vector of common factors $\Psi$.
+low-dimensional random vector of common factors.
 
 TODO: CONTINUE HERE
 
@@ -570,7 +571,6 @@ transition matrix such as the following:
 \end{displaymath}
 
 The next section (\ref{pdftm}) explains how to derive the PD's curves from a 
-transition matrix. However, this simplified case has a closed-form solution 
 transition matrix. However, this simplified case has a closed-form solution 
 stated by the following proposition.
 
@@ -1345,9 +1345,13 @@ high (e.g., 10).
 
 
 %------------------------------------------------------------------------------
-% BAYESIAN INFERENCE
+% METROPOLIS-HASTINGS ALGORITHM
 %------------------------------------------------------------------------------
-\section{Bayesian Inference}
+\section{Metropolis-Hastings Algorithm}
+
+This section contains a brief introduction to Bayesian inference using 
+the Metropolis-Hastings algorithm and is heavily influenced by the book 
+\emph{Bayesian Modeling Using WinBUGS}~\cite{ntzoufras:2009}.
 
 Simulating a multivariate Gaussian distribution 20 times and calculating 
 the sample correlation indicates a high uncertainty of estimated correlations. 
@@ -1401,15 +1405,6 @@ $\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T$}.
 		\end{array}
 	\end{displaymath}
 \end{definition}
-
-%------------------------------------------------------------------------------
-% METROPOLIS-HASTINGS ALGORITHM
-%------------------------------------------------------------------------------
-\section{Metropolis-Hastings Algorithm}
-
-This section contains a brief introduction to Bayesian inference using 
-the Metropolis-Hastings algorithm and is heavily influenced by the book 
-\emph{Bayesian Modeling Using WinBUGS}~\cite{ntzoufras:2009}.
 
 When utilizing Bayesian inference, we can identify a closed form of the 
 posterior distribution in only a few cases. Generally this must be determined 
@@ -1650,9 +1645,9 @@ not independent of one another; in fact, they form a multivariate distribution.
 \end{figure}
 
 %------------------------------------------------------------------------------
-% ESTIMATION OF PARAMETERS
+% BAYESIAN ESTIMATOR
 %------------------------------------------------------------------------------
-\section{Estimation of Parameters}
+\section{Bayesian Estimator}
 
 \begin{proposition}[Parameters estimation]
 	\label{prop:pemh}
@@ -2462,6 +2457,8 @@ Variance reduction methods are procedures used to increase the precision
 of the estimates of the Monte Carlo method. The main procedures are common 
 random numbers, antithetic variates, control variates, importance sampling 
 and stratified sampling.
+
+TODO: add crude Monte Carlo, reference to new Monte Carlo document.
 
 CCruncher generates random samples from the portfolio loss distribution.
 This sample is used to estimate the risk measures (e.g., VaR) using the 
