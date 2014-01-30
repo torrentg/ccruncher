@@ -331,68 +331,51 @@ a discussion of the implementation details.
 Portfolio credit risk tries to respond to questions such as: ``What is the 
 expected portfolio loss for the next year?'' and ``How much could I 
 lose in a really bad year?'' There are several approaches to answering these 
-questions. The following two paragraphs briefly present the two most used 
-approaches~\cite{crouhy:2000}\cite[chap. 2.4]{bluhm:2002}. 
-Both attempt to ascertain the portfolio loss distribution and measure 
-the credit risk using a set of selected statistics (e.g., mean, quantile), 
-but they differ in how to obtain this distribution. 
+questions. All of them attempt to ascertain the portfolio loss distribution 
+and measure the credit risk using a set of selected statistics (e.g., mean, 
+quantile), but they differ in how to obtain this distribution. The following 
+list briefly present the most used 
+models~\cite{crouhy:2000,brereton:2012,mcneil:2003}\cite[chap. 2.4]{bluhm:2002}. 
 
-%.................................
+\textbf{Actuarial models} considers that the frequency of defaults (Poisson type 
+distributions) is the proper manner in which to analyze observed defaults. 
+Compounding default frequency with the obligors' exposure gives the
+portfolio loss distribution. The main representative of this approach is 
+the CreditRisk+ model~\cite{creditrisk+:1997}.
 
-TODO: ADD NEW APPROACHES \cite{brereton:2012}
-Bernoulli mixture models, factor models, copula models, and intensity models.
+\textbf{Intensity models} consider that an obligor defaults when ocurres the first 
+jump of a Poisson process with random intensity given by a Cox process.
+Dependency between defaults is induced by assuming that each intensity
+is a function of a common process and an idiosyncratic process. Actuarial 
+models may be included within this family to the extent that they have a 
+static intensity.
 
-In Bernoulli mixture model, obligors defaults are modeled as Bernoullis 
-conditionally independent given a vector of default probabilities. It is 
-assumed that these default probabilities comes from a random vector with 
-a known density.
+\textbf{Bernoulli mixture models} represents the i-th obligor's default using a 
+Bernoulli variable (with probability of default $p_i$). These variables are 
+conditionally independent given a vector of default probabilities with a known 
+density. The sum of the defaulted obligors' exposure gives the portfolio loss 
+distribution.
 
-In factor models, the i-th obligor defaults when the corresponding random 
-variable $X_i$ crosses a preset threshold. Variables $X_i$ depends on a 
-low-dimensional random vector of common factors.
+\textbf{Factor models} represents the i-th obligor's using a random variable and
+considere that this obligor defaults when this variable crosses a preset 
+threshold. These variables depends on a low-dimensional random vector of 
+common factors. Conditional on factors, factor models are Bernoulli mixture 
+models. CreditMetrics\texttrademark{}~\cite{cmetrics:1997} and 
+KMV~\cite{kmv:2003} are models of this type. 
 
-TODO: CONTINUE HERE
-
-%.................................
-
-\textbf{The actuarial approach} considers that the frequency of defaults 
-(Poisson type distributions) is the proper manner in which to analyze observed 
-defaults. Compounding default frequency with the obligors' exposure creates a
-portfolio loss distribution that can be approximated by Panjer recursion or 
-by the Fast Fourier Transform (FFT) method. The main representative of this 
-approach is the CreditRisk+ model~\cite{creditrisk+:1997}.
-
-\textbf{The Merton based approach} considers that the obligors' probabilities 
-of default are the proper manner in which to explain the observed defaults.
-The sum of the obligors' exposure weighted by the probabilities of default 
-derives the portfolio loss distribution. This distribution is approximated 
-using the Monte Carlo method. The main representatives of this approach are the 
-CreditMetrics\texttrademark{} model~\cite{cmetrics:1997} and the KMV 
-model~\cite{kmv:2003}. 
-
-These two approaches achieve similar results in simple cases~\cite{koyluoglu:1998}
-but differ when there is more than one underlying factor~\cite{bluhm:2001}, 
-i.e., when the dependence between obligors stops being simple.
-Circa 2000, the copula approach appeared \textit{en scene}, placing the focus 
-on the dependence structure, the \underline{key point} in the quantification 
-of portfolio credit risk. This approach was introduced by David X. Li~\cite{li:2000}
-and Embrechts, McNeil and Straumann~\cite{embrechts:2002}, and then 
-unfairly demonized by Salmon~\cite{salmon:2009} in 2009, who blamed the 
-copula approach for causing the sub-prime crisis.
-
-\textbf{The copula approach} considers that the lifetimes of obligors are
-the proper manner in which to explain observed defaults. The dependence between 
-these variables is explicitly modeled using a copula. The sum of the obligors' 
-exposure at the end of their lifetimes provides the portfolio loss 
-distribution. The CreditMetrics\texttrademark{} model can be interpreted as 
-the Gaussian case in the copula approach context~\cite{li:2000}.
+\textbf{Copula models} represents the i-th obligor using a random variable and
+considere that this obligor defaults when this variable satisfies a condition. 
+The dependence between these variables is explicitly modeled using a 
+copula~\cite{embrechts:2002}. The sum of the defaulted obligors' exposure 
+gives the portfolio loss distribution. Li copula model~\cite{li:2000} belongs 
+to this family of models. In the Li model, random variables are the obligors 
+default times and the default trigger is to cross a preset threshold. The 
+multi-factor Gaussian case of the Li model covers the 
+CreditMetrics\texttrademark{} model.
 
 The CCruncher model adheres to the copula approach, implementing the 
-t-Student multi-factor copula even for high-dimensional portfolios. 
-CCruncher is formulated according to the Basel II concepts (PD, EAD, LGD) 
-and developed considering portfolios of credits to SMEs; CCruncher can also 
-be used to evaluate other types of portfolios such as portfolios of bonds.
-
+t-Student multi-factor copula even for high-dimensional portfolios, and
+it is formulated according to the Basel II concepts (PD, EAD, LGD).
 CCruncher quantifies the portfolio credit risk by sampling the portfolio loss
 distribution and computing the appropriate statistics (EL, VaR, ES). The 
 portfolio losses are obtained simulating the time-until-default of obligors 
@@ -402,16 +385,21 @@ probabilities of default given by obligors' ratings and in which the dependence
 between obligors is determined by obligors' industrial sectors. CCruncher 
 assumes that the dependence structure is a t-Student copula, specifically 
 a t-Student multi-factor copula in which the factors are the industrial sectors.
-This document provides a procedure with which to estimate the copula parameters 
-using Bayesian inference and encourages transferring the parameters uncertainty
-to the credit risk measures.
+
+This document details the obligors' default times model, gives methods to 
+estimate the model parameters, details the procedure to simulate the portfolio 
+loss distribution and provides the formulas to quantify the credit risk. 
+Furthermore, it explore the risk sensitivity for some parameters, encourages 
+transferring the parameters uncertainty to the credit risk measures, and 
+exposes a method to optimize the credit risk portfolio.
 
 CCruncher requires a portfolio with a buy-and-hold policy in which each obligor 
 has a rating assigned and belongs to a single economic sector. An example of 
 such a credit portfolio could be an SMEs loan portfolio (buy-and-hold policy, 
 rated obligors, and multiple sectors in which each obligor belongs to a single 
-sector). Unlike CreditMetrics\texttrademark{}, CCruncher does not follow a 
-mark-to-market account, but rather follows a two-state model (default/no-default). 
+sector) or a portfolios of bonds. Unlike CreditMetrics\texttrademark{}, CCruncher 
+does not follow a mark-to-market account, but rather follows a two-state model 
+(default/no-default). 
 
 The advantages of CCruncher are as follows: 
 \begin{inparaenum}[1)]
@@ -439,6 +427,7 @@ The disadvantages of CCruncher are as follows:
 \end{inparaenum}
 
 TODO: REVISE CONTENT ORGANIZATION (OPTIMIZATION, PARAMETERS UNCERTAINTY).
+
 The content is organized into three chapters. The first chapter details the 
 distribution used to simulate the obligors' default times. It is easy to 
 understand and is recommended reading, especially the section in which the 
@@ -1933,6 +1922,8 @@ appropriate statistics.
 \section{Credit Risk Measurement}
 \label{sec:riskm}
 
+\subsection{Portfolio risk}
+
 After $N$ simulations (e.g., \num{20000}, \num{500000} or more) of the 
 portfolio loss, we measure the portfolio credit risk computing the 
 corresponding statistics and their standard errors according to sample size. 
@@ -1948,16 +1939,16 @@ methods.
 	\label{fig:lossdistr}
 \end{figure}
 
-When the loss values are high, for example, $\mathcal{O}(10^7)$, and the 
-number of simulations is also high, for example, $\mathcal{O}(10^6)$, we 
-can incur a loss of precision when we calculate the sum of the squares. 
-The usual manner of storing these values has a 15--17 significant 
-decimal-digit precision that can be exceeded in the sum of squares as we 
-can see in the previous example: $\mathcal{O}(10^{2 \cdot 7 + 6})$. In 
-this case, we recommend using the Kahan~\cite{kahan:1965} summation 
-algorithm.
+% When the loss values are high, for example, $\mathcal{O}(10^7)$, and the 
+% number of simulations is also high, for example, $\mathcal{O}(10^6)$, we 
+% can incur a loss of precision when we calculate the sum of the squares. 
+% The usual manner of storing these values has a 15--17 significant 
+% decimal-digit precision that can be exceeded in the sum of squares as we 
+% can see in the previous example: $\mathcal{O}(10^{2 \cdot 7 + 6})$. In 
+% this case, we recommend using the Kahan~\cite{kahan:1965} summation 
+% algorithm.
 
-\subsection{Expected Loss}
+\subsubsection{Expected Loss}
 
 \begin{definition}[Expected Loss (EL)]
 	The Expected Loss of a portfolio at time horizon $T$ is the 
@@ -1989,7 +1980,7 @@ confidence level, $\Phi^{-1}$ is the $N(0,1)$ inverse cumulative distribution
 function, and $\widehat{\mu}$ and $\widehat{\sigma}$ are the mean and standard 
 deviation estimators.
 
-\subsection{Value at Risk}
+\subsubsection{Value at Risk}
 
 \begin{definition}[Value at Risk (VaR)]
 	The Value at Risk of a portfolio at time horizon $T$ and confidence level 
@@ -2047,7 +2038,7 @@ to ascertain due to convergence problems. Also, a large sample size causes
 the evaluation of the incomplete beta function multiple being this computation
 numerically costly.
 
-\subsection{Expected Shortfall}
+\subsubsection{Expected Shortfall}
 
 \begin{definition}[Expected Shortfall (ES)]
 	The Expected Shortfall (aka Conditional VaR, aka Conditional Tail 
@@ -2087,10 +2078,7 @@ This estimator assumes that the estimated $\text{VaR}_{\beta}$ has the
 exact value. Despite this, if the sample size is high enough, then the 
 estimated value is good enough.
 
-%------------------------------------------------------------------------------
-% RISK DISAGGREGATION
-%------------------------------------------------------------------------------
-\section{Risk Disaggregation}
+\subsection{Risk Disaggregation}
 \label{ss:ra}
 
 Once we have measured the credit risk, naturally arises the question 
@@ -2113,17 +2101,6 @@ the obligor loss is aggregated to segment loss when the obligor defaults.
 In the second case, the asset losses are aggregated to segment losses when 
 the obligor defaults.
 
-\begin{example}
-	We use the identical scenario as that described in example~\ref{ex:test05} 
-	and that corresponds to CCruncher input file 
-	\texttt{\$CCRUNCHER/samples/test05.xml}. This example defines a 
-	segmentation named \emph{sector-rating} with segments S1-A, S1-B, S1-C, 
-	S2-A, S2-B, S2-C. Segment X-Y is composed by the obligors located at sector
-	X with the rating Y; each segment has $\approx 166$ obligors.
-	Figure~\ref{fig:disaggregation} displays the risk disaggregated respect
-	this segmentation.
-\end{example}
-
 \begin{figure}[!h]
 	\centering
 	\subcaptionbox{EL disaggregation}{
@@ -2136,7 +2113,7 @@ the obligor defaults.
 	\label{fig:disaggregation} 
 \end{figure}
 
-\subsection{Expected Loss}
+\subsubsection{Expected Loss}
 Expected Loss is additive respect the portfolio composition, i.e., if 
 $L$, $L_1$, and $L_2$ are respectively the portfolio, sub-portfolio 1, 
 and sub-portfolio 2 loss distributions in which $L=L_1+L_2$, then 
@@ -2149,7 +2126,7 @@ in which $x_i^k$ are the simulated losses of the k-th sub-portfolio.
 Dividing $\text{EL}_k$ by the portfolio EL gives the percentage of EL 
 consumed by this sub-portfolio.
 
-\subsection{Value at Risk}
+\subsubsection{Value at Risk}
 Value at Risk is not additive, it is not even sub-additive~\cite{var:varbad}.
 As mentioned in~\cite[chap. 5.2.2]{bluhm:2002}, calculating VaR risk 
 measure contributions is a natural but difficult attempt. In the CCruncher 
@@ -2159,7 +2136,7 @@ simulated sub-portfolio losses having a portfolio loss equal to
 $\text{VaR}_{\beta}$ has a very small size. For this reason, CCruncher 
 don't provides support for VaR disaggregation.
 
-\subsection{Expected Shortfall}
+\subsubsection{Expected Shortfall}
 Expected Shortfall can be disaggregated using the simulated losses of the 
 portfolio and its sub-portfolios. As indicated 
 in~\cite[chap. 5.2.3]{bluhm:2002}, the contribution of k-th sub-portfolio 
@@ -2175,10 +2152,23 @@ $\{y_1^k,\dots,y_K^k\} = \{x_i^k \mid x_i \ge \text{VaR}_{\beta}\}_{i=1\dots N}$
 are the simulated sub-portfolio losses having a portfolio loss large than 
 $\text{VaR}_{\beta}$.
 
+\begin{example}
+	We use the identical scenario as that described in example~\ref{ex:test05} 
+	and that corresponds to CCruncher input file 
+	\texttt{\$CCRUNCHER/samples/test05.xml}. This example defines a 
+	segmentation named \emph{sector-rating} with segments S1-A, S1-B, S1-C, 
+	S2-A, S2-B, S2-C. Segment X-Y is composed by the obligors located at sector
+	X with the rating Y; each segment has $\approx 166$ obligors.
+	Figure~\ref{fig:disaggregation} displays the risk disaggregated respect
+	this segmentation.
+\end{example}
+
 %------------------------------------------------------------------------------
-% VARIANCE REDUCTION
+% SIMULATION DETAILS
 %------------------------------------------------------------------------------
-\section{Variance Reduction}
+\section{Simulation Details}
+
+\subsection{Variance Reduction}
 
 The Monte Carlo method consists of sampling a distribution and averaging 
 these values to approximate the mean of this distribution. The main drawback 
@@ -2188,14 +2178,13 @@ of the estimates of the Monte Carlo method. The main procedures are common
 random numbers, antithetic variates, control variates, importance sampling 
 and stratified sampling.
 
-TODO: add crude Monte Carlo, reference to new Monte Carlo document.
-
 CCruncher generates random samples from the portfolio loss distribution.
 This sample is used to estimate the risk measures (e.g., VaR) using the 
 statistics described in section~\ref{sec:riskm} or any other required 
 by the analyst. Any one of these measures, considered individually, can be 
-formulated as a Monte Carlo problem and can apply some variance 
-reduction techniques, but not simultaneously. 
+formulated as a Monte Carlo problem and can apply some variance reduction 
+techniques (e.g., importance sampling~\cite{brereton:2012}), but not 
+simultaneously. 
 
 For this reason, the variance reduction techniques used in CCruncher 
 do not seek an increase in precision, but an improvement in the overall 
@@ -2203,7 +2192,7 @@ results in some manner. The applied variance reduction procedures
 implemented in CCruncher are antithetic variates and Latin hypercube 
 sampling.
 
-\subsection{Antithetic variates}
+\subsubsection{Antithetic variates}
 We estimate $E(g(X))$ using the Monte Carlo method. Assume $Y_1$ and 
 $Y_2$ as random variables with the identical distribution $g(X)$. 
 This indicates that $E(g(X)) = E(Y_1) = E(Y_2) = E(\frac{Y_1+Y_2}{2})$ and
@@ -2297,7 +2286,7 @@ EADs' and LGDs' random values for each variate.
 
 \end{lstlisting}
 
-\subsection{Latin Hypercube Sampling (LHS)}
+\subsubsection{Latin Hypercube Sampling (LHS)}
 This variance reduction technique 
 belongs to the stratified sampling family. It consists of dividing the total 
 probability range [0,1] in $N$ equispaced segments. Then we create a 
@@ -2365,7 +2354,7 @@ extreme cases are represented.
 %------------------------------------------------------------------------------
 % SIMULATION INTERNALS
 %------------------------------------------------------------------------------
-\section{Simulation Internals}
+\subsection{Simulation Internals}
 
 \textbf{EAD and LGD interpolation}. Given an asset, CCruncher knows its EAD 
 and LGD values at fixed times $\{t_1,\dots,t_n\}$ provided by the user. When 
@@ -2460,6 +2449,45 @@ file (e.g., 2000*\$EUR2USD).
 % ADDITIONAL TOPICS
 %==============================================================================
 \chapter{Additional Topics}
+
+%------------------------------------------------------------------------------
+% RISK SENSITIVITIES
+%------------------------------------------------------------------------------
+\section{Risk Sensitivities}
+
+In this section we make a basic sensitivity analysis evaluating the variation 
+of a parameter $s$, in the risk measure $V$. The goal is to determine the 
+appearance of the curve $V(s)$ (increasing/decreasing, concave/convex, 
+linear/quadratic/logarithmic, asymptotic behavior) and an estimate of the 
+slope given by $\frac{\partial V}{\partial s}$.
+
+It is difficult to draw general guidelines in the absence of a closed formula 
+for the portfolio credit risk that takes into account all the parameters: 
+number of ratings, PDs over time, number of sectors, number of obligors, 
+EADs and LGDs for each asset , factor loadings, factor correlations, and 
+$\nu$. For this reason, we lays out this section analyzing the case 
+\texttt{\$CCRUNCHER/samples/test05.xml} exposed in example~\ref{ex:test05}.
+We considere that risk measure is $\text{ES}_{99\%}$ and parameters subject 
+to sensibility analysis are: $\vec{w}, R, \nu, p_i$, and time. 
+
+%TODO: ADD NUMBER OF OBLIGORS IN ANALYSIS
+%TODO: NUMBER OF SECTORS NOT CONSIDERED BECAUSE ...
+
+We sketch the function $\text{ES}_{99\%}(s)$ by calculating $\text{ES}_{99\%}$ 
+in various consecutive values of the analyzed parameter. Each of these values 
+is obtained by applying the simulation procedure described in Chapter 4. 
+In order to reduce variations caused by the simulation procedure, we use the 
+same RNG seed in each evaluation.
+
+% Sensitivity analysis can be useful for a range of purposes,[2] including:
+
+    % Testing the robustness of the results of a model or system in the presence of uncertainty.
+    % Increased understanding of the relationships between input and output variables in a system or model.
+
+% The main drawback of sensitivity analysis is that it measures the impact 
+% of the uncertainty of a parameter setting the other parameters. Another 
+% drawback is that it does not consider the distribution of the parameters. 
+% The section that follows provides solutions to these two problems.
 
 %------------------------------------------------------------------------------
 % PARAMETERS UNCERTAINTY
@@ -2675,13 +2703,6 @@ export(rcount, "paramu.txt")
 	\caption{$\text{ES}_{99\%}$ distribution}
 	\label{fig:paramu5}
 \end{figure}
-
-%------------------------------------------------------------------------------
-% RISK SENSITIVITIES
-%------------------------------------------------------------------------------
-\section{Risk Sensitivities}
-
-TODO: GREEKS
 
 %------------------------------------------------------------------------------
 % PORTFOLIO OPTIMIZATION
