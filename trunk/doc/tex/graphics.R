@@ -612,3 +612,74 @@ pdf(file="disaggregation2.pdf", width=7, height=7)
 par(mar=c(0,0,0,0))
 pie(es99, labels2, radius=0.8)
 dev.off()
+
+# ================================================
+# sensitivity analysis
+# ================================================
+
+#!/bin/bash
+function ctrl_c() {
+	echo "** Trapped CTRL-C"
+	exit 1;
+}
+trap ctrl_c INT
+for NU in $(seq -f "%03.f" 5 25; seq -f "%03.f" 30 5 100;)
+do
+	echo "simulating NU=${NU} ...";
+	mkdir data/SA/NU.${NU};
+	build/ccruncher-cmd -o data/SA/NU.${NU} \
+		-D lhs=false -D seed=10 -D NU=${NU} \
+		samples/test05.xml > data/SA/NU.${NU}/ccruncher.out;
+done
+
+#/usr/bin/R
+ getRisk <- function(dir)
+ {
+   filename = paste(dir, "/portfolio.csv", sep="")
+   data <- read.csv(filename, header=T)
+   X = sort(data[,1])
+   n = length(X)
+   Y = X[as.integer(n*0.99):n]
+   ES99 = mean(Y)
+   sde = sqrt(var(Y)/length(Y))
+   return(c(ES99,sde))
+ }
+
+ dirs = dir("data/SA", pattern="NU.[[:digit:]{3}]*", full.names=TRUE)
+ values = matrix(ncol=3,nrow=length(dirs))
+ colnames(values) = c("NU", "ES99", "stderr")
+ for(i in 1:length(dirs)) {
+   values[i,1] = as.double(substr(dirs[i], nchar("data/SA/NU.")+1, 1000))
+   values[i,2:3] = getRisk(dirs[i])
+ }
+
+ save(values, file="sa-nu.dat")
+ load("sa-nu.dat")
+ 
+ plot(values[,1:2])
+ x = values[,1]
+ y = values[,2]
+ y.low = y - 1.96*values[,3]
+ y.high = y + 1.96*values[,3]
+ polygon(c(x, rev(x)), c(y.high, rev(y.low)),
+     col = "grey70", border = NA)
+ lines(lowess(values[,1:2], f=.2), col=2)
+ points(values[,1:2])
+ grid()
+ 
+ install.packages("pspline")
+ library(pspline)
+ x = values[,1]
+ y = values[,2]
+ fit <- smooth.Pspline(x, y, method=3)
+ dfit = predict(fit, x, nderiv=1)
+ nf = 1/sqrt(dfit^2 + 1)
+ x.high = x - dfit * nf * 1.96
+ y.high = y +    1 * nf * 1.96
+ x.low = x + dfit * nf * 1.96
+ y.low = y -    1 * nf * 1.96
+ polygon(c(x.high, rev(x.low)), c(y.high, rev(y.low)),
+     col = "grey80", border = NA)
+ lines(fit$x, fit$y, col="red")
+ points(values[,1:2])
+ grid()
