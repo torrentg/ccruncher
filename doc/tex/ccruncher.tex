@@ -248,7 +248,7 @@ please cite it when using it for credit risk analysis.
 	sort=100
 }
 \newglossaryentry{glos:Rbar}{name={\ensuremath{\widehat{R}}},
-	description={Correlation block matrix of dimension $n {\times} n$.},
+	description={Obligors' correlation block matrix of dimension $n {\times} n$.},
 	sort=110
 }
 \newglossaryentry{glos:R}{name=$R$,
@@ -1922,16 +1922,17 @@ appropriate statistics.
 \section{Credit Risk Measurement}
 \label{sec:riskm}
 
-\subsection{Portfolio risk}
-
 After $N$ simulations (e.g., \num{20000}, \num{500000} or more) of the 
 portfolio loss, we measure the portfolio credit risk computing the 
 corresponding statistics and their standard errors according to sample size. 
-Then we provide the definitions and formulas of the most usual credit risk 
-measures. Figure~\ref{fig:lossdistr} illustrates the concepts presented in 
-this section. Any other user-defined risk measure can be estimated from the 
-simulated sample, and its standard error can be obtained using resampling 
-methods.
+
+\subsection{Portfolio risk}
+
+In this section we provide the definitions and formulas of the most usual 
+credit risk measures. Figure~\ref{fig:lossdistr} illustrates the concepts 
+presented in this section. Any other user-defined risk measure can be 
+estimated from the simulated sample, and its standard error can be obtained 
+using resampling methods.
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=12cm]{creditvar}
@@ -1950,6 +1951,9 @@ methods.
 
 \subsubsection{Expected Loss}
 
+The Expected Loss attempts to answer the question, ``What is my expected 
+loss for the next year?''
+
 \begin{definition}[Expected Loss (EL)]
 	The Expected Loss of a portfolio at time horizon $T$ is the 
 	mean of the portfolio loss distribution.
@@ -1958,9 +1962,8 @@ methods.
 	\end{displaymath}
 \end{definition}
 
-The Expected Loss attempts to answer the question, ``What is my expected 
-loss for the next year?'' The answer can be approximated using the following 
-statistic:
+Expected Loss can be approximated using the following statistic:
+
 \begin{displaymath}
 	\text{EL} = \widehat{\mu} \pm \Phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma}}{\sqrt{N}}
 	\quad \text{ being } \quad
@@ -1982,6 +1985,9 @@ deviation estimators.
 
 \subsubsection{Value at Risk}
 
+The Value at Risk~\cite{var:jorion} is the most commonly used risk measure 
+to respond to the question, ``How much could I lose in a really bad year?''
+
 \begin{definition}[Value at Risk (VaR)]
 	The Value at Risk of a portfolio at time horizon $T$ and confidence level 
 	$\beta$ is the $\beta$-quantile of the portfolio loss distribution at time 
@@ -1993,9 +1999,8 @@ deviation estimators.
 	time $T$.
 \end{definition}
 
-The Value at Risk~\cite{var:jorion} is the most commonly used risk measure 
-to respond to the question, ``How much could I lose in a really bad year?''
-The answer can be approximated using the following statistic:
+Value at Risk can be approximated using the following statistic:
+
 \begin{displaymath}
 	\begin{array}{lcl}
 		\textrm{VaR}_{\beta} = \widehat{q_{\beta}} \pm \Phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \textrm{stderr}(q_{\beta})
@@ -2040,6 +2045,10 @@ numerically costly.
 
 \subsubsection{Expected Shortfall}
 
+VaR is not a coherent risk measure because it does not fulfill the 
+sub-additive property~\cite{var:varbad}. Expected Shortfall is a coherent 
+risk measure similar to VaR~\cite{var:eshortfall}.
+
 \begin{definition}[Expected Shortfall (ES)]
 	The Expected Shortfall (aka Conditional VaR, aka Conditional Tail 
 	Expectation) of a portfolio at time horizon $T$ and 
@@ -2050,10 +2059,8 @@ numerically costly.
 	\end{displaymath}
 \end{definition}
 
-VaR is not a coherent risk measure because it does not fulfill the 
-sub-additive property~\cite{var:varbad}. Expected Shortfall is a coherent 
-risk measure similar to VaR~\cite{var:eshortfall}. Consider the following
-statistic:
+Expected Shortfall can be approximated using the following statistic:
+
 \begin{displaymath}
 	\text{ES}_{\beta} = \widehat{\mu} \pm \Phi^{-1}\left(\frac{1-\alpha}{2}\right) \cdot \frac{\widehat{\sigma}}{\sqrt{K}}
 	\quad \text{ being } \quad

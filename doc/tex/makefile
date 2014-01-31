@@ -2,7 +2,7 @@
 #***************************************************************************
 #
 # CreditCruncher - A portfolio credit risk valorator
-# Copyright (C) 2004-2013 Gerard Torrent
+# Copyright (C) 2004-2014 Gerard Torrent
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -79,11 +79,21 @@ clean:
 	rm -f *~
 
 #
-#Developers tips & tricks
-#--------------------------------
-# yum install "tex(wrapfig.sty)"
-# yum install "tex(bbm.sty)"
-# miktex package manager -> mpm.exe
-# set 'draft' in \documentclass properties
-# check tex file using : chktex ccruncher.tex
+# Developers tips & tricks
+# --------------------------------
 #
+# Install packages:
+# > yum install "tex(wrapfig.sty)"
+# > yum install "tex(bbm.sty)"
+# > miktex package manager -> mpm.exe
+#
+# Additional syntax checking
+# > set 'draft' in \documentclass properties
+# > chktex ccruncher.tex
+#
+# Find unused bibentries:
+# > sed -n -e "s/\\\bibitem{\([^}]*\)}/\\1/p" ccruncher.bbl > check-bibentries.tmp1
+# > sed -n -e "s/@[[:alnum:]]*{\([^,]*\),/\\1/p" bibliography.bib > check-bibentries.tmp2
+# > grep -f check-bibentries.tmp1 -v check-bibentries.tmp2
+#
+
