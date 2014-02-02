@@ -618,24 +618,33 @@ dev.off()
 # ================================================
 
 #!/bin/bash
+if [ $# -ne 1 ]; then
+    echo "error: invalid number of arguments.";
+    exit 1;
+fi
 function ctrl_c() {
 	echo "** Trapped CTRL-C"
 	exit 1;
 }
 trap ctrl_c INT
-for NU in $(seq -f "%03.f" 5 25; seq -f "%03.f" 30 5 100;)
+export LC_NUMERIC=C
+for NUM in $(seq -f "%03.2f" 0 0.05 1;)
 do
-	echo "simulating NU=${NU} ...";
-	mkdir data/SA/NU.${NU};
-	build/ccruncher-cmd -o data/SA/NU.${NU} \
-		-D lhs=false -D seed=10 -D NU=${NU} \
-		samples/test05.xml > data/SA/NU.${NU}/ccruncher.out;
+	echo "simulating $1=${NUM} ...";
+	mkdir data/SA/$1.${NUM};
+	build/ccruncher-cmd -wo data/SA/$1.${NUM} \
+		-D lhs=false -D seed=10 -D $1=${NUM} \
+		samples/test05.xml > data/SA/$1.${NUM}/ccruncher.out;
+	if [ $? -ne 0 ]; then
+        rm -rvf data/SA/$1.${NUM};
+    fi
 done
 
 #/usr/bin/R
- getRisk <- function(dir)
+
+ getRisk <- function(path)
  {
-   filename = paste(dir, "/portfolio.csv", sep="")
+   filename = paste(path, "/portfolio.csv", sep="")
    data <- read.csv(filename, header=T)
    X = sort(data[,1])
    n = length(X)
@@ -645,41 +654,78 @@ done
    return(c(ES99,sde))
  }
 
- dirs = dir("data/SA", pattern="NU.[[:digit:]{3}]*", full.names=TRUE)
- values = matrix(ncol=3,nrow=length(dirs))
- colnames(values) = c("NU", "ES99", "stderr")
- for(i in 1:length(dirs)) {
-   values[i,1] = as.double(substr(dirs[i], nchar("data/SA/NU.")+1, 1000))
-   values[i,2:3] = getRisk(dirs[i])
+ getValues <- function(path, prefix)
+ {
+   len = nchar(path)+nchar(prefix)+3
+   pat = paste(prefix,"[.](.*)",sep="")
+   dirs = dir(path, pattern=pat , full.names=TRUE)
+   values = matrix(ncol=3,nrow=length(dirs))
+   colnames(values) = c("NU", "ES99", "stderr")
+   for(i in 1:length(dirs)) {
+     values[i,1] = as.double(substr(dirs[i], len, 1000))
+     values[i,2:3] = getRisk(dirs[i])
+   }
+   values = values[order(values[,1]),]
+   return(values)
  }
 
- save(values, file="sa-nu.dat")
- load("sa-nu.dat")
+ plotValues <- function(values, k=1)
+ {
+   fit <- smooth.spline(values[,1], values[,2])
+   dfit = predict(fit, values[,1], deriv=1)$y
+   nf = 1/sqrt(dfit^2 + 1)
+   x.high = fit$x - dfit * nf * 1.96 * values[,3] * k
+   y.high = fit$y +    1 * nf * 1.96 * values[,3] * k
+   x.low  = fit$x + dfit * nf * 1.96 * values[,3] * k
+   y.low  = fit$y -    1 * nf * 1.96 * values[,3] * k
+   plot(values[,1:2]) #, ylim=c(250,700)
+   polygon(c(x.high, rev(x.low)), c(y.high, rev(y.low)),
+       col = "grey80", border = NA)
+   lines(fit$x, fit$y, col="red")
+   points(values[,1:2])
+   grid()
+ }
+
+ VNU = getValues("data/SA", "NU")
+ VW1 = getValues("data/SA", "W1")
+ VW2 = getValues("data/SA", "W2")
+ VR12 = getValues("data/SA", "R12")
  
- plot(values[,1:2])
- x = values[,1]
- y = values[,2]
- y.low = y - 1.96*values[,3]
- y.high = y + 1.96*values[,3]
- polygon(c(x, rev(x)), c(y.high, rev(y.low)),
-     col = "grey70", border = NA)
- lines(lowess(values[,1:2], f=.2), col=2)
- points(values[,1:2])
+ #par(mfrow=c(2,2))
+ 
+ pdf(file="sensi-w1.pdf", width=7, height=7)
+ par(mar=c(2,2,0.5,0.5))
+ plotValues(VW1[1:21,], k=0.01)
+ points(VW1[9,1], VW1[9,2], pch=21, bg="black")
+ dev.off()
+ 
+ pdf(file="sensi-w2.pdf", width=7, height=7)
+ par(mar=c(2,2,0.5,0.5))
+ plotValues(VW2[1:21,], k=0.01)
+ points(VW2[8,1], VW2[8,2], pch=21, bg="black")
+ dev.off()
+ 
+ pdf(file="sensi-r12.pdf", width=7, height=7)
+ par(mar=c(2,2,0.5,0.5))
+ plotValues(VR12, k=0.05)
+ points(VR12[25,1], VR12[25,2], pch=21, bg="black")
+ dev.off()
+ 
+ pdf(file="sensi-nu.pdf", width=7, height=7)
+ par(mar=c(2,2,0.5,0.5))
+ plotValues(VNU)
+ points(VNU[11,1], VNU[11,2], pch=21, bg="black")
+ dev.off()
+ 
+ VSIZE = getValues("data/SA", "SIZE")
+ x = VSIZE[,1]
+ y = VSIZE[,2]/VSIZE[,1]
+ plot(x, y, yaxt="n", xlab="Number of obligors", ylab=~ES[99]~" as percentage of Exposure")
+ axis(2, at=pretty(y), paste0(pretty(y)*100, " %"), las=TRUE)
+ nlmod <- nls(y ~ B+A/(x))
+ lines(x, predict(nlmod), col = 2)
  grid()
  
- install.packages("pspline")
- library(pspline)
- x = values[,1]
- y = values[,2]
- fit <- smooth.Pspline(x, y, method=3)
- dfit = predict(fit, x, nderiv=1)
- nf = 1/sqrt(dfit^2 + 1)
- x.high = x - dfit * nf * 1.96
- y.high = y +    1 * nf * 1.96
- x.low = x + dfit * nf * 1.96
- y.low = y -    1 * nf * 1.96
- polygon(c(x.high, rev(x.low)), c(y.high, rev(y.low)),
-     col = "grey80", border = NA)
- lines(fit$x, fit$y, col="red")
- points(values[,1:2])
- grid()
+ 
+
+ 
