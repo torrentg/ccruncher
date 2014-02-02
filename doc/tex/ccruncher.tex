@@ -2496,6 +2496,96 @@ same RNG seed in each evaluation.
 % drawback is that it does not consider the distribution of the parameters. 
 % The section that follows provides solutions to these two problems.
 
+\begin{lstlisting}[language=bash, label={sc:sensi1}, caption={Execution of multiple CCrunchers (bash script)}]
+ 
+ #!/bin/bash
+ 
+ if [ $# -ne 1 ]; then
+	echo "error: invalid number of arguments.";
+	exit 1;
+ fi
+ 
+ function ctrl_c() {
+	echo "** Trapped CTRL-C"
+	exit 1;
+ }
+ trap ctrl_c INT
+ 
+ export LC_NUMERIC=C
+ for NUM in $(seq -f "%03.2f" 0 0.05 1;)
+ do
+	echo "simulating $1=${NUM} ...";
+	mkdir data/SA/$1.${NUM};
+	cmd/ccruncher-cmd -wo data/SA/$1.${NUM} \
+		-D lhs=false -D seed=10 -D $1=${NUM} \
+		samples/test05.xml > data/SA/$1.${NUM}/ccruncher.out;
+	if [ $? -ne 0 ]; then
+		rm -rvf data/SA/$1.${NUM};
+	fi
+ done
+
+\end{lstlisting}
+
+
+
+\begin{lstlisting}[language=R, label={sc:sensi2}, caption={$ES_{99\%}$ sensitivity (R script)}]
+
+ getRisk <- function(path)
+ {
+   filename = paste(path, "/portfolio.csv", sep="")
+   data <- read.csv(filename, header=T)
+   X = sort(data[,1])
+   n = length(X)
+   Y = X[as.integer(n*0.99):n]
+   ES99 = mean(Y)
+   sde = sqrt(var(Y)/length(Y))
+   return(c(ES99,sde))
+ }
+
+ getValues <- function(path, prefix)
+ {
+   len = nchar(path)+nchar(prefix)+3
+   pat = paste(prefix,"[.](.*)",sep="")
+   dirs = dir(path, pattern=pat , full.names=TRUE)
+   values = matrix(ncol=3,nrow=length(dirs))
+   colnames(values) = c("NU", "ES99", "stderr")
+   for(i in 1:length(dirs)) {
+     values[i,1] = as.double(substr(dirs[i], len, 1000))
+     values[i,2:3] = getRisk(dirs[i])
+   }
+   values = values[order(values[,1]),]
+   return(values)
+ }
+ 
+ VNU = getValues("data/SA", "NU")
+ VW1 = getValues("data/SA", "W1")
+ VW2 = getValues("data/SA", "W2")
+ VR12 = getValues("data/SA", "R12")
+
+\end{lstlisting}
+
+
+
+\begin{figure}[!h]
+	\centering
+	\subcaptionbox{Parameter $w_1$}{
+		\includegraphics[width=7cm]{sensi-w1}
+	}
+	\subcaptionbox{Parameter $w_2$}{
+		\includegraphics[width=7cm]{sensi-w2}
+	}
+	\\
+	\subcaptionbox{Parameter $R_{12}$}{
+		\includegraphics[width=7cm]{sensi-r12}
+	}
+	\subcaptionbox{Parameter $\nu$}{
+		\includegraphics[width=7cm]{sensi-nu}
+	}
+	\caption{$\text{ES}_{99\%}$ sensitivity to parameters}
+	\label{fig:sensi}
+\end{figure}
+
+
 %------------------------------------------------------------------------------
 % PARAMETERS UNCERTAINTY
 %------------------------------------------------------------------------------
