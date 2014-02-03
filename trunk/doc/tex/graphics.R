@@ -724,6 +724,7 @@ done
  axis(2, at=pretty(y), paste0(pretty(y)*100, " %"), las=TRUE)
  nlmod <- nls(y ~ B+A/(x))
  lines(x, predict(nlmod), col = 2)
+ points(x[20], y[20], pch=21, bg="black")
  grid()
  
  
