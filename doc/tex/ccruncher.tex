@@ -2486,7 +2486,7 @@ file (e.g., 2000*\$EUR2USD).
 %------------------------------------------------------------------------------
 % RISK SENSITIVITIES
 %------------------------------------------------------------------------------
-\section{Risk Sensitivities}
+\section{Risk Sensitivity}
 
 In this section we make a basic sensitivity analysis evaluating the variation 
 of a parameter $s$, in the risk measure $V$. The goal is to determine the 
@@ -2501,10 +2501,7 @@ EADs and LGDs for each asset, factor loadings, factor correlations, and
 $\nu$. For this reason, we lays out this section analyzing the case 
 \texttt{\$CCRUNCHER/samples/test05.xml} exposed in example~\ref{ex:test05}.
 We considere that risk measure is $\text{ES}_{99\%}$ and parameters subject 
-to sensibility analysis are: $\vec{w}, R, \nu, p_i$, and time. 
-
-%TODO: ADD NUMBER OF OBLIGORS IN ANALYSIS
-%TODO: NUMBER OF SECTORS NOT CONSIDERED BECAUSE ...
+to sensibility analysis are: $\vec{w}, R, \nu$.
 
 We sketch the function $\text{ES}_{99\%}(s)$ by calculating $\text{ES}_{99\%}$ 
 in various consecutive values of the analyzed parameter. Each of these values 
@@ -2512,16 +2509,14 @@ is obtained by applying the simulation procedure described in Chapter 4.
 In order to reduce variations caused by the simulation procedure, we use the 
 same RNG seed in each evaluation.
 
-% Sensitivity analysis can be useful for a range of purposes,[2] including:
+Figures \ref{fig:sensi1} and \ref{fig:sensi2} displays the portfolio risk
+value $\text{ES}_{99\%}$ depending on the parameter value. Each dot is a risk 
+value computed using a simulation, the black dot corresponds to the original 
+value in example~\ref{ex:test05}, and the confidence bounds shows the impact
+of the parameter value in the error attributable to simulation (this value is
+magnified in order to appreciate the impact).
 
-    % Testing the robustness of the results of a model or system in the presence of uncertainty.
-    % Increased understanding of the relationships between input and output variables in a system or model.
-
-% The main drawback of sensitivity analysis is that it measures the impact 
-% of the uncertainty of a parameter setting the other parameters. Another 
-% drawback is that it does not consider the distribution of the parameters. 
-% The section that follows provides solutions to these two problems.
-
+\begin{comment}
 \begin{lstlisting}[language=bash, label={sc:sensi1}, caption={Execution of multiple CCrunchers (bash script)}]
  
  #!/bin/bash
@@ -2551,8 +2546,6 @@ same RNG seed in each evaluation.
  done
 
 \end{lstlisting}
-
-
 
 \begin{lstlisting}[language=R, label={sc:sensi2}, caption={$ES_{99\%}$ sensitivity (R script)}]
 
@@ -2589,7 +2582,7 @@ same RNG seed in each evaluation.
  VR12 = getValues("data/SA", "R12")
 
 \end{lstlisting}
-
+\end{comment}
 
 
 \begin{figure}[!h]
@@ -2600,17 +2593,33 @@ same RNG seed in each evaluation.
 	\subcaptionbox{Parameter $w_2$}{
 		\includegraphics[width=7cm]{sensi-w2}
 	}
-	\\
+	\caption{$\text{ES}_{99\%}$ sensitivity to factor loadings}
+	\label{fig:sensi1}
+\end{figure}
+\begin{figure}[!h]
+	\centering
 	\subcaptionbox{Parameter $R_{12}$}{
 		\includegraphics[width=7cm]{sensi-r12}
 	}
 	\subcaptionbox{Parameter $\nu$}{
 		\includegraphics[width=7cm]{sensi-nu}
 	}
-	\caption{$\text{ES}_{99\%}$ sensitivity to parameters}
-	\label{fig:sensi}
+	\caption{$\text{ES}_{99\%}$ sensitivity to factor correlation and $\nu$}
+	\label{fig:sensi2}
 \end{figure}
 
+If we consider only the range of feasible values (eg. $w_i \in (0,0.5)$, or
+$\nu \in (5,\infty)$), we note that the impact of factor loading loadings
+and $\nu$ are similar. However, the impact of factor correlations is much 
+smaller. This is good news, because as we saw in the estimation of the 
+parameters, the uncertainty of factor correlations are much higher than 
+that of factor loadings. We also recall that in the estimation procedure,
+the values of factor loadings and $\nu$ are closely related. 
+
+The main drawback of sensitivity analysis is that it measures the impact 
+of the uncertainty of a parameter fixing the other ones. Another drawback 
+is that it does not consider the distribution of the parameters. The 
+section that follows provides solutions to these two problems.
 
 %------------------------------------------------------------------------------
 % PARAMETERS UNCERTAINTY
@@ -2833,6 +2842,37 @@ export(rcount, "paramu.txt")
 \section{Portfolio Optimization}
 
 TODO: Harry Markowitz, efficient frontier \\
+
+\subsection{Problem formulation}
+
+\begin{definition}[Risk minimization]
+	Portfolio + segmentations + ES/EL as percentages + X
+	\begin{displaymath}
+		\min_{\alpha_i} \ \text{ES}_{99\%}(L) = 
+		\min_{\alpha_i} \ \text{ES}_{99\%}\left(\displaystyle \sum_{i=1}^{n} \alpha_i \cdot L_i\right)
+	\end{displaymath}
+	Subjecto to:
+	\begin{displaymath}
+		\left.
+		\begin{array}{l}
+			x = \text{EL}(L) = 
+			\text{EL}\left(\displaystyle \sum_{i=1}^{n} \alpha_i \cdot L_i\right) = 
+			\displaystyle \sum_{i=1}^{n} \alpha_i \cdot \text{EL}(L_i)
+			\\
+			0 \le \alpha_i \le 1 \quad \forall i \\
+			\displaystyle \sum_{i=1}^{n} \alpha_i = 1 \\
+		\end{array}
+		\right\}
+	\end{displaymath}
+\end{definition}
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.98\textwidth]{sensi-size}
+	\caption{$\text{ES}_{99\%}$ vs. portfolio size}
+	\label{fig:popt1}
+\end{figure}
+
 TODO: Huge enough portfolios -> risk don't depend on size \\
 TODO: Equivalence modify obligors - change weights \\
 
