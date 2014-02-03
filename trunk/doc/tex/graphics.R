@@ -720,13 +720,31 @@ done
  VSIZE = getValues("data/SA", "SIZE")
  x = VSIZE[,1]
  y = VSIZE[,2]/VSIZE[,1]
- plot(x, y, yaxt="n", xlab="Number of obligors", ylab=~ES[99]~" as percentage of Exposure")
+
+ pdf(file="sensi-size.pdf", width=7, height=3)
+ #par(mar=c(2,4,0.5,0))
+ par(mar=c(4,4,0.5,0.1))
+ plot(x, y, yaxt="n", xlab="Number of obligors", ylab=~ES[99]~" as pct. of Exposure")
  axis(2, at=pretty(y), paste0(pretty(y)*100, " %"), las=TRUE)
  nlmod <- nls(y ~ B+A/(x))
  lines(x, predict(nlmod), col = 2)
  points(x[20], y[20], pch=21, bg="black")
  grid()
+ dev.off()
  
- 
+# ================================================
+# portfolio optimization
+# ================================================
 
- 
+# cal refer aquesta funcio -> (0:10)/10
+rmunif <- function(n, k)
+{
+	ret = matrix(nrow=k, ncol=n, NA)
+	for(i in 1:k) {
+		ret[i,] = runif(n)
+		ret[i,] = ret[i,]/sum(ret[i,])
+	}
+	return(ret)
+}
+
+rmunif(6, 1000)
