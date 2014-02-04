@@ -736,15 +736,102 @@ done
 # portfolio optimization
 # ================================================
 
-# cal refer aquesta funcio -> (0:10)/10
-rmunif <- function(n, k)
+f <- function()
 {
-	ret = matrix(nrow=k, ncol=n, NA)
-	for(i in 1:k) {
-		ret[i,] = runif(n)
-		ret[i,] = ret[i,]/sum(ret[i,])
-	}
-	return(ret)
+  ret = NULL
+  p = 0:10
+  a = rep(0, 6)
+    
+  for(i1 in 1:11) {
+    a[1] = i1
+    for(i2 in 1:11) {
+      if (sum(p[a]) + p[i2] > 10.001) next
+      a[2] = i2
+      for(i3 in 1:11) {
+        if (sum(p[a]) + p[i3] > 10.001) next
+        a[3] = i3
+        for(i4 in 1:11) {
+          if (sum(p[a]) + p[i4] > 10.001) next
+          a[4] = i4
+          for(i5 in 1:11) {
+            if (sum(p[a]) + p[i5] > 10.001) next
+            a[5] = i5
+            for(i6 in 1:11) {
+              if (sum(p[a]) + p[i6] != 10) next
+              a[6] = i6
+              ret = rbind(ret, p[a]/10)
+              a[6] = 0
+            }
+            a[5] = 0
+          }
+          a[4] = 0
+        }
+        a[3] = 0
+      }
+      a[2] = 0
+    }
+    a[1] = 0
+  }
+  
+  return(ret)
 }
 
-rmunif(6, 1000)
+# return EL and ES99 as percentage
+eles <- function(losses, weights, exposures, level=0.99)
+{
+  if (ncol(losses) != length(weights)) stop("data frame cols and weight length differs")
+  if (level <= 0 || level >= 1) stop("ES level out-of-range (0,1)")
+  n = nrow(losses)
+  k = ncol(losses)
+  loss = rep(0, n)
+  for(i in 1:k) {
+    loss = loss + losses[,i]*weights[i]
+  }
+  loss = sort(loss)
+  el = mean(loss)
+  es = mean(loss[as.integer(n*level):n])
+  return(c(el,es))
+}
+
+
+E = c(167, 166, 167, 167, 167, 166)
+L <- read.csv("data/sector-rating.csv", header=TRUE, sep=",")
+W = f()
+W = cbind(W, rep(0,nrow(W)), rep(0,nrow(W)))
+colnames(W) = c(colnames(L), "el", "es")
+for(i in 1:nrow(W)) {
+    W[i,7:8] = eles(L, W[i,1:6], E)/166.66
+}
+
+p = NULL
+p = rbind(p, c(383.82/1000, 116.58/1000))
+p = rbind(p, c(383.82/1000,  64.50/1000))
+p = rbind(p, c(374.00/1000, 116.58/1000))
+p = rbind(p, rev(W[2569,7:8]))
+p = rbind(p, rev(W[3003,7:8]))
+p = rbind(p, rev(W[1001,7:8]))
+p = rbind(p, rev(W[ 286,7:8]))
+p = rbind(p, rev(W[ 203,7:8]))
+p = rbind(p, rev(W[1151,7:8]))
+p = rbind(p, rev(W[1940,7:8]))
+plabs = c("", "", "", "A", "B", "C", "D", "E", "F", "G")
+
+
+pdf(file="optim1.pdf", width=7, height=7)
+par(mar=c(4,4,0.5,0.5))
+plot(W[,8], W[,7], xlab=~ES[99], ylab="EL", pch='.', yaxt="n", xaxt="n", xlim=c(0.25,0.65))
+axis(1, at=pretty(W[,8]), paste0(pretty(W[,8])*100, " %"), las=TRUE)
+axis(2, at=pretty(W[,7]), paste0(pretty(W[,7])*100, " %"), las=TRUE)
+points(p[4:nrow(p),], pch=21)
+points(p[1,1],p[1,2], pch=21, bg="black")
+arrows(p[1,1],p[1,2],p[2,1],p[2,2], lty="solid", length=0.1)
+arrows(p[1,1],p[1,2],p[3,1],p[3,2], lty="solid", length=0.1)
+hpts <- chull(W[,8], W[,7])
+hpts <- c(hpts, hpts[1])
+lines(W[hpts,8], W[hpts,7])
+text(p[,1]+0.01*c(0,0,0,-1,1,1,1,-1,-1,-1), p[,2], plabs)
+grid()
+#identify(W[,8], W[,7], 1:nrow(W))
+dev.off()
+
+
