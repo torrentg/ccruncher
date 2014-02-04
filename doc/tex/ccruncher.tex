@@ -373,9 +373,13 @@ default times and the default trigger is to cross a preset threshold. The
 multi-factor Gaussian case of the Li model covers the 
 CreditMetrics\texttrademark{} model.
 
-The CCruncher model adheres to the copula approach, implementing the 
-t-Student multi-factor copula even for high-dimensional portfolios, and
-it is formulated according to the Basel II concepts (PD, EAD, LGD).
+CCruncher uses the copula approach to formulate the model, then reformulate
+the model as a factor model in order to reduce the dimensionality, and finally 
+interprets the model as a Bernouilli mixture model to estimate the parameters.
+The CCruncher model implements the t-Student multi-factor copula even for 
+high-dimensional portfolios, and it is formulated according to the Basel II 
+concepts (PD, EAD, LGD).
+
 CCruncher quantifies the portfolio credit risk by sampling the portfolio loss
 distribution and computing the appropriate statistics (EL, VaR, ES). The 
 portfolio losses are obtained simulating the time-until-default of obligors 
@@ -2076,13 +2080,6 @@ estimated value is good enough.
 	because each defaulted obligor is computed as a 1\euro\ loss.
 \end{example}
 
-%\begin{figure}[!h]
-%	\centering
-%	\includegraphics[width=0.98\textwidth]{test05}
-%	\caption{2-factors example}
-%	\label{fig:test05}
-%\end{figure}
-
 \begin{figure}[!h]
 	\centering
 	\subcaptionbox{Risk measures}{
@@ -2842,6 +2839,32 @@ export(rcount, "paramu.txt")
 \section{Portfolio Optimization}
 
 TODO: Harry Markowitz, efficient frontier \\
+
+
+\begin{figure}[!h]
+	\centering
+	\subcaptionbox{Portfolio values}{
+		\includegraphics[width=6.5cm]{optim1}
+	}
+	\subcaptionbox{Portfolio composition}{
+		\small
+	    \begin{tabular}{c|cccccc}
+			  & S1A   & S1B   & S1C   & S2A   & S2B & S2C   \\
+			\hline
+			A &  40\% &   0\% &   0\% &  60\% & 0\% &   0\% \\
+			B & 100\% &   0\% &   0\% &   0\% & 0\% &   0\% \\
+			C &   0\% & 100\% &   0\% &   0\% & 0\% &   0\% \\
+			D &   0\% &   0\% & 100\% &   0\% & 0\% &   0\% \\
+			E &   0\% &   0\% &  40\% &   0\% & 0\% &  60\% \\
+			F &  10\% &   0\% &  30\% &  20\% & 0\% &  40\% \\
+			G &  20\% &  10\% &  10\% &  40\% & 0\% &  20\% \\
+		\end{tabular}
+		\vspace{50pt}
+	}
+	\caption{Feasible portfolios}
+	\label{fig:optim1}
+\end{figure}
+
 
 \subsection{Problem formulation}
 
