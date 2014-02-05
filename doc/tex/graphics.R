@@ -717,20 +717,53 @@ done
  points(VNU[11,1], VNU[11,2], pch=21, bg="black")
  dev.off()
  
- VSIZE = getValues("data/SA", "SIZE")
- x = VSIZE[,1]
- y = VSIZE[,2]/VSIZE[,1]
+ VSIZE1 = getValues("data/SA", "SIZE1")
+ x = VSIZE1[,1]
+ y = VSIZE1[,2]/VSIZE1[,1]
 
  pdf(file="sensi-size.pdf", width=7, height=3)
- #par(mar=c(2,4,0.5,0))
  par(mar=c(4,4,0.5,0.1))
- plot(x, y, yaxt="n", xlab="Number of obligors", ylab=~ES[99]~" as pct. of Exposure")
+ plot(x, y, yaxt="n", xlab="Number of obligors", ylab=~ES[99])
  axis(2, at=pretty(y), paste0(pretty(y)*100, " %"), las=TRUE)
  nlmod <- nls(y ~ B+A/(x))
  lines(x, predict(nlmod), col = 2)
  points(x[20], y[20], pch=21, bg="black")
  grid()
  dev.off()
+
+ #--------
+
+ VSIZE2 = getValues("data/SA", "SIZE2")
+ x = VSIZE2[,1]
+ y = VSIZE2[,2]/1000
+ data <- read.csv("data/SA/SIZE2.500/sector-rating.csv", header=T)
+ L = cbind(rowSums(data[,1:3]), rowSums(data[,4:6]))
+ W = matrix(nrow=nrow(VSIZE2), ncol=4)
+ W[,1] = VSIZE2[,1]
+ W[,2] = 1000-W[,1]
+ for(i in 1:nrow(W)) {
+    # see below for eles() function definition
+    W[i,3:4] = eles(L, W[i,1:2]/1000, c(500,500))
+ }
+
+ pdf(file="sensi-pct.pdf", width=7, height=3)
+ par(mar=c(4,4,0.5,0.1))
+ plot(x, y, yaxt="n", xaxt="n", xlab="Number of obligors", ylab=~ES[99], type='o')
+ axis(2, at=pretty(y), paste0(pretty(y)*100, " %"), las=TRUE)
+ axis(1, at=pretty(x,10), paste0("\n",pretty(x,10),"+\n",1000-pretty(x,10)," "), mgp=c(0,1.5,0), las=TRUE)
+ #nlmod <- nls(y ~ a+b*x+c*x^2+d*x^3+e*x^4, start = list(a=1,b=1,c=1,d=0,e=0))
+ #lines(x, predict(nlmod), col = 2)
+ points(x[10], y[10], pch=21, bg="black")
+ points(W[,1],W[,4]/500, pch=3, type='o', col="red")
+ legend(200, 0.45, c("Simulated", "Approximated"), lty=c(1,1), pch=c(21,3), col=c("black","red"), bg="white", cex=0.7)
+ grid()
+ dev.off()
+ 
+ par(mar=c(4,4,0.5,0.1))
+ plot(x, W[,4]/500-y,  yaxt="n", xaxt="n", type='o', xlab="Number of obligors", ylab=~ES[99]~" error")
+ axis(2, at=pretty(W[,4]/500-y), paste0(pretty(W[,4]/500-y)*100, " %"), las=TRUE)
+ axis(1, at=pretty(x,10), paste0("\n",pretty(x,10),"+\n",1000-pretty(x,10)," "), mgp=c(0,1.5,0), las=TRUE)
+ grid()
  
 # ================================================
 # portfolio optimization
