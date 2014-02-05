@@ -2481,7 +2481,7 @@ file (e.g., 2000*\$EUR2USD).
 \chapter{Additional Topics}
 
 %------------------------------------------------------------------------------
-% RISK SENSITIVITIES
+% RISK SENSITIVITY
 %------------------------------------------------------------------------------
 \section{Risk Sensitivity}
 
@@ -2848,7 +2848,7 @@ TODO: Harry Markowitz, efficient frontier \\
 	}
 	\subcaptionbox{Portfolio composition}{
 		\small
-	    \begin{tabular}{c|cccccc}
+	    \begin{tabular}{c|rrrrrr}
 			  & S1A   & S1B   & S1C   & S2A   & S2B & S2C   \\
 			\hline
 			A &  40\% &   0\% &   0\% &  60\% & 0\% &   0\% \\
@@ -2894,6 +2894,13 @@ TODO: Harry Markowitz, efficient frontier \\
 	\includegraphics[width=0.98\textwidth]{sensi-size}
 	\caption{$\text{ES}_{99\%}$ vs. portfolio size}
 	\label{fig:popt1}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.98\textwidth]{sensi-pct}
+	\caption{$\text{ES}_{99\%}$ for distinct percentages of S1 and S2}
+	\label{fig:popt2}
 \end{figure}
 
 TODO: Huge enough portfolios -> risk don't depend on size \\
