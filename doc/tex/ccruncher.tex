@@ -2611,12 +2611,12 @@ and $\nu$ are similar. However, the impact of factor correlations is much
 smaller. This is good news, because as we saw in the estimation of the 
 parameters, the uncertainty of factor correlations are much higher than 
 that of factor loadings. We also recall that in the estimation procedure,
-the values of factor loadings and $\nu$ are closely related. 
+the values of factor loadings and $\nu$ are interlaced. 
 
 The main drawback of sensitivity analysis is that it measures the impact 
 of the uncertainty of a parameter fixing the other ones. Another drawback 
 is that it does not consider the distribution of the parameters. The 
-section that follows provides solutions to these two problems.
+section that follows provides a solution to these problems.
 
 %------------------------------------------------------------------------------
 % PARAMETERS UNCERTAINTY
@@ -2744,7 +2744,7 @@ hidden such as:
 	provides an R script to perform this task. 
 
 	The exact value of the $\text{ES}_{99\%}$ assuming that parameters 
-	are fixed and known is $\approx 385$\ \euro. If we do not assume that 
+	are fixed and known is $\approx 383$\ \euro. If we do not assume that 
 	parameters are known and we infer the parameters from 20 observations 
 	of the numbers of defaults, then we obtain the distribution displayed 
 	in figure~\ref{fig:paramu5}. 
@@ -2787,17 +2787,17 @@ export(rcount, "paramu.txt")
  
  mkdir data/MH001;
  bin/ccruncher-cmd -o data/MH001 -DNU=12.54 -DW1=0.29 \
-     -DW2=0.48 -DR12=0.21 samples/test05.xml; 
+     -DW2=0.48 -DR12=0.21 samples/test05.xml > data/MH001/ccruncher.out; 
  
  mkdir data/MH002; 
  bin/ccruncher-cmd -o data/MH002 -DNU=10.77 -DW1=0.28 \
-     -DW2=0.32 -DR12=-0.28 samples/test05.xml; 
+     -DW2=0.32 -DR12=-0.28 samples/test05.xml > data/MH002/ccruncher.out;
 
  ...
 
  mkdir data/MH300; 
  bin/ccruncher-cmd -o data/MH300 -DNU=10.06 -DW1=0.33 \
-     -DW2=0.36 -DR12=0.02 samples/test05.xml; 
+     -DW2=0.36 -DR12=0.02 samples/test05.xml > data/MH300/ccruncher.out; 
  
 \end{lstlisting}
 
@@ -2838,7 +2838,85 @@ export(rcount, "paramu.txt")
 %------------------------------------------------------------------------------
 \section{Portfolio Optimization}
 
+Once we knows the portfolio credit risk, naturally arises the question ``How 
+can I balance the weights assigned to each business unit so that the total 
+portfolio risk is minimized?'' In section \ref{ss:ra}, we have seen that 
+CCruncher can define sub-portfolios and allows disaggregate the portfolio 
+credit risk in terms of them. In this section we will see how to modify the 
+weights assigned to each sub-portfolio in order to optimize the portfolio
+credit risk. First of all, let's define the problems considered:
+
+\begin{definition}[Expected Loss minimization]
+	Let a portfolio composed of $K$ sub-portfolios. We want to determine the 
+	sub-portfolio weights $\alpha_k$ that minimize the portfolio 
+	EL having $\text{ES}_{99\%} = x^0$.
+	\begin{displaymath}
+		\min_{\alpha_k} \ \text{EL}(L)
+	\end{displaymath}
+	Subjecto to:
+	\begin{displaymath}
+		\left.
+		\begin{array}{l}
+			x^0 = \text{ES}_{99\%}(L) \\
+			0 \le \alpha_k \le 1 \quad \forall k \\
+			\displaystyle \sum_{k=1}^{K} \alpha_k = 1 \\
+		\end{array}
+		\right\}
+	\end{displaymath}
+\end{definition}
+
+\begin{definition}[Expected Shortfall minimization]
+	Let a portfolio composed of $K$ sub-portfolios. We want to determine the 
+	sub-portfolio weights $\alpha_k$ that minimize the portfolio 
+	$\text{ES}_{99\%}$ having EL = $y^0$.
+	\begin{displaymath}
+		\min_{\alpha_k} \ \text{ES}_{99\%}(L)
+	\end{displaymath}
+	Subjecto to:
+	\begin{displaymath}
+		\left.
+		\begin{array}{l}
+			y^0 = \text{EL}(L) \\
+			0 \le \alpha_k \le 1 \quad \forall k \\
+			\displaystyle \sum_{k=1}^{K} \alpha_k = 1 \\
+		\end{array}
+		\right\}
+	\end{displaymath}
+\end{definition}
+
+In both cases you can replace $\text{ES}_{99\%}$ by any other risk measure
+depending on copula parameters, such as $\text{ES}_{95\%}$ or $\text{VaR}_{99\%}$.
+
+TODO: Problemes: tenim un portfolio de partida, simulacio costosa, els pesos 
+depenen del numero de deutors, treballem en \% respecte exposure.
+
+
 TODO: Harry Markowitz, efficient frontier \\
+
+
+\begin{definition}[Expected Shortfall minimization]
+	Let an existing portfolio composed of $K$ sub-portfolios, each of them
+	with a weight (relative to total exposure) $\alpha^0_k$. We want to determine
+	the weights $\alpha_k$ that minimize the portfolio $\text{ES}_{99\%}$ 
+	having $EL = x$.
+	\begin{displaymath}
+		\min_{\alpha_k} \ \text{ES}_{99\%}(L) = 
+		\min_{\alpha_k} \ \text{ES}_{99\%}\left(\displaystyle \sum_{i=1}^{K} \alpha_k \cdot L_k\right)
+	\end{displaymath}
+	Subjecto to:
+	\begin{displaymath}
+		\left.
+		\begin{array}{l}
+			x = \text{EL}(L) = 
+			\text{EL}\left(\displaystyle \sum_{i=1}^{K} \alpha_k \cdot L_k \right) = 
+			\displaystyle \sum_{k=1}^{K} \alpha_k \cdot \text{EL}(L_k)
+			\\
+			0 \le \alpha_k \le 1 \quad \forall k \\
+			\displaystyle \sum_{k=1}^{K} \alpha_k = 1 \\
+		\end{array}
+		\right\}
+	\end{displaymath}
+\end{definition}
 
 
 \begin{figure}[!h]
@@ -2866,28 +2944,6 @@ TODO: Harry Markowitz, efficient frontier \\
 \end{figure}
 
 
-\subsection{Problem formulation}
-
-\begin{definition}[Risk minimization]
-	Portfolio + segmentations + ES/EL as percentages + X
-	\begin{displaymath}
-		\min_{\alpha_i} \ \text{ES}_{99\%}(L) = 
-		\min_{\alpha_i} \ \text{ES}_{99\%}\left(\displaystyle \sum_{i=1}^{n} \alpha_i \cdot L_i\right)
-	\end{displaymath}
-	Subjecto to:
-	\begin{displaymath}
-		\left.
-		\begin{array}{l}
-			x = \text{EL}(L) = 
-			\text{EL}\left(\displaystyle \sum_{i=1}^{n} \alpha_i \cdot L_i\right) = 
-			\displaystyle \sum_{i=1}^{n} \alpha_i \cdot \text{EL}(L_i)
-			\\
-			0 \le \alpha_i \le 1 \quad \forall i \\
-			\displaystyle \sum_{i=1}^{n} \alpha_i = 1 \\
-		\end{array}
-		\right\}
-	\end{displaymath}
-\end{definition}
 
 \begin{figure}[!ht]
 	\centering
