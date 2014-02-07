@@ -1646,6 +1646,7 @@ Criterion (DIC) values, etc.
 % PORTFOLIO LOSS DISTRIBUTION
 %------------------------------------------------------------------------------
 \section{Portfolio Loss Distribution}
+\label{sec:pld}
 
 Figure~\ref{fig:lnlblock} displays the hierarchy of the portfolio components.
 As we observed in chapter~\ref{chap:mdt}, each obligor belongs to a single 
@@ -2084,20 +2085,20 @@ estimated value is good enough.
 	\centering
 	\subcaptionbox{Risk measures}{
 		%\small
-	    \begin{tabular}{|l|c|c|}
-		    \hline
-		    Statistic & Value & Std. Err. \\
-		    \hline
-		    EL & 116.58 & 0.16 \\
-		    $\text{VaR}_{95\%}$ & 252.00 & 1.09 \\
-		    $\text{VaR}_{99\%}$ & 338.00 & 2.22 \\
-		    $\text{VaR}_{99.9\%}$ & 442.00 & 5.44 \\
+		\begin{tabular}{|l|c|c|}
+			\hline
+			Statistic & Value & Std. Err. \\
+			\hline
+			EL & 116.58 & 0.16 \\
+			$\text{VaR}_{95\%}$ & 252.00 & 1.09 \\
+			$\text{VaR}_{99\%}$ & 338.00 & 2.22 \\
+			$\text{VaR}_{99.9\%}$ & 442.00 & 5.44 \\
 		
-		    $\text{ES}_{95\%}$ & 304.63 & 0.49 \\
-		    $\text{ES}_{99\%}$ & 383.82 & 0.96 \\
-		    $\text{ES}_{99.9\%}$ & 480.98 & 2.71 \\
+			$\text{ES}_{95\%}$ & 304.63 & 0.49 \\
+			$\text{ES}_{99\%}$ & 383.82 & 0.96 \\
+			$\text{ES}_{99.9\%}$ & 480.98 & 2.71 \\
 		
-		    \hline
+			\hline
 	    \end{tabular}
 	}
 	\hfill
@@ -2251,7 +2252,7 @@ EADs' and LGDs' random values for each variate.
 	We would like to estimate the following integral using the Monte Carlo 
 	method:
 	\begin{displaymath}
-	I = \displaystyle \int_0^1 \frac{1}{1+x} \ud x
+		I = \displaystyle \int_0^1 \frac{1}{1+x} \ud x
 	\end{displaymath}
 	In this case the random variable is $U \sim \text{Uniform}[0,1]$, and 
 	its variate is $1-U$. Listing~\ref{sc:antithetic} computes the integral 
@@ -2849,7 +2850,7 @@ credit risk. First of all, let's define the problems considered:
 \begin{definition}[Expected Loss minimization]
 	Let a portfolio composed of $K$ sub-portfolios. We want to determine the 
 	sub-portfolio weights $\alpha_k$ that minimize the portfolio 
-	EL having $\text{ES}_{99\%} = x^0$.
+	EL having a fixed risk\footnotemark[2].
 	\begin{displaymath}
 		\min_{\alpha_k} \ \text{EL}(L)
 	\end{displaymath}
@@ -2868,7 +2869,7 @@ credit risk. First of all, let's define the problems considered:
 \begin{definition}[Expected Shortfall minimization]
 	Let a portfolio composed of $K$ sub-portfolios. We want to determine the 
 	sub-portfolio weights $\alpha_k$ that minimize the portfolio 
-	$\text{ES}_{99\%}$ having EL = $y^0$.
+	risk\footnotemark[2] having a fixed EL.
 	\begin{displaymath}
 		\min_{\alpha_k} \ \text{ES}_{99\%}(L)
 	\end{displaymath}
@@ -2884,8 +2885,45 @@ credit risk. First of all, let's define the problems considered:
 	\end{displaymath}
 \end{definition}
 
-In both cases you can replace $\text{ES}_{99\%}$ by any other risk measure
-depending on copula parameters, such as $\text{ES}_{95\%}$ or $\text{VaR}_{99\%}$.
+\footnotetext[2]{We use $\text{ES}_{99\%}$ but you can use any other risk 
+measure depending on copula parameters, such as $\text{ES}_{95\%}$ or 
+$\text{VaR}_{99\%}$.}
+
+In both cases, sub-portfolio weights $\alpha_k$ are the sub-portfolio exposures 
+relative to total portfolio exposure at 1-year. The way to balance the portfolio
+composition is to add or substract obligors preserving the characteristics of 
+each sub-portfolio. This approach has two problems: 
+\begin{inparaenum}[1)]
+	\item losses of portfolios with distinct composition are not comparable, 
+	\item it is unclear the procedure to modify the composition of a 
+		sub-portfolio (we add half a debtor?, we put an averaged exposure
+		and recovery?, what rating we assign?, to wich sector we assign?).
+\end{inparaenum}
+
+The parameters to adjust $\alpha_k$, affects directly the portfolio composition.
+This is a major drawback because we knows our current portfolio with known 
+weights $\alpha_k^0$ but it is difficult to establish the sub-portfolio 
+composition for a value $\alpha_k^0+5\%$. Ideally is to increase/decrease the 
+number of obligors considering exposures similar to those of this sub-portfolio.
+
+Fortunately these two problems are solvable. The first one is bypassed 
+considering the relative losses on exposure rather than absolute losses. 
+Thus, the relative portfolio loss at time horizon $T$ is
+\begin{displaymath}
+	L_T = \frac{
+	\displaystyle \sum_{i=1}^n \mathbbm{1}_{[0,T]}(t_i) \cdot 
+	\left( 
+	\sum_{j=1}^{m_i} \text{EAD}_i^j(t_i) \cdot \text{LGD}_i^j(t_i)
+	\right)}
+	{\displaystyle \sum_{i=1}^n
+	\left( 
+	\sum_{j=1}^{m_i}\ \underset{[0,T]}{\text{avg}} \left( \text{EAD}_i^j(t) \right)
+	\right)}
+\end{displaymath}
+where $T$ is the time horizon where loss is computed, $n$ is the number of obligors,
+$(t_1,\dots,t_n)$ are the obligors' default times, $m_i$ is the number of assets of 
+the i-th obligor, and $\text{EAD}_i^j(t)$ and $\text{LGD}_i^j(t)$ are the EAD and 
+LGD functions of the j-th asset of the i-th obligor evaluated at time $t$.
 
 TODO: Problemes: tenim un portfolio de partida, simulacio costosa, els pesos 
 depenen del numero de deutors, treballem en \% respecte exposure.
