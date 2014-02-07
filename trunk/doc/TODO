@@ -8,6 +8,7 @@ Current works
   * Add portfolio optimization to technical doc.
   * check unused bib entries in tech. doc.
   * output exposure per segmentation
+  * print losses as % respect exposure
 
 Future works
 -------------------
