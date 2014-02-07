@@ -9,6 +9,7 @@ Current works
   * check unused bib entries in tech. doc.
   * output exposure per segmentation
   * print losses as % respect exposure
+  * rename bin package to lin package?
 
 Future works
 -------------------
