@@ -2185,13 +2185,12 @@ $\text{VaR}_{\beta}$.
 
 \begin{example}
 	We use the identical scenario as that described in example~\ref{ex:test05} 
-	and that corresponds to CCruncher input file 
-	\texttt{\$CCRUNCHER/samples/test05.xml}. This example defines a 
-	segmentation named \emph{sector-rating} with segments S1-A, S1-B, S1-C, 
-	S2-A, S2-B, S2-C. Segment X-Y is composed by the obligors located at sector
-	X with the rating Y; each segment has $\approx 166$ obligors.
-	Figure~\ref{fig:disaggregation} displays the risk disaggregated respect
-	this segmentation.
+	and that corresponds to CCruncher input file \texttt{test05.xml}. This 
+	example defines a segmentation named \emph{sector-rating} with segments 
+	S1-A, S1-B, S1-C, S2-A, S2-B, S2-C. Segment X-Y is composed by the obligors 
+	located at sector X with the rating Y; each segment has $\approx 166$ 
+	obligors. Figure~\ref{fig:disaggregation} displays the risk disaggregated 
+	respect this segmentation.
 \end{example}
 
 %------------------------------------------------------------------------------
@@ -2494,18 +2493,27 @@ slope given by $\frac{\partial V}{\partial s}$.
 
 It is difficult to draw general guidelines in the absence of a closed formula 
 for the portfolio credit risk that takes into account all the parameters: 
-number of ratings, PDs over time, number of sectors, number of obligors, 
-EADs and LGDs for each asset, factor loadings, factor correlations, and 
-$\nu$. For this reason, we lays out this section analyzing the case 
-\texttt{\$CCRUNCHER/samples/test05.xml} exposed in example~\ref{ex:test05}.
-We considere that risk measure is $\text{ES}_{99\%}$ and parameters subject 
-to sensibility analysis are: $\vec{w}, R, \nu$.
+number of ratings, PDs over time, number of sectors, number of obligors, EADs 
+and LGDs for each asset, factor loadings, factor correlations, and $\nu$. For 
+this reason, we lays out this section analyzing the case \texttt{test05.xml} 
+exposed in example~\ref{ex:test05}. In this case, we considere that risk 
+measure is $\text{ES}_{99\%}$ and parameters subject to sensibility analysis 
+are: $n, \vec{w}, R, \nu$.
 
 We sketch the function $\text{ES}_{99\%}(s)$ by calculating $\text{ES}_{99\%}$ 
 in various consecutive values of the analyzed parameter. Each of these values 
 is obtained by applying the simulation procedure described in Chapter 4. 
 In order to reduce variations caused by the simulation procedure, we use the 
 same RNG seed in each evaluation.
+
+TODO: COMPLETE THIS, Exposure  as \%\\
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.98\textwidth]{sensi-size}
+	\caption{$\text{ES}_{99\%}$ vs. portfolio size}
+	\label{fig:popt1}
+\end{figure}
 
 Figures \ref{fig:sensi1} and \ref{fig:sensi2} displays the portfolio risk
 value $\text{ES}_{99\%}$ depending on the parameter value. Each dot is a risk 
@@ -2581,7 +2589,6 @@ magnified in order to appreciate the impact).
 
 \end{lstlisting}
 \end{comment}
-
 
 \begin{figure}[!h]
 	\centering
@@ -2693,10 +2700,10 @@ hidden such as:
 \begin{example}[Credit risk considering parameters uncertainty]
 	\label{ex:paramu}
 	We use the identical scenario as that described in example~\ref{ex:test05} 
-	and that corresponds to CCruncher input file 
-	\texttt{\$CCRUNCHER/samples/test05.xml}. We generate 20 observations of 
-	annual numbers of defaults using the algorithm~\ref{alg:snod} (in the real 
-	world, these observations are extracted from the historical records). 
+	and that corresponds to CCruncher input file \texttt{test05.xml}. We 
+	generate 20 observations of annual numbers of defaults using the 
+	algorithm~\ref{alg:snod} (in the real world, these observations are extracted
+	from the historical records). 
 	In the following lines, we apply algorithm~\ref{alg:crmd} to estimate 
 	the $\text{ES}_{99\%}$ distribution, considering the parameters' 
 	uncertainty. 
@@ -2847,66 +2854,62 @@ credit risk in terms of them. In this section we will see how to modify the
 weights assigned to each sub-portfolio in order to optimize the portfolio
 credit risk. First of all, let's define the problems considered:
 
-\begin{definition}[Expected Loss minimization]
+\begin{definition}[Portfolio optimization]
 	Let a portfolio composed of $K$ sub-portfolios. We want to determine the 
-	sub-portfolio weights $\alpha_k$ that minimize the portfolio 
-	EL having a fixed risk\footnotemark[2].
-	\begin{displaymath}
-		\min_{\alpha_k} \ \text{EL}(L)
-	\end{displaymath}
-	Subjecto to:
-	\begin{displaymath}
-		\left.
-		\begin{array}{l}
-			x^0 = \text{ES}_{99\%}(L) \\
-			0 \le \alpha_k \le 1 \quad \forall k \\
-			\displaystyle \sum_{k=1}^{K} \alpha_k = 1 \\
-		\end{array}
-		\right\}
-	\end{displaymath}
-\end{definition}
+	sub-portfolio weights $\alpha_k$ that minimize one of the following 
+	problems\footnotemark[2].
 
-\begin{definition}[Expected Shortfall minimization]
-	Let a portfolio composed of $K$ sub-portfolios. We want to determine the 
-	sub-portfolio weights $\alpha_k$ that minimize the portfolio 
-	risk\footnotemark[2] having a fixed EL.
-	\begin{displaymath}
-		\min_{\alpha_k} \ \text{ES}_{99\%}(L)
-	\end{displaymath}
-	Subjecto to:
-	\begin{displaymath}
-		\left.
-		\begin{array}{l}
-			y^0 = \text{EL}(L) \\
-			0 \le \alpha_k \le 1 \quad \forall k \\
-			\displaystyle \sum_{k=1}^{K} \alpha_k = 1 \\
-		\end{array}
-		\right\}
-	\end{displaymath}
+	{\centering
+	\renewcommand{\arraystretch}{1.5}
+	\begin{tabular}{l m{2cm} l}
+		\textbf{EL minimization} & & \textbf{ES minimization} \\
+		$\displaystyle \min_{\alpha_k} \ \text{EL}(L)$
+		& &
+		$\displaystyle \min_{\alpha_k} \ \text{ES}_{99\%}(L)$
+		\\
+		Subjecto to:
+		& \centering or &
+		Subjecto to:
+		\\
+		$\left.
+			\begin{array}{l}
+				x^0 = \text{ES}_{99\%}(L) \\
+				0 \le \alpha_k \le 1 \quad \forall k \\
+				\displaystyle \sum_{k=1}^{K} \alpha_k = 1 \\
+			\end{array}
+			\right\}
+		$
+		& &
+		$\left.
+			\begin{array}{l}
+				y^0 = \text{EL}(L) \\
+				0 \le \alpha_k \le 1 \quad \forall k \\
+				\displaystyle \sum_{k=1}^{K} \alpha_k = 1 \\
+			\end{array}
+			\right\}
+		$
+	\end{tabular}\par}
+	where $L=L_1+\dots+L_k$ is the portfolio loss, and $x^0$ and $y^0$ are 
+	fixed values.
 \end{definition}
 
 \footnotetext[2]{We use $\text{ES}_{99\%}$ but you can use any other risk 
 measure depending on copula parameters, such as $\text{ES}_{95\%}$ or 
 $\text{VaR}_{99\%}$.}
 
-In both cases, sub-portfolio weights $\alpha_k$ are the sub-portfolio exposures 
-relative to total portfolio exposure at 1-year. The way to balance the portfolio
-composition is to add or substract obligors preserving the characteristics of 
-each sub-portfolio. This approach has two problems: 
+Sub-portfolio weights $\alpha_k$ are the sub-portfolio exposures relative 
+to total portfolio exposure at 1-year. The way to balance the portfolio 
+composition is to add or substract obligors preserving the characteristics 
+of each sub-portfolio. This approach has two problems: 
 \begin{inparaenum}[1)]
 	\item losses of portfolios with distinct composition are not comparable, 
 	\item it is unclear the procedure to modify the composition of a 
-		sub-portfolio (we add half a debtor?, we put an averaged exposure
-		and recovery?, what rating we assign?, to wich sector we assign?).
+		sub-portfolio (we add half a debtor?, to wich rating and sector we 
+		assign the new obligor?, new obligors have an averaged exposure and 
+		recovery?).
 \end{inparaenum}
 
-The parameters to adjust $\alpha_k$, affects directly the portfolio composition.
-This is a major drawback because we knows our current portfolio with known 
-weights $\alpha_k^0$ but it is difficult to establish the sub-portfolio 
-composition for a value $\alpha_k^0+5\%$. Ideally is to increase/decrease the 
-number of obligors considering exposures similar to those of this sub-portfolio.
-
-Fortunately these two problems are solvable. The first one is bypassed 
+Fortunately these two problems are solvable. The first one is avoided
 considering the relative losses on exposure rather than absolute losses. 
 Thus, the relative portfolio loss at time horizon $T$ is
 \begin{displaymath}
@@ -2920,16 +2923,46 @@ Thus, the relative portfolio loss at time horizon $T$ is
 	\sum_{j=1}^{m_i}\ \underset{[0,T]}{\text{avg}} \left( \text{EAD}_i^j(t) \right)
 	\right)}
 \end{displaymath}
-where $T$ is the time horizon where loss is computed, $n$ is the number of obligors,
-$(t_1,\dots,t_n)$ are the obligors' default times, $m_i$ is the number of assets of 
-the i-th obligor, and $\text{EAD}_i^j(t)$ and $\text{LGD}_i^j(t)$ are the EAD and 
-LGD functions of the j-th asset of the i-th obligor evaluated at time $t$.
+where $T$ is the time horizon where portfolio loss is computed, $n$ is the 
+number of obligors, $(t_1,\dots,t_n)$ are the obligors' default times, $m_i$ 
+is the number of assets of the i-th obligor, and $\text{EAD}_i^j(t)$ and 
+$\text{LGD}_i^j(t)$ are the EAD and LGD functions of the j-th asset of the 
+i-th obligor evaluated at time $t$.
 
-TODO: Problemes: tenim un portfolio de partida, simulacio costosa, els pesos 
-depenen del numero de deutors, treballem en \% respecte exposure.
+The second problem, the portfolio composition, is avoided by equating the number 
+of obligors to exposures. Suppose we have two sub-portfolios A and B with the 
+same exposure, the first one with 500 obligors, and the second with 500 obligors. 
+We want to balance the portfolio so that ends up with $25\%$ of the exposure in 
+A and $75\%$ in B. The practical way to do this, is eliminating half of the 
+obligors from A and adding $250$ new obligors similar to those of B. That said, 
+if sub-portfolios A and B have a large number of homogeneous individuals, then 
+we can maintain the original number of individuals ($500+500$) and balance the 
+portfolio by multiplying by $0.5$ the A's exposures and by $1.5$ the B's 
+exposures.
 
+\begin{example}[Sub-portfolio weights]
+	To check the accuracy of the equivalence between the number of individuals 
+	and the exposures we analyze the case \texttt{test05.xml} (see 
+	example~\ref{ex:test05}) considering the sub-portfolios S1 ( = S1A + 
+	S1B + S1C) and S2 (= S2A + S2B + S2C). In this example we consider only two 
+	sub-portfolios, rather than the six defined, so that the values can be 
+	clearly represented in the plane. First, we simulate different portfolio 
+	compositions (50+950, 100+900, \dots, 950+50) and calculate the ES for each
+	of them. Next, we consider a fixed number of individuals (500+500) and we 
+	change the exposure of individuals according to its sector so that we mimic
+	the previous compositions. Figure \ref{fig:popt2} displays the values 
+	modifying the composition of the portfolio (simulated) and the values 
+	modifying the exposure of the obligors (approximated). In this case, both 
+	values are similar, with an error less than $0.15\%$.
+\end{example}
 
-TODO: Harry Markowitz, efficient frontier \\
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.98\textwidth]{sensi-pct}
+	\caption{$\text{ES}_{99\%}$ for distinct percentages of S1 and S2}
+	\label{fig:popt2}
+\end{figure}
+
 
 
 \begin{definition}[Expected Shortfall minimization]
@@ -2982,20 +3015,6 @@ TODO: Harry Markowitz, efficient frontier \\
 \end{figure}
 
 
-
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.98\textwidth]{sensi-size}
-	\caption{$\text{ES}_{99\%}$ vs. portfolio size}
-	\label{fig:popt1}
-\end{figure}
-
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.98\textwidth]{sensi-pct}
-	\caption{$\text{ES}_{99\%}$ for distinct percentages of S1 and S2}
-	\label{fig:popt2}
-\end{figure}
 
 TODO: Huge enough portfolios -> risk don't depend on size \\
 TODO: Equivalence modify obligors - change weights \\
