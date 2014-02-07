@@ -48,7 +48,7 @@
 % Font Settings
 \usepackage{avant} % Use the Avantgarde font for headings
 %\usepackage{times} % Use the Times font for headings
-\usepackage{mathptmx} % Use the Adobe Times Roman as the default text font together with math symbols from the Sym­bol, Chancery and Com­puter Modern fonts
+\usepackage{mathptmx} % Use the Adobe Times Roman as the default text font together with math symbols from the Symbol, Chancery and Com­puter Modern fonts
 \usepackage{microtype} % Slightly tweak font spacing for aesthetics
 \usepackage[utf8]{inputenc} % Required for including letters with accents
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
@@ -2506,89 +2506,40 @@ is obtained by applying the simulation procedure described in Chapter 4.
 In order to reduce variations caused by the simulation procedure, we use the 
 same RNG seed in each evaluation.
 
-TODO: COMPLETE THIS, Exposure  as \%\\
+\begin{example}[Sensitivity to portfolio size]
+	Common sense tells us that a large and homogeneous portfolio must have the 
+	same risk (as percentage of the total exposure) that a portfolio with the 
+	same characteristics but with twice obligors. Figure~\ref{fig:sensi1}
+	shows the $\text{ES}_{99\%}$ by varying the number of obligors that 
+	compose the portfolio described in \texttt{test05.xml}. Note that this
+	value is almost equal in range $[200,\infty)$. In the range $[50,200]$
+	we can appreciate the impact of the small number of individuals in the 
+	risk measure, not very exaggerated otherwise.
+\end{example}
 
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=0.98\textwidth]{sensi-size}
 	\caption{$\text{ES}_{99\%}$ vs. portfolio size}
-	\label{fig:popt1}
+	\label{fig:sensi1}
 \end{figure}
 
-Figures \ref{fig:sensi1} and \ref{fig:sensi2} displays the portfolio risk
-value $\text{ES}_{99\%}$ depending on the parameter value. Each dot is a risk 
-value computed using a simulation, the black dot corresponds to the original 
-value in example~\ref{ex:test05}, and the confidence bounds shows the impact
-of the parameter value in the error attributable to simulation (this value is
-magnified in order to appreciate the impact).
-
-\begin{comment}
-\begin{lstlisting}[language=bash, label={sc:sensi1}, caption={Execution of multiple CCrunchers (bash script)}]
- 
- #!/bin/bash
- 
- if [ $# -ne 1 ]; then
-	echo "error: invalid number of arguments.";
-	exit 1;
- fi
- 
- function ctrl_c() {
-	echo "** Trapped CTRL-C"
-	exit 1;
- }
- trap ctrl_c INT
- 
- export LC_NUMERIC=C
- for NUM in $(seq -f "%03.2f" 0 0.05 1;)
- do
-	echo "simulating $1=${NUM} ...";
-	mkdir data/SA/$1.${NUM};
-	cmd/ccruncher-cmd -wo data/SA/$1.${NUM} \
-		-D lhs=false -D seed=10 -D $1=${NUM} \
-		samples/test05.xml > data/SA/$1.${NUM}/ccruncher.out;
-	if [ $? -ne 0 ]; then
-		rm -rvf data/SA/$1.${NUM};
-	fi
- done
-
-\end{lstlisting}
-
-\begin{lstlisting}[language=R, label={sc:sensi2}, caption={$ES_{99\%}$ sensitivity (R script)}]
-
- getRisk <- function(path)
- {
-   filename = paste(path, "/portfolio.csv", sep="")
-   data <- read.csv(filename, header=T)
-   X = sort(data[,1])
-   n = length(X)
-   Y = X[as.integer(n*0.99):n]
-   ES99 = mean(Y)
-   sde = sqrt(var(Y)/length(Y))
-   return(c(ES99,sde))
- }
-
- getValues <- function(path, prefix)
- {
-   len = nchar(path)+nchar(prefix)+3
-   pat = paste(prefix,"[.](.*)",sep="")
-   dirs = dir(path, pattern=pat , full.names=TRUE)
-   values = matrix(ncol=3,nrow=length(dirs))
-   colnames(values) = c("NU", "ES99", "stderr")
-   for(i in 1:length(dirs)) {
-     values[i,1] = as.double(substr(dirs[i], len, 1000))
-     values[i,2:3] = getRisk(dirs[i])
-   }
-   values = values[order(values[,1]),]
-   return(values)
- }
- 
- VNU = getValues("data/SA", "NU")
- VW1 = getValues("data/SA", "W1")
- VW2 = getValues("data/SA", "W2")
- VR12 = getValues("data/SA", "R12")
-
-\end{lstlisting}
-\end{comment}
+\begin{example}[Sensitivity to copula parameters]
+	Figure~\ref{fig:sensi2} shows the portfolio risk value $\text{ES}_{99\%}$ 
+	depending on the copula parameters. Each dot is a 
+	risk value computed using a simulation, the black dot corresponds to the 
+	original value in example~\ref{ex:test05}, and the confidence bounds shows 
+	the impact of the parameter value in the error attributable to simulation 
+	(this value is magnified in order to appreciate the impact).
+	
+	If we consider only the range of feasible values (eg. $w_i \in (0,0.5)$, or
+	$\nu \in (5,\infty)$), we note that the impact of factor loading loadings
+	and $\nu$ are similar. However, the impact of factor correlations is much 
+	smaller. This is good news, because as we saw in the estimation of the 
+	parameters, the uncertainty of factor correlations are much higher than 
+	that of factor loadings. We also recall that in the estimation procedure,
+	the values of factor loadings and $\nu$ are interlaced. 
+\end{example}
 
 \begin{figure}[!h]
 	\centering
@@ -2598,28 +2549,19 @@ magnified in order to appreciate the impact).
 	\subcaptionbox{Parameter $w_2$}{
 		\includegraphics[width=7cm]{sensi-w2}
 	}
-	\caption{$\text{ES}_{99\%}$ sensitivity to factor loadings}
-	\label{fig:sensi1}
-\end{figure}
-\begin{figure}[!h]
-	\centering
+%	\caption{$\text{ES}_{99\%}$ sensitivity to factor loadings}
+%	\label{fig:sensi2}
+	\\
 	\subcaptionbox{Parameter $R_{12}$}{
 		\includegraphics[width=7cm]{sensi-r12}
 	}
 	\subcaptionbox{Parameter $\nu$}{
 		\includegraphics[width=7cm]{sensi-nu}
 	}
-	\caption{$\text{ES}_{99\%}$ sensitivity to factor correlation and $\nu$}
+%	\caption{$\text{ES}_{99\%}$ sensitivity to factor correlation and $\nu$}
+	\caption{$\text{ES}_{99\%}$ sensitivity to copula parameters}
 	\label{fig:sensi2}
 \end{figure}
-
-If we consider only the range of feasible values (eg. $w_i \in (0,0.5)$, or
-$\nu \in (5,\infty)$), we note that the impact of factor loading loadings
-and $\nu$ are similar. However, the impact of factor correlations is much 
-smaller. This is good news, because as we saw in the estimation of the 
-parameters, the uncertainty of factor correlations are much higher than 
-that of factor loadings. We also recall that in the estimation procedure,
-the values of factor loadings and $\nu$ are interlaced. 
 
 The main drawback of sensitivity analysis is that it measures the impact 
 of the uncertainty of a parameter fixing the other ones. Another drawback 
@@ -2900,7 +2842,8 @@ $\text{VaR}_{99\%}$.}
 Sub-portfolio weights $\alpha_k$ are the sub-portfolio exposures relative 
 to total portfolio exposure at 1-year. The way to balance the portfolio 
 composition is to add or substract obligors preserving the characteristics 
-of each sub-portfolio. This approach has two problems: 
+of each sub-portfolio. When we try to model this procedure we find two 
+problems:
 \begin{inparaenum}[1)]
 	\item losses of portfolios with distinct composition are not comparable, 
 	\item it is unclear the procedure to modify the composition of a 
@@ -2931,14 +2874,14 @@ i-th obligor evaluated at time $t$.
 
 The second problem, the portfolio composition, is avoided by equating the number 
 of obligors to exposures. Suppose we have two sub-portfolios A and B with the 
-same exposure, the first one with 500 obligors, and the second with 500 obligors. 
-We want to balance the portfolio so that ends up with $25\%$ of the exposure in 
-A and $75\%$ in B. The practical way to do this, is eliminating half of the 
-obligors from A and adding $250$ new obligors similar to those of B. That said, 
-if sub-portfolios A and B have a large number of homogeneous individuals, then 
-we can maintain the original number of individuals ($500+500$) and balance the 
-portfolio by multiplying by $0.5$ the A's exposures and by $1.5$ the B's 
-exposures.
+same exposure, the first one with 500 obligors, and the second one with 500 
+obligors. We want to balance the portfolio so that ends up with $25\%$ of the 
+exposure in A and $75\%$ in B. The practical way to do this, is eliminating 
+half of the obligors from A and adding $250$ new obligors similar to those of 
+B. That said, if sub-portfolios A and B have a large number of homogeneous 
+individuals, then we can maintain the original number of individuals 
+($500+500$) and balance the portfolio by multiplying by $0.5$ the A's exposures 
+and by $1.5$ the B's exposures.
 
 \begin{example}[Sub-portfolio weights]
 	To check the accuracy of the equivalence between the number of individuals 
@@ -2963,32 +2906,14 @@ exposures.
 	\label{fig:popt2}
 \end{figure}
 
+The equivalence between the number of debtors and the exposures has a very 
+important advantage since it allows to optimize without having to do multiple 
+simulations. This is achieved by simulating the losses of the current portfolio
+and by reusing these values to calculate any desired composition of the 
+portfolio. The following algorithm shows to compute the risk of a weighted
+portfolio using the simulated losses from the current portfolio.
 
-
-\begin{definition}[Expected Shortfall minimization]
-	Let an existing portfolio composed of $K$ sub-portfolios, each of them
-	with a weight (relative to total exposure) $\alpha^0_k$. We want to determine
-	the weights $\alpha_k$ that minimize the portfolio $\text{ES}_{99\%}$ 
-	having $EL = x$.
-	\begin{displaymath}
-		\min_{\alpha_k} \ \text{ES}_{99\%}(L) = 
-		\min_{\alpha_k} \ \text{ES}_{99\%}\left(\displaystyle \sum_{i=1}^{K} \alpha_k \cdot L_k\right)
-	\end{displaymath}
-	Subjecto to:
-	\begin{displaymath}
-		\left.
-		\begin{array}{l}
-			x = \text{EL}(L) = 
-			\text{EL}\left(\displaystyle \sum_{i=1}^{K} \alpha_k \cdot L_k \right) = 
-			\displaystyle \sum_{k=1}^{K} \alpha_k \cdot \text{EL}(L_k)
-			\\
-			0 \le \alpha_k \le 1 \quad \forall k \\
-			\displaystyle \sum_{k=1}^{K} \alpha_k = 1 \\
-		\end{array}
-		\right\}
-	\end{displaymath}
-\end{definition}
-
+TODO: SET ALGORITHM HERE
 
 \begin{figure}[!h]
 	\centering
@@ -3013,11 +2938,6 @@ exposures.
 	\caption{Feasible portfolios}
 	\label{fig:optim1}
 \end{figure}
-
-
-
-TODO: Huge enough portfolios -> risk don't depend on size \\
-TODO: Equivalence modify obligors - change weights \\
 
 
 %==============================================================================
