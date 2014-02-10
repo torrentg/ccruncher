@@ -48,7 +48,7 @@
 % Font Settings
 \usepackage{avant} % Use the Avantgarde font for headings
 %\usepackage{times} % Use the Times font for headings
-\usepackage{mathptmx} % Use the Adobe Times Roman as the default text font together with math symbols from the Symbol, Chancery and Com­puter Modern fonts
+\usepackage{mathptmx} % Use the Adobe Times Roman as the default text font
 \usepackage{microtype} % Slightly tweak font spacing for aesthetics
 \usepackage[utf8]{inputenc} % Required for including letters with accents
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
@@ -457,17 +457,25 @@ risk measures can skip the last section referring to parameters' uncertainty.
 \chapter{Modeling Default Times}
 \label{chap:mdt}
 
+Financial institutions have statistical models that measure the probability of 
+default of each obligor as well as statistical models for the exposure and 
+recovery of each operation. These models allows us to estimate the expected 
+loss of the portfolio, but they have nothing to say about the measures related 
+to economic capital such as VaR or ES. This is because these values strongly 
+depend on the dependence between obligors, and models mentioned above do not 
+refer to this concept. This chapter develops the multivariate model exploiting 
+the existing PD models.
+
 %------------------------------------------------------------------------------
-% THE MULTIVARIATE MODEL
+% THE COPULA MODEL
 %------------------------------------------------------------------------------
-\section{The Multivariate Model}
+\section{The Copula Model}
 
 The multivariate time-until-default model described in this section is identical
-to that described in~\cite{li:2000,roncalli:2001,frey:2001}~\cite[chap. 2.6]{bluhm:2002}.
+to that described in~\cite{li:2000,frey:2001}~\cite[chap. 2.6]{bluhm:2002}.
 We recommend perusing the appendices before proceeding. The appendices contain 
 definitions, statements, and notation regarding subjects used in this section.
 
-\subsection{The copula model}
 The copula approach considers that the lifetimes of obligors are the proper 
 manner in which to explain the observed defaults. Obligors' default times 
 $(T_1,\dots,T_n)$ are modeled by a multivariate distribution $F$ such that
@@ -482,9 +490,10 @@ theorem, we obtain
 	C\left(F_1(t_1), \dots, F_n(t_n)\right)
 \end{displaymath}
 in which marginal $F_i(t) = \Pr\{T_i \le t\}$ is the time-until-default 
-distribution of the i-th obligor obtained in appendix~\ref{ap:pd} and $C$ 
-is a copula. CCruncher considers that $C$ is a t-Student copula for the 
-following \ul{practical} reasons:
+distribution of the i-th obligor (see appendix~\ref{ap:pd} to obtain
+this distribution from existing PD models) and $C$ is a copula. CCruncher 
+considers that $C$ is a t-Student copula for the following \ul{practical} 
+reasons:
 
 \begin{itemize}
 	\item it is determined by the correlation matrix (elliptical property). 
@@ -1120,23 +1129,23 @@ of this algorithm adapted to our case.
 	We can estimate the parameters of the t-Student multi-factor copula from 
 	the observed annual number of defaults using the Metropolis-Hastings 
 	algorithm detailed in algorithm~\ref{alg:bimh}, considering
-~\\
-~\\
-\begin{listliketab} 
-	\begin{tabular}{Lll}
-		\textbullet & parameters $\theta \equiv \{ \nu,\vec{w},R,\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\}$ & \\
-		\textbullet & observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$ & \\
-		\textbullet & likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid \upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$ & see definition \ref{def:clik} \\
-		\textbullet & proposal distributions $q_j(\theta_j \mid \theta_j') \equiv N(\theta,\sigma_j)$ & all parameters\\
-		\textbullet & prior distribution $\nu \equiv \text{Unif}(2,1000)$ & \\
-		\textbullet & prior distribution $w_i \equiv \text{Unif}(0,1)$ & $i=1,\dots,s$ \\
-		\textbullet & prior distribution $r_{ij} \equiv \Xi_{ij}(\vec{z}^1,\dots,\vec{z}^T,R)$ & $i=1,\dots,s \quad j>i$ \\ %, 
-		\textbullet & prior distribution $\vec{z}^t \equiv N(\vec{0},R)$ & $t=1,\dots,T$ \\
-		\textbullet & prior distribution $\upsilon^t \equiv \chi_{\nu}^2$ & $t=1,\dots,T$ \\
-	\end{tabular}
-\end{listliketab}
-~\\
-~\\
+	~\\
+	~\\
+	\begin{listliketab} 
+		\begin{tabular}{lll}
+			\textbullet & parameters $\theta \equiv \{ \nu,\vec{w},R,\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\}$ & \\
+			\textbullet & observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$ & \\
+			\textbullet & likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid \upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$ & see definition \ref{def:clik} \\
+			\textbullet & proposal distributions $q_j(\theta_j \mid \theta_j') \equiv N(\theta,\sigma_j)$ & all parameters\\
+			\textbullet & prior distribution $\nu \equiv \text{Unif}(2,1000)$ & \\
+			\textbullet & prior distribution $w_i \equiv \text{Unif}(0,1)$ & $i=1,\dots,s$ \\
+			\textbullet & prior distribution $r_{ij} \equiv \Xi_{ij}(\vec{z}^1,\dots,\vec{z}^T,R)$ & $i=1,\dots,s \quad j>i$ \\ %, 
+			\textbullet & prior distribution $\vec{z}^t \equiv N(\vec{0},R)$ & $t=1,\dots,T$ \\
+			\textbullet & prior distribution $\upsilon^t \equiv \chi_{\nu}^2$ & $t=1,\dots,T$ \\
+		\end{tabular}
+	\end{listliketab}
+	~\\
+	~\\
 	The pdf of the distribution $\Xi_{ij}(\vec{z}^1,\dots,\vec{z}^T,R)$ is
 	\begin{displaymath}
 		\xi_{ij}(r_{ij}\ ;\ \vec{z}^1,\dots,\vec{z}^T,R) = \frac
