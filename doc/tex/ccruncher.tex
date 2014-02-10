@@ -373,7 +373,7 @@ default times and the default trigger is to cross a preset threshold. The
 multi-factor Gaussian case of the Li model covers the 
 CreditMetrics\texttrademark{} model.
 
-CCruncher uses the copula approach to formulate the model, then coerce the 
+CCruncher uses the copula approach to formulate the model, then restrict the 
 model into a factor model in order to reduce the dimensionality, and finally 
 interprets the model as a Bernouilli mixture model to estimate the parameters.
 The CCruncher model implements the t-Student multi-factor copula even for 
@@ -458,331 +458,6 @@ risk measures can skip the last section referring to parameters' uncertainty.
 \label{chap:mdt}
 
 %------------------------------------------------------------------------------
-% THE PROBABILITIES OF DEFAULT
-%------------------------------------------------------------------------------
-\section{The Probabilities of Default}
-\label{sec:pd}
-
-One pillar of the multivariate time-until-default model is the probability 
-of default over time. In this section, we construct these curves using 
-available information such as the 1-year PDs or the ratings transition 
-matrix. Those who already know how to obtain the PDs over time can skip 
-this section and go directly to the multivariate model section.
-
-\begin{definition}[Probability of Default (PD)]
-	$T_i$ is the random variable that represents the default time 
-	(aka time-until-default, aka survival time, aka time-to-default) of the 
-	i-th obligor. Let $F_i(t)$ denote the distribution function of $T_i$:
-	\begin{displaymath}
-		F_i(t) = \Pr\{T_i \le t\} = 
-		\Pr\{\text{ i-th obligor defaults before $t$ years }\}
-	\end{displaymath}
-	Note that $F_i(t)$ is the probability of default (PD) of the i-th obligor
-	at time horizon $t$. PD is a key parameter used in the calculation of credit 
-	risk under Basel II\@. We indicate as $p_i$ the probability that i-th obligor 
-	defaults within the time range $[0,1]$.
-	\begin{displaymath}
-		p_i = \Pr\{T_i \le 1\ \text{year}\} = F_i(1) 
-	\end{displaymath}
-\end{definition}
-
-Each obligor has its own time-until-default distribution depending on its 
-rating; therefore, all obligors with identical ratings have identical
-distributions. Below, we indicate three different manners of inferring $F_i$ 
-depending upon the amount of information available. All three manners produce 
-similar results in the short term (e.g., 1 year) but differ in the middle and
-long term. Before detailing the different approaches, we define the transition 
-matrix because it is used in all three cases.
-
-\begin{definition}[Transition matrix]
-	\label{def:tm}
-	The $T$-years transition matrix gives the probability of changing 
-	from i-th rating to j-th rating in a period of $T$ years:
-	{\small
-	\begin{displaymath}
-		M_T = \left(
-		\begin{array}{ccc}
-			m_{11} & \cdots & m_{1r} \\
-			\vdots & \ddots & \vdots \\
-			m_{r1} & \cdots & m_{rr} \\
-		\end{array}
-		\right)
-	\end{displaymath}\par}
-	in which $r$ is the number of ratings and $m_{ij}$ is the probability that 
-	an obligor with i-th rating ends up having the j-th rating after $T$ years.
-	Note that row sums are $1$ and that two consecutive transition matrices, 
-	$M_{T_1}$ and $M_{T_2}$, give $M_{T_1+T_2} = M_{T_1} \cdot M_{T_2}$.
-	A valid transition matrix must have a unique \emph{defaulted} rating, and 
-	any rating ends up defaulting.
-\end{definition}
-
-\begin{example}
-	\label{ex:1ytm}
-	Table~\ref{tmatrix1} shows a transition matrix, extracted 
-	from~\cite[p. 20]{cmetrics:1997}, in which the probability that an obligor 
-	with rating AA changes to rating B in one year is $0.14\%$. Note that the
-	last column contains the 1-year default probabilities for each rating and 
-	that the last row corresponds to the \emph{defaulted} rating.
-\end{example}
-
-\begin{table}[!ht]
-	\begin{center}
-		\begin{tabular}[]{l|rrrrrrrr}
-							& AAA     & AA      & A       & BBB     & BB      & B                  & CCC     & Default  \\
-			\hline
-			AAA     & $90.81$ & $8.33$  & $0.68$  & $0.06$  & $0.12$  & $0.00$             & $0.00$  & $0.00$   \\
-			AA      & $0.70$  & $90.65$ & $7.79$  & $0.64$  & $0.06$  & $\underline{0.14}$ & $0.02$  & $0.00$   \\
-			A       & $0.09$  & $2.27$  & $91.05$ & $5.52$  & $0.74$  & $0.26$             & $0.01$  & $0.06$   \\
-			BBB     & $0.02$  & $0.33$  & $5.95$  & $86.93$ & $5.30$  & $1.17$             & $0.12$  & $0.18$   \\
-			BB      & $0.03$  & $0.14$  & $0.67$  & $7.73$  & $80.53$ & $8.84$             & $1.00$  & $1.06$   \\
-			B       & $0.00$  & $0.11$  & $0.24$  & $0.43$  & $6.48$  & $83.46$            & $4.07$  & $5.21$   \\
-			CCC     & $0.22$  & $0.00$  & $0.22$  & $1.30$  & $2.38$  & $11.24$            & $64.86$ & $19.78$  \\
-			Default & $0.00$  & $0.00$  & $0.00$  & $0.00$  & $0.00$  & $0.00$             & $0.00$  & $100.00$ \\
-		\end{tabular}
-		\caption{1-year transition matrix \%}
-		\label{tmatrix1}
-	\end{center}
-\end{table}
-
-\subsection{From annual PDs}
-\label{pdfsv}
-
-In some circumstances, the transition matrix is not available, and we only 
-have the probability of default at 1-year for each rating, 
-$p_1,\dots,p_{r-1},p_r$ in which the r-th rating is the \emph{defaulted} 
-status. In the absence of more information, we can consider a diagonal 
-transition matrix such as the following:
-\begin{displaymath}
-	M_1 = \left(
-	\begin{array}{cccc}
-		1-p_1  & \cdots & 0         & p_1     \\
-		\vdots & \ddots & \vdots    & \vdots  \\
-		0      & \cdots & 1-p_{r-1} & p_{r-1} \\
-		0      & \cdots & 0         & 1       \\
-	\end{array}
-	\right)
-\end{displaymath}
-
-The next section (\ref{pdftm}) explains how to derive the PD's curves from a 
-transition matrix. However, this simplified case has a closed-form solution 
-stated by the following proposition.
-
-\begin{proposition}[PDs derived from single values]
-	\label{prop:pdfsv}
-	If the time-until-default of an obligor satisfies a transition matrix 
-	and only depends on the 1-year probability of default $p_i$, then this
-	time-until-default follows the exponential distribution, i.e.,
-	$T_i \sim \text{Exp}(-\ln(1-p_i))$.
-	\begin{displaymath}
-		F_i(t) = \Pr\{T_. \le t\} = 1 - e^{-\lambda_i \cdot t} 
-		\quad \text{ where } \lambda = -\ln(1-p_i)
-		\quad i=1,\dots,r
-	\end{displaymath}
-\end{proposition}
-
-\begin{example}
-	\label{ex:pdfsv}
-	Suppose that we only know the annual probabilities of default and that these 
-	values are those from the 1-year regularized transition matrix displayed in
-	table~\ref{tmatrix1}. In this case, the 1-year diagonal transition matrix 
-	is
-	{\small
-	\begin{displaymath}
-		M_1 = \left(
-		\begin{array}{cccccccc}
-			99.9991 & 0 & 0 & 0 & 0 & 0 & 0 & 0.0009 \\
-			0 & 99.9923 & 0 & 0 & 0 & 0 & 0 & 0.0077 \\
-			0 & 0 & 99.9400 & 0 & 0 & 0 & 0 & 0.0600 \\
-			0 & 0 & 0 & 99.8200 & 0 & 0 & 0 & 0.1800 \\
-			0 & 0 & 0 & 0 & 98.9401 & 0 & 0 & 1.0599 \\
-			0 & 0 & 0 & 0 & 0 & 94.7997 & 0 & 5.2003 \\
-			0 & 0 & 0 & 0 & 0 & 0 & 80.2154 & 19.7846 \\
-			0 & 0 & 0 & 0 & 0 & 0 & 0 & 100 \\
-		\end{array}
-		\right)
-	\end{displaymath}\par}
-	We determine the PD's function for each rating using  
-	proposition~\ref{prop:pdfsv}, i.e., considering that times-until-default
-	are exponential distributions. These results are displayed in 
-	figure~\ref{fig:pdfsv}. 
-\end{example}
-
-\begin{figure}[!ht]
-	\centering
-	\subcaptionbox{Probability of Default (100 years)}{
-		\includegraphics[width=7cm]{pdfsv1}
-	}
-	\subcaptionbox{Probability of Default (10-year zoom)}{
-		\includegraphics[width=7cm]{pdfsv2}
-	}
-	\caption{PDs derived from annual PDs}
-	\label{fig:pdfsv}
-\end{figure}
-
-\subsection{From transition matrix}
-\label{pdftm}
-
-This alternative implies that transition probabilities remain constant
-over time, undermining the economic cycle effect. In practice, this constancy
-is equivalent to considering an averaged economic cycle. 
-See document~\cite[sec. 3.2.1]{bindseil:2007} to obtain additional information
-related with this section and the CreditMetrics\texttrademark{} approach.
-
-\begin{proposition}[Scaled transition matrix]
-	The transition matrix can be scaled in time using the following rules:
-	\begin{itemize}
-		\item $M_{k \cdot T} = M_{T}^k$
-		\item $M_{\frac{T}{k}} = \sqrt[k]{M_{T}}$
-	\end{itemize}
-\end{proposition}
-
-The root of a matrix $M$ can be obtained using the spectral decomposition
-$M = P \cdot D \cdot P^{-1}$ doing $M^{k} = P \cdot D^{k} \cdot P^{-1}$, 
-in which $P$ and $D$ are the eigenvectors and eigenvalue matrices of $M$. 
-
-Sometimes, the scaled transition matrix does not satisfy the Markov conditions
-(the row sum is equal to one, and all elements are non-negatives). In this case, 
-we must transform this matrix to the relevant Markov matrix. This process is 
-called regularization. Below is the QOM regularization algorithm extracted 
-from~\cite{kreinin:2001}.
-
-\begin{algorithm}[Transition matrix regularization]
-	The QOM (Quasi-Optimization of the root Matrix) algorithm regularizes an 
-	$n {\times} n$ transition matrix $M$, row by row. The steps to 
-	regularizing the $i$-th row are
-	\begin{enumerate}
-		\item Compute the difference between the row sum and one. 
-		Divide by $n$ and subtract this value from all non-zero components:
-		\begin{displaymath}
-			m_{ij} \ne 0 
-			\Longrightarrow 
-			m_{ij} = m_{ij} - \frac{1}{n} \left( \sum_{k=1}^{n} m_{ik} - 1\right)
-		\end{displaymath}
-		\item If all the row elements are non-negative and add up to one, 
-		then stop: the row is regularized.
-		\item Adjust any negative row element to zero and go to Step 1.
-	\end{enumerate}
-	The algorithm stops after $m$ steps, where $m \le n$. 
-	Apply the previous algorithm to every row.
-	The final matrix is a regularized matrix. 
-\end{algorithm}
-
-\begin{proposition}[PDs derived from transition matrix]
-	\label{prop:pdftm}
-	If $M_T$ is a transition matrix, then the time-until-default distribution 
-	for an obligor with the i-th rating is
-	\begin{displaymath}
-		F_i(t) = \Pr\{T_. \le t\} = \left( M_t \right)_{id}
-	\end{displaymath}
-	in which $T_.$ is the time-until-default of an obligor with the i-th rating, 
-	$d$ is the index of the \emph{defaulted} rating, $M_t$ is the transition 
-	matrix scaled to time $t$, and $(M)_{ij}$ is the matrix element located in 
-	the i-th row and the j-th column.
-\end{proposition}
-
-\begin{example}
-	\label{ex:pdftm}
-	We derive the time-until-default distribution for each rating induced by the 
-	transition matrix presented in table~\ref{tmatrix1}. As a first step, we 
-	scale the 1-year transition matrix $M_1$ to the 1-month transition matrix 
-	$M_{\frac{1}{12}}$.
-	{\small
-	\begin{displaymath}
-		M_{\frac{1}{12}} = \left(
-		\begin{array}{cccccccc}
-			99.1972 &  0.7588 &  0.0320 &  0.0020 &  0.0112 & -0.0011 & -0.0001 &   0.0000 \\
-			 0.0635 & 99.1744 &  0.7083 &  0.0392 &  0.0015 &  0.0120 &  0.0018 &  -0.0007 \\
-			 0.0074 &  0.2057 & 99.1980 &  0.5102 &  0.0557 &  0.0189 & -0.0001 &   0.0042 \\
-			 0.0014 &  0.0239 &  0.5507 & 98.8021 &  0.5164 &  0.0871 &  0.0077 &   0.0106 \\
-			 0.0027 &  0.0113 &  0.0396 &  0.7581 & 98.1557 &  0.8774 &  0.0889 &   0.0665 \\
-			-0.0007 &  0.0098 &  0.0196 &  0.0111 &  0.6447 & 98.4443 &  0.4463 &   0.4240 \\
-			 0.0233 & -0.0023 &  0.0170 &  0.1287 &  0.2166 &  1.2298 & 96.4213 &   1.9667 \\
-			 0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 & 100 \\
-		\end{array}
-		\right)
-	\end{displaymath}\par}
-	We observe that $M_{\frac{1}{12}}$ is not a regular matrix because of 
-	negative values. We apply the QOM algorithm to regularize it.
-	{\small
-	\begin{displaymath}
-		\bar{M}_{\frac{1}{12}} = \left(
-		\begin{array}{cccccccc}
-			99.1969 &  0.7586 &  0.0317 &  0.0018 &  0.0110 &  0.0000 &  0.0000 &   0.0000 \\
-			 0.0634 & 99.1744 &  0.7082 &  0.0391 &  0.0014 &  0.0119 &  0.0017 &   0.0000 \\
-			 0.0074 &  0.2057 & 99.1980 &  0.5102 &  0.0557 &  0.0189 &  0.0000 &   0.0041 \\
-			 0.0014 &  0.0239 &  0.5507 & 98.8021 &  0.5164 &  0.0871 &  0.0077 &   0.0106 \\
-			 0.0027 &  0.0112 &  0.0395 &  0.7581 & 98.1557 &  0.8774 &  0.0889 &   0.0665 \\
-			 0.0000 &  0.0099 &  0.0197 &  0.0111 &  0.6447 & 98.4444 &  0.4463 &   0.4240 \\
-			 0.0228 &  0.0000 &  0.0165 &  0.1282 &  0.2161 &  1.2293 & 96.4208 &   1.9663 \\
-			 0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 & 100 \\
-		\end{array}
-		\right)
-	\end{displaymath}\par}
-	We call the 1-year regularized transition matrix to 
-	$\bar{M}_1 = \bar{M}_{\frac{1}{12}}^{12}$. 
-	Finally, we use proposition~\ref{prop:pdftm} to determine the 
-	PD function for each rating and month. The results are displayed in 
-	figure~\ref{fig:pdftm}. Observe that values around $T=1$ are similar 
-	to those of example~\ref{ex:pdfsv}; however, they differ as they move 
-	away from this.
-\end{example}
-
-\begin{figure}[!ht]
-	\centering
-	\subcaptionbox{Probability of Default (100 years)}{
-		\includegraphics[width=7cm]{pdftm1}
-	}
-	\subcaptionbox{Probability of Default (10-year zoom)}{
-		\includegraphics[width=7cm]{pdftm2}
-	}
-	\caption{PDs derived from transition matrix}
-	\label{fig:pdftm}
-\end{figure}
-
-\subsection{From advanced models}
-
-There are financial institutions that may have models to forecast the 
-transition matrix using some economic indicators such as GDP or inflation. We 
-note as $M_T(t)$ the T-period transition matrix at time $t$. In these cases, 
-the time-until-default distributions can be obtained successively composing
-the transition matrices for each T-period.
-\begin{displaymath}
-	F_i(t) = \Pr\{T_. \le t\} = \left(
-		\left( \prod_{j=1}^{[t/T]} M_T(j) \right) \cdot 
-		M_{t-T\cdot[t/T]}\left([t/T]+1\right) 
-		\right)_{id}
-\end{displaymath}
-in which $[x]$ is the integer part of $x$, $T_.$ is the time-until-default
-of an obligor with the i-th rating, $d$ is the index of the \emph{defaulted} 
-rating, $M_t(j)$ is the T-period transition matrix evaluated at time $j$ 
-and scaled to time $t$, and $(M)_{ij}$ is the matrix element located in the 
-i-th row and the j-th column.
-
-The time-until-default distributions derived from an advanced model may show 
-various steps according to the different stages of the economic cycle. This 
-approach is the most appropriate for risk estimates in the medium and long 
-term.
-
-CCruncher allows description of the PDs derived from advanced models specifying 
-the PDs' values at given time points. These must fulfill the cdf conditions:
-~\\
-~\\
-\storestyleof{itemize}
-\begin{listliketab} 
-	\begin{tabular}{Lll}
-		\textbullet & $F_i(0) = 0$                 & $i=1,\dots,r \quad i \ne \text{default}$ \\
-		\textbullet & $F_i(t)$ strictly increasing & $i=1,\dots,r \quad i \ne \text{default}$ \\
-		\textbullet & $F_i(\infty) = 1$            & $i=1,\dots,r$ \\
-		\textbullet & $F_{\text{default}}(t) = 1$  & $\forall\ t \ge 0$ \\
-	\end{tabular} 
-\end{listliketab}
-~\\
-~\\
-The functions specified in this manner are interpolated using cubic splines
-when the above conditions are preserved and are interpolated using linear 
-splines when they are not.
-
-%------------------------------------------------------------------------------
 % THE MULTIVARIATE MODEL
 %------------------------------------------------------------------------------
 \section{The Multivariate Model}
@@ -792,7 +467,7 @@ to that described in~\cite{li:2000,roncalli:2001,frey:2001}~\cite[chap. 2.6]{blu
 We recommend perusing the appendices before proceeding. The appendices contain 
 definitions, statements, and notation regarding subjects used in this section.
 
-\subsection{The copula approach}
+\subsection{The copula model}
 The copula approach considers that the lifetimes of obligors are the proper 
 manner in which to explain the observed defaults. Obligors' default times 
 $(T_1,\dots,T_n)$ are modeled by a multivariate distribution $F$ such that
@@ -807,7 +482,7 @@ theorem, we obtain
 	C\left(F_1(t_1), \dots, F_n(t_n)\right)
 \end{displaymath}
 in which marginal $F_i(t) = \Pr\{T_i \le t\}$ is the time-until-default 
-distribution of the i-th obligor obtained in section~\ref{sec:pd} and $C$ 
+distribution of the i-th obligor obtained in appendix~\ref{ap:pd} and $C$ 
 is a copula. CCruncher considers that $C$ is a t-Student copula for the 
 following \ul{practical} reasons:
 
@@ -842,6 +517,26 @@ parameters.
 	univariate t-Student distribution $t_1(\nu,0,1)$.
 \end{proposition}
 
+\begin{proof}
+	We note that $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
+	distribution $t_n(\nu,\vec{0},\widehat{R})$ and $(U_1,\dots,U_n)$ to 
+	represent the components of the copula $C_{\nu,\widehat{R}}^{\text{t}}$.
+	\begin{displaymath}
+		\begin{array}{rl}
+			F(t_1,\dots,t_n) = & \Pr\{ T_1 \le t_1 , \dots, T_n \le t_n \} = \\
+			                   & \text{we use the corollary~\ref{cor:cop3}: }
+			(T_1,\dots,T_n) = (F_1^{-1}(U_1),\dots,F_n^{-1}(U_n)) \\
+			=                  & \Pr\{ F_1^{-1}(U_1) \le t_1 , \dots , F_n^{-1}(U_n) \le t_n \} = \\
+			                   & \text{we use the corollary~\ref{cor:cop2}: }
+			(U_1,\dots,U_n) = (t_\nu(X_1),\dots,t_\nu(X_n)) \\
+			=                  & \Pr\{ F_1^{-1}(t_\nu(X_1)) \le t_1 , \dots , F_n^{-1}(t_\nu(X_n)) \le t_n \} = \\
+			=                  & \Pr\{ t_\nu(X_1) \le F_1(t_1), \dots , t_\nu(X_n) \le F_n(t_n) \} = \\
+			=                  & \Pr\{ X_1 \le t_\nu^{-1}(F_1(t_1)), \dots , X_n \le t_\nu^{-1}(F_n(t_n)) \} = \\
+			=                  & H(t_\nu^{-1}(F_1(t_1)), \dots, t_\nu^{-1}(F_n(t_n))) \\
+		\end{array}
+	\end{displaymath}
+\end{proof}
+
 \begin{corollary}[Default times simulation (I)]
 	\label{cor:dts1}
 	Let $T=(T_1, \dots, T_n)$, a random vector with marginals 
@@ -860,10 +555,13 @@ parameters.
 The current situation is not yet satisfactory because the dimension 
 $n {\times} n$ of the correlation matrix $\widehat{R}$ indicates that any 
 attempt to simulate random values or estimate the parameters cannot be 
-performed in practice when $n$ is large. For these reason we introduce 
-the multi-factor formulation.
+performed in practice when $n$ is large. For these reason we restrict the 
+copula model to the multi-factor formulation.
 
-\subsection{The multi-factor formulation}
+%------------------------------------------------------------------------------
+% THE MULTI-FACTOR FORMULATION
+%------------------------------------------------------------------------------
+\section{The Multi-Factor Formulation}
 
 To develop a correlation matrix that is easy to handle, we assume that a 
 reduced number $s$ of industrial sectors exists and that each obligor belongs 
@@ -993,29 +691,34 @@ the portfolio losses.
 		\item For each obligor, repeat the following steps:
 		\begin{enumerate}
 			\item Simulate $\epsilon \sim N(0,1)$.
-			\item Simulate the multivariate t-Student component using the obligor's sector:
-			\begin{displaymath}
+			\item Simulate the multivariate t-Student component using the obligor's sector:\\
+			$
 				x = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \epsilon \right)
-			\end{displaymath}
-			\item Obtain the obligor's default time using the obligor's rating:
-			\begin{displaymath}
+			$
+			\item Obtain the obligor's default time using the obligor's rating:\\
+			$
 				t = F_j^{-1}\left(t_{\nu}(x)\right)
-			\end{displaymath}
+			$
 		\end{enumerate}
 	\end{enumerate}
 \end{corollary}
 
+We want to estimate the copula parameters of the multivariate default times
+distribution. These parameters are the degrees of freedom $\nu$, the factor 
+loadings $\vec{w}$, and the factor correlation matrix $R$. The historical 
+data available for parameter calibration are panel data type. Calibration 
+with such data leads to the interpretation of the current model as a Bernoulli 
+mixture model.
 
-%==============================================================================
-% ESTIMATING PARAMETERS
-%==============================================================================
-\chapter{Estimating Parameters}
-\label{chap:estimation}
+%------------------------------------------------------------------------------
+% THE BERNOULLI MIXTURE MODEL
+%------------------------------------------------------------------------------
+\section{The Bernoulli Mixture Model}
 
-We want to estimate the t-Student multi-factor copula parameters of the 
-multivariate default times distribution. These parameters are the degrees of 
-freedom $\nu$, the factor loadings $\vec{w}$, and the factor correlation 
-matrix $R$.
+The available historical data lead us to interpret obligors defaults as 
+conditionally independent Bernoulli random variables. In this section we 
+reinterprets the multi-factor copula model as a Bernoulli model in order 
+to estimate the model parameters.
 
 \begin{definition}[Annual number of defaults]
 	We define the annual number of defaults by sector and rating such as a
@@ -1164,6 +867,45 @@ we attempt to solve the problem recurring in the multi-factor formulation.
 	coefficients consider all combinations of exchangeable obligors.
 \end{proposition}
 
+\begin{proof}
+	We use the pdf of the default times distribution (see 
+	proposition~\ref{prop:dtd}) to obtain the probability that an obligor 
+	$k$ belonging to i-th sector with j-th rating defaults the first year 
+	conditioned to $z_i$ and $\upsilon$:
+	\begin{displaymath}
+		H_{ij}(\upsilon,z_i) = 
+		\Pr\{T_k \le 1 \mid \upsilon, z_i\} = 
+		\Pr\{ X_k \le t_{\nu}^{-1}(F_j(1)) \mid \upsilon, z_i\} = 
+		\Pr\{ X_k \le t_{\nu}^{-1}(p_j) \mid \upsilon, z_i\}
+	\end{displaymath}
+	in which $T_k$ is the k-th component of the multivariate default times 
+	and $X_k$ is the k-th component of the multivariate t-Student. 
+	Now we express $X$ in the multi-factor form:
+	\begin{displaymath}
+		H_{ij}(\upsilon,z_i) = \Pr \left\{ 
+		\sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j\right)
+		\le t_{\nu}^{-1}(p_j) \mid \upsilon, z_i
+		\right\}
+	\end{displaymath}
+	Because $\upsilon$ and $z_i$ are fixed and independent from 
+	$\epsilon_i^j \sim N(0,1)$, we obtain
+	\begin{displaymath}
+		H_{ij}(\upsilon,z_i) = \Phi\left(  
+		\frac{\sqrt{\frac{\upsilon}{\nu}} \cdot t_{\nu}^{-1}(p_j) - w_i\cdot z_i}{\sqrt{1-w_i^2}}
+		\right)
+	\end{displaymath}
+	$H_{ij}$ is the probability that an obligor defaults in 1 year. The 
+	probability of observing $k_{ij}$ failures in a set of $n_{ij}$ independent
+	obligors follows a binomial distribution:
+	\begin{displaymath}
+		\text{Bin}(k_{ij}\ ;\ n_{ij},H_{ij}) = 
+		\binom{n_{ij}}{k_{ij}} \cdot H_{ij}^{k_{ij}} \cdot (1-H_{ij})^{n_{ij}-k_{ij}}
+	\end{displaymath}
+	The product for all sectors and ratings gives the stated formula. 
+	We can do the product because $\upsilon$ and $z_i$ are fixed.
+	\\
+\end{proof}
+
 \begin{corollary}[Density of the annual number of defaults (II)]
 	We can express the density of the annual number of defaults using 
 	the conditional density:
@@ -1185,7 +927,8 @@ we attempt to solve the problem recurring in the multi-factor formulation.
 This expression has a dimension significantly less than before. Despite 
 this, this expression does not have a known analytical form and cannot 
 be approximated numerically with accuracy when the number of factors is 
-high (e.g., 10).
+high (e.g., 10). The following sections provide effective methods for 
+parameter estimation.
 
 %------------------------------------------------------------------------------
 % FREQUENTIST INFERENCE
@@ -1330,6 +1073,7 @@ avoids these problems.
 % BAYESIAN INFERENCE
 %------------------------------------------------------------------------------
 \section{Bayesian Inference}
+\label{sec:binf}
 
 Simulating a multivariate Gaussian distribution 20 times and calculating 
 the sample correlation indicates a high uncertainty of estimated correlations. 
@@ -1687,7 +1431,7 @@ freedom, factor loadings $\vec{w}$, and factor correlation matrix $R$.
 
 We define the EAD and LGD concepts used to model the credit risk emphasizing 
 the temporal dimension. These concepts and the PD defined in 
-section~\ref{sec:pd} are those of the Basel II accord~\cite{basel2:2006}, 
+section~\ref{ap:pd} are those of the Basel II accord~\cite{basel2:2006}, 
 the de-facto international financial risk regulation framework. 
 
 \begin{definition}[Exposure at Default (EAD)]
@@ -2073,7 +1817,7 @@ estimated value is good enough.
 	which to check that the result is correct involves disaggregating the 
 	simulated portfolio losses by sector-rating (see section~\ref{ss:ra}) and 
 	estimating the parameters $\nu, \vec{w}$, and $R$ with the first \num{1000} 
-	simulations using the procedure described in chapter~\ref{chap:estimation}. 
+	simulations using the procedure described in section~\ref{sec:binf}. 
 	If the estimated parameters match the parameters of the example, we have
 	consistent simulation and estimation algorithms. Observe that in 
 	this case, the simulated losses can be equated to the number of defaults 
@@ -2947,6 +2691,376 @@ TODO: SET ALGORITHM HERE
 \chapter{Appendices}
 
 %------------------------------------------------------------------------------
+% THE PROBABILITIES OF DEFAULT
+%------------------------------------------------------------------------------
+\section{The Probabilities of Default}
+\label{ap:pd}
+
+In this section, we construct the univariate time-until-default obligor 
+distributions using available information such as the 1-year PDs or the ratings
+transition matrix.
+
+\begin{definition}[Probability of Default (PD)]
+	$T_i$ is the random variable that represents the default time 
+	(aka time-until-default, aka survival time, aka time-to-default) of the 
+	i-th obligor. Let $F_i(t)$ denote the distribution function of $T_i$:
+	\begin{displaymath}
+		F_i(t) = \Pr\{T_i \le t\} = 
+		\Pr\{\text{ i-th obligor defaults before $t$ years }\}
+	\end{displaymath}
+	Note that $F_i(t)$ is the probability of default (PD) of the i-th obligor
+	at time horizon $t$. PD is a key parameter used in the calculation of credit 
+	risk under Basel II\@. We indicate as $p_i$ the probability that i-th obligor 
+	defaults within the time range $[0,1]$.
+	\begin{displaymath}
+		p_i = \Pr\{T_i \le 1\ \text{year}\} = F_i(1) 
+	\end{displaymath}
+\end{definition}
+
+Each obligor has its own time-until-default distribution depending on its 
+rating; therefore, all obligors with identical ratings have identical
+distributions. Below, we indicate three different manners of inferring $F_i$ 
+depending upon the amount of information available. All three manners produce 
+similar results in the short term (e.g., 1 year) but differ in the middle and
+long term. Before detailing the different approaches, we define the transition 
+matrix because it is used in all three cases.
+
+\begin{definition}[Transition matrix]
+	\label{def:tm}
+	The $T$-years transition matrix gives the probability of changing 
+	from i-th rating to j-th rating in a period of $T$ years:
+	{\small
+	\begin{displaymath}
+		M_T = \left(
+		\begin{array}{ccc}
+			m_{11} & \cdots & m_{1r} \\
+			\vdots & \ddots & \vdots \\
+			m_{r1} & \cdots & m_{rr} \\
+		\end{array}
+		\right)
+	\end{displaymath}\par}
+	in which $r$ is the number of ratings and $m_{ij}$ is the probability that 
+	an obligor with i-th rating ends up having the j-th rating after $T$ years.
+	Note that row sums are $1$ and that two consecutive transition matrices, 
+	$M_{T_1}$ and $M_{T_2}$, give $M_{T_1+T_2} = M_{T_1} \cdot M_{T_2}$.
+	A valid transition matrix must have a unique \emph{defaulted} rating, and 
+	any rating ends up defaulting.
+\end{definition}
+
+\begin{example}
+	\label{ex:1ytm}
+	Table~\ref{tmatrix1} shows a transition matrix, extracted 
+	from~\cite[p. 20]{cmetrics:1997}, in which the probability that an obligor 
+	with rating AA changes to rating B in one year is $0.14\%$. Note that the
+	last column contains the 1-year default probabilities for each rating and 
+	that the last row corresponds to the \emph{defaulted} rating.
+\end{example}
+
+\begin{table}[!ht]
+	\begin{center}
+		\begin{tabular}[]{l|rrrrrrrr}
+							& AAA     & AA      & A       & BBB     & BB      & B                  & CCC     & Default  \\
+			\hline
+			AAA     & $90.81$ & $8.33$  & $0.68$  & $0.06$  & $0.12$  & $0.00$             & $0.00$  & $0.00$   \\
+			AA      & $0.70$  & $90.65$ & $7.79$  & $0.64$  & $0.06$  & $\underline{0.14}$ & $0.02$  & $0.00$   \\
+			A       & $0.09$  & $2.27$  & $91.05$ & $5.52$  & $0.74$  & $0.26$             & $0.01$  & $0.06$   \\
+			BBB     & $0.02$  & $0.33$  & $5.95$  & $86.93$ & $5.30$  & $1.17$             & $0.12$  & $0.18$   \\
+			BB      & $0.03$  & $0.14$  & $0.67$  & $7.73$  & $80.53$ & $8.84$             & $1.00$  & $1.06$   \\
+			B       & $0.00$  & $0.11$  & $0.24$  & $0.43$  & $6.48$  & $83.46$            & $4.07$  & $5.21$   \\
+			CCC     & $0.22$  & $0.00$  & $0.22$  & $1.30$  & $2.38$  & $11.24$            & $64.86$ & $19.78$  \\
+			Default & $0.00$  & $0.00$  & $0.00$  & $0.00$  & $0.00$  & $0.00$             & $0.00$  & $100.00$ \\
+		\end{tabular}
+		\caption{1-year transition matrix \%}
+		\label{tmatrix1}
+	\end{center}
+\end{table}
+
+\subsection{Obtaining PDs from the transition matrix}
+\label{pdftm}
+
+This alternative implies that transition probabilities remain constant
+over time, undermining the economic cycle effect. In practice, this constancy
+is equivalent to considering an averaged economic cycle. 
+See document~\cite[sec. 3.2.1]{bindseil:2007} to obtain additional information
+related with this section and the CreditMetrics\texttrademark{} approach.
+
+\begin{proposition}[Scaled transition matrix]
+	The transition matrix can be scaled in time using the following rules:
+	\begin{itemize}
+		\item $M_{k \cdot T} = M_{T}^k$
+		\item $M_{\frac{T}{k}} = \sqrt[k]{M_{T}}$
+	\end{itemize}
+\end{proposition}
+
+The root of a matrix $M$ can be obtained using the spectral decomposition
+$M = P \cdot D \cdot P^{-1}$ doing $M^{k} = P \cdot D^{k} \cdot P^{-1}$, 
+in which $P$ and $D$ are the eigenvectors and eigenvalue matrices of $M$. 
+
+Sometimes, the scaled transition matrix does not satisfy the Markov conditions
+(the row sum is equal to one, and all elements are non-negatives). In this case, 
+we must transform this matrix to the relevant Markov matrix. This process is 
+called regularization. Below is the QOM regularization algorithm extracted 
+from~\cite{kreinin:2001}.
+
+\begin{algorithm}[Transition matrix regularization]
+	The QOM (Quasi-Optimization of the root Matrix) algorithm regularizes an 
+	$n {\times} n$ transition matrix $M$, row by row. The steps to 
+	regularizing the $i$-th row are
+	\begin{enumerate}
+		\item Compute the difference between the row sum and one. 
+		Divide by $n$ and subtract this value from all non-zero components:
+		\begin{displaymath}
+			m_{ij} \ne 0 
+			\Longrightarrow 
+			m_{ij} = m_{ij} - \frac{1}{n} \left( \sum_{k=1}^{n} m_{ik} - 1\right)
+		\end{displaymath}
+		\item If all the row elements are non-negative and add up to one, 
+		then stop: the row is regularized.
+		\item Adjust any negative row element to zero and go to Step 1.
+	\end{enumerate}
+	The algorithm stops after $m$ steps, where $m \le n$. 
+	Apply the previous algorithm to every row.
+	The final matrix is a regularized matrix. 
+\end{algorithm}
+
+\begin{proposition}[PDs derived from transition matrix]
+	\label{prop:pdftm}
+	If $M_T$ is a transition matrix, then the time-until-default distribution 
+	for an obligor with the i-th rating is
+	\begin{displaymath}
+		F_i(t) = \Pr\{T_. \le t\} = \left( M_t \right)_{id}
+	\end{displaymath}
+	in which $T_.$ is the time-until-default of an obligor with the i-th rating, 
+	$d$ is the index of the \emph{defaulted} rating, $M_t$ is the transition 
+	matrix scaled to time $t$, and $(M)_{ij}$ is the matrix element located in 
+	the i-th row and the j-th column.
+\end{proposition}
+
+\begin{example}
+	\label{ex:pdftm}
+	We derive the time-until-default distribution for each rating induced by the 
+	transition matrix presented in table~\ref{tmatrix1}. As a first step, we 
+	scale the 1-year transition matrix $M_1$ to the 1-month transition matrix 
+	$M_{\frac{1}{12}}$.
+	{\small
+	\begin{displaymath}
+		M_{\frac{1}{12}} = \left(
+		\begin{array}{cccccccc}
+			99.1972 &  0.7588 &  0.0320 &  0.0020 &  0.0112 & -0.0011 & -0.0001 &   0.0000 \\
+			 0.0635 & 99.1744 &  0.7083 &  0.0392 &  0.0015 &  0.0120 &  0.0018 &  -0.0007 \\
+			 0.0074 &  0.2057 & 99.1980 &  0.5102 &  0.0557 &  0.0189 & -0.0001 &   0.0042 \\
+			 0.0014 &  0.0239 &  0.5507 & 98.8021 &  0.5164 &  0.0871 &  0.0077 &   0.0106 \\
+			 0.0027 &  0.0113 &  0.0396 &  0.7581 & 98.1557 &  0.8774 &  0.0889 &   0.0665 \\
+			-0.0007 &  0.0098 &  0.0196 &  0.0111 &  0.6447 & 98.4443 &  0.4463 &   0.4240 \\
+			 0.0233 & -0.0023 &  0.0170 &  0.1287 &  0.2166 &  1.2298 & 96.4213 &   1.9667 \\
+			 0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 & 100 \\
+		\end{array}
+		\right)
+	\end{displaymath}\par}
+	We observe that $M_{\frac{1}{12}}$ is not a regular matrix because of 
+	negative values. We apply the QOM algorithm to regularize it.
+	{\small
+	\begin{displaymath}
+		\bar{M}_{\frac{1}{12}} = \left(
+		\begin{array}{cccccccc}
+			99.1969 &  0.7586 &  0.0317 &  0.0018 &  0.0110 &  0.0000 &  0.0000 &   0.0000 \\
+			 0.0634 & 99.1744 &  0.7082 &  0.0391 &  0.0014 &  0.0119 &  0.0017 &   0.0000 \\
+			 0.0074 &  0.2057 & 99.1980 &  0.5102 &  0.0557 &  0.0189 &  0.0000 &   0.0041 \\
+			 0.0014 &  0.0239 &  0.5507 & 98.8021 &  0.5164 &  0.0871 &  0.0077 &   0.0106 \\
+			 0.0027 &  0.0112 &  0.0395 &  0.7581 & 98.1557 &  0.8774 &  0.0889 &   0.0665 \\
+			 0.0000 &  0.0099 &  0.0197 &  0.0111 &  0.6447 & 98.4444 &  0.4463 &   0.4240 \\
+			 0.0228 &  0.0000 &  0.0165 &  0.1282 &  0.2161 &  1.2293 & 96.4208 &   1.9663 \\
+			 0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 &  0.0000 & 100 \\
+		\end{array}
+		\right)
+	\end{displaymath}\par}
+	We call the 1-year regularized transition matrix to 
+	$\bar{M}_1 = \bar{M}_{\frac{1}{12}}^{12}$. 
+	Finally, we use proposition~\ref{prop:pdftm} to determine the 
+	PD function for each rating and month. The results are displayed in 
+	figure~\ref{fig:pdftm}. Observe that values around $T=1$ are similar 
+	to those of example~\ref{ex:pdfsv}; however, they differ as they move 
+	away from this.
+\end{example}
+
+\begin{figure}[!ht]
+	\centering
+	\subcaptionbox{Probability of Default (100 years)}{
+		\includegraphics[width=7cm]{pdftm1}
+	}
+	\subcaptionbox{Probability of Default (10-year zoom)}{
+		\includegraphics[width=7cm]{pdftm2}
+	}
+	\caption{PDs derived from transition matrix}
+	\label{fig:pdftm}
+\end{figure}
+
+\subsection{Obtaining PDs from single PD values}
+\label{pdfsv}
+
+In some circumstances, the transition matrix is not available, and we only 
+have the probability of default at 1-year for each rating, 
+$p_1,\dots,p_{r-1},p_r$ in which the r-th rating is the \emph{defaulted} 
+status. In the absence of more information, we can consider a diagonal 
+transition matrix such as the following:
+\begin{displaymath}
+	M_1 = \left(
+	\begin{array}{cccc}
+		1-p_1  & \cdots & 0         & p_1     \\
+		\vdots & \ddots & \vdots    & \vdots  \\
+		0      & \cdots & 1-p_{r-1} & p_{r-1} \\
+		0      & \cdots & 0         & 1       \\
+	\end{array}
+	\right)
+\end{displaymath}
+
+The next section (\ref{pdftm}) explains how to derive the PD's curves from a 
+transition matrix. However, this simplified case has a closed-form solution 
+stated by the following proposition.
+
+\begin{proposition}[PDs derived from single values]
+	\label{prop:pdfsv}
+	If the time-until-default of an obligor satisfies a transition matrix 
+	and only depends on the 1-year probability of default $p_i$, then this
+	time-until-default follows the exponential distribution, i.e.,
+	$T_i \sim \text{Exp}(-\ln(1-p_i))$.
+	\begin{displaymath}
+		F_i(t) = \Pr\{T_. \le t\} = 1 - e^{-\lambda_i \cdot t} 
+		\quad \text{ where } \lambda = -\ln(1-p_i)
+		\quad i=1,\dots,r
+	\end{displaymath}
+\end{proposition}
+
+\begin{proof}
+	We note that ratings are detached from one another. We use 
+	proposition~\ref{prop:pdftm} to obtain the time-until-default distribution 
+	of the i-th rating:
+	\small
+	\begin{displaymath}
+		\left(
+		\begin{array}{cc}
+			1-p_i & p_i \\
+			0 & 1
+		\end{array}
+		\right) ^ t 
+		= 
+		\left(
+		\begin{array}{cc}
+			1 & 1 \\
+			1 & 0
+		\end{array}
+		\right) 
+		\cdot
+		\left(
+		\begin{array}{cc}
+			1 & 0 \\
+			0 & 1-p_i
+		\end{array}
+		\right) ^t 
+		\cdot
+		\left(
+		\begin{array}{cc}
+			0 & 1 \\
+			1 & -1
+		\end{array}
+		\right)
+		=
+		\left(
+		\begin{array}{cc}
+			(1-p_i)^t & 1-(1-p_i)^t \\
+			0 & 1
+		\end{array}
+		\right)
+	\end{displaymath}
+	Then,
+	\begin{displaymath}
+		F_i(t) = 1-(1-p_i)^t = 1 - e^{-\lambda_i \cdot t} \quad \text{ where } \quad \lambda_i = -\ln(1-p_i)
+	\end{displaymath}
+\end{proof}
+
+\begin{example}
+	\label{ex:pdfsv}
+	Suppose that we only know the annual probabilities of default and that these 
+	values are those from the 1-year regularized transition matrix displayed in
+	table~\ref{tmatrix1}. In this case, the 1-year diagonal transition matrix 
+	is
+	{\small
+	\begin{displaymath}
+		M_1 = \left(
+		\begin{array}{cccccccc}
+			99.9991 & 0 & 0 & 0 & 0 & 0 & 0 & 0.0009 \\
+			0 & 99.9923 & 0 & 0 & 0 & 0 & 0 & 0.0077 \\
+			0 & 0 & 99.9400 & 0 & 0 & 0 & 0 & 0.0600 \\
+			0 & 0 & 0 & 99.8200 & 0 & 0 & 0 & 0.1800 \\
+			0 & 0 & 0 & 0 & 98.9401 & 0 & 0 & 1.0599 \\
+			0 & 0 & 0 & 0 & 0 & 94.7997 & 0 & 5.2003 \\
+			0 & 0 & 0 & 0 & 0 & 0 & 80.2154 & 19.7846 \\
+			0 & 0 & 0 & 0 & 0 & 0 & 0 & 100 \\
+		\end{array}
+		\right)
+	\end{displaymath}\par}
+	We determine the PD's function for each rating using  
+	proposition~\ref{prop:pdfsv}, i.e., considering that times-until-default
+	are exponential distributions. These results are displayed in 
+	figure~\ref{fig:pdfsv}. 
+\end{example}
+
+\begin{figure}[!ht]
+	\centering
+	\subcaptionbox{Probability of Default (100 years)}{
+		\includegraphics[width=7cm]{pdfsv1}
+	}
+	\subcaptionbox{Probability of Default (10-year zoom)}{
+		\includegraphics[width=7cm]{pdfsv2}
+	}
+	\caption{PDs derived from annual PDs}
+	\label{fig:pdfsv}
+\end{figure}
+
+\subsection{Obtaining PDs from advanced models}
+
+There are financial institutions that may have models to forecast the 
+transition matrix using some economic indicators such as GDP or inflation. We 
+note as $M_T(t)$ the T-period transition matrix at time $t$. In these cases, 
+the time-until-default distributions can be obtained successively composing
+the transition matrices for each T-period.
+\begin{displaymath}
+	F_i(t) = \Pr\{T_. \le t\} = \left(
+		\left( \prod_{j=1}^{[t/T]} M_T(j) \right) \cdot 
+		M_{t-T\cdot[t/T]}\left([t/T]+1\right) 
+		\right)_{id}
+\end{displaymath}
+in which $[x]$ is the integer part of $x$, $T_.$ is the time-until-default
+of an obligor with the i-th rating, $d$ is the index of the \emph{defaulted} 
+rating, $M_t(j)$ is the T-period transition matrix evaluated at time $j$ 
+and scaled to time $t$, and $(M)_{ij}$ is the matrix element located in the 
+i-th row and the j-th column.
+
+The time-until-default distributions derived from an advanced model may show 
+various steps according to the different stages of the economic cycle. This 
+approach is the most appropriate for risk estimates in the medium and long 
+term.
+
+CCruncher allows description of the PDs derived from advanced models specifying 
+the PDs' values at given time points. These must fulfill the cdf conditions:
+~\\
+~\\
+\storestyleof{itemize}
+\begin{listliketab} 
+	\begin{tabular}{Lll}
+		\textbullet & $F_i(0) = 0$                 & $i=1,\dots,r \quad i \ne \text{default}$ \\
+		\textbullet & $F_i(t)$ strictly increasing & $i=1,\dots,r \quad i \ne \text{default}$ \\
+		\textbullet & $F_i(\infty) = 1$            & $i=1,\dots,r$ \\
+		\textbullet & $F_{\text{default}}(t) = 1$  & $\forall\ t \ge 0$ \\
+	\end{tabular} 
+\end{listliketab}
+~\\
+~\\
+The functions specified in this manner are interpolated using cubic splines
+when the above conditions are preserved and are interpolated using linear 
+splines when they are not.
+
+%------------------------------------------------------------------------------
 % COPULA BASICS
 %------------------------------------------------------------------------------
 \section{Copula Basics}
@@ -3728,143 +3842,6 @@ not independent of one another; in fact, they form a multivariate distribution.
 	\caption{Metropolis-Hastings algorithm example}
 	\label{fig:mhbd}
 \end{figure}
-
-
-%==============================================================================
-% PROOFS
-%==============================================================================
-\chapter{Proofs}
-
-%------------------------------------------------------------------------------
-% MODELING DEFAULT TIMES
-%------------------------------------------------------------------------------
-\section{\nameref{chap:mdt}}
-
-\subsection{Proposition~\ref{prop:pdfsv} --~\nameref{prop:pdfsv} (page~\pageref{prop:pdfsv})}
-\begin{proof}
-	We note that ratings are detached from one another. We use 
-	proposition~\ref{prop:pdftm} to obtain the time-until-default distribution 
-	of the i-th rating:
-	\small
-	\begin{displaymath}
-		\left(
-		\begin{array}{cc}
-			1-p_i & p_i \\
-			0 & 1
-		\end{array}
-		\right) ^ t 
-		= 
-		\left(
-		\begin{array}{cc}
-			1 & 1 \\
-			1 & 0
-		\end{array}
-		\right) 
-		\cdot
-		\left(
-		\begin{array}{cc}
-			1 & 0 \\
-			0 & 1-p_i
-		\end{array}
-		\right) ^t 
-		\cdot
-		\left(
-		\begin{array}{cc}
-			0 & 1 \\
-			1 & -1
-		\end{array}
-		\right)
-		=
-		\left(
-		\begin{array}{cc}
-			(1-p_i)^t & 1-(1-p_i)^t \\
-			0 & 1
-		\end{array}
-		\right)
-	\end{displaymath}
-	Then,
-	\begin{displaymath}
-		F_i(t) = 1-(1-p_i)^t = 1 - e^{-\lambda_i \cdot t} \quad \text{ where } \quad \lambda_i = -\ln(1-p_i)
-	\end{displaymath}
-\end{proof}
-
-\subsection{Proposition~\ref{prop:dtd} --~\nameref{prop:dtd} (page~\pageref{prop:dtd})}
-\begin{proof}
-	We note that $X=(X_1,\dots,X_n)$ a vector having a multivariate t-Student
-	distribution $t_n(\nu,\vec{0},\widehat{R})$ and $(U_1,\dots,U_n)$ to 
-	represent the components of the copula $C_{\nu,\widehat{R}}^{\text{t}}$.
-	\begin{displaymath}
-		\begin{array}{rl}
-			F(t_1,\dots,t_n) = & \Pr\{ T_1 \le t_1 , \dots, T_n \le t_n \} = \\
-			                   & \text{we use the corollary~\ref{cor:cop3}: }
-			(T_1,\dots,T_n) = (F_1^{-1}(U_1),\dots,F_n^{-1}(U_n)) \\
-			=                  & \Pr\{ F_1^{-1}(U_1) \le t_1 , \dots , F_n^{-1}(U_n) \le t_n \} = \\
-			                   & \text{we use the corollary~\ref{cor:cop2}: }
-			(U_1,\dots,U_n) = (t_\nu(X_1),\dots,t_\nu(X_n)) \\
-			=                  & \Pr\{ F_1^{-1}(t_\nu(X_1)) \le t_1 , \dots , F_n^{-1}(t_\nu(X_n)) \le t_n \} = \\
-			=                  & \Pr\{ t_\nu(X_1) \le F_1(t_1), \dots , t_\nu(X_n) \le F_n(t_n) \} = \\
-			=                  & \Pr\{ X_1 \le t_\nu^{-1}(F_1(t_1)), \dots , X_n \le t_\nu^{-1}(F_n(t_n)) \} = \\
-			=                  & H(t_\nu^{-1}(F_1(t_1)), \dots, t_\nu^{-1}(F_n(t_n))) \\
-		\end{array}
-	\end{displaymath}
-\end{proof}
-
-\subsection{Proposition~\ref{prop:tmfm} --~\nameref{prop:tmfm} (page~\pageref{prop:tmfm})}
-\begin{proof}
-	We use the t-Student characterization (proposition~\ref{prop:mtschar})
-	$X = \sqrt{\frac{\nu}{V}} \cdot Z$ in which $V \sim \chi_{\nu}^2$ and 
-	$Z \sim N(\vec{0},\widehat{R})$, expressing $Z$ as a Gaussian multi-factor model 
-	(definition~\ref{def:gmfm}). The determination of $R$ and $w_1,\dots,w_s$
-	values can be observed in proposition~\ref{prop:gmfigs}. The tag line 
-	``$n_i$ sizes are high enough'' is justified in 
-	proposition~\ref{prop:gmfamgb}.
-	\\
-\end{proof}
-
-%------------------------------------------------------------------------------
-% ESTIMATING PARAMETERS
-%------------------------------------------------------------------------------
-\section{\nameref{chap:estimation}}
-
-\subsection{Proposition~\ref{prop:cdand} --~\nameref{prop:cdand} (page~\pageref{prop:cdand})}
-\begin{proof}
-	We use the pdf of the default times distribution (see 
-	proposition~\ref{prop:dtd}) to obtain the probability that an obligor 
-	$k$ belonging to i-th sector with j-th rating defaults the first year 
-	conditioned to $z_i$ and $\upsilon$:
-	\begin{displaymath}
-		H_{ij}(\upsilon,z_i) = 
-		\Pr\{T_k \le 1 \mid \upsilon, z_i\} = 
-		\Pr\{ X_k \le t_{\nu}^{-1}(F_j(1)) \mid \upsilon, z_i\} = 
-		\Pr\{ X_k \le t_{\nu}^{-1}(p_j) \mid \upsilon, z_i\}
-	\end{displaymath}
-	in which $T_k$ is the k-th component of the multivariate default times 
-	and $X_k$ is the k-th component of the multivariate t-Student. 
-	Now we express $X$ in the multi-factor form:
-	\begin{displaymath}
-		H_{ij}(\upsilon,z_i) = \Pr \left\{ 
-		\sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j\right)
-		\le t_{\nu}^{-1}(p_j) \mid \upsilon, z_i
-		\right\}
-	\end{displaymath}
-	Because $\upsilon$ and $z_i$ are fixed and independent from 
-	$\epsilon_i^j \sim N(0,1)$, we obtain
-	\begin{displaymath}
-		H_{ij}(\upsilon,z_i) = \Phi\left(  
-		\frac{\sqrt{\frac{\upsilon}{\nu}} \cdot t_{\nu}^{-1}(p_j) - w_i\cdot z_i}{\sqrt{1-w_i^2}}
-		\right)
-	\end{displaymath}
-	$H_{ij}$ is the probability that an obligor defaults in 1 year. The 
-	probability of observing $k_{ij}$ failures in a set of $n_{ij}$ independent
-	obligors follows a binomial distribution:
-	\begin{displaymath}
-		\text{Bin}(k_{ij}\ ;\ n_{ij},H_{ij}) = 
-		\binom{n_{ij}}{k_{ij}} \cdot H_{ij}^{k_{ij}} \cdot (1-H_{ij})^{n_{ij}-k_{ij}}
-	\end{displaymath}
-	The product for all sectors and ratings gives the stated formula. 
-	We can do the product because $\upsilon$ and $z_i$ are fixed.
-	\\
-\end{proof}
 
 
 %==============================================================================

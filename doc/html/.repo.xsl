@@ -38,7 +38,7 @@
           <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
         </td>
         <td style="vertical-align:middle; font-size:14pt; color:white; width:100%">
-          <span style="display:block">Open-Source Tool for</span>Credit Risk Modeling
+          <span style="display:block">Open-Source Project for</span>Credit Risk Modeling
         </td>
         <td style="vertical-align: middle;">
           <a href="/index.html">
@@ -101,7 +101,7 @@
         Copyright &copy; 2004-2014 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
       </span>
       <span id="modified">
-        Last modified: 22-Jan-2014
+        Last modified: 10-Feb-2014
       </span>
     </div>
 
