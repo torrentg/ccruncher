@@ -373,8 +373,8 @@ default times and the default trigger is to cross a preset threshold. The
 multi-factor Gaussian case of the Li model covers the 
 CreditMetrics\texttrademark{} model.
 
-CCruncher uses the copula approach to formulate the model, then reformulate
-the model as a factor model in order to reduce the dimensionality, and finally 
+CCruncher uses the copula approach to formulate the model, then coerce the 
+model into a factor model in order to reduce the dimensionality, and finally 
 interprets the model as a Bernouilli mixture model to estimate the parameters.
 The CCruncher model implements the t-Student multi-factor copula even for 
 high-dimensional portfolios, and it is formulated according to the Basel II 
@@ -859,11 +859,8 @@ parameters.
 
 The current situation is not yet satisfactory because the dimension 
 $n {\times} n$ of the correlation matrix $\widehat{R}$ indicates that any 
-attempt to simulate random values or estimate the parameters cannot 
-be performed in practice when $n$ is large. Previous versions of the 
-CCruncher project bypassed the simulation problem using an algorithm 
-adapted to address high-dimensional cases~\cite{torrent:2011}; however, 
-the parameter estimation problem remains. For this reason we introduce 
+attempt to simulate random values or estimate the parameters cannot be 
+performed in practice when $n$ is large. For these reason we introduce 
 the multi-factor formulation.
 
 \subsection{The multi-factor formulation}
@@ -1123,7 +1120,8 @@ More information is available in~\cite{gordy:2002,roncalli:2004}.
 			f(x_1,\dots,x_n) \ud x_1 \dots \ud x_n
 		\end{array}
 	\end{displaymath}
-	in which $n_{ij}$ and $k_{ij}$ are respectively the number of obligors and 
+	in which $s$ is the number of sectors, $r$ is the number of ratings,
+	$n_{ij}$ and $k_{ij}$ are respectively the number of obligors and 
 	defaults in the i-th sector with the j-th rating, $p_j = F_j(1)$ is the 
 	probability of default within 1 year of the j-th rating, $f(\vec{x})$ 
 	is the pdf of $t_n(\nu,\vec{0},\widehat{R})$, and $t_{\nu}^{-1}$ is the 
@@ -1157,7 +1155,8 @@ we attempt to solve the problem recurring in the multi-factor formulation.
 		\frac{\sqrt{\frac{\upsilon}{\nu}} \cdot t_{\nu}^{-1}(p_j) - w_i\cdot z_i}{\sqrt{1-w_i^2}}
 		\right)
 	\end{displaymath}
-	and $n_{ij}$ and $k_{ij}$ are respectively the number of obligors and 
+	and $s$ is the number of sectors, $r$ is the number of ratings,
+	$n_{ij}$ and $k_{ij}$ are respectively the number of obligors and 
 	defaults in the i-th sector with the j-th rating, $p_j = F_j(1)$ 
 	is the probability to default within 1 year of the j-th rating,
 	$\Phi$ is the cdf of the univariate $N(0,1)$, and $t_{\nu}^{-1}$ is the 
@@ -1622,7 +1621,7 @@ few.
 % 	\right)
 % \end{displaymath}
 
-\textbf{Degrees of freedom}. We observe that factor correlations and degrees 
+\textbf{Degrees of freedom}. We observed that factor correlations and degrees 
 of freedom are interwoven. When we fix one of them with a value more distinct 
 than generated data and we estimate the other one, the latter reacts to 
 compensate for the modification. This effect is more pronounced when the 
@@ -2162,16 +2161,16 @@ Value at Risk is not additive, it is not even sub-additive~\cite{var:varbad}.
 As mentioned in~\cite[chap. 5.2.2]{bluhm:2002}, calculating VaR risk 
 measure contributions is a natural but difficult attempt. In the CCruncher 
 case, problems arise when we try to estimate 
-$E\left(L_k \mid L = \text{VaR}_{\beta}(L)\right)$ because the subsample of 
-simulated sub-portfolio losses having a portfolio loss equal to 
+$\text{E}\left(L_k \mid L = \text{VaR}_{\beta}(L)\right)$ because the subsample
+of simulated sub-portfolio losses having a portfolio loss equal to 
 $\text{VaR}_{\beta}$ has a very small size. For this reason, CCruncher 
 don't provides support for VaR disaggregation.
 
 \subsubsection{Expected Shortfall}
 Expected Shortfall can be disaggregated using the simulated losses of the 
 portfolio and its sub-portfolios. As indicated 
-in~\cite[chap. 5.2.3]{bluhm:2002}, the contribution of k-th sub-portfolio 
-to ES is given by $E\left(L_k \mid L \ge \text{VaR}_{\beta}(L)\right)$.
+in~\cite[chap. 5.2.3]{bluhm:2002}, the contribution of k-th sub-portfolio to 
+ES is given by $\text{E}\left(L_k \mid L \ge \text{VaR}_{\beta}(L)\right)$.
 The ES attributable to the k-th segment, in cash, is given by the 
 following statistic:
 \begin{displaymath}
@@ -2576,7 +2575,8 @@ section that follows provides a solution to these problems.
 The estimation of dependence parameters (degrees of freedom $\nu$, factor
 loadings $\vec{w}$, and factor correlation matrix $R$) has an uncertainty 
 that cannot be ignored~\cite{tarashev:2010,gossl:2005}. Example~\ref{ex:calib} 
-illustrates this phenomenon and its magnitude (see the 20 observations case).
+illustrates this phenomenon and its magnitude (see the \emph{20 observations} 
+case).
 
 The CCruncher framework encourages incorporating the parameter uncertainty 
 into the credit risk valuation. This indicates that credit risk measures
@@ -2620,7 +2620,7 @@ hidden such as:
 \begin{algorithm}[Credit risk measure distribution]
 	\label{alg:crmd}
 	Assume a portfolio (ratings, sectors, PDs, EADs, LGDs) and the number 
-	of defaults observed by sector rating in the previous years. We can
+	of defaults observed by sector-rating in the previous years. We can
 	determine the distribution of a credit risk measure 
 	(e.g., $\text{VaR}_{99\%}$) by performing the following:
 	\begin{enumerate}
