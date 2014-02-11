@@ -1950,41 +1950,20 @@ $\text{VaR}_{\beta}$.
 %------------------------------------------------------------------------------
 \section{Simulation Details}
 
-\subsection{Variance Reduction}
-
-The Monte Carlo method consists of sampling a distribution and averaging 
-these values to approximate the mean of this distribution. The main drawback 
-of this method is the low rate of convergence, on the order $1/\sqrt{N}$.
-Variance reduction methods are procedures used to increase the precision 
-of the estimates of the Monte Carlo method. The main procedures are common 
-random numbers, antithetic variates, control variates, importance sampling 
-and stratified sampling.
-
-CCruncher generates random samples from the portfolio loss distribution.
-This sample is used to estimate the risk measures (e.g., VaR) using the 
-statistics described in section~\ref{sec:riskm} or any other required 
-by the analyst. Any one of these measures, considered individually, can be 
-formulated as a Monte Carlo problem and can apply some variance reduction 
-techniques (e.g., importance sampling~\cite{brereton:2012}), but not 
-simultaneously. 
-
-For this reason, the variance reduction techniques used in CCruncher 
-do not seek an increase in precision, but an improvement in the overall 
-results in some manner. The applied variance reduction procedures 
+\textbf{Variance reduction}. CCruncher generates random samples from the 
+portfolio loss distribution. This sample is used to estimate the risk measures 
+(e.g., VaR) using the statistics described in section~\ref{sec:riskm} or any 
+other required by the analyst. Any one of these measures, considered 
+individually, can be formulated as a Monte Carlo problem and can apply some 
+variance reduction techniques (e.g., importance sampling~\cite{brereton:2012}), 
+but not simultaneously. For this reason, the variance reduction techniques 
+used in CCruncher do not seek an increase in precision, but an improvement 
+in the overall results in some manner. The applied variance reduction procedures 
 implemented in CCruncher are antithetic variates and Latin hypercube 
-sampling.
+sampling. You can found more info at appendix~\ref{ap:vr}.
 
-\subsubsection{Antithetic variates}
-We estimate $E(g(X))$ using the Monte Carlo method. Assume $Y_1$ and 
-$Y_2$ as random variables with the identical distribution $g(X)$. 
-This indicates that $E(g(X)) = E(Y_1) = E(Y_2) = E(\frac{Y_1+Y_2}{2})$ and
-$\text{Var}\left(\frac{Y_1+Y_2}{2}\right) = 
-\frac{\text{Var}(Y_1)+\text{Cov}(Y_1,Y_2)}{2}$.
-If $Y_1$ and $Y_2$ are negatively correlated, then the variance of $N$ 
-simulated values from $\frac{Y_1+Y_2}{2}$ is smaller than the variance 
-of $2{\times}N$ simulated values from $Y_1$ or $Y_2$.
-
-In CCruncher the random sampling of the portfolio loss distribution is 
+\emph{Antithetic variates}. In CCruncher the random sampling of the portfolio 
+loss distribution is 
 performed using $g(X)$ in which $X$ is a multivariate t-Student distribution 
 and $g(x) = F^{-1}(t_{\nu}(x))$. We use the fact that the multivariate 
 t-Student distribution $X$ is symmetrical, that is, $(x_1,\dots,x_n)$ is 
@@ -1992,151 +1971,15 @@ equiprobable to $(-x_1,\dots,-x_n)$, to apply the antithetic method.
 Expected Loss is the unique statistic that benefits from the variance 
 reduction. However, rather than reducing the variance, we are interested 
 in the reusing of the simulated random numbers to increase the simulation 
-speed. It is notable that when we use the antithetic method to sample the 
-default times and there are some stochastic EADs or LGDs, we use distinct 
-EADs' and LGDs' random values for each variate.
+speed. When we use the antithetic method to sample the default times and 
+there are some stochastic EADs or LGDs, we use distinct EADs' and LGDs' 
+random values for each variate.
 
-\begin{example}
-	In this example extracted from 
-	\href{http://en.wikipedia.org/wiki/Antithetic_variates}{Wikipedia}, we 
-	show how the antithetical method works and how it is used by CCruncher. 
-	We would like to estimate the following integral using the Monte Carlo 
-	method:
-	\begin{displaymath}
-		I = \displaystyle \int_0^1 \frac{1}{1+x} \ud x
-	\end{displaymath}
-	In this case the random variable is $U \sim \text{Uniform}[0,1]$, and 
-	its variate is $1-U$. Listing~\ref{sc:antithetic} computes the integral 
-	value using plain Monte Carlo, Monte Carlo with antithetic method, and 
-	Monte Carlo with antithetic variates but only to reduce the number of 
-	simulated values as CCruncher does.
-	\\
-	\hspace*{1cm}
-	\begin{tabular}{l|c|c|c|c|}
-		\cline{2-5}
-		& Sims & N & Mean & Variance \\
-		\hline
-		\multicolumn{1}{|l|}{Exact = $\ln(2)$} & - & - & 0.693147 & - \\
-		\hline
-		\multicolumn{1}{|l|}{Monte Carlo} & 10000 & 10000 & 0.695685 & 0.019624 \\
-		\hline
-		\multicolumn{1}{|l|}{Antithetic} & 5000 & 5000 & 0.693404 & 0.000593 \\
-		\hline
-		\multicolumn{1}{|l|}{CCruncher} & 5000 & 10000 & 0.693099 & 0.019508 \\
-		\hline
-	\end{tabular}
-\end{example}
-%\vspace{11pt}
-
-\begin{lstlisting}[language=R, label=sc:antithetic, caption=Antithetic example (R script)]
-
- f <- function(x) { 1/(1+x) }
- 
- result = matrix(nrow=4, ncol=4)
- colnames(result) = c("Sims", "N", "Mean", "Variance")
- rownames(result) = 1:4
-
- rownames(result)[1] = "Exact";
- result[1,1] = 0
- result[1,2] = 0
- result[1,3] = integrate(f, lower=0, upper=1)$value
- result[1,4] = 0
-
- u = runif(10000)
- rownames(result)[2] = "Monte Carlo";
- result[2,1] = length(u)
- result[2,2] = length(u)
- result[2,3] = mean(f(u))
- result[2,4] = var(f(u))
-
- u = runif(5000)
- rownames(result)[3] = "Antithetic";
- result[3,1] = length(u)
- result[3,2] = length(u)
- result[3,3] = mean((f(u)+f(1-u))/2)
- result[3,4] = var((f(u)+f(1-u))/2)
-
- u = runif(5000)
- u = c(u, 1-u)
- rownames(result)[4] = "CCruncher";
- result[4,1] = length(u)/2
- result[4,2] = length(u)
- result[4,3] = mean(f(u))
- result[4,4] = var(f(u))
- 
- result
-
-\end{lstlisting}
-
-\subsubsection{Latin Hypercube Sampling (LHS)}
-This variance reduction technique 
-belongs to the stratified sampling family. It consists of dividing the total 
-probability range [0,1] in $N$ equispaced segments. Then we create a 
-sample of size $N$ picking a random value from each segment using a uniform 
-distribution and applying the inverse transform sampling. Finally we shuffle 
-the sample to obtain the desired distribution random values. When we have 
-two independent random variables, we repeat the above procedure for each of 
-them, obtaining the Latin Square effect: the generated random points are in
-a reticle in which each row and column has only one point. The procedure for
-three or more independent variables is identical, and it is called Latin 
-Hypercube Sampling~\cite{glasserman:1997}.
-
-When the random variables are dependent, the previous schema does not work, 
-and it is reformulated recurring to copulas and the rank statistic~\cite{wolfgang:2008}. 
-In this case, the number of bins affects the quality of the generated values, 
-the larger the better.
-
-In CCruncher, the random variables that can be sampled using the LHS 
+\emph{Latin hypercube sampling}. In CCruncher, the random variables that can be 
+sampled using the LHS 
 technique are the degrees of freedom $\nu$, and the factors $\vec{z}$. 
 The aim is to ensure a uniform scanning of these variables so that the
 extreme cases are represented.
-
-\begin{example}
-	We compare the estimated density of $N(0,1)$ using a sample of 100 
-	simulated values without using LHS and a sample of 100 simulated values 
-	using LHS. Listing~\ref{sc:lhs} exposes the R script, and 
-	figure~\ref{fig:lhs} displays the results.
-\end{example}
-
-\begin{figure}[!ht]
-	\centering
-	\subcaptionbox{Empirical cdf (without lhs)}{
-		\includegraphics[width=7cm]{lhs1}
-	}
-	\subcaptionbox{Empirical cdf (using lhs)}{
-		\includegraphics[width=7cm]{lhs2}
-	}
-	\caption{Latin Hypercube Sampling example (1-dim)}
-	\label{fig:lhs} 
-\end{figure}
-
-\begin{lstlisting}[language=R, label=sc:lhs, caption=Latin Hypercube Sampling example (R script)]
-
- rlhs <- function(nblocks, icdf, ...) 
- {
-   ret = rep(NA,nblocks)
-   for(i in 1:nblocks) {
-     u = runif(1, min=(i-1)/nblocks, max=i/nblocks)
-     ret[i] = icdf(u, ...)
-   }
-   ret = sample(ret)
-   return(ret)
- }
-
- x1 = rnorm(100, mean=0, sd=1)
- cdf1 = ecdf(x1)
- plot(cdf1, verticals=TRUE, pch=-1, ylab="prob", main="");
- 
- x2 = rlhs(100, qnorm, mean=0, sd=1)
- cdf2 = ecdf(x2)
- plot(cdf2, verticals=TRUE, pch=-1, ylab="prob", main="");
- 
-\end{lstlisting}
-
-%------------------------------------------------------------------------------
-% SIMULATION INTERNALS
-%------------------------------------------------------------------------------
-\subsection{Simulation Internals}
 
 \textbf{EAD and LGD interpolation}. Given an asset, CCruncher knows its EAD 
 and LGD values at fixed times $\{t_1,\dots,t_n\}$ provided by the user. When 
@@ -2336,10 +2179,10 @@ into the credit risk valuation. This indicates that credit risk measures
 (e.g., $\text{VaR}_{99\%}$, $\text{ES}_{99\%}$) are regarded as distributions 
 instead of values. For example, in the case of the Value at Risk, we consider
 the function $\text{VaR}_{99\%}(L_T(\nu,\vec{w},R))$ that depends on 
-the multivariate random variables $\nu, \vec{w}$ and $R$.
-Note that Expected Loss is not affected by the uncertainty of dependence 
-parameters because the expectation satisfies $E(X+Y)=E(X)+E(Y)$ even if 
-$X$ is not statistically independent of $Y$.
+the multivariate random variables $\nu, \vec{w}$ and $R$. Note that Expected 
+Loss is not affected by the uncertainty of dependence parameters because the 
+expectation satisfies $\text{E}(X+Y)=\text{E}(X)+\text{E}(Y)$ even if $X$ is 
+not statistically independent of $Y$.
 
 The solution recommended by CCruncher to determine the credit risk measure 
 distribution is the obvious one and is based on the identical procedure 
@@ -2629,7 +2472,7 @@ The second problem, the portfolio composition, is avoided by equating the number
 of obligors to exposures. Suppose we have two sub-portfolios A and B with the 
 same exposure, the first one with 500 obligors, and the second one with 500 
 obligors. We want to balance the portfolio so that ends up with $25\%$ of the 
-exposure in A and $75\%$ in B. The practical way to do this, is eliminating 
+exposure in A and $75\%$ in B. The way to implement it, is eliminating 
 half of the obligors from A and adding $250$ new obligors similar to those of 
 B. That said, if sub-portfolios A and B have a large number of homogeneous 
 individuals, then we can maintain the original number of individuals 
@@ -2643,13 +2486,13 @@ and by $1.5$ the B's exposures.
 	S1B + S1C) and S2 (= S2A + S2B + S2C). In this example we consider only two 
 	sub-portfolios, rather than the six defined, so that the values can be 
 	clearly represented in the plane. First, we simulate different portfolio 
-	compositions (50+950, 100+900, \dots, 950+50) and calculate the ES for each
-	of them. Next, we consider a fixed number of individuals (500+500) and we 
-	change the exposure of individuals according to its sector so that we mimic
-	the previous compositions. Figure \ref{fig:popt2} displays the values 
-	modifying the composition of the portfolio (simulated) and the values 
-	modifying the exposure of the obligors (approximated). In this case, both 
-	values are similar, with an error less than $0.15\%$.
+	compositions (50+950, 100+900, \dots, 950+50) and calculate the 
+	$\text{ES}_{99\%}$ for each of them. Next, we consider a fixed number of 
+	individuals (500+500) and we change the exposure of individuals according to 
+	its sector so that we mimic the previous compositions. Figure \ref{fig:popt2} 
+	displays the values modifying the composition of the portfolio (simulated) 
+	and the values modifying the exposure of the obligors (approximated). In this 
+	case, both values are similar, with an error less than $0.15\%$.
 \end{example}
 
 \begin{figure}[!ht]
@@ -2665,6 +2508,40 @@ simulations. This is achieved by simulating the losses of the current portfolio
 and by reusing these values to calculate any desired composition of the 
 portfolio. The following algorithm shows to compute the risk of a weighted
 portfolio using the simulated losses from the current portfolio.
+
+\begin{algorithm}[Risk of a weighted portfolio]
+	\label{alg:rwp}
+	Let a portfolio be categorized in $s$ sectors and $r$ ratings.
+	Assume a multivariate default times distribution with marginals $F_i$
+	and a t-Student multi-factor copula $C_{\nu,\vec{w},R}^{\text{t}}$.
+	We can then simulate a sample of size $M$ of the portfolio loss distribution
+	at time $T$ by performing the following:
+	\begin{enumerate}
+		\item Compute the Cholesky decomposition of $R = L \cdot L^\intercal$
+		\item For $m=1,\dots,M$ repeat the following steps:
+		\begin{itemize}
+			\item $\text{Loss}^m = 0$
+			\item Simulate $s$ independent $N(0,1)$, $\vec{y}$
+			\item Simulate factors doing $\vec{z} = L \cdot \vec{y}$
+			\item Simulate $\upsilon \sim \chi_{\nu}^2$
+			\item For $i=1,\dots,n$ repeat the following steps:
+			\begin{itemize}
+				\item Set $si = $ i-th obligor sector index
+				\item Set $ri = $ i-th obligor rating index
+				\item Simulate $\epsilon \sim N(0,1)$
+				\item Compute $x_i = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_{si} \cdot z_{si} + \sqrt{1-w_{si}^2} \cdot \epsilon \right)$
+				\item Compute $t_i = F_{ri}^{-1}\left(t_{\nu}(x_i)\right)$
+				\item if $t_i \le T$, then for each asset $j$ belonging to i-th obligor
+				\begin{itemize}
+					\item Evaluate or simulate $\text{EAD}_i^j(t_i)$
+					\item Evaluate or simulate $\text{LGD}_i^j(t_i)$
+					\item $\text{Loss}^m = \text{Loss}^m + \text{EAD}_i^j(t_i) \cdot \text{LGD}_i^j(t_i)$
+				\end{itemize}
+			\end{itemize}
+			\item print $\text{Loss}^m$
+		\end{itemize}
+	\end{enumerate}
+\end{algorithm}
 
 TODO: SET ALGORITHM HERE
 
@@ -3851,6 +3728,161 @@ not independent of one another; in fact, they form a multivariate distribution.
 	\caption{Metropolis-Hastings algorithm example}
 	\label{fig:mhbd}
 \end{figure}
+
+%------------------------------------------------------------------------------
+% VARIANCE REDUCTION
+%------------------------------------------------------------------------------
+\section{Variance Reduction}
+\label{ap:vr}
+
+The Monte Carlo method consists of sampling a distribution and averaging 
+these values to approximate the mean of this distribution. The main drawback 
+of this method is the low rate of convergence, on the order $1/\sqrt{N}$.
+Variance reduction methods are procedures used to increase the precision 
+of the estimates of the Monte Carlo method. The main procedures are common 
+random numbers, antithetic variates, control variates, importance sampling 
+and stratified sampling.
+
+\subsection{Antithetic variates}
+We estimate $E(g(X))$ using the Monte Carlo method. Assume $Y_1$ and 
+$Y_2$ as random variables with the identical distribution $g(X)$. 
+This indicates that $E(g(X)) = E(Y_1) = E(Y_2) = E(\frac{Y_1+Y_2}{2})$ and
+$\text{Var}\left(\frac{Y_1+Y_2}{2}\right) = 
+\frac{\text{Var}(Y_1)+\text{Cov}(Y_1,Y_2)}{2}$.
+If $Y_1$ and $Y_2$ are negatively correlated, then the variance of $N$ 
+simulated values from $\frac{Y_1+Y_2}{2}$ is smaller than the variance 
+of $2{\times}N$ simulated values from $Y_1$ or $Y_2$.
+
+\begin{example}
+	In this example extracted from 
+	\href{http://en.wikipedia.org/wiki/Antithetic_variates}{Wikipedia}, we 
+	show how the antithetical method works and how it is used by CCruncher. 
+	We would like to estimate the following integral using the Monte Carlo 
+	method:
+	\begin{displaymath}
+		I = \displaystyle \int_0^1 \frac{1}{1+x} \ud x
+	\end{displaymath}
+	In this case the random variable is $U \sim \text{Uniform}[0,1]$, and 
+	its variate is $1-U$. Listing~\ref{sc:antithetic} computes the integral 
+	value using plain Monte Carlo, Monte Carlo with antithetic method, and 
+	Monte Carlo with antithetic variates but only to reduce the number of 
+	simulated values as CCruncher does.
+	\\
+	\hspace*{1cm}
+	\begin{tabular}{l|c|c|c|c|}
+		\cline{2-5}
+		& Sims & N & Mean & Variance \\
+		\hline
+		\multicolumn{1}{|l|}{Exact = $\ln(2)$} & - & - & 0.693147 & - \\
+		\hline
+		\multicolumn{1}{|l|}{Monte Carlo} & 10000 & 10000 & 0.695685 & 0.019624 \\
+		\hline
+		\multicolumn{1}{|l|}{Antithetic} & 5000 & 5000 & 0.693404 & 0.000593 \\
+		\hline
+		\multicolumn{1}{|l|}{CCruncher} & 5000 & 10000 & 0.693099 & 0.019508 \\
+		\hline
+	\end{tabular}
+\end{example}
+%\vspace{11pt}
+
+\begin{lstlisting}[language=R, label=sc:antithetic, caption=Antithetic example (R script)]
+
+ f <- function(x) { 1/(1+x) }
+ 
+ result = matrix(nrow=4, ncol=4)
+ colnames(result) = c("Sims", "N", "Mean", "Variance")
+ rownames(result) = 1:4
+
+ rownames(result)[1] = "Exact";
+ result[1,1] = 0
+ result[1,2] = 0
+ result[1,3] = integrate(f, lower=0, upper=1)$value
+ result[1,4] = 0
+
+ u = runif(10000)
+ rownames(result)[2] = "Monte Carlo";
+ result[2,1] = length(u)
+ result[2,2] = length(u)
+ result[2,3] = mean(f(u))
+ result[2,4] = var(f(u))
+
+ u = runif(5000)
+ rownames(result)[3] = "Antithetic";
+ result[3,1] = length(u)
+ result[3,2] = length(u)
+ result[3,3] = mean((f(u)+f(1-u))/2)
+ result[3,4] = var((f(u)+f(1-u))/2)
+
+ u = runif(5000)
+ u = c(u, 1-u)
+ rownames(result)[4] = "CCruncher";
+ result[4,1] = length(u)/2
+ result[4,2] = length(u)
+ result[4,3] = mean(f(u))
+ result[4,4] = var(f(u))
+ 
+ result
+
+\end{lstlisting}
+
+\subsection{Latin Hypercube Sampling (LHS)}
+This variance reduction technique belongs to the stratified sampling family. 
+It consists of dividing the total probability range [0,1] in $N$ equispaced 
+segments. Then we create a sample of size $N$ picking a random value from 
+each segment using a uniform distribution and applying the inverse transform 
+sampling. Finally we shuffle the sample to obtain the desired distribution 
+random values. When we have two independent random variables, we repeat the 
+above procedure for each of them, obtaining the Latin Square effect: the 
+generated random points are in a reticle in which each row and column has 
+only one point. The procedure for three or more independent variables is 
+identical, and it is called Latin Hypercube Sampling~\cite{glasserman:1997}.
+
+When the random variables are dependent, the previous schema does not work, 
+and it is reformulated recurring to copulas and the rank statistic~\cite{wolfgang:2008}. 
+In this case, the number of bins affects the quality of the generated values, 
+the larger the better.
+
+\begin{example}
+	We compare the estimated density of $N(0,1)$ using a sample of 100 
+	simulated values without using LHS and a sample of 100 simulated values 
+	using LHS. Listing~\ref{sc:lhs} exposes the R script, and 
+	figure~\ref{fig:lhs} displays the results.
+\end{example}
+
+\begin{figure}[!ht]
+	\centering
+	\subcaptionbox{Empirical cdf (without lhs)}{
+		\includegraphics[width=7cm]{lhs1}
+	}
+	\subcaptionbox{Empirical cdf (using lhs)}{
+		\includegraphics[width=7cm]{lhs2}
+	}
+	\caption{Latin Hypercube Sampling example (1-dim)}
+	\label{fig:lhs} 
+\end{figure}
+
+\begin{lstlisting}[language=R, label=sc:lhs, caption=Latin Hypercube Sampling example (R script)]
+
+ rlhs <- function(nblocks, icdf, ...) 
+ {
+   ret = rep(NA,nblocks)
+   for(i in 1:nblocks) {
+     u = runif(1, min=(i-1)/nblocks, max=i/nblocks)
+     ret[i] = icdf(u, ...)
+   }
+   ret = sample(ret)
+   return(ret)
+ }
+
+ x1 = rnorm(100, mean=0, sd=1)
+ cdf1 = ecdf(x1)
+ plot(cdf1, verticals=TRUE, pch=-1, ylab="prob", main="");
+ 
+ x2 = rlhs(100, qnorm, mean=0, sd=1)
+ cdf2 = ecdf(x2)
+ plot(cdf2, verticals=TRUE, pch=-1, ylab="prob", main="");
+ 
+\end{lstlisting}
 
 
 %==============================================================================
