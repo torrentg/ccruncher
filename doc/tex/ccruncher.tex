@@ -2479,6 +2479,13 @@ individuals, then we can maintain the original number of individuals
 ($500+500$) and balance the portfolio by multiplying by $0.5$ the A's exposures 
 and by $1.5$ the B's exposures.
 
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.98\textwidth]{sensi-pct}
+	\caption{$\text{ES}_{99\%}$ for distinct percentages of S1 and S2}
+	\label{fig:popt2}
+\end{figure}
+
 \begin{example}[Sub-portfolio weights]
 	To check the accuracy of the equivalence between the number of individuals 
 	and the exposures we analyze the case \texttt{test05.xml} (see 
@@ -2495,13 +2502,6 @@ and by $1.5$ the B's exposures.
 	case, both values are similar, with an error less than $0.15\%$.
 \end{example}
 
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.98\textwidth]{sensi-pct}
-	\caption{$\text{ES}_{99\%}$ for distinct percentages of S1 and S2}
-	\label{fig:popt2}
-\end{figure}
-
 The equivalence between the number of debtors and the exposures has a very 
 important advantage since it allows to optimize without having to do multiple 
 simulations. This is achieved by simulating the losses of the current portfolio
@@ -2511,39 +2511,26 @@ portfolio using the simulated losses from the current portfolio.
 
 \begin{algorithm}[Risk of a weighted portfolio]
 	\label{alg:rwp}
-	Let a portfolio be categorized in $s$ sectors and $r$ ratings.
-	Assume a multivariate default times distribution with marginals $F_i$
-	and a t-Student multi-factor copula $C_{\nu,\vec{w},R}^{\text{t}}$.
-	We can then simulate a sample of size $M$ of the portfolio loss distribution
-	at time $T$ by performing the following:
+	Let a portfolio composed of $K$ sub-portfolios with an average exposure $E_k$ 
+	for each of them in the period $[0, T]$. We have simulated the portfolio 
+	losses broken down by sub-portfolios. We want compute the EL and 
+	$\text{ES}_{99\%}$ of this portfolio with weights $\alpha_1,\dots,\alpha_K$.
 	\begin{enumerate}
-		\item Compute the Cholesky decomposition of $R = L \cdot L^\intercal$
-		\item For $m=1,\dots,M$ repeat the following steps:
-		\begin{itemize}
-			\item $\text{Loss}^m = 0$
-			\item Simulate $s$ independent $N(0,1)$, $\vec{y}$
-			\item Simulate factors doing $\vec{z} = L \cdot \vec{y}$
-			\item Simulate $\upsilon \sim \chi_{\nu}^2$
-			\item For $i=1,\dots,n$ repeat the following steps:
-			\begin{itemize}
-				\item Set $si = $ i-th obligor sector index
-				\item Set $ri = $ i-th obligor rating index
-				\item Simulate $\epsilon \sim N(0,1)$
-				\item Compute $x_i = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_{si} \cdot z_{si} + \sqrt{1-w_{si}^2} \cdot \epsilon \right)$
-				\item Compute $t_i = F_{ri}^{-1}\left(t_{\nu}(x_i)\right)$
-				\item if $t_i \le T$, then for each asset $j$ belonging to i-th obligor
-				\begin{itemize}
-					\item Evaluate or simulate $\text{EAD}_i^j(t_i)$
-					\item Evaluate or simulate $\text{LGD}_i^j(t_i)$
-					\item $\text{Loss}^m = \text{Loss}^m + \text{EAD}_i^j(t_i) \cdot \text{LGD}_i^j(t_i)$
-				\end{itemize}
-			\end{itemize}
-			\item print $\text{Loss}^m$
-		\end{itemize}
+		\item Obtain multiplicative factors: $\lambda_k = \alpha_k \cdot \frac{E}{E_k}$
+		\item Create weighted losses: $y_i = \displaystyle \sum_{k=1}^K \lambda_k \cdot x_i^k \quad i=1,\dots,N$
+		\item Compute EL (see section~\ref{sec:riskm}) using values $\left\{y_i\right\}_{i=1,\dots,N}$ 
+		and divide this value by $E$ to obtain the EL relative to total exposure.
+		\item Compute $\text{ES}_{99\%}$ (see section~\ref{sec:riskm}) using values 
+		$\left\{y_i\right\}_{i=1,\dots,N}$ and divide this value by $E$ to obtain the 
+		$\text{ES}_{99\%}$ relative to total exposure.
 	\end{enumerate}
+	where $E = \sum_{k=1}^K E_k$ is the total exposure, $N$ is the number of simulated
+	losses, $x_i^k$ is the i-th simulated loss of the k-th sub-portfolio.
 \end{algorithm}
 
-TODO: SET ALGORITHM HERE
+The risk of weighted portfolio is continuous with respect to $\alpha_1,\dots,\alpha_K$
+but it is not linear with respect to this parameters because the rank statistic. This 
+is illustrated in figure~\ref{fig:popt2}.
 
 \begin{figure}[!h]
 	\centering
