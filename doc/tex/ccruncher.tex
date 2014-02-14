@@ -395,7 +395,7 @@ estimate the model parameters, details the procedure to simulate the portfolio
 loss distribution and provides the formulas to quantify the credit risk. 
 Furthermore, it explore the risk sensitivity for some parameters, encourages 
 transferring the parameters uncertainty to the credit risk measures, and 
-exposes a method to optimize the credit risk portfolio.
+exposes a method to optimize the portfolio credit risk.
 
 CCruncher requires a portfolio with a buy-and-hold policy in which each obligor 
 has a rating assigned and belongs to a single economic sector. An example of 
@@ -423,32 +423,22 @@ The disadvantages of CCruncher are as follows:
 \begin{inparaenum}[1)]
 	\item it is computationally intensive;
 	\item the convergence rate of the Monte Carlo method is rather slow;
-	\item obligors cannot belong to a weighted sum of factors;
+	\item currently the obligors cannot belong to a weighted sum of factors;
 	\item dependence only relies on sectors;
 	\item correlations are constant over time;
 	\item currently only Gaussian and t-Student copulas are supported; and
 	\item mark-to-market is not supported.
 \end{inparaenum}
 
-TODO: REVISE CONTENT ORGANIZATION (OPTIMIZATION, PARAMETERS UNCERTAINTY).
-
 The content is organized into three chapters. The first chapter details the 
-distribution used to simulate the obligors' default times. It is easy to 
-understand and is recommended reading, especially the section in which the 
-multivariate model is presented. The second chapter addresses the estimation 
-of parameters. This topic can be difficult for those not familiar with MCMC; 
-therefore the second chapter includes a detailed introduction to the 
-Metropolis-Hastings method. Finally, the 
-third chapter describes how to obtain the portfolio loss distribution and 
-quantify the credit risk. It is recommended reading, although those who are 
-not concerned with the estimation of parameters and their effect on credit 
-risk measures can skip the last section referring to parameters' uncertainty. 
-
-% Four short appendices cover issues addressed in the first chapter (the 
-% multivariate time-until-default model). These appendices are recommended 
-% reading because they contain key statements and establish the utilized 
-% notation. The proofs for some results presented in this document are located 
-% at the end of this document to facilitate the reading.
+distribution used to simulate the obligors' default times, and provides methods 
+to estimate the copula parameters. The second chapter describes how to obtain 
+the portfolio loss distribution and quantify the portfolio credit risk.
+Finally, the third chapter covers three important topics: risk sensitivity,
+parameters uncertainty, and portfolio optimization.
+In order to facilitate reading, have been relegated to appendices those issues 
+that are important to understanding the content and require a detailed 
+discussion. 
 
 
 %==============================================================================
@@ -1084,13 +1074,13 @@ avoids these problems.
 \section{Bayesian Inference}
 \label{sec:binf}
 
-Simulating a multivariate Gaussian distribution 20 times and calculating 
-the sample correlation indicates a high uncertainty of estimated correlations. 
-This stylized fact reflects our situation because we are trying to estimate 
-factor correlations among other values. Uncertainty is exacerbated because 
-our variables are latent and we are estimating from observations of type 
-count-data. Thus, considering the estimated parameters as fixed values such 
-as the Maximum Likelihood estimator is a naive and risky proposition. 
+The sample correlation coefficient of 20 Gaussian values has a high 
+uncertainty~\cite[pp. 217-221]{kenney:1951}. This stylized fact reflects our 
+situation because we are trying to estimate factor correlations among other 
+values. Uncertainty is exacerbated because our variables are latent and we 
+are estimating from observations of type count-data. Thus, considering the 
+estimated parameters as fixed values such as the Maximum Likelihood estimator 
+is a naive and risky proposition. 
 The Bayesian approach appears more appropriate~\cite{gossl:2005,tarashev:2010}
 because it considers the uncertainty of the parameters. Later we will see 
 how to transfer this uncertainty to the assessment of credit risk.
@@ -2387,7 +2377,7 @@ export(rcount, "paramu.txt")
 Once we knows the portfolio credit risk, naturally arises the question ``How 
 can I balance the weights assigned to each business unit so that the total 
 portfolio risk is minimized?'' In section \ref{ss:ra}, we have seen that 
-CCruncher can define sub-portfolios and allows disaggregate the portfolio 
+CCruncher allows to define sub-portfolios and it can disaggregate the portfolio 
 credit risk in terms of them. In this section we will see how to modify the 
 weights assigned to each sub-portfolio in order to optimize the portfolio
 credit risk. First of all, let's define the problems considered:
@@ -2399,12 +2389,17 @@ credit risk. First of all, let's define the problems considered:
 
 	{\centering
 	\renewcommand{\arraystretch}{1.5}
-	\begin{tabular}{l m{2cm} l}
-		\textbf{EL minimization} & & \textbf{ES minimization} \\
+	\begin{tabular}{l m{1cm} l m{1cm} l}
+		\textbf{EL minimization} & & \textbf{ES minimization} & & \textbf{EL-ES minimization} 
+		\\
 		$\displaystyle \min_{\alpha_k} \ \text{EL}(L)$
 		& &
 		$\displaystyle \min_{\alpha_k} \ \text{ES}_{99\%}(L)$
+		& &
+		$\displaystyle \min_{\alpha_k} \ \sqrt{\text{EL}^2+\text{ES}_{99\%}^2}$
 		\\
+		Subjecto to:
+		& \centering or &
 		Subjecto to:
 		& \centering or &
 		Subjecto to:
@@ -2421,6 +2416,15 @@ credit risk. First of all, let's define the problems considered:
 		$\left.
 			\begin{array}{l}
 				y^0 = \text{EL}(L) \\
+				0 \le \alpha_k \le 1 \quad \forall k \\
+				\displaystyle \sum_{k=1}^{K} \alpha_k = 1 \\
+			\end{array}
+			\right\}
+		$
+		& &
+		$\left.
+			\begin{array}{l}
+				\\
 				0 \le \alpha_k \le 1 \quad \forall k \\
 				\displaystyle \sum_{k=1}^{K} \alpha_k = 1 \\
 			\end{array}
@@ -2506,8 +2510,8 @@ The equivalence between the number of debtors and the exposures has a very
 important advantage since it allows to optimize without having to do multiple 
 simulations. This is achieved by simulating the losses of the current portfolio
 and by reusing these values to calculate any desired composition of the 
-portfolio. The following algorithm shows to compute the risk of a weighted
-portfolio using the simulated losses from the current portfolio.
+portfolio. The following algorithm compute the risk of a weighted portfolio 
+using the simulated losses from the current portfolio.
 
 \begin{algorithm}[Risk of a weighted portfolio]
 	\label{alg:rwp}
@@ -2516,7 +2520,8 @@ portfolio using the simulated losses from the current portfolio.
 	losses broken down by sub-portfolios. We want compute the EL and 
 	$\text{ES}_{99\%}$ of this portfolio with weights $\alpha_1,\dots,\alpha_K$.
 	\begin{enumerate}
-		\item Obtain multiplicative factors: $\lambda_k = \alpha_k \cdot \frac{E}{E_k}$
+		\item Obtain multiplicative factors: 
+		$\lambda_k = \alpha_k \cdot \frac{E}{E_k} = \frac{\alpha_k}{\alpha_k^0}$
 		\item Create weighted losses: $y_i = \displaystyle \sum_{k=1}^K \lambda_k \cdot x_i^k \quad i=1,\dots,N$
 		\item Compute EL (see section~\ref{sec:riskm}) using values $\left\{y_i\right\}_{i=1,\dots,N}$ 
 		and divide this value by $E$ to obtain the EL relative to total exposure.
@@ -2524,15 +2529,40 @@ portfolio using the simulated losses from the current portfolio.
 		$\left\{y_i\right\}_{i=1,\dots,N}$ and divide this value by $E$ to obtain the 
 		$\text{ES}_{99\%}$ relative to total exposure.
 	\end{enumerate}
-	where $E = \sum_{k=1}^K E_k$ is the total exposure, $N$ is the number of simulated
-	losses, $x_i^k$ is the i-th simulated loss of the k-th sub-portfolio.
+	where $E = \sum_{k=1}^K E_k$ is the total exposure, $\alpha_k^0$ is the weight
+	of the current k-th sub-portfolio, $N$ is the number of simulated losses, and
+	$x_i^k$ is the i-th simulated loss of the k-th sub-portfolio.
 \end{algorithm}
 
 The risk of weighted portfolio is continuous with respect to $\alpha_1,\dots,\alpha_K$
-but it is not linear with respect to this parameters because the rank statistic. This 
-is illustrated in figure~\ref{fig:popt2}.
+but it is not linear with respect to this parameters because the rank statistic 
+involved in the $\text{VaR}_{99\%}$ and $\text{ES}_{99\%}$ measures. 
+This is illustrated in figure~\ref{fig:popt2}.
 
-\begin{figure}[!h]
+\begin{example}[Feasible portfolios]
+	We consider the portfolio defined in \texttt{test05.xml} (see example~\ref{ex:test05}).
+	We want to know the values that can take the risk measures by changing the 
+	composition of the portfolio. To achieve this, we consider the following 
+	combinations of weights:
+	\begin{displaymath}
+		\left\{
+		\left( \alpha_1,\dots,\alpha_6 \right) \mid
+		\alpha_i \in \left\{0, 0.1, 0.2,\dots,0.9,1 \right\}
+		\ \text{ and }\ \displaystyle \sum_{i=1}^6 \alpha_i = 1
+		\right\}
+	\end{displaymath}
+	This set of weights has \num{3003} elements. For each element of this set we
+	compute the EL and $\text{ES}_{99\%}$ of the weighted portfolio applying the
+	algorithm~\ref{alg:rwp}. Result is displayed in figure~\ref{fig:optim1}. We
+	have drawn the convex hull of the region and we have identified the relevant 
+	points. The original portfolio is marked with a black dot and the 
+	corresponding optimal portfolios are indicated with a arrow. The appearance 
+	of the EL-ES region is determined by the involved sub-portfolios, in this 
+	case: S1A, S1B, S1C, S2A, S2B, S2C. Other segmentations (e.g., geographic 
+	areas, types of products) will lead to EL-ES regions with a different shape. 
+\end{example}
+
+\begin{figure}[!ht]
 	\centering
 	\subcaptionbox{Portfolio values}{
 		\includegraphics[width=6.5cm]{optim1}
@@ -2552,9 +2582,114 @@ is illustrated in figure~\ref{fig:popt2}.
 		\end{tabular}
 		\vspace{50pt}
 	}
-	\caption{Feasible portfolios}
+	\caption{\texttt{test05.xml} feasible portfolios}
 	\label{fig:optim1}
 \end{figure}
+
+Now we have all the elements to solve the three optimization problems. Instead
+of presenting the algorithm in pseudo-code, this time we use a basic R script 
+exposed in listing~\ref{sc:opt} to illustrate the procedure. The optimizaed 
+portfolio is the case \texttt{test05.xml} and optimization results are listed
+in table~\ref{tab:optim1}. Note that $K-1$ parameters are optimized rather 
+than $K$. This is because we can obtain the former doing 
+$\alpha_1 = 1-\sum_{i=2}^K \alpha_i$. Note also that penalty functions are 
+used to ensure the restrictions compliance.
+
+\begin{lstlisting}[language=R, label=sc:opt, caption=Portfolio optimization (R script)]
+
+ evalPortfolio <- function(losses, w0, w1, level=0.99)
+ {
+   if (length(w0) != length(w1)) stop("invalid parameters")
+   if (ncol(losses) != length(w0)) stop("invalid losses")
+   if (level <= 0 || level >= 1) stop("ES level out-of-range (0,1)")
+   n = nrow(losses)
+   k = ncol(losses)
+   lambda = w1/w0
+   loss = rep(0, n)
+   for(i in 1:k) {
+     loss = loss + losses[,i]*lambda[i]
+   }
+   loss = sort(loss)
+   el = mean(loss)
+   es = mean(loss[as.integer(n*level):n])
+   return(c(el,es))
+ }
+
+ getW <- function(params)
+ {
+   w = c(0, params)
+   w[1] = 1-sum(w)
+   return(w)
+ }
+
+ f <- function(params, losses, w0, option, val, level=0.99)
+ {
+   if (!(option %in% (1:3))) stop("unrecognized option")
+   w1 = getW(params)
+   aux = 0
+   if (w1[1] < 0) {
+     aux = w1[1]
+     w1[1] = 0
+   }
+   eles = evalPortfolio(losses, w0, w1, level)
+   if (aux != 0) {
+     eles = eles + abs(aux)*10
+   }
+   if (option == 1) {
+     ret = eles[1] + 10*(val-eles[2])^2
+     return(ret)
+   }
+   else if (option == 2) {
+     ret = eles[2] + 10*(val-eles[1])^2
+     return(ret)
+   }
+   else if (option == 3) {
+     ret = sqrt(sum(eles^2))
+     return(ret)
+   }
+   else return(NA)
+ }
+
+ losses <- read.csv("data/sector-rating.csv", header=TRUE, sep=",")
+ exposures = c(167, 166, 167, 167, 167, 166)
+ w0 = exposures/sum(exposures)
+ eles0 = evalPortfolio(losses, w0, w0)
+ 
+ # EL minimization
+ params = w0[2:length(w0)]
+ opt = nlminb(params, f, losses=losses, w0=w0, option=1, val=eles0[2],
+       lower=rep(0,length(params)), upper=rep(1,length(params)))
+ w1 = getW(opt$par)
+ evalPortfolio(losses, w0, w1)
+
+ # ES minimization
+ params = w0[2:length(w0)]
+ opt = nlminb(params, f, losses=losses, w0=w0, option=2, val=eles0[1],
+       lower=rep(0,length(params)), upper=rep(1,length(params)))
+ w2 = getW(opt$par)
+ evalPortfolio(losses, w0, w2)
+
+ # optimization
+ params = w0[2:length(w0)]
+ opt = nlminb(params, f, losses=losses, w0=w0, option=3, val=NA,
+       lower=rep(0,length(params)), upper=rep(1,length(params)))
+ w3 = getW(opt$par)
+ evalPortfolio(losses, w0, w3)
+ 
+\end{lstlisting}
+
+\begin{table}[!hb]
+\begin{tabular}{l|rrrrrr|rr}
+	          & S1A   & S1B   & S1C   & S2A   & S2B   & S2C   & EL    & ES \\
+	\hline
+	current   &16.7\% &16.6\% &16.7\% &16.7\% &16.7\% &16.6\% &11.6\% &38.3\% \\
+	min EL    &68.9\% &31.1\% &   0\% &   0\% &   0\% &   0\% & 6.6\% &38.3\% \\
+	min ES    &18.7\% &   0\% &21.3\% &36.8\% &   0\% &23.2\% &11.6\% &37.2\% \\
+	min EL-ES &41.0\% &   0\% &   0\% &59.0\% &   0\% &   0\% & 5.0\% &27.0\% \\
+\end{tabular}
+	\caption{\texttt{test05.xml} optimization}
+	\label{tab:optim1}
+\end{table}
 
 
 %==============================================================================
@@ -2571,7 +2706,8 @@ is illustrated in figure~\ref{fig:popt2}.
 
 In this section, we construct the univariate time-until-default obligor 
 distributions using available information such as the 1-year PDs or the ratings
-transition matrix.
+transition matrix. The objective is to determine the cumulative density 
+functions $F_i(t) = \Pr\{T_i \le t\}$ for each of the ratings.
 
 \begin{definition}[Probability of Default (PD)]
 	$T_i$ is the random variable that represents the default time 
@@ -2768,7 +2904,7 @@ from~\cite{kreinin:2001}.
 	\label{fig:pdftm}
 \end{figure}
 
-\subsection{Obtaining PDs from single PD values}
+\subsection{Obtaining PDs from annual values}
 \label{pdfsv}
 
 In some circumstances, the transition matrix is not available, and we only 
@@ -2787,11 +2923,10 @@ transition matrix such as the following:
 	\right)
 \end{displaymath}
 
-The next section (\ref{pdftm}) explains how to derive the PD's curves from a 
-transition matrix. However, this simplified case has a closed-form solution 
-stated by the following proposition.
+This simplified case has a closed-form solution stated by the following 
+proposition.
 
-\begin{proposition}[PDs derived from single values]
+\begin{proposition}[PDs derived from annual values]
 	\label{prop:pdfsv}
 	If the time-until-default of an obligor satisfies a transition matrix 
 	and only depends on the 1-year probability of default $p_i$, then this
