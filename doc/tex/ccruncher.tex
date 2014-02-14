@@ -52,14 +52,21 @@
 \usepackage{microtype} % Slightly tweak font spacing for aesthetics
 \usepackage[utf8]{inputenc} % Required for including letters with accents
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
-
-% Bibliography
-\usepackage[hidelinks,hyperfootnotes=false]{hyperref} %added by GTG
+\usepackage[hidelinks,
+            hyperfootnotes=false,
+            pdftex,
+            pdfauthor={Gerard Torrent-Gironella},
+            pdftitle={Quantifying Portfolio Credit Risk Using CCruncher},
+            pdfsubject={Portfolio credit risk modeling},
+            pdfkeywords={PD, EAD, LGD, ratings, correlations, transition matrix,
+                         copula, t-Student, Value at Risk, Expected Loss,
+                         Expected Shortfall, Monte Carlo, open source,
+                         multi-factor model, risk sensitivity, parameters
+                         uncertainty, portfolio optimization},
+            pdfproducer={Latex with hyperref},
+            pdfcreator={pdflatex}
+           ]{hyperref} %added by GTG
 \usepackage[all]{hypcap} % needed to help hyperlinks direct correctly
-
-%----------------------------------------------------------------------------------------
-
-% added by GTG
 \usepackage{verbatim}
 \usepackage{alltt}
 \usepackage{parskip}
@@ -141,7 +148,14 @@ Version \numversion\par
 \newpage
 
  \section*{Abstract}
-TODO: SET ABSTRACT HERE
+This document provides a comprehensible view of portfolio credit risk modeling 
+using the copula approach (t-Student case). It emphasizes the practical aspects, 
+including short introductions of methods, examples, and a discussion of the 
+implementation details.
+It takes into account the sensitivity of the risk with respect to the estimated 
+parameters and provides a practical method to incorporate this uncertainty in 
+the portfolio credit risk measure. Finally, a method for optimizing the 
+portfolio credit risk is provided.
 
 % ~\vfill
 % \section*{Contributors}
@@ -276,9 +290,9 @@ please cite it when using it for credit risk analysis.
 % 	description={Gaussian copula with correlation matrix $R$.},
 % 	sort=160
 % }
-\newglossaryentry{glos:ct}{name=$C_{\nu,R}^{\text{t}}$,
+\newglossaryentry{glos:ct}{name=$C_{\nu,\widehat{R}}^{\text{t}}$,
 	description={t-Student copula with $\nu$ degrees of freedom and 
-	correlation matrix $R$.},
+	correlation matrix $\widehat{R}$.},
 	sort=170
 }
 \newglossaryentry{glos:ctm}{name=$C_{\nu,\vec{w},R}^{\text{t}}$,
@@ -743,7 +757,7 @@ to estimate the model parameters.
 	the observation at time $t$ (e.g., $K_{ij}^t$).
 \end{definition}
 
-\begin{example}[]
+\begin{example}[Historical data]
 	Suppose that our portfolio has two sectors, S1 and S2, and four ratings, 
 	A, B, C, and D, in which D is the \emph{defaulted} status. We collected 
 	the number of defaults by sector and rating from the past 20 years. We 
@@ -1029,7 +1043,7 @@ is fixed and known.
 
 \end{lstlisting}
 
-\begin{example}
+\begin{example}[Implied covariance estimator]
 	Consider the following scenario:
 	\begin{itemize}
 		\item Two sectors \{S1, S2\}
@@ -1551,7 +1565,7 @@ appropriate statistics.
 			\item Simulate $s$ independent $N(0,1)$, $\vec{y}$
 			\item Simulate factors doing $\vec{z} = L \cdot \vec{y}$
 			\item Simulate $\upsilon \sim \chi_{\nu}^2$
-			\item For $i=1,\dots,n$ repeat the following steps:
+			\item For each obligor $i=1,\dots,n$ repeat the following steps:
 			\begin{itemize}
 				\item Set $si = $ i-th obligor sector index
 				\item Set $ri = $ i-th obligor rating index
@@ -1925,7 +1939,7 @@ $\{y_1^k,\dots,y_K^k\} = \{x_i^k \mid x_i \ge \text{VaR}_{\beta}\}_{i=1\dots N}$
 are the simulated sub-portfolio losses having a portfolio loss large than 
 $\text{VaR}_{\beta}$.
 
-\begin{example}
+\begin{example}[Risk disaggregation]
 	We use the identical scenario as that described in example~\ref{ex:test05} 
 	and that corresponds to CCruncher input file \texttt{test05.xml}. This 
 	example defines a segmentation named \emph{sector-rating} with segments 
@@ -1986,11 +2000,11 @@ use the following piecewise constant interpolation:
 \end{displaymath}
 
 \textbf{PD functions approximation}. CCruncher allows defining the PD
-functions using the transition matrix or defining explicitly the values
-at some fixed points. When PDs are defined using the transition matrix, 
+functions using the transition matrix or defining explicitly the PD values
+at some fixed times. When PDs are defined using the transition matrix, 
 CCruncher uses proposition~\ref{prop:pdftm} to derive $F_i$ for each 
 month, and intermediate values are interpolated using cubic splines. 
-When PDs are defined explicitly at some fixed points, then intermediate 
+When PDs are defined explicitly at some fixed times, then intermediate 
 values are interpolated using cubic splines; however, if the resulting 
 function is not strictly increasing, then CCruncher uses linear splines.
 
@@ -2009,7 +2023,7 @@ following procedure:
 	\item Repeat until $\displaystyle \max_{d_1 \le d \le d_T}\left|d - P(t_{\nu}^{-1}(F_r(d)))\right| < 1$ hour
 	\begin{itemize}
 		\item Let $d$ be the day on which maximum error is achieved
-		\item Let $t_i \le d \le t_{i+1}$ be the nearest days on which PDs are defined
+		\item Let $t_i \le d \le t_{i+1}$ be the nearest days on which PDs are user defined
 		\item If $t_i$ is not contained in $\mathbb{S}$, add $t_i$ to $\mathbb{S}$
 		\item Else if $t_{i+1}$ is not contained in $\mathbb{S}$, add $t_{i+1}$ to $\mathbb{S}$
 		\item Else add $d$ to $\mathbb{S}$
@@ -2041,15 +2055,16 @@ CCruncher parallelizes the portfolio loss sampling, spawning multiple
 simulation threads, each with its own Mersenne twister Random Number 
 Generator seeded with consecutive values. When the number of obligors is 
 high, data do not fit in the cache memory L1 and L2. The memory transfer is 
-a time-consuming operation that must be minimized. To achieve this, CCruncher 
-simulates each obligor \emph{blocksize} times (each of them with the 
-corresponding $\nu$ and $\vec{z}$) before moving to the next obligor.
+a time-consuming operation that must be minimized. To achieve this, a CCruncher 
+threads perform simultaneously \emph{blocksize} simulations. Each obligor is 
+simulated \emph{blocksize} times (each of them with the corresponding $\nu$ 
+and $\vec{z}$) before moving to the next obligor.
 
 \textbf{Parameterization}. 
 The CCruncher input file contains the data required to simulate the portfolio
 losses (obligors, assets, EADs, LGDs, ratings, factor correlations, factor
 loadings, copula to use, interest rates, segmentations, etc.). This file can 
-be quite large (e.g., 1GB). When we do stress-testing or evaluate the effect 
+be quite large (e.g., 1GB). When we evaluate the risk sensitivity or the effect 
 of parameters' uncertainty, we must slightly modify the input file and 
 reevaluate the portfolio loss distribution multiple times. To simplify this 
 task, CCruncher provides the macro mechanism, that allows using variables 
@@ -2279,15 +2294,13 @@ hidden such as:
 	can be approximated using the empirical density. Listing~\ref{sc:paramu5}
 	provides an R script to perform this task. 
 
-	The exact value of the $\text{ES}_{99\%}$ assuming that parameters 
-	are fixed and known is $\approx 383$\ \euro. If we do not assume that 
-	parameters are known and we infer the parameters from 20 observations 
-	of the numbers of defaults, then we obtain the distribution displayed 
-	in figure~\ref{fig:paramu5}. 
+	The exact value of the $\text{ES}_{99\%}$ assuming that parameters are 
+	fixed and known is $\approx 383$\ \euro\ (see example~\ref{ex:test05}). 
+	If we do not assume that parameters are known and we infer the parameters 
+	from 20 observations of the numbers of defaults, then we obtain the 
+	distribution displayed in figure~\ref{fig:paramu5}. 
 	The key point is to dispose a distribution indicating the 
 	feasible values that can take the risk measure $\text{ES}_{99\%}$.
-	In this example, it is reasonable to consider that 
-	$\text{ES}_{99\%} < 450$ \euro.
 \end{example}
 \footnotetext[1]{\url{http://www3.nd.edu/~ccl/software/makeflow/}} 
 \begin{comment}
@@ -2315,7 +2328,7 @@ export(rcount, "paramu.txt")
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.98\textwidth]{paramu-2}
-	\caption{Step2 -- ACF of simulated parameters}
+	\caption{Step 2 -- ACF of simulated parameters}
 	\label{fig:paramu2}
 \end{figure}
 
@@ -2399,9 +2412,9 @@ credit risk. First of all, let's define the problems considered:
 		$\displaystyle \min_{\alpha_k} \ \sqrt{\text{EL}^2+\text{ES}_{99\%}^2}$
 		\\
 		Subjecto to:
-		& \centering or &
+		& &
 		Subjecto to:
-		& \centering or &
+		& &
 		Subjecto to:
 		\\
 		$\left.
@@ -2511,7 +2524,7 @@ important advantage since it allows to optimize without having to do multiple
 simulations. This is achieved by simulating the losses of the current portfolio
 and by reusing these values to calculate any desired composition of the 
 portfolio. The following algorithm compute the risk of a weighted portfolio 
-using the simulated losses from the current portfolio.
+reusing the simulated losses from the current portfolio.
 
 \begin{algorithm}[Risk of a weighted portfolio]
 	\label{alg:rwp}
@@ -2543,7 +2556,7 @@ This is illustrated in figure~\ref{fig:popt2}.
 	We consider the portfolio defined in \texttt{test05.xml} (see example~\ref{ex:test05}).
 	We want to know the values that can take the risk measures by changing the 
 	composition of the portfolio. To achieve this, we consider the following 
-	combinations of weights:
+	weights:
 	\begin{displaymath}
 		\left\{
 		\left( \alpha_1,\dots,\alpha_6 \right) \mid
@@ -2588,7 +2601,7 @@ This is illustrated in figure~\ref{fig:popt2}.
 
 Now we have all the elements to solve the three optimization problems. Instead
 of presenting the algorithm in pseudo-code, this time we use a basic R script 
-exposed in listing~\ref{sc:opt} to illustrate the procedure. The optimizaed 
+exposed in listing~\ref{sc:opt} to illustrate the procedure. The optimized 
 portfolio is the case \texttt{test05.xml} and optimization results are listed
 in table~\ref{tab:optim1}. Note that $K-1$ parameters are optimized rather 
 than $K$. This is because we can obtain the former doing 
@@ -2756,7 +2769,7 @@ matrix because it is used in all three cases.
 	any rating ends up defaulting.
 \end{definition}
 
-\begin{example}
+\begin{example}[1-year transition matrix]
 	\label{ex:1ytm}
 	Table~\ref{tmatrix1} shows a transition matrix, extracted 
 	from~\cite[p. 20]{cmetrics:1997}, in which the probability that an obligor 
@@ -2887,9 +2900,7 @@ from~\cite{kreinin:2001}.
 	$\bar{M}_1 = \bar{M}_{\frac{1}{12}}^{12}$. 
 	Finally, we use proposition~\ref{prop:pdftm} to determine the 
 	PD function for each rating and month. The results are displayed in 
-	figure~\ref{fig:pdftm}. Observe that values around $T=1$ are similar 
-	to those of example~\ref{ex:pdfsv}; however, they differ as they move 
-	away from this.
+	figure~\ref{fig:pdftm}.
 \end{example}
 
 \begin{figure}[!ht]
@@ -3010,7 +3021,9 @@ proposition.
 	We determine the PD's function for each rating using  
 	proposition~\ref{prop:pdfsv}, i.e., considering that times-until-default
 	are exponential distributions. These results are displayed in 
-	figure~\ref{fig:pdfsv}. 
+	figure~\ref{fig:pdfsv}. Observe that values around $T=1$ are similar 
+	to those of example~\ref{ex:pdftm}; however, they differ as they move 
+	away from this.
 \end{example}
 
 \begin{figure}[!ht]
@@ -3021,7 +3034,7 @@ proposition.
 	\subcaptionbox{Probability of Default (10-year zoom)}{
 		\includegraphics[width=7cm]{pdfsv2}
 	}
-	\caption{PDs derived from annual PDs}
+	\caption{PDs derived from annual values}
 	\label{fig:pdfsv}
 \end{figure}
 
@@ -3369,7 +3382,7 @@ in~\cite{torrent:2011}.
 %------------------------------------------------------------------------------
 \section{Multi-Factor Gaussian Model}
 \label{ap:mfgm}
-
+~\\
 \begin{definition}[Gaussian multi-factor model]
 	\label{def:gmfm}
 	We say that a multivariate distribution $X$ follows a Gaussian multi-factor
@@ -3389,13 +3402,13 @@ in~\cite{torrent:2011}.
 	\end{displaymath}
 	An alternative definition based on the covariance matrix is
 	\begin{displaymath}
-		X_i^j = Z_i + \sqrt{1-\sigma_{ii}} \cdot \epsilon_i^j
+		X_i^j = Z_i + \sqrt{1-\Sigma_{ii}} \cdot \epsilon_i^j
 		\quad \text{ where } \left\{
 		\begin{array}{ll}
 			i = 1, \dots, k & \text{$k$ is the number of factors} \\
 			j = 1, \dots, n_i & \text{$n_i$ is i-th factor size} \\
 			Z \sim N(\vec{0},\Sigma) & \text{$\Sigma$ is a $k {\times} k$ covariance matrix} \\
-			\sigma_{ii} \in (0,1) & \text{diagonal values of $\Sigma$} \\
+			\Sigma_{ii} \in (0,1) & \text{diagonal values of $\Sigma$} \\
 			\epsilon_i^j \sim N(0,1) \text { iid } & \forall\ i,j \\
 			Z, \epsilon_i^j \text{ independents } & \forall\ i,j \\
 		\end{array}
@@ -3406,28 +3419,54 @@ in~\cite{torrent:2011}.
 \begin{proposition}[The Gaussian multi-factor model is a Gaussian distribution]
 	\label{prop:gmfigs}
 	The Gaussian multi-factor model defined by factor loadings $\vec{w}$,
-	the factor correlation matrix $R$, and $\sum_{i=1}^k n_i = n$ is a 
+	the factor correlation matrix $R$, and $n = \sum_{i=1}^k n_i$ is a 
 	multivariate Gaussian distribution with an $n {\times} n$ block 
 	correlation matrix $\widehat{R}=B_k(\vec{n},\vec{1},\Sigma)$ 
 	with values $\Sigma_{ij} = w_i \cdot w_j \cdot R_{ij}$.
 \end{proposition}
 \begin{proof}
-	We check that the correlation between Gaussian multi-factor model
-	components is a matrix comprising blocks that fulfill the equivalence.
+	We check that the correlation between components of the Gaussian multi-factor 
+	model fulfill the equivalence.
+	
+	Version with the correlation matrix $R$:
 	\begin{displaymath}
 		\begin{array}{rl}
 			\text{Var}(X_i^j) =                       &
 			w_i^2 \cdot \text{Var}(Z_i) + (1-w_i^2) \cdot \text{Var}(\epsilon_i^j) +
 			2 \cdot w_i \cdot \sqrt{1-w_i^2} \cdot \text{Cov}(Z_i, \epsilon_i^j)    \\
 			=                                         & w_i^2 + (1-w_i^2) = 1       \\
-			                                          &                             \\
-			\text{Cor}(X_{i_1}^{j_1},X_{i_2}^{j_2}) = & \text{Cov}(X_{i_1}^{j_1},X_{i_2}^{j_2})                                                                    \\
-			=                                         & w_{i_1} \cdot w_{i_2} \cdot \text{Cov}(Z_{i_1},Z_{i_2}) +                                                  \\
-			                                          & + w_{i_1} \cdot \sqrt{1-w_{i_2}^2} \cdot \text{Cov}(Z_{i_1}, \epsilon_{i_2}^{j_2}) +                       \\
-			                                          & + \sqrt{1-w_{i_1}^2} \cdot w_{i_2} \cdot \text{Cov}(Z_{i_2}, \epsilon_{i_1}^{j_1}) +                       \\
-			                                          & + \sqrt{1-w_{i_1}^2} \cdot \sqrt{1-w_{i_2}^2} \cdot \text{Cov}(\epsilon_{i_1}^{j_1}, \epsilon_{i_2}^{j_2}) \\
-			=                                         & w_{i_1} \cdot w_{i_2} \cdot \text{Cov}(Z_{i_1}, Z_{i_2})                                                   \\
-			=                                         & w_{i_1} \cdot w_{i_2} \cdot R_{i_1,i_2}                                                                    \\
+		\end{array}
+	\end{displaymath}
+	\begin{displaymath}
+		\begin{array}{rl}
+			\text{Cor}(X_{i_1}^{j_1},X_{i_2}^{j_2}) = & \text{Cov}(X_{i_1}^{j_1},X_{i_2}^{j_2})                                               \\
+			=                                         & w_{i_1} \cdot w_{i_2} \cdot \text{Cov}(Z_{i_1},Z_{i_2}) +
+			                                            w_{i_1} \cdot \sqrt{1-w_{i_2}^2} \cdot \text{Cov}(Z_{i_1}, \epsilon_{i_2}^{j_2}) +    \\
+			                                          & + \sqrt{1-w_{i_1}^2} \cdot w_{i_2} \cdot \text{Cov}(\epsilon_{i_1}^{j_1}, Z_{i_2}) +
+			                                            \sqrt{1-w_{i_1}^2} \cdot \sqrt{1-w_{i_2}^2} \cdot 
+			                                            \text{Cov}(\epsilon_{i_1}^{j_1}, \epsilon_{i_2}^{j_2})                                \\
+			=                                         & w_{i_1} \cdot w_{i_2} \cdot \text{Cov}(Z_{i_1}, Z_{i_2})                              \\
+			=                                         & w_{i_1} \cdot w_{i_2} \cdot R_{i_1i_2}                                                \\
+		\end{array}
+	\end{displaymath}
+	Version with the covariance matrix $\Sigma$:
+	\begin{displaymath}
+		\begin{array}{rl}
+			\text{Var}(X_i^j) =                       &
+			\text{Var}(Z_i) + (1-\Sigma_{ii}) \cdot \text{Var}(\epsilon_i^j) +
+			2 \cdot \sqrt{1-\Sigma_{ii}} \cdot \text{Cov}(Z_i, \epsilon_i^j)               \\
+			=                                         & \Sigma_{ii} + (1-\Sigma_{ii}) = 1  \\
+		\end{array}
+	\end{displaymath}
+	\begin{displaymath}
+		\begin{array}{rl}
+			\text{Cor}(X_{i_1}^{j_1},X_{i_2}^{j_2}) = & \text{Cov}(X_{i_1}^{j_1},X_{i_2}^{j_2})                                        \\
+			=                                         & \text{Cov}(Z_{i_1},Z_{i_2}) +
+			                                            \sqrt{1-\Sigma_{i_2i_2}} \cdot \text{Cov}(Z_{i_1}, \epsilon_{i_2}^{j_2}) +     \\
+			                                          & + \sqrt{1-\Sigma_{i_1i_1}} \cdot \text{Cov}(\epsilon_{i_1}^{j_1}, Z_{i_2}) +
+			                                            \sqrt{1-\Sigma_{i_1i_1}} \cdot \sqrt{1-\Sigma_{i_2i_2}} \cdot 
+			                                            \text{Cov}(\epsilon_{i_1}^{j_1}, \epsilon_{i_2}^{j_2})                         \\
+			=                                         & \Sigma_{i_1i_2}                                                                \\
 		\end{array}
 	\end{displaymath}
 	The characterization of the multivariate Gaussian~\cite[thm. 2.6.2]{anderson:1984}
