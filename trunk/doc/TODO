@@ -5,7 +5,6 @@ CCRUNCHER TODO
 Current works
 -------------------
   * update ccruncher output in html doc.
-  * check unused bib entries in tech. doc.
   * output exposure per segmentation
   * rename bin package to lin package?
 
