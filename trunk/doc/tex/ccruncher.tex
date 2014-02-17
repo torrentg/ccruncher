@@ -381,11 +381,10 @@ KMV~\cite{kmv:2003} are models of this type.
 considere that this obligor defaults when this variable satisfies a condition. 
 The dependence between these variables is explicitly modeled using a 
 copula~\cite{embrechts:2002}. The sum of the defaulted obligors' exposure 
-gives the portfolio loss distribution. Li copula model~\cite{li:2000} belongs 
-to this family of models. In the Li model, random variables are the obligors 
-default times and the default trigger is to cross a preset threshold. The 
-multi-factor Gaussian case of the Li model covers the 
-CreditMetrics\texttrademark{} model.
+gives the portfolio loss distribution. In the Li copula model~\cite{li:2000}, 
+random variables are the obligors default times and the default trigger is to 
+cross a preset threshold. The multi-factor Gaussian case of the Li model covers 
+the CreditMetrics\texttrademark{} model.
 
 CCruncher uses the copula approach to formulate the model, then restrict the 
 model into a factor model in order to reduce the dimensionality, and finally 
@@ -406,7 +405,7 @@ a t-Student multi-factor copula in which the factors are the industrial sectors.
 
 This document details the obligors' default times model, gives methods to 
 estimate the model parameters, details the procedure to simulate the portfolio 
-loss distribution and provides the formulas to quantify the credit risk. 
+loss distribution, and provides the formulas to quantify the credit risk. 
 Furthermore, it explore the risk sensitivity for some parameters, encourages 
 transferring the parameters uncertainty to the credit risk measures, and 
 exposes a method to optimize the portfolio credit risk.
@@ -461,11 +460,11 @@ discussion.
 \chapter{Modeling Default Times}
 \label{chap:mdt}
 
-Financial institutions have statistical models that measure the probability of 
+Financial institutions have statistical models that assigns a probability of 
 default of each obligor as well as statistical models for the exposure and 
 recovery of each operation. These models allows us to estimate the expected 
 loss of the portfolio, but they have nothing to say about the measures related 
-to economic capital such as VaR or ES. This is because these values strongly 
+to economic capital such as VaR or ES. This is because these measures strongly 
 depend on the dependence between obligors, and models mentioned above do not 
 refer to this concept. This chapter develops the multivariate model exploiting 
 the existing PD models.
@@ -627,10 +626,10 @@ its marginals $F_i$ and a t-Student copula $C_{\nu,\widehat{R}}^{\text{t}}$
 in which $\widehat{R} = B_s(\vec{n},\vec{1},M)$.
 
 As we have observed, proposition~\ref{prop:dtd} establishes the link between 
-the t-Student copula and the multivariate t-Student distribution. For this 
-reason, we are interested in formulating the multivariate t-Student distribution 
-$t_n(\nu,\vec{0},\widehat{R})$ in which $\widehat{R} = B_s(\vec{n},\vec{1},M)$ 
-as a t-Student multi-factor model.
+the t-Student copula and the multivariate t-Student distribution. Now, we are
+interested in formulating this multivariate t-Student distribution with 
+correlation matrix $\widehat{R} = B_s(\vec{n},\vec{1},M)$ as a t-Student 
+multi-factor model.
 
 The multivariate t-Student distribution relies on the multivariate Gaussian
 distribution (see proposition~\ref{prop:mtschar}). The multivariate Gaussian 
@@ -719,7 +718,7 @@ the portfolio losses.
 We want to estimate the copula parameters of the multivariate default times
 distribution. These parameters are the degrees of freedom $\nu$, the factor 
 loadings $\vec{w}$, and the factor correlation matrix $R$. The historical 
-data available for parameter calibration are panel data type. Calibration 
+data available for parameters calibration are panel data type. Calibration 
 with such data leads to the interpretation of the current model as a Bernoulli 
 mixture model.
 
@@ -730,8 +729,8 @@ mixture model.
 
 The available historical data lead us to interpret obligors defaults as 
 conditionally independent Bernoulli random variables. In this section we 
-reinterprets the multi-factor copula model as a Bernoulli model in order 
-to estimate the model parameters.
+reinterprets the multi-factor copula model as a Bernoulli mixture model in 
+order to estimate the copula parameters.
 
 \begin{definition}[Annual number of defaults]
 	We define the annual number of defaults by sector and rating such as a
@@ -3688,7 +3687,7 @@ distribution.
 	Let us assume a target distribution $f(x)$ from which we wish to 
 	generate a sample $\left\{x^{(0)},\dots,x^{(T)}\right\}$. The 
 	Metropolis-Hastings algorithm can be described by the following 
-	iterative steps:
+	iterative procedure:
 	\begin{enumerate}
 		\item Set initial values $x^{(0)}$
 		\item For $t=1,\dots,T$ repeat the following steps:
