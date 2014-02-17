@@ -108,6 +108,8 @@ class EAD
     double getValue2() const;
     //! Returns exposure
     double getValue(const gsl_rng *rng=NULL) const;
+    //! Returns the mean of the exposure
+    double getExpected() const;
     //! Apply current net value factor
     void mult(double);
 

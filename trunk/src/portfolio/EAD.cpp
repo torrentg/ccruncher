@@ -26,6 +26,7 @@
 #include <cstdio>
 #include <cmath>
 #include <cassert>
+#include <gsl/gsl_cdf.h>
 #include "portfolio/EAD.hpp"
 #include "utils/Parser.hpp"
 
@@ -262,6 +263,56 @@ void ccruncher::EAD::mult(double factor)
     default:
       assert(false);
       break;
+  }
+}
+
+/**************************************************************************//**
+ * @details If exposure is a fixed value, mean coincides with this value,
+ *          but if exposure is a distribution, then it return the mean
+ *          of this distribution.
+ * @return Exposure expected value.
+ */
+double ccruncher::EAD::getExpected() const
+{
+  switch(type)
+  {
+    case Fixed:
+      return value1;
+
+    case Lognormal:
+      // http://en.wikipedia.org/wiki/Log-normal_distribution
+      // http://www.gnu.org/software/gsl/manual/html_node/The-Lognormal-Distribution.html
+      return exp(value1+value2*value2/2.0);
+
+    case Exponential:
+      // http://en.wikipedia.org/wiki/Exponential_distribution (<-not)
+      // http://www.gnu.org/software/gsl/manual/html_node/The-Exponential-Distribution.html (<-this)
+      return value1;
+
+    case Uniform:
+      // http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29
+      // http://www.gnu.org/software/gsl/manual/html_node/The-Flat-_0028Uniform_0029-Distribution.html
+      return (value1+value2)/2.0;
+
+    case Gamma:
+      // http://en.wikipedia.org/wiki/Gamma_distribution
+      // http://www.gnu.org/software/gsl/manual/html_node/The-Gamma-Distribution.html
+      return value1*value2;
+
+    case Normal:
+      // http://en.wikipedia.org/wiki/Normal_distribution
+      // http://en.wikipedia.org/wiki/Truncated_normal_distribution
+      // http://www.gnu.org/software/gsl/manual/html_node/The-Gaussian-Distribution.html
+      {
+        double x = -value1/value2;
+        double v1 = gsl_ran_ugaussian_pdf(x);
+        double v2 = gsl_cdf_ugaussian_P(x);
+        return value1 + value2*v1/(1.0-v2);
+      }
+
+    default:
+      assert(false);
+      return NAN;
   }
 }
 

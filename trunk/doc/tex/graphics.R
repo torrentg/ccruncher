@@ -289,7 +289,7 @@ skip=2000
 
 fcalib <- function(name)
 {
-	X <- read.csv(name %&% ".out", header=TRUE, sep="\t")
+	X <- read.csv(name %&% ".out", header=TRUE, sep="\t", comment.char="#")
 	n=nrow(X)
 
 	pdf(file=name %&% "1.pdf", width=2.3, height=1.8)
@@ -326,7 +326,7 @@ df <- function(x, p, w) {
 }
 
 # reading simulated data
-portfolio = read.csv("data/test04-1000/portfolio.csv", header=TRUE, sep=",")
+portfolio = read.csv("data/test04-1000/portfolio.csv", comment.char="#")
 
 numsims = nrow(portfolio)
 numobligors = 1000
@@ -347,7 +347,7 @@ legend(0.25, 0.05, c("CCruncher", "LHP"), lty=c(1,1), col= 1:2, bg="white", cex=
 dev.off()
 
 # reading simulated data
-portfolio = read.csv("data/test04-100/portfolio.csv", header=TRUE, sep=",")
+portfolio = read.csv("data/test04-100/portfolio.csv", comment.char="#")
 
 numsims = nrow(portfolio)
 numobligors = 100
@@ -370,7 +370,7 @@ dev.off()
 # ================================================
 # CCruncher example (test05)
 # ================================================
-portfolio = read.csv("data/test05/portfolio.csv", header=TRUE, sep=",")
+portfolio = read.csv("data/test05/portfolio.csv", comment.char="#")
 d = density(portfolio[,1])
 pdf(file="test05.pdf", width=7, height=3)
 par(mar=c(4,4,1,1))
@@ -413,7 +413,7 @@ dev.off()
 # ================================================
 # paramu example
 # ================================================
-X <- read.csv("paramu.out", header=TRUE, sep="\t")
+X <- read.csv("paramu.out", header=TRUE, sep="\t", comment.char="#")
 n=nrow(X)
 skip = 5000
 pdf(file="paramu-1.pdf", width=7, height=2)
@@ -455,7 +455,7 @@ for(i in 1:nrow(Y)) {
  getRisk <- function(dir)
  {
    filename = paste(dir, "/portfolio.csv", sep="")
-   data <- read.csv(filename, header=T)
+   data <- read.csv(filename, comment.char="#")
    X = sort(data[,1])
    n = length(X)
    Y = X[as.integer(n*0.99):n]
@@ -645,7 +645,7 @@ done
  getRisk <- function(path)
  {
    filename = paste(path, "/portfolio.csv", sep="")
-   data <- read.csv(filename, header=T)
+   data <- read.csv(filename, comment.char="#")
    X = sort(data[,1])
    n = length(X)
    Y = X[as.integer(n*0.99):n]
@@ -736,7 +736,7 @@ done
  VSIZE2 = getValues("data/SA", "SIZE2")
  x = VSIZE2[,1]
  y = VSIZE2[,2]/1000
- data <- read.csv("data/SA/SIZE2.500/sector-rating.csv", header=T)
+ data <- read.csv("data/SA/SIZE2.500/sector-rating.csv", comment.char="#")
  L = cbind(rowSums(data[,1:3]), rowSums(data[,4:6]))
  W = matrix(nrow=nrow(VSIZE2), ncol=4)
  W[,1] = VSIZE2[,1]
@@ -828,7 +828,7 @@ eles <- function(losses, weights, exposures, level=0.99)
 
 
 E = c(167, 166, 167, 167, 167, 166)
-L <- read.csv("data/sector-rating.csv", header=TRUE, sep=",")
+L <- read.csv("data/sector-rating.csv", comment.char="#")
 W = f()
 W = cbind(W, rep(0,nrow(W)), rep(0,nrow(W)))
 colnames(W) = c(colnames(L), "el", "es")

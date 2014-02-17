@@ -114,6 +114,7 @@
 {\small\sffamily\color{ocre}\thmname{#1}\thmnumber{\@ifnotempty{#1}{ }\@upn{#2}} % Theorem text (e.g. Theorem 2.1)
 \thmnote{\ {\the\thm@notefont\sffamily\bfseries\color{black}--- #3.}}} % Optional theorem note
 \renewcommand{\qedsymbol}{$\blacksquare$} % Optional qed square
+\renewenvironment{proof}{{\small\bf\sffamily Proof.}}{\qed}
 
 \newtheoremstyle{blacknumex} % Theorem style name
 {7pt} % Space above

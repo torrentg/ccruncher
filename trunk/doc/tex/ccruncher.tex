@@ -351,34 +351,34 @@ quantile), but they differ in how to obtain this distribution. The following
 list briefly present the most used 
 models~\cite{crouhy:2000,brereton:2012,mcneil:2003}\cite[chap. 2.4]{bluhm:2002}. 
 
-\textbf{Actuarial models} considers that the frequency of defaults (Poisson type 
+\textbf{Actuarial models} consider that the frequency of defaults (Poisson type 
 distributions) is the proper manner in which to analyze observed defaults. 
 Compounding default frequency with the obligors' exposure gives the
 portfolio loss distribution. The main representative of this approach is 
 the CreditRisk+ model~\cite{creditrisk+:1997}.
 
-\textbf{Intensity models} consider that an obligor defaults when ocurres the first 
+\textbf{Intensity models} consider that an obligor defaults when occurs the first 
 jump of a Poisson process with random intensity given by a Cox process.
 Dependency between defaults is induced by assuming that each intensity
 is a function of a common process and an idiosyncratic process. Actuarial 
 models may be included within this family to the extent that they have a 
 static intensity.
 
-\textbf{Bernoulli mixture models} represents the i-th obligor's default using a 
+\textbf{Bernoulli mixture models} represent the i-th obligor's default using a 
 Bernoulli variable (with probability of default $p_i$). These variables are 
 conditionally independent given a vector of default probabilities with a known 
 density. The sum of the defaulted obligors' exposure gives the portfolio loss 
 distribution.
 
-\textbf{Factor models} represents the i-th obligor's using a random variable and
-considere that this obligor defaults when this variable crosses a preset 
-threshold. These variables depends on a low-dimensional random vector of 
+\textbf{Factor models} represent the i-th obligor using a random variable and
+consider that this obligor defaults when this variable crosses a preset 
+threshold. These variables depend on a low-dimensional random vector of 
 common factors. Conditional on factors, factor models are Bernoulli mixture 
 models. CreditMetrics\texttrademark{}~\cite{cmetrics:1997} and 
 KMV~\cite{kmv:2003} are models of this type. 
 
-\textbf{Copula models} represents the i-th obligor using a random variable and
-considere that this obligor defaults when this variable satisfies a condition. 
+\textbf{Copula models} represent the i-th obligor using a random variable and
+consider that this obligor defaults when this variable satisfies a condition. 
 The dependence between these variables is explicitly modeled using a 
 copula~\cite{embrechts:2002}. The sum of the defaulted obligors' exposure 
 gives the portfolio loss distribution. In the Li copula model~\cite{li:2000}, 
@@ -388,7 +388,7 @@ the CreditMetrics\texttrademark{} model.
 
 CCruncher uses the copula approach to formulate the model, then restrict the 
 model into a factor model in order to reduce the dimensionality, and finally 
-interprets the model as a Bernouilli mixture model to estimate the parameters.
+interprets the model as a Bernoulli mixture model to estimate the parameters.
 The CCruncher model implements the t-Student multi-factor copula even for 
 high-dimensional portfolios, and it is formulated according to the Basel II 
 concepts (PD, EAD, LGD).
@@ -406,7 +406,7 @@ a t-Student multi-factor copula in which the factors are the industrial sectors.
 This document details the obligors' default times model, gives methods to 
 estimate the model parameters, details the procedure to simulate the portfolio 
 loss distribution, and provides the formulas to quantify the credit risk. 
-Furthermore, it explore the risk sensitivity for some parameters, encourages 
+Furthermore, it explores the risk sensitivity for some parameters, encourages 
 transferring the parameters uncertainty to the credit risk measures, and 
 exposes a method to optimize the portfolio credit risk.
 
@@ -448,10 +448,9 @@ distribution used to simulate the obligors' default times, and provides methods
 to estimate the copula parameters. The second chapter describes how to obtain 
 the portfolio loss distribution and quantify the portfolio credit risk.
 Finally, the third chapter covers three important topics: risk sensitivity,
-parameters uncertainty, and portfolio optimization.
-In order to facilitate reading, have been relegated to appendices those issues 
-that are important to understanding the content and require a detailed 
-discussion. 
+parameters uncertainty, and portfolio optimization. In order to facilitate 
+reading, those issues that are important to understanding the content and 
+require a detailed discussion have been relegated to appendices.
 
 
 %==============================================================================
@@ -462,7 +461,7 @@ discussion.
 
 Financial institutions have statistical models that assigns a probability of 
 default of each obligor as well as statistical models for the exposure and 
-recovery of each operation. These models allows us to estimate the expected 
+recovery of each operation. These models allow us to estimate the expected 
 loss of the portfolio, but they have nothing to say about the measures related 
 to economic capital such as VaR or ES. This is because these measures strongly 
 depend on the dependence between obligors, and models mentioned above do not 
@@ -727,7 +726,7 @@ mixture model.
 %------------------------------------------------------------------------------
 \section{The Bernoulli Mixture Model}
 
-The available historical data lead us to interpret obligors defaults as 
+The available historical data lead us to interpret obligors' defaults as 
 conditionally independent Bernoulli random variables. In this section we 
 reinterprets the multi-factor copula model as a Bernoulli mixture model in 
 order to estimate the copula parameters.
@@ -949,7 +948,7 @@ parameter estimation.
 
 We have failed to obtain reasonable estimates of the covariances using the 
 nonparametric estimator described by Nagpal \& Bahar~\cite{nagpal:2001}, even 
-in the Gaussian case. Tests consisted on simulating a pannel data of defaults 
+in the Gaussian case. Tests consisted on simulating a panel data of defaults 
 (see algorithm~\ref{alg:snod}) and trying to infer the covariance matrix using 
 the nonparametric estimator.
 
@@ -1587,8 +1586,8 @@ appropriate statistics.
 	\label{ex:test04}
 	Assume a portfolio composed of \num{1000} exchangeable obligors (with 
 	identical ratings and sectors) in which every obligor owes 1\euro\ to 
-	1 year. The common 1-year default probability is $p=10\%$, and the factor 
-	loading is $20\%$. This problem is close to fulfilling the LHP assumptions. 
+	1 year, the 1-year default probability is $p=10\%$, and the factor loading 
+	is $20\%$. This problem is close to fulfilling the LHP assumptions. 
 	In the Gaussian case, the density is~\cite[chap. 2.5]{bluhm:2002}: 
 	\begin{displaymath}
 		f_{p,w}(x) = 
@@ -1869,7 +1868,7 @@ estimated value is good enough.
 
 Once we have measured the credit risk, naturally arises the question 
 ``how much of this risk corresponds to the business unit X?'' CCruncher
-allows to define and simulate sub-portfolio losses in order to respond
+allows defining and simulating sub-portfolio losses in order to respond
 this question.
 
 CCruncher simulates the entire portfolio loss at time $T$. It also allows 
@@ -2095,7 +2094,7 @@ for the portfolio credit risk that takes into account all the parameters:
 number of ratings, PDs over time, number of sectors, number of obligors, EADs 
 and LGDs for each asset, factor loadings, factor correlations, and $\nu$. For 
 this reason, we lays out this section analyzing the case \texttt{test05.xml} 
-exposed in example~\ref{ex:test05}. In this case, we considere that risk 
+exposed in example~\ref{ex:test05}. In this case, we consider that risk 
 measure is $\text{ES}_{99\%}$ and parameters subject to sensibility analysis 
 are: $n, \vec{w}, R, \nu$.
 
@@ -2135,7 +2134,7 @@ same RNG seed in each evaluation.
 	$\nu \in (5,\infty)$), we note that the impact of factor loading loadings
 	and $\nu$ are similar. However, the impact of factor correlations is much 
 	smaller. This is good news, because as we saw in the estimation of the 
-	parameters, the uncertainty of factor correlations are much higher than 
+	parameters, the uncertainty of factor correlations is much higher than 
 	that of factor loadings. We also recall that in the estimation procedure,
 	the values of factor loadings and $\nu$ are interlaced. 
 \end{example}
@@ -2354,7 +2353,7 @@ export(rcount, "paramu.txt")
  getRisk <- function(dir)
  {
    filename = paste(dir, "/portfolio.csv", sep="")
-   data <- read.csv(filename, header=T)
+   data <- read.csv(filename, comment.char="#")
    X = sort(data[,1])
    n = length(X)
    Y = X[as.integer(n*0.99):n]
@@ -2389,7 +2388,7 @@ export(rcount, "paramu.txt")
 Once we knows the portfolio credit risk, naturally arises the question ``How 
 can I balance the weights assigned to each business unit so that the total 
 portfolio risk is minimized?'' In section \ref{ss:ra}, we have seen that 
-CCruncher allows to define sub-portfolios and it can disaggregate the portfolio 
+CCruncher allows defining sub-portfolios and it can disaggregate the portfolio 
 credit risk in terms of them. In this section we will see how to modify the 
 weights assigned to each sub-portfolio in order to optimize the portfolio
 credit risk. First of all, let's define the problems considered:
@@ -2453,7 +2452,7 @@ $\text{VaR}_{99\%}$.}
 
 Sub-portfolio weights $\alpha_k$ are the sub-portfolio exposures relative 
 to total portfolio exposure at 1-year. The way to balance the portfolio 
-composition is to add or substract obligors preserving the characteristics 
+composition is to add or subtract obligors preserving the characteristics 
 of each sub-portfolio. When we try to model this procedure we find two 
 problems:
 \begin{inparaenum}[1)]
@@ -2488,7 +2487,7 @@ The second problem, the portfolio composition, is avoided by equating the number
 of obligors to exposures. Suppose we have two sub-portfolios A and B with the 
 same exposure, the first one with 500 obligors, and the second one with 500 
 obligors. We want to balance the portfolio so that ends up with $25\%$ of the 
-exposure in A and $75\%$ in B. The way to implement it, is eliminating 
+exposure in A and $75\%$ in B. The way to implement it is eliminating 
 half of the obligors from A and adding $250$ new obligors similar to those of 
 B. That said, if sub-portfolios A and B have a large number of homogeneous 
 individuals, then we can maintain the original number of individuals 
@@ -2519,10 +2518,10 @@ and by $1.5$ the B's exposures.
 \end{example}
 
 The equivalence between the number of debtors and the exposures has a very 
-important advantage since it allows to optimize without having to do multiple 
+important advantage since it allows optimizing without having to do multiple 
 simulations. This is achieved by simulating the losses of the current portfolio
 and by reusing these values to calculate any desired composition of the 
-portfolio. The following algorithm compute the risk of a weighted portfolio 
+portfolio. The following algorithm computes the risk of a weighted portfolio 
 reusing the simulated losses from the current portfolio.
 
 \begin{algorithm}[Risk of a weighted portfolio]
@@ -2662,7 +2661,7 @@ used to ensure the restrictions compliance.
    else return(NA)
  }
 
- losses <- read.csv("data/sector-rating.csv", header=TRUE, sep=",")
+ losses <- read.csv("data/sector-rating.csv", comment.char="#")
  exposures = c(167, 166, 167, 167, 167, 166)
  w0 = exposures/sum(exposures)
  eles0 = evalPortfolio(losses, w0, w0)
