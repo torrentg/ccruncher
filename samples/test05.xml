@@ -91,7 +91,6 @@ S.level = [0.44]
     <parameter name="antithetic" value="$antithetic"/>
     <parameter name="lhs" value="$lhs"/>
     <parameter name="blocksize" value="128"/>
-    <parameter name="onlyActiveObligors" value="true"/>
   </parameters>
 
   <!-- ============================================================== -->

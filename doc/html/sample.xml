@@ -24,7 +24,6 @@
     <parameter name="antithetic" value="true"/>
     <parameter name="lhs" value="false"/>
     <parameter name="blocksize" value="128"/>
-    <parameter name="onlyActiveObligors" value="true"/>
   </parameters>
 
   <interest type="compound">

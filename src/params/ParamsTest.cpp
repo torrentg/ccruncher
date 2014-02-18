@@ -42,7 +42,6 @@ void ccruncher_test::ParamsTest::test1()
       <parameter name='rng.seed' value='38765874'/>\n\
       <parameter name='antithetic' value='true'/>\n\
       <parameter name='lhs' value='false'/>\n\
-      <parameter name='onlyActiveObligors' value='false'/>\n\
       <parameter name='blocksize' value='256'/>\n\
     </parameters>";
 
@@ -59,7 +58,6 @@ void ccruncher_test::ParamsTest::test1()
   ASSERT(38765874L == params.rng_seed);
   ASSERT(true == params.antithetic);
   ASSERT(1 == params.lhs_size);
-  ASSERT(false == params.onlyactive);
   ASSERT(256 == params.blocksize);
 }
 
@@ -126,7 +124,6 @@ void ccruncher_test::ParamsTest::test4()
       <parameter name='rng.seed' value='38765874'/>\n\
       <parameter name='antithetic' value='true'/>\n\
       <parameter name='lhs' value='false'/>\n\
-      <parameter name='onlyActiveObligors' value='false'/>\n\
       <parameter name='blocksize' value='257'/>\n\
     </parameters>";
 

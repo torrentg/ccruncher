@@ -63,7 +63,6 @@ How to check results?
     <parameter name="antithetic" value="$antithetic"/>
     <parameter name="lhs" value="$lhs"/>
     <parameter name="blocksize" value="$blocksize"/>
-    <parameter name="onlyActiveObligors" value="true"/>
   </parameters>
 
   <!-- ============================================================== -->
