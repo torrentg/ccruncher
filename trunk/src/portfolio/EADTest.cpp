@@ -27,7 +27,7 @@
 using namespace std;
 using namespace ccruncher;
 
-#define EPSILON 1E-14
+#define EPSILON 1E-6
 
 //===========================================================================
 // test1. constructors
@@ -40,42 +40,50 @@ void ccruncher_test::EADTest::test1()
     ASSERT(r0.getType() == EAD::Fixed);
     ASSERT(isnan(r0.getValue1()));
     ASSERT(isnan(r0.getValue2()));
-  
+    ASSERT(isnan(r0.getExpected()));
+
     EAD r1;
     ASSERT(r1.getType() == EAD::Fixed);
     ASSERT(isnan(r1.getValue1()));
     ASSERT(isnan(r1.getValue2()));
-  
+    ASSERT(isnan(r1.getExpected()));
+
     EAD r2(EAD::Fixed,1.0);
     ASSERT(r2.getType() == EAD::Fixed);
     ASSERT_EQUALS_EPSILON(r2.getValue1(), 1.0, EPSILON);
+    ASSERT_EQUALS_EPSILON(r2.getExpected(), 1.0, EPSILON);
     ASSERT(isnan(r2.getValue2()));
 
     EAD r3("+1000.0");
     ASSERT(r3.getType() == EAD::Fixed);
     ASSERT_EQUALS_EPSILON(r3.getValue1(), 1000.0, EPSILON);
+    ASSERT_EQUALS_EPSILON(r3.getExpected(), 1000.0, EPSILON);
 
     EAD r4("+1000.0 -100*2");
     ASSERT(r4.getType() == EAD::Fixed);
     ASSERT_EQUALS_EPSILON(r4.getValue1(), 800.0, EPSILON);
+    ASSERT_EQUALS_EPSILON(r4.getExpected(), 800.0, EPSILON);
   }
 
   // lognormal distribution
   {
-    EAD r0 = EAD(EAD::Lognormal, 800.0, 60.0);
+    EAD r0 = EAD(EAD::Lognormal, log(800.0), log(1.2));
     ASSERT(r0.getType() == EAD::Lognormal);
-    ASSERT_EQUALS_EPSILON(r0.getValue1(), 800.0, EPSILON);
-    ASSERT_EQUALS_EPSILON(r0.getValue2(), 60.0, EPSILON);
+    ASSERT_EQUALS_EPSILON(r0.getValue1(), log(800.0), EPSILON);
+    ASSERT_EQUALS_EPSILON(r0.getValue2(), log(1.2), EPSILON);
+    ASSERT_EQUALS_EPSILON(r0.getExpected(), 813.4076, EPSILON);
 
-    EAD r1("lognormal(800.0,60.0)");
+    EAD r1("lognormal(log(800.0),log(1.2))");
     ASSERT(r1.getType() == EAD::Lognormal);
-    ASSERT_EQUALS_EPSILON(r1.getValue1(), 800.0, EPSILON);
-    ASSERT_EQUALS_EPSILON(r1.getValue2(), 60.0, EPSILON);
+    ASSERT_EQUALS_EPSILON(r1.getValue1(), log(800.0), EPSILON);
+    ASSERT_EQUALS_EPSILON(r1.getValue2(), log(1.2), EPSILON);
+    ASSERT_EQUALS_EPSILON(r1.getExpected(), 813.4076, EPSILON);
 
-    EAD r2("lognormal(max(-10,800.0),min(60.0,100))");
+    EAD r2("lognormal(max(-10,log(800.0)),min(log(1.2),100))");
     ASSERT(r2.getType() == EAD::Lognormal);
-    ASSERT_EQUALS_EPSILON(r2.getValue1(), 800.0, EPSILON);
-    ASSERT_EQUALS_EPSILON(r2.getValue2(), 60.0, EPSILON);
+    ASSERT_EQUALS_EPSILON(r2.getValue1(), log(800.0), EPSILON);
+    ASSERT_EQUALS_EPSILON(r2.getValue2(), log(1.2), EPSILON);
+    ASSERT_EQUALS_EPSILON(r2.getExpected(), 813.4076, EPSILON);
   }
 
   // exponential distribution
@@ -84,16 +92,19 @@ void ccruncher_test::EADTest::test1()
     ASSERT(r0.getType() == EAD::Exponential);
     ASSERT_EQUALS_EPSILON(r0.getValue1(), 800.0, EPSILON);
     ASSERT(isnan(r0.getValue2()));
+    ASSERT_EQUALS_EPSILON(r0.getExpected(), 800.0, EPSILON);
 
     EAD r1("exponential(800.0)");
     ASSERT(r1.getType() == EAD::Exponential);
     ASSERT_EQUALS_EPSILON(r1.getValue1(), 800.0, EPSILON);
     ASSERT(isnan(r1.getValue2()));
+    ASSERT_EQUALS_EPSILON(r1.getExpected(), 800.0, EPSILON);
 
     EAD r2("exponential(1000-200.0)");
     ASSERT(r2.getType() == EAD::Exponential);
     ASSERT_EQUALS_EPSILON(r2.getValue1(), 800.0, EPSILON);
     ASSERT(isnan(r2.getValue2()));
+    ASSERT_EQUALS_EPSILON(r2.getExpected(), 800.0, EPSILON);
   }
 
   // uniform distribution
@@ -102,21 +113,25 @@ void ccruncher_test::EADTest::test1()
     ASSERT(r0.getType() == EAD::Uniform);
     ASSERT_EQUALS_EPSILON(r0.getValue1(), 0.0, EPSILON);
     ASSERT_EQUALS_EPSILON(r0.getValue2(), 1.0, EPSILON);
+    ASSERT_EQUALS_EPSILON(r0.getExpected(), 0.5, EPSILON);
 
     EAD r1(EAD::Uniform, 0.25, 0.5);
     ASSERT(r1.getType() == EAD::Uniform);
     ASSERT_EQUALS_EPSILON(r1.getValue1(), 0.25, EPSILON);
     ASSERT_EQUALS_EPSILON(r1.getValue2(), 0.5, EPSILON);
+    ASSERT_EQUALS_EPSILON(r1.getExpected(), 0.375, EPSILON);
 
     EAD r2("uniform(0.2,0.3)");
     ASSERT(r2.getType() == EAD::Uniform);
     ASSERT_EQUALS_EPSILON(r2.getValue1(), 0.2, EPSILON);
     ASSERT_EQUALS_EPSILON(r2.getValue2(), 0.3, EPSILON);
+    ASSERT_EQUALS_EPSILON(r2.getExpected(), 0.25, EPSILON);
 
     EAD r3("uniform( +0.2, +0.3 )");
     ASSERT(r3.getType() == EAD::Uniform);
     ASSERT_EQUALS_EPSILON(r3.getValue1(), 0.2, EPSILON);
     ASSERT_EQUALS_EPSILON(r3.getValue2(), 0.3, EPSILON);
+    ASSERT_EQUALS_EPSILON(r3.getExpected(), 0.25, EPSILON);
   }
 
   // gamma distribution
@@ -125,16 +140,19 @@ void ccruncher_test::EADTest::test1()
     ASSERT(r0.getType() == EAD::Gamma);
     ASSERT_EQUALS_EPSILON(r0.getValue1(), 0.5, EPSILON);
     ASSERT_EQUALS_EPSILON(r0.getValue2(), 0.25, EPSILON);
+    ASSERT_EQUALS_EPSILON(r0.getExpected(), 0.125, EPSILON);
   
     EAD r1("gamma(0.2,0.3)");
     ASSERT(r1.getType() == EAD::Gamma);
     ASSERT_EQUALS_EPSILON(r1.getValue1(), 0.2, EPSILON);
     ASSERT_EQUALS_EPSILON(r1.getValue2(), 0.3, EPSILON);
+    ASSERT_EQUALS_EPSILON(r1.getExpected(), 0.06, EPSILON);
 
     EAD r2("gamma( +0.2,0.3 )");
     ASSERT(r2.getType() == EAD::Gamma);
     ASSERT_EQUALS_EPSILON(r2.getValue1(), 0.2, EPSILON);
     ASSERT_EQUALS_EPSILON(r2.getValue2(), 0.3, EPSILON);
+    ASSERT_EQUALS_EPSILON(r2.getExpected(), 0.06, EPSILON);
   }
 
   // normal distribution
@@ -143,16 +161,19 @@ void ccruncher_test::EADTest::test1()
     ASSERT(r0.getType() == EAD::Normal);
     ASSERT_EQUALS_EPSILON(r0.getValue1(), 500.0, EPSILON);
     ASSERT_EQUALS_EPSILON(r0.getValue2(), 25.0, EPSILON);
+    ASSERT_EQUALS_EPSILON(r0.getExpected(), 500.0, EPSILON);
 
     EAD r1("normal(500.0,25)");
     ASSERT(r1.getType() == EAD::Normal);
     ASSERT_EQUALS_EPSILON(r1.getValue1(), 500.0, EPSILON);
     ASSERT_EQUALS_EPSILON(r1.getValue2(), 25.0, EPSILON);
+    ASSERT_EQUALS_EPSILON(r1.getExpected(), 500.0, EPSILON);
 
     EAD r2("normal( +500*1 , 25+5*(4-2*2) )");
     ASSERT(r2.getType() == EAD::Normal);
     ASSERT_EQUALS_EPSILON(r2.getValue1(), 500.0, EPSILON);
     ASSERT_EQUALS_EPSILON(r2.getValue2(), 25.0, EPSILON);
+    ASSERT_EQUALS_EPSILON(r2.getExpected(), 500.0, EPSILON);
   }
 }
 

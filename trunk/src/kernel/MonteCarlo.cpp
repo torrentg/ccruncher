@@ -423,9 +423,6 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
  * @param[in] idata CCruncher input data.
  * @throw Exception Error initializing object.
  */
-//===========================================================================
-// initAggregators
-//===========================================================================
 void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 {
   // assertions
@@ -463,6 +460,42 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   log << indent(-1);
 }
 
+/**************************************************************************//**
+ * @details For each DateValues computes its expected exposure (weighted
+ *          by its duration in the period T0-T1) and adds this values to
+ *          the corresponding segment.
+ * @param[in] isegmentation Segmentation index.
+ * @param[in] idata CCruncher input data.
+ * @return Segments' exposures.
+ *
+vector<double> ccruncher::MonteCarlo::getExposures(int isegmentation, IData &idata) const
+{
+  double numdays = timeT - time0;
+  int numsegments = idata.getSegmentations().getSegmentation(isegmentation).size();
+  vector<double> ret(numsegments, 0.0);
+
+  for(size_t i=0; i<obligors.size(); i++)
+  {
+    char *p = static_cast<char*>(obligors[i].ref.assets);
+
+    for(unsigned short j=0; j<obligors[i].numassets; j++)
+    {
+      SimulatedAsset *asset = reinterpret_cast<SimulatedAsset*>(p+j*assetsize);
+      unsigned short *segments = &(asset->segments);
+      unsigned short isegment = segments[isegmentation];
+      int prevt = time0;
+      for(DateValue *dv=asset->begin; dv < asset->end; ++dv)
+      {
+        double weight = (min(dv->date,timeT) - prevt)/numdays;
+        ret[isegment] += weight * dv->ead.getExpected();
+        prevt = dv->date;
+      }
+    }
+  }
+
+  return ret;
+}
+*/
 /**************************************************************************//**
  * @details Starts the simulation procedure. If there is only 1 thread,
  *          then uses the current thread (simplifies debug), otherwise
