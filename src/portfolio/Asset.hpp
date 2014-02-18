@@ -84,7 +84,7 @@ class Asset : public ExpatHandlers
     //! Return the asset's segment of the given segmentation
     int getSegment(int isegmentation) const;
     //! Return the list of segments
-   const std::vector<int>& getSegments() const;
+    const std::vector<int>& getSegments() const;
     //! Set the given segment to segmentation
     void setSegment(int isegmentation, int isegment);
     //! Indicates if this asset has info in date1-date2

@@ -333,7 +333,7 @@ void ccruncher_test::AssetTest::test5()
 }
 
 //===========================================================================
-// test6 (datavalues not found)
+// test6 (datevalues not found)
 //===========================================================================
 void ccruncher_test::AssetTest::test6()
 {

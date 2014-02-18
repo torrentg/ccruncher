@@ -46,7 +46,7 @@ class SimulatedAsset
 
   private:
 
-    //! Constructor (non-instanciable)
+    //! Constructor (non-instantiable)
     SimulatedAsset() {}
 
   public:

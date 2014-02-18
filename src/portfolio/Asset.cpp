@@ -64,7 +64,7 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
   // assumes that data is sorted.
   for (int i=0; i<(int)data.size(); i++) 
   {
-    if (d1 <= data[i].date)
+    if (d1 < data[i].date)
     {
       if (pos1 < 0) {
         pos1 = i;
@@ -145,6 +145,7 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
   {
     id = getStringAttribute(attributes, "id");
     date = getDateAttribute(attributes, "date");
+    data.push_back(DateValues(date, EAD(EAD::Fixed,0.0), LGD(LGD::Fixed,0.0)));
     const char *str = getAttributeValue(attributes, "lgd", NULL);
     if (str != NULL) {
       dlgd = LGD(str);
@@ -172,7 +173,7 @@ void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
   if (isEqual(name_,"asset"))
   {
     // checking data size
-    if (data.empty()) {
+    if (data.empty() || (data.size()==1 && data[0].date==date)) {
       throw Exception("asset without data");
     }
 
