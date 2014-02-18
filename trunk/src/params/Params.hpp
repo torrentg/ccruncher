@@ -63,8 +63,6 @@ class Params : public ExpatHandlers
     bool antithetic;
     //! lhs param value
     unsigned short lhs_size;
-    //! onlyActiveObligors param value
-    bool onlyactive;
     //! blocksize param value
     unsigned short blocksize;
 

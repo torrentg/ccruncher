@@ -2,6 +2,14 @@
 CCRUNCHER CHANGELOG
 ===================
 
+version 2.4.0 (Feb. 2014)
+--------------------------
+  * Technical document reorganization
+  * Technical document added risk sensitivity
+  * Technical document added portfolio optimization
+  * removed OnlyActiveObligors parameter
+  * Code commented using doxygen
+
 version 2.3.0 (Sep. 2013)
 --------------------------
   * added technical document

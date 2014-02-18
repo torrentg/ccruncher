@@ -45,7 +45,7 @@
 			<xsd:element name="parameters" minOccurs="1" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="parameter" minOccurs="7" maxOccurs="10">
+						<xsd:element name="parameter" minOccurs="5" maxOccurs="9">
 							<xsd:complexType>
 								<xsd:attribute name="name" type="propertyType" use="required"/>
 								<xsd:attribute name="value" type="xsd:string" use="required"/>
@@ -225,7 +225,6 @@
 			<xsd:enumeration value="antithetic"/>
 			<xsd:enumeration value="lhs"/>
 			<xsd:enumeration value="blocksize"/>
-			<xsd:enumeration value="onlyActiveObligors"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 

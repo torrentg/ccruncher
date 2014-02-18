@@ -42,7 +42,6 @@ ccruncher::Params::Params()
   rng_seed = 0L;
   antithetic = false;
   lhs_size = 1;
-  onlyactive = false;
   blocksize = 128;
 }
 
@@ -193,10 +192,6 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
         lhs_size = aux;
       }
     }
-  }
-  else if (name == "onlyActiveObligors")
-  {
-    onlyactive = getBooleanAttribute(attributes, "value");
   }
   else if (name == "blocksize")
   {

@@ -40,7 +40,6 @@
     <parameter name='rng.seed' value='$seed'/>
     <parameter name='antithetic' value='false'/>
     <parameter name="blocksize" value="128"/>
-    <parameter name='onlyActiveObligors' value='true'/>
   </parameters>
   <interest type='compound'>
     <rate t="0D" r="0.0%"/>

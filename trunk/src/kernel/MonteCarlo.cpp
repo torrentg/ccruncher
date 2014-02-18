@@ -285,24 +285,12 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
     throw Exception("invalid number of factors");
   }
 
-  // setting logger info
-  log << "simulate only active obligors" << split << idata.getParams().onlyactive << endl;
-  log << "number of obligors" << split << idata.getPortfolio().getObligors().size() << endl;
-
   // determining the obligors to simulate
-  bool onlyactive = idata.getParams().onlyactive;
   vector<Obligor *> &vobligors = idata.getPortfolio().getObligors();
   obligors.reserve(vobligors.size());
   for(unsigned int i=0; i<vobligors.size(); i++)
   {
-    if (onlyactive)
-    {
-      if (vobligors[i]->isActive(time0, timeT)) 
-      {
-        obligors.push_back(SimulatedObligor(vobligors[i]));
-      }
-    }
-    else
+    if (vobligors[i]->isActive(time0, timeT))
     {
       obligors.push_back(SimulatedObligor(vobligors[i]));
     }
@@ -310,6 +298,9 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
   
   // sorting obligors list by factor and rating
   sort(obligors.begin(), obligors.end());
+
+  // setting logger info
+  log << "number of obligors" << split << idata.getPortfolio().getObligors().size() << endl;
   log << "number of simulated obligors" << split << obligors.size() << endl;
 
   // checking that exist obligors to simulate
