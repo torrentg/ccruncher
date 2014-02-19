@@ -80,7 +80,7 @@ Obligor& ccruncher::Obligor::operator=(const Obligor &o)
 
   vsegments = o.vsegments;
 
-  for(unsigned int i=0; i<vassets.size(); i++) {
+  for(size_t i=0; i<vassets.size(); i++) {
     if (vassets[i] != NULL) delete vassets[i];
   }
   vassets.assign(o.vassets.size(), NULL);
@@ -225,7 +225,7 @@ void ccruncher::Obligor::epend(ExpatUserData &eu, const char *name_)
  */
 bool ccruncher::Obligor::isActive(const Date &from, const Date &to)
 {
-  for(unsigned int i=0;i<vassets.size();i++)
+  for(size_t i=0; i<vassets.size(); i++)
   {
     if (vassets[i]->isActive(from,to))
     {
@@ -291,7 +291,7 @@ vector<Asset *> & ccruncher::Obligor::getAssets()
  */
 bool ccruncher::Obligor::hasLGD() const
 {
-  for(unsigned int i=0; i<vassets.size(); i++)
+  for(size_t i=0; i<vassets.size(); i++)
   {
     if (vassets[i]->requiresObligorLGD())
     {

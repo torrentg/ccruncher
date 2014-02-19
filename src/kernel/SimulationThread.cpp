@@ -40,10 +40,11 @@ using namespace ccruncher;
  * @param[in] seed RNG seed.
  */
 ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned long seed) :
-  Thread(), montecarlo(mc), obligors(mc.obligors), numSegmentsBySegmentation(mc.numSegmentsBySegmentation),
-  chol(mc.chol), floadings1(mc.floadings1), floadings2(mc.floadings2), inverses(mc.inverses),
+  Thread(), montecarlo(mc), obligors(mc.obligors), assets(mc.assets), segments(mc.segments),
+  numSegmentsBySegmentation(mc.numSegmentsBySegmentation), chol(mc.chol),
+  floadings1(mc.floadings1), floadings2(mc.floadings2), inverses(mc.inverses),
   numfactors(mc.chol->size1), ndf(mc.ndf), time0(mc.time0), timeT(mc.timeT),
-  antithetic(mc.antithetic), numsegments(mc.numsegments), assetsize(mc.assetsize),
+  antithetic(mc.antithetic), numsegments(mc.numsegments),
   blocksize(mc.blocksize), lhs_size(mc.lhs_size), rng(NULL), losses(0)
 {
   assert(chol != NULL);
@@ -105,7 +106,7 @@ void ccruncher::SimulationThread::run()
     timer1.stop();
 
     timer2.resume();
-    for(size_t iobligor=0; iobligor<obligors.size(); iobligor++)
+    for(size_t iobligor=0, iasset=0, isegment=0; iobligor<obligors.size(); iobligor++)
     {
       unsigned char ifactor = obligors[iobligor].ifactor;
 
@@ -142,9 +143,15 @@ void ccruncher::SimulationThread::run()
 
         if (ddate <= timeT)
         {
-          simuleObligorLoss(obligors[iobligor], ddate, (double*) &(losses[j*numsegments]));
+          const SimulatedAsset *ptr_assets = &(assets[iasset]);
+          const unsigned short *ptr_segments = &(segments[isegment]);
+          double *ptr_losses = (double*) &(losses[j*numsegments]);
+          simuleObligorLoss(obligors[iobligor], ddate, ptr_assets, ptr_segments, ptr_losses);
         }
       }
+
+      iasset += obligors[iobligor].numassets;
+      isegment += obligors[iobligor].numassets * numSegmentsBySegmentation.size();
     }
     timer2.stop();
 
@@ -340,22 +347,22 @@ void ccruncher::SimulationThread::rmvnorm()
  * @param[out] ptr_losses Cumulated losses by segmentation-segment.
  */
 void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obligor,
-    Date dtime, double *ptr_losses) const throw()
+    Date dtime, const SimulatedAsset *vassets, const unsigned short *vsegments,
+    double *vlosses) const throw()
 {
-  assert(ptr_losses != NULL);
+  assert(vassets != NULL);
+  assert(vsegments != NULL);
+  assert(vlosses != NULL);
 
   double obligor_lgd = NAN;
-  char *p = static_cast<char*>(obligor.ref.assets);
 
   for(unsigned short i=0; i<obligor.numassets; i++)
   {
-    SimulatedAsset *asset = reinterpret_cast<SimulatedAsset*>(p+i*assetsize);
-
     // evalue asset loss
-    if (dtime <= asset->maxdate && asset->mindate <= dtime)
+    if (dtime <= vassets[i].maxdate && vassets[i].mindate <= dtime)
     {
-      DateValues *values = lower_bound(asset->begin, asset->end, dtime);
-      assert(dtime <= (asset->end-1)->date);
+      DateValues *values = lower_bound(vassets[i].begin, vassets[i].end, dtime);
+      assert(dtime <= (vassets[i].end-1)->date);
       double ead = values->ead.getValue(rng);
       double lgd = values->lgd.getValue(rng);
 
@@ -374,15 +381,15 @@ void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obli
 
       // aggregate asset loss in the correspondent segment loss
       // remember: obligor segments was recoded to assets segments
-      unsigned short *segments = &(asset->segments);
-      double *closses = ptr_losses;
+      double *closses = vlosses;
       for(size_t j=0; j<numSegmentsBySegmentation.size(); j++)
       {
-        unsigned short isegment = segments[j];
+        unsigned short isegment = vsegments[j];
         assert(isegment < numSegmentsBySegmentation[j]);
         closses[isegment] += loss;
         closses += numSegmentsBySegmentation[j];
       }
+      vsegments += numSegmentsBySegmentation.size();
     }
   }
 }

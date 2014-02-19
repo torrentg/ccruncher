@@ -242,6 +242,8 @@ void ccruncher_test::SimulatedDataTest::test1()
   for(unsigned int i=0; i<obligors.size(); i++)
   {
     sobligors.push_back(SimulatedObligor(obligors[i]));
+    sobligors.back().setObligor(obligors[i]);
+    ASSERT(sobligors.back().getObligor() == obligors[i]);
   }
   
   ASSERT_EQUALS(sobligors[0].irating, (unsigned char) 2);

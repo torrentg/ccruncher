@@ -293,6 +293,9 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
  */
 void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, const char **attributes) throw(Exception)
 {
+  // we push interest to stack (is optional)
+  eu.interest = &interest;
+
   string ref = getStringAttribute(attributes, "include", "");
 
   if (ref == "")
