@@ -31,23 +31,46 @@
 namespace ccruncher {
 
 /**************************************************************************//**
+ * @brief Simulated obligor.
+ *
+ * @details Unlike Obligor class, this class only contains the strictly
+ *          required data to do the simulation.
+ */
+class SimulatedObligor
+{
+
+  public:
+
+    //! Obligor's factor index
+    unsigned char ifactor;
+    //! Obligor's rating index
+    unsigned char irating;
+    //! Number of assets
+    unsigned short numassets;
+    //! Obligor's lgd
+    LGD lgd;
+
+  public:
+
+    //! Constructor
+    SimulatedObligor(Obligor *obligor=NULL);
+    //! Sets a pointer
+    void setObligor(Obligor*);
+    //! Gets a pointer
+    Obligor* getObligor();
+    //! Less-than operator
+    bool operator<(const SimulatedObligor &obj) const;
+
+};
+
+/**************************************************************************//**
  * @brief Simulated asset.
  *
  * @details Unlike Asset class, this class only contains the strictly
- *          required data to do the simulation. The real size of this
- *          object is bigger than reported by sizeof(). Segments variable
- *          is not a unique value but a list of n elements (n = number of
- *          segmentations). The length is only know in execution time.
- *          We don't use allocated memory (eg. vector) for performance
- *          reasons.
+ *          required data to do the simulation.
  */
 class SimulatedAsset
 {
-
-  private:
-
-    //! Constructor (non-instantiable)
-    SimulatedAsset() {}
 
   public:
 
@@ -59,58 +82,21 @@ class SimulatedAsset
     DateValues *begin;
     //! Allocated datevalues
     DateValues *end;
-    //! Segmentations indexes
-    unsigned short segments;
-
-  public:
-
-    //! Initialize content
-    void init(Asset *asset);
-    //! Deallocate memory
-    void free();
-
-};
-
-/**************************************************************************//**
- * @brief Simulated obligor.
- *
- * @details Unlike Obligor class, this class only contains the strictly
- *          required data to do the simulation. Variable ref contains
- *          (in the initialization stage) a reference to the obligor.
- *          Later, in the simulation stage, contains a reference to the first
- *          SimulatedAsset belonging by this Obligor. It is a void pointer
- *          to avoid the temptation to increase it (p++) -remind that
- *          SimulatedAsset has a real size distinct than reported by
- *          sizeof-.
- */
-class SimulatedObligor
-{
-
-  public:
-
-    //! Obligor's factor index
-    unsigned char ifactor;
-    //! Obligor's rating index
-    unsigned char irating;
-    //! Obligor's lgd
-    LGD lgd;
-    //! Number of assets
-    unsigned short numassets;
-    //! Data pointer
-    union
-    {
-      //! obligor
-      Obligor *obligor;
-      //! simulated assets
-      void *assets;
-    } ref;
 
   public:
 
     //! Constructor
-    SimulatedObligor(Obligor *obligor=NULL);
-    //! Less-than operator
-    bool operator<(const SimulatedObligor &obj) const;
+    SimulatedAsset(Asset *asset=NULL);
+    //! Copy constructor
+    SimulatedAsset(const SimulatedAsset &o);
+    //! Destructor
+    ~SimulatedAsset();
+    //! Assignment operator
+    SimulatedAsset& operator=(const SimulatedAsset &o);
+    //! Initialize content
+    void assign(Asset *asset);
+    //! Deallocate memory
+    void free();
 
 };
 

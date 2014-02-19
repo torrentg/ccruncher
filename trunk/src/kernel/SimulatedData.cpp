@@ -24,51 +24,8 @@
 #include <cassert>
 #include "kernel/SimulatedData.hpp"
 
-/**************************************************************************//**
- * @details Initialize object content using asset data.
- * @param[in] asset Asset to use.
- */
-void ccruncher::SimulatedAsset::init(Asset *asset)
-{
-  assert(asset != NULL);
-
-  mindate = asset->getMinDate();
-  maxdate = asset->getMaxDate();
-
-  size_t len = asset->getData().size();
-  if (len > 0)
-  {
-    begin = new DateValues[len];
-    end = begin + len;
-    memcpy(begin, &(asset->getData()[0]), len*sizeof(DateValues));
-  }
-  else
-  {
-    begin = NULL;
-    end = NULL;
-  }
-
-  segments = 0;
-  unsigned short *ptr = &(segments);
-  for(size_t i=0; i<asset->getSegments().size(); i++)
-  {
-    ptr[i] = static_cast<unsigned short>(asset->getSegment(i));
-  }
-}
-
-/**************************************************************************//**
- * @details Deallocates memory pointed by begin.
- */
-void ccruncher::SimulatedAsset::free()
-{
-  if (begin != NULL)
-  {
-    assert(end != NULL);
-    delete [] begin;
-    begin = NULL;
-    end = NULL;
-  }
-}
+using namespace std;
+using namespace ccruncher;
 
 /**************************************************************************//**
  * @param[in] obligor Obligor to use.
@@ -78,15 +35,36 @@ ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
   if (obligor != NULL) {
     irating = static_cast<unsigned char>(obligor->irating);
     ifactor = static_cast<unsigned char>(obligor->ifactor);
-    lgd = obligor->lgd;
+    numassets = 0;
   }
   else {
     irating = 0;
     ifactor = 0;
-    //lgd = LGD();
+    numassets = 0;
   }
-  numassets = 0;
-  ref.obligor = obligor;
+}
+
+/**************************************************************************//**
+ * @details Save a pointer in the lgd memory region.
+ *          Caution, lgd variable contains (in the initialization stage) a
+ *          reference to the obligor. We don't use a union because classes
+ *          with constructor are not allowed as member of a union.
+ * @param[in] ptr Pointer
+ */
+void ccruncher::SimulatedObligor::setObligor(Obligor *ptr)
+{
+  Obligor **p = reinterpret_cast<Obligor**>(&lgd);
+  *p = ptr;
+}
+
+/**************************************************************************//**
+ * @details Return a pointer saved in the lgd memory region.
+ * @return Pointer.
+ */
+Obligor* ccruncher::SimulatedObligor::getObligor()
+{
+  Obligor **p = reinterpret_cast<Obligor**>(&(lgd));
+  return *p;
 }
 
 /**************************************************************************//**
@@ -115,6 +93,93 @@ bool ccruncher::SimulatedObligor::operator<(const SimulatedObligor &c) const
   else
   {
     return false;
+  }
+}
+
+/**************************************************************************/
+ccruncher::SimulatedAsset::SimulatedAsset(Asset *asset) : begin(NULL), end(NULL)
+{
+  assign(asset);
+}
+
+/**************************************************************************/
+ccruncher::SimulatedAsset::SimulatedAsset(const SimulatedAsset &o)
+{
+  *this = o;
+}
+
+/**************************************************************************/
+ccruncher::SimulatedAsset::~SimulatedAsset()
+{
+  free();
+}
+
+/**************************************************************************/
+ccruncher::SimulatedAsset& ccruncher::SimulatedAsset::operator=(const SimulatedAsset &o)
+{
+  mindate = o.mindate;
+  maxdate = o.maxdate;
+  if (o.begin == NULL) {
+    begin = NULL;
+    end = NULL;
+  }
+  else {
+    size_t len = o.end - o.begin;
+    begin = new DateValues[len];
+    end = begin + len;
+    memcpy(begin, o.begin, len*sizeof(DateValues));
+  }
+  return *this;
+}
+
+/**************************************************************************//**
+ * @details Initialize object content using asset data.
+ * @param[in] asset Asset to use.
+ */
+void ccruncher::SimulatedAsset::assign(Asset *asset)
+{
+  if (begin != NULL) {
+    free();
+  }
+
+  if (asset == NULL)
+  {
+    mindate = NAD;
+    maxdate = NAD;
+    begin = NULL;
+    end = NULL;
+  }
+  else
+  {
+    mindate = asset->getMinDate();
+    maxdate = asset->getMaxDate();
+
+    size_t len = asset->getData().size();
+    if (len > 0)
+    {
+      begin = new DateValues[len];
+      end = begin + len;
+      memcpy(begin, &(asset->getData()[0]), len*sizeof(DateValues));
+    }
+    else
+    {
+      begin = NULL;
+      end = NULL;
+    }
+  }
+}
+
+/**************************************************************************//**
+ * @details Deallocates memory pointed by begin.
+ */
+void ccruncher::SimulatedAsset::free()
+{
+  if (begin != NULL)
+  {
+    assert(end != NULL);
+    delete [] begin;
+    begin = NULL;
+    end = NULL;
   }
 }
 

@@ -39,7 +39,7 @@ using namespace ccruncher;
 /**************************************************************************//**
  * @param[in] s Streambuf where the trace will be written.
  */
-ccruncher::MonteCarlo::MonteCarlo(std::streambuf *s) : log(s), assets(NULL), chol(NULL), stop(NULL)
+ccruncher::MonteCarlo::MonteCarlo(std::streambuf *s) : log(s), chol(NULL), stop(NULL)
 {
   pthread_mutex_init(&mutex, NULL);
   maxseconds = 0;
@@ -56,8 +56,6 @@ ccruncher::MonteCarlo::MonteCarlo(std::streambuf *s) : log(s), assets(NULL), cho
   time0 = NAD;
   timeT = NAD;
   ndf = NAN;
-  assetsize = 0;
-  numassets = 0;
   numsegments = 0;
 }
 
@@ -81,19 +79,6 @@ void ccruncher::MonteCarlo::release()
   }
   threads.clear();
 
-  // deallocating assets
-  if (assets != NULL)
-  {
-    assert(assetsize >= sizeof(SimulatedAsset));
-    for (size_t i=0; i<numassets; i++) {
-      SimulatedAsset *p = reinterpret_cast<SimulatedAsset*>(assets+i*assetsize);
-      p->free();
-    }
-    delete [] assets;
-    assets = NULL;
-  }
-  numassets = 0;
-
   // dropping aggregators elements
   for(unsigned int i=0; i<aggregators.size(); i++) {
     if (aggregators[i] != NULL) {
@@ -111,6 +96,8 @@ void ccruncher::MonteCarlo::release()
 
   // flushing memory
   vector<SimulatedObligor>(0).swap(obligors);
+  vector<SimulatedAsset>(0).swap(assets);
+  vector<unsigned short>(0).swap(segments);
   floadings1.clear();
   floadings2.clear();
 }
@@ -288,14 +275,16 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
   // determining the obligors to simulate
   vector<Obligor *> &vobligors = idata.getPortfolio().getObligors();
   obligors.reserve(vobligors.size());
-  for(unsigned int i=0; i<vobligors.size(); i++)
+  for(size_t i=0; i<vobligors.size(); i++)
   {
     if (vobligors[i]->isActive(time0, timeT))
     {
       obligors.push_back(SimulatedObligor(vobligors[i]));
+      // trick to transfer obligor ref to next stage (initAssets)
+      obligors.back().setObligor(vobligors[i]);
     }
   }
-  
+
   // sorting obligors list by factor and rating
   sort(obligors.begin(), obligors.end());
 
@@ -331,23 +320,27 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   // in massive portfolios memory can be exhausted
 
   // determining the assets to simulate
-  numassets = 0;
+  size_t numassets = 0;
+  size_t numdatevalues = 0;
   size_t cont = 0;
   for(size_t i=0; i<obligors.size(); i++)
   {
-    vector<Asset*> &vassets = obligors[i].ref.obligor->getAssets();
+    Obligor *obligor = obligors[i].getObligor();
+    vector<Asset*> &vassets = obligor->getAssets();
     for(size_t j=0; j<vassets.size(); j++)
     {
       cont++;
-      if (vassets[j]->isActive(time0, timeT)) 
+      if (vassets[j]->isActive(time0, timeT))
       {
         numassets++;
+        numdatevalues += vassets[j]->getData().size();
         idata.getSegmentations().addComponents(vassets[j]);
       }
     }
   }
   log << "number of assets" << split << cont << endl;
   log << "number of simulated assets" << split << numassets << endl;
+  log << "number of simulated data items" << split << numdatevalues << endl;
 
   // checking that exist assets to simulate
   if (numassets == 0)
@@ -359,20 +352,21 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
   idata.getSegmentations().removeUnusedSegments();
 
   // creating the simulated assets array
-  assert(assets == NULL);
-  assert(idata.getSegmentations().size() >= 1);
-  assetsize = sizeof(SimulatedAsset) + sizeof(unsigned short)*(idata.getSegmentations().size()-1);
-  assets = new char[assetsize*numassets];
-  memset(assets, 0, assetsize*numassets); // set pointers to NULL
+  assert(assets.empty());
+  assets.resize(numassets); // initialize values (pointers)
+  assert(segments.empty());
+  size_t numsegmentations = idata.getSegmentations().size();
+  assert(numsegmentations >= 1);
+  segments.reserve(numassets*numsegmentations);
 
   numassets = 0;
-  for(unsigned int i=0; i<obligors.size(); i++)
+  for(size_t i=0; i<obligors.size(); i++)
   {
-    Obligor *obligor = obligors[i].ref.obligor;
-    obligors[i].ref.assets = NULL;
+    Obligor *obligor = obligors[i].getObligor();
+    obligors[i].lgd = obligor->lgd;
     obligors[i].numassets = 0;
     vector<Asset*> &vassets = obligor->getAssets();
-    for(unsigned int j=0; j<vassets.size(); j++)
+    for(size_t j=0; j<vassets.size(); j++)
     {
       if (vassets[j]->isActive(time0, timeT)) 
       {
@@ -385,25 +379,25 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
         // recode segments
         idata.getSegmentations().recodeSegments(vassets[j]);
 
-        // setting asset
-        SimulatedAsset *p = reinterpret_cast<SimulatedAsset *>(assets+numassets*assetsize);
+        // setting asset segments
+        for(size_t k=0; k<numsegmentations; k++)
+        {
+          segments.push_back(static_cast<unsigned short>(vassets[j]->getSegment(k)));
+        }
 
         // filling simulated asset
-        p->init(vassets[j]);
-        vassets[j]->clearData();
-
-        // assigning obligor.assets to first asset
-        if (obligors[i].ref.assets == NULL)
-        {
-          obligors[i].ref.assets = p;
-        }
+        assets[numassets].assign(vassets[j]);
 
         // incrementing num assets counters
         obligors[i].numassets++;
         numassets++;
       }
+      vassets[j]->clearData();
     }
   }
+
+  assert(assets.size() == numassets);
+  assert(segments.size() == numassets*numsegmentations);
 
   // exit function
   log << indent(-1);
@@ -429,10 +423,10 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
 
   // allocating and initializing aggregators
   numsegments = 0;
-  int numsegmentations = idata.getSegmentations().size();
+  size_t numsegmentations = idata.getSegmentations().size();
   numSegmentsBySegmentation.resize(numsegmentations, 0);
   aggregators.resize(numsegmentations, static_cast<Aggregator*>(NULL));
-  for(int i=0; i<numsegmentations; i++)
+  for(int i=0; i<(int)numsegmentations; i++)
   {
     if (idata.getSegmentations().getSegmentation(i).size() > USHRT_MAX) {
       const string &sname = idata.getSegmentations().getSegmentation(i).name;
@@ -523,7 +517,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   log << "maximum number of iterations" << split << maxiterations << endl;
   log << "antithetic mode" << split << antithetic << endl;
   log << "latin hypercube sampling" << split << (lhs_size==1?"false":Format::toString(size_t(lhs_size))) << endl;
-  log << "thread block size" << split << blocksize << endl;
+  log << "block size" << split << blocksize << endl;
   log << "number of threads" << split << int(numthreads) << endl;
   log << indent(-1);
   log << "running Monte Carlo";

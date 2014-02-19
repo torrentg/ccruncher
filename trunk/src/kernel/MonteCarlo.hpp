@@ -66,11 +66,9 @@ class MonteCarlo
     //! List of simulated obligors
     std::vector<SimulatedObligor> obligors;
     //! List of simulated assets
-    char *assets;
-    //! Simulated asset size (in bytes)
-    size_t assetsize;
-    //! Number of simulated assets
-    size_t numassets;
+    std::vector<SimulatedAsset> assets;
+    //! List of obligor-segments
+    std::vector<unsigned short> segments;
     //! Number of segments for each segmentation
     std::vector<unsigned short> numSegmentsBySegmentation;
     //! Total number of segments (included in all segmentations)

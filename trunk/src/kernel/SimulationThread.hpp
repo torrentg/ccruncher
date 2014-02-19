@@ -97,6 +97,10 @@ class SimulationThread : public Thread
     MonteCarlo &montecarlo;
     //! List of simulated obligors
     const std::vector<SimulatedObligor> &obligors;
+    //! List of simulated assets
+    const std::vector<SimulatedAsset> &assets;
+    //! List of obligor-segments
+    const std::vector<unsigned short> &segments;
     //! Number of segments for each segmentation
     const std::vector<unsigned short> &numSegmentsBySegmentation;
     //! Cholesky matrix (see MonteCarlo::initModel())
@@ -119,8 +123,6 @@ class SimulationThread : public Thread
     const bool &antithetic;
     //! Total number of segments
     const size_t &numsegments;
-    //! Asset size (in bytes)
-    const size_t &assetsize;
     //! Block size
     const unsigned short &blocksize;
     //! Lhs sample size
@@ -173,7 +175,8 @@ class SimulationThread : public Thread
     //! Simule latent variables
     void simuleLatentVars();
     //! Simule obligor
-    void simuleObligorLoss(const SimulatedObligor &, Date, double *) const throw();
+    void simuleObligorLoss(const SimulatedObligor &, Date, const SimulatedAsset *,
+                           const unsigned short *, double *) const throw();
     //! Chi-square random generation
     void rchisq();
     //! Factors random generation
