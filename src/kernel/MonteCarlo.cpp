@@ -433,12 +433,14 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
       throw Exception("segmentation '" + sname + "' exceeds the maximum number of segments");
     }
 
-    string filename = idata.getSegmentations().getSegmentation(i).getFilename(fpath);
-    Aggregator *aggregator = new Aggregator(i, idata.getSegmentations(), filename, fmode);
+    string ifile = idata.getFilename();
+    string ofile = idata.getSegmentations().getSegmentation(i).getFilename(fpath);
+    vector<double> exposures = getExposures(i, idata);
+    Aggregator *aggregator = new Aggregator(i, idata.getSegmentations(), ofile, fmode, ifile, exposures);
     aggregators[i] = aggregator;
     numSegmentsBySegmentation[i] = (unsigned short)(idata.getSegmentations().getSegmentation(i).size());
     numsegments += numSegmentsBySegmentation[i];
-    log << "segmentation" << split << "["+filename+"]" << endl;
+    log << "segmentation" << split << "["+ofile+"]" << endl;
   }
 
   // exit function
@@ -452,35 +454,34 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
  * @param[in] isegmentation Segmentation index.
  * @param[in] idata CCruncher input data.
  * @return Segments' exposures.
- *
+ */
 vector<double> ccruncher::MonteCarlo::getExposures(int isegmentation, IData &idata) const
 {
   double numdays = timeT - time0;
-  int numsegments = idata.getSegmentations().getSegmentation(isegmentation).size();
-  vector<double> ret(numsegments, 0.0);
+  size_t numsegmentations = idata.getSegmentations().size();
+  int len = idata.getSegmentations().getSegmentation(isegmentation).size();
+  vector<double> ret(len, 0.0);
 
-  for(size_t i=0; i<obligors.size(); i++)
+  for(size_t iobligor=0, iasset=0, isegment=isegmentation; iobligor<obligors.size(); iobligor++)
   {
-    char *p = static_cast<char*>(obligors[i].ref.assets);
-
-    for(unsigned short j=0; j<obligors[i].numassets; j++)
+    for(size_t i=0; i<obligors[iobligor].numassets; i++)
     {
-      SimulatedAsset *asset = reinterpret_cast<SimulatedAsset*>(p+j*assetsize);
-      unsigned short *segments = &(asset->segments);
-      unsigned short isegment = segments[isegmentation];
-      int prevt = time0;
-      for(DateValue *dv=asset->begin; dv < asset->end; ++dv)
+      unsigned short segment = segments[isegment];
+      Date prevt = time0;
+      for(DateValues *dv=assets[iasset].begin; dv < assets[iasset].end; ++dv)
       {
         double weight = (min(dv->date,timeT) - prevt)/numdays;
-        ret[isegment] += weight * dv->ead.getExpected();
+        ret[segment] += weight * dv->ead.getExpected();
         prevt = dv->date;
       }
+      iasset++;
+      isegment += numsegmentations;
     }
   }
 
   return ret;
 }
-*/
+
 /**************************************************************************//**
  * @details Starts the simulation procedure. If there is only 1 thread,
  *          then uses the current thread (simplifies debug), otherwise
@@ -606,7 +607,8 @@ bool ccruncher::MonteCarlo::append(int ithread, const std::vector<short> &vi,
     {
       // trace indexes (if required)
       if (findexes.is_open()) {
-        findexes << ithread << ", " << std::abs(int(vi[iblock])) << ", " << (vi[iblock]<0?1:0) << "\n";
+        findexes << ithread << ", " << std::abs(int(vi[iblock]))
+                 << ", " << (vi[iblock]<0?1:0) << "\n";
       }
 
       // aggregating simulation result

@@ -32,6 +32,8 @@ using namespace std;
 
 #define BUFFER_SIZE 128*1024
 #define MAX_FIELD_SIZE 40
+#define FIELD_SEPARATOR ','
+#define COMMENT_CHAR '#'
 
 /**************************************************************************//**
  * @param[in] fname CSV file path with read permission.
@@ -121,7 +123,7 @@ const vector<string>& ccruncher::CsvFile::getHeaders()
 /**************************************************************************//**
  * @details Internal method.
  *          Moves content pointed by ptr to the begining of buffer and
- *          appends new file date just to complete the buffer capacity.
+ *          appends new file data just to complete the buffer capacity.
  *          Returns the number of available chars in buffer.
  * @param[in] ptr Current position in buffer.
  * @return Number of available bytes in buffer.
@@ -160,6 +162,31 @@ size_t ccruncher::CsvFile::getChunk(char *ptr)
 }
 
 /**************************************************************************//**
+ * @details Move ptr0 and ptr1 to the next uncommented line.
+ *          Comments starts by COMMENT_CHAR and ends at line-end.
+ */
+void ccruncher::CsvFile::skipComments()
+{
+  while (*ptr0 == COMMENT_CHAR)
+  {
+    while(*ptr0 != '\n' && *ptr0 != 0)
+    {
+      if (buffer+BUFFER_SIZE-1 <= ptr0) {
+        getChunk(ptr0);
+      }
+      ptr0++;
+    }
+    if (*ptr0 != 0) {
+      if (buffer+BUFFER_SIZE-1 <= ptr0) {
+        getChunk(ptr0);
+      }
+      ptr0++;
+    }
+  }
+  ptr1 = ptr0;
+}
+
+/**************************************************************************//**
  * @details Internal method.
  *          Parse next token in buffer. Returns the type of token found:
  *          - 1: field separator
@@ -170,10 +197,17 @@ size_t ccruncher::CsvFile::getChunk(char *ptr)
  */
 int ccruncher::CsvFile::next() throw(Exception)
 {
-  if (ptr1 == NULL) getChunk(NULL);
+  // first line
+  if (ptr1 == NULL) {
+    getChunk(NULL);
+  }
   ptr0 = ptr1;
   assert(buffer <= ptr0 && ptr0 < buffer+BUFFER_SIZE);
-  if (ptr0 == 0) return 3;
+
+  if (*ptr0 == COMMENT_CHAR) {
+    skipComments();
+  }
+  if (*ptr0 == 0) return 3;
 
   do
   {
@@ -188,7 +222,7 @@ int ccruncher::CsvFile::next() throw(Exception)
       ptr1++;
       return 2;
     }
-    else if (*ptr1 == ',') { //strchr(separators.c_str(), buffer[pos]) != NULL
+    else if (*ptr1 == FIELD_SEPARATOR) { //strchr(separators.c_str(), buffer[pos]) != NULL
       *ptr1 = 0;
       ptr1++;
       return 1;

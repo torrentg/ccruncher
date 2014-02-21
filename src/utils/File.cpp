@@ -29,6 +29,7 @@
 #include <cstdio>
 #include <fstream>
 #include <cerrno>
+#include <cstring>
 #include "utils/Format.hpp"
 #include "utils/File.hpp"
 
@@ -276,12 +277,16 @@ string ccruncher::File::dirname(const string &pathname)
   char drive[_MAX_DRIVE];
   char dir[_MAX_DIR];
   char fname[_MAX_FNAME];
-  char ext[_MAX_EXT];
+  char ext[_MAX_EXT];q
   _splitpath(pathname.c_str(), drive, dir, fname, ext);
   snprintf(buf, _MAX_PATH, "%s%s", drive, dir);
   return string(buf);
 #else
-  return string(::dirname(const_cast<char*>(pathname.c_str())));
+  char *aux = new char[pathname.length()+1];
+  std::strcpy (aux, pathname.c_str());
+  string ret(::dirname(aux));
+  delete[] aux;
+  return ret;
 #endif
 }
 
@@ -302,7 +307,11 @@ string ccruncher::File::filename(const string &pathname)
   snprintf(buf, _MAX_PATH, "%s%s", fname, ext);
   return string(buf);
 #else
-  return string(::basename(const_cast<char*>(pathname.c_str())));
+  char *aux = new char[pathname.length()+1];
+  std::strcpy (aux, pathname.c_str());
+  string ret(::basename(aux));
+  delete[] aux;
+  return ret;
 #endif
 }
 

@@ -160,6 +160,8 @@ class IData : public ExpatHandlers
     size_t getFileSize() const;
     //! Returns readed bytes
     size_t getReadedSize() const;
+    //! Return input file name
+    std::string getFilename() const;
 
 };
 

@@ -64,7 +64,8 @@ class Aggregator
   public:
 
     //! Constructor
-    Aggregator(int , const Segmentations &, const std::string &, char) throw(Exception);
+    Aggregator(int , const Segmentations &, const std::string &, char,
+               const std::string &, const std::vector<double> &exposures=std::vector<double>(0)) throw(Exception);
     //! Destructor
     ~Aggregator();
     //! Append data to aggregator
