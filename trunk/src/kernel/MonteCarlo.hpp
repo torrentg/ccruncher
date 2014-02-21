@@ -136,6 +136,8 @@ class MonteCarlo
     void initModel(IData &) throw(Exception);
     //! Initialize aggregators
     void initAggregators(IData &) throw(Exception);
+    //! Averaged exposures by segment
+    std::vector<double> getExposures(int isegmentation, IData &) const;
     //! Append simulation result
     bool append(int ithread, const std::vector<short> &, const double *) throw();
     //! Non-copyable class

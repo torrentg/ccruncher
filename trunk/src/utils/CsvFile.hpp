@@ -76,6 +76,8 @@ class CsvFile
     static double parse(const char *) throw(Exception);
     //! Trim a string
     static char* trim(char *);
+    //! Skip comments
+    void skipComments();
 
   public:
 

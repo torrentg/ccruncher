@@ -312,7 +312,6 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
       string path;
       if (filename==STDIN_FILENAME) path = File::getWorkDir();
       else path = File::dirname(filename);
-
       string filepath = File::filepath(path, ref);
       file = gzopen(filepath.c_str(), "rb");
       if (file == NULL) {
@@ -530,5 +529,13 @@ size_t ccruncher::IData::getReadedSize() const
   else ret = gzoffset(curfile);
   pthread_mutex_unlock(&mutex);
   return ret;
+}
+
+/**************************************************************************//**
+ * @return Input file name.
+ */
+std::string ccruncher::IData::getFilename() const
+{
+  return filename;
 }
 

@@ -49,7 +49,7 @@
 #===========================================================================
 ccruncher.read <- function(filename)
 {
-  df <- read.csv(filename, header=TRUE, sep=",");
+  df <- read.csv(filename, comment.char="#");
   return(df);
 }
 
