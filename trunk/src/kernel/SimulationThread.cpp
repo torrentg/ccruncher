@@ -344,7 +344,9 @@ void ccruncher::SimulationThread::rmvnorm()
  *          them in the corresponding segmentation-segment.
  * @param[in] obligor Obligor to simulate.
  * @param[in] dtime Default time.
- * @param[out] ptr_losses Cumulated losses by segmentation-segment.
+ * @param[in] vassets List of assets.
+ * @param[in] vsegments List of segments.
+ * @param[out] vlosses Cumulated losses by segmentation-segment.
  */
 void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obligor,
     Date dtime, const SimulatedAsset *vassets, const unsigned short *vsegments,
