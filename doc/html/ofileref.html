@@ -249,17 +249,17 @@
     <h2>ccruncher.out</h2>
     <pre>
 
-        ccruncher is Copyright (C) 2004-2013 Gerard Torrent and licensed        
+        ccruncher is Copyright (C) 2004-2014 Gerard Torrent and licensed        
          under the GNU General Public License, version 2. More info at          
                             http://www.ccruncher.net                            
 
 general information ************************************************************
-  ccruncher version                                                2.3.0 (R1147)
-  start time (dd/MM/yyyy hh:mm:ss)                           08/09/2013 08:11:29
+  ccruncher version                                                2.4.0 (R1206)
+  start time (dd/MM/yyyy hh:mm:ss)                           22/02/2014 07:15:08
 
 reading input file *************************************************************
   file name                                                 [samples/test05.xml]
-  file size                                                            274.74 KB
+  file size                                                            274.69 KB
   define (user defined)                                                 NU=12.54
   define (user defined)                                                 R12=0.21
   define (user defined)                                                  W1=0.29
@@ -269,8 +269,8 @@ reading input file *************************************************************
   define (input file)                                            antithetic=true
   define (input file)                                                   lhs=1000
   define (input file)                                                     seed=0
-  file checksum (adler32)                                             4053574356
-  elapsed time parsing data                                         00:00:00.022
+  file checksum (adler32)                                             1900187585
+  elapsed time parsing data                                         00:00:00.028
 
 initialization procedure *******************************************************
   setting parameters -----------------------------------------------------------
@@ -284,12 +284,12 @@ initialization procedure *******************************************************
     default probability functions                                       computed
     default probability splines (linear, cubic, none)                       cccn
   setting obligors to simulate -------------------------------------------------
-    simulate only active obligors                                           true
     number of obligors                                                      1000
     number of simulated obligors                                            1000
   setting assets to simulate ---------------------------------------------------
     number of assets                                                        1000
     number of simulated assets                                              1000
+    number of simulated data items                                          1000
   initializing aggregators -----------------------------------------------------
     output data directory                                                 [data]
     segmentation            [/home/gerard/projects/ccruncher/data/portfolio.csv]
@@ -297,26 +297,26 @@ initialization procedure *******************************************************
 
 Monte Carlo ********************************************************************
   configuration ----------------------------------------------------------------
-    seed used to initialize randomizer                          1378620689362757
+    seed used to initialize randomizer                          1393049708265257
     maximum execution time (seconds)                                       86400
     maximum number of iterations                                          200000
     antithetic mode                                                         true
     latin hypercube sampling                                                1000
-    thread block size                                                        128
+    block size                                                               128
     number of threads                                                          4
   running Monte Carlo [1000 simulations per hash] ------------------------------
     ............................................................................
     ............................................................................
     ................................................
     simulations realized                                                  200000
-    elapsed time creating random numbers                            00:00:01.055
-    elapsed time simulating obligors                                00:00:01.482
-    elapsed time writing data to disk                               00:00:00.292
-    total simulation time                                           00:00:02.844
+    elapsed time creating random numbers                            00:00:01.045
+    elapsed time simulating losses                                  00:00:01.581
+    elapsed time writing data to disk                               00:00:00.273
+    total simulation time                                           00:00:02.930
 
 general information ************************************************************
-  end time (dd/MM/yyyy hh:mm:ss)                             08/09/2013 08:11:32
-  total elapsed time                                                00:00:02.880
+  end time (dd/MM/yyyy hh:mm:ss)                             22/02/2014 07:15:11
+  total elapsed time                                                00:00:03.020
     </pre>
     <p>
       ccruncher-gui program saves the execution trace in the ccruncher.out file.
@@ -335,7 +335,7 @@ general information ************************************************************
         Copyright &copy; 2004-2014 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
       </span>
       <span id="modified">
-        Last modified: 21-Feb-2014
+        Last modified: 22-Feb-2014
       </span>
     </div>
 
