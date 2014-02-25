@@ -98,7 +98,7 @@ class Segmentation : public ExpatHandlers
     //! Reset object content
     void reset();
     //! Returns enabled flag
-    bool isEnabled() const { return enabled; }
+    bool isEnabled() const;
     //! Return filename
     std::string getFilename(const std::string &path) const;
     //! Add components to segmentations stats
