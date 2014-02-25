@@ -212,6 +212,12 @@ void ccruncher::Segmentation::epend(ExpatUserData &, const char *name_)
   }
 }
 
+/**************************************************************************/
+bool ccruncher::Segmentation::isEnabled() const
+{
+  return enabled;
+}
+
 /**************************************************************************//**
  * @details Create filename concatenating path/name.csv.
  * @param[in] path Dir path.

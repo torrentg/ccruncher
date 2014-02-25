@@ -41,7 +41,7 @@ namespace ccruncher {
  *   timer.stop();
  *   double t1 = timer.read();
  *   timer.resume();
- *   // another a heavy task here
+ *   // another heavy task here
  *   double t2 = timer.read();
  * @endcode
  *
