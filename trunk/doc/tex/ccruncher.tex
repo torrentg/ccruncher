@@ -378,9 +378,9 @@ models. CreditMetrics\texttrademark{}~\cite{cmetrics:1997} and
 KMV~\cite{kmv:2003} are models of this type. 
 
 \textbf{Copula models} represent the i-th obligor using a random variable and
-consider that this obligor defaults when this variable satisfies a condition. 
-The dependence between these variables is explicitly modeled using a 
-copula~\cite{embrechts:2002}. The sum of the defaulted obligors' exposure 
+consider that this obligor defaults when this variable satisfies a given 
+condition. The dependence between these variables is explicitly modeled using 
+a copula~\cite{embrechts:2002}. The sum of the defaulted obligors' exposure 
 gives the portfolio loss distribution. In the Li copula model~\cite{li:2000}, 
 random variables are the obligors default times and the default trigger is to 
 cross a preset threshold. The multi-factor Gaussian case of the Li model covers 
@@ -460,9 +460,9 @@ require a detailed discussion have been relegated to appendices.
 \label{chap:mdt}
 
 Financial institutions have statistical models that assigns a probability of 
-default of each obligor as well as statistical models for the exposure and 
+default to each obligor as well as statistical models for the exposure and 
 recovery of each operation. These models allow us to estimate the expected 
-loss of the portfolio, but they have nothing to say about the measures related 
+loss of the portfolio, but they have nothing to say about measures related 
 to economic capital such as VaR or ES. This is because these measures strongly 
 depend on the dependence between obligors, and models mentioned above do not 
 refer to this concept. This chapter develops the multivariate model exploiting 
@@ -580,30 +580,30 @@ to a single sector. In addition, we assume that obligors' time-until-default
 dependence only relies on the involved industrials sectors. With these 
 restrictions and by sorting the obligors by sector, we see that the obligors' 
 time-until-default Spearman's rank correlation is an $n {\times} n$ correlation
-block matrix $\widetilde{R} = B_s(\vec{n},\vec{1},\widetilde{M})$.
+block matrix $\widetilde{R} = B_s(\vec{n},\vec{1},\widetilde{\Sigma})$.
 \begin{displaymath}
-	\widetilde{R} = B_s(\vec{n},\vec{1},\widetilde{M}) = 
+	\widetilde{R} = B_s(\vec{n},\vec{1},\widetilde{\Sigma}) = 
 	\left(
 	\begin{array}{ccccccc}
-		1         & \cdots & \rho_{11} &        & \rho_{1s} & \cdots & \rho_{1s} \\
-		\vdots    & \ddots & \vdots    & \cdots & \vdots    &        & \vdots    \\
-		\rho_{11} & \cdots & 1         &        & \rho_{1s} & \cdots & \rho_{1s} \\
+		1           & \cdots & \sigma_{11} &        & \sigma_{1s} & \cdots & \sigma_{1s} \\
+		\vdots      & \ddots & \vdots      & \cdots & \vdots      &        & \vdots      \\
+		\sigma_{11} & \cdots & 1           &        & \sigma_{1s} & \cdots & \sigma_{1s} \\
 		
-		          & \vdots &           & \ddots &           & \vdots &           \\
+		            & \vdots &             & \ddots &             & \vdots &             \\
 		
-		\rho_{1s} & \cdots & \rho_{1s} &        & 1         & \cdots & \rho_{ss} \\
-		\vdots    &        & \vdots    & \cdots & \vdots    & \ddots & \vdots    \\
-		\rho_{1s} & \cdots & \rho_{1s} &        & \rho_{ss} & \cdots & 1         \\
+		\sigma_{1s} & \cdots & \sigma_{1s} &        & 1           & \cdots & \sigma_{ss} \\
+		\vdots      &        & \vdots      & \cdots & \vdots      & \ddots & \vdots      \\
+		\sigma_{1s} & \cdots & \sigma_{1s} &        & \sigma_{ss} & \cdots & 1           \\
 	\end{array}
 	\right)
 	\quad 
 	\begin{array}{l}
-		\widetilde{M} = 
+		\widetilde{\Sigma} = 
 		\left(
 		\begin{array}{ccc}
-			\rho_{11} & \cdots & \rho_{1s} \\
-			\vdots    & \ddots & \vdots    \\
-			\rho_{1s} & \cdots & \rho_{ss}
+			\sigma_{11} & \cdots & \sigma_{1s} \\
+			\vdots      & \ddots & \vdots      \\
+			\sigma_{1s} & \cdots & \sigma_{ss}
 		\end{array}
 		\right) \\
 		\\
@@ -617,17 +617,17 @@ that does not depend on marginals ($F_i$ in our case), unlike the usual
 Pearson's correlation, which does depend on marginals. t-Student copulas 
 with Spearman's rank correlation block matrix are those that come from a 
 multivariate t-Student $t_n(\nu,\vec{0},\widehat{R})$ in which 
-$\widehat{R} = B_s(\vec{n},\vec{1},M)$~\footnote{ In the Gaussian case, the 
-relation between Spearman's and Pearson's correlations is 
+$\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$~\footnote{ In the Gaussian case, 
+the relation between Spearman's and Pearson's correlations is 
 $\rho_S = \frac{6}{\pi}\cdot \arcsin(\frac{\rho}{2})$.}. Consequently, 
 the multivariate time-until-default distribution $F$ can be expressed by 
 its marginals $F_i$ and a t-Student copula $C_{\nu,\widehat{R}}^{\text{t}}$ 
-in which $\widehat{R} = B_s(\vec{n},\vec{1},M)$.
+in which $\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$.
 
 As we have observed, proposition~\ref{prop:dtd} establishes the link between 
 the t-Student copula and the multivariate t-Student distribution. Now, we are
 interested in formulating this multivariate t-Student distribution with 
-correlation matrix $\widehat{R} = B_s(\vec{n},\vec{1},M)$ as a t-Student 
+correlation matrix $\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$ as a t-Student 
 multi-factor model.
 
 The multivariate t-Student distribution relies on the multivariate Gaussian
@@ -1794,7 +1794,7 @@ This estimator assumes that the estimated $\text{VaR}_{\beta}$ has the
 exact value. Despite this, if the sample size is high enough, then the 
 estimated value is good enough.
 
-\begin{example}[2 factors]
+\begin{example}[test05.xml]
 	\label{ex:test05}
 	Assume a portfolio composed of \num{1000} obligors in which every obligor 
 	owes 1\euro\ to 1 year. Then $\text{EAD}_i^1(t) = \mathbbm{1}_{[0,1]}(t)$, 
@@ -1886,18 +1886,6 @@ the obligor loss is aggregated to segment loss when the obligor defaults.
 In the second case, the asset losses are aggregated to segment losses when 
 the obligor defaults.
 
-\begin{figure}[!h]
-	\centering
-	\subcaptionbox{EL disaggregation}{
-		\includegraphics[width=7cm]{disaggregation1}
-	}
-	\subcaptionbox{$\text{ES}_{99\%}$ disaggregation}{
-		\includegraphics[width=7cm]{disaggregation2}
-	}
-	\caption{Risk disaggregation}
-	\label{fig:disaggregation} 
-\end{figure}
-
 \subsubsection{Expected Loss}
 Expected Loss is additive respect the portfolio composition, i.e., if 
 $L$, $L_1$, and $L_2$ are respectively the portfolio, sub-portfolio 1, 
@@ -1936,6 +1924,8 @@ losses of the k-th sub-portfolio, and
 $\{y_1^k,\dots,y_K^k\} = \{x_i^k \mid x_i \ge \text{VaR}_{\beta}\}_{i=1\dots N}$ 
 are the simulated sub-portfolio losses having a portfolio loss large than 
 $\text{VaR}_{\beta}$.
+Dividing $\text{ES}_k$ by the portfolio ES gives the percentage of ES 
+consumed by this sub-portfolio.
 
 \begin{example}[Risk disaggregation]
 	We use the identical scenario as that described in example~\ref{ex:test05} 
@@ -1946,6 +1936,18 @@ $\text{VaR}_{\beta}$.
 	obligors. Figure~\ref{fig:disaggregation} displays the risk disaggregated 
 	respect this segmentation.
 \end{example}
+
+\begin{figure}[!h]
+	\centering
+	\subcaptionbox{EL disaggregation}{
+		\includegraphics[width=7cm]{disaggregation1}
+	}
+	\subcaptionbox{$\text{ES}_{99\%}$ disaggregation}{
+		\includegraphics[width=7cm]{disaggregation2}
+	}
+	\caption{Risk disaggregation}
+	\label{fig:disaggregation} 
+\end{figure}
 
 %------------------------------------------------------------------------------
 % SIMULATION DETAILS
@@ -2053,8 +2055,8 @@ CCruncher parallelizes the portfolio loss sampling, spawning multiple
 simulation threads, each with its own Mersenne twister Random Number 
 Generator seeded with consecutive values. When the number of obligors is 
 high, data do not fit in the cache memory L1 and L2. The memory transfer is 
-a time-consuming operation that must be minimized. To achieve this, a CCruncher 
-threads perform simultaneously \emph{blocksize} simulations. Each obligor is 
+a time-consuming operation that must be minimized. To achieve this, each
+thread performs simultaneously \emph{blocksize} simulations. Each obligor is 
 simulated \emph{blocksize} times (each of them with the corresponding $\nu$ 
 and $\vec{z}$) before moving to the next obligor.
 
@@ -2207,8 +2209,8 @@ We combine both components to define an algorithm that samples the desired
 credit risk measure. The empirical density given by this sample 
 approximates the risk measure distribution and allows evaluating the 
 effect of the parameter uncertainty. One must be cautious because this 
-procedure unveils the parameter uncertainty, but other uncertainties remain 
-hidden such as:
+procedure unveils the copula parameters uncertainty, but other uncertainties
+remain hidden such as:
 \begin{inparaenum}[1)]
 	\item copula selection, 
 	\item factors/sectors selection and assignation,
@@ -2548,7 +2550,7 @@ reusing the simulated losses from the current portfolio.
 The risk of weighted portfolio is continuous with respect to $\alpha_1,\dots,\alpha_K$
 but it is not linear with respect to this parameters because the rank statistic 
 involved in the $\text{VaR}_{99\%}$ and $\text{ES}_{99\%}$ measures. 
-This is illustrated in figure~\ref{fig:popt2}.
+This is clearly shown in figure~\ref{fig:popt2}.
 
 \begin{example}[Feasible portfolios]
 	We consider the portfolio defined in \texttt{test05.xml} (see example~\ref{ex:test05}).
@@ -2894,8 +2896,6 @@ from~\cite{kreinin:2001}.
 		\end{array}
 		\right)
 	\end{displaymath}\par}
-	We call the 1-year regularized transition matrix to 
-	$\bar{M}_1 = \bar{M}_{\frac{1}{12}}^{12}$. 
 	Finally, we use proposition~\ref{prop:pdftm} to determine the 
 	PD function for each rating and month. The results are displayed in 
 	figure~\ref{fig:pdftm}.
@@ -2999,8 +2999,10 @@ proposition.
 	\label{ex:pdfsv}
 	Suppose that we only know the annual probabilities of default and that these 
 	values are those from the 1-year regularized transition matrix displayed in
-	table~\ref{tmatrix1}. In this case, the 1-year diagonal transition matrix 
-	is
+	table~\ref{tmatrix1}. We call the 1-year regularized transition matrix to 
+	$\bar{M}_1 = \bar{M}_{\frac{1}{12}}^{12}$ where $\bar{M}_{\frac{1}{12}}$ 
+	is computed in example~\ref{ex:pdftm}. In this case, the 1-year diagonal 
+	transition matrix is
 	{\small
 	\begin{displaymath}
 		M_1 = \left(
