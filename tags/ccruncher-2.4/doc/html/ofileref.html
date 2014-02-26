@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+  <head>
+    <title>CCruncher - Ouput files</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="ccruncher.js" type="text/javascript"></script>
+    <style type="text/css">
+        ul {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+        td.c1 {
+            text-align: left;
+            padding: 8px;
+            width: 150px;
+        }
+        td.c2 {
+            text-align: justify;
+            padding: 8px;
+        }
+        td.c3 {
+            text-align: center;
+            padding: 8px;
+            width: 70px;
+        }
+        td.c4 {
+            text-align: center;
+            padding: 8px;
+            width: 70px;
+            white-space: nowrap;
+        }
+        @media print {
+            td.c1, td.c2, td.c3 {
+                border: 1px solid gray;
+            }
+        }
+    </style>
+  </head>
+  <body onload="adaptBackground();">
+    <div id="main-container">
+    <div id="page-header" style="background:#005080;">
+      <table><tr>
+        <td style="vertical-align:middle;">
+          <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
+            &nbsp;CCRUNCHER
+          </a>
+        </td>
+        <td>
+          <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
+        </td>
+        <td style="vertical-align:middle; font-size:14pt; color:white; width:100%">
+          Open-Source Project for<br/>Credit Risk Modeling
+        </td>
+        <td style="vertical-align: middle;">
+          <a href="index.html">
+            <img src="logo.png" alt="logo" height="80" style="margin-right:10px; border:0"/>
+          </a>
+        </td>
+      </tr>
+      </table>
+      </div>
+      <div id="navbar">
+        <ul>
+          <li>
+            <a href="index.html">Home</a>
+          </li>
+          <li><a href="#">About</a>
+            <ul>
+              <li><a href="faq.html">F.A.Q.</a></li>
+              <li><a href="features.html">Features</a></li>
+              <li><a href="screenshots.html">Screenshots</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Let's work!</a>
+            <ul>
+              <li><a href="http://sourceforge.net/projects/ccruncher/">Download&nbsp;<img src="external.png" alt="" style="border:none;"/></a></li>
+              <li><a href="gstarted.html">Getting Started</a></li>
+            </ul>
+          </li>
+          <li><a class="active" href="#">Documentation</a>
+            <ul>
+              <li><a href="ccruncher.pdf">Technical Doc.&nbsp;<img src="pdf.png" width="14" alt="" style="border:none;"/></a></li>
+              <li><a href="ifileref.html">Input File</a></li>
+              <li><a href="ofileref.html">Output Files</a></li>
+              <li><a href="dissemination.html">Dissemination</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Development</a>
+            <ul>
+              <li><a href="dependencies.html">Dependencies</a></li>
+              <li><a href="http://www.ccruncher.net/svn/">Repository (svn)</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+    <h1>Output Files</h1>
+    <p>
+      CCruncher leaves the output files in the directory indicated by the 
+      '-o' argument in ccruncher-cmd, or the directory indicated by the 
+      'Output' textbox in the ccruncher-gui. CCruncher output files are:
+    </p>
+    <table cellpadding="3">
+      <tr class="a">
+        <th>File</th>
+        <th>Content</th>
+        <th>Format</th>
+        <th>Number</th>
+      </tr>
+      <tr class="b">
+        <td class="c1"><a href="#segmentation">segmentation.csv</a></td>
+        <td class="c2">
+          Portfolio or sub-portfolios simulated losses.
+        </td>
+        <td class="c3">CSV</td>
+        <td class="c4">1 or more</td>
+      </tr>
+      <tr class="a">
+        <td class="c1"><a href="#indexes">indexes.csv</a></td>
+        <td class="c2">
+          Additional info about simulated values.
+        </td>
+        <td class="c3">CSV</td>
+        <td class="c4">0 or 1</td>
+      </tr>
+      <tr class="b">
+        <td class="c1"><a href="#trace">ccruncher.out</a></td>
+        <td class="c2">
+          Execution trace.
+        </td>
+        <td class="c3">TXT</td>
+        <td class="c4">1 (gui),<br/>0 (cmd)</td>
+      </tr>
+    </table>
+    <p>
+      CCruncher uses the <a href="http://en.wikipedia.org/wiki/Comma-separated_values">CSV file format</a>
+      to save tabular data. This is a widely accepted data format supported by
+      all data analysis tool (SPSS, R, Excel, Matlab, Mathematica, etc.).
+      CCruncher CSV files satisfy the following considerations:
+    </p>
+    <ul>
+      <li>
+        Lines starting with hash (#) are comments.
+      </li>
+      <li>
+        The field separator is the comma (,).
+      </li>
+      <li>
+        Each record contains the same number of comma-separated fields.
+      </li>
+      <li>
+        First non-commented line contains the names of fields. Names are surrounded by double quotes (").
+      </li>
+      <li>
+        Amounts are rounded and represented with 2 decimal places, using the period (.) 
+        as decimal point separator and without thousand separators.
+      </li>
+    </ul>
+
+<!-- ==================================================== -->
+<!--    segmentation                                      -->
+<!-- ==================================================== -->
+    <a name="segmentation"></a>
+    <h2>segmentation.csv</h2>
+    <pre>
+
+#=============================================================================
+# file generated by ccruncher-2.4.0
+# input file: samples/test05.xml
+# exposure: 167.00, 166.00, 167.00, 167.00, 167.00, 166.00
+#=============================================================================
+"S1-A", "S1-B", "S1-C", "S2-A", "S2-B", "S2-C"
+44.00, 46.00, 75.00, 32.00, 39.00, 69.00
+9.00, 30.00, 41.00, 14.00, 36.00, 35.00
+0.00, 0.00, 3.00, 1.00, 0.00, 3.00
+11.00, 21.00, 57.00, 13.00, 28.00, 67.00
+11.00, 14.00, 37.00, 5.00, 8.00, 16.00
+5.00, 17.00, 32.00, 13.00, 25.00, 57.00
+12.00, 19.00, 29.00, 6.00, 9.00, 24.00
+13.00, 31.00, 39.00, 18.00, 55.00, 71.00
+1.00, 3.00, 10.00, 2.00, 2.00, 7.00
+21.00, 30.00, 65.00, 15.00, 37.00, 77.00
+0.00, 5.00, 8.00, 5.00, 11.00, 29.00
+...
+24.00, 57.00, 76.00, 14.00, 23.00, 40.00
+    </pre>
+    <p>
+      These files contain the simulated losses of the indicated segmentation
+      disaggregated by its segments (aka. sub-portfolios). There are so many 
+      files of this type as segmentations defined in the input file.
+      The segmentation name lead to the corresponding file name (e.g., 
+      portfolio.csv and sector-ratings.csv <code>samples/test05.xml</code>), 
+      and the segment names leads to the corresponding column names. 
+      Each row is a simulation performed by CCruncher, and each value is the
+      loss of the corresponding segment.
+    </p>
+    <p>
+      When there is more than one segment, the sum of row losses can 
+      differ slightly from the corresponding whole portfolio loss
+      (located in a different file) due to the rounding errors (numeric 
+      values are rounded to 2 decimal places).
+    </p>
+
+<!-- ==================================================== -->
+<!--    indexes                                           -->
+<!-- ==================================================== -->
+    <a name="indexes"></a>
+    <h2>indexes.csv</h2>
+    <pre>
+
+"thread", "lhs", "antithetic"
+1, 1, 0
+1, 1, 0
+2, 1, 1
+2, 1, 0
+1, 1, 1
+2, 1, 0
+...
+1, 21, 0
+1, 21, 1
+...
+2, 51, 0
+2, 51, 1
+    </pre>
+    <p>
+      This file contains additional info about simulated values. Its creation
+      is managed by the '-i' argument in ccruncher-cmd or ccruncher-gui programs.
+      We recommend disabling this option and not generate this file unless you 
+      are checking the program or trying to apply some variance reduction 
+      technique.
+    </p>
+    <p>
+      Each row contains information about the corresponding simulation.
+      The first column (thread) contains the thread index (starting at 1) that 
+      performed the simulation. The second column contains the Latin Hypercube 
+      Sampling batch (where each batch consists of <i>lhs sample size</i> 
+      simulations). Finally, the third column (antithetic) indicates (0=false, 
+      1=true) if this simulation is an antithetic variate or not.
+    </p>
+
+<!-- ==================================================== -->
+<!--    trace                                             -->
+<!-- ==================================================== -->
+    <a name="trace"></a>
+    <h2>ccruncher.out</h2>
+    <pre>
+
+        ccruncher is Copyright (C) 2004-2014 Gerard Torrent and licensed        
+         under the GNU General Public License, version 2. More info at          
+                            http://www.ccruncher.net                            
+
+general information ************************************************************
+  ccruncher version                                                2.4.0 (R1206)
+  start time (dd/MM/yyyy hh:mm:ss)                           22/02/2014 07:15:08
+
+reading input file *************************************************************
+  file name                                                 [samples/test05.xml]
+  file size                                                            274.69 KB
+  define (user defined)                                                 NU=12.54
+  define (user defined)                                                 R12=0.21
+  define (user defined)                                                  W1=0.29
+  define (user defined)                                                  W2=0.48
+  define (input file)                                             numsims=200000
+  define (input file)                                            copula=t(12.54)
+  define (input file)                                            antithetic=true
+  define (input file)                                                   lhs=1000
+  define (input file)                                                     seed=0
+  file checksum (adler32)                                             1900187585
+  elapsed time parsing data                                         00:00:00.028
+
+initialization procedure *******************************************************
+  setting parameters -----------------------------------------------------------
+    initial date                                                      01/01/2013
+    end date                                                          01/01/2014
+    number of ratings                                                          4
+    number of factors                                                          2
+    copula type                                                         t(12.54)
+    transition matrix period (months)                                         12
+    transition matrix regularization error (1M)                                0
+    default probability functions                                       computed
+    default probability splines (linear, cubic, none)                       cccn
+  setting obligors to simulate -------------------------------------------------
+    number of obligors                                                      1000
+    number of simulated obligors                                            1000
+  setting assets to simulate ---------------------------------------------------
+    number of assets                                                        1000
+    number of simulated assets                                              1000
+    number of simulated data items                                          1000
+  initializing aggregators -----------------------------------------------------
+    output data directory                                                 [data]
+    segmentation            [/home/gerard/projects/ccruncher/data/portfolio.csv]
+    segmentation        [/home/gerard/projects/ccruncher/data/sector-rating.csv]
+
+Monte Carlo ********************************************************************
+  configuration ----------------------------------------------------------------
+    seed used to initialize randomizer                          1393049708265257
+    maximum execution time (seconds)                                       86400
+    maximum number of iterations                                          200000
+    antithetic mode                                                         true
+    latin hypercube sampling                                                1000
+    block size                                                               128
+    number of threads                                                          4
+  running Monte Carlo [1000 simulations per hash] ------------------------------
+    ............................................................................
+    ............................................................................
+    ................................................
+    simulations realized                                                  200000
+    elapsed time creating random numbers                            00:00:01.045
+    elapsed time simulating losses                                  00:00:01.581
+    elapsed time writing data to disk                               00:00:00.273
+    total simulation time                                           00:00:02.930
+
+general information ************************************************************
+  end time (dd/MM/yyyy hh:mm:ss)                             22/02/2014 07:15:11
+  total elapsed time                                                00:00:03.020
+    </pre>
+    <p>
+      ccruncher-gui program saves the execution trace in the ccruncher.out file.
+      This file, together with the input file, allows interpreting the output 
+      files contents.
+      The command line program (ccruncher-cmd) doesn't save its trace because it is
+      designed with the Unix philosophy in mind (<i>Write programs that do one thing 
+      and do it well. Write programs to work together. Write programs to handle text 
+      streams, because that is a universal interface.</i>). If you want to preserve 
+      the trace, you can redirect the program output using the 
+      <a href="http://ss64.com/bash/tee.html">tee</a> utility.
+    </p>
+
+    <div id="page-footer">
+      <span id="copyright" >
+        Copyright &copy; 2004-2014 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+      </span>
+      <span id="modified">
+        Last modified: 22-Feb-2014
+      </span>
+    </div>
+
+  </div>
+  </body>
+</html>

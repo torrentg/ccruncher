@@ -1,0 +1,21 @@
+
+CCRUNCHER TODO
+==============
+
+Current works
+-------------------
+
+Future works
+-------------------
+  * technical features
+     - move to Qt5
+     - input file in binary format
+     - force equal number of sims by thread
+     - PD functions can mix transition matrix and dprobs
+  * improve model
+     - add grouped t-copula support
+     - allow evaluation in multiple time horizons
+     - consider that an obligor could belong to a weighted sum of factors
+  * improve functional tests
+     - examples based on real data
+ 

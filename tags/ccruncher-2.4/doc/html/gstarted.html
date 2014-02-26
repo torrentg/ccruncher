@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+  <head>
+    <title>CCruncher - Getting started</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="ccruncher.js" type="text/javascript"></script>
+    <style type="text/css">
+        li {
+          text-align: justify;
+        }
+    </style>
+  </head>
+
+  <body onload="adaptBackground();">
+    <div id="main-container">
+    <div id="page-header" style="background:#005080;">
+      <table><tr>
+        <td style="vertical-align:middle;">
+          <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
+            &nbsp;CCRUNCHER
+          </a>
+        </td>
+        <td>
+          <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
+        </td>
+        <td style="vertical-align:middle; font-size:14pt; color:white; width:100%">
+          Open-Source Project for<br/>Credit Risk Modeling
+        </td>
+        <td style="vertical-align: middle;">
+          <a href="index.html">
+            <img src="logo.png" alt="logo" height="80" style="margin-right:10px; border:0"/>
+          </a>
+        </td>
+      </tr>
+      </table>
+      </div>
+      <div id="navbar">
+        <ul>
+          <li>
+            <a href="index.html">Home</a>
+          </li>
+          <li><a href="#">About</a>
+            <ul>
+              <li><a href="faq.html">F.A.Q.</a></li>
+              <li><a href="features.html">Features</a></li>
+              <li><a href="screenshots.html">Screenshots</a></li>
+            </ul>
+          </li>
+          <li><a class="active" href="#">Let's work!</a>
+            <ul>
+              <li><a href="http://sourceforge.net/projects/ccruncher/">Download&nbsp;<img src="external.png" alt="" style="border:none;"/></a></li>
+              <li><a href="gstarted.html">Getting Started</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Documentation</a>
+            <ul>
+              <li><a href="ccruncher.pdf">Technical Doc.&nbsp;<img src="pdf.png" width="14" alt="" style="border:none;"/></a></li>
+              <li><a href="ifileref.html">Input File</a></li>
+              <li><a href="ofileref.html">Output Files</a></li>
+              <li><a href="dissemination.html">Dissemination</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Development</a>
+            <ul>
+              <li><a href="dependencies.html">Dependencies</a></li>
+              <li><a href="http://www.ccruncher.net/svn/">Repository (svn)</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+    <h1>Getting Started</h1>
+
+    <ol>
+      <li><a href="#first_steps">First steps</a></li>
+      <li><a href="#analysis">Risk analysis</a></li>
+      <li><a href="#macros">Using macros</a></li>
+      <li><a href="#command_line">Using command line</a></li>
+      <li><a href="#flying_solo">Flying solo</a></li>
+    </ol>
+
+<!-- ==================================================== -->
+<!--    first steps                                       -->
+<!-- ==================================================== -->
+    <a name="first_steps"></a>
+    <h2>1. First steps</h2>
+    <p>
+      Follow these steps to install CCruncher and perform your first simulation.
+    </p>
+    <ol>
+      <li>
+        Download your binary package from 
+        <a href="http://sourceforge.net/projects/ccruncher/">SourceForge</a>&nbsp;<img src="external.png" alt="" style="border:none;"/>.
+      </li>
+      <li>
+        Unpack it in a folder. To uninstall CCruncher simply delete the folder where it is located.
+      </li>
+      <li>
+        Take a time to inspect the directory contents (<code>bin, data, doc, samples</code>).
+      </li>
+      <li>
+        Execute CCruncher double-clicking <code>bin/ccruncher-gui</code>.
+      </li>
+      <li>
+        Open file <code>samples/test05.xml</code>.
+      </li>
+      <li>
+        Click on the 'Monte Carlo' button.
+      </li>
+      <li>
+        Set <code>data/</code> as output directory.
+      </li>
+      <li>
+        Click the 'Run' button, or the 'Run' icon, to execute the Monte Carlo simulation.
+      </li>
+      <li>
+        Read the execution trace.
+      </li>
+      <li>
+        Open a file browser and review the content of the <code>data/</code> directory.
+        Observe the output files named <code>portfolio.csv</code> and 
+        <code>sector-rating.csv</code>. Open it and inspect its content. 
+        The values are the simulated portfolio losses. The output file format
+        is described <a href="ofileref.html#segmentation">here</a>.
+      </li>
+    </ol>
+
+<!-- ==================================================== -->
+<!--    analysis                                          -->
+<!-- ==================================================== -->
+    <a name="analysis"></a>
+    <h2>2. Risk analysis</h2>
+    <p>
+      Output files contain the simulated portfolio and sub-portfolios 
+      losses. The <a href="ccruncher.pdf">technical document</a> explains 
+      how to use these simulated values to compute the Expected Loss (EL), 
+      Value at Risk (VaR), Expected Shortfall(ES), and how to disaggregate 
+      by sub-portfolios these risk measures. We encourage using your 
+      preferred data analysis tool (Excel, R, SAS, SPSS, etc.) to compute 
+      these values using the simulated losses. The following lines explain
+      how you can do the credit risk analysis using CCruncher:
+    </p>
+    <ol>
+      <li>
+        Open <code>sector-rating.csv</code> output data file. You can use 
+        the 'File > Open file' dialog, or click the output file link in the 
+        simulation trace, or click the 'Data analysis' icon.
+      </li>
+      <li>
+        CCruncher display the analysis tab. The top-right combobox 
+        indicates the analysis mode. There are two analysis modes:
+        'Segmentation' and 'Segments'.
+      </li>
+      <li>
+        Set the 'Segmentation' mode. In this mode, CCruncher displays
+        the risk disaggregation when there is more than a segment
+        defined. The pie chart values indicate the percentage of risk 
+        attributable to the given sub-portfolio (right-click or ctrl-C
+        to copy values to clipboard). The 'Results' section shows the 
+        whole portfolio risk measure.
+      </li>
+      <li>
+        Set the 'Segments' mode. In this mode, CCruncher performs 
+        the risk analysis of the indicated segment. If you are analyzing 
+        a segment/sub-portfolio distinct than the whole portfolio, remain 
+        that risk measures distinct than EL aren't additives. The curve plot 
+        displays the risk measure evolution depending on the number of samples
+        (right-click or ctrl-C to copy values to clipboard).
+      </li>
+    </ol>
+    
+<!-- ==================================================== -->
+<!--    macros                                            -->
+<!-- ==================================================== -->
+    <a name="macros"></a>
+    <h2>3. Using macros</h2>
+    <p>
+      The macros mechanism allows modifying the input file in easy way.
+      This is useful if you desire to evaluate the same input file modifying slightly
+      a parameter each time.
+    </p>
+    <ol>
+      <li>
+        Open file <code>samples/test05.xml</code> in the xml editor tab.
+      </li>
+      <li>
+        Create a new define adding the following line into the <code>&lt;defines&gt;</code> tag:<br/>
+        <code>&nbsp;&nbsp;&nbsp;&nbsp;&lt;define name="numsecs" value="20" /&gt;</code>
+      </li>
+      <li>
+        Go to the <code>maxseconds</code> parameter and replace its
+        value by <code>$numsecs</code>.
+      </li>
+      <li>
+        Save the changes made in input file.
+      </li>
+      <li>
+        Click on the 'Monte Carlo' button. 
+      </li>
+      <li>
+        Set <code>data/</code> as output directory.
+      </li>
+      <li>
+        Click on the 'Set ...' defines button.
+      </li>
+      <li>
+        Set <code>numsims</code> value to <i>0</i> (unbounded number of simulations).
+      </li>
+      <li>
+        Close defines dialog pressing the 'Ok' button.
+      </li>
+      <li>
+        Click the 'Run' button, or the 'Run' icon, to execute the Monte Carlo simulation.
+      </li>
+      <li>
+        Check that the simulation has elapsed ~20 seconds before to stop.
+      </li>
+    </ol>
+    
+<!-- ==================================================== -->
+<!--    command line                                      -->
+<!-- ==================================================== -->
+    <a name="command_line"></a>
+    <h2>4. Using command line</h2>
+    <p>
+      The command line version of CCruncher is the proper way to perform
+      multiple simulations, or to integrate CCruncher in your management
+      system. Below we show the available options:
+    </p>
+    <pre>
+
+<b>> bin/ccruncher-cmd -h</b>
+
+Usage: ccruncher-cmd [OPTION]... -o DIRECTORY [FILE]
+
+Simule the loss distribution of the credit portfolio described in the xml
+input FILE using the Monte Carlo method. FILE can be gziped. If no one is
+given, then STDIN is considered. The input file format description and
+details of the simulation procedure can be found at http://www.ccruncher.net.
+
+Mandatory arguments to long options are mandatory for short options too.
+
+  -D, --define=KEY=VAL    replace '$KEY' strings by 'VAL' in input file
+  -a, --append            output data is appended to existing files
+  -w, --overwrite         existing output files are overwritten
+  -o, --output=DIRECTORY  directory where output files will be placed
+  -i, --indexes           create file indexes.csv with info about simulation
+      --nice=NICEVAL      set process priority to NICEVAL (see nice command)
+      --threads=NTHREADS  number of threads to use (default=number of cores)
+      --hash=HASHNUM      print '.' for each HASHNUM simulations (default=1000)
+      --info              show build parameters and exit
+  -h, --help              show this message and exit
+      --version           show version and exit
+
+Exit status:
+  0   finished without errors
+  1   finished with errors
+
+Examples:
+  basic example      ccruncher-cmd -o data/ samples/test04.xml
+  forcing overwrite  ccruncher-cmd -w -o data/ samples/test100.xml
+  redefining values  ccruncher-cmd -w -o data/ -D ndf=8 samples/sample.xml
+
+Report bugs to gtorrent@ccruncher.net. Please include the output of
+'ccruncher-cmd --info' in the body of your report and attach the input
+file if at all possible.
+    </pre>
+    <p>
+      The following example simulates the input file <code>samples/test05.xml</code> 
+      redefining macros NU, W1, W2, R12, placing output files in <code>data/</code> 
+      directory and overwriting output files if they exist.
+    </p>
+    <pre>
+
+<b>> bin/ccruncher-cmd -w -o data -DNU=12.54 -DW1=0.29 -DW2=0.48 -DR12=0.21 samples/test05.xml</b>
+  </pre>
+  <p>
+    Command line execution outputs a 80-colum width 
+    <a href="ofileref.html#trace">trace</a> cointaining valuable info. 
+    We recommend to save this trace becasue it contains the file name and its 
+    checksum, the macros values, the RNG seed, and a description of the problem 
+    that is simulated.
+  </p>
+
+<!-- ==================================================== -->
+<!--    flying solo                                       -->
+<!-- ==================================================== -->
+    <a name="flying_solo"></a>
+    <h2>5. Flying solo</h2>
+    <p>
+      We have revised the main features. 
+      Some final words before you move by yourself:
+    </p>
+    <ul>
+      <li>
+        Read carefully the <a href="ccruncher.pdf">technical document</a>.
+      </li>
+      <li>
+        Read carefully the <a href="ifileref.html">input file documentation</a>.
+      </li>
+      <li>
+        Create your own input files using some file from samples directory as template.
+      </li>
+      <li>
+        Do not hesitate to send your questions, suggestions, improvements, bugs, 
+        etc. to the <a href="mailto:gtorrent@ccruncher.net">CCruncher team</a>.
+      </li>
+    </ul>
+
+    <div id="page-footer">
+      <span id="copyright" >
+        Copyright &copy; 2004-2014 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+      </span>
+      <span id="modified">
+        Last modified: 21-Feb-2014
+      </span>
+    </div>
+
+  </div>
+  </body>
+</html>
