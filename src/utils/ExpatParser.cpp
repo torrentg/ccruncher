@@ -202,10 +202,9 @@ void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, b
   assert(buf != NULL);
   assert(buffer_size > 0);
 
-  // parsing doc
   try
   {
-    unsigned len=0;
+    int len=0;
     int done;
 
     do
@@ -216,23 +215,26 @@ void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, b
 
       if (file != NULL) {
         len = gzread(file, buf, buffer_size);
-        done = (len < buffer_size);
+        done = (len < (int)buffer_size);
       }
       else {
         len = buffer_size;
         done = true;
       }
 
-      checksum = adler32(checksum, (Bytef*)(buf), len);
-
-      if (XML_Parse(xmlparser, buf, len, done) == XML_STATUS_ERROR)
+      if (len > 0)
       {
-        char aux[512];
-        snprintf(aux, 512, "%s at line %d column %d",
+        checksum = adler32(checksum, (Bytef*)(buf), len);
+
+        if (XML_Parse(xmlparser, buf, len, done) == XML_STATUS_ERROR)
+        {
+          char aux[512];
+          snprintf(aux, 512, "%s at line %d column %d",
                      XML_ErrorString(XML_GetErrorCode(xmlparser)),
                      (int) XML_GetCurrentLineNumber(xmlparser),
                      (int) XML_GetCurrentColumnNumber(xmlparser));
-        throw Exception(string(aux));
+          throw Exception(string(aux));
+        }
       }
     } while(!done);
   }
