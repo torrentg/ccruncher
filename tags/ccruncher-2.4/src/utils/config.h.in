@@ -159,6 +159,6 @@
 
 
 /* subversion identifier */
-#define SVN_VERSION "R1206"
+#define SVN_VERSION "R1212"
 
 

@@ -28,6 +28,11 @@ pdf: ccruncher.tex structure.tex bibliography.bib
 	makeglossaries ccruncher
 	pdflatex -halt-on-error -draftmode ccruncher
 	pdflatex -halt-on-error ccruncher
+	# embed all fonts
+	gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -dEmbedAllFonts=true -sOutputFile=ccruncher-emb.pdf -f ccruncher.pdf
+	# restore title in pdf metadata (gs bug?)
+	exiftool -Title="Quantifying Portfolio Credit Risk Using CCruncher" ccruncher-emb.pdf
+	mv ccruncher-emb.pdf ccruncher.pdf
 
 rtf: ccruncher.tex bibliography.bib
 	# remove existent files
@@ -87,7 +92,7 @@ clean:
 # > yum install "tex(bbm.sty)"
 # > miktex package manager -> mpm.exe
 #
-# Additional syntax checking
+# Additional syntax checking:
 # > set 'draft' in \documentclass properties
 # > chktex ccruncher.tex
 #
@@ -96,4 +101,7 @@ clean:
 # > sed -n -e "s/@[[:alnum:]]*{\([^,]*\),/\\1/p" bibliography.bib > check-bibentries.tmp2
 # > grep -f check-bibentries.tmp1 -v check-bibentries.tmp2
 #
-
+# Other useful commands:
+# > pdfinfo
+# > pdffonts
+#
