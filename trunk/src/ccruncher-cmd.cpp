@@ -28,6 +28,8 @@
 #include <iostream>
 #include <csignal>
 #include <map>
+#include <cstdlib>
+#include <exception>
 #include <cassert>
 #include <getopt.h>
 #include <gsl/gsl_errno.h>
@@ -69,7 +71,18 @@ bool stop = false;
 void catchsignal(int)
 {
   stop = true;
-} 
+}
+
+/**************************************************************************//**
+ * @details Catch uncaught exceptions thrown by program.
+ */
+void exception_handler()
+{
+  cerr << endl <<
+      "unexpected error. please report this bug sending input file, \n"
+      "ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
+  exit(1);
+}
 
 /**************************************************************************//**
  * @brief Error handler for the GSL library.
@@ -110,6 +123,9 @@ int main(int argc, char *argv[])
       { "info",         0,  nullptr,  305 },
       { nullptr,        0,  nullptr,   0  }
   };
+
+  // uncaught exceptions manager
+  set_terminate(exception_handler);
 
   // parsing options
   while (1)
@@ -279,6 +295,8 @@ int main(int argc, char *argv[])
 
     // running simulation
     run();
+
+    return 0;
   }
   catch(std::exception &e)
   {
@@ -287,14 +305,9 @@ int main(int argc, char *argv[])
   }
   catch(...)
   {
-    cerr << endl <<
-        "uncatched exception. please report this bug sending input file, \n"
-        "ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
+    exception_handler();
     return 1;
   }
-
-  // exit function
-  return 0;
 }
 
 /**************************************************************************//**

@@ -36,7 +36,7 @@ class ExceptionTest : public TestFixture<ExceptionTest>
     void function1();
     void function2() throw(ccruncher::Exception, std::exception);
     void function3() throw(ccruncher::Exception);
-    void function4() throw();
+    void function4() noexcept;
 
     void test1();
 

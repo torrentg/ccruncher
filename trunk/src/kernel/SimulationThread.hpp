@@ -176,7 +176,7 @@ class SimulationThread : public Thread
     void simuleLatentVars();
     //! Simule obligor
     void simuleObligorLoss(const SimulatedObligor &, Date, const SimulatedAsset *,
-                           const unsigned short *, double *) const throw();
+                           const unsigned short *, double *) const noexcept;
     //! Chi-square random generation
     void rchisq();
     //! Factors random generation
