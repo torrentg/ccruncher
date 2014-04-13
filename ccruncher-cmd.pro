@@ -1,7 +1,7 @@
 QT -= core gui
 TARGET = ccruncher-cmd
 CONFIG -= qt
-CONFIG += console thread
+CONFIG += c++11 console thread
 
 HEADERS += \
     src/params/Correlations.hpp \
@@ -109,6 +109,7 @@ CONFIG(release, debug|release) {
   DEFINES += NDEBUG
 }
 
+QMAKE_CXXFLAGS += -std=c++11 -Wall -Wextra -Wshadow -Wpedantic
 QMAKE_CXXFLAGS_RELEASE -= -g
 
 OBJECTS_DIR = $$PWD/build

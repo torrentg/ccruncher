@@ -111,7 +111,7 @@ fi
 dnl -------------------------------------------------------------
 dnl setting compiler options
 dnl -------------------------------------------------------------
-CXXFLAGS="$CXXFLAGS -Wall -Wextra -Wshadow -pthread"
+CXXFLAGS="$CXXFLAGS -std=c++11 -Wall -Wextra -Wshadow -Wpedantic -pthread"
 AC_SUBST(CXXFLAGS)
 
 dnl -------------------------------------------------------------

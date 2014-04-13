@@ -1,7 +1,7 @@
 QT += core gui network
 TARGET = ccruncher-gui
 TEMPLATE = app
-CONFIG += qwt
+CONFIG += c++11 qwt
 
 HEADERS += \
     src/gui/Application.hpp \
@@ -157,6 +157,7 @@ CONFIG(release, debug|release) {
   DEFINES += NDEBUG
 }
 
+QMAKE_CXXFLAGS += -std=c++11 -Wall -Wextra -Wpedantic
 QMAKE_CXXFLAGS_RELEASE -= -g
 
 UI_DIR = $$PWD/build

@@ -2,16 +2,20 @@
 CCRUNCHER CHANGELOG
 ===================
 
+version 2.5.0 (???. 2014)
+--------------------------
+  * code moved from C++98 to C++11
+
 version 2.4.1 (Mar. 2014)
 --------------------------
-  * Embeded fonts in the Technical Document
+  * embeded fonts in the Technical Document
   * repaired 2 html broken links
 
 version 2.4.0 (Feb. 2014)
 --------------------------
-  * Reorganized content in Technical document
-  * Added risk sensitivity section in Technical document
-  * Added portfolio optimization section in Technical document
+  * reorganized content in Technical document
+  * added risk sensitivity section in Technical document
+  * added portfolio optimization section in Technical document
   * removed 'OnlyActiveObligors' parameter
   * code commented using doxygen
   * added averaged exposure computation

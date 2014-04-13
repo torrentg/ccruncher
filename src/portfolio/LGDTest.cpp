@@ -38,23 +38,23 @@ void ccruncher_test::LGDTest::test1()
   {
     LGD r0 = LGD(LGD::Fixed,NAN);
     ASSERT(r0.getType() == LGD::Fixed);
-    ASSERT(isnan(r0.getValue1()));
-    ASSERT(isnan(r0.getValue2()));
+    ASSERT(std::isnan(r0.getValue1()));
+    ASSERT(std::isnan(r0.getValue2()));
   
     LGD r1;
     ASSERT(r1.getType() == LGD::Fixed);
-    ASSERT(isnan(r1.getValue1()));
-    ASSERT(isnan(r1.getValue2()));
+    ASSERT(std::isnan(r1.getValue1()));
+    ASSERT(std::isnan(r1.getValue2()));
   
     LGD r2(LGD::Fixed,1.0);
     ASSERT(r2.getType() == LGD::Fixed);
     ASSERT_EQUALS_EPSILON(r2.getValue1(), 1.0, EPSILON);
-    ASSERT(isnan(r2.getValue2()));
+    ASSERT(std::isnan(r2.getValue2()));
 
     LGD r3("0.25");
     ASSERT(r3.getType() == LGD::Fixed);
     ASSERT_EQUALS_EPSILON(r3.getValue1(), 0.25, EPSILON);
-    ASSERT(isnan(r3.getValue2()));
+    ASSERT(std::isnan(r3.getValue2()));
   }
 
   // uniform distribution

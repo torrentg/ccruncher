@@ -112,7 +112,7 @@ void ccruncher::Correlations::insertCorrelation(const std::string &factor1,
   }
 
   // checking that value don't exist
-  if (!isnan(matrix[row][col]) || !isnan(matrix[col][row]))
+  if (!std::isnan(matrix[row][col]) || !std::isnan(matrix[col][row]))
   {
     string msg = "correlation[" + factor1 + "," + factor2 + "] redefined";
     throw Exception(msg);
@@ -169,7 +169,7 @@ void ccruncher::Correlations::validate() throw(Exception)
   {
     for (int j=0; j<size(); j++)
     {
-      if (isnan(matrix[i][j]))
+      if (std::isnan(matrix[i][j]))
       {
         throw Exception("correlation[" + factors.getName(i) +
             "," + factors.getName(j) + "] not defined");

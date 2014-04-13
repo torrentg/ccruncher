@@ -38,21 +38,21 @@ void ccruncher_test::EADTest::test1()
   {
     EAD r0 = EAD(EAD::Fixed,NAN);
     ASSERT(r0.getType() == EAD::Fixed);
-    ASSERT(isnan(r0.getValue1()));
-    ASSERT(isnan(r0.getValue2()));
-    ASSERT(isnan(r0.getExpected()));
+    ASSERT(std::isnan(r0.getValue1()));
+    ASSERT(std::isnan(r0.getValue2()));
+    ASSERT(std::isnan(r0.getExpected()));
 
     EAD r1;
     ASSERT(r1.getType() == EAD::Fixed);
-    ASSERT(isnan(r1.getValue1()));
-    ASSERT(isnan(r1.getValue2()));
-    ASSERT(isnan(r1.getExpected()));
+    ASSERT(std::isnan(r1.getValue1()));
+    ASSERT(std::isnan(r1.getValue2()));
+    ASSERT(std::isnan(r1.getExpected()));
 
     EAD r2(EAD::Fixed,1.0);
     ASSERT(r2.getType() == EAD::Fixed);
     ASSERT_EQUALS_EPSILON(r2.getValue1(), 1.0, EPSILON);
     ASSERT_EQUALS_EPSILON(r2.getExpected(), 1.0, EPSILON);
-    ASSERT(isnan(r2.getValue2()));
+    ASSERT(std::isnan(r2.getValue2()));
 
     EAD r3("+1000.0");
     ASSERT(r3.getType() == EAD::Fixed);
@@ -91,19 +91,19 @@ void ccruncher_test::EADTest::test1()
     EAD r0 = EAD(EAD::Exponential, 800.0);
     ASSERT(r0.getType() == EAD::Exponential);
     ASSERT_EQUALS_EPSILON(r0.getValue1(), 800.0, EPSILON);
-    ASSERT(isnan(r0.getValue2()));
+    ASSERT(std::isnan(r0.getValue2()));
     ASSERT_EQUALS_EPSILON(r0.getExpected(), 800.0, EPSILON);
 
     EAD r1("exponential(800.0)");
     ASSERT(r1.getType() == EAD::Exponential);
     ASSERT_EQUALS_EPSILON(r1.getValue1(), 800.0, EPSILON);
-    ASSERT(isnan(r1.getValue2()));
+    ASSERT(std::isnan(r1.getValue2()));
     ASSERT_EQUALS_EPSILON(r1.getExpected(), 800.0, EPSILON);
 
     EAD r2("exponential(1000-200.0)");
     ASSERT(r2.getType() == EAD::Exponential);
     ASSERT_EQUALS_EPSILON(r2.getValue1(), 800.0, EPSILON);
-    ASSERT(isnan(r2.getValue2()));
+    ASSERT(std::isnan(r2.getValue2()));
     ASSERT_EQUALS_EPSILON(r2.getExpected(), 800.0, EPSILON);
   }
 

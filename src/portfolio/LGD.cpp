@@ -122,15 +122,15 @@ bool ccruncher::LGD::valid(Type t, double a, double b)
   switch(t)
   {
     case Fixed:
-      if (a < 0.0 || a > 1.0 || isnan(a)) return false;
+      if (a < 0.0 || a > 1.0 || std::isnan(a)) return false;
       else return true;
 
     case Beta:
-      if (a <= 0.0 || b <= 0.0 || isnan(a) || isnan(b)) return false;
+      if (a <= 0.0 || b <= 0.0 || std::isnan(a) || std::isnan(b)) return false;
       else return true;
 
     case Uniform:
-      if (a < 0.0 || 1.0 < b || b <= a || isnan(a) || isnan(b)) return false;
+      if (a < 0.0 || 1.0 < b || b <= a || std::isnan(a) || std::isnan(b)) return false;
       else return true;
 
     default:
@@ -147,7 +147,7 @@ bool ccruncher::LGD::valid(Type t, double a, double b)
  */
 void ccruncher::LGD::init(Type t, double a, double b) throw(Exception)
 {
-  if (t != Fixed || !isnan(a))
+  if (t != Fixed || !std::isnan(a))
   {
     if (!valid(t, a, b)) throw Exception("invalid lgd");
   }
