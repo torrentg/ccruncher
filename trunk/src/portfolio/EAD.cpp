@@ -134,27 +134,27 @@ bool ccruncher::EAD::valid(Type t, double a, double b)
   switch(t)
   {
     case Fixed:
-      if (isnan(a) || a < 0.0) return false;
+      if (std::isnan(a) || a < 0.0) return false;
       else return true;
 
     case Lognormal:
-      if (isnan(a) || isnan(b) || a < 0.0 || b <= 0.0) return false;
+      if (std::isnan(a) || std::isnan(b) || a < 0.0 || b <= 0.0) return false;
       else return true;
 
     case Exponential:
-      if (isnan(a) || a <= 0.0) return false;
+      if (std::isnan(a) || a <= 0.0) return false;
       else return true;
 
     case Uniform:
-      if (isnan(a) || isnan(b) || a < 0.0 || b <= a) return false;
+      if (std::isnan(a) || std::isnan(b) || a < 0.0 || b <= a) return false;
       else return true;
 
     case Gamma:
-      if (isnan(a) || isnan(b) || a <= 0.0 || b <= 0.0) return false;
+      if (std::isnan(a) || std::isnan(b) || a <= 0.0 || b <= 0.0) return false;
       else return true;
 
     case Normal:
-      if (isnan(a) || isnan(b) || a <= 0.0 || b <= 0.0) return false;
+      if (std::isnan(a) || std::isnan(b) || a <= 0.0 || b <= 0.0) return false;
       else return true;
 
     default:
@@ -171,7 +171,7 @@ bool ccruncher::EAD::valid(Type t, double a, double b)
  */
 void ccruncher::EAD::init(Type t, double a, double b) throw(Exception)
 {
-  if (t != Fixed || !isnan(a))
+  if (t != Fixed || !std::isnan(a))
   {
     if (!valid(t, a, b)) throw Exception("invalid ead");
   }

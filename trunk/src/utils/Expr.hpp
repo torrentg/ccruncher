@@ -47,6 +47,8 @@ class Expr
 
   private:
 
+    //! Generic function pointer (equivalent to void*)
+    typedef double (*ffunc0)();
     //! Function with 1 argument
     typedef double (*ffunc1)(double);
     //! Function with 2 arguments
@@ -94,8 +96,8 @@ class Expr
       const char id[5];
       //! Number of arguments. 0 is used for minus and plus signs functions.
       int args;
-      //! Pointer to function
-      void *ptr;
+      //! Generic function pointer
+      ffunc0 ptr;
     };
 
   public:
@@ -129,6 +131,7 @@ class Expr
         int n;
         double x;
         void *ptr;
+        ffunc0 pfunc;
       } dat;
     };
 
@@ -175,7 +178,7 @@ class Expr
     //! Check if is a value (number or constant or variable)
     static bool isValue(TokenType type);
     //! Returns function name by ptr value
-    static const char *getFunctionName(const void *ptr);
+    static const char *getFunctionName(const ffunc0 ptr);
     //! Constructor (public constructor not allowed)
     Expr() { }
 

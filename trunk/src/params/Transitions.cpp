@@ -131,7 +131,7 @@ void ccruncher::Transitions::insertTransition(const std::string &rating1,
   }
 
   // checking that it is not previously defined
-  if (!isnan(matrix[row][col]))
+  if (!std::isnan(matrix[row][col]))
   {
     string msg = "transition[" + rating1 + "," + rating2 + "] redefined";
     throw Exception(msg);
@@ -182,7 +182,7 @@ void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
     {
       for (size_t j=0; j<size(); j++)
       {
-        if (isnan(matrix[i][j]))
+        if (std::isnan(matrix[i][j]))
         {
           matrix[i][j] = 0.0;
         }

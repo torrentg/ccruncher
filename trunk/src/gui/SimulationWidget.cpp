@@ -171,11 +171,11 @@ void ccruncher_gui::SimulationWidget::selectDir()
  */
 void ccruncher_gui::SimulationWidget::setDir()
 {
-  if (ui->odir->text() == odir) {
+  if (ui->odir->text() == odirAux) {
     return;
   }
   else {
-    odir = ui->odir->text();
+    odirAux = ui->odir->text();
     updateControls();
     clearLog();
   }

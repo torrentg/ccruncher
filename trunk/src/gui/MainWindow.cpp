@@ -180,21 +180,21 @@ void ccruncher_gui::MainWindow::updateToolBars(QMdiSubWindow *window)
 /**************************************************************************/
 void ccruncher_gui::MainWindow::about()
 {
-  QMessageBox about;
+  QMessageBox msg;
 
-  about.setWindowTitle("About ...");
-  about.setText("<h3>CCruncher</h3>");
-  about.setInformativeText(
+  msg.setWindowTitle("About ...");
+  msg.setText("<h3>CCruncher</h3>");
+  msg.setInformativeText(
         "<p>"
         "version: " VERSION " [" SVN_VERSION "]<br/><br/>"
         "copyright: <a href='http://www.tatine.es'>Tatine</a><br/><br/>"
         "license: GPL<br/><br/>"
         "url: <a href='http://www.ccruncher.net'>www.ccruncher.net</a><br/><br/>"
         "</p>");
-  about.setStandardButtons(QMessageBox::Ok);
-  about.setDefaultButton(QMessageBox::Ok);
-  about.setIconPixmap(QPixmap(":/images/logo.png"));
-  about.exec();
+  msg.setStandardButtons(QMessageBox::Ok);
+  msg.setDefaultButton(QMessageBox::Ok);
+  msg.setIconPixmap(QPixmap(":/images/logo.png"));
+  msg.exec();
 }
 
 /**************************************************************************/

@@ -229,17 +229,20 @@ size_t ccruncher_gui::SimulationTask::getNumRunningSims()
 /**************************************************************************//**
  * @details Checks for conflicts related with previous executions before
  *          to proceed to simule.
- * @return true = checked, you can do the simulation, false = don't execute.
+ * @return true = you can do the simulation, false = don't execute.
  */
 bool ccruncher_gui::SimulationTask::checkConflicts()
 {
   fmode = 'w';
-  IData idata;
+  IData data;
 
   try {
-    idata.init(ifile, defines, NULL, false);
+    data.init(ifile, defines, NULL, false);
   }
   catch(...) {
+    // error in input file
+    // nothing to check
+    // errors will be reported by ccruncher execution
     return true;
   }
 
@@ -248,9 +251,9 @@ bool ccruncher_gui::SimulationTask::checkConflicts()
   vector<string> badfiles;
   size_t numlines = 0;
 
-  for(int i=0; i<idata.getSegmentations().size(); i++)
+  for(int i=0; i<data.getSegmentations().size(); i++)
   {
-    const Segmentation &segmentation = idata.getSegmentations().getSegmentation(i);
+    const Segmentation &segmentation = data.getSegmentations().getSegmentation(i);
     string filename = segmentation.getFilename(odir);
     if (!QFileInfo(QString(filename.c_str())).exists()) {
       nonfiles.push_back(filename);
@@ -290,7 +293,7 @@ bool ccruncher_gui::SimulationTask::checkConflicts()
       }
       goodfiles.push_back(filename);
     }
-    catch(std::exception &e)
+    catch(std::exception &)
     {
       badfiles.push_back(filename);
     }
@@ -312,7 +315,7 @@ bool ccruncher_gui::SimulationTask::checkConflicts()
 
     if (rc == 0) { // append
       fmode = 'a';
-      if (idata.getParams().rng_seed != 0) {
+      if (data.getParams().rng_seed != 0) {
         QMessageBox::StandardButton val = QMessageBox::warning(NULL, tr("CCruncher"),
            tr("You indicated a RNG seed distinct than 0.\n"
            "This can cause repeated values.\n"

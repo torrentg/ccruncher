@@ -85,8 +85,8 @@ class SimulationWidget : public MdiChildWidget
     QAction *actionStop;
     //! Action analyze data
     QAction *actionAnal;
-    //! Output directory
-    QString odir;
+    //! Output directory (used to identify changes)
+    QString odirAux;
     //! Log file output
     std::ofstream fout;
     //! User defined properties

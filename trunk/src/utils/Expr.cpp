@@ -96,19 +96,19 @@ const Expr::operador ccruncher::Expr::operators[] =
 
 const Expr::function ccruncher::Expr::functions[] =
 {
-  { "+", 0, (void*) &fplus },
-  { "-", 0, (void*) &fminus },
-  { "sqrt", 1, (void*) &fsqrt },
-  { "sin", 1, (void*) &fsin },
-  { "cos", 1, (void*) &fcos },
-  { "tan", 1, (void*) &ftan },
-  { "abs", 1, (void*) &ffabs },
-  { "exp", 1, (void*) &fexp },
-  { "log", 1, (void*) &flog },
-  { "min", 2, (void*) &fmin },
-  { "max", 2, (void*) &fmax },
-  { "pow", 2, (void*) &fpow },
-  { "if", 3, (void*) &fif }
+  { "+", 0, (ffunc0) &fplus },
+  { "-", 0, (ffunc0) &fminus },
+  { "sqrt", 1, (ffunc0) &fsqrt },
+  { "sin", 1, (ffunc0) &fsin },
+  { "cos", 1, (ffunc0) &fcos },
+  { "tan", 1, (ffunc0) &ftan },
+  { "abs", 1, (ffunc0) &ffabs },
+  { "exp", 1, (ffunc0) &fexp },
+  { "log", 1, (ffunc0) &flog },
+  { "min", 2, (ffunc0) &fmin },
+  { "max", 2, (ffunc0) &fmax },
+  { "pow", 2, (ffunc0) &fpow },
+  { "if", 3, (ffunc0) &fif }
 };
 
 #define NUMFUNCTIONS (sizeof(functions)/sizeof(function))
@@ -699,13 +699,13 @@ int ccruncher::Expr::link(std::vector<token> &tokens, const std::vector<variable
         if (functions[tokens[i].dat.n].args <= 1) tokens[i].type = FUNCTION1;
         else if (functions[tokens[i].dat.n].args == 2) tokens[i].type = FUNCTION2;
         else if (functions[tokens[i].dat.n].args == 3) tokens[i].type = FUNCTION3;
-        tokens[i].dat.ptr = functions[tokens[i].dat.n].ptr;
+        tokens[i].dat.pfunc = functions[tokens[i].dat.n].ptr;
         break;
       }
       case OPERATOR: {
         tokens[i].type = FUNCTION2;
         if (tokens[i].dat.n >= int(NUMOPERATORS)) throw Exception("operator not found");
-        else tokens[i].dat.ptr = (void*) operators[tokens[i].dat.n].func;
+        else tokens[i].dat.pfunc = (ffunc0) operators[tokens[i].dat.n].func;
         break;
       }
       case VARIABLE: {
@@ -793,18 +793,18 @@ double ccruncher::Expr::eval(const token *tokens, size_t maxsize) throw(Exceptio
         break;
       }
       case FUNCTION1: {
-        ffunc1 f = (ffunc1) tokens[i].dat.ptr;
+        ffunc1 f = (ffunc1) tokens[i].dat.pfunc;
         values[cont-1] = f(values[cont-1]);
         break;
       }
       case FUNCTION2: {
-        ffunc2 f = (ffunc2) tokens[i].dat.ptr;
+        ffunc2 f = (ffunc2) tokens[i].dat.pfunc;
         values[cont-2] = f(values[cont-2],values[cont-1]);
         cont--;
         break;
       }
       case FUNCTION3: {
-        ffunc3 f = (ffunc3) tokens[i].dat.ptr;
+        ffunc3 f = (ffunc3) tokens[i].dat.pfunc;
         values[cont-3] = f(values[cont-3],values[cont-2],values[cont-1]);
         cont -= 2;
         break;
@@ -825,7 +825,7 @@ double ccruncher::Expr::eval(const token *tokens, size_t maxsize) throw(Exceptio
  * @param[in] ptr Pointer to function (see Token#dat.ptr).
  * @return Function name/identifier. '???' if not found.
  */
-const char *ccruncher::Expr::getFunctionName(const void *ptr)
+const char *ccruncher::Expr::getFunctionName(const ffunc0 ptr)
 {
   for(int i=0; i<int(NUMFUNCTIONS); i++) {
     if (functions[i].ptr == ptr) {
@@ -834,7 +834,7 @@ const char *ccruncher::Expr::getFunctionName(const void *ptr)
   }
 
   for(int i=0; i<int(NUMOPERATORS); i++) {
-    if ((void*) operators[i].func == ptr) {
+    if (operators[i].func == (ffunc2)ptr) {
       return operators[i].id;
     }
   }
@@ -882,13 +882,13 @@ void ccruncher::Expr::debug(const std::vector<token> &tokens, const std::vector<
         cout << "END" << endl;
         break;
       case FUNCTION1:
-        cout << "FUNC1\t" << getFunctionName(tokens[i].dat.ptr) << endl;
+        cout << "FUNC1\t" << getFunctionName(tokens[i].dat.pfunc) << endl;
         break;
       case FUNCTION2:
-        cout << "FUNC2\t" << getFunctionName(tokens[i].dat.ptr) << endl;
+        cout << "FUNC2\t" << getFunctionName(tokens[i].dat.pfunc) << endl;
         break;
       case FUNCTION3:
-        cout << "FUNC3\t" << getFunctionName(tokens[i].dat.ptr) << endl;
+        cout << "FUNC3\t" << getFunctionName(tokens[i].dat.pfunc) << endl;
         break;
       case VALREF:
         cout << "VALREF\t";

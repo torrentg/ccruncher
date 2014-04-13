@@ -549,7 +549,7 @@ statval ccruncher_gui::AnalysisTask::expectedShortfall(double percentile,
   double stdev = sqrt((m*s2-s1*s1)/double(m*(m-1)));
   double std_err = stdev/sqrt(m);
   // if stdev near 0 (eg. 1e-307) can cause std_err be NaN
-  if (isnan(std_err)) std_err = 0.0;
+  if (std::isnan(std_err)) std_err = 0.0;
 
   return statval(n, mean, std_err);
 }

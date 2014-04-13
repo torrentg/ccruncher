@@ -136,7 +136,7 @@ void ccruncher::SimulationThread::run()
           }
         }
 
-        assert(!isnan(val));
+        assert(!std::isnan(val));
         int r = obligors[iobligor].irating;
         double days = inverses.evalue(r, val);
         Date ddate = time0 + (long)ceil(days);
@@ -244,7 +244,7 @@ void ccruncher::SimulationThread::rchisq()
       {
         double u = gsl_ran_flat(rng, double(n)/double(lhs_size), double(n+1)/double(lhs_size));
         lhs_values_s[n] = gsl_cdf_chisq_Pinv(u, ndf);
-        assert(!isnan(lhs_values_s[n]) && !isinf(lhs_values_s[n]));
+        assert(!std::isnan(lhs_values_s[n]) && !std::isinf(lhs_values_s[n]));
       }
       std::random_shuffle(lhs_values_s.begin(), lhs_values_s.end(), f_rand);
     }
@@ -332,7 +332,7 @@ void ccruncher::SimulationThread::rmvnorm()
       for(size_t n=0; n<lhs_size; n++) {
         for(size_t i=0; i<numfactors; i++) {
           LHS_VALUES_Z(n,i) *= floadings1[i];
-          assert(!isnan(LHS_VALUES_Z(n,i)) && !isinf(LHS_VALUES_Z(n,i)));
+          assert(!std::isnan(LHS_VALUES_Z(n,i)) && !std::isinf(LHS_VALUES_Z(n,i)));
         }
       }
     }
@@ -369,9 +369,9 @@ void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obli
       double lgd = values->lgd.getValue(rng);
 
       // non-lgd means that is inherited from obligor
-      if (isnan(lgd))
+      if (std::isnan(lgd))
       {
-        if (isnan(obligor_lgd))
+        if (std::isnan(obligor_lgd))
         {
           obligor_lgd = obligor.lgd.getValue(rng);
         }
