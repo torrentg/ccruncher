@@ -199,9 +199,9 @@ void ccruncher::Inverses::setSplines(const DefaultProbabilities &dprobs) throw(E
 
     do
     {
-      vector<int>::iterator pos1 = lower_bound(days.begin(), days.end(), dayko);
+      auto pos1 = lower_bound(days.begin(), days.end(), dayko);
       assert(days.begin() < pos1);
-      vector<int>::iterator pos2 = lower_bound(nodes.begin(), nodes.end(), dayko);
+      auto pos2 = lower_bound(nodes.begin(), nodes.end(), dayko);
       assert(nodes.begin() < pos2 && pos2 < nodes.end());
       if (dayko == *pos2) {
         // dayko is a remaining node

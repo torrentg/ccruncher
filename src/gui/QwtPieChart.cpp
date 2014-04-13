@@ -140,7 +140,7 @@ bool QwtPieChart::getInfo(QPoint point, string &name, double &val, double &pct) 
     int angle = acos(v.x()/len) * (5760.0/(2.0*M_PI));
     if (v.y() < 0) angle = 5760 - angle;
     angle = 5760 - angle;
-    vector<item>::const_iterator pos = lower_bound(items.begin(), items.end(), angle);
+    auto pos = lower_bound(items.begin(), items.end(), angle);
     name = pos->name;
     val = pos->value;
     pct = pos->value/sum;

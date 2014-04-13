@@ -185,7 +185,7 @@ const char* ccruncher::ExpatUserData::applyDefines(const char *str)
     while(isalnum(*p2) || *p2=='_') p2++;
     string key(p1, p2-p1);
 
-    map<string,string>::const_iterator it = defines.find(key);
+    auto it = defines.find(key);
     if (it == defines.end()) throw Exception("macro '" + key + "' not defined");
     ret = bufferAppend(it->second.c_str(), it->second.size());
 

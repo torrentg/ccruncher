@@ -403,7 +403,7 @@ statval ccruncher_gui::AnalysisTask::valueAtRisk(double percentile,
     return statval(n, *first, 0.0);
   }
 
-  vector<double>::iterator middle = first + m;
+  auto middle = first + m;
   // sort in such a way that [first,middle) contains the smallest elements
   partial_sort(first, middle, last);
 
@@ -532,12 +532,12 @@ statval ccruncher_gui::AnalysisTask::expectedShortfall(double percentile,
     return statval(n, *first, 0.0);
   }
 
-  vector<double>::iterator middle = first + m;
+  auto middle = first + m;
   // sort in such a way that [first,middle) contains the smallest elements
   partial_sort(first, middle, last);
 
   kahan sum1, sum2;
-  for(vector<double>::iterator it=first; it<middle; ++it) {
+  for(auto it=first; it<middle; ++it) {
     sum1.add(*it);
     sum2.add((*it)*(*it));
   }
