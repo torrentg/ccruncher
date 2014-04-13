@@ -76,7 +76,7 @@ class DefaultProbabilities : public ExpatHandlers
     //! Initial date
     Date date;
     //! Default probabilities for each rating
-    std::vector<std::vector<pd> > ddata;
+    std::vector<std::vector<pd>> ddata;
     //! List of ratings
     Ratings ratings;
     //! Index of the default rating
@@ -124,7 +124,7 @@ class DefaultProbabilities : public ExpatHandlers
     //! Constructor
     DefaultProbabilities(const Ratings &, const Date &d) throw(Exception);
     //! Constructor
-    DefaultProbabilities(const Ratings &, const Date &d, const std::vector<Date> &dates, const std::vector<std::vector<double> > &values) throw(Exception);
+    DefaultProbabilities(const Ratings &, const Date &d, const std::vector<Date> &dates, const std::vector<std::vector<double>> &values) throw(Exception);
     //! Destructor
     ~DefaultProbabilities();
     //! Assignment operator

@@ -48,7 +48,7 @@ class PowMatrix
     //! Matrix pow function
     static void pow(double **a, double x, int n, double **ret) throw(Exception);
     //! Matrix pow function
-    static void pow(const std::vector<std::vector<double> > &a, double x, std::vector<std::vector<double> > &ret) throw(Exception);
+    static void pow(const std::vector<std::vector<double>> &a, double x, std::vector<std::vector<double>> &ret) throw(Exception);
 
 };
 

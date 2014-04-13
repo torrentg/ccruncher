@@ -535,8 +535,8 @@ void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables,
 {
   assert(str != nullptr);
   token prevtok, curtok;
-  stack<token, vector<token> > pile;
-  stack<int, vector<int> > numargs;
+  stack<token, vector<token>> pile;
+  stack<int, vector<int>> numargs;
   const char *ptr = str;
   char *endptr;
 

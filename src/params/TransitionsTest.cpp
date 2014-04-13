@@ -362,7 +362,7 @@ void ccruncher_test::TransitionsTest::test5()
    0.00000,  0.00000,  0.00000,  0.00000,  0.00000,  0.00000,  0.00000,  1.00000
   };
 
-  vector<vector<double> > values(8, vector<double>(8));
+  vector<vector<double>> values(8, vector<double>(8));
   for(int i=0; i<8; i++)
   {
     for(int j=0; j<8; j++) 

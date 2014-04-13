@@ -50,7 +50,7 @@ class Correlations : public ExpatHandlers
     //! List of factors
     Factors factors;
     //! Correlation matrix
-    std::vector<std::vector<double> > matrix;
+    std::vector<std::vector<double>> matrix;
 
   private:
 

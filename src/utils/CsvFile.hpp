@@ -94,7 +94,7 @@ class CsvFile
     //! Returns column values
     void getColumn(int col, std::vector<double> &ret, bool *stop=nullptr) throw(Exception);
     //! Returns file values
-    void getColumns(std::vector<std::vector<double> > &ret, bool *stop=nullptr) throw(Exception);
+    void getColumns(std::vector<std::vector<double>> &ret, bool *stop=nullptr) throw(Exception);
     //! Returns file size (in bytes)
     size_t getFileSize() const;
     //! Returns readed bytes

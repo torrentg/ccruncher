@@ -78,7 +78,7 @@ ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_,
  */
 ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_,
            const Date &d, const std::vector<Date> &dates,
-           const std::vector<std::vector<double> > &values) throw(Exception)
+           const std::vector<std::vector<double>> &values) throw(Exception)
 {
   indexdefault = -1;
   date = d;
@@ -177,7 +177,7 @@ void ccruncher::DefaultProbabilities::setRatings(const Ratings &ratings_) throw(
   else
   {
     ratings = ratings_;
-    ddata = vector<vector<pd> >(ratings.size());
+    ddata = vector<vector<pd>>(ratings.size());
   }
 }
 

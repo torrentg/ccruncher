@@ -162,7 +162,7 @@ class AnalysisTask : public QThread
     //! Read csv data
     void readData(int col, std::vector<double> &ret) throw(ccruncher::Exception);
     //! Read csv data
-    void readData(std::vector<std::vector<double> > &ret) throw(ccruncher::Exception);
+    void readData(std::vector<std::vector<double>> &ret) throw(ccruncher::Exception);
     //! Set status
     void setStatus(status);
     //! Compute histogram
@@ -174,9 +174,9 @@ class AnalysisTask : public QThread
     //! Compute ES
     void runEvolutionES(std::vector<double> &);
     //! Contribution EL
-    void runContributionEL(const std::vector<std::vector<double> > &);
+    void runContributionEL(const std::vector<std::vector<double>> &);
     //! Contribution ES
-    void runContributionES(std::vector<std::vector<double> > &);
+    void runContributionES(std::vector<std::vector<double>> &);
 
   public:
 
