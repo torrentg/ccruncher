@@ -114,7 +114,7 @@ class AnalysisWidget: public MdiChildWidget
     //! Destructor
     ~AnalysisWidget();
     //! Virtual method implementation
-    QToolBar* getToolBar() { return toolbar; }
+    virtual QToolBar* getToolBar() override { return toolbar; }
 
   public slots:
 

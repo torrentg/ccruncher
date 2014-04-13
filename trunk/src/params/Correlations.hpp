@@ -62,9 +62,9 @@ class Correlations : public ExpatHandlers
   protected:
 
     //! Directives to process an xml start tag element
-    void epstart(ExpatUserData &, const char *, const char **);
+    virtual void epstart(ExpatUserData &, const char *, const char **) override;
     //! Directives to process an xml end tag element
-    void epend(ExpatUserData &, const char *);
+    virtual void epend(ExpatUserData &, const char *) override;
 
   public:
 

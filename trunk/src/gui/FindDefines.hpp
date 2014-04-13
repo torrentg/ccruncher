@@ -44,11 +44,11 @@ class FindDefines : public ccruncher::ExpatHandlers
   protected:
 
     //! Directives to process an xml start tag element
-    void epstart(ccruncher::ExpatUserData &, const char *, const char **);
+    virtual void epstart(ccruncher::ExpatUserData &, const char *, const char **) override;
     //! Directives to process an xml end tag element
-    void epend(ccruncher::ExpatUserData &, const char *);
+    virtual void epend(ccruncher::ExpatUserData &, const char *) override;
     //! Directives to process xml data element
-    void epdata(ccruncher::ExpatUserData &, const char *, const char *, int);
+    virtual void epdata(ccruncher::ExpatUserData &, const char *, const char *, int) override;
 
   public:
 

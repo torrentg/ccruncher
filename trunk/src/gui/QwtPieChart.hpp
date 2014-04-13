@@ -80,17 +80,17 @@ class QwtPieChart : public QwtPlotSeriesItem
     //! Destructor
     virtual ~QwtPieChart() {}
     //! Extended from QwtAbstractSeriesStore
-    virtual void setRectOfInterest( const QRectF & ) {}
+    virtual void setRectOfInterest( const QRectF & ) override {}
     //! Extended from QwtAbstractSeriesStore
-    virtual QRectF dataRect() const { return QRectF(); }
+    virtual QRectF dataRect() const override { return QRectF(); }
     //! Extended from QwtAbstractSeriesStore
-    virtual size_t dataSize() const { return items.size(); }
+    virtual size_t dataSize() const override { return items.size(); }
     //! Extended from QwtPlotSeriesItem
     virtual void drawSeries( QPainter *painter,
         const QwtScaleMap &xMap, const QwtScaleMap &yMap,
-        const QRectF &canvasRect, int from, int to ) const;
+        const QRectF &canvasRect, int from, int to ) const override;
     //! Extended from QwtPlotItem
-    virtual int rtti() const { return QwtPlotItem::Rtti_PlotUserItem; }
+    virtual int rtti() const override { return QwtPlotItem::Rtti_PlotUserItem; }
     //! Set data to be ploted
     void setSamples(const std::vector<double> &, const std::vector<std::string> &);
     //! Return name and value under point
