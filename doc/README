@@ -187,7 +187,9 @@ Developers tips & tricks
 1. download CCruncher sources from subversion repository
      > svn checkout http://www.ccruncher.net/svn/trunk/ ccruncher 
 
-2. install required libraries (explained before)
+2. install required libraries
+     * used by ccruncher (explained before)
+     * autoconf macros (package autoconf-archive)
 
 3. create auto-files (run only 1 time)
      > autoscan (produces preliminary configure.ac)
