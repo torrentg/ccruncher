@@ -93,7 +93,7 @@ class XmlEditWidget : public MdiChildWidget
     //! Destructor
     ~XmlEditWidget();
     //! Virtual method implementation
-    QToolBar* getToolBar() { return toolbar; }
+    virtual QToolBar* getToolBar() override { return toolbar; }
 
   public slots:
 

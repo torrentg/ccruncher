@@ -51,9 +51,9 @@ class QStreamBuf : public QObject, public std::basic_streambuf<char>
   protected:
 
     //! Inherited from streambuf
-    virtual int overflow(int v);
+    virtual int overflow(int v) override;
     //! Inherited from streambuf
-    virtual std::streamsize xsputn(const char *p, std::streamsize n);
+    virtual std::streamsize xsputn(const char *p, std::streamsize n) override;
 
   signals:
 

@@ -197,7 +197,7 @@ class SimulationThread : public Thread
     //! Destructor
     ~SimulationThread();
     //! Thread main function
-    void run();
+    virtual void run() override;
     //! Returns elapsed time creating random numbers
     double getElapsedTime1();
     //! Returns elapsed time simulating default times
