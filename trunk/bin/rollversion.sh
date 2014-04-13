@@ -30,7 +30,7 @@ csvn=false
 usage() {
 
   cat << _EOF_
-  usage: $progname [options] <file>
+  usage: $progname [options]
 
   description:
     $progname is a shell script to roll version numbers in
@@ -44,7 +44,7 @@ usage() {
     1        KO. finished with errors
   examples:
     $progname -s
-    $progname -g "2.4.0"
+    $progname -g "2.5.0"
 
 _EOF_
 
@@ -152,6 +152,7 @@ if [ "$cver" = "true" ]; then
   sed -i -e "s/version\:.*/version\: $gloversion/g" $CCRUNCHERPATH/doc/html/version
   sed -i -e "s/date\:.*/date\: $curdate/g" $CCRUNCHERPATH/doc/html/version
   echo "you need to run autoconf to take effect some changes";
+  echo "check technical document (version log)";
 fi
 
 exit $retcode;

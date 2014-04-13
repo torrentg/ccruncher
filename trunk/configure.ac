@@ -7,8 +7,7 @@ dnl *************************************************************
 dnl -------------------------------------------------------------
 dnl initializing procedures
 dnl -------------------------------------------------------------
-AC_PREREQ(2.59)
-AC_INIT(ccruncher, 2.4.1, gtorrent@ccruncher.net, ccruncher, http://www.ccruncher.net)
+AC_INIT(ccruncher, 2.5.0, gtorrent@ccruncher.net, ccruncher, http://www.ccruncher.net)
 AC_CONFIG_SRCDIR([src/kernel/MonteCarlo.hpp])
 AC_CONFIG_HEADER([src/utils/config.h],,[src/utils/config.h.in])
 AM_INIT_AUTOMAKE
@@ -20,6 +19,12 @@ AC_PROG_CXX
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
+
+dnl -------------------------------------------------------------
+dnl macros
+dnl -------------------------------------------------------------
+AC_LANG_PUSH([C++])
+AX_CXX_COMPILE_STDCXX_11(noext,mandatory)
 
 dnl -------------------------------------------------------------
 dnl checks for libraries
@@ -132,7 +137,7 @@ dnl -------------------------------------------------------------
 AH_BOTTOM([
 
 /* subversion identifier */
-#define SVN_VERSION "R1212"
+#define SVN_VERSION "R1216"
 
 ])
 
