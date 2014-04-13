@@ -29,7 +29,7 @@ using namespace std;
 ccruncher::Thread::Thread()
 {
   memset(&thread, 0, sizeof(pthread_t));
-  pthread_mutex_init(&mutex, NULL);
+  pthread_mutex_init(&mutex, nullptr);
   setStatus(fresh);
 }
 
@@ -56,8 +56,8 @@ ccruncher::Thread::~Thread()
 void* ccruncher::Thread::launcher(void *d)
 {
   Thread *x = static_cast<Thread *>(d);
-  pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
-  pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+  pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, nullptr);
+  pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, nullptr);
 
   try 
   {
@@ -83,7 +83,7 @@ void ccruncher::Thread::start()
 {
   if (getStatus() == running) return;
   setStatus(running);
-  int rc = pthread_create(&thread, NULL, Thread::launcher, (void*)this);
+  int rc = pthread_create(&thread, nullptr, Thread::launcher, (void*)this);
   if (rc != 0) setStatus(aborted);
 }
 
@@ -92,7 +92,7 @@ void ccruncher::Thread::wait()
 {
   if (getStatus() == running)
   {
-    int rc = pthread_join(thread, NULL);
+    int rc = pthread_join(thread, nullptr);
     if (rc != 0) setStatus(aborted);
     else setStatus(finished);
   }
@@ -104,7 +104,7 @@ void ccruncher::Thread::cancel()
   if (getStatus() == running)
   {
     pthread_cancel(thread);
-    pthread_join(thread, NULL);
+    pthread_join(thread, nullptr);
     setStatus(cancelled);
   }
 }

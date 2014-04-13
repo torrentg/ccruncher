@@ -46,7 +46,7 @@ class QStreamBuf : public QObject, public std::basic_streambuf<char>
   public:
 
     //! Constructor
-    QStreamBuf(QObject *parent=NULL);
+    QStreamBuf(QObject *parent=nullptr);
 
   protected:
 

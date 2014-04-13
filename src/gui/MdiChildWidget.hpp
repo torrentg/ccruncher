@@ -43,13 +43,13 @@ class MdiChildWidget: public QWidget
     //! Destructor
     virtual ~MdiChildWidget() {
       QMainWindow *main = dynamic_cast<QMainWindow*>(parent);
-      if (main != NULL && getToolBar() != NULL) {
+      if (main != nullptr && getToolBar() != nullptr) {
         main->removeToolBar(getToolBar());
       }
     }
 */
     //! Widget toolbar
-    virtual QToolBar* getToolBar() { return NULL; }
+    virtual QToolBar* getToolBar() { return nullptr; }
 
 };
 

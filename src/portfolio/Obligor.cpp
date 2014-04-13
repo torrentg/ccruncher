@@ -62,7 +62,7 @@ ccruncher::Obligor::~Obligor()
 {
   for(unsigned int i=0; i<vassets.size(); i++)
   {
-    if (vassets[i] != NULL) delete vassets[i];
+    if (vassets[i] != nullptr) delete vassets[i];
   }
   vassets.clear();
 }
@@ -81,12 +81,12 @@ Obligor& ccruncher::Obligor::operator=(const Obligor &o)
   vsegments = o.vsegments;
 
   for(size_t i=0; i<vassets.size(); i++) {
-    if (vassets[i] != NULL) delete vassets[i];
+    if (vassets[i] != nullptr) delete vassets[i];
   }
-  vassets.assign(o.vassets.size(), NULL);
+  vassets.assign(o.vassets.size(), nullptr);
   for(size_t i=0; i<vassets.size(); i++)
   {
-    if (o.vassets[i] != NULL)
+    if (o.vassets[i] != nullptr)
     {
       vassets[i] = new Asset;
       *(vassets[i]) = *(o.vassets[i]);
@@ -117,7 +117,7 @@ void ccruncher::Obligor::insertAsset(ExpatUserData &eu) throw(Exception)
   // preparing asset
   try
   {
-    assert(eu.date1 != NULL && eu.date2 != NULL && eu.interest != NULL);
+    assert(eu.date1 != nullptr && eu.date2 != nullptr && eu.interest != nullptr);
     vassets[ila]->prepare(*(eu.date1), *(eu.date2), *(eu.interest));
   }
   catch(std::exception &e)
@@ -143,7 +143,7 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
   }
   else if (isEqual(name_,"belongs-to"))
   {
-    assert(eu.segmentations != NULL);
+    assert(eu.segmentations != nullptr);
     const char *ssegmentation = getAttributeValue(attributes, "segmentation");
     int isegmentation = eu.segmentations->indexOfSegmentation(ssegmentation);
 
@@ -159,26 +159,26 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
   }
   else if (isEqual(name_,"obligor"))
   {
-    const char *str = NULL;
+    const char *str = nullptr;
 
     id = getStringAttribute(attributes, "id");
 
-    assert(eu.ratings != NULL);
+    assert(eu.ratings != nullptr);
     str = getAttributeValue(attributes, "rating");
     irating = eu.ratings->getIndex(str);
     if (irating < 0) throw Exception("rating '" + string(str) + "' not found");
 
-    assert(eu.factors != NULL);
+    assert(eu.factors != nullptr);
     str = getAttributeValue(attributes, "factor");
     ifactor = eu.factors->getIndex(str);
     if (ifactor < 0) throw Exception("factor '" + string(str) + "' not found");
 
-    str = getAttributeValue(attributes, "lgd", NULL);
-    if (str != NULL) {
+    str = getAttributeValue(attributes, "lgd", nullptr);
+    if (str != nullptr) {
       lgd = LGD(str);
     }
 
-    assert(eu.segmentations != NULL);
+    assert(eu.segmentations != nullptr);
     vsegments.resize(eu.segmentations->size(), 0);
   }
   else

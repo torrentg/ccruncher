@@ -45,9 +45,9 @@ ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned l
   floadings1(mc.floadings1), floadings2(mc.floadings2), inverses(mc.inverses),
   numfactors(mc.chol->size1), ndf(mc.ndf), time0(mc.time0), timeT(mc.timeT),
   antithetic(mc.antithetic), numsegments(mc.numsegments),
-  blocksize(mc.blocksize), lhs_size(mc.lhs_size), rng(NULL), losses(0)
+  blocksize(mc.blocksize), lhs_size(mc.lhs_size), rng(nullptr), losses(0)
 {
-  assert(chol != NULL);
+  assert(chol != nullptr);
   assert(blocksize > 0);
   assert(numfactors == floadings1.size());
   assert(antithetic?(blocksize%2!=0?false:true):true);
@@ -78,7 +78,7 @@ ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned l
 /**************************************************************************/
 ccruncher::SimulationThread::~SimulationThread()
 {
-  if (rng != NULL) gsl_rng_free(rng);
+  if (rng != nullptr) gsl_rng_free(rng);
 }
 
 /**************************************************************************//**
@@ -278,7 +278,7 @@ void ccruncher::SimulationThread::rmvnorm()
     auxz.size = numfactors;
     auxz.stride = 1;
     auxz.data = (double *) &(lhs_values_z[0]);
-    auxz.block = NULL;
+    auxz.block = nullptr;
     auxz.owner = 0;
 
     // creating sample of size lhs_size
@@ -352,9 +352,9 @@ void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obli
     Date dtime, const SimulatedAsset *vassets, const unsigned short *vsegments,
     double *vlosses) const throw()
 {
-  assert(vassets != NULL);
-  assert(vsegments != NULL);
-  assert(vlosses != NULL);
+  assert(vassets != nullptr);
+  assert(vsegments != nullptr);
+  assert(vlosses != nullptr);
 
   double obligor_lgd = NAN;
 

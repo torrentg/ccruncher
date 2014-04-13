@@ -160,7 +160,7 @@ Logger& ccruncher::Logger::operator<<(const char *s)
 {
   const char *ptr = strchr(s, '\n');
 
-  while(ptr != NULL)
+  while(ptr != nullptr)
   {
     if (curcol == 0) repeat(ilevel*isize, ' ');
     size_t l = ptr - s;

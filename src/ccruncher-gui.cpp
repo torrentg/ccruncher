@@ -79,19 +79,19 @@ int main(int argc, char *argv[])
   // long options (name + has_arg + flag + val)
   const struct option options2[] =
   {
-      { "help",         0,  NULL,  'h' },
-      { "indexes",      0,  NULL,  'i' },
-      { "version",      0,  NULL,  301 },
-      { "nice",         1,  NULL,  302 },
-      { "threads",      1,  NULL,  304 },
-      { "info",         0,  NULL,  305 },
-      { NULL,           0,  NULL,   0  }
+      { "help",         0,  nullptr,  'h' },
+      { "indexes",      0,  nullptr,  'i' },
+      { "version",      0,  nullptr,  301 },
+      { "nice",         1,  nullptr,  302 },
+      { "threads",      1,  nullptr,  304 },
+      { "info",         0,  nullptr,  305 },
+      { nullptr,        0,  nullptr,   0  }
   };
 
   // parsing options
   while (1)
   {
-    int curropt = getopt_long(argc, argv, options1, options2, NULL);
+    int curropt = getopt_long(argc, argv, options1, options2, nullptr);
 
     if (curropt == -1)
     {

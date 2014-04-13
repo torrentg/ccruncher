@@ -191,8 +191,8 @@ void ccruncher::PowMatrix::pow(const std::vector<std::vector<double> > &a, doubl
                                std::vector<std::vector<double> > &ret) throw(Exception)
 {
   size_t n = a.size();
-  vector<double*> A(n, NULL);
-  vector<double*> C(n, NULL);
+  vector<double*> A(n, nullptr);
+  vector<double*> C(n, nullptr);
 
   for(size_t i=0; i<n; i++) {
     A[i] = (double *) &(a[i][0]);

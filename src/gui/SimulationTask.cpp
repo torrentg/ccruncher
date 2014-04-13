@@ -39,7 +39,7 @@ size_t ccruncher_gui::SimulationTask::num_running_sims = 0;
  * @param[in] s CCruncher execution trace destination.
  */
 ccruncher_gui::SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s),
-    idata(NULL), montecarlo(NULL)
+    idata(nullptr), montecarlo(nullptr)
 {
   ifile = "";
   odir = "";
@@ -208,13 +208,13 @@ Logger& ccruncher_gui::SimulationTask::getLogger()
  */
 void ccruncher_gui::SimulationTask::free(int obj)
 {
-  if (obj != 2 && idata != NULL) {
+  if (obj != 2 && idata != nullptr) {
     delete idata;
-    idata = NULL;
+    idata = nullptr;
   }
-  if (obj != 1 && montecarlo != NULL) {
+  if (obj != 1 && montecarlo != nullptr) {
     delete montecarlo;
-    montecarlo = NULL;
+    montecarlo = nullptr;
   }
 }
 
@@ -237,7 +237,7 @@ bool ccruncher_gui::SimulationTask::checkConflicts()
   IData data;
 
   try {
-    data.init(ifile, defines, NULL, false);
+    data.init(ifile, defines, nullptr, false);
   }
   catch(...) {
     // error in input file
@@ -316,7 +316,7 @@ bool ccruncher_gui::SimulationTask::checkConflicts()
     if (rc == 0) { // append
       fmode = 'a';
       if (data.getParams().rng_seed != 0) {
-        QMessageBox::StandardButton val = QMessageBox::warning(NULL, tr("CCruncher"),
+        QMessageBox::StandardButton val = QMessageBox::warning(nullptr, tr("CCruncher"),
            tr("You indicated a RNG seed distinct than 0.\n"
            "This can cause repeated values.\n"
            "Are you sure to continue?"),
@@ -341,7 +341,7 @@ bool ccruncher_gui::SimulationTask::checkConflicts()
   {
     // previous execution found distinct than current
     fmode = 'w';
-    QMessageBox::StandardButton rc = QMessageBox::warning(NULL, "CCruncher",
+    QMessageBox::StandardButton rc = QMessageBox::warning(nullptr, "CCruncher",
         "Existing files in the output directory will be overwritten.\n"
         "Are you sure to continue?",
         QMessageBox::Yes|QMessageBox::No,

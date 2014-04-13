@@ -201,7 +201,7 @@ void ccruncher::Segmentations::epend(ExpatUserData &, const char *name_)
  */
 void ccruncher::Segmentations::addComponents(const Asset *asset)
 {
-  assert(asset != NULL);
+  assert(asset != nullptr);
   for(size_t i=0; i<enabled.size(); i++)
   {
     enabled[i].addComponent(asset->getSegment(i));
@@ -226,7 +226,7 @@ void ccruncher::Segmentations::removeUnusedSegments()
  */
 void ccruncher::Segmentations::recodeSegments(Asset *asset)
 {
-  assert(asset != NULL);
+  assert(asset != nullptr);
   for(size_t i=0; i<enabled.size(); i++)
   {
     int old = asset->getSegment(i);

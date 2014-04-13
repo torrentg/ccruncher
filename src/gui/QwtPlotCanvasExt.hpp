@@ -36,7 +36,7 @@ class QwtPlotCanvasExt : public QwtPlotCanvas
   public:
 
     //! Constructor
-    QwtPlotCanvasExt(QwtPlot *p=NULL) : QwtPlotCanvas(p) {
+    QwtPlotCanvasExt(QwtPlot *p=nullptr) : QwtPlotCanvas(p) {
       setMouseTracking(true);
     }
     //! Destructor

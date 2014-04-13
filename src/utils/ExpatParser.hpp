@@ -77,9 +77,9 @@ class ExpatParser
     //! Destructor
     ~ExpatParser();
     //! Parse a string containing an xml
-    void parse(const std::string &xmlcontent, ExpatHandlers *eh, bool *stop=NULL) throw(Exception);
+    void parse(const std::string &xmlcontent, ExpatHandlers *eh, bool *stop=nullptr) throw(Exception);
     //! Parse an xml file
-    void parse(gzFile file, ExpatHandlers *eh, bool *stop=NULL) throw(Exception);
+    void parse(gzFile file, ExpatHandlers *eh, bool *stop=nullptr) throw(Exception);
     //! Returns defines
     const std::map<std::string,std::string>& getDefines() const;
     //! Set defines

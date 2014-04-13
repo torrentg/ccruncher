@@ -45,7 +45,7 @@ using namespace std;
  */
 string ccruncher::Utils::timestamp()
 {
-  time_t now = time(NULL);
+  time_t now = time(nullptr);
   tm lt = *(localtime(&now));
 
   char aux[] = "dd/mm/yyyy hh:mm:ss ";
@@ -65,7 +65,7 @@ string ccruncher::Utils::timestamp()
 unsigned long ccruncher::Utils::trand()
 {
   timeval tv;
-  gettimeofday(&tv,NULL);
+  gettimeofday(&tv,nullptr);
   return (unsigned long)(tv.tv_sec)*1000000UL + (unsigned long)(tv.tv_usec);
 }
 
@@ -119,11 +119,11 @@ int ccruncher::Utils::getNumCores()
     uint32_t count;
 
     nm[0] = CTL_HW; nm[1] = HW_AVAILCPU;
-    sysctl(nm, 2, &count, &len, NULL, 0);
+    sysctl(nm, 2, &count, &len, nullptr, 0);
 
     if(count < 1) {
         nm[1] = HW_NCPU;
-        sysctl(nm, 2, &count, &len, NULL, 0);
+        sysctl(nm, 2, &count, &len, nullptr, 0);
         if(count < 1) { count = 1; }
     }
     return count;

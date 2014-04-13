@@ -39,9 +39,9 @@ using namespace ccruncher;
 /**************************************************************************//**
  * @param[in] s Streambuf where the trace will be written.
  */
-ccruncher::MonteCarlo::MonteCarlo(std::streambuf *s) : log(s), chol(NULL), stop(NULL)
+ccruncher::MonteCarlo::MonteCarlo(std::streambuf *s) : log(s), chol(nullptr), stop(nullptr)
 {
-  pthread_mutex_init(&mutex, NULL);
+  pthread_mutex_init(&mutex, nullptr);
   maxseconds = 0;
   numiterations = 0;
   maxiterations = 0;
@@ -71,27 +71,27 @@ void ccruncher::MonteCarlo::release()
 {
   // removing threads
   for(unsigned int i=0; i<threads.size(); i++) {
-    if (threads[i] != NULL) {
+    if (threads[i] != nullptr) {
       threads[i]->cancel();
       delete threads[i];
-      threads[i] = NULL;
+      threads[i] = nullptr;
     }
   }
   threads.clear();
 
   // dropping aggregators elements
   for(unsigned int i=0; i<aggregators.size(); i++) {
-    if (aggregators[i] != NULL) {
+    if (aggregators[i] != nullptr) {
       delete aggregators[i];
-      aggregators[i] = NULL;
+      aggregators[i] = nullptr;
     }
   }
   aggregators.clear();
 
   // deallocating cholesky matrix
-  if (chol != NULL) {
+  if (chol != nullptr) {
     gsl_matrix_free(chol);
-    chol = NULL;
+    chol = nullptr;
   }
 
   // flushing memory
@@ -425,7 +425,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
   numsegments = 0;
   size_t numsegmentations = idata.getSegmentations().size();
   numSegmentsBySegmentation.resize(numsegmentations, 0);
-  aggregators.resize(numsegmentations, static_cast<Aggregator*>(NULL));
+  aggregators.resize(numsegmentations, static_cast<Aggregator*>(nullptr));
   for(int i=0; i<(int)numsegmentations; i++)
   {
     if (idata.getSegmentations().getSegmentation(i).size() > USHRT_MAX) {
@@ -493,7 +493,7 @@ vector<double> ccruncher::MonteCarlo::getExposures(int isegmentation, IData &ida
 void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *stop_)
 {
   stop = stop_;
-  if (stop != NULL && *stop) return;
+  if (stop != nullptr && *stop) return;
 
   // assertions
   assert(fpath != "" && fpath != "path not set");
@@ -530,7 +530,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   timer.start();
   nfthreads = numthreads;
   numiterations = 0;
-  threads.assign(numthreads, static_cast<SimulationThread*>(NULL));
+  threads.assign(numthreads, static_cast<SimulationThread*>(nullptr));
   for(int i=0; i<numthreads; i++)
   {
     threads[i] = new SimulationThread(i+1, *this, seed+i);
@@ -554,7 +554,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
     etime2 += threads[i]->getElapsedTime2();
     etime3 += threads[i]->getElapsedTime3();
     delete threads[i];
-    threads[i] = NULL;
+    threads[i] = nullptr;
   }
 
   // closing aggregators
@@ -566,7 +566,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   for(unsigned int i=0; i<aggregators.size(); i++)
   {
     delete aggregators[i];
-    aggregators[i] = NULL;
+    aggregators[i] = nullptr;
   }
   etime3 += timer3_aux.stop();
 
@@ -595,7 +595,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
 bool ccruncher::MonteCarlo::append(int ithread, const std::vector<short> &vi,
     const double *losses) throw()
 {
-  assert(losses != NULL);
+  assert(losses != nullptr);
   assert(vi.size() == blocksize);
 
   pthread_mutex_lock(&mutex);
@@ -631,7 +631,7 @@ bool ccruncher::MonteCarlo::append(int ithread, const std::vector<short> &vi,
       assert(nfthreads > 0);
       if (
            (maxiterations > 0 && numiterations + (nfthreads-1)*blocksize >= maxiterations) ||
-           (stop != NULL && *stop)
+           (stop != nullptr && *stop)
          )
       {
         more = false;

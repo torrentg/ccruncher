@@ -38,14 +38,14 @@ using namespace ccruncher;
  * @see http://www.cplusplus.com/reference/streambuf/streambuf/
  * @param[in] s Streambuf where the trace will be written.
  */
-ccruncher::IData::IData(streambuf *s) : log(s), curfile(NULL)
+ccruncher::IData::IData(streambuf *s) : log(s), curfile(nullptr)
 {
-  pthread_mutex_init(&mutex, NULL);
+  pthread_mutex_init(&mutex, nullptr);
   hasmaintag = false;
   hasdefinestag = 0;
   title = "";
   description = "";
-  stop = NULL;
+  stop = nullptr;
   cursize = 0;
   parse_portfolio = true;
 }
@@ -53,8 +53,8 @@ ccruncher::IData::IData(streambuf *s) : log(s), curfile(NULL)
 /**************************************************************************/
 ccruncher::IData::~IData()
 {
-  assert(curfile == NULL);
-  if (curfile != NULL) gzclose(curfile);
+  assert(curfile == nullptr);
+  if (curfile != nullptr) gzclose(curfile);
   pthread_mutex_destroy(&mutex);
 }
 
@@ -68,7 +68,7 @@ ccruncher::IData::~IData()
 void ccruncher::IData::init(const std::string &f,
     const std::map<std::string,std::string> &m, bool *s, bool p) throw(Exception)
 {
-  gzFile file = NULL;
+  gzFile file = nullptr;
   size_t bytes = 0;
   filename = f;
   stop = s;
@@ -86,7 +86,7 @@ void ccruncher::IData::init(const std::string &f,
       bytes = File::filesize(filename);
     }
 
-    if (file == NULL) {
+    if (file == nullptr) {
       throw Exception("can't open file '" + filename + "'");
     }
 
@@ -100,15 +100,15 @@ void ccruncher::IData::init(const std::string &f,
     parse(file, m);
 
     pthread_mutex_lock(&mutex);
-    curfile = NULL;
+    curfile = nullptr;
     pthread_mutex_unlock(&mutex);
     gzclose(file);
   }
   catch(...)
   {
-    if (file != NULL) {
+    if (file != nullptr) {
       pthread_mutex_lock(&mutex);
-      curfile = NULL;
+      curfile = nullptr;
       pthread_mutex_unlock(&mutex);
       gzclose(file);
     }
@@ -304,7 +304,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
   else
   {
     gzFile prevfile = curfile;
-    gzFile file = NULL;
+    gzFile file = nullptr;
 
     try
     {
@@ -313,7 +313,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
       else path = File::dirname(filename);
       string filepath = File::filepath(path, ref);
       file = gzopen(filepath.c_str(), "rb");
-      if (file == NULL) {
+      if (file == nullptr) {
         throw Exception("can't open file '" + filepath + "'");
       }
 
@@ -346,7 +346,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
     }
     catch(std::exception &e)
     {
-      if (file != NULL) {
+      if (file != nullptr) {
         pthread_mutex_lock(&mutex);
         curfile = prevfile;
         pthread_mutex_unlock(&mutex);
@@ -524,7 +524,7 @@ size_t ccruncher::IData::getReadedSize() const
 {
   size_t ret = 0;
   pthread_mutex_lock(&mutex);
-  if (curfile == NULL) ret = cursize;
+  if (curfile == nullptr) ret = cursize;
   else ret = gzoffset(curfile);
   pthread_mutex_unlock(&mutex);
   return ret;

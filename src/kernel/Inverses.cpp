@@ -67,7 +67,7 @@ ccruncher::Inverses::Inverses(const Inverses &o)
 ccruncher::Inverses::~Inverses()
 {
   for(size_t i=0; i<splines.size(); i++) {
-    if (splines[i] != NULL) {
+    if (splines[i] != nullptr) {
       gsl_spline_free(splines[i]);
     }
   }
@@ -86,7 +86,7 @@ Inverses & ccruncher::Inverses::operator=(const Inverses &o)
   splines = o.splines;
   for(size_t i=0; i<splines.size(); i++)
   {
-    if (o.splines[i] != NULL) {
+    if (o.splines[i] != nullptr) {
       splines[i] = gsl_spline_alloc(o.splines[i]->interp->type, o.splines[i]->size);
       gsl_spline_init(splines[i], o.splines[i]->x, o.splines[i]->y, o.splines[i]->size);
     }
@@ -156,7 +156,7 @@ double ccruncher::Inverses::icdf(double u) const
 void ccruncher::Inverses::setSplines(const DefaultProbabilities &dprobs) throw(Exception)
 {
   int nratings = dprobs.getRatings().size();
-  splines.assign((size_t)nratings, NULL);
+  splines.assign((size_t)nratings, nullptr);
 
   for(int irating=0; irating<nratings; irating++)
   {
@@ -245,7 +245,7 @@ void ccruncher::Inverses::setSpline(int irating, vector<int> &days, vector<doubl
 {
   assert(days.size() >= 2);
 
-  if (splines[irating] != NULL) {
+  if (splines[irating] != nullptr) {
     gsl_spline_free(splines[irating]);
   }
 

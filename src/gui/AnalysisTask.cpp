@@ -33,7 +33,7 @@ using namespace ccruncher_gui;
 #define MJ_EPSILON 1e-12
 
 /**************************************************************************/
-ccruncher_gui::AnalysisTask::AnalysisTask() : QThread(), hist(NULL)
+ccruncher_gui::AnalysisTask::AnalysisTask() : QThread(), hist(nullptr)
 {
   mode_ = none;
   progress = 0.0f;
@@ -45,7 +45,7 @@ ccruncher_gui::AnalysisTask::AnalysisTask() : QThread(), hist(NULL)
 /**************************************************************************/
 ccruncher_gui::AnalysisTask::~AnalysisTask()
 {
-  if (hist != NULL) gsl_histogram_free(hist);
+  if (hist != nullptr) gsl_histogram_free(hist);
 }
 
 /**************************************************************************//**
@@ -265,9 +265,9 @@ void ccruncher_gui::AnalysisTask::runHistogram(const std::vector<double> &values
 {
   setStatus(running);
 
-  if (hist != NULL) {
+  if (hist != nullptr) {
     gsl_histogram_free(hist);
-    hist = NULL;
+    hist = nullptr;
   }
 
   if (values.empty()) return;

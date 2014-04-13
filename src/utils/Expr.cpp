@@ -201,7 +201,7 @@ bool ccruncher::Expr::isNumber(const char *ptr, token *tok, char **endptr)
 {
   tok->dat.x = strtod(ptr, endptr);
 
-  if (ptr == *endptr || *endptr == NULL)
+  if (ptr == *endptr || *endptr == nullptr)
   {
     return false;
   }
@@ -237,7 +237,7 @@ bool ccruncher::Expr::isVariable(const char *ptr, token *tok, char **endptr, std
     }
   }
 
-  variable var("",NULL);
+  variable var("",nullptr);
   while(isalnum(*ptr) || *ptr == '_')
   {
     var.id.push_back(*ptr);
@@ -247,7 +247,7 @@ bool ccruncher::Expr::isVariable(const char *ptr, token *tok, char **endptr, std
   //TODO: check that isn't only composed by _'s
   if (var.id.length()>0 && !isdigit(var.id[0]))
   {
-    var.ptr = NULL;
+    var.ptr = nullptr;
     variables.push_back(var);
     tok->type = VARIABLE;
     tok->dat.n = variables.size()-1;
@@ -533,7 +533,7 @@ void ccruncher::Expr::compile(const std::string &str, std::vector<variable> &var
  */
 void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables, std::vector<token> &tokens) throw(Exception)
 {
-  assert(str != NULL);
+  assert(str != nullptr);
   token prevtok, curtok;
   stack<token, vector<token> > pile;
   stack<int, vector<int> > numargs;
@@ -710,7 +710,7 @@ int ccruncher::Expr::link(std::vector<token> &tokens, const std::vector<variable
       }
       case VARIABLE: {
         if (tokens[i].dat.n >= (int)variables.size()) throw Exception("variable not found");
-        if (variables[tokens[i].dat.n].ptr == NULL) throw Exception("variable not linked");
+        if (variables[tokens[i].dat.n].ptr == nullptr) throw Exception("variable not linked");
         tokens[i].type = VALREF;
         tokens[i].dat.ptr = variables[tokens[i].dat.n].ptr;
         break;
@@ -852,7 +852,7 @@ void ccruncher::Expr::debug(const std::vector<token> &tokens, const std::vector<
   for(size_t i=0; i<variables.size(); i++)
   {
     cout << "\tvar " << (i+1) << " : id=" << variables[i].id << ", value=";
-    if (variables[i].ptr==NULL) cout << "NULL" << endl;
+    if (variables[i].ptr==nullptr) cout << "NULL" << endl;
     else cout << *(variables[i].ptr) << endl;
   }
 

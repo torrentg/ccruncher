@@ -97,24 +97,24 @@ int main(int argc, char *argv[])
   // long options (name + has_arg + flag + val)
   const struct option options2[] =
   {
-      { "help",         0,  NULL,  'h' },
-      { "append",       0,  NULL,  'a' },
-      { "overwrite",    0,  NULL,  'w' },
-      { "indexes",      0,  NULL,  'i' },
-      { "define",       1,  NULL,  'D' },
-      { "output",       1,  NULL,  'o' },
-      { "version",      0,  NULL,  301 },
-      { "nice",         1,  NULL,  302 },
-      { "hash",         1,  NULL,  303 },
-      { "threads",      1,  NULL,  304 },
-      { "info",         0,  NULL,  305 },
-      { NULL,           0,  NULL,   0  }
+      { "help",         0,  nullptr,  'h' },
+      { "append",       0,  nullptr,  'a' },
+      { "overwrite",    0,  nullptr,  'w' },
+      { "indexes",      0,  nullptr,  'i' },
+      { "define",       1,  nullptr,  'D' },
+      { "output",       1,  nullptr,  'o' },
+      { "version",      0,  nullptr,  301 },
+      { "nice",         1,  nullptr,  302 },
+      { "hash",         1,  nullptr,  303 },
+      { "threads",      1,  nullptr,  304 },
+      { "info",         0,  nullptr,  305 },
+      { nullptr,        0,  nullptr,   0  }
   };
 
   // parsing options
   while (1)
   {
-    int curropt = getopt_long(argc, argv, options1, options2, NULL);
+    int curropt = getopt_long(argc, argv, options1, options2, nullptr);
 
     if (curropt == -1)
     {
@@ -324,7 +324,7 @@ void run() throw(Exception)
   log << copyright << endl;
   log << header << endl;
 
-  IData *idata = NULL;
+  IData *idata = nullptr;
 
   try
   {
@@ -346,7 +346,7 @@ void run() throw(Exception)
   }
   catch(...)
   {
-    if (idata != NULL) {
+    if (idata != nullptr) {
       delete idata;
     }
     throw;

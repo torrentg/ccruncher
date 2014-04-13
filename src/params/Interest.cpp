@@ -35,7 +35,7 @@ using namespace ccruncher;
  * @param[in] type_ Type of interest to apply.
  */
 ccruncher::Interest::Interest(const Date &date_, InterestType type_) :
-    spline(NULL), accel(NULL)
+    spline(nullptr), accel(nullptr)
 {
   type = type_;
   date = date_;
@@ -54,11 +54,11 @@ ccruncher::Interest::Interest(const Interest &o)
 /**************************************************************************/
 ccruncher::Interest::~Interest()
 {
-  if (spline != NULL) {
+  if (spline != nullptr) {
     gsl_spline_free(spline);
   }
 
-  if (accel != NULL) {
+  if (accel != nullptr) {
     gsl_interp_accel_free(accel);
   }
 }
@@ -74,28 +74,28 @@ Interest & ccruncher::Interest::operator=(const Interest &o)
   rates = o.rates;
   is_cubic_spline = o.is_cubic_spline;
 
-  if (spline != NULL) {
+  if (spline != nullptr) {
     gsl_spline_free(spline);
   }
 
-  if (accel != NULL) {
+  if (accel != nullptr) {
     gsl_interp_accel_free(accel);
   }
 
-  if (o.spline != NULL) {
+  if (o.spline != nullptr) {
     spline = gsl_spline_alloc(o.spline->interp->type, o.spline->size);
     gsl_spline_init(spline, o.spline->x, o.spline->y, o.spline->size);
   }
   else {
-    spline = NULL;
+    spline = nullptr;
   }
 
-  if (o.accel != NULL) {
+  if (o.accel != nullptr) {
     accel = gsl_interp_accel_alloc();
     gsl_interp_accel_reset(accel);
   }
   else {
-    accel = NULL;
+    accel = nullptr;
   }
 
   return *this;
@@ -257,7 +257,7 @@ void ccruncher::Interest::insertRate(const Rate &val) throw(Exception)
  */
 void ccruncher::Interest::setSpline() throw(Exception)
 {
-  assert(spline == NULL && accel == NULL);
+  assert(spline == nullptr && accel == nullptr);
   size_t n = rates.size();
 
   if (!is_cubic_spline && n < gsl_interp_type_min_size(gsl_interp_linear)) {

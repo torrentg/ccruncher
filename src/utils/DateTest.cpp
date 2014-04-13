@@ -38,7 +38,7 @@ void ccruncher_test::DateTest::test_constructors()
   Date date2 = Date("25/07/2001");
   Date date3 = Date(date2);
   Date date4 = Date(1,1,2012);
-  Date now = Date(time(NULL));
+  Date now = Date(time(nullptr));
 
   ASSERT(nad[0] == *((long*)(&invalid_date)));
   ASSERT(date1 == date2);

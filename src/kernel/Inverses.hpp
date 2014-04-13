@@ -112,7 +112,7 @@ inline double ccruncher::Inverses::evalue(int irating, double val) const
 
   gsl_spline *spline = splines[irating];
 
-  if (spline == NULL)
+  if (spline == nullptr)
   {
     // default rating
     return 0.0;
@@ -132,7 +132,7 @@ inline double ccruncher::Inverses::evalue(int irating, double val) const
   else
   {
     // we don't use accel because values are random
-    return gsl_spline_eval(spline, val, NULL);
+    return gsl_spline_eval(spline, val, nullptr);
   }
 }
 

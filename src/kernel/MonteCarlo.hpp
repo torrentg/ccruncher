@@ -148,7 +148,7 @@ class MonteCarlo
   public:
 
     //! Constructor
-    MonteCarlo(std::streambuf *s=NULL);
+    MonteCarlo(std::streambuf *s=nullptr);
     //! Destructor
     ~MonteCarlo();
     //! Set path for output files
@@ -156,7 +156,7 @@ class MonteCarlo
     //! Initiliaze this class
     void setData(IData &) throw(Exception);
     //! Execute Monte Carlo
-    void run(unsigned char numthreads, size_t nhash, bool *stop_=NULL);
+    void run(unsigned char numthreads, size_t nhash, bool *stop_=nullptr);
     //! Returns number of iterations done
     int getNumIterations() const;
     //! Returns maximum number of iterations to do

@@ -71,7 +71,7 @@ class CsvFile
     //! Parse a field
     int next() throw(Exception);
     //! Returns row sums
-    void getRowSums(std::vector<double> &ret, bool *stop=NULL) throw(Exception);
+    void getRowSums(std::vector<double> &ret, bool *stop=nullptr) throw(Exception);
     //! Parse a double
     static double parse(const char *) throw(Exception);
     //! Trim a string
@@ -92,9 +92,9 @@ class CsvFile
     //! Returns headers
     const std::vector<std::string>& getHeaders();
     //! Returns column values
-    void getColumn(int col, std::vector<double> &ret, bool *stop=NULL) throw(Exception);
+    void getColumn(int col, std::vector<double> &ret, bool *stop=nullptr) throw(Exception);
     //! Returns file values
-    void getColumns(std::vector<std::vector<double> > &ret, bool *stop=NULL) throw(Exception);
+    void getColumns(std::vector<std::vector<double> > &ret, bool *stop=nullptr) throw(Exception);
     //! Returns file size (in bytes)
     size_t getFileSize() const;
     //! Returns readed bytes

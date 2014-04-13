@@ -115,8 +115,8 @@ void ccruncher::ExpatHandlers::epstop(ExpatUserData &)
  */
 const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const char *attname) const throw(Exception)
 {
-  assert(atts != NULL);
-  assert(attname != NULL);
+  assert(atts != nullptr);
+  assert(attname != nullptr);
 
   for (int i=0; atts[i]; i+=2)
   {
@@ -141,8 +141,8 @@ const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, cons
  */
 const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const char *attname, const char *defval) const
 {
-  assert(atts != NULL);
-  assert(attname != NULL);
+  assert(atts != nullptr);
+  assert(attname != nullptr);
 
   for (int i=0; atts[i]; i+=2)
   {
@@ -182,9 +182,9 @@ string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const cha
  */
 string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const char *attname, const std::string &defval) const
 {
-  const char *val = getAttributeValue(atts, attname, NULL);
+  const char *val = getAttributeValue(atts, attname, nullptr);
 
-  if (val != NULL)
+  if (val != nullptr)
   {
     return string(val);
   }
@@ -223,9 +223,9 @@ int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const char *att
  */
 int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const char *attname, int defval) const
 {
-  const char *val = getAttributeValue(atts, attname, NULL);
+  const char *val = getAttributeValue(atts, attname, nullptr);
 
-  if (val != NULL)
+  if (val != nullptr)
   {
     return Parser::intValue(val);
   }
@@ -264,9 +264,9 @@ long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const char *a
  */
 long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const char *attname, long defval) const
 {
-  const char *val = getAttributeValue(atts, attname, NULL);
+  const char *val = getAttributeValue(atts, attname, nullptr);
 
-  if (val != NULL)
+  if (val != nullptr)
   {
     return Parser::longValue(val);
   }
@@ -305,9 +305,9 @@ double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const cha
  */
 double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const char *attname, double defval) const
 {
-  const char *val = getAttributeValue(atts, attname, NULL);
+  const char *val = getAttributeValue(atts, attname, nullptr);
 
-  if (val != NULL)
+  if (val != nullptr)
   {
     return Parser::doubleValue(val);
   }
@@ -346,9 +346,9 @@ Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const char *a
  */
 Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const char *attname, const Date &defval) const
 {
-  const char *val = getAttributeValue(atts, attname, NULL);
+  const char *val = getAttributeValue(atts, attname, nullptr);
 
-  if (val != NULL)
+  if (val != nullptr)
   {
     return Parser::dateValue(val);
   }
@@ -387,9 +387,9 @@ bool ccruncher::ExpatHandlers::getBooleanAttribute(const char **atts, const char
  */
 bool ccruncher::ExpatHandlers::getBooleanAttribute(const char **atts, const char *attname, bool defval) const
 {
-  const char *val = getAttributeValue(atts, attname, NULL);
+  const char *val = getAttributeValue(atts, attname, nullptr);
 
-  if (val != NULL)
+  if (val != nullptr)
   {
     return Parser::boolValue(val);
   }

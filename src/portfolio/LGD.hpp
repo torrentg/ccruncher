@@ -102,7 +102,7 @@ class LGD
     //! Returns distribution parameter
     double getValue2() const;
     //! Returns lgd
-    double getValue(const gsl_rng *rng=NULL) const;
+    double getValue(const gsl_rng *rng=nullptr) const;
     //! Check if it is a Non-A-LGD value
     static bool isvalid(const LGD &);
 
@@ -128,11 +128,11 @@ inline double ccruncher::LGD::getValue(const gsl_rng *rng) const
       return value1;
 
     case Beta:
-      assert(rng != NULL);
+      assert(rng != nullptr);
       return gsl_ran_beta(rng, value1, value2);
 
     case Uniform:
-      assert(rng != NULL);
+      assert(rng != nullptr);
       return gsl_ran_flat(rng, value1, value2);
 
     default:

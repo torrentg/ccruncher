@@ -127,11 +127,11 @@ class IData : public ExpatHandlers
   public:
 
     //! Default constructor
-    IData(std::streambuf *s=NULL);
+    IData(std::streambuf *s=nullptr);
     //! Destructor
     ~IData();
     //! Initialize content
-    void init(const std::string &f, const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *stop_=NULL, bool parse_portfolio_=true) throw(Exception);
+    void init(const std::string &f, const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *stop_=nullptr, bool parse_portfolio_=true) throw(Exception);
     //! Returns simulation title
     const std::string &getTitle() const;
     //! Returns simulation description
