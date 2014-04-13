@@ -84,7 +84,7 @@ void ccruncher_test::ExceptionTest::function3() throw(ccruncher::Exception)
 //===========================================================================
 // function4. Can't throw exceptions
 //===========================================================================
-void ccruncher_test::ExceptionTest::function4() throw()
+void ccruncher_test::ExceptionTest::function4() noexcept
 {
   // nothing to do
 }

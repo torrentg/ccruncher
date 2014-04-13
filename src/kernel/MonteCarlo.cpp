@@ -593,7 +593,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
  *            segments of the segmentation).
  */
 bool ccruncher::MonteCarlo::append(int ithread, const std::vector<short> &vi,
-    const double *losses) throw()
+    const double *losses) noexcept
 {
   assert(losses != nullptr);
   assert(vi.size() == blocksize);

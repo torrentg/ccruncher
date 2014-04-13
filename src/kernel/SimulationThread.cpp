@@ -350,7 +350,7 @@ void ccruncher::SimulationThread::rmvnorm()
  */
 void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obligor,
     Date dtime, const SimulatedAsset *vassets, const unsigned short *vsegments,
-    double *vlosses) const throw()
+    double *vlosses) const noexcept
 {
   assert(vassets != nullptr);
   assert(vsegments != nullptr);

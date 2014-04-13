@@ -64,7 +64,7 @@ const string & ccruncher::Exception::toString() const
  * @see http://www.cplusplus.com/reference/exception/exception/what/
  * @return Exception message as char array.
  */
-const char * ccruncher::Exception::what() const throw()
+const char * ccruncher::Exception::what() const noexcept
 {
   return msg.c_str();
 }

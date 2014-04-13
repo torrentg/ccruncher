@@ -27,6 +27,8 @@
 #include <iostream>
 #include <getopt.h>
 #include <unistd.h>
+#include <cstdlib>
+#include <exception>
 #include <gsl/gsl_errno.h>
 #include <QApplication>
 #include <QTextCodec>
@@ -49,6 +51,17 @@ void help();
 void info();
 void version();
 void setnice(int niceval) throw(Exception);
+
+/**************************************************************************//**
+ * @details Catch uncaught exceptions thrown by program.
+ */
+void exception_handler()
+{
+  cerr << endl <<
+      "unexpected error. please report this bug sending input file, \n"
+      "ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
+  exit(1);
+}
 
 /**************************************************************************//**
  * @brief Error handler for the GSL library.
@@ -87,6 +100,9 @@ int main(int argc, char *argv[])
       { "info",         0,  nullptr,  305 },
       { nullptr,        0,  nullptr,   0  }
   };
+
+  // uncaught exceptions manager
+  set_terminate(exception_handler);
 
   // parsing options
   while (1)
@@ -204,9 +220,7 @@ int main(int argc, char *argv[])
   }
   catch(...)
   {
-    cerr <<
-      "panic: unexpected error. Please report this bug sending input\n"
-      "file, ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
+    exception_handler();
     return 1;
   }
 }
