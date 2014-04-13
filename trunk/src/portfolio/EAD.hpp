@@ -107,7 +107,7 @@ class EAD
     //! Returns distribution parameter
     double getValue2() const;
     //! Returns exposure
-    double getValue(const gsl_rng *rng=NULL) const;
+    double getValue(const gsl_rng *rng=nullptr) const;
     //! Returns the mean of the exposure
     double getExpected() const;
     //! Apply current net value factor
@@ -138,23 +138,23 @@ inline double ccruncher::EAD::getValue(const gsl_rng *rng) const
       return value1;
 
     case Lognormal:
-      assert(rng != NULL);
+      assert(rng != nullptr);
       return gsl_ran_lognormal(rng, value1, value2);
 
     case Exponential:
-      assert(rng != NULL);
+      assert(rng != nullptr);
       return gsl_ran_exponential(rng, value1);
 
     case Uniform:
-      assert(rng != NULL);
+      assert(rng != nullptr);
       return gsl_ran_flat(rng, value1, value2);
 
     case Gamma:
-      assert(rng != NULL);
+      assert(rng != nullptr);
       return gsl_ran_gamma(rng, value1, value2);
 
     case Normal:
-      assert(rng != NULL);
+      assert(rng != nullptr);
       return std::max(0.0, value1 + gsl_ran_gaussian(rng, value2));
 
     default:

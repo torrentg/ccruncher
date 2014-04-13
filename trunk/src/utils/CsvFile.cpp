@@ -40,7 +40,7 @@ using namespace std;
  * @throw Exception Error opening file.
  */
 ccruncher::CsvFile::CsvFile(const string &fname) throw(Exception)
-    : filename(""), file(NULL), filesize(0)
+    : filename(""), file(nullptr), filesize(0)
 {
   if (fname != "") {
     open(fname);
@@ -65,12 +65,12 @@ void ccruncher::CsvFile::open(const string &fname) throw(Exception)
   filename = fname;
 
   file = fopen(fname.c_str(), "r");
-  if (file == NULL) {
+  if (file == nullptr) {
     throw Exception("error opening file " + fname);
   }
 
-  ptr0 = NULL;
-  ptr1 = NULL;
+  ptr0 = nullptr;
+  ptr1 = nullptr;
   buffer[0] = 0;
 
   // get current file size
@@ -83,13 +83,13 @@ void ccruncher::CsvFile::open(const string &fname) throw(Exception)
 /**************************************************************************/
 void ccruncher::CsvFile::close()
 {
-  if (file != NULL) {
+  if (file != nullptr) {
     fclose(file);
-    file = NULL;
+    file = nullptr;
   }
   headers.clear();
-  ptr0 = NULL;
-  ptr1 = NULL;
+  ptr0 = nullptr;
+  ptr1 = nullptr;
   buffer[0] = 0;
   filesize = 0;
 }
@@ -99,7 +99,7 @@ void ccruncher::CsvFile::close()
  */
 const vector<string>& ccruncher::CsvFile::getHeaders()
 {
-  if (file != NULL && !headers.empty()) return headers;
+  if (file != nullptr && !headers.empty()) return headers;
 
   headers.clear();
   open(filename);
@@ -131,10 +131,10 @@ const vector<string>& ccruncher::CsvFile::getHeaders()
 size_t ccruncher::CsvFile::getChunk(char *ptr)
 {
   size_t len = 0;
-  char *aux = NULL;
+  char *aux = nullptr;
 
   // move data pointed by ptr to the begining of buffer
-  if (ptr != NULL) {
+  if (ptr != nullptr) {
     assert(buffer <= ptr && ptr < buffer+BUFFER_SIZE);
     len = buffer + BUFFER_SIZE - ptr;
     memcpy(buffer, ptr, len);
@@ -198,8 +198,8 @@ void ccruncher::CsvFile::skipComments()
 int ccruncher::CsvFile::next() throw(Exception)
 {
   // first line
-  if (ptr1 == NULL) {
-    getChunk(NULL);
+  if (ptr1 == nullptr) {
+    getChunk(nullptr);
   }
   ptr0 = ptr1;
   assert(buffer <= ptr0 && ptr0 < buffer+BUFFER_SIZE);
@@ -222,7 +222,7 @@ int ccruncher::CsvFile::next() throw(Exception)
       ptr1++;
       return 2;
     }
-    else if (*ptr1 == FIELD_SEPARATOR) { //strchr(separators.c_str(), buffer[pos]) != NULL
+    else if (*ptr1 == FIELD_SEPARATOR) { //strchr(separators.c_str(), buffer[pos]) != nullptr
       *ptr1 = 0;
       ptr1++;
       return 1;
@@ -264,7 +264,7 @@ double ccruncher::CsvFile::parse(const char *str) throw(Exception)
  */
 char* ccruncher::CsvFile::trim(char *ptr)
 {
-  if (ptr == NULL) return ptr;
+  if (ptr == nullptr) return ptr;
   char *ret = ptr;
   while (isspace(*ret)) ret++;
   if (*ret == 0) return ret;
@@ -337,7 +337,7 @@ void ccruncher::CsvFile::getColumn(int col, vector<double> &ret, bool *stop) thr
       numlines++;
 
       // check stop flag
-      if (stop != NULL && *stop) break;
+      if (stop != nullptr && *stop) break;
     }
     while(rc != 3);
   }
@@ -399,7 +399,7 @@ void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Excep
       numlines++;
 
       // check stop flag
-      if (stop != NULL && *stop) break;
+      if (stop != nullptr && *stop) break;
     }
     while(rc != 3);
   }
@@ -467,7 +467,7 @@ void ccruncher::CsvFile::getColumns(vector<vector<double> > &ret, bool *stop) th
       numlines++;
 
       // check stop flag
-      if (stop != NULL && *stop) break;
+      if (stop != nullptr && *stop) break;
     }
     while(rc != 3);
   }
@@ -499,7 +499,7 @@ size_t ccruncher::CsvFile::getFileSize() const
  */
 size_t ccruncher::CsvFile::getReadedSize() const
 {
-  if (file == NULL) return 0;
+  if (file == nullptr) return 0;
   else return ftell(file);
 }
 
@@ -517,7 +517,7 @@ size_t ccruncher::CsvFile::getNumLines() throw(Exception)
 
   do
   {
-    rc = getChunk(NULL);
+    rc = getChunk(nullptr);
     for(size_t i=0; i<rc; i++) {
       if (buffer[i] == '\n') {
         numlines++;

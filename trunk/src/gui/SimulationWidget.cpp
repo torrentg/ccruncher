@@ -47,8 +47,8 @@ using namespace ccruncher_gui;
  * @param[in] parent Widget parent.
  */
 ccruncher_gui::SimulationWidget::SimulationWidget(const QString &filename, QWidget *parent) :
-    MdiChildWidget(parent), ui(new Ui::SimulationWidget), progress(NULL),
-    toolbar(NULL)
+    MdiChildWidget(parent), ui(new Ui::SimulationWidget), progress(nullptr),
+    toolbar(nullptr)
 {
   ui->setupUi(this);
   ui->progress->setStyle(new QCleanlooksStyle()); //QCleanlooksStyle, QMacStyle, QPlastiqueStyle, QWindowsXPStyle
@@ -91,7 +91,7 @@ ccruncher_gui::SimulationWidget::SimulationWidget(const QString &filename, QWidg
   toolbar->addAction(actionStop);
 
   MainWindow *main = dynamic_cast<MainWindow*>(parent);
-  if (main != NULL) properties = main->getProperties();
+  if (main != nullptr) properties = main->getProperties();
 
   task.setStreamBuf(&qstream);
   connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
@@ -108,7 +108,7 @@ ccruncher_gui::SimulationWidget::~SimulationWidget()
 {
   task.stop();
   task.wait();
-  if (toolbar != NULL) delete toolbar;
+  if (toolbar != nullptr) delete toolbar;
   delete ui;
 }
 
@@ -373,7 +373,7 @@ void ccruncher_gui::SimulationWidget::draw()
 
   if (task.getStatus() == SimulationTask::reading)
   {
-    if (task.getIData() == NULL) return;
+    if (task.getIData() == nullptr) return;
     size_t mbytes = task.getIData()->getFileSize();
     size_t nbytes = task.getIData()->getReadedSize();
 
@@ -385,7 +385,7 @@ void ccruncher_gui::SimulationWidget::draw()
   }
   else
   {
-    if (task.getMonteCarlo() == NULL) return;
+    if (task.getMonteCarlo() == nullptr) return;
     size_t msims = task.getMonteCarlo()->getMaxIterations();
     size_t nsims = task.getMonteCarlo()->getNumIterations();
 

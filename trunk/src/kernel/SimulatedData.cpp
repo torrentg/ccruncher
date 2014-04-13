@@ -32,7 +32,7 @@ using namespace ccruncher;
  */
 ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
 {
-  if (obligor != NULL) {
+  if (obligor != nullptr) {
     irating = static_cast<unsigned char>(obligor->irating);
     ifactor = static_cast<unsigned char>(obligor->ifactor);
     numassets = 0;
@@ -97,7 +97,7 @@ bool ccruncher::SimulatedObligor::operator<(const SimulatedObligor &c) const
 }
 
 /**************************************************************************/
-ccruncher::SimulatedAsset::SimulatedAsset(Asset *asset) : begin(NULL), end(NULL)
+ccruncher::SimulatedAsset::SimulatedAsset(Asset *asset) : begin(nullptr), end(nullptr)
 {
   assign(asset);
 }
@@ -119,9 +119,9 @@ ccruncher::SimulatedAsset& ccruncher::SimulatedAsset::operator=(const SimulatedA
 {
   mindate = o.mindate;
   maxdate = o.maxdate;
-  if (o.begin == NULL) {
-    begin = NULL;
-    end = NULL;
+  if (o.begin == nullptr) {
+    begin = nullptr;
+    end = nullptr;
   }
   else {
     size_t len = o.end - o.begin;
@@ -138,16 +138,16 @@ ccruncher::SimulatedAsset& ccruncher::SimulatedAsset::operator=(const SimulatedA
  */
 void ccruncher::SimulatedAsset::assign(Asset *asset)
 {
-  if (begin != NULL) {
+  if (begin != nullptr) {
     free();
   }
 
-  if (asset == NULL)
+  if (asset == nullptr)
   {
     mindate = NAD;
     maxdate = NAD;
-    begin = NULL;
-    end = NULL;
+    begin = nullptr;
+    end = nullptr;
   }
   else
   {
@@ -163,8 +163,8 @@ void ccruncher::SimulatedAsset::assign(Asset *asset)
     }
     else
     {
-      begin = NULL;
-      end = NULL;
+      begin = nullptr;
+      end = nullptr;
     }
   }
 }
@@ -174,12 +174,12 @@ void ccruncher::SimulatedAsset::assign(Asset *asset)
  */
 void ccruncher::SimulatedAsset::free()
 {
-  if (begin != NULL)
+  if (begin != nullptr)
   {
-    assert(end != NULL);
+    assert(end != nullptr);
     delete [] begin;
-    begin = NULL;
-    end = NULL;
+    begin = nullptr;
+    end = nullptr;
   }
 }
 

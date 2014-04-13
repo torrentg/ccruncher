@@ -143,7 +143,7 @@ class Expr
       //! Pointer to variable value
       double *ptr;
       //! Default constructor
-      variable() : id("?"), ptr(NULL) {}
+      variable() : id("?"), ptr(nullptr) {}
       //! Constructor
       variable(const std::string &s, double *p) : id(s), ptr(p) {}
     };

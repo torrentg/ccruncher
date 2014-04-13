@@ -32,17 +32,17 @@ using namespace ccruncher;
  */
 ccruncher_gui::FindDefines::FindDefines(const std::string &filename)
 {
-  gzFile file = NULL;
+  gzFile file = nullptr;
 
   try {
     file = gzopen(filename.c_str(), "rb");
-    if (file == NULL) return;
+    if (file == nullptr) return;
     ExpatParser parser;
     parser.parse(file, this);
     gzclose(file);
   }
   catch(...) {
-    if (file != NULL) gzclose(file);
+    if (file != nullptr) gzclose(file);
   }
 }
 

@@ -40,7 +40,7 @@ using namespace std;
  * @param[in] parent Widget parent.
  */
 ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidget *parent) : QMainWindow(parent),
-  ui(new Ui::MainWindow), mainToolBar(NULL), childToolBar(NULL), properties(map),
+  ui(new Ui::MainWindow), mainToolBar(nullptr), childToolBar(nullptr), properties(map),
   network(this)
 {
   ui->setupUi(this);
@@ -148,15 +148,15 @@ void ccruncher_gui::MainWindow::dropEvent(QDropEvent* event)
  */
 void ccruncher_gui::MainWindow::updateToolBars(QMdiSubWindow *window)
 {
-  if (window == NULL)
+  if (window == nullptr)
   {
     if (!mdiArea->hasFocus() && mdiArea->subWindowList().size() > 0) {
       // mdiarea has lost focus, nothing to do
     }
-    else if (childToolBar != NULL) {
+    else if (childToolBar != nullptr) {
       // last subwindow removed
       //removeToolBar(childToolBar);
-      childToolBar = NULL;
+      childToolBar = nullptr;
     }
     else {
       // nothing to do
@@ -165,11 +165,11 @@ void ccruncher_gui::MainWindow::updateToolBars(QMdiSubWindow *window)
   else
   {
     MdiChildWidget* child = dynamic_cast<MdiChildWidget*>(window->widget());
-    QToolBar *toolbar = (child?child->getToolBar():NULL);
+    QToolBar *toolbar = (child?child->getToolBar():nullptr);
     if (childToolBar != toolbar) {
       removeToolBar(childToolBar);
       childToolBar = toolbar;
-      if (childToolBar != NULL) {
+      if (childToolBar != nullptr) {
         addToolBar(childToolBar);
         childToolBar->setVisible(true);
       }
@@ -248,11 +248,11 @@ void ccruncher_gui::MainWindow::openFile(const QUrl &url)
     if (existing) {
       mdiArea->setActiveSubWindow(existing);
       AnalysisWidget *analysis = dynamic_cast<AnalysisWidget*>(existing->widget());
-      if (analysis != NULL) analysis->refresh();
+      if (analysis != nullptr) analysis->refresh();
       return;
     }
 
-    QWidget *child = NULL;
+    QWidget *child = nullptr;
     try
     {
       if (url.scheme() == "exec") {
@@ -310,7 +310,7 @@ QMdiSubWindow* ccruncher_gui::MainWindow::findMdiChild(const QString &filename)
       return child;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 /**************************************************************************//**

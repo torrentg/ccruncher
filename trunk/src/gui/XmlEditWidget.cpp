@@ -37,8 +37,8 @@ using namespace ccruncher;
  */
 ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent)
     throw(NonEditableException, InvalidFormatException, OpenErrorException) :
-    MdiChildWidget(parent), ui(new Ui::XmlEditWidget), highlighter(NULL),
-    toolbar(NULL)
+    MdiChildWidget(parent), ui(new Ui::XmlEditWidget), highlighter(nullptr),
+    toolbar(nullptr)
 {
   ui->setupUi(this);
 
@@ -81,8 +81,8 @@ ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent)
     load(f);
   }
   catch(...) {
-    if (toolbar != NULL) delete toolbar;
-    if (highlighter != NULL) delete highlighter;
+    if (toolbar != nullptr) delete toolbar;
+    if (highlighter != nullptr) delete highlighter;
     throw;
   }
 }
@@ -90,8 +90,8 @@ ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent)
 /**************************************************************************/
 ccruncher_gui::XmlEditWidget::~XmlEditWidget()
 {
-  if (toolbar != NULL) delete toolbar;
-  if (highlighter != NULL) delete highlighter;
+  if (toolbar != nullptr) delete toolbar;
+  if (highlighter != nullptr) delete highlighter;
   delete ui;
 }
 

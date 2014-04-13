@@ -57,8 +57,8 @@ using namespace ccruncher;
  * @param[in] parent Widget parent.
  */
 ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *parent) :
-  MdiChildWidget(parent), ui(new Ui::AnalysisWidget), progress(NULL),
-    magnifier(NULL), panner(NULL), task_progress(0.0f), toolbar(NULL)
+  MdiChildWidget(parent), ui(new Ui::AnalysisWidget), progress(nullptr),
+    magnifier(nullptr), panner(nullptr), task_progress(0.0f), toolbar(nullptr)
 {
   blockSignals(true);
 
@@ -162,7 +162,7 @@ ccruncher_gui::AnalysisWidget::~AnalysisWidget()
   blockSignals(true);
   task.stop();
   task.wait(250);
-  if (toolbar != NULL) delete toolbar;
+  if (toolbar != nullptr) delete toolbar;
   delete ui;
 }
 
@@ -171,7 +171,7 @@ ccruncher_gui::AnalysisWidget::~AnalysisWidget()
  */
 void ccruncher_gui::AnalysisWidget::setZoomX(bool checked)
 {
-  assert(magnifier != NULL);
+  assert(magnifier != nullptr);
   magnifier->setAxisEnabled(QwtPlot::xBottom, checked);
 }
 
@@ -180,7 +180,7 @@ void ccruncher_gui::AnalysisWidget::setZoomX(bool checked)
  */
 void ccruncher_gui::AnalysisWidget::setZoomY(bool checked)
 {
-  assert(magnifier != NULL);
+  assert(magnifier != nullptr);
   magnifier->setAxisEnabled(QwtPlot::yLeft, checked);
 }
 
@@ -336,7 +336,7 @@ void ccruncher_gui::AnalysisWidget::drawHistogram()
   ui->plot->setAxisTitle(QwtPlot::xBottom, "Portfolio Loss");
 
   const gsl_histogram *hist = task.getHistogram();
-  if (hist == NULL) return;
+  if (hist == nullptr) return;
   numbins = gsl_histogram_bins(hist);
   ui->numbins->blockSignals(true);
   ui->numbins->setValue(numbins);
@@ -374,7 +374,7 @@ void ccruncher_gui::AnalysisWidget::drawHistogram()
   qhist->setData(new QwtIntervalSeriesData(samples));
   qhist->attach(ui->plot);
 
-  if (panner != NULL) panner->setOrientations(Qt::Horizontal);
+  if (panner != nullptr) panner->setOrientations(Qt::Horizontal);
   ui->plot->replot();
 
   ui->numiterations->setText(QString::number(numiterations));
@@ -448,7 +448,7 @@ void ccruncher_gui::AnalysisWidget::drawCurve()
     d_intervalCurve->attach(ui->plot);
   }
 
-  if (panner != NULL) panner->setOrientations(Qt::Horizontal | Qt::Vertical);
+  if (panner != nullptr) panner->setOrientations(Qt::Horizontal | Qt::Vertical);
   ui->plot->replot();
 
   ui->statistic_str->setText(name + ":");

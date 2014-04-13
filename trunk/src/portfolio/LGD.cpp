@@ -47,14 +47,14 @@ const ccruncher::LGD::Distr ccruncher::LGD::distrs[] = {
  */
 ccruncher::LGD::LGD(const char *cstr) throw(Exception)
 {
-  assert(cstr != NULL);
-  if (cstr == NULL) throw Exception("null lgd value");
+  assert(cstr != nullptr);
+  if (cstr == nullptr) throw Exception("null lgd value");
   
   // triming initial spaces
   while (isspace(*cstr)) cstr++;
 
   size_t len = strlen(cstr);
-  if (strchr(cstr,'(') != NULL && cstr[len-1] == ')')
+  if (strchr(cstr,'(') != nullptr && cstr[len-1] == ')')
   {
     // parsing lgd distribution
     for(size_t i=0; i<NUMDISTRS; i++)

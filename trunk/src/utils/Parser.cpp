@@ -52,7 +52,7 @@ int ccruncher::Parser::intValue(const std::string &str) throw(Exception)
  */
 int ccruncher::Parser::intValue(const char *pnum) throw(Exception)
 {
-  assert(pnum != NULL);
+  assert(pnum != nullptr);
   
   long aux = 0L;
 
@@ -94,9 +94,9 @@ long ccruncher::Parser::longValue(const std::string &str) throw(Exception)
  */
 long ccruncher::Parser::longValue(const char *pnum) throw(Exception)
 {
-  assert(pnum != NULL);
+  assert(pnum != nullptr);
   
-  char *pstr = NULL;
+  char *pstr = nullptr;
 
   // initializing numerical error status
   errno = 0;
@@ -132,8 +132,8 @@ double ccruncher::Parser::doubleValue(const std::string &str) throw(Exception)
  */
 double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
 {
-  assert(pnum != NULL);
-  char *pstr = NULL;
+  assert(pnum != nullptr);
+  char *pstr = nullptr;
 
   // initializing numerical error status
   errno = 0;
@@ -199,7 +199,7 @@ Date ccruncher::Parser::dateValue(const std::string &str) throw(Exception)
  */
 Date ccruncher::Parser::dateValue(const char *cstr) throw(Exception)
 {
-  assert(cstr != NULL);
+  assert(cstr != nullptr);
   return Date(cstr);
 }
 
@@ -231,7 +231,7 @@ bool ccruncher::Parser::boolValue(const std::string &str) throw(Exception)
  */
 bool ccruncher::Parser::boolValue(const char *cstr) throw(Exception)
 {
-  assert(cstr != NULL);
+  assert(cstr != nullptr);
 
   if (strcmp(cstr,"true") == 0)
   {

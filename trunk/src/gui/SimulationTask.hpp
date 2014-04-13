@@ -93,7 +93,7 @@ class SimulationTask : public QThread
   public:
 
     //! Constructor
-    SimulationTask(std::streambuf *s=NULL);
+    SimulationTask(std::streambuf *s=nullptr);
     //! Destructor
     ~SimulationTask();
     //! Set streambuf

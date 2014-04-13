@@ -31,10 +31,10 @@ using namespace ccruncher;
 
 /**************************************************************************/
 ccruncher::ExpatUserData::ExpatUserData(size_t buffersize) :
-  pila(MAX_STACK_SIZE), pila_pos(-1), current_tag(NULL), buffer(NULL),
-  buffer_size(buffersize), buffer_pos1(NULL), buffer_pos2(NULL),
-  date1(NULL), date2(NULL), interest(NULL), ratings(NULL),
-  factors(NULL), segmentations(NULL)
+  pila(MAX_STACK_SIZE), pila_pos(-1), current_tag(nullptr), buffer(nullptr),
+  buffer_size(buffersize), buffer_pos1(nullptr), buffer_pos2(nullptr),
+  date1(nullptr), date2(nullptr), interest(nullptr), ratings(nullptr),
+  factors(nullptr), segmentations(nullptr)
 {
   if (buffer_size == 0) buffer_size = 1;
   buffer = new char[buffer_size];
@@ -47,8 +47,8 @@ ccruncher::ExpatUserData::ExpatUserData(size_t buffersize) :
  * @param[in] o Object to replicate.
  */
 ccruncher::ExpatUserData::ExpatUserData(const ExpatUserData &o) :
-  pila(0), pila_pos(-1), current_tag(NULL), buffer(NULL),
-  buffer_size(0), buffer_pos1(NULL), buffer_pos2(NULL)
+  pila(0), pila_pos(-1), current_tag(nullptr), buffer(nullptr),
+  buffer_size(0), buffer_pos1(nullptr), buffer_pos2(nullptr)
 {
   *this = o;
 }
@@ -56,7 +56,7 @@ ccruncher::ExpatUserData::ExpatUserData(const ExpatUserData &o) :
 /**************************************************************************/
 ccruncher::ExpatUserData::~ExpatUserData()
 {
-  if (buffer != NULL) delete [] buffer;
+  if (buffer != nullptr) delete [] buffer;
 }
 
 /**************************************************************************//**
@@ -72,7 +72,7 @@ ExpatUserData & ccruncher::ExpatUserData::operator= (const ExpatUserData &o)
     current_tag = o.current_tag;
     defines = o.defines;
 
-    if (buffer != NULL) delete [] buffer;
+    if (buffer != nullptr) delete [] buffer;
     buffer_size = o.buffer_size;
     buffer = new char[buffer_size];
     buffer_pos1 = buffer + buffer_size + 1;
@@ -176,7 +176,7 @@ const char* ccruncher::ExpatUserData::applyDefines(const char *str)
   const char *p1 = str;
   const char *p2;
 
-  while ((p2=strchr(p1,'$'))!=NULL)
+  while ((p2=strchr(p1,'$'))!=nullptr)
   {
     if (ret == str) bufferPush(p1, p2-p1);
     else bufferAppend(p1, p2-p1);

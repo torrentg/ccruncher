@@ -192,7 +192,7 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
 
   Date time0("01/01/2000");
   Date timeT("01/01/2005");
-  Obligor *bp = NULL;
+  Obligor *bp = nullptr;
   Ratings ratings = getRatings();
   Factors factors = getFactors();
   Segmentations segmentations = getSegmentations();

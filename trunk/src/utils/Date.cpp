@@ -122,7 +122,7 @@ ccruncher::Date::Date(const char *str) throw(Exception)
  */
 void ccruncher::Date::parse(const char *str) throw(Exception)
 {
-  assert(str != NULL);
+  assert(str != nullptr);
 
   const char *ptr1 = str;
   const char *ptr2 = str;

@@ -119,15 +119,15 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     str = getAttributeValue(attributes, "ead");
     values.ead = EAD(str);
 
-    str = getAttributeValue(attributes, "lgd", NULL);
-    if (str != NULL) values.lgd = LGD(str);
+    str = getAttributeValue(attributes, "lgd", nullptr);
+    if (str != nullptr) values.lgd = LGD(str);
     else values.lgd = dlgd;
     
     data.push_back(values);
   }
   else if (isEqual(name_,"belongs-to"))
   {
-    assert(eu.segmentations != NULL);
+    assert(eu.segmentations != nullptr);
     const char *ssegmentation = getAttributeValue(attributes, "segmentation");
     int isegmentation = eu.segmentations->indexOfSegmentation(ssegmentation);
 
@@ -146,11 +146,11 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     id = getStringAttribute(attributes, "id");
     date = getDateAttribute(attributes, "date");
     data.push_back(DateValues(date, EAD(EAD::Fixed,0.0), LGD(LGD::Fixed,0.0)));
-    const char *str = getAttributeValue(attributes, "lgd", NULL);
-    if (str != NULL) {
+    const char *str = getAttributeValue(attributes, "lgd", nullptr);
+    if (str != nullptr) {
       dlgd = LGD(str);
     }
-    assert(eu.segmentations != NULL);
+    assert(eu.segmentations != nullptr);
     vsegments.resize(eu.segmentations->size(), 0);
   }
   else if (isEqual(name_,"data"))

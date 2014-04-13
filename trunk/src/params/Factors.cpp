@@ -82,7 +82,7 @@ vector<double> ccruncher::Factors::getLoadings() const
  */
 int ccruncher::Factors::getIndex(const char *name) const
 {
-  assert(name != NULL);
+  assert(name != nullptr);
   for (size_t i=0; i<vfactors.size(); i++)
   {
     if (vfactors[i].name.compare(name) == 0)

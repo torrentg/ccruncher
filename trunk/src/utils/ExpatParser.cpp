@@ -41,13 +41,13 @@ using namespace std;
 /**************************************************************************/
 ccruncher::ExpatParser::ExpatParser() : userdata(4000), checksum(0UL)
 {
-  xmlparser = NULL;
+  xmlparser = nullptr;
 }
 
 /**************************************************************************/
 ccruncher::ExpatParser::~ExpatParser()
 {
-  if (xmlparser != NULL) {
+  if (xmlparser != nullptr) {
     XML_ParserFree(xmlparser);
   }
 }
@@ -59,14 +59,14 @@ ccruncher::ExpatParser::~ExpatParser()
  */
 void ccruncher::ExpatParser::reset()
 {
-  if (xmlparser != NULL) {
+  if (xmlparser != nullptr) {
     XML_ParserFree(xmlparser);
-    xmlparser = NULL;
+    xmlparser = nullptr;
   }
 
   // creating parser object
-  xmlparser = XML_ParserCreate(NULL);
-  assert(xmlparser != NULL);
+  xmlparser = XML_ParserCreate(nullptr);
+  assert(xmlparser != nullptr);
 
   // setting userData
   XML_SetUserData(xmlparser, &userdata);
@@ -124,7 +124,7 @@ void ccruncher::ExpatParser::endElement(void *ud_, const char *name)
   ExpatHandlers *eh = ud->getCurrentHandlers();
 
   // setting current tag
-  ud->setCurrentTag(NULL);
+  ud->setCurrentTag(nullptr);
 
   // calling current handler
   eh->epend(*ud, name);
@@ -167,7 +167,7 @@ void ccruncher::ExpatParser::parse(const std::string &xmlcontent, ExpatHandlers 
 {
   reset();
   userdata.setCurrentHandlers("", eh);
-  parse(NULL, const_cast<char*>(xmlcontent.c_str()), xmlcontent.length(), stop);
+  parse(nullptr, const_cast<char*>(xmlcontent.c_str()), xmlcontent.length(), stop);
 }
 
 /**************************************************************************//**
@@ -199,7 +199,7 @@ void ccruncher::ExpatParser::parse(gzFile file, ExpatHandlers *eh, bool *stop) t
  */
 void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, bool *stop) throw(Exception)
 {
-  assert(buf != NULL);
+  assert(buf != nullptr);
   assert(buffer_size > 0);
 
   try
@@ -209,11 +209,11 @@ void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, b
 
     do
     {
-      if (stop != NULL && *stop == true) {
+      if (stop != nullptr && *stop == true) {
         throw Exception("parser stopped");
       }
 
-      if (file != NULL) {
+      if (file != nullptr) {
         len = gzread(file, buf, buffer_size);
         done = (len < (int)buffer_size);
       }

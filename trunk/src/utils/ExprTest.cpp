@@ -112,7 +112,7 @@ void ccruncher_test::ExprTest::test2()
   ASSERT_NO_THROW(Expr::compile("a+a2", variables, tokens));
   ASSERT(variables.size()==2);
   ASSERT_NO_THROW(Expr::compile("a+aVeryLongVariablesWithSomeCharsInUpperCase", variables, tokens));
-  ASSERT(variables.size()==3 && variables[2].ptr == NULL);
+  ASSERT(variables.size()==3 && variables[2].ptr == nullptr);
   ASSERT_NO_THROW(Expr::compile("_a", variables, tokens));
   ASSERT(variables.size()==4);
   ASSERT_NO_THROW(Expr::compile("a_", variables, tokens));

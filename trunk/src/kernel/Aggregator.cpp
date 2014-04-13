@@ -123,7 +123,7 @@ ccruncher::Aggregator::~Aggregator()
  */
 void ccruncher::Aggregator::append(const double *losses) throw(Exception)
 {
-  assert(losses != NULL);
+  assert(losses != nullptr);
   assert(numsegments > 0);
 
   try

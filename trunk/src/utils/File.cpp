@@ -181,12 +181,10 @@ string ccruncher::File::normalizePath(const string &path) throw(Exception)
  */
 bool ccruncher::File::existDir(const std::string &dirname)
 {
-  DIR *tmp;
-
   errno = 0;
-  tmp = opendir(dirname.c_str());
+  DIR *tmp = opendir(dirname.c_str());
 
-  if (tmp == NULL)
+  if (tmp == nullptr)
   {
     if (errno == EACCES)
     {

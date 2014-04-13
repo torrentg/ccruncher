@@ -122,7 +122,7 @@ class ExpatHandlers
  */
 inline bool ccruncher::ExpatHandlers::isEqual(const char *pchr, const char *str) const
 {
-  if (pchr != NULL && str != NULL)
+  if (pchr != nullptr && str != nullptr)
   {
     return (std::strcmp(str, pchr) == 0);
   }

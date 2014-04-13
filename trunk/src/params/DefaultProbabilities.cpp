@@ -114,14 +114,14 @@ void ccruncher::DefaultProbabilities::reset()
   date = NAD;
 
   for(size_t i=0; i<splines.size(); i++) {
-    if (splines[i] != NULL) {
+    if (splines[i] != nullptr) {
       gsl_spline_free(splines[i]);
     }
   }
   splines.clear();
 
   for(size_t i=0; i<accels.size(); i++) {
-    if (accels[i] != NULL) {
+    if (accels[i] != nullptr) {
       gsl_interp_accel_free(accels[i]);
     }
   }
@@ -146,7 +146,7 @@ DefaultProbabilities & ccruncher::DefaultProbabilities::operator=(const DefaultP
   splines = o.splines;
   for(size_t i=0; i<splines.size(); i++)
   {
-    if (o.splines[i] != NULL) {
+    if (o.splines[i] != nullptr) {
       splines[i] = gsl_spline_alloc(o.splines[i]->interp->type, o.splines[i]->size);
       gsl_spline_init(splines[i], o.splines[i]->x, o.splines[i]->y, o.splines[i]->size);
     }
@@ -155,7 +155,7 @@ DefaultProbabilities & ccruncher::DefaultProbabilities::operator=(const DefaultP
   accels = o.accels;
   for(size_t i=0; i<accels.size(); i++)
   {
-    if (o.accels[i] != NULL) {
+    if (o.accels[i] != nullptr) {
       accels[i] = gsl_interp_accel_alloc();
       gsl_interp_accel_reset(accels[i]);
     }
@@ -238,7 +238,7 @@ string ccruncher::DefaultProbabilities::getInterpolationType(int i) const
     return "none";
   }
   else {
-    assert(splines[i] != NULL);
+    assert(splines[i] != nullptr);
     return gsl_interp_name(splines[i]->interp);
   }
 }
@@ -437,8 +437,8 @@ void ccruncher::DefaultProbabilities::setSplines()
   assert(indexdefault >= 0);
   assert(ddata.size() > 0);
 
-  splines.assign(ddata.size(), NULL);
-  accels.assign(ddata.size(), NULL);
+  splines.assign(ddata.size(), nullptr);
+  accels.assign(ddata.size(), nullptr);
 
   for(size_t i=0; i<ddata.size(); i++)
   {
@@ -494,10 +494,10 @@ void ccruncher::DefaultProbabilities::setSplines()
 
       for(size_t j=0; j<n; j++)
       {
-        double deriv = gsl_spline_eval_deriv(splines[i], x[j], NULL);
+        double deriv = gsl_spline_eval_deriv(splines[i], x[j], nullptr);
         if (deriv < 0.0) {
           gsl_spline_free(splines[i]);
-          splines[i] = NULL;
+          splines[i] = nullptr;
           iscspline = false;
           break;
         }
@@ -535,7 +535,7 @@ double ccruncher::DefaultProbabilities::evalue(int irating, double t) const
     return 0.0;
   }
 
-  assert(splines[irating] != NULL);
+  assert(splines[irating] != nullptr);
   int n = splines[irating]->size - 1;
 
   if (splines[irating]->x[n] <= t) {
@@ -588,7 +588,7 @@ double ccruncher::DefaultProbabilities::inverse(int irating, double prob) const
     return 0.0;
   }
 
-  assert(splines[irating] != NULL && splines[irating]->size > 0);
+  assert(splines[irating] != nullptr && splines[irating]->size > 0);
 
   if (ddata[irating].back().prob < prob) {
     return ddata[irating].back().day + 1.0;
@@ -677,8 +677,8 @@ void ccruncher::DefaultProbabilities::fdf (double x, void *params, double *y, do
 double ccruncher::DefaultProbabilities::inverse_linear(gsl_spline *spline, double y,
                   gsl_interp_accel *accel) const
 {
-  assert(spline != NULL);
-  assert(accel != NULL);
+  assert(spline != nullptr);
+  assert(accel != nullptr);
 
   int status;
   int iter = 0;
@@ -721,8 +721,8 @@ double ccruncher::DefaultProbabilities::inverse_linear(gsl_spline *spline, doubl
 double ccruncher::DefaultProbabilities::inverse_cspline(gsl_spline *spline, double y,
                   gsl_interp_accel *accel) const
 {
-  assert(spline != NULL);
-  assert(accel != NULL);
+  assert(spline != nullptr);
+  assert(accel != nullptr);
 
   int status;
   int iter = 0;
@@ -783,7 +783,7 @@ Date ccruncher::DefaultProbabilities::getMaxDate(int irating) const
 vector<int> ccruncher::DefaultProbabilities::getDays(int irating) const
 {
   assert(!splines.empty());
-  if (splines[irating] == NULL) return vector<int>();
+  if (splines[irating] == nullptr) return vector<int>();
   vector<int> ret(splines[irating]->size, 0);
   for(size_t i=0; i<splines[irating]->size; i++) {
     assert(splines[irating]->x[i] >= 0);

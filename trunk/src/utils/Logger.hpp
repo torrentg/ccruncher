@@ -60,7 +60,7 @@ class Logger : public std::ostream
   public:
 
     //! Default constructor
-    explicit Logger(std::streambuf *sb=NULL);
+    explicit Logger(std::streambuf *sb=nullptr);
     //! Set indentation size
     void setIndentSize(size_t v);
     //! Set the number of columns

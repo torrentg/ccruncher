@@ -79,7 +79,7 @@ int ccruncher::Segmentation::indexOfSegment(const std::string &sname) const thro
  */
 int ccruncher::Segmentation::indexOfSegment(const char *sname) const throw(Exception)
 {
-  assert(sname != NULL);
+  assert(sname != nullptr);
 
   for (unsigned int i=0; i<segments.size(); i++)
   {
@@ -122,7 +122,7 @@ bool ccruncher::Segmentation::isValidName(const std::string &str)
 {
   if (str.length() == 0) return false;
   for(size_t i=0; i<str.length(); i++) {
-    if (!isalnum(str[i]) && strchr("+-._ ",str[i]) == NULL) {
+    if (!isalnum(str[i]) && strchr("+-._ ",str[i]) == nullptr) {
       return false;
     }
   }

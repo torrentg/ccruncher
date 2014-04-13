@@ -59,7 +59,7 @@ const string& ccruncher::Ratings::getDescription(int i) const
  */
 int ccruncher::Ratings::getIndex(const char *name) const
 {
-  assert(name != NULL);
+  assert(name != nullptr);
   for (unsigned int i=0; i<vratings.size(); i++)
   {
     if (vratings[i].name.compare(name) == 0)

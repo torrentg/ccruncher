@@ -53,7 +53,7 @@ class SimulatedObligor
   public:
 
     //! Constructor
-    SimulatedObligor(Obligor *obligor=NULL);
+    SimulatedObligor(Obligor *obligor=nullptr);
     //! Sets a pointer
     void setObligor(Obligor*);
     //! Gets a pointer
@@ -86,7 +86,7 @@ class SimulatedAsset
   public:
 
     //! Constructor
-    SimulatedAsset(Asset *asset=NULL);
+    SimulatedAsset(Asset *asset=nullptr);
     //! Copy constructor
     SimulatedAsset(const SimulatedAsset &o);
     //! Destructor

@@ -142,7 +142,7 @@ void ccruncher_gui::ProgressWidget::setOpacity(double val)
 {
   opacity = val;
   QGraphicsOpacityEffect *effect = dynamic_cast<QGraphicsOpacityEffect*>(graphicsEffect());
-  if (effect != NULL) {
+  if (effect != nullptr) {
     effect->setOpacity(val);
     update();
     ui->frame->update();

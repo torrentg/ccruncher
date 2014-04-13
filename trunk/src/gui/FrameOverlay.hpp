@@ -47,7 +47,7 @@ class FrameOverlay : public QFrame
     void resizeEvent(QResizeEvent *event)
     {
       for(size_t i=0; i<layers.size(); i++) {
-        if (layers[i] != NULL) layers[i]->resize(event->size());
+        if (layers[i] != nullptr) layers[i]->resize(event->size());
       }
       event->accept();
     }
