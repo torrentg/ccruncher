@@ -416,7 +416,7 @@ void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Excep
  * @param[in] stop Stop flag.
  * @throw Exception Parser error.
  */
-void ccruncher::CsvFile::getColumns(vector<vector<double> > &ret, bool *stop) throw(Exception)
+void ccruncher::CsvFile::getColumns(vector<vector<double>> &ret, bool *stop) throw(Exception)
 {
   int rc;
   size_t numlines = 0;

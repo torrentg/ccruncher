@@ -166,7 +166,7 @@ void ccruncher_gui::AnalysisTask::readData(int col, std::vector<double> &ret) th
  * @param[out] content Csv data.
  * @throw Exception Error reading data.
  */
-void ccruncher_gui::AnalysisTask::readData(std::vector<std::vector<double> > &content) throw(Exception)
+void ccruncher_gui::AnalysisTask::readData(std::vector<std::vector<double>> &content) throw(Exception)
 {
   try {
     setStatus(reading);
@@ -229,13 +229,13 @@ void ccruncher_gui::AnalysisTask::run()
         break;
       }
       case contribution_el: {
-        vector<vector<double> > content;
+        vector<vector<double>> content;
         readData(content);
         runContributionEL(content);
         break;
       }
       case contribution_es: {
-        vector<vector<double> > content;
+        vector<vector<double>> content;
         readData(content);
         runContributionES(content);
         break;
@@ -558,7 +558,7 @@ statval ccruncher_gui::AnalysisTask::expectedShortfall(double percentile,
  * @details Compute risk contribution. Let result in variable contribs.
  * @param[in] content Csv data (columns = segments).
  */
-void ccruncher_gui::AnalysisTask::runContributionEL(const std::vector<std::vector<double> > &content)
+void ccruncher_gui::AnalysisTask::runContributionEL(const std::vector<std::vector<double>> &content)
 {
   setStatus(running);
 
@@ -622,7 +622,7 @@ void ccruncher_gui::AnalysisTask::runContributionEL(const std::vector<std::vecto
  * @details Compute risk contribution. Let result in variable contribs.
  * @param[in] content Csv data (columns = segments).
  */
-void ccruncher_gui::AnalysisTask::runContributionES(std::vector<std::vector<double> > &content)
+void ccruncher_gui::AnalysisTask::runContributionES(std::vector<std::vector<double>> &content)
 {
   setStatus(running);
 

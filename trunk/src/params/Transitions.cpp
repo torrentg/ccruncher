@@ -59,7 +59,7 @@ ccruncher::Transitions::Transitions(const Ratings &ratings_) throw(Exception)
  * @throw Exception Error validating data.
  */
 ccruncher::Transitions::Transitions(const Ratings &ratings_,
-   const std::vector<std::vector<double> > &matrix_, int period_) throw(Exception)
+   const std::vector<std::vector<double>> &matrix_, int period_) throw(Exception)
 {
   assert(period_ > 0);
   assert(ratings_.size() == (int)matrix_.size());
@@ -362,7 +362,7 @@ Transitions ccruncher::Transitions::scale(int t) const throw(Exception)
  * @param numrows Number of steps (step size = period).
  * @param ret Matrix of return values (ratings-PD).
  */
-void ccruncher::Transitions::cdfr(size_t numrows, std::vector<std::vector<double> > &ret) const
+void ccruncher::Transitions::cdfr(size_t numrows, std::vector<std::vector<double>> &ret) const
 {
   // making assertions
   assert(indexdefault >= 0);
@@ -374,13 +374,13 @@ void ccruncher::Transitions::cdfr(size_t numrows, std::vector<std::vector<double
   }
 
   // building Id-matrix of size nxn
-  vector<vector<double> > aux(size(), vector<double>(size(),0.0));
+  vector<vector<double>> aux(size(), vector<double>(size(),0.0));
   for(size_t i=0; i<size(); i++) {
     aux[i][i] = 1.0;
   }
 
   // auxiliary matrix
-  vector<vector<double> > tmp(size(), vector<double>(size(),0.0));
+  vector<vector<double>> tmp(size(), vector<double>(size(),0.0));
 
   // filling CDFR(.,0)
   for(size_t i=0; i<size(); i++)
@@ -413,7 +413,7 @@ DefaultProbabilities ccruncher::Transitions::getDefaultProbabilities(const Date 
        int numrows) const throw(Exception)
 {
   // computing CDFR
-  vector<vector<double> > values(size(), vector<double>(numrows,NAN));
+  vector<vector<double>> values(size(), vector<double>(numrows,NAN));
   cdfr(numrows, values);
 
   // creating dprobs function object
@@ -434,8 +434,8 @@ double ccruncher::Transitions::getRegularizationError() const
 //===========================================================================
 // matrix product (M3 = M1·M2)
 //===========================================================================
-void ccruncher::Transitions::prod(const vector<vector<double> > &M1,
-                const vector<vector<double> > &M2, vector<vector<double> > &M3)
+void ccruncher::Transitions::prod(const vector<vector<double>> &M1,
+                const vector<vector<double>> &M2, vector<vector<double>> &M3)
 {
   assert(M1.size() > 0 && M1[0].size() > 0);
   assert(M1.size() == M2.size() && M1[0].size() == M2[0].size());

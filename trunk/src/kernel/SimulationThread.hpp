@@ -158,7 +158,7 @@ class SimulationThread : public Thread
     //! Lhs sample chi square
     std::vector<double> lhs_values_s;
     //! Auxiliar vector
-    std::vector<std::pair<double,size_t> > lhs_aux;
+    std::vector<std::pair<double,size_t>> lhs_aux;
 
     //! Elapsed time creating random numbers
     Timer timer1;

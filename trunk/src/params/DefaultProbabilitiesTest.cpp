@@ -217,7 +217,7 @@ void ccruncher_test::DefaultProbabilitiesTest::test5()
   Ratings ratings = getRatings();
 
   // dprob function creation
-  vector<vector<double> > mvalues(2);
+  vector<vector<double>> mvalues(2);
   mvalues[0] = vector<double>(pvalues0, pvalues0+4);
   mvalues[1] = vector<double>(pvalues1, pvalues1+4);
   DefaultProbabilities pd(ratings, Date("1/1/2012"), vector<Date>(dvalues, dvalues+4), mvalues);
@@ -287,7 +287,7 @@ void ccruncher_test::DefaultProbabilitiesTest::test6()
   Ratings ratings = getRatings();
 
   // dprob function creation
-  vector<vector<double> > mvalues(2);
+  vector<vector<double>> mvalues(2);
   mvalues[0] = vector<double>(mvalues1, mvalues1+2);
   mvalues[1] = vector<double>(mvalues2, mvalues2+2);
   DefaultProbabilities pd(ratings, Date("1/1/2012"), vector<Date>(dates, dates+2), mvalues);

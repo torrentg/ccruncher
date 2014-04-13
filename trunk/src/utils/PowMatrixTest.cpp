@@ -58,9 +58,9 @@ void ccruncher_test::PowMatrixTest::test1()
      +0.0918803, -0.00327799, +0.990166
   };
 
-  vector<vector<double> > A(3, vector<double>(3));
+  vector<vector<double>> A(3, vector<double>(3));
   for(int i=0; i<3; i++) for(int j=0; j<3; j++) A[i][j] = valA[3*i+j];
-  vector<vector<double> > M(3, vector<double>(3));
+  vector<vector<double>> M(3, vector<double>(3));
 
   ASSERT_NO_THROW(PowMatrix::pow(A, 0.3, M));
 
@@ -120,9 +120,9 @@ void ccruncher_test::PowMatrixTest::test2()
      +1.36792  , +0.0329025 , +0.414152
   };
 
-  vector<vector<double> > A(3, vector<double>(3));
+  vector<vector<double>> A(3, vector<double>(3));
   for(int i=0; i<3; i++) for(int j=0; j<3; j++) A[i][j] = valA[3*i+j];
-  vector<vector<double> > M(3, vector<double>(3));
+  vector<vector<double>> M(3, vector<double>(3));
 
   ASSERT_NO_THROW(PowMatrix::pow(A, 0.2, M));
 
@@ -169,9 +169,9 @@ void ccruncher_test::PowMatrixTest::test3()
     0.808758,  0.0179912,  0.244533
   };
 
-  vector<vector<double> > A(3, vector<double>(3));
+  vector<vector<double>> A(3, vector<double>(3));
   for(int i=0; i<3; i++) for(int j=0; j<3; j++) A[i][j] = valA[3*i+j];
-  vector<vector<double> > M(3, vector<double>(3));
+  vector<vector<double>> M(3, vector<double>(3));
 
   ASSERT_NO_THROW(PowMatrix::pow(A, 0.2, M));
 
@@ -200,9 +200,9 @@ void ccruncher_test::PowMatrixTest::test4()
      +0.0, +0.0, -1.0
   };
 
-  vector<vector<double> > A(3, vector<double>(3));
+  vector<vector<double>> A(3, vector<double>(3));
   for(int i=0; i<3; i++) for(int j=0; j<3; j++) A[i][j] = valA[3*i+j];
-  vector<vector<double> > M(3, vector<double>(3));
+  vector<vector<double>> M(3, vector<double>(3));
 
   ASSERT_THROW(PowMatrix::pow(A, 0.3, M));
 }

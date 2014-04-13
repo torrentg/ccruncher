@@ -187,8 +187,8 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
  * @param[out] ret Matrix to set A^x.
  * @throw Exception Singular matrix or complex eigenvalues.
  */
-void ccruncher::PowMatrix::pow(const std::vector<std::vector<double> > &a, double x,
-                               std::vector<std::vector<double> > &ret) throw(Exception)
+void ccruncher::PowMatrix::pow(const std::vector<std::vector<double>> &a, double x,
+                               std::vector<std::vector<double>> &ret) throw(Exception)
 {
   size_t n = a.size();
   vector<double*> A(n, nullptr);
