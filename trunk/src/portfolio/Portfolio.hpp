@@ -56,7 +56,7 @@ class Portfolio : public ExpatHandlers
     //! Assignment operator (currently forbidden)
     Portfolio& operator=(const Portfolio &);
     //! Checks an obligor
-    void checkObligor(Obligor *) throw(Exception);
+    void checkObligor(Obligor *);
 
   protected:
   

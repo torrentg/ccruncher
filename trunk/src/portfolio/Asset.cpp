@@ -202,7 +202,7 @@ void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
  * @param[in] isegment Segment index.
  * @throw Exception Redefined relation.
  */
-void ccruncher::Asset::addBelongsTo(int isegmentation, int isegment) throw(Exception)
+void ccruncher::Asset::addBelongsTo(int isegmentation, int isegment)
 {
   assert(isegmentation < (int) vsegments.size());
   assert(isegment >= 0);

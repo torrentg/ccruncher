@@ -82,7 +82,7 @@ void ccruncher::Params::epend(ExpatUserData &, const char *name)
  * @return Copula type ('gaussian' or 't').
  * @throw Exception Invalid copula identifier.
  */
-string ccruncher::Params::getCopulaType() const throw(Exception)
+string ccruncher::Params::getCopulaType() const
 {
   // gaussian case
   if (copula_type == "gaussian") {
@@ -105,7 +105,7 @@ string ccruncher::Params::getCopulaType() const throw(Exception)
  * @return Degrees of freedom of the t-copula (ndf>=2).
  * @throw Exception Invalid copula or copula params.
  */
-double ccruncher::Params::getCopulaParam() const throw(Exception)
+double ccruncher::Params::getCopulaParam() const
 {
   if (getCopulaType() != "t") {
     throw Exception("copula without params");
@@ -126,7 +126,7 @@ double ccruncher::Params::getCopulaParam() const throw(Exception)
  * @param[in] attributes Xml element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes) throw(Exception)
+void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
 {
   // reading attribute name
   string name = getStringAttribute(attributes, "name");
@@ -214,7 +214,7 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
  * @details Check that all variables are defined and have a valid value.
  * @throw Exception Error validating parameters.
  */
-void ccruncher::Params::validate() const throw(Exception)
+void ccruncher::Params::validate() const
 {
 
   if (time0 == NAD)

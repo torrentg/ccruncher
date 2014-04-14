@@ -106,7 +106,7 @@ int ccruncher::Factors::getIndex(const std::string &name) const
  * @param[in] val Factor to insert.
  * @throw Exception Factor repeated or loading out-of-range.
  */
-void ccruncher::Factors::insertFactor(const Factor &val) throw(Exception)
+void ccruncher::Factors::insertFactor(const Factor &val)
 {
   // checking coherence
   for (size_t i=0; i<vfactors.size(); i++)

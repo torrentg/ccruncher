@@ -59,7 +59,7 @@ class Ratings : public ExpatHandlers
   private:
   
     //! insert a rating in the list
-    void insertRating(const Rating &) throw(Exception);
+    void insertRating(const Rating &);
 
   protected:
   

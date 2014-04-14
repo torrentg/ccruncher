@@ -97,7 +97,7 @@ bool ccruncher::File::isAbsolutePath(const std::string &path)
  * @return Working directory ending with pathSeparator (eg. '/').
  * @throw Exception Error retrieving working directory.
  */
-string ccruncher::File::getWorkDir() throw(Exception)
+string ccruncher::File::getWorkDir()
 {
   char tempname[1024];
 
@@ -137,7 +137,7 @@ string ccruncher::File::getWorkDir() throw(Exception)
  * @return Dir path normalized.
  * @throw Exception Non valid file path.
  */
-string ccruncher::File::normalizePath(const string &path) throw(Exception)
+string ccruncher::File::normalizePath(const string &path)
 {
   string ret = normalize(path);
 
@@ -207,7 +207,7 @@ bool ccruncher::File::existDir(const std::string &dirname)
  * @param[in] dirname Directory path.
  * @throw Exception Error creating directory.
  */
-void ccruncher::File::makeDir(const std::string &dirname) throw(Exception)
+void ccruncher::File::makeDir(const std::string &dirname)
 {
   int aux;
 
@@ -239,7 +239,7 @@ void ccruncher::File::makeDir(const std::string &dirname) throw(Exception)
  * @param[in] smode Allowed modes: r=read, w=write, rw=read+write
  * @throw Exception invalid mode or file access error.
  */
-void ccruncher::File::checkFile(const string &pathname, const string &smode) throw(Exception)
+void ccruncher::File::checkFile(const string &pathname, const string &smode)
 {
   int aux;
   int mode = 0;

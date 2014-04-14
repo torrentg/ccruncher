@@ -65,7 +65,7 @@ class Segmentation : public ExpatHandlers
   private:
   
     //! Inserts a segment into the list
-    void insertSegment(const std::string &) throw(Exception);
+    void insertSegment(const std::string &);
     //! Check name
     bool isValidName(const std::string &);
 
@@ -92,9 +92,9 @@ class Segmentation : public ExpatHandlers
     //! Returns i-th segment name
     const std::string& getSegment(int i) const;
     //! Return the index of the given segment
-    int indexOfSegment(const std::string &sname) const throw(Exception);
+    int indexOfSegment(const std::string &sname) const;
     //! Return the index of the given segment
-    int indexOfSegment(const char *sname) const throw(Exception);
+    int indexOfSegment(const char *sname) const;
     //! Reset object content
     void reset();
     //! Returns enabled flag

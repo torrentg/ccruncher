@@ -53,7 +53,7 @@ class Obligor : public ExpatHandlers
   private: 
 
     //! Insert an asset
-    void insertAsset(ExpatUserData &eu) throw(Exception);
+    void insertAsset(ExpatUserData &eu);
 
   protected:
   
@@ -88,7 +88,7 @@ class Obligor : public ExpatHandlers
     //! Indicates if this obligor has values in date1-date2
     bool isActive(const Date &, const Date &);
     //! Add a segmentation-segment relation
-    void addBelongsTo(int isegmentation, int isegment) throw(Exception);
+    void addBelongsTo(int isegmentation, int isegment);
     //! Check if belongs to segmentation-segment
     bool belongsTo(int isegmentation, int isegment);
     //! Given a segmentation returns the segment

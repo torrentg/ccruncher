@@ -55,9 +55,9 @@ class Correlations : public ExpatHandlers
   private:
 
     //! Insert a new matrix value
-    void insertCorrelation(const std::string &, const std::string &, double) throw(Exception);
+    void insertCorrelation(const std::string &, const std::string &, double);
     //! Validate matrix values
-    void validate() throw(Exception);
+    void validate();
 
   protected:
 
@@ -71,9 +71,9 @@ class Correlations : public ExpatHandlers
     //! Default constructor
     Correlations() {}
     //! Constructor
-    Correlations(const Factors &) throw(Exception);
+    Correlations(const Factors &);
     //! Set factors
-    void setFactors(const Factors &) throw(Exception);
+    void setFactors(const Factors &);
     //! Return factors
     const Factors& getFactors() const;
     //! Matrix dimension
@@ -81,7 +81,7 @@ class Correlations : public ExpatHandlers
     //! Matrix element access
     const std::vector<double>& operator[] (int row) const;
     //! Return Cholesky matrix
-    gsl_matrix* getCholesky() const throw(Exception);
+    gsl_matrix* getCholesky() const;
 
 };
 

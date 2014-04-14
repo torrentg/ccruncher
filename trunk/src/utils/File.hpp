@@ -50,17 +50,17 @@ class File
   public:
 
     //! Normalize a directory path
-    static std::string normalizePath(const std::string &path) throw(Exception);
+    static std::string normalizePath(const std::string &path);
     //! Returns working directory
-    static std::string getWorkDir() throw(Exception);
+    static std::string getWorkDir();
     //! Indicates if exist a directory
     static bool existDir(const std::string &);
     //! Create a directory
-    static void makeDir(const std::string &) throw(Exception);
+    static void makeDir(const std::string &);
     //! Indicates if a path is absolute
     static bool isAbsolutePath(const std::string &);
     //! Check rw file status
-    static void checkFile(const std::string &pathname, const std::string &smode) throw(Exception);
+    static void checkFile(const std::string &pathname, const std::string &smode);
     //! Directory part of a filepath
     static std::string dirname(const std::string &pathname);
     //! File part of a filepath

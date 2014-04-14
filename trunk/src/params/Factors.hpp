@@ -62,7 +62,7 @@ class Factors : public ExpatHandlers
   private:
   
     //! Add a factor to list
-    void insertFactor(const Factor &) throw(Exception);
+    void insertFactor(const Factor &);
 
   protected:
   

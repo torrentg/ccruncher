@@ -59,7 +59,7 @@ const string& ccruncher::Segmentation::getSegment(int i) const
  * @return The index of the given segment.
  * @throw Exception Segment name not found.
  */
-int ccruncher::Segmentation::indexOfSegment(const std::string &sname) const throw(Exception)
+int ccruncher::Segmentation::indexOfSegment(const std::string &sname) const
 {
   for (unsigned int i=0; i<segments.size(); i++)
   {
@@ -77,7 +77,7 @@ int ccruncher::Segmentation::indexOfSegment(const std::string &sname) const thro
  * @return The index of the given segment.
  * @throw Exception Segment name not found.
  */
-int ccruncher::Segmentation::indexOfSegment(const char *sname) const throw(Exception)
+int ccruncher::Segmentation::indexOfSegment(const char *sname) const
 {
   assert(sname != nullptr);
 
@@ -133,7 +133,7 @@ bool ccruncher::Segmentation::isValidName(const std::string &str)
  * @param[in] sname Segment name.
  * @throw Exception Invalid name or segment name repeated.
  */
-void ccruncher::Segmentation::insertSegment(const std::string &sname) throw(Exception)
+void ccruncher::Segmentation::insertSegment(const std::string &sname)
 {
   if (!isValidName(sname))
   {

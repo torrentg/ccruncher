@@ -107,13 +107,13 @@ class IData : public ExpatHandlers
   private:
   
     //! Validate simulation data
-    void validate() throw(Exception);
+    void validate();
     //! Parse main input file
-    void parse(gzFile file, const std::map<std::string,std::string> &m) throw(Exception);
+    void parse(gzFile file, const std::map<std::string,std::string> &m);
     //! Parse portfolio
-    void parsePortfolio(ExpatUserData &, const char *, const char **) throw(Exception);
+    void parsePortfolio(ExpatUserData &, const char *, const char **);
     //! Check define
-    void checkDefine(const std::string &key, const std::string &value) const throw(Exception);
+    void checkDefine(const std::string &key, const std::string &value) const;
 
   protected:
 
@@ -131,7 +131,7 @@ class IData : public ExpatHandlers
     //! Destructor
     ~IData();
     //! Initialize content
-    void init(const std::string &f, const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *stop_=nullptr, bool parse_portfolio_=true) throw(Exception);
+    void init(const std::string &f, const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *stop_=nullptr, bool parse_portfolio_=true);
     //! Returns simulation title
     const std::string &getTitle() const;
     //! Returns simulation description

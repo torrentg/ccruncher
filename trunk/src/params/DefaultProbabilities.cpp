@@ -59,7 +59,7 @@ ccruncher::DefaultProbabilities::DefaultProbabilities(const DefaultProbabilities
  * @throw Exception Invalid rating list.
  */
 ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_,
-           const Date &d) throw(Exception)
+           const Date &d)
 {
   indexdefault = -1;
   date = d;
@@ -78,7 +78,7 @@ ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_,
  */
 ccruncher::DefaultProbabilities::DefaultProbabilities(const Ratings &ratings_,
            const Date &d, const std::vector<Date> &dates,
-           const std::vector<std::vector<double>> &values) throw(Exception)
+           const std::vector<std::vector<double>> &values)
 {
   indexdefault = -1;
   date = d;
@@ -168,7 +168,7 @@ DefaultProbabilities & ccruncher::DefaultProbabilities::operator=(const DefaultP
  * @param[in] ratings_ List of ratings.
  * @throw Exception Invalid ratings.
  */
-void ccruncher::DefaultProbabilities::setRatings(const Ratings &ratings_) throw(Exception)
+void ccruncher::DefaultProbabilities::setRatings(const Ratings &ratings_)
 {
   if (ratings_.size() <= 0)
   {
@@ -251,7 +251,7 @@ string ccruncher::DefaultProbabilities::getInterpolationType(int i) const
  * @throw Exception Error inserting element.
  */
 void ccruncher::DefaultProbabilities::insertValue(const std::string &srating,
-                const Date &t, double value) throw(Exception)
+                const Date &t, double value)
 {
   assert(ratings.size() > 0);
   assert(date != NAD);
@@ -342,7 +342,7 @@ void ccruncher::DefaultProbabilities::epend(ExpatUserData &, const char *name)
  *          info not entered by user, and checks data.
  * @throw Exception Validation error.
  */
-void ccruncher::DefaultProbabilities::validate() throw(Exception)
+void ccruncher::DefaultProbabilities::validate()
 {
   // ranges are checked in insertValue() method. don't rechecked here
 

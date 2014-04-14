@@ -41,9 +41,9 @@ ccruncher::Transitions::Transitions()
 
 /**************************************************************************//**
  * @param[in] ratings_ List of ratings.
- * @throw Exception Void ratings list.
+ * @throw Exception Empty ratings list.
  */
-ccruncher::Transitions::Transitions(const Ratings &ratings_) throw(Exception)
+ccruncher::Transitions::Transitions(const Ratings &ratings_)
 {
   setRatings(ratings_);
   period = -1;
@@ -59,7 +59,7 @@ ccruncher::Transitions::Transitions(const Ratings &ratings_) throw(Exception)
  * @throw Exception Error validating data.
  */
 ccruncher::Transitions::Transitions(const Ratings &ratings_,
-   const std::vector<std::vector<double>> &matrix_, int period_) throw(Exception)
+   const std::vector<std::vector<double>> &matrix_, int period_)
 {
   assert(period_ > 0);
   assert(ratings_.size() == (int)matrix_.size());
@@ -109,7 +109,7 @@ int ccruncher::Transitions::getPeriod() const
  * @throw Exception Error validating data.
  */
 void ccruncher::Transitions::insertTransition(const std::string &rating1,
-    const std::string &rating2, double value) throw(Exception)
+    const std::string &rating2, double value)
 {
   assert(size() > 0);
 
@@ -198,7 +198,7 @@ void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
  *          default rating.
  * @throw Exception Transition matrix is invalid.
  */
-void ccruncher::Transitions::validate() throw(Exception)
+void ccruncher::Transitions::validate()
 {
   // checking that all rows sum 1
   for (size_t i=0; i<size(); i++)
@@ -335,11 +335,11 @@ void ccruncher::Transitions::regularize()
 /**************************************************************************//**
  * @details Given the transition matrix for period T1, compute the transition
  *          matrix for a new period, t.
- * @param t Period (in months) of the new transition matrix.
+ * @param[in] t Period (in months) of the new transition matrix.
  * @return Transition matrix for period t.
  * @throw Exception Error scaling matrix.
  */
-Transitions ccruncher::Transitions::scale(int t) const throw(Exception)
+Transitions ccruncher::Transitions::scale(int t) const
 {
   try
   {
@@ -359,8 +359,8 @@ Transitions ccruncher::Transitions::scale(int t) const throw(Exception)
  * @details Obtains the PD functions for each rating from the transition
  *          matrix doing M^t.
  * @see http://en.wikipedia.org/wiki/Matrix_norm
- * @param numrows Number of steps (step size = period).
- * @param ret Matrix of return values (ratings-PD).
+ * @param[in] numrows Number of steps (step size = period).
+ * @param[out] ret Matrix of return values (ratings-PD).
  */
 void ccruncher::Transitions::cdfr(size_t numrows, std::vector<std::vector<double>> &ret) const
 {
@@ -406,11 +406,16 @@ void ccruncher::Transitions::cdfr(size_t numrows, std::vector<std::vector<double
   }
 }
 
-//===========================================================================
-// computes default probabilities functions related to this transition matrix
-//===========================================================================
+/**************************************************************************//**
+ * @details Use the transition matrix to infere the default probabilities
+ *          curves computing the default probabilities at each month.
+ * @param[in] date Starting date of this transition matrix.
+ * @param[in] numrows Number of months to compute.
+ * @return DefaultProbabilities related to this transition matrix.
+ * @throw Exception Error creating DefaultProbabilities object.
+ */
 DefaultProbabilities ccruncher::Transitions::getDefaultProbabilities(const Date &date,
-       int numrows) const throw(Exception)
+       int numrows) const
 {
   // computing CDFR
   vector<vector<double>> values(size(), vector<double>(numrows,NAN));
@@ -423,17 +428,20 @@ DefaultProbabilities ccruncher::Transitions::getDefaultProbabilities(const Date 
   return ret;
 }
 
-//===========================================================================
-// returns the regularization error (|non_regularized| - |regularized|)
-//===========================================================================
+/**************************************************************************//**
+ * @see Transitions::regularize()
+ * @return Regularization error using the sub-inf matrix norm.
+ */
 double ccruncher::Transitions::getRegularizationError() const
 {
   return rerror;
 }
 
-//===========================================================================
-// matrix product (M3 = M1·M2)
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] M1 Left-hand matrix.
+ * @param[in] M2 Right-hand matrix.
+ * @param[out] M3 Result Product matrix (M1·M2).
+ */
 void ccruncher::Transitions::prod(const vector<vector<double>> &M1,
                 const vector<vector<double>> &M2, vector<vector<double>> &M3)
 {
@@ -457,9 +465,11 @@ void ccruncher::Transitions::prod(const vector<vector<double>> &M1,
   }
 }
 
-//===========================================================================
-// matrix element access
-//===========================================================================
+/**************************************************************************//**
+ * @details Return the transition probabilities of the given rating index.
+ * @param[in] row Rating index.
+ * @return i-th row of the transition matrix.
+ */
 const vector<double>& ccruncher::Transitions::operator[] (int row) const
 {
   assert(row >= 0 && row < (int)matrix.size());

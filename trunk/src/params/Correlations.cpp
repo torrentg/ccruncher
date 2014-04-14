@@ -31,18 +31,18 @@ using namespace ccruncher;
 
 /**************************************************************************//**
  * @param[in] factors_ List of defined factors.
- * @throw Exception Void list of factors.
+ * @throw Exception List of factors is empty.
  */
-ccruncher::Correlations::Correlations(const Factors &factors_) throw(Exception)
+ccruncher::Correlations::Correlations(const Factors &factors_)
 {
   setFactors(factors_);
 }
 
 /**************************************************************************//**
  * @param[in] factors_ List of defined factors.
- * @throw Exception Void list of factors.
+ * @throw Exception List of factors is empty.
  */
-void ccruncher::Correlations::setFactors(const Factors &factors_) throw(Exception)
+void ccruncher::Correlations::setFactors(const Factors &factors_)
 {
   if (factors_.size() <= 0) {
     throw Exception("factors not found");
@@ -81,7 +81,7 @@ int ccruncher::Correlations::size() const
  * @throw Exception Factor not found, repeated element, or invalid value.
  */
 void ccruncher::Correlations::insertCorrelation(const std::string &factor1,
-    const std::string &factor2, double value) throw(Exception)
+    const std::string &factor2, double value)
 {
   int row = factors.getIndex(factor1);
   int col = factors.getIndex(factor2);
@@ -162,7 +162,7 @@ void ccruncher::Correlations::epend(ExpatUserData &, const char *name)
  * @details Check that all matrix elements are set.
  * @throw Exception Correlation element not defined.
  */
-void ccruncher::Correlations::validate() throw(Exception)
+void ccruncher::Correlations::validate()
 {
   // checking that all matrix elements exists
   for (int i=0; i<size(); i++)
@@ -195,7 +195,7 @@ const vector<double>& ccruncher::Correlations::operator[] (int row) const
  * @return Cholesky matrix.
  * @throw Exception Correlation matrix is not definite-posivite.
  */
-gsl_matrix * ccruncher::Correlations::getCholesky() const throw(Exception)
+gsl_matrix * ccruncher::Correlations::getCholesky() const
 {
   assert(size() > 0);
 

@@ -50,7 +50,7 @@ const ccruncher::EAD::Distr ccruncher::EAD::distrs[] = {
  * @param[in] cstr String with exposure value/distribution.
  * @throw Exception Invalid exposure.
  */
-ccruncher::EAD::EAD(const char *cstr) throw(Exception)
+ccruncher::EAD::EAD(const char *cstr)
 {
   assert(cstr != nullptr);
   if (cstr == nullptr) throw Exception("null ead value");
@@ -107,7 +107,7 @@ ccruncher::EAD::EAD(const char *cstr) throw(Exception)
  * @param[in] str String with exposure value/distribution.
  * @throw Exception Invalid exposure.
  */
-ccruncher::EAD::EAD(const std::string &str) throw(Exception)
+ccruncher::EAD::EAD(const std::string &str)
 {
   *this = EAD(str.c_str());
 }
@@ -118,7 +118,7 @@ ccruncher::EAD::EAD(const std::string &str) throw(Exception)
  * @param[in] b Distribution parameter.
  * @throw Exception Invalid exposure.
  */
-ccruncher::EAD::EAD(Type t, double a, double b) throw(Exception)
+ccruncher::EAD::EAD(Type t, double a, double b)
 {
   init(t, a, b);
 }
@@ -169,7 +169,7 @@ bool ccruncher::EAD::valid(Type t, double a, double b)
  * @param[in] b Distribution parameter.
  * @throw Exception Invalid exposure.
  */
-void ccruncher::EAD::init(Type t, double a, double b) throw(Exception)
+void ccruncher::EAD::init(Type t, double a, double b)
 {
   if (t != Fixed || !std::isnan(a))
   {

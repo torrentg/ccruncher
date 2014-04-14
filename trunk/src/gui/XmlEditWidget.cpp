@@ -35,8 +35,7 @@ using namespace ccruncher;
  * @param[in] f Input filename.
  * @param[in] parent Widget parent.
  */
-ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent)
-    throw(NonEditableException, InvalidFormatException, OpenErrorException) :
+ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
     MdiChildWidget(parent), ui(new Ui::XmlEditWidget), highlighter(nullptr),
     toolbar(nullptr)
 {
@@ -126,7 +125,6 @@ void ccruncher_gui::XmlEditWidget::setCurrentFile(const QString &fileName)
  * @throw OpenErrorException File not found.
  */
 bool ccruncher_gui::XmlEditWidget::load(const QString &str)
-    throw(NonEditableException, InvalidFormatException, OpenErrorException)
 {
   QString fileName = str;
   if (fileName.isEmpty()) {

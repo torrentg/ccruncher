@@ -106,7 +106,7 @@ void ccruncher::MonteCarlo::release()
  * @param[in] idata CCruncher input data.
  * @throw Exception Error initializing object.
  */
-void ccruncher::MonteCarlo::setData(IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::setData(IData &idata)
 {
   if (numiterations != 0)
   {
@@ -152,7 +152,7 @@ void ccruncher::MonteCarlo::setData(IData &idata) throw(Exception)
  * @param[in] idata CCruncher input data.
  * @throw Exception Error initializing object.
  */
-void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initModel(IData &idata)
 {
   // setting logger header
   log << "setting parameters" << flood('-') << endl;
@@ -255,7 +255,7 @@ void ccruncher::MonteCarlo::initModel(IData &idata) throw(Exception)
  * @param[in] idata CCruncher input data.
  * @throw Exception Error initializing object.
  */
-void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initObligors(IData &idata)
 {
   // doing assertions
   assert(obligors.empty());
@@ -308,7 +308,7 @@ void ccruncher::MonteCarlo::initObligors(IData &idata) throw(Exception)
  * @param[in] idata CCruncher input data.
  * @throw Exception Error initializing object.
  */
-void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initAssets(IData &idata)
 {
   // setting logger header
   log << "setting assets to simulate" << flood('-') << endl;
@@ -408,7 +408,7 @@ void ccruncher::MonteCarlo::initAssets(IData &idata) throw(Exception)
  * @param[in] idata CCruncher input data.
  * @throw Exception Error initializing object.
  */
-void ccruncher::MonteCarlo::initAggregators(IData &idata) throw(Exception)
+void ccruncher::MonteCarlo::initAggregators(IData &idata)
 {
   // assertions
   assert(fpath != "" && fpath != "path not set"); 
@@ -663,7 +663,7 @@ bool ccruncher::MonteCarlo::append(int ithread, const std::vector<short> &vi,
  *            procedure.
  * @throw std::exception Error creating files.
  */
-void ccruncher::MonteCarlo::setFilePath(const string &path, char mode, bool indexes) throw(std::exception)
+void ccruncher::MonteCarlo::setFilePath(const string &path, char mode, bool indexes)
 {
   fpath = path;
   fmode = mode;

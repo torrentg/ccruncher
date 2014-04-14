@@ -41,9 +41,9 @@ class Params : public ExpatHandlers
   private:
 
     //! Parse a parameter
-    void parseParameter(ExpatUserData &, const char **) throw(Exception);
+    void parseParameter(ExpatUserData &, const char **);
     //! Validate object content
-    void validate() const throw(Exception);
+    void validate() const;
 
   public:
 
@@ -78,9 +78,9 @@ class Params : public ExpatHandlers
     //! Constructor
     Params();
     //! Returns copula type as string (gaussian or t)
-    std::string getCopulaType() const throw(Exception);
+    std::string getCopulaType() const;
     //! Returns copula param (only t-copula)
-    double getCopulaParam() const throw(Exception);
+    double getCopulaParam() const;
 
 };
 

@@ -45,7 +45,7 @@ const ccruncher::LGD::Distr ccruncher::LGD::distrs[] = {
  * @param[in] cstr String with lgd value/distribution.
  * @throw Exception Invalid exposure.
  */
-ccruncher::LGD::LGD(const char *cstr) throw(Exception)
+ccruncher::LGD::LGD(const char *cstr)
 {
   assert(cstr != nullptr);
   if (cstr == nullptr) throw Exception("null lgd value");
@@ -95,7 +95,7 @@ ccruncher::LGD::LGD(const char *cstr) throw(Exception)
  * @param[in] str String with lgd value/distribution.
  * @throw Exception Invalid exposure.
  */
-ccruncher::LGD::LGD(const std::string &str) throw(Exception)
+ccruncher::LGD::LGD(const std::string &str)
 {
   *this = LGD(str.c_str());
 }
@@ -106,7 +106,7 @@ ccruncher::LGD::LGD(const std::string &str) throw(Exception)
  * @param[in] b Distribution parameter.
  * @throw Exception Invalid lgd.
  */
-ccruncher::LGD::LGD(Type t, double a, double b) throw(Exception)
+ccruncher::LGD::LGD(Type t, double a, double b)
 {
   init(t, a, b);
 }
@@ -145,7 +145,7 @@ bool ccruncher::LGD::valid(Type t, double a, double b)
  * @param[in] b Distribution parameter.
  * @throw Exception Invalid lgd.
  */
-void ccruncher::LGD::init(Type t, double a, double b) throw(Exception)
+void ccruncher::LGD::init(Type t, double a, double b)
 {
   if (t != Fixed || !std::isnan(a))
   {

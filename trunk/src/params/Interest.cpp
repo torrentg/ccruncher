@@ -209,7 +209,7 @@ double ccruncher::Interest::getFactor(const Date &d) const
  * @param[in] val User-defined rate to insert.
  * @throw Exception Error validating rate.
  */
-void ccruncher::Interest::insertRate(const Rate &val) throw(Exception)
+void ccruncher::Interest::insertRate(const Rate &val)
 {
   assert(date != NAD);
 
@@ -255,7 +255,7 @@ void ccruncher::Interest::insertRate(const Rate &val) throw(Exception)
  *          (linear/cubic splines).
  * @throw Exception Lack of data to create interpolation function.
  */
-void ccruncher::Interest::setSpline() throw(Exception)
+void ccruncher::Interest::setSpline()
 {
   assert(spline == nullptr && accel == nullptr);
   size_t n = rates.size();

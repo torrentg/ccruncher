@@ -95,11 +95,11 @@ class Interest : public ExpatHandlers
   private:
 
     //! Insert a rate to list
-    void insertRate(const Rate &) throw(Exception);
+    void insertRate(const Rate &);
     //! Given a time, returns the rate (interpolated)
     void getValues(int, double *, double *) const;
     //! Create spline curve
-    void setSpline() throw(Exception);
+    void setSpline();
 
   protected:
   

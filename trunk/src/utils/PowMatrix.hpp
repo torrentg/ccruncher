@@ -44,11 +44,11 @@ class PowMatrix
   public:
 
     //! Improved std::pow() function
-    static double fpow(double base, double exponent) throw(Exception);
+    static double fpow(double base, double exponent);
     //! Matrix pow function
-    static void pow(double **a, double x, int n, double **ret) throw(Exception);
+    static void pow(double **a, double x, int n, double **ret);
     //! Matrix pow function
-    static void pow(const std::vector<std::vector<double>> &a, double x, std::vector<std::vector<double>> &ret) throw(Exception);
+    static void pow(const std::vector<std::vector<double>> &a, double x, std::vector<std::vector<double>> &ret);
 
 };
 

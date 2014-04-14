@@ -69,11 +69,11 @@ class CsvFile
     //! Fills buffer
     size_t getChunk(char *ptr);
     //! Parse a field
-    int next() throw(Exception);
+    int next();
     //! Returns row sums
-    void getRowSums(std::vector<double> &ret, bool *stop=nullptr) throw(Exception);
+    void getRowSums(std::vector<double> &ret, bool *stop=nullptr);
     //! Parse a double
-    static double parse(const char *) throw(Exception);
+    static double parse(const char *);
     //! Trim a string
     static char* trim(char *);
     //! Skip comments
@@ -82,25 +82,25 @@ class CsvFile
   public:
 
     //! Constructor
-    CsvFile(const std::string &fname="") throw(Exception);
+    CsvFile(const std::string &fname="");
     //! Destructor
     ~CsvFile();
     //! Open file
-    void open(const std::string &fname) throw(Exception);
+    void open(const std::string &fname);
     //! Close file
     void close();
     //! Returns headers
     const std::vector<std::string>& getHeaders();
     //! Returns column values
-    void getColumn(int col, std::vector<double> &ret, bool *stop=nullptr) throw(Exception);
+    void getColumn(int col, std::vector<double> &ret, bool *stop=nullptr);
     //! Returns file values
-    void getColumns(std::vector<std::vector<double>> &ret, bool *stop=nullptr) throw(Exception);
+    void getColumns(std::vector<std::vector<double>> &ret, bool *stop=nullptr);
     //! Returns file size (in bytes)
     size_t getFileSize() const;
     //! Returns readed bytes
     size_t getReadedSize() const;
     //! Returns the number of lines
-    size_t getNumLines() throw(Exception);
+    size_t getNumLines();
 
 };
 

@@ -38,31 +38,31 @@ class Parser
   private:
 
     //! Evalue a numeric expression without variables
-    static double eval(const char *) throw(Exception);
+    static double eval(const char *);
 
   public:
 
     //! Convert string to int
-    static int intValue(const std::string &) throw(Exception);
+    static int intValue(const std::string &);
     //! Convert string to long
-    static long longValue(const std::string &) throw(Exception);
+    static long longValue(const std::string &);
     //! Convert string to double
-    static double doubleValue(const std::string &) throw(Exception);
+    static double doubleValue(const std::string &);
     //! Convert string to date
-    static Date dateValue(const std::string &) throw(Exception);
+    static Date dateValue(const std::string &);
     //! Convert string to bool
-    static bool boolValue(const std::string &) throw(Exception);
+    static bool boolValue(const std::string &);
     
     //! Convert string to int
-    static int intValue(const char *) throw(Exception);
+    static int intValue(const char *);
     //! Convert string to long
-    static long longValue(const char *) throw(Exception);
+    static long longValue(const char *);
     //! Convert string to double
-    static double doubleValue(const char *) throw(Exception);
+    static double doubleValue(const char *);
     //! Convert string to date
-    static Date dateValue(const char *) throw(Exception);
+    static Date dateValue(const char *);
     //! Convert string to bool
-    static bool boolValue(const char *) throw(Exception);
+    static bool boolValue(const char *);
 
 };
 

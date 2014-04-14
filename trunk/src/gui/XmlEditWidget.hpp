@@ -88,8 +88,7 @@ class XmlEditWidget : public MdiChildWidget
   public:
 
     //! Constructor
-    explicit XmlEditWidget(const QString &filename, QWidget *parent=0)
-        throw(NonEditableException, InvalidFormatException, OpenErrorException);
+    explicit XmlEditWidget(const QString &filename, QWidget *parent=0);
     //! Destructor
     ~XmlEditWidget();
     //! Virtual method implementation
@@ -100,8 +99,7 @@ class XmlEditWidget : public MdiChildWidget
     //! Set modified flag
     void documentWasModified();
     //! Load file
-    bool load(const QString &fileName=QString())
-        throw(NonEditableException, InvalidFormatException, OpenErrorException);
+    bool load(const QString &fileName=QString());
     //! Save file
     bool save(const QString &fileName=QString());
     //! Simule current file
