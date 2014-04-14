@@ -40,7 +40,7 @@ using namespace ccruncher;
  * @return Value parsed.
  * @throw Exception Invalid format.
  */
-int ccruncher::Parser::intValue(const std::string &str) throw(Exception)
+int ccruncher::Parser::intValue(const std::string &str)
 {
   return intValue(str.c_str());
 }
@@ -50,7 +50,7 @@ int ccruncher::Parser::intValue(const std::string &str) throw(Exception)
  * @return Value parsed.
  * @throw Exception Invalid format.
  */
-int ccruncher::Parser::intValue(const char *pnum) throw(Exception)
+int ccruncher::Parser::intValue(const char *pnum)
 {
   assert(pnum != nullptr);
   
@@ -82,7 +82,7 @@ int ccruncher::Parser::intValue(const char *pnum) throw(Exception)
  * @return Value parsed.
  * @throw Exception Invalid format.
  */
-long ccruncher::Parser::longValue(const std::string &str) throw(Exception)
+long ccruncher::Parser::longValue(const std::string &str)
 {
   return longValue(str.c_str());
 }
@@ -92,7 +92,7 @@ long ccruncher::Parser::longValue(const std::string &str) throw(Exception)
  * @return Value parsed.
  * @throw Exception Invalid format.
  */
-long ccruncher::Parser::longValue(const char *pnum) throw(Exception)
+long ccruncher::Parser::longValue(const char *pnum)
 {
   assert(pnum != nullptr);
   
@@ -120,7 +120,7 @@ long ccruncher::Parser::longValue(const char *pnum) throw(Exception)
  * @return Value parsed.
  * @throw Exception Invalid format.
  */
-double ccruncher::Parser::doubleValue(const std::string &str) throw(Exception)
+double ccruncher::Parser::doubleValue(const std::string &str)
 {
   return doubleValue(str.c_str());
 }
@@ -130,7 +130,7 @@ double ccruncher::Parser::doubleValue(const std::string &str) throw(Exception)
  * @return Value parsed.
  * @throw Exception Invalid format.
  */
-double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
+double ccruncher::Parser::doubleValue(const char *pnum)
 {
   assert(pnum != nullptr);
   char *pstr = nullptr;
@@ -165,7 +165,7 @@ double ccruncher::Parser::doubleValue(const char *pnum) throw(Exception)
  * @return Expression value.
  * @throw Exception Invalid format.
  */
-double ccruncher::Parser::eval(const char *pnum) throw(Exception)
+double ccruncher::Parser::eval(const char *pnum)
 {
   try
   {
@@ -187,7 +187,7 @@ double ccruncher::Parser::eval(const char *pnum) throw(Exception)
  * @return Value parsed.
  * @throw Exception Invalid format.
  */
-Date ccruncher::Parser::dateValue(const std::string &str) throw(Exception)
+Date ccruncher::Parser::dateValue(const std::string &str)
 {
   return Date(str);
 }
@@ -197,7 +197,7 @@ Date ccruncher::Parser::dateValue(const std::string &str) throw(Exception)
  * @return Value parsed.
  * @throw Exception Invalid format.
  */
-Date ccruncher::Parser::dateValue(const char *cstr) throw(Exception)
+Date ccruncher::Parser::dateValue(const char *cstr)
 {
   assert(cstr != nullptr);
   return Date(cstr);
@@ -208,7 +208,7 @@ Date ccruncher::Parser::dateValue(const char *cstr) throw(Exception)
  * @return Value parsed.
  * @throw Exception Invalid format.
  */
-bool ccruncher::Parser::boolValue(const std::string &str) throw(Exception)
+bool ccruncher::Parser::boolValue(const std::string &str)
 {
   if (str == "true")
   {
@@ -229,7 +229,7 @@ bool ccruncher::Parser::boolValue(const std::string &str) throw(Exception)
  * @return Value parsed.
  * @throw Exception Invalid format.
  */
-bool ccruncher::Parser::boolValue(const char *cstr) throw(Exception)
+bool ccruncher::Parser::boolValue(const char *cstr)
 {
   assert(cstr != nullptr);
 

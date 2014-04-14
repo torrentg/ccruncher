@@ -47,7 +47,7 @@ using namespace std;
  */
 ccruncher::Aggregator::Aggregator(int isegmentation, const Segmentations &segmentations,
     const std::string &ofile, char mode, const std::string &ifile,
-    const std::vector<double> &exposures) throw(Exception)
+    const std::vector<double> &exposures)
 {
   assert(mode=='a' || mode=='w' || mode=='c');
   assert(0 <= isegmentation && isegmentation < segmentations.size());
@@ -121,7 +121,7 @@ ccruncher::Aggregator::~Aggregator()
  * @param[in] losses List of losses (length=numsegments).
  * @throw Exception Error writing data to file.
  */
-void ccruncher::Aggregator::append(const double *losses) throw(Exception)
+void ccruncher::Aggregator::append(const double *losses)
 {
   assert(losses != nullptr);
   assert(numsegments > 0);
@@ -145,7 +145,7 @@ void ccruncher::Aggregator::append(const double *losses) throw(Exception)
  * @details Synchronizes disk file and the associated stream buffer.
  * @throw Exception Error writing data to file.
  */
-void ccruncher::Aggregator::flush() throw(Exception)
+void ccruncher::Aggregator::flush()
 {
   try
   {

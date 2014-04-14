@@ -50,8 +50,9 @@ ccruncher_gui::AnalysisTask::~AnalysisTask()
 
 /**************************************************************************//**
  * @param[in] filename CSV filename.
+ * @throw Exception Error opening file.
  */
-void ccruncher_gui::AnalysisTask::setFilename(const QString &filename) throw(Exception)
+void ccruncher_gui::AnalysisTask::setFilename(const QString &filename)
 {
   csv.open(filename.toStdString());
 }
@@ -137,8 +138,9 @@ const std::vector<contrib>& ccruncher_gui::AnalysisTask::getContributions() cons
  * @param[in] col Column index (if <0 return rowsum).
  * @param[out] ret Data readed (rowsum if col negative).
  * @throw Exception Error reading data.
+ * @throw StopException Read has been interrupted by user (using stop).
  */
-void ccruncher_gui::AnalysisTask::readData(int col, std::vector<double> &ret) throw(Exception)
+void ccruncher_gui::AnalysisTask::readData(int col, std::vector<double> &ret)
 {
   try {
     setStatus(reading);
@@ -165,8 +167,9 @@ void ccruncher_gui::AnalysisTask::readData(int col, std::vector<double> &ret) th
 /**************************************************************************//**
  * @param[out] content Csv data.
  * @throw Exception Error reading data.
+ * @throw StopException Read has been interrupted by user (using stop).
  */
-void ccruncher_gui::AnalysisTask::readData(std::vector<std::vector<double>> &content) throw(Exception)
+void ccruncher_gui::AnalysisTask::readData(std::vector<std::vector<double>> &content)
 {
   try {
     setStatus(reading);
@@ -260,6 +263,7 @@ void ccruncher_gui::AnalysisTask::run()
 /**************************************************************************//**
  * @details Result is set in variable hist.
  * @param[in] values Data values to computed histogram.
+ * @throw StopException Action stoped by user.
  */
 void ccruncher_gui::AnalysisTask::runHistogram(const std::vector<double> &values)
 {
@@ -313,6 +317,7 @@ void ccruncher_gui::AnalysisTask::runHistogram(const std::vector<double> &values
  * @details Given a list of values compute EL at regular steps. Let result
  *          in variable statvals.
  * @param[in] values Data values.
+ * @throw StopException Action stoped by user.
  */
 void ccruncher_gui::AnalysisTask::runEvolutionEL(const std::vector<double> &values)
 {
@@ -354,6 +359,7 @@ void ccruncher_gui::AnalysisTask::runEvolutionEL(const std::vector<double> &valu
  * @details Given a list of values compute VaR at regular steps. Let result
  *          in variable statvals.
  * @param[in] values Data values.
+ * @throw StopException Action stoped by user.
  */
 void ccruncher_gui::AnalysisTask::runEvolutionVAR(std::vector<double> &values)
 {
@@ -485,6 +491,7 @@ statval ccruncher_gui::AnalysisTask::valueAtRisk(double percentile,
  * @details Given a list of values compute ES at regular steps. Let result
  *          in variable statvals.
  * @param[in] values Data values.
+ * @throw StopException Action stoped by user.
  */
 void ccruncher_gui::AnalysisTask::runEvolutionES(std::vector<double> &values)
 {
@@ -557,6 +564,7 @@ statval ccruncher_gui::AnalysisTask::expectedShortfall(double percentile,
 /**************************************************************************//**
  * @details Compute risk contribution. Let result in variable contribs.
  * @param[in] content Csv data (columns = segments).
+ * @throw StopException Action stoped by user.
  */
 void ccruncher_gui::AnalysisTask::runContributionEL(const std::vector<std::vector<double>> &content)
 {
@@ -621,6 +629,7 @@ void ccruncher_gui::AnalysisTask::runContributionEL(const std::vector<std::vecto
 /**************************************************************************//**
  * @details Compute risk contribution. Let result in variable contribs.
  * @param[in] content Csv data (columns = segments).
+ * @throw StopException Action stoped by user.
  */
 void ccruncher_gui::AnalysisTask::runContributionES(std::vector<std::vector<double>> &content)
 {

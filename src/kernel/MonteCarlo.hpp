@@ -127,15 +127,15 @@ class MonteCarlo
     //! Deallocate memory
     void release();
     //! Initialize params
-    void initParams(IData &) throw(Exception);
+    void initParams(IData &);
     //! Initialize obligors
-    void initObligors(IData &) throw(Exception);
+    void initObligors(IData &);
     //! Initialize assets
-    void initAssets(IData &) throw(Exception);
+    void initAssets(IData &);
     //! Initialize simulation parameters
-    void initModel(IData &) throw(Exception);
+    void initModel(IData &);
     //! Initialize aggregators
-    void initAggregators(IData &) throw(Exception);
+    void initAggregators(IData &);
     //! Averaged exposures by segment
     std::vector<double> getExposures(int isegmentation, IData &) const;
     //! Append simulation result
@@ -152,9 +152,9 @@ class MonteCarlo
     //! Destructor
     ~MonteCarlo();
     //! Set path for output files
-    void setFilePath(const std::string &path, char mode, bool indexes=false) throw(std::exception);
+    void setFilePath(const std::string &path, char mode, bool indexes=false);
     //! Initiliaze this class
-    void setData(IData &) throw(Exception);
+    void setData(IData &);
     //! Execute Monte Carlo
     void run(unsigned char numthreads, size_t nhash, bool *stop_=nullptr);
     //! Returns number of iterations done

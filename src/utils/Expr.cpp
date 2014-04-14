@@ -265,7 +265,7 @@ bool ccruncher::Expr::isVariable(const char *ptr, token *tok, char **endptr, std
  * @param[in,out] variables List of variables.
  * @throw Exception Unrecognized text.
  */
-void ccruncher::Expr::next(const char *ptr, token *tok, char **endptr, std::vector<variable> &variables) throw(Exception)
+void ccruncher::Expr::next(const char *ptr, token *tok, char **endptr, std::vector<variable> &variables)
 {
   while(isspace(*ptr)) ptr++;
 
@@ -322,7 +322,7 @@ inline bool ccruncher::Expr::isValue(TokenType type)
  * @param[in] curtok Current token.
  * @throw Exception Syntax error.
  */
-void ccruncher::Expr::check(token *prevtok, token *curtok) throw(Exception)
+void ccruncher::Expr::check(token *prevtok, token *curtok)
 {
   if (prevtok->type == FUNCTION && functions[prevtok->dat.n].args == 0)
   {
@@ -518,7 +518,7 @@ void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
  * @param[out] tokens RPN stack. Previous tokens are not cleared.
  * @throw Exception Syntax error.
  */
-void ccruncher::Expr::compile(const std::string &str, std::vector<variable> &variables, std::vector<token> &tokens) throw(Exception)
+void ccruncher::Expr::compile(const std::string &str, std::vector<variable> &variables, std::vector<token> &tokens)
 {
   return compile(str.c_str(), variables, tokens);
 }
@@ -531,7 +531,7 @@ void ccruncher::Expr::compile(const std::string &str, std::vector<variable> &var
  * @param[out] tokens RPN stack. Previous tokens are not cleared.
  * @throw Exception Syntax error.
  */
-void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables, std::vector<token> &tokens) throw(Exception)
+void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables, std::vector<token> &tokens)
 {
   assert(str != nullptr);
   token prevtok, curtok;
@@ -685,7 +685,7 @@ void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables,
  * @return Minimum evaluation stack size.
  * @throw Exception Link error.
  */
-int ccruncher::Expr::link(std::vector<token> &tokens, const std::vector<variable> &variables) throw(Exception)
+int ccruncher::Expr::link(std::vector<token> &tokens, const std::vector<variable> &variables)
 {
   int size=0, max_size=0;
 
@@ -757,7 +757,7 @@ int ccruncher::Expr::link(std::vector<token> &tokens, const std::vector<variable
  * @param[in] maxsize Evaluation stack size.
  * @throw Exception Corrupted stack or stack size to low.
  */
-double ccruncher::Expr::eval(const std::vector<token> &tokens, size_t maxsize) throw(Exception)
+double ccruncher::Expr::eval(const std::vector<token> &tokens, size_t maxsize)
 {
   return eval(&tokens[0], maxsize);
 }
@@ -771,7 +771,7 @@ double ccruncher::Expr::eval(const std::vector<token> &tokens, size_t maxsize) t
  * @param[in] maxsize Evaluation stack size.
  * @throw Exception Corrupted stack or stack size to low.
  */
-double ccruncher::Expr::eval(const token *tokens, size_t maxsize) throw(Exception)
+double ccruncher::Expr::eval(const token *tokens, size_t maxsize)
 {
   vector<double> values(maxsize);
   size_t i=0, cont=0;

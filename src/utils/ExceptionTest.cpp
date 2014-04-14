@@ -59,7 +59,7 @@ void ccruncher_test::ExceptionTest::function1()
 //===========================================================================
 // function2. Can throw 2 exceptions types: Exception and exception
 //===========================================================================
-void ccruncher_test::ExceptionTest::function2() throw(ccruncher::Exception, exception)
+void ccruncher_test::ExceptionTest::function2()
 {
   try
   {
@@ -74,7 +74,7 @@ void ccruncher_test::ExceptionTest::function2() throw(ccruncher::Exception, exce
 //===========================================================================
 // function3. Only can throw exceptions type Exception
 //===========================================================================
-void ccruncher_test::ExceptionTest::function3() throw(ccruncher::Exception)
+void ccruncher_test::ExceptionTest::function3()
 {
   function4();
 

@@ -59,15 +59,15 @@ class Transitions : public ExpatHandlers
 
   private:
 
-    //! Matrix product (M12 = M1·M2)
+    //! Matrix product (M3 = M1·M2)
     static void prod(const std::vector<std::vector<double>> &M1,
                      const std::vector<std::vector<double>> &M2,
-                     std::vector<std::vector<double>> &M12);
+                     std::vector<std::vector<double>> &M3);
 
     //! Insert a transition value into the matrix
-    void insertTransition(const std::string &r1, const std::string &r2, double val) throw(Exception);
+    void insertTransition(const std::string &r1, const std::string &r2, double val);
     //! Validate object content
-    void validate() throw(Exception);
+    void validate();
     //! Computes Cumulated Default Forward Rate
     void cdfr(size_t numrows, std::vector<std::vector<double>> &ret) const;
 
@@ -83,9 +83,9 @@ class Transitions : public ExpatHandlers
     //! Default constructor
     Transitions();
     //! Constructor
-    Transitions(const Ratings &) throw(Exception);
+    Transitions(const Ratings &);
     //! Constructor
-    Transitions(const Ratings &, const std::vector<std::vector<double>> &, int) throw(Exception);
+    Transitions(const Ratings &, const std::vector<std::vector<double>> &, int);
     //! Set ratings
     void setRatings(const Ratings &);
     //! Matrix dimension (=number of ratings)
@@ -97,9 +97,9 @@ class Transitions : public ExpatHandlers
     //! Regularize the transition matrix
     void regularize();
     //! Returns equivalent transition matrix that covers t months
-    Transitions scale(int t) const throw(Exception);
+    Transitions scale(int t) const;
     //! Computes default probabilities functions related to this transition matrix
-    DefaultProbabilities getDefaultProbabilities(const Date &date, int numrows) const throw(Exception);
+    DefaultProbabilities getDefaultProbabilities(const Date &date, int numrows) const;
     //! Regularization error (|non_regularized| - |regularized|)
     double getRegularizationError() const;
     //! Matrix element access

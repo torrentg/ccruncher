@@ -54,9 +54,9 @@ class Segmentations : public ExpatHandlers
   private:
   
     //! Insert a segmentation to list
-    int insertSegmentation(Segmentation &) throw(Exception);
+    int insertSegmentation(Segmentation &);
     //! Validate object content
-    void validate() throw(Exception);
+    void validate();
 
   protected:
   
@@ -74,9 +74,9 @@ class Segmentations : public ExpatHandlers
     //! [] operator (i>=0 -> enabled, i<0 -> disabled)
     const Segmentation& getSegmentation(int i) const;
     //! Return the index of the given segmentation
-    int indexOfSegmentation(const std::string &sname) const throw(Exception);
+    int indexOfSegmentation(const std::string &sname) const;
     //! Return the index of the given segmentation
-    int indexOfSegmentation(const char *sname) const throw(Exception);
+    int indexOfSegmentation(const char *sname) const;
     //! Add components to segmentations stats
     void addComponents(const Asset *);
     //! Remove unused segments

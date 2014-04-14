@@ -65,7 +65,7 @@ using namespace ccruncher;
  * @param[in] year Date's year (>0)
  * @throw Exception If the given parameters don't conforms a valid date.
  */
-ccruncher::Date::Date(const int day, const int month, const int year) throw(Exception)
+ccruncher::Date::Date(const int day, const int month, const int year)
 {
   if (!valid(day, month, year))
   {
@@ -100,7 +100,7 @@ ccruncher::Date::Date( const time_t tSysTime )
  * @param[in] str String with the date in format dd/MM/yyyy.
  * @throw Exception If the given string don't represents a valid date.
  */
-ccruncher::Date::Date(const std::string &str) throw(Exception)
+ccruncher::Date::Date(const std::string &str)
 {
   parse(str.c_str());
 }
@@ -110,7 +110,7 @@ ccruncher::Date::Date(const std::string &str) throw(Exception)
  * @param[in] str String with the date in format dd/MM/yyyy.
  * @throw Exception If the given string don't represents a valid date.
  */
-ccruncher::Date::Date(const char *str) throw(Exception)
+ccruncher::Date::Date(const char *str)
 {
   parse(str);
 }
@@ -120,7 +120,7 @@ ccruncher::Date::Date(const char *str) throw(Exception)
  * @param[in] str String with the date in format dd/MM/yyyy.
  * @throw Exception If the given string don't represents a valid date.
  */
-void ccruncher::Date::parse(const char *str) throw(Exception)
+void ccruncher::Date::parse(const char *str)
 {
   assert(str != nullptr);
 
@@ -488,7 +488,7 @@ ostream & ccruncher::operator << (ostream& os, const Date& d)
  * @return date + num units
  * @throw Exception Units value not recognized.
  */
-Date ccruncher::add(const Date &date, int num, char units) throw(Exception)
+Date ccruncher::add(const Date &date, int num, char units)
 {
   if (num == 0)
   {
@@ -681,7 +681,7 @@ bool ccruncher::isInterval(const char *str)
  * @param[in] str String containing interval (eg. +450D, -3M, +5Y).
  * @throw Exception invalid interval.
  */
-void ccruncher::Date::add(const char *str) throw(Exception)
+void ccruncher::Date::add(const char *str)
 {
   int interval;
   char buffer[25];

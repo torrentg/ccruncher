@@ -50,7 +50,7 @@ ccruncher::Inverses::Inverses()
  * @throw Exception Error creating inverse functions.
  */
 ccruncher::Inverses::Inverses(double ndf_, const Date &maxdate,
-    const DefaultProbabilities &dprobs) throw(Exception)
+    const DefaultProbabilities &dprobs)
 {
   init(ndf_, maxdate, dprobs);
 }
@@ -102,7 +102,7 @@ Inverses & ccruncher::Inverses::operator=(const Inverses &o)
  * @param[in] dprobs Default probabilities functions.
  * @throw Exception Error creating inverse functions.
  */
-void ccruncher::Inverses::init(double ndf_, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception)
+void ccruncher::Inverses::init(double ndf_, const Date &maxdate, const DefaultProbabilities &dprobs)
 {
   ndf = ndf_;
   t0 = dprobs.getDate();
@@ -153,7 +153,7 @@ double ccruncher::Inverses::icdf(double u) const
  * @param[in] dprobs Default probabilities functions.
  * @throw Exception Error creating spline functions.
  */
-void ccruncher::Inverses::setSplines(const DefaultProbabilities &dprobs) throw(Exception)
+void ccruncher::Inverses::setSplines(const DefaultProbabilities &dprobs)
 {
   int nratings = dprobs.getRatings().size();
   splines.assign((size_t)nratings, nullptr);

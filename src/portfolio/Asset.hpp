@@ -76,7 +76,7 @@ class Asset : public ExpatHandlers
     //! Return asset identifier
     const std::string& getId() const { return id; }
     //! Add a segmentation-segment relation
-    void addBelongsTo(int isegmentation, int isegment) throw(Exception);
+    void addBelongsTo(int isegmentation, int isegment);
     //! Prepare data
     void prepare(const Date &d1, const Date &d2, const Interest &interest);
     //! Check if this asset belongs to segmentation-segment

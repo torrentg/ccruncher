@@ -160,9 +160,9 @@ class AnalysisTask : public QThread
     static statval expectedShortfall(double percentile, std::vector<double>::iterator first, std::vector<double>::iterator last);
 
     //! Read csv data
-    void readData(int col, std::vector<double> &ret) throw(ccruncher::Exception);
+    void readData(int col, std::vector<double> &ret);
     //! Read csv data
-    void readData(std::vector<std::vector<double>> &ret) throw(ccruncher::Exception);
+    void readData(std::vector<std::vector<double>> &ret);
     //! Set status
     void setStatus(status);
     //! Compute histogram
@@ -185,7 +185,7 @@ class AnalysisTask : public QThread
     //! Destructor
     ~AnalysisTask();
     //! Set csv filename
-    void setFilename(const QString &) throw(ccruncher::Exception);
+    void setFilename(const QString &);
     //! Set data
     void setData(mode m, int isegment=-1, double param=0.0);
     //! Return mode

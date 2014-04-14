@@ -59,7 +59,7 @@ const Segmentation& ccruncher::Segmentations::getSegmentation(int i) const
  * @return Index of the segmentation (negative if disabled, positive otherwise).
  * @throw Exception Segmentation not found.
  */
-int ccruncher::Segmentations::indexOfSegmentation(const std::string &sname) const throw(Exception)
+int ccruncher::Segmentations::indexOfSegmentation(const std::string &sname) const
 {
   return indexOfSegmentation(sname.c_str());
 }
@@ -69,7 +69,7 @@ int ccruncher::Segmentations::indexOfSegmentation(const std::string &sname) cons
  * @return Index of the segmentation (negative if disabled, positive otherwise).
  * @throw Exception Segmentation not found.
  */
-int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const throw(Exception)
+int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const
 {
   for (size_t i=0; i<enabled.size(); i++)
   {
@@ -95,7 +95,7 @@ int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const throw
  *          regardless of the type of components.
  * @throw Exception Validation error.
  */
-void ccruncher::Segmentations::validate() throw(Exception)
+void ccruncher::Segmentations::validate()
 {
   if (enabled.empty()) {
     throw Exception("don't found active segmentations");
@@ -125,7 +125,7 @@ void ccruncher::Segmentations::validate() throw(Exception)
  * @param[in] val Segmentation to insert.
  * @throw Exception Repeated segmentation name.
  */
-int ccruncher::Segmentations::insertSegmentation(Segmentation &val) throw(Exception)
+int ccruncher::Segmentations::insertSegmentation(Segmentation &val)
 {
   // checking coherence
   for (size_t i=0; i<enabled.size(); i++)

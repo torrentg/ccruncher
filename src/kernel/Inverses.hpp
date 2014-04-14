@@ -70,7 +70,7 @@ class Inverses
     //! Return minimum day
     int getMinDay(int irating, const DefaultProbabilities &dprobs) const;
     //! Set splines
-    void setSplines(const DefaultProbabilities &dprobs) throw(Exception);
+    void setSplines(const DefaultProbabilities &dprobs);
     //! Set spline
     void setSpline(int irating, std::vector<int> &days, std::vector<double> &cache);
     //! Return the worst unaccurate day
@@ -81,7 +81,7 @@ class Inverses
     //! Default constructor
     Inverses();
     //! Constructor
-    Inverses(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception);
+    Inverses(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs);
     //! Copy constructor
     Inverses(const Inverses &);
     //! Destructor
@@ -89,7 +89,7 @@ class Inverses
     //! Assignment operator
     Inverses & operator=(const Inverses &);
     //! Initialize
-    void init(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs) throw(Exception);
+    void init(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs);
     //! Evalue (return days from t0)
     double evalue(int irating, double val) const;
     //! Evalue (return date)

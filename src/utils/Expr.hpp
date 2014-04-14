@@ -170,9 +170,9 @@ class Expr
     //! Check if the current token is a variable
     static bool isVariable(const char *, token *, char **, std::vector<variable> &);
     //! Parse the next token
-    static void next(const char *, token *, char **, std::vector<variable> &) throw(Exception);
+    static void next(const char *, token *, char **, std::vector<variable> &);
     //! Syntax checking
-    static void check(token *, token *) throw(Exception);
+    static void check(token *, token *);
     //! Push token to RPN instructions pile
     static void push(token &, std::vector<token> &tokens);
     //! Check if is a value (number or constant or variable)
@@ -185,15 +185,15 @@ class Expr
   public:
 
     //! Compile an expression
-    static void compile(const char *, std::vector<variable> &variables, std::vector<token> &tokens) throw(Exception);
+    static void compile(const char *, std::vector<variable> &variables, std::vector<token> &tokens);
     //! Compile an expression
-    static void compile(const std::string &, std::vector<variable> &variables, std::vector<token> &tokens) throw(Exception);
+    static void compile(const std::string &, std::vector<variable> &variables, std::vector<token> &tokens);
     //! Link an expression
-    static int link(std::vector<token> &tokens, const std::vector<variable> &variables) throw(Exception);
+    static int link(std::vector<token> &tokens, const std::vector<variable> &variables);
     //! Evalue an expression
-    static double eval(const std::vector<token> &tokens, size_t maxsize) throw(Exception);
+    static double eval(const std::vector<token> &tokens, size_t maxsize);
     //! Evalue an expression
-    static double eval(const token *tok, size_t maxsize) throw(Exception);
+    static double eval(const token *tok, size_t maxsize);
     //! trace RPN stack to stdout
     static void debug(const std::vector<token> &tokens, const std::vector<variable> &variables);
 

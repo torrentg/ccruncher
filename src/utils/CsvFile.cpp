@@ -39,7 +39,7 @@ using namespace std;
  * @param[in] fname CSV file path with read permission.
  * @throw Exception Error opening file.
  */
-ccruncher::CsvFile::CsvFile(const string &fname) throw(Exception)
+ccruncher::CsvFile::CsvFile(const string &fname)
     : filename(""), file(nullptr), filesize(0)
 {
   if (fname != "") {
@@ -58,7 +58,7 @@ ccruncher::CsvFile::~CsvFile()
  * @param[in] fname CSV file path with read permission.
  * @throw Exception Error opening file.
  */
-void ccruncher::CsvFile::open(const string &fname) throw(Exception)
+void ccruncher::CsvFile::open(const string &fname)
 {
   close();
 
@@ -194,8 +194,9 @@ void ccruncher::CsvFile::skipComments()
  *          - 3: end-of-file
  *          ptr0 points to the identified token.
  * @return Type of token (1=sep, 2=eol, 3=eof)
+ * @throw Exception Field length exceeds max size.
  */
-int ccruncher::CsvFile::next() throw(Exception)
+int ccruncher::CsvFile::next()
 {
   // first line
   if (ptr1 == nullptr) {
@@ -242,7 +243,7 @@ int ccruncher::CsvFile::next() throw(Exception)
  * @return Number as floating point value.
  * @throw Exception Invalid number.
  */
-double ccruncher::CsvFile::parse(const char *str) throw(Exception)
+double ccruncher::CsvFile::parse(const char *str)
 {
   char *endptr;
   errno = 0;
@@ -284,7 +285,7 @@ char* ccruncher::CsvFile::trim(char *ptr)
  * @param[in] stop Stop flag.
  * @throw Exception Parser error.
  */
-void ccruncher::CsvFile::getColumn(int col, vector<double> &ret, bool *stop) throw(Exception)
+void ccruncher::CsvFile::getColumn(int col, vector<double> &ret, bool *stop)
 {
   if (col < 0) {
     return getRowSums(ret, stop);
@@ -354,7 +355,7 @@ void ccruncher::CsvFile::getColumn(int col, vector<double> &ret, bool *stop) thr
  * @param[in] stop Stop flag.
  * @throw Exception Parser error.
  */
-void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Exception)
+void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop)
 {
   int rc;
   size_t numlines = 0;
@@ -416,7 +417,7 @@ void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop) throw(Excep
  * @param[in] stop Stop flag.
  * @throw Exception Parser error.
  */
-void ccruncher::CsvFile::getColumns(vector<vector<double>> &ret, bool *stop) throw(Exception)
+void ccruncher::CsvFile::getColumns(vector<vector<double>> &ret, bool *stop)
 {
   int rc;
   size_t numlines = 0;
@@ -508,7 +509,7 @@ size_t ccruncher::CsvFile::getReadedSize() const
  * @return Number of lines
  * @throw Exception If file can not be readed.
  */
-size_t ccruncher::CsvFile::getNumLines() throw(Exception)
+size_t ccruncher::CsvFile::getNumLines()
 {
   size_t numlines = 0;
   size_t rc = 0;

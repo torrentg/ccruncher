@@ -163,7 +163,7 @@ void ccruncher::ExpatParser::characterData(void *ud_, const char *cdata, int len
  * @param[in] stop Variable to stop parser from outside.
  * @throw Exception Error parsing string content.
  */
-void ccruncher::ExpatParser::parse(const std::string &xmlcontent, ExpatHandlers *eh, bool *stop) throw(Exception)
+void ccruncher::ExpatParser::parse(const std::string &xmlcontent, ExpatHandlers *eh, bool *stop)
 {
   reset();
   userdata.setCurrentHandlers("", eh);
@@ -179,7 +179,7 @@ void ccruncher::ExpatParser::parse(const std::string &xmlcontent, ExpatHandlers 
  * @param[in] stop Variable to stop parser from outside.
  * @throw Exception Error parsing file content.
  */
-void ccruncher::ExpatParser::parse(gzFile file, ExpatHandlers *eh, bool *stop) throw(Exception)
+void ccruncher::ExpatParser::parse(gzFile file, ExpatHandlers *eh, bool *stop)
 {
   reset();
   userdata.setCurrentHandlers("", eh);
@@ -197,7 +197,7 @@ void ccruncher::ExpatParser::parse(gzFile file, ExpatHandlers *eh, bool *stop) t
  * @param[in] stop Variable to stop parser from outside.
  * @throw Exception Error parsing XML content.
  */
-void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, bool *stop) throw(Exception)
+void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, bool *stop)
 {
   assert(buf != nullptr);
   assert(buffer_size > 0);

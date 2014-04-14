@@ -86,7 +86,7 @@ class EAD
   private:
   
     //! Initialize content
-    void init(Type, double, double) throw(Exception);
+    void init(Type, double, double);
     //! Check distribution parameters
     static bool valid(Type, double, double);
 
@@ -95,11 +95,11 @@ class EAD
     //! Default constructor
     EAD();
     //! Constructor
-    EAD(const char *) throw(Exception);
+    EAD(const char *);
     //! Constructor
-    EAD(const std::string &) throw(Exception);
+    EAD(const std::string &);
     //! Constructor
-    EAD(Type, double a, double b=NAN) throw(Exception);
+    EAD(Type, double a, double b=NAN);
     //! Exposure type
     Type getType() const;
     //! Returns distribution parameter

@@ -66,7 +66,7 @@ class ExpatParser
     static void characterData(void *ud, const char *cdata, int len);
 
     //! Parse an xml file
-    void parse(gzFile file, char *buf, size_t buffer_size, bool *stop) throw(Exception);
+    void parse(gzFile file, char *buf, size_t buffer_size, bool *stop);
     //! Reset internal variables
     void reset();
 
@@ -77,9 +77,9 @@ class ExpatParser
     //! Destructor
     ~ExpatParser();
     //! Parse a string containing an xml
-    void parse(const std::string &xmlcontent, ExpatHandlers *eh, bool *stop=nullptr) throw(Exception);
+    void parse(const std::string &xmlcontent, ExpatHandlers *eh, bool *stop=nullptr);
     //! Parse an xml file
-    void parse(gzFile file, ExpatHandlers *eh, bool *stop=nullptr) throw(Exception);
+    void parse(gzFile file, ExpatHandlers *eh, bool *stop=nullptr);
     //! Returns defines
     const std::map<std::string,std::string>& getDefines() const;
     //! Set defines

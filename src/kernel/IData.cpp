@@ -66,7 +66,7 @@ ccruncher::IData::~IData()
  * @throw Exception Error parsing input file.
  */
 void ccruncher::IData::init(const std::string &f,
-    const std::map<std::string,std::string> &m, bool *s, bool p) throw(Exception)
+    const std::map<std::string,std::string> &m, bool *s, bool p)
 {
   gzFile file = nullptr;
   size_t bytes = 0;
@@ -121,7 +121,7 @@ void ccruncher::IData::init(const std::string &f,
  * @param[in] m List of defines defined by user (eg. using cmd or gui).
  * @throw Exception Error parsing input file.
  */
-void ccruncher::IData::parse(gzFile file, const map<string,string> &m) throw(Exception)
+void ccruncher::IData::parse(gzFile file, const map<string,string> &m)
 {
   try
   {
@@ -290,7 +290,7 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
  * @param[in] attributes Element attributes.
  * @throw Exception Error parsing input file.
  */
-void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, const char **attributes) throw(Exception)
+void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, const char **attributes)
 {
   // we push interest to stack (is optional)
   eu.interest = &interest;
@@ -360,7 +360,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
 /**************************************************************************//**
  * @throw Exception Input file section not found.
  */
-void ccruncher::IData::validate() throw(Exception)
+void ccruncher::IData::validate()
 {
   if (params.maxiterations < 0) {
     throw Exception("section 'parameters' not defined");
@@ -493,7 +493,7 @@ bool ccruncher::IData::hasDefaultProbabilities() const
  * @param[in] value Define value.
  * @throw Exception Invalid define.
  */
-void ccruncher::IData::checkDefine(const string &key, const string &value) const throw(Exception)
+void ccruncher::IData::checkDefine(const string &key, const string &value) const
 {
   if (key.length() == 0) throw Exception("invalid macro name");
 

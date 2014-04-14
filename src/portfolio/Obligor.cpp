@@ -100,7 +100,7 @@ Obligor& ccruncher::Obligor::operator=(const Obligor &o)
  * @details Checks that asset identifier is not repeated.
  * @throw Exception Error inserting asset.
  */
-void ccruncher::Obligor::insertAsset(ExpatUserData &eu) throw(Exception)
+void ccruncher::Obligor::insertAsset(ExpatUserData &eu)
 {
   int ila = vassets.size()-1;
 
@@ -241,7 +241,7 @@ bool ccruncher::Obligor::isActive(const Date &from, const Date &to)
  * @param[in] isegment Segment index.
  * @throw Exception Redefined relation.
  */
-void ccruncher::Obligor::addBelongsTo(int isegmentation, int isegment) throw(Exception)
+void ccruncher::Obligor::addBelongsTo(int isegmentation, int isegment)
 {
   assert(isegmentation < (int) vsegments.size());
   assert(isegment >= 0);

@@ -81,7 +81,7 @@ class LGD
   private:
   
     //! Initialize content
-    void init(Type, double, double) throw(Exception);
+    void init(Type, double, double);
     //! Check distribution parameters
     static bool valid(Type, double, double);
 
@@ -90,11 +90,11 @@ class LGD
     //! Default constructor
     LGD();
     //! Constructor
-    LGD(const char *) throw(Exception);
+    LGD(const char *);
     //! Constructor
-    LGD(const std::string &) throw(Exception);
+    LGD(const std::string &);
     //! Constructor
-    LGD(Type, double a, double b=NAN) throw(Exception);
+    LGD(Type, double a, double b=NAN);
     //! Returns type
     Type getType() const;
     //! Returns distribution parameter

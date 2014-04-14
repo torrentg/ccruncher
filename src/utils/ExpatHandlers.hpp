@@ -66,31 +66,31 @@ class ExpatHandlers
     //! Returns the number of attributes
     int getNumAttributes(const char **atts) const;
     //! Returns the value of the given attribute
-    const char * getAttributeValue(const char **atts, const char *attname) const throw(Exception);
+    const char * getAttributeValue(const char **atts, const char *attname) const;
     //! Returns the value of the given attribute
     const char * getAttributeValue(const char **atts, const char *attname, const char *defval) const;
     //! Returns attribute value as string
-    std::string getStringAttribute(const char **atts, const char *attname) const throw(Exception);
+    std::string getStringAttribute(const char **atts, const char *attname) const;
     //! Returns attribute value as string
     std::string getStringAttribute(const char **atts, const char *attname, const std::string &defval) const;
     //! Returns attribute value as int
-    int getIntAttribute(const char **atts, const char *attname) const throw(Exception);
+    int getIntAttribute(const char **atts, const char *attname) const;
     //! Returns attribute value as int
     int getIntAttribute(const char **atts, const char *attname, int defval) const;
     //! Returns attribute value as long
-    long getLongAttribute(const char **atts, const char *attname) const throw(Exception);
+    long getLongAttribute(const char **atts, const char *attname) const;
     //! Returns attribute value as long
     long getLongAttribute(const char **atts, const char *attname, long defval) const;
     //! Returns attribute value as double
-    double getDoubleAttribute(const char **atts, const char *attname) const throw(Exception);
+    double getDoubleAttribute(const char **atts, const char *attname) const;
     //! Returns attribute value as double
     double getDoubleAttribute(const char **atts, const char *attname, double defval) const;
     //! Returns attribute value as date
-    Date getDateAttribute(const char **atts, const char *attname) const throw(Exception);
+    Date getDateAttribute(const char **atts, const char *attname) const;
     //! Returns attribute value as date
     Date getDateAttribute(const char **atts, const char *attname, const Date &defval) const;
     //! Returns attribute value as boolean
-    bool getBooleanAttribute(const char **atts, const char *attname) const throw(Exception);
+    bool getBooleanAttribute(const char **atts, const char *attname) const;
     //! Returns attribute value as boolean
     bool getBooleanAttribute(const char **atts, const char *attname, bool defval) const;
 

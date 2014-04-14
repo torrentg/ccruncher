@@ -87,7 +87,7 @@ class Date
     static void JdToYmd(const long lJD, int *piYear, int *piMonth, int *piDay);
 
     //! Parse a date in format 'dd/MM/yyyy'
-    void parse(const char *) throw(Exception);
+    void parse(const char *);
 
 
   public:
@@ -95,13 +95,13 @@ class Date
     //! Default constructor
     Date();
     //! Constructor
-    Date(const int day, const int month, const int year) throw(Exception);
+    Date(const int day, const int month, const int year);
     //! Constructor
     explicit Date(const time_t tSysTime);
     //! Constructor
-    Date(const std::string &str) throw(Exception);
+    Date(const std::string &str);
     //! Constructor
-    Date(const char *str) throw(Exception);
+    Date(const char *str);
 
     //! Checks if the given day-month-year is a valid date
     static bool valid(const int d, const int m, const int y);
@@ -133,7 +133,7 @@ class Date
     //! Returns the year, month and day
     void YMD( int *pY, int *pM, int *pD ) const;
     //! Increments the current date x days/months/years
-    void add(const char *str) throw(Exception);
+    void add(const char *str);
 
     //! Assignment operator
     Date& operator=( const Date& date );
@@ -177,7 +177,7 @@ class Date
 //! Prints current date to an output stream
 std::ostream& operator << (std::ostream& os, const Date& d);
 //! Increments n number of days/months/years
-Date add(const Date &d, int num, char units) throw(Exception);
+Date add(const Date &d, int num, char units);
 //! Difference between 2 dates in days/months/years
 double diff(const Date &d1, const Date &d2, char units);
 //! Minimum of 2 dates

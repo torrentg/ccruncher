@@ -42,7 +42,7 @@ using namespace std;
  * @return base^exponent.
  * @throw Exception Result value is not a real.
  */
-double ccruncher::PowMatrix::fpow(double base, double exponent) throw(Exception)
+double ccruncher::PowMatrix::fpow(double base, double exponent)
 {
   if (base >= 0.0)
   {
@@ -83,7 +83,7 @@ double ccruncher::PowMatrix::fpow(double base, double exponent) throw(Exception)
  * @param[out] ret Allocated space to put A^x.
  * @throw Exception Singular matrix or complex eigenvalues.
  */
-void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(Exception)
+void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret)
 {
   int rc=0;
 
@@ -188,7 +188,7 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret) throw(
  * @throw Exception Singular matrix or complex eigenvalues.
  */
 void ccruncher::PowMatrix::pow(const std::vector<std::vector<double>> &a, double x,
-                               std::vector<std::vector<double>> &ret) throw(Exception)
+                               std::vector<std::vector<double>> &ret)
 {
   size_t n = a.size();
   vector<double*> A(n, nullptr);

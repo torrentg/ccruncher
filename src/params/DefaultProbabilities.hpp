@@ -98,9 +98,9 @@ class DefaultProbabilities : public ExpatHandlers
     //! Reset object content
     void reset();
     //! Insert a data value
-    void insertValue(const std::string &r1, const Date &t, double val) throw(Exception);
+    void insertValue(const std::string &r1, const Date &t, double val);
     //! Validate object content
-    void validate() throw(Exception);
+    void validate();
     //! Set splines
     void setSplines();
     //! Inverse by root finding (bisection method)
@@ -122,9 +122,9 @@ class DefaultProbabilities : public ExpatHandlers
     //! Copy constructor
     DefaultProbabilities(const DefaultProbabilities &);
     //! Constructor
-    DefaultProbabilities(const Ratings &, const Date &d) throw(Exception);
+    DefaultProbabilities(const Ratings &, const Date &d);
     //! Constructor
-    DefaultProbabilities(const Ratings &, const Date &d, const std::vector<Date> &dates, const std::vector<std::vector<double>> &values) throw(Exception);
+    DefaultProbabilities(const Ratings &, const Date &d, const std::vector<Date> &dates, const std::vector<std::vector<double>> &values);
     //! Destructor
     ~DefaultProbabilities();
     //! Assignment operator
@@ -136,7 +136,7 @@ class DefaultProbabilities : public ExpatHandlers
     //! Return initial date
     Date getDate() const;
     //! Set ratings
-    void setRatings(const Ratings &) throw(Exception);
+    void setRatings(const Ratings &);
     //! Return ratings
     const Ratings & getRatings() const;
     //! Return index of default rating

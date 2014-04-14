@@ -65,13 +65,13 @@ class Aggregator
 
     //! Constructor
     Aggregator(int , const Segmentations &, const std::string &, char,
-               const std::string &, const std::vector<double> &exposures=std::vector<double>(0)) throw(Exception);
+               const std::string &, const std::vector<double> &exposures=std::vector<double>(0));
     //! Destructor
     ~Aggregator();
     //! Append data to aggregator
-    void append(const double *) throw(Exception);
+    void append(const double *);
     //! Force flush data to disk
-    void flush() throw(Exception);
+    void flush();
     //! Return the number of segments
     int size() const;
 

@@ -81,9 +81,9 @@ int ccruncher::Ratings::getIndex(const std::string &name) const
 
 /**************************************************************************//**
  * @param[in] val Rating to insert.
- * @throw Exception Rating repeated.
+ * @throw Exception Rating name repeated.
  */
-void ccruncher::Ratings::insertRating(const Rating &val) throw(Exception)
+void ccruncher::Ratings::insertRating(const Rating &val)
 {
   // checking coherence
   for (unsigned int i=0; i<vratings.size(); i++)

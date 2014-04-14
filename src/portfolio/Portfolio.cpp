@@ -52,9 +52,9 @@ vector<Obligor *> & ccruncher::Portfolio::getObligors()
 /**************************************************************************//**
  * @details Checks if obligors and assets identifiers are uniques.
  * @param[in] val Obligor to insert.
- * @throw Exception Repeated identifier.
+ * @throw Exception Repeated obligor identifier.
  */
-void ccruncher::Portfolio::checkObligor(Obligor *val) throw(Exception)
+void ccruncher::Portfolio::checkObligor(Obligor *val)
 {
   // checking if obligor id is previously defined
   if(idobligors.find(val->id) != idobligors.end())
