@@ -40,7 +40,7 @@ class TextBrowser : public QTextBrowser
   protected:
 
     //! Method overrided
-    void setSource(const QUrl &) {}
+    virtual void setSource(const QUrl &) override {}
 
   public:
 

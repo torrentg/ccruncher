@@ -129,7 +129,7 @@ class IData : public ExpatHandlers
     //! Default constructor
     IData(std::streambuf *s=nullptr);
     //! Destructor
-    ~IData();
+    virtual ~IData() override;
     //! Initialize content
     void init(const std::string &f, const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *stop_=nullptr, bool parse_portfolio_=true);
     //! Returns simulation title

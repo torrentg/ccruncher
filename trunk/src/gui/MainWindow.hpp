@@ -75,22 +75,22 @@ class MainWindow : public QMainWindow
   protected:
 
     //! Close event
-    void closeEvent(QCloseEvent *event);
+    virtual void closeEvent(QCloseEvent *event) override;
      //! This event is called when the mouse enters the widgets area during a drag/drop operation
-    void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dragEnterEvent(QDragEnterEvent *event) override;
     //! This event is called when the mouse moves inside the widgets area during a drag/drop operation
-    void dragMoveEvent(QDragMoveEvent *event);
+    virtual void dragMoveEvent(QDragMoveEvent *event) override;
     //! This event is called when the mouse leaves the widgets area during a drag/drop operation
-    void dragLeaveEvent(QDragLeaveEvent *event);
+    virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
     //! This event is called when the drop operation is initiated at the widget
-    void dropEvent(QDropEvent *event);
+    virtual void dropEvent(QDropEvent *event) override;
 
   public:
 
     //! Constructor
-    explicit MainWindow(const QMap<QString, QVariant> &properties = QMap<QString,QVariant>(), QWidget *parent = 0);
+    MainWindow(const QMap<QString, QVariant> &properties = QMap<QString,QVariant>(), QWidget *parent = 0);
     //! Destructor
-    ~MainWindow();
+    virtual ~MainWindow() override;
     //! Return properties
     const QMap<QString, QVariant> &getProperties() const;
 

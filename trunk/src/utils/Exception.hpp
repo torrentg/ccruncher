@@ -54,7 +54,7 @@ class Exception : public std::exception
     //! Constructor.
     Exception(const std::exception &e, const std::string &str);
     //! Destructor.
-    virtual ~Exception() noexcept {}
+    virtual ~Exception() noexcept override {}
     //! Returns exception message.
     virtual const char * what() const noexcept override;
     //! Returns exception message.

@@ -183,7 +183,7 @@ class AnalysisTask : public QThread
     //! Constructor
     AnalysisTask();
     //! Destructor
-    ~AnalysisTask();
+    virtual ~AnalysisTask() override;
     //! Set csv filename
     void setFilename(const QString &);
     //! Set data
@@ -199,7 +199,7 @@ class AnalysisTask : public QThread
     //! Return contributions
     const std::vector<contrib>& getContributions() const;
     //! Thread task
-    void run();
+    virtual void run() override;
     //! Stop current execution
     void stop();
     //! Return status

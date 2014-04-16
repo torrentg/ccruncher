@@ -70,7 +70,7 @@ class Portfolio : public ExpatHandlers
     //! Default constructor
     Portfolio() {}
     //! Destructor
-    ~Portfolio();
+    virtual ~Portfolio() override;
     //! Returns the obligors list
     std::vector<Obligor *> &getObligors();
 

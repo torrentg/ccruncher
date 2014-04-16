@@ -67,9 +67,9 @@ class XmlHighlighter : public QSyntaxHighlighter
   protected:
 
     // overrided method
-    void highlightBlock(const QString& rstrText);
+    virtual void highlightBlock(const QString& rstrText);
     // overrided method
-    int  processDefaultText(int i, const QString& rstrText, ParsingState &state);
+    int processDefaultText(int i, const QString& rstrText, ParsingState &state);
 
   public:
 
