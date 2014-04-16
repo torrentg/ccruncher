@@ -40,9 +40,9 @@ class QwtPlotCanvasExt : public QwtPlotCanvas
       setMouseTracking(true);
     }
     //! Destructor
-    virtual ~QwtPlotCanvasExt() {}
+    virtual ~QwtPlotCanvasExt() override {}
     //! Mouse moved
-    void mouseMoveEvent(QMouseEvent* event) {
+    virtual void mouseMoveEvent(QMouseEvent* event) override {
       emit mouseMoved(event->pos());
     }
 

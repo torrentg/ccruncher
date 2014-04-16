@@ -112,7 +112,7 @@ class AnalysisWidget: public MdiChildWidget
     //! Constructor
     AnalysisWidget(const QString &filename, QWidget *parent=0);
     //! Destructor
-    ~AnalysisWidget();
+    virtual ~AnalysisWidget() override;
     //! Virtual method implementation
     virtual QToolBar* getToolBar() override { return toolbar; }
 

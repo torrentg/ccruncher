@@ -195,7 +195,7 @@ class SimulationThread : public Thread
     //! Constructor
     SimulationThread(int, MonteCarlo &, unsigned long seed);
     //! Destructor
-    ~SimulationThread();
+    virtual ~SimulationThread() override;
     //! Thread main function
     virtual void run() override;
     //! Returns elapsed time creating random numbers

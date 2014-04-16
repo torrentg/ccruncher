@@ -126,7 +126,7 @@ class DefaultProbabilities : public ExpatHandlers
     //! Constructor
     DefaultProbabilities(const Ratings &, const Date &d, const std::vector<Date> &dates, const std::vector<std::vector<double>> &values);
     //! Destructor
-    ~DefaultProbabilities();
+    virtual ~DefaultProbabilities() override;
     //! Assignment operator
     DefaultProbabilities & operator=(const DefaultProbabilities &);
     //! Number of default probabilities functions

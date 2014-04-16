@@ -111,11 +111,11 @@ class Interest : public ExpatHandlers
   public:
 
     //! Constructor
-    explicit Interest(const Date &date_=NAD, InterestType type=Compound);
+    Interest(const Date &date_=NAD, InterestType type=Compound);
     //! Copy constructor
     Interest(const Interest &);
     //! Destructor
-    ~Interest();
+    virtual ~Interest() override;
     //! Assignment operator
     Interest & operator=(const Interest &);
     //! Return interest type

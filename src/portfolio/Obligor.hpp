@@ -80,7 +80,7 @@ class Obligor : public ExpatHandlers
     //! Constructor
     Obligor(size_t nsegmentations=0);
     //! Destructor
-    ~Obligor();
+    virtual ~Obligor() override;
     //! Assignment operator
     Obligor& operator=(const Obligor &);
     //! Return the asset list

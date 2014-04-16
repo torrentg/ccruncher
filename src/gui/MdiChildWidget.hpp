@@ -39,9 +39,11 @@ class MdiChildWidget: public QWidget
 
     //! Constructor
     MdiChildWidget(QWidget *parent) : QWidget(parent, Qt::SubWindow) {}
+    //! Destructor
+    virtual ~MdiChildWidget() override {}
 /*
     //! Destructor
-    virtual ~MdiChildWidget() {
+    virtual ~MdiChildWidget() override {
       QMainWindow *main = dynamic_cast<QMainWindow*>(parent);
       if (main != nullptr && getToolBar() != nullptr) {
         main->removeToolBar(getToolBar());

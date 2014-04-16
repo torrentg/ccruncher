@@ -55,9 +55,9 @@ class ProgressWidget : public QWidget
   public:
 
     //! Constructor
-    explicit ProgressWidget(QWidget *parent = 0);
+    ProgressWidget(QWidget *parent = 0);
     //! Destructor
-    ~ProgressWidget();
+    virtual ~ProgressWidget() override;
     //! Fadein (0->1)
     void fadein(size_t millis=0);
     //! Fadeout (1->0)

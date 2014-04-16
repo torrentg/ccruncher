@@ -50,9 +50,9 @@ class DefinesDialog : public QDialog
   public:
 
     //! Constructor
-    explicit DefinesDialog(QWidget *parent, const std::map<std::string, std::string> &);
+    DefinesDialog(QWidget *parent, const std::map<std::string, std::string> &);
     //! Destructor
-    ~DefinesDialog();
+    virtual ~DefinesDialog() override;
     //! Return content
     const std::map<std::string,std::string> & getDefines() const;
 

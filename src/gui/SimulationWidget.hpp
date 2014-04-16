@@ -108,14 +108,14 @@ class SimulationWidget : public MdiChildWidget
   protected:
 
     //! Override close
-    void closeEvent(QCloseEvent *event);
+    virtual void closeEvent(QCloseEvent *event) override;
 
   public:
 
     //! Constructor
-    explicit SimulationWidget(const QString &filename, QWidget *parent=0);
+    SimulationWidget(const QString &filename, QWidget *parent=0);
     //! Destructor
-    ~SimulationWidget();
+    virtual ~SimulationWidget() override;
     //! Virtual method implementation
     virtual QToolBar* getToolBar() override { return toolbar; }
 

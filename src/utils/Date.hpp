@@ -99,9 +99,9 @@ class Date
     //! Constructor
     explicit Date(const time_t tSysTime);
     //! Constructor
-    Date(const std::string &str);
+    explicit Date(const std::string &str);
     //! Constructor
-    Date(const char *str);
+    explicit Date(const char *str);
 
     //! Checks if the given day-month-year is a valid date
     static bool valid(const int d, const int m, const int y);

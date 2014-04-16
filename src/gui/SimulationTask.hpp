@@ -95,14 +95,14 @@ class SimulationTask : public QThread
     //! Constructor
     SimulationTask(std::streambuf *s=nullptr);
     //! Destructor
-    ~SimulationTask();
+    virtual ~SimulationTask() override;
     //! Set streambuf
     void setStreamBuf(std::streambuf *);
     //! Set data info
     void setData(const std::string &, const std::map<std::string,std::string> &,
                  const std::string &, unsigned char, bool );
     //! Thread task
-    void run();
+    virtual void run() override;
     //! Stop current execution
     void stop();
     //! Return status

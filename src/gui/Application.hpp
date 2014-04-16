@@ -38,9 +38,9 @@ class Application : public QApplication
   public:
 
     //! Constructor
-    explicit Application(int &argc, char** argv);
+    Application(int &argc, char** argv);
     //! Notify method
-    bool notify(QObject *rec, QEvent *ev);
+    virtual bool notify(QObject *rec, QEvent *ev) override;
 
 };
 

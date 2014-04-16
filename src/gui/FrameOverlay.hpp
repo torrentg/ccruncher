@@ -44,7 +44,7 @@ class FrameOverlay : public QFrame
   protected:
 
     //! Resize event
-    void resizeEvent(QResizeEvent *event)
+    virtual void resizeEvent(QResizeEvent *event) override
     {
       for(size_t i=0; i<layers.size(); i++) {
         if (layers[i] != nullptr) layers[i]->resize(event->size());
@@ -55,7 +55,7 @@ class FrameOverlay : public QFrame
   public:
 
     //! Constructor
-    explicit FrameOverlay(QWidget *parent = 0) : QFrame(parent) {}
+    FrameOverlay(QWidget *parent = 0) : QFrame(parent) {}
     //! Add a layer
     void addLayer(QWidget *w) { layers.push_back(w); }
 

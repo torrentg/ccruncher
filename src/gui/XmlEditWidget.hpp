@@ -74,7 +74,7 @@ class XmlEditWidget : public MdiChildWidget
   protected:
 
     //! Close event
-    void closeEvent(QCloseEvent *event);
+    virtual void closeEvent(QCloseEvent *event) override;
 
   public:
 
@@ -88,9 +88,9 @@ class XmlEditWidget : public MdiChildWidget
   public:
 
     //! Constructor
-    explicit XmlEditWidget(const QString &filename, QWidget *parent=0);
+    XmlEditWidget(const QString &filename, QWidget *parent=0);
     //! Destructor
-    ~XmlEditWidget();
+    virtual ~XmlEditWidget() override;
     //! Virtual method implementation
     virtual QToolBar* getToolBar() override { return toolbar; }
 
