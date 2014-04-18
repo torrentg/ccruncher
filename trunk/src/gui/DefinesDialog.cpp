@@ -43,7 +43,7 @@ ccruncher_gui::DefinesDialog::DefinesDialog(QWidget *parent,
   {
     ui->table->removeRow(i);
   }
-  for (auto it=defines.begin(); it != defines.end(); ++it)
+  for(auto it=defines.begin(); it != defines.end(); ++it)
   {
     int row = ui->table->rowCount();
     ui->table->insertRow(row);

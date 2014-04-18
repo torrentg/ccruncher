@@ -353,7 +353,7 @@ void ccruncher::DefaultProbabilities::validate()
 
   // finding default rating
   indexdefault = -1;
-  for (int i=0; i<ratings.size(); i++)
+  for(int i=0; i<ratings.size(); i++)
   {
     if (ddata[i].size() == 0 || (ddata[i][0].day == 0 && ddata[i][0].prob > 1.0-EPSILON)) {
       indexdefault = i;
@@ -365,7 +365,7 @@ void ccruncher::DefaultProbabilities::validate()
   }
 
   // checking that all ratings (except default) have pd function defined
-  for (int i=0; i<ratings.size(); i++)
+  for(int i=0; i<ratings.size(); i++)
   {
     if (i == indexdefault) continue;
     if(ddata[i].size() == 0 || (ddata[i].size() == 1 && ddata[i][0].day == 0)) {
@@ -375,7 +375,7 @@ void ccruncher::DefaultProbabilities::validate()
   }
 
   // checking dprob[irating][0]=0 if rating != default
-  for (int i=0; i<ratings.size(); i++)
+  for(int i=0; i<ratings.size(); i++)
   {
     if (i != indexdefault && ddata[i][0].day == 0 && ddata[i][0].prob > EPSILON)
     {
@@ -385,7 +385,7 @@ void ccruncher::DefaultProbabilities::validate()
   }
 
   // setting dprob[irating][0]=0 if not set
-  for (int i=0; i<ratings.size(); i++)
+  for(int i=0; i<ratings.size(); i++)
   {
     if (i != indexdefault && ddata[i][0].day > 0)
     {
@@ -394,7 +394,7 @@ void ccruncher::DefaultProbabilities::validate()
   }
 
   // checking that dprob[default][t] = 1 for all t's
-  for (size_t j=0; j<ddata[indexdefault].size(); j++)
+  for(size_t j=0; j<ddata[indexdefault].size(); j++)
   {
     if (ddata[indexdefault][j].prob < 1.0-EPSILON)
     {
@@ -403,11 +403,11 @@ void ccruncher::DefaultProbabilities::validate()
   }
 
   // checking monotonic increasing
-  for (int i=0; i<ratings.size(); i++)
+  for(int i=0; i<ratings.size(); i++)
   {
     if (i == indexdefault) continue;
 
-    for (unsigned int j=1; j<ddata[i].size(); j++)
+    for(unsigned int j=1; j<ddata[i].size(); j++)
     {
       if (ddata[i][j].prob < ddata[i][j-1].prob)
       {

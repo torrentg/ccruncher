@@ -98,7 +98,7 @@ void ccruncher::ExpatParser::startElement(void *ud_, const char *name, const cha
   // replacing defines
   if (ud->defines.size() > 0)
   {
-    for (int i=0; atts[i]; i+=2)
+    for(int i=0; atts[i]; i+=2)
     {
       atts[i+1] = ud->applyDefines(atts[i+1]);
     }

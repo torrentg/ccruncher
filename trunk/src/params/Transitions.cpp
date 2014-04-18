@@ -178,9 +178,9 @@ void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
   if (isEqual(name,"transitions"))
   {
     // non-informed elements are 0
-    for (size_t i=0; i<size(); i++)
+    for(size_t i=0; i<size(); i++)
     {
-      for (size_t j=0; j<size(); j++)
+      for(size_t j=0; j<size(); j++)
       {
         if (std::isnan(matrix[i][j]))
         {
@@ -201,11 +201,11 @@ void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
 void ccruncher::Transitions::validate()
 {
   // checking that all rows sum 1
-  for (size_t i=0; i<size(); i++)
+  for(size_t i=0; i<size(); i++)
   {
     double sum = 0.0;
 
-    for (size_t j=0; j<size(); j++)
+    for(size_t j=0; j<size(); j++)
     {
       sum += matrix[i][j];
     }
@@ -219,7 +219,7 @@ void ccruncher::Transitions::validate()
   // finding default rating
   indexdefault = -1;
 
-  for (size_t i=0; i<size(); i++)
+  for(size_t i=0; i<size(); i++)
   {
     if (fabs(matrix[i][i]-1.0) < EPSILON)
     {

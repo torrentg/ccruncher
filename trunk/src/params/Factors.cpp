@@ -83,7 +83,7 @@ vector<double> ccruncher::Factors::getLoadings() const
 int ccruncher::Factors::getIndex(const char *name) const
 {
   assert(name != nullptr);
-  for (size_t i=0; i<vfactors.size(); i++)
+  for(size_t i=0; i<vfactors.size(); i++)
   {
     if (vfactors[i].name.compare(name) == 0)
     {
@@ -109,7 +109,7 @@ int ccruncher::Factors::getIndex(const std::string &name) const
 void ccruncher::Factors::insertFactor(const Factor &val)
 {
   // checking coherence
-  for (size_t i=0; i<vfactors.size(); i++)
+  for(size_t i=0; i<vfactors.size(); i++)
   {
     Factor aux = vfactors[i];
 

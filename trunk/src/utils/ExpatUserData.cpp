@@ -195,7 +195,7 @@ const char* ccruncher::ExpatUserData::applyDefines(const char *str)
   if (ret != str) ret = bufferAppend(p1, strlen(p1));
 /*
 cout << "buffer(" << buffer_size << ")='";
-for (int i=0; i<buffer_size; i++) cout << (char)(buffer[i]==0?'.':buffer[i]);
+for(int i=0; i<buffer_size; i++) cout << (char)(buffer[i]==0?'.':buffer[i]);
 cout << "'" << endl;
 */
   return ret;

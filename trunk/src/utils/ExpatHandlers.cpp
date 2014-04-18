@@ -118,7 +118,7 @@ const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, cons
   assert(atts != nullptr);
   assert(attname != nullptr);
 
-  for (int i=0; atts[i]; i+=2)
+  for(int i=0; atts[i]; i+=2)
   {
     if (strcmp(attname,atts[i]) == 0)
     {
@@ -144,7 +144,7 @@ const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, cons
   assert(atts != nullptr);
   assert(attname != nullptr);
 
-  for (int i=0; atts[i]; i+=2)
+  for(int i=0; atts[i]; i+=2)
   {
     if (strcmp(attname,atts[i]) == 0)
     {
@@ -407,7 +407,7 @@ int ccruncher::ExpatHandlers::getNumAttributes(const char **atts) const
 {
   int ret = 0;
 
-  for (int i=0; atts[i]; i+=2)
+  for(int i=0; atts[i]; i+=2)
   {
     ret++;
   }

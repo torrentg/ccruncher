@@ -64,9 +64,9 @@ void ccruncher_test::PowMatrixTest::test1()
 
   ASSERT_NO_THROW(PowMatrix::pow(A, 0.3, M));
 
-  for (int i=0;i<3;i++)
+  for(int i=0; i<3; i++)
   {
-    for (int j=0;j<3;j++)
+    for(int j=0; j<3; j++)
     {
       ASSERT_EQUALS_EPSILON(solA[j+3*i], M[i][j], EPSILON);
     }
@@ -79,9 +79,9 @@ void ccruncher_test::PowMatrixTest::test1()
 
   ASSERT_NO_THROW(PowMatrix::pow(aA, 0.3, 3, aM));
 
-  for (int i=0;i<3;i++)
+  for(int i=0; i<3; i++)
   {
-    for (int j=0;j<3;j++)
+    for(int j=0; j<3; j++)
     {
        ASSERT_EQUALS_EPSILON(solA[j+3*i], aM[i][j], EPSILON);
     }
@@ -126,15 +126,14 @@ void ccruncher_test::PowMatrixTest::test2()
 
   ASSERT_NO_THROW(PowMatrix::pow(A, 0.2, M));
 
-  for (int i=0;i<3;i++)
+  for(int i=0; i<3; i++)
   {
-    for (int j=0;j<3;j++)
+    for(int j=0; j<3; j++)
     {
       ASSERT_EQUALS_EPSILON(solA[j+3*i], M[i][j], EPSILON);
     }
   }
 }
-
 
 //===========================================================================
 // test3. try to pow a non-invertible matrix (singular matrix)
@@ -175,9 +174,9 @@ void ccruncher_test::PowMatrixTest::test3()
 
   ASSERT_NO_THROW(PowMatrix::pow(A, 0.2, M));
 
-  for (int i=0;i<3;i++)
+  for(int i=0; i<3; i++)
   {
-    for (int j=0;j<3;j++)
+    for(int j=0; j<3; j++)
     {
       ASSERT_EQUALS_EPSILON(solA[j+3*i], M[i][j], EPSILON);
     }
@@ -232,9 +231,9 @@ void ccruncher_test::PowMatrixTest::test5()
 //===========================================================================
 void ccruncher_test::PowMatrixTest::printMatrix(double **a, int n)
 {
-  for(int i=0;i<n;i++)
+  for(int i=0; i<n; i++)
   {
-    for(int j=0;j<n;j++)
+    for(int j=0; j<n; j++)
     {
       cout << a[i][j] << " \t";
     }

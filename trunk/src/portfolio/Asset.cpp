@@ -62,7 +62,7 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
   assert(d1 <= d2);
 
   // assumes that data is sorted.
-  for (int i=0; i<(int)data.size(); i++) 
+  for(int i=0; i<(int)data.size(); i++) 
   {
     if (d1 < data[i].date)
     {

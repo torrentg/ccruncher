@@ -128,7 +128,7 @@ void ccruncher::Aggregator::append(const double *losses)
 
   try
   {
-    for (int i=0; i<numsegments-1; i++)
+    for(int i=0; i<numsegments-1; i++)
     {
       fout << losses[i] << ", ";
     }

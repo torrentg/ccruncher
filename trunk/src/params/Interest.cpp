@@ -221,7 +221,7 @@ void ccruncher::Interest::insertRate(const Rate &val)
   }
 
   // checking if previously defined
-  for (size_t i=0; i<rates.size(); i++)
+  for(size_t i=0; i<rates.size(); i++)
   {
     Rate aux = rates[i];
 

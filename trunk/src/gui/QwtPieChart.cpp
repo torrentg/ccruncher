@@ -74,7 +74,7 @@ void QwtPieChart::drawSeries( QPainter *painter,
   QPen pen(QColor(255,255,255));
   pen.setWidth(1);
   painter->setPen(pen);
-  for (size_t i=0; i<items.size(); i++ )
+  for(size_t i=0; i<items.size(); i++ )
   {
     int angle1 = (i==0 ? 0:items[i-1].angle);
     int angle2 = items[i].angle;
@@ -160,7 +160,7 @@ void QwtPieChart::setSamples(const std::vector<double> &values,
   sum = 0.0;
   items.resize(values.size());
 
-  for (size_t i=0; i<items.size(); i++)
+  for(size_t i=0; i<items.size(); i++)
   {
     items[i].value = values[i];
     items[i].name = names[i];
@@ -169,7 +169,7 @@ void QwtPieChart::setSamples(const std::vector<double> &values,
   }
 
   double angle = 0.0;
-  for (size_t i=0; i<items.size(); i++)
+  for(size_t i=0; i<items.size(); i++)
   {
     angle += 5760.0*(items[i].value/sum);
     items[i].angle = int(angle+0.5); // rounding to nearest
