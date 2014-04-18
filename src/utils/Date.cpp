@@ -668,7 +668,7 @@ bool ccruncher::isInterval(const char *str)
     return false;
   if ((str[0]!='+') && ( str[0]!='-') && ( (str[0]<'0') || ( str[0]>'9')))
     return false;
-  for (size_t i=1;i<l-1;i++)
+  for(size_t i=1; i<l-1; i++)
   {
     if (( str[i]<'0') || ( str[i]>'9'))
     return false;

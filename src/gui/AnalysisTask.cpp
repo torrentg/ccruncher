@@ -280,7 +280,7 @@ void ccruncher_gui::AnalysisTask::runHistogram(const std::vector<double> &values
   bool areints = true;
   double minval = values[0];
   double maxval = values[0];
-  for (size_t i=1; i<values.size(); i++)
+  for(size_t i=1; i<values.size(); i++)
   {
     if (areints && fabs(modf(values[i],&intpart)) > 1e-14) areints = false;
     if (values[i] > maxval) maxval = values[i];
@@ -329,7 +329,7 @@ void ccruncher_gui::AnalysisTask::runEvolutionEL(const std::vector<double> &valu
   statvals.reserve(numpoints);
   kahan sum1, sum2;
 
-  for (size_t i=0,n=0; i<numpoints; i++)
+  for(size_t i=0, n=0; i<numpoints; i++)
   {
     double x = (i+1)*step;
 
@@ -375,7 +375,7 @@ void ccruncher_gui::AnalysisTask::runEvolutionVAR(std::vector<double> &values)
     values[i] = -values[i];
   }
 
-  for (size_t i=0; i<numpoints; i++)
+  for(size_t i=0; i<numpoints; i++)
   {
     int n = (int)((i+1)*step+0.5);
     statval var = valueAtRisk(1.0-percentile, values.begin(), values.begin()+n);
@@ -507,7 +507,7 @@ void ccruncher_gui::AnalysisTask::runEvolutionES(std::vector<double> &values)
     values[i] = -values[i];
   }
 
-  for (size_t i=0; i<numpoints; i++)
+  for(size_t i=0; i<numpoints; i++)
   {
     int n = (int)((i+1)*step+0.5);
     statval es = expectedShortfall(1.0-percentile, values.begin(), values.begin()+n);

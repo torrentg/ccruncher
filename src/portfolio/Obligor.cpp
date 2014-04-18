@@ -106,7 +106,7 @@ void ccruncher::Obligor::insertAsset(ExpatUserData &eu)
 
   // checking coherence
   // TODO: remove this check because Portfolio rechecks
-  for (int i=0; i<ila; i++)
+  for(int i=0; i<ila; i++)
   {
     if (vassets[i]->getId() == vassets[ila]->getId())
     {
@@ -208,7 +208,7 @@ void ccruncher::Obligor::epend(ExpatUserData &eu, const char *name_)
     vector<Asset*>(vassets.begin(),vassets.end()).swap(vassets);
 
     // important: coding obligor-segments as asset-segments
-    for (int i=0; i<(int)eu.segmentations->size(); i++) {
+    for(int i=0; i<(int)eu.segmentations->size(); i++) {
       if (eu.segmentations->getSegmentation(i).components == Segmentation::obligor) {
         for(int j=0; j<(int)vassets.size(); j++) {
           vassets[j]->addBelongsTo(i, vsegments[i]);

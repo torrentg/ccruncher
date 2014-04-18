@@ -136,7 +136,7 @@ void ccruncher_gui::MainWindow::dropEvent(QDropEvent* event)
   if (mimeData->hasUrls()) {
     QList<QUrl> urlList = mimeData->urls();
     // extract the local paths of the files
-    for (int i=0; i<urlList.size() && i<32; ++i) {
+    for(int i=0; i<urlList.size() && i<32; ++i) {
       openFile(urlList.at(i));
     }
   }

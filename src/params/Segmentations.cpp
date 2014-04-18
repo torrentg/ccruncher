@@ -71,14 +71,14 @@ int ccruncher::Segmentations::indexOfSegmentation(const std::string &sname) cons
  */
 int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const
 {
-  for (size_t i=0; i<enabled.size(); i++)
+  for(size_t i=0; i<enabled.size(); i++)
   {
     if (enabled[i].name.compare(sname) == 0)
     {
       return (int)i;
     }
   }
-  for (size_t i=0; i<disabled.size(); i++)
+  for(size_t i=0; i<disabled.size(); i++)
   {
     if (disabled[i].name.compare(sname) == 0)
     {
@@ -103,13 +103,13 @@ void ccruncher::Segmentations::validate()
 
   string str;
   int nbasic = 0;
-  for (size_t i=0; i<enabled.size(); i++) {
+  for(size_t i=0; i<enabled.size(); i++) {
     if (enabled[i].size() == 1) {
       str += (nbasic>0?", ":"") + enabled[i].name;
       nbasic++;
     }
   }
-  for (size_t i=0; i<disabled.size(); i++) {
+  for(size_t i=0; i<disabled.size(); i++) {
     if (disabled[i].size() == 1) {
       str += (nbasic>0?", ":"") + disabled[i].name;
       nbasic++;
@@ -128,14 +128,14 @@ void ccruncher::Segmentations::validate()
 int ccruncher::Segmentations::insertSegmentation(Segmentation &val)
 {
   // checking coherence
-  for (size_t i=0; i<enabled.size(); i++)
+  for(size_t i=0; i<enabled.size(); i++)
   {
     if (enabled[i].name == val.name)
     {
       throw Exception("segmentation name '" + val.name + "' repeated");
     }
   }
-  for (size_t i=0; i<disabled.size(); i++)
+  for(size_t i=0; i<disabled.size(); i++)
   {
     if (disabled[i].name == val.name)
     {

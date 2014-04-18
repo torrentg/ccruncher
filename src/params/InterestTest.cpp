@@ -63,7 +63,7 @@ void ccruncher_test::InterestTest::test1()
   Interest interest(date0);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &interest));
 
-  for (int i=0; i<25; i++)
+  for(int i=0; i<25; i++)
   {
     Date aux = add(date0, i, 'M');
     double val = interest.getFactor(aux);
@@ -103,7 +103,7 @@ void ccruncher_test::InterestTest::test2()
   Interest iobj(date0);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &iobj));
 
-  for (int i=0; i<25; i++)
+  for(int i=0; i<25; i++)
   {
     Date aux = add(date0, i, 'M');
     double val = iobj.getFactor(aux);
@@ -144,7 +144,7 @@ void ccruncher_test::InterestTest::test3()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &iobj));
 
 
-  for (int i=0; i<25; i++)
+  for(int i=0; i<25; i++)
   {
     Date aux = add(date0, i, 'M');
     double val = iobj.getFactor(aux);

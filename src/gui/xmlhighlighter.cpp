@@ -131,7 +131,7 @@ void XmlHighlighter::highlightBlock(const QString& text)
     state = (ParsingState) previousBlockState();
   }
 
-  for (; i < text.length(); i++)
+  for(; i < text.length(); i++)
   {
     switch (text.at(i).toAscii())
     {

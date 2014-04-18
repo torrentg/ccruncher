@@ -165,9 +165,9 @@ void ccruncher::Correlations::epend(ExpatUserData &, const char *name)
 void ccruncher::Correlations::validate()
 {
   // checking that all matrix elements exists
-  for (int i=0; i<size(); i++)
+  for(int i=0; i<size(); i++)
   {
-    for (int j=0; j<size(); j++)
+    for(int j=0; j<size(); j++)
     {
       if (std::isnan(matrix[i][j]))
       {
