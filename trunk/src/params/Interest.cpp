@@ -221,11 +221,9 @@ void ccruncher::Interest::insertRate(const Rate &val)
   }
 
   // checking if previously defined
-  for(size_t i=0; i<rates.size(); i++)
+  for(Rate &rate : rates)
   {
-    Rate aux = rates[i];
-
-    if (abs(aux.d-val.d) == 0)
+    if (abs(rate.d-val.d) == 0)
     {
       throw Exception("rate time '" + val.t_str + "' repeated");
     }

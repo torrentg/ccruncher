@@ -26,7 +26,6 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "params/Segmentations.hpp"
 #include "params/Segmentation.hpp"
 #include "utils/Exception.hpp"
 
@@ -64,7 +63,7 @@ class Aggregator
   public:
 
     //! Constructor
-    Aggregator(int , const Segmentations &, const std::string &, char,
+    Aggregator(const Segmentation &, const std::string &, char,
                const std::string &, const std::vector<double> &exposures=std::vector<double>(0));
     //! Destructor
     ~Aggregator();

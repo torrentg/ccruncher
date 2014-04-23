@@ -87,9 +87,9 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
   }
   
   // computing Current Net Value
-  for(unsigned int i=0; i<data.size(); i++)
+  for(DateValues &dv : data)
   {
-    data[i].ead.mult(interest.getFactor(data[i].date));
+    dv.ead.mult(interest.getFactor(dv.date));
   }
 }
 
@@ -313,14 +313,13 @@ bool ccruncher::Asset::isActive(const Date &from, const Date &to)
  */
 bool ccruncher::Asset::requiresObligorLGD() const
 {
-  for(unsigned int i=0; i<data.size(); i++)
+  for(const DateValues &dv : data)
   {
-    if (!LGD::isvalid(data[i].lgd))
+    if (!LGD::isvalid(dv.lgd))
     {
       return true;
     }
   }
-  
   return false;
 }
 

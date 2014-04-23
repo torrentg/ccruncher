@@ -60,7 +60,7 @@ const string& ccruncher::Ratings::getDescription(int i) const
 int ccruncher::Ratings::getIndex(const char *name) const
 {
   assert(name != nullptr);
-  for(unsigned int i=0; i<vratings.size(); i++)
+  for(size_t i=0; i<vratings.size(); i++)
   {
     if (vratings[i].name.compare(name) == 0)
     {
@@ -86,11 +86,9 @@ int ccruncher::Ratings::getIndex(const std::string &name) const
 void ccruncher::Ratings::insertRating(const Rating &val)
 {
   // checking coherence
-  for(unsigned int i=0; i<vratings.size(); i++)
+  for(Rating &rating : vratings)
   {
-    Rating aux = vratings[i];
-
-    if (aux.name == val.name)
+    if (rating.name == val.name)
     {
       throw Exception("rating name '" + val.name + "' repeated");
     }

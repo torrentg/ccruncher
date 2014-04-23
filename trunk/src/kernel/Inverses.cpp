@@ -66,9 +66,9 @@ ccruncher::Inverses::Inverses(const Inverses &o)
 /**************************************************************************/
 ccruncher::Inverses::~Inverses()
 {
-  for(size_t i=0; i<splines.size(); i++) {
-    if (splines[i] != nullptr) {
-      gsl_spline_free(splines[i]);
+  for(gsl_spline *spline : splines) {
+    if (spline != nullptr) {
+      gsl_spline_free(spline);
     }
   }
 }

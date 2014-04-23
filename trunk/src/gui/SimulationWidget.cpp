@@ -416,9 +416,9 @@ void ccruncher_gui::SimulationWidget::showDefines()
   // checking for new defines in xml file ...
   FindDefines finder = FindDefines(ui->ifile->text().toStdString());
   map<string,string> aux = finder.getDefines();
-  for(auto it=aux.begin(); it != aux.end(); ++it) {
-    if (defines.find(it->first) == defines.end()) {
-      defines[it->first] = it->second;
+  for(auto &it : aux) {
+    if (defines.find(it.first) == defines.end()) {
+      defines[it.first] = it.second;
     }
   }
 
@@ -440,10 +440,10 @@ void ccruncher_gui::SimulationWidget::showDefines()
 void ccruncher_gui::SimulationWidget::setDefines()
 {
   QString str;
-  for(auto it=defines.begin(); it != defines.end(); ++it)
+  for(auto &it : defines)
   {
-    str += QString(str.length()>0?", ":"") + it->first.c_str() +
-           QString("=") + it->second.c_str();
+    str += QString(str.length()>0?", ":"") + it.first.c_str() +
+           QString("=") + it.second.c_str();
   }
   ui->defines->setText(str);
 }

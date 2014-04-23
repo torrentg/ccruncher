@@ -113,16 +113,16 @@ void ccruncher::DefaultProbabilities::reset()
   indexdefault = -1;
   date = NAD;
 
-  for(size_t i=0; i<splines.size(); i++) {
-    if (splines[i] != nullptr) {
-      gsl_spline_free(splines[i]);
+  for(gsl_spline *spline : splines) {
+    if (spline != nullptr) {
+      gsl_spline_free(spline);
     }
   }
   splines.clear();
 
-  for(size_t i=0; i<accels.size(); i++) {
-    if (accels[i] != nullptr) {
-      gsl_interp_accel_free(accels[i]);
+  for(gsl_interp_accel *accel : accels) {
+    if (accel != nullptr) {
+      gsl_interp_accel_free(accel);
     }
   }
   accels.clear();
@@ -347,7 +347,7 @@ void ccruncher::DefaultProbabilities::validate()
   // ranges are checked in insertValue() method. don't rechecked here
 
   // sorting values
-    for(size_t i=0; i<ddata.size(); i++) {
+  for(size_t i=0; i<ddata.size(); i++) {
     sort(ddata[i].begin(), ddata[i].end());
   }
 
@@ -407,7 +407,7 @@ void ccruncher::DefaultProbabilities::validate()
   {
     if (i == indexdefault) continue;
 
-    for(unsigned int j=1; j<ddata[i].size(); j++)
+    for(size_t j=1; j<ddata[i].size(); j++)
     {
       if (ddata[i][j].prob < ddata[i][j-1].prob)
       {

@@ -137,9 +137,9 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m)
     }
 
     // trace defines
-    for(auto it=m.begin(); it != m.end(); ++it) {
-      checkDefine((*it).first, (*it).second);
-      log << "define (user defined)" << split << (*it).first+"="+(*it).second << endl;
+    for(auto &it : m) {
+      checkDefine(it.first, it.second);
+      log << "define (user defined)" << split << it.first+"="+it.second << endl;
     }
 
     // parsing

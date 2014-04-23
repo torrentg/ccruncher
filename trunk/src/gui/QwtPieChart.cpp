@@ -40,8 +40,8 @@ QwtPieChart::QwtPieChart(const QString &title) : QwtPlotSeriesItem(title),
   setRenderHint( QwtPlotItem::RenderAntialiased, true );
 
   seed = 10;
-  for(size_t i=0; i<palette.size(); i++) {
-    palette[i] = getRandomColor();
+  for(QColor &color : palette) {
+    color = getRandomColor();
   }
 }
 

@@ -43,12 +43,12 @@ ccruncher_gui::DefinesDialog::DefinesDialog(QWidget *parent,
   {
     ui->table->removeRow(i);
   }
-  for(auto it=defines.begin(); it != defines.end(); ++it)
+  for(auto &it : defines)
   {
     int row = ui->table->rowCount();
     ui->table->insertRow(row);
-    ui->table->setItem(row, 0, new QTableWidgetItem(it->first.c_str()));
-    ui->table->setItem(row, 1, new QTableWidgetItem(it->second.c_str()));
+    ui->table->setItem(row, 0, new QTableWidgetItem(it.first.c_str()));
+    ui->table->setItem(row, 1, new QTableWidgetItem(it.second.c_str()));
   }
   int row = ui->table->rowCount();
   ui->table->insertRow(row);
