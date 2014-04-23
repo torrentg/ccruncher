@@ -35,9 +35,9 @@ using namespace ccruncher;
 /**************************************************************************/
 ccruncher::Portfolio::~Portfolio()
 {
-  for(unsigned int i=0; i<vobligors.size(); i++)
+  for(Obligor *obligor : vobligors)
   {
-    delete vobligors[i];
+    delete obligor;
   }
 }
 
@@ -68,9 +68,9 @@ void ccruncher::Portfolio::checkObligor(Obligor *val)
   }
 
   // checking if assets id are previously defined
-  for(int i=0; i<(int)val->getAssets().size(); i++)
+  for(Asset *asset : val->getAssets())
   {
-    const string &id = val->getAssets()[i]->getId();
+    const string &id = asset->getId();
     if (idassets.find(id) == idassets.end())
     {
       idassets[id] = true;

@@ -109,11 +109,9 @@ int ccruncher::Factors::getIndex(const std::string &name) const
 void ccruncher::Factors::insertFactor(const Factor &val)
 {
   // checking coherence
-  for(size_t i=0; i<vfactors.size(); i++)
+  for(Factor &factor : vfactors)
   {
-    Factor aux = vfactors[i];
-
-    if (aux.name == val.name)
+    if (factor.name == val.name)
     {
       throw Exception("factor '" + val.name + "' repeated");
     }

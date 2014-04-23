@@ -280,11 +280,11 @@ void ccruncher_gui::AnalysisTask::runHistogram(const std::vector<double> &values
   bool areints = true;
   double minval = values[0];
   double maxval = values[0];
-  for(size_t i=1; i<values.size(); i++)
+  for(auto value : values)
   {
-    if (areints && fabs(modf(values[i],&intpart)) > 1e-14) areints = false;
-    if (values[i] > maxval) maxval = values[i];
-    else if (values[i] < minval) minval = values[i];
+    if (areints && fabs(modf(value,&intpart)) > 1e-14) areints = false;
+    if (value > maxval) maxval = value;
+    else if (value < minval) minval = value;
     if (stop_) throw StopException();
   }
 
@@ -371,8 +371,8 @@ void ccruncher_gui::AnalysisTask::runEvolutionVAR(std::vector<double> &values)
   statvals.reserve(numpoints);
 
   // negate values (used in partial_sort)
-  for(size_t i=0; i<values.size(); i++) {
-    values[i] = -values[i];
+  for(auto &value : values) {
+    value = -value;
   }
 
   for(size_t i=0; i<numpoints; i++)
@@ -503,8 +503,8 @@ void ccruncher_gui::AnalysisTask::runEvolutionES(std::vector<double> &values)
   statvals.reserve(numpoints);
 
   // negate values (used in partial_sort)
-  for(size_t i=0; i<values.size(); i++) {
-    values[i] = -values[i];
+  for(auto &value : values) {
+    value = -value;
   }
 
   for(size_t i=0; i<numpoints; i++)

@@ -216,7 +216,7 @@ void ccruncher::Transitions::validate()
     }
   }
 
-  // finding default rating
+  // searching default rating
   indexdefault = -1;
 
   for(size_t i=0; i<size(); i++)
@@ -449,14 +449,14 @@ void ccruncher::Transitions::prod(const vector<vector<double>> &M1,
   assert(M1.size() == M2.size() && M1[0].size() == M2[0].size());
   assert(M1.size() == M3.size() && M1[0].size() == M3[0].size());
 
-  unsigned int n = M1.size();
+  size_t n = M1.size();
 
-  for(unsigned int i=0; i<n; i++)
+  for(size_t i=0; i<n; i++)
   {
-    for(unsigned int j=0; j<n; j++)
+    for(size_t j=0; j<n; j++)
     {
       double val = 0.0;
-      for(unsigned int k=0; k<n; k++)
+      for(size_t k=0; k<n; k++)
       {
         val += M1[i][k]*M2[k][j];
       }

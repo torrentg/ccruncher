@@ -98,20 +98,20 @@ int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const
 void ccruncher::Segmentations::validate()
 {
   if (enabled.empty()) {
-    throw Exception("don't found active segmentations");
+    throw Exception("active segmentations not found");
   }
 
   string str;
   int nbasic = 0;
-  for(size_t i=0; i<enabled.size(); i++) {
-    if (enabled[i].size() == 1) {
-      str += (nbasic>0?", ":"") + enabled[i].name;
+  for(Segmentation &segmentation : enabled) {
+    if (segmentation.size() == 1) {
+      str += (nbasic>0?", ":"") + segmentation.name;
       nbasic++;
     }
   }
-  for(size_t i=0; i<disabled.size(); i++) {
-    if (disabled[i].size() == 1) {
-      str += (nbasic>0?", ":"") + disabled[i].name;
+  for(Segmentation &segmentation : disabled) {
+    if (segmentation.size() == 1) {
+      str += (nbasic>0?", ":"") + segmentation.name;
       nbasic++;
     }
   }
@@ -128,16 +128,16 @@ void ccruncher::Segmentations::validate()
 int ccruncher::Segmentations::insertSegmentation(Segmentation &val)
 {
   // checking coherence
-  for(size_t i=0; i<enabled.size(); i++)
+  for(Segmentation &segmentation : enabled)
   {
-    if (enabled[i].name == val.name)
+    if (segmentation.name == val.name)
     {
       throw Exception("segmentation name '" + val.name + "' repeated");
     }
   }
-  for(size_t i=0; i<disabled.size(); i++)
+  for(Segmentation &segmentation : disabled)
   {
-    if (disabled[i].name == val.name)
+    if (segmentation.name == val.name)
     {
       throw Exception("segmentation name '" + val.name + "' repeated");
     }
@@ -214,9 +214,9 @@ void ccruncher::Segmentations::addComponents(const Asset *asset)
  */
 void ccruncher::Segmentations::removeUnusedSegments()
 {
-  for(size_t i=0; i<enabled.size(); i++)
+  for(Segmentation &segmentation : enabled)
   {
-    enabled[i].removeUnusedSegments();
+    segmentation.removeUnusedSegments();
   }
 }
 

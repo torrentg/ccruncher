@@ -60,9 +60,9 @@ ccruncher::Obligor::Obligor(size_t nsegmentations) :
 /**************************************************************************/
 ccruncher::Obligor::~Obligor()
 {
-  for(unsigned int i=0; i<vassets.size(); i++)
+  for(Asset *asset : vassets)
   {
-    if (vassets[i] != nullptr) delete vassets[i];
+    if (asset != nullptr) delete asset;
   }
   vassets.clear();
 }
@@ -80,8 +80,8 @@ Obligor& ccruncher::Obligor::operator=(const Obligor &o)
 
   vsegments = o.vsegments;
 
-  for(size_t i=0; i<vassets.size(); i++) {
-    if (vassets[i] != nullptr) delete vassets[i];
+  for(Asset *asset : vassets) {
+    if (asset != nullptr) delete asset;
   }
   vassets.assign(o.vassets.size(), nullptr);
   for(size_t i=0; i<vassets.size(); i++)
@@ -210,8 +210,8 @@ void ccruncher::Obligor::epend(ExpatUserData &eu, const char *name_)
     // important: coding obligor-segments as asset-segments
     for(int i=0; i<(int)eu.segmentations->size(); i++) {
       if (eu.segmentations->getSegmentation(i).components == Segmentation::obligor) {
-        for(int j=0; j<(int)vassets.size(); j++) {
-          vassets[j]->addBelongsTo(i, vsegments[i]);
+        for(Asset *asset : vassets) {
+          asset->addBelongsTo(i, vsegments[i]);
         }
       }
     }
@@ -225,14 +225,13 @@ void ccruncher::Obligor::epend(ExpatUserData &eu, const char *name_)
  */
 bool ccruncher::Obligor::isActive(const Date &from, const Date &to)
 {
-  for(size_t i=0; i<vassets.size(); i++)
+  for(Asset *asset : vassets)
   {
-    if (vassets[i]->isActive(from,to))
+    if (asset->isActive(from,to))
     {
       return true;
     }
   }
-
   return false;
 }
 
@@ -291,9 +290,9 @@ vector<Asset *> & ccruncher::Obligor::getAssets()
  */
 bool ccruncher::Obligor::hasLGD() const
 {
-  for(size_t i=0; i<vassets.size(); i++)
+  for(Asset *asset : vassets)
   {
-    if (vassets[i]->requiresObligorLGD())
+    if (asset->requiresObligorLGD())
     {
       return true;
     }

@@ -37,26 +37,22 @@ using namespace std;
  *          - 'c': Create. Fails if file exist.
  *          - 'w': overwrites previous file content (if exist)
  * @see http://ccruncher.net/ofileref.html#segmentation
- * @param[in] isegmentation Segmentation index.
- * @param[in] segmentations List of segmentations.
+ * @param[in] segmentation Segmentation of this aggregator.
  * @param[in] ofile Filename.
  * @param[in] mode a=append, w=overwrite, c=create
  * @param[in] ifile Input file name (to put in header)
  * @param[in] exposures Segment exposures (to put in header)
  * @throw Exception Error creating file.
  */
-ccruncher::Aggregator::Aggregator(int isegmentation, const Segmentations &segmentations,
+ccruncher::Aggregator::Aggregator(const Segmentation &segmentation,
     const std::string &ofile, char mode, const std::string &ifile,
     const std::vector<double> &exposures)
 {
   assert(mode=='a' || mode=='w' || mode=='c');
-  assert(0 <= isegmentation && isegmentation < segmentations.size());
-
-  Segmentation segmentation = segmentations.getSegmentation(isegmentation);
 
   // initialization
   filename = ofile;
-  numsegments = segmentations.getSegmentation(isegmentation).size();
+  numsegments = segmentation.size();
   assert(numsegments > 0);
   assert(exposures.empty() || (int)exposures.size()==numsegments);
 

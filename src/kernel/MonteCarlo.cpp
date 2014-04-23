@@ -70,20 +70,20 @@ ccruncher::MonteCarlo::~MonteCarlo()
 void ccruncher::MonteCarlo::release()
 {
   // removing threads
-  for(unsigned int i=0; i<threads.size(); i++) {
-    if (threads[i] != nullptr) {
-      threads[i]->cancel();
-      delete threads[i];
-      threads[i] = nullptr;
+  for(auto &thread : threads) {
+    if (thread != nullptr) {
+      thread->cancel();
+      delete thread;
+      thread = nullptr;
     }
   }
   threads.clear();
 
   // dropping aggregators elements
-  for(unsigned int i=0; i<aggregators.size(); i++) {
-    if (aggregators[i] != nullptr) {
-      delete aggregators[i];
-      aggregators[i] = nullptr;
+  for(auto &aggregator : aggregators) {
+    if (aggregator != nullptr) {
+      delete aggregator;
+      aggregator = nullptr;
     }
   }
   aggregators.clear();
@@ -275,13 +275,13 @@ void ccruncher::MonteCarlo::initObligors(IData &idata)
   // determining the obligors to simulate
   vector<Obligor *> &vobligors = idata.getPortfolio().getObligors();
   obligors.reserve(vobligors.size());
-  for(size_t i=0; i<vobligors.size(); i++)
+  for(Obligor *ptro : vobligors)
   {
-    if (vobligors[i]->isActive(time0, timeT))
+    if (ptro->isActive(time0, timeT))
     {
-      obligors.push_back(SimulatedObligor(vobligors[i]));
+      obligors.push_back(SimulatedObligor(ptro));
       // trick to transfer obligor ref to next stage (initAssets)
-      obligors.back().setObligor(vobligors[i]);
+      obligors.back().setObligor(ptro);
     }
   }
 
@@ -323,18 +323,16 @@ void ccruncher::MonteCarlo::initAssets(IData &idata)
   size_t numassets = 0;
   size_t numdatevalues = 0;
   size_t cont = 0;
-  for(size_t i=0; i<obligors.size(); i++)
+  for(auto &obligor : obligors)
   {
-    Obligor *obligor = obligors[i].getObligor();
-    vector<Asset*> &vassets = obligor->getAssets();
-    for(size_t j=0; j<vassets.size(); j++)
+    for(auto ptra : obligor.getObligor()->getAssets())
     {
       cont++;
-      if (vassets[j]->isActive(time0, timeT))
+      if (ptra->isActive(time0, timeT))
       {
         numassets++;
-        numdatevalues += vassets[j]->getData().size();
-        idata.getSegmentations().addComponents(vassets[j]);
+        numdatevalues += ptra->getData().size();
+        idata.getSegmentations().addComponents(ptra);
       }
     }
   }
@@ -360,39 +358,38 @@ void ccruncher::MonteCarlo::initAssets(IData &idata)
   segments.reserve(numassets*numsegmentations);
 
   numassets = 0;
-  for(size_t i=0; i<obligors.size(); i++)
+  for(auto &obligor : obligors)
   {
-    Obligor *obligor = obligors[i].getObligor();
-    obligors[i].lgd = obligor->lgd;
-    obligors[i].numassets = 0;
-    vector<Asset*> &vassets = obligor->getAssets();
-    for(size_t j=0; j<vassets.size(); j++)
+    Obligor *ptro = obligor.getObligor();
+    obligor.lgd = ptro->lgd;
+    obligor.numassets = 0;
+    for(auto ptra : ptro->getAssets())
     {
-      if (vassets[j]->isActive(time0, timeT)) 
+      if (ptra->isActive(time0, timeT))
       {
         // checking ranges
-        if (obligors[i].numassets == USHRT_MAX)
+        if (obligor.numassets == USHRT_MAX)
         {
           throw Exception("exceeded maximum number of assets by obligor");
         }
 
         // recode segments
-        idata.getSegmentations().recodeSegments(vassets[j]);
+        idata.getSegmentations().recodeSegments(ptra);
 
         // setting asset segments
         for(size_t k=0; k<numsegmentations; k++)
         {
-          segments.push_back(static_cast<unsigned short>(vassets[j]->getSegment(k)));
+          segments.push_back(static_cast<unsigned short>(ptra->getSegment(k)));
         }
 
         // filling simulated asset
-        assets[numassets].assign(vassets[j]);
+        assets[numassets].assign(ptra);
 
         // incrementing num assets counters
-        obligors[i].numassets++;
+        obligor.numassets++;
         numassets++;
       }
-      vassets[j]->clearData();
+      ptra->clearData();
     }
   }
 
@@ -425,20 +422,21 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata)
   numsegments = 0;
   size_t numsegmentations = idata.getSegmentations().size();
   numSegmentsBySegmentation.resize(numsegmentations, 0);
-  aggregators.resize(numsegmentations, static_cast<Aggregator*>(nullptr));
+  aggregators.resize(numsegmentations, nullptr);
   for(int i=0; i<(int)numsegmentations; i++)
   {
-    if (idata.getSegmentations().getSegmentation(i).size() > USHRT_MAX) {
-      const string &sname = idata.getSegmentations().getSegmentation(i).name;
-      throw Exception("segmentation '" + sname + "' exceeds the maximum number of segments");
+    const Segmentation &segmentation = idata.getSegmentations().getSegmentation(i);
+    if (segmentation.size() > USHRT_MAX) {
+      throw Exception("segmentation '" + segmentation.name +
+                      "' exceeds the maximum number of segments");
     }
 
     string ifile = idata.getFilename();
-    string ofile = idata.getSegmentations().getSegmentation(i).getFilename(fpath);
+    string ofile = segmentation.getFilename(fpath);
     vector<double> exposures = getExposures(i, idata);
-    Aggregator *aggregator = new Aggregator(i, idata.getSegmentations(), ofile, fmode, ifile, exposures);
+    Aggregator *aggregator = new Aggregator(segmentation, ofile, fmode, ifile, exposures);
     aggregators[i] = aggregator;
-    numSegmentsBySegmentation[i] = (unsigned short)(idata.getSegmentations().getSegmentation(i).size());
+    numSegmentsBySegmentation[i] = (unsigned short)(segmentation.size());
     numsegments += numSegmentsBySegmentation[i];
     log << "segmentation" << split << "["+ofile+"]" << endl;
   }
@@ -468,7 +466,7 @@ vector<double> ccruncher::MonteCarlo::getExposures(int isegmentation, IData &ida
     {
       unsigned short segment = segments[isegment];
       Date prevt = time0;
-      for(DateValues *dv=assets[iasset].begin; dv < assets[iasset].end; ++dv)
+      for(DateValues *dv=assets[iasset].begin; dv<assets[iasset].end; ++dv)
       {
         double weight = (min(dv->date,timeT) - prevt)/numdays;
         ret[segment] += weight * dv->ead.getExpected();
@@ -530,7 +528,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   timer.start();
   nfthreads = numthreads;
   numiterations = 0;
-  threads.assign(numthreads, static_cast<SimulationThread*>(nullptr));
+  threads.assign(numthreads, nullptr);
   for(int i=0; i<numthreads; i++)
   {
     threads[i] = new SimulationThread(i+1, *this, seed+i);
@@ -563,10 +561,10 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   {
     findexes.close();
   }
-  for(unsigned int i=0; i<aggregators.size(); i++)
+  for(auto &aggregator : aggregators)
   {
-    delete aggregators[i];
-    aggregators[i] = nullptr;
+    delete aggregator;
+    aggregator = nullptr;
   }
   etime3 += timer3_aux.stop();
 
@@ -612,7 +610,7 @@ bool ccruncher::MonteCarlo::append(int ithread, const std::vector<short> &vi,
       }
 
       // aggregating simulation result
-      for(unsigned int i=0; i<aggregators.size(); i++)
+      for(size_t i=0; i<aggregators.size(); i++)
       {
         aggregators[i]->append(losses);
         losses += numSegmentsBySegmentation[i];

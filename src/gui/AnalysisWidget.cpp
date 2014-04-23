@@ -138,8 +138,8 @@ ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *
     ui->segment->addItem("All");
     ui->segment->insertSeparator(1);
   }
-  for(size_t i=0; i<segments.size(); i++) {
-    ui->segment->addItem(segments[i].c_str());
+  for(auto &segment : segments) {
+    ui->segment->addItem(segment.c_str());
   }
   ui->segment->blockSignals(false);
 

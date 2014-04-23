@@ -61,7 +61,7 @@ const string& ccruncher::Segmentation::getSegment(int i) const
  */
 int ccruncher::Segmentation::indexOfSegment(const std::string &sname) const
 {
-  for(unsigned int i=0; i<segments.size(); i++)
+  for(size_t i=0; i<segments.size(); i++)
   {
     if (segments[i] == sname)
     {
@@ -81,7 +81,7 @@ int ccruncher::Segmentation::indexOfSegment(const char *sname) const
 {
   assert(sname != nullptr);
 
-  for(unsigned int i=0; i<segments.size(); i++)
+  for(size_t i=0; i<segments.size(); i++)
   {
     if (segments[i].compare(sname) == 0)
     {
@@ -141,11 +141,11 @@ void ccruncher::Segmentation::insertSegment(const std::string &sname)
   }
 
   // checking coherence
-  for(unsigned int i=0; i<segments.size(); i++)
+  for(string &segment : segments)
   {
-    if (segments[i] == sname)
+    if (segment == sname)
     {
-      throw Exception("segment '" + segments[i] + "' repeated");
+      throw Exception("segment '" + sname + "' repeated");
     }
   }
 
@@ -269,7 +269,7 @@ void ccruncher::Segmentation::removeUnusedSegments()
     }
   }
 
-  // moving unassigned segment at the end
+  // moving unassigned segment to the end
   if (segments.size() > 1 && segments[0] == UNASSIGNED)
   {
     segments.push_back(UNASSIGNED);
