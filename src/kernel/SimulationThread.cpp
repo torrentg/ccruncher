@@ -373,7 +373,7 @@ void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obli
       {
         if (std::isnan(obligor_lgd))
         {
-          obligor_lgd = obligor.lgd.getValue(rng);
+          obligor_lgd = obligor.ref.lgd.getValue(rng);
         }
         lgd = obligor_lgd;
       }
