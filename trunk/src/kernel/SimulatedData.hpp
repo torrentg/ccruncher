@@ -45,19 +45,23 @@ class SimulatedObligor
     unsigned char ifactor;
     //! Obligor's rating index
     unsigned char irating;
-    //! Number of assets
+    //! Number of active assets
     unsigned short numassets;
-    //! Obligor's lgd
-    LGD lgd;
+    //! obligor in initialization, lgd otherwise
+    union UnionType
+    {
+      //! Obligor's lgd
+      LGD lgd;
+      //! Obligor's pointer
+      Obligor *obligor;
+      //! Union constructor
+      UnionType() { new(&lgd) LGD(); }
+    } ref;
 
   public:
 
     //! Constructor
     SimulatedObligor(Obligor *obligor=nullptr);
-    //! Sets a pointer
-    void setObligor(Obligor*);
-    //! Gets a pointer
-    Obligor* getObligor();
     //! Less-than operator
     bool operator<(const SimulatedObligor &obj) const;
 

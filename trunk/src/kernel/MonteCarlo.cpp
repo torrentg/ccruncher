@@ -280,8 +280,6 @@ void ccruncher::MonteCarlo::initObligors(IData &idata)
     if (ptro->isActive(time0, timeT))
     {
       obligors.push_back(SimulatedObligor(ptro));
-      // trick to transfer obligor ref to next stage (initAssets)
-      obligors.back().setObligor(ptro);
     }
   }
 
@@ -325,7 +323,7 @@ void ccruncher::MonteCarlo::initAssets(IData &idata)
   size_t cont = 0;
   for(auto &obligor : obligors)
   {
-    for(auto ptra : obligor.getObligor()->getAssets())
+    for(auto ptra : obligor.ref.obligor->getAssets())
     {
       cont++;
       if (ptra->isActive(time0, timeT))
@@ -360,8 +358,8 @@ void ccruncher::MonteCarlo::initAssets(IData &idata)
   numassets = 0;
   for(auto &obligor : obligors)
   {
-    Obligor *ptro = obligor.getObligor();
-    obligor.lgd = ptro->lgd;
+    Obligor *ptro = obligor.ref.obligor;
+    obligor.ref.lgd = ptro->lgd;
     obligor.numassets = 0;
     for(auto ptra : ptro->getAssets())
     {

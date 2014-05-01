@@ -36,35 +36,14 @@ ccruncher::SimulatedObligor::SimulatedObligor(Obligor *obligor)
     irating = static_cast<unsigned char>(obligor->irating);
     ifactor = static_cast<unsigned char>(obligor->ifactor);
     numassets = 0;
+    ref.obligor = obligor;
   }
   else {
     irating = 0;
     ifactor = 0;
     numassets = 0;
+    ref.obligor = nullptr;
   }
-}
-
-/**************************************************************************//**
- * @details Save a pointer in the lgd memory region.
- *          Caution, lgd variable contains (in the initialization stage) a
- *          reference to the obligor. We don't use a union because classes
- *          with constructor are not allowed as member of a union.
- * @param[in] ptr Pointer
- */
-void ccruncher::SimulatedObligor::setObligor(Obligor *ptr)
-{
-  Obligor **p = reinterpret_cast<Obligor**>(&lgd);
-  *p = ptr;
-}
-
-/**************************************************************************//**
- * @details Return a pointer saved in the lgd memory region.
- * @return Pointer.
- */
-Obligor* ccruncher::SimulatedObligor::getObligor()
-{
-  Obligor **p = reinterpret_cast<Obligor**>(&(lgd));
-  return *p;
 }
 
 /**************************************************************************//**

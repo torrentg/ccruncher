@@ -2,13 +2,13 @@
 /* src/utils/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2014-04-23 19:40:46+02:00"
+#define BUILD_DATE "2014-05-01 07:39:51+02:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
 
 /* build user */
-#define BUILD_USER "gerard"
+#define BUILD_USER "Gerard Torrent"
 
 /* Define to 1 if you have the `alarm' function. */
 #define HAVE_ALARM 1

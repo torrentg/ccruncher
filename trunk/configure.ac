@@ -127,9 +127,9 @@ AC_SUBST([AM_CPPFLAGS], ['-I$(top_srcdir)/src'])
 dnl -------------------------------------------------------------
 dnl defining some usefull variables in config.h
 dnl -------------------------------------------------------------
-AC_DEFINE_UNQUOTED([BUILD_USER], ["`whoami`"], [build user])
-AC_DEFINE_UNQUOTED([BUILD_DATE], ["`date --rfc-3339=seconds`"], [build date])
-AC_DEFINE_UNQUOTED([BUILD_HOST], ["`hostname | head -n 1`"], [build host name])
+AC_DEFINE_UNQUOTED([BUILD_USER], ["$(grep -P "^$(whoami):" /etc/passwd | cut -f5 -d:)"], [build user])
+AC_DEFINE_UNQUOTED([BUILD_DATE], ["$(date --rfc-3339=seconds)"], [build date])
+AC_DEFINE_UNQUOTED([BUILD_HOST], ["$(hostname | head -n 1)"], [build host name])
 
 dnl -------------------------------------------------------------
 dnl completing config.h.in
