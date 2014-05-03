@@ -24,12 +24,11 @@
 #define _Thread_
 
 #include <thread>
-#include <mutex>
 
 namespace ccruncher {
 
 /**************************************************************************//**
- * @brief   Base class to create a thread class.
+ * @brief   Base class to create a basic thread class.
  *
  * @details User extends this class implementing the Thread::run() method.
  *          Launch the defined task in a new thread calling Thread::start().
@@ -37,42 +36,24 @@ namespace ccruncher {
 class Thread
 {
 
-  public:
-
-    //! Thread status
-    enum ThreadStatus
-    {
-      fresh,     //!< Thread not started
-      running,   //!< Running thread (see start method)
-      aborted,   //!< Aborted thread (problem during execution)
-      finished   //!< Finished thread (run method finish)
-    };
-
   private:
-  
+
     //! Thread object
     std::thread mThread;
-    //! Thread status
-    ThreadStatus mStatus;
-    //! Ensures status consistence
-    mutable std::mutex mMutex;
 
   private:
 
     //! Thread launcher
     static void launcher(Thread *) noexcept;
 
-    //! Non-copyable class
-    Thread(const Thread &);
-    //! Non-copyable class
-    Thread& operator=(const Thread &);
-    //! Set thread status
-    void setStatus(ThreadStatus s);
-
   protected:
 
     //! Constructor
-    Thread();
+    Thread() {}
+    //! Non-copyable class
+    Thread(const Thread &) = delete;
+    //! Non-copyable class
+    Thread& operator=(const Thread &) = delete;
     //! Destructor
     virtual ~Thread();
 
@@ -83,9 +64,7 @@ class Thread
     //! Starts the thread
     void start();
     //! Blocks until thread termination
-    void wait();
-    //! Returns thread status
-    ThreadStatus getStatus() const;
+    void join();
 
 };
 

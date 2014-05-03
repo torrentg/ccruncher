@@ -542,7 +542,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
 
   for(int i=0; i<numthreads; i++)
   {
-    threads[i]->wait();
+    threads[i]->join();
     etime1 += threads[i]->getElapsedTime1();
     etime2 += threads[i]->getElapsedTime2();
     etime3 += threads[i]->getElapsedTime3();
