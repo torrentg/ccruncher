@@ -44,8 +44,6 @@ AC_CHECK_LIB([gslcblas],[cblas_dgemm],,
     [AC_MSG_ERROR([cannot find the gsl library]) ])
 AC_CHECK_LIB([gsl], [gsl_rng_alloc],,
     [AC_MSG_ERROR([cannot find the gsl library]) ])
-AC_CHECK_LIB([pthread], [pthread_create],,
-    [AC_MSG_ERROR([cannot find the pthread library]) ])
 
 dnl -------------------------------------------------------------
 dnl checks for header
@@ -116,7 +114,7 @@ fi
 dnl -------------------------------------------------------------
 dnl setting compiler options
 dnl -------------------------------------------------------------
-CXXFLAGS="$CXXFLAGS -std=c++11 -Wall -Wextra -Wshadow -Wpedantic -pthread"
+CXXFLAGS="$CXXFLAGS -std=c++11 -Wall -Wextra -Wshadow -Wpedantic"
 AC_SUBST(CXXFLAGS)
 
 dnl -------------------------------------------------------------

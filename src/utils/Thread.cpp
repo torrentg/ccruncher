@@ -21,46 +21,37 @@
 //===========================================================================
 
 #include "Thread.hpp"
-#include <cstring>
+#include <exception>
+#include <cassert>
 
 using namespace std;
 
 /**************************************************************************/
 ccruncher::Thread::Thread()
 {
-  memset(&thread, 0, sizeof(pthread_t));
-  pthread_mutex_init(&mutex, nullptr);
   setStatus(fresh);
 }
-
 
 /**************************************************************************//**
  * @details If there is a running task, this task will be stoped.
  */
 ccruncher::Thread::~Thread()
 {
-  cancel();
-
-  if (getStatus() != fresh)
-  {
-    pthread_detach(thread);
+  if (mThread.joinable()) {
+    assert(false);
+    mThread.detach();
   }
-
-  pthread_mutex_destroy(&mutex);
 }
 
 /**************************************************************************//**
- * @details Internal method used to launch thread.
- * @param[in] d pointer to a Thread instance
+ * @details Internal method used to launch threads.
+ * @param[in] x Thread to launch.
  */
-void* ccruncher::Thread::launcher(void *d)
+void ccruncher::Thread::launcher(Thread *x) noexcept
 {
-  Thread *x = static_cast<Thread *>(d);
-  pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, nullptr);
-  pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, nullptr);
-
-  try 
+  try
   {
+    assert(x != nullptr);
     x->setStatus(running);
     x->run();
     x->setStatus(finished);
@@ -68,53 +59,50 @@ void* ccruncher::Thread::launcher(void *d)
   catch(...) 
   {
     x->setStatus(aborted);
-    throw;
   }
-
-  return d;
 }
 
 /**************************************************************************//**
  * @details If you want to execute the main class procedure in the current
- *          execution thread use Thread::run(). This method creates a new
- *          thread.
+ *          execution thread use Thread::run(). This method executes the
+ *          Thread::run() method in a new thread.
  */
 void ccruncher::Thread::start()
 {
   if (getStatus() == running) return;
-  setStatus(running);
-  int rc = pthread_create(&thread, nullptr, Thread::launcher, (void*)this);
-  if (rc != 0) setStatus(aborted);
+  assert(!mThread.joinable());
+  if (mThread.joinable()) return;
+  try {
+    setStatus(running);
+    mThread = std::thread(Thread::launcher, this);
+  }
+  catch(std::exception &) {
+    setStatus(aborted);
+  }
 }
 
 /**************************************************************************/
 void ccruncher::Thread::wait()
 {
-  if (getStatus() == running)
+  if (getStatus() == running || mThread.joinable())
   {
-    int rc = pthread_join(thread, nullptr);
-    if (rc != 0) setStatus(aborted);
-    else setStatus(finished);
-  }
-}
-
-/**************************************************************************/
-void ccruncher::Thread::cancel()
-{
-  if (getStatus() == running)
-  {
-    pthread_cancel(thread);
-    pthread_join(thread, nullptr);
-    setStatus(cancelled);
+    try {
+      assert(mThread.joinable());
+      mThread.join();
+      setStatus(finished);
+    }
+    catch(std::exception &) {
+      setStatus(aborted);
+    }
   }
 }
 
 /**************************************************************************/
 ccruncher::Thread::ThreadStatus ccruncher::Thread::getStatus() const
 {
-  pthread_mutex_lock(&mutex);
-  ThreadStatus s = status;
-  pthread_mutex_unlock(&mutex);
+  mMutex.lock();
+  ThreadStatus s = mStatus;
+  mMutex.unlock();
   return s;
 }
 
@@ -124,8 +112,8 @@ ccruncher::Thread::ThreadStatus ccruncher::Thread::getStatus() const
  */
 void ccruncher::Thread::setStatus(ThreadStatus s)
 {
-  pthread_mutex_lock(&mutex);
-  status = s;
-  pthread_mutex_unlock(&mutex);
+  mMutex.lock();
+  mStatus = s;
+  mMutex.unlock();
 }
 

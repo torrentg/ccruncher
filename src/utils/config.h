@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2014-05-01 07:39:51+02:00"
+#define BUILD_DATE "2014-05-03 08:02:35+02:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -47,7 +47,7 @@
 #define HAVE_LIBM 1
 
 /* Define to 1 if you have the `pthread' library (-lpthread). */
-#define HAVE_LIBPTHREAD 1
+/* #undef HAVE_LIBPTHREAD */
 
 /* Define to 1 if you have the `z' library (-lz). */
 #define HAVE_LIBZ 1

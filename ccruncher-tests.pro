@@ -1,7 +1,7 @@
 QT -= core gui
 TARGET = ccruncher-tests
 CONFIG -= qt
-CONFIG += c++11 console thread
+CONFIG += c++11 console
 
 HEADERS += \
     src/params/Correlations.hpp \
@@ -139,8 +139,7 @@ INCLUDEPATH += \
     $$PWD/src
 
 LIBS += \
-    -lm \
-    -lpthread
+    -lm
 
 unix {
   LIBS += \

@@ -23,17 +23,16 @@
 #ifndef _Thread_
 #define _Thread_
 
-#include <pthread.h>
+#include <thread>
+#include <mutex>
 
 namespace ccruncher {
 
 /**************************************************************************//**
- * @brief   Base class to create a posix thread class.
+ * @brief   Base class to create a thread class.
  *
- * @details User extends this class implementing the procedure to execute
- *          in a new thread in the Thread::run() method. He launch the task
- *          in a new thread calling Thread::start(). The rest of methods
- *          provides support to manage the running thread (stop, getStatus, etc.)
+ * @details User extends this class implementing the Thread::run() method.
+ *          Launch the defined task in a new thread calling Thread::start().
  */
 class Thread
 {
@@ -46,23 +45,22 @@ class Thread
       fresh,     //!< Thread not started
       running,   //!< Running thread (see start method)
       aborted,   //!< Aborted thread (problem during execution)
-      cancelled, //!< Cancelled thread (see cabcel method)
       finished   //!< Finished thread (run method finish)
     };
 
   private:
   
     //! Thread object
-    pthread_t thread;
+    std::thread mThread;
     //! Thread status
-    ThreadStatus status;
-    //! Ensures data consistence
-    mutable pthread_mutex_t mutex;
+    ThreadStatus mStatus;
+    //! Ensures status consistence
+    mutable std::mutex mMutex;
 
   private:
 
     //! Thread launcher
-    static void* launcher(void *d);
+    static void launcher(Thread *) noexcept;
 
     //! Non-copyable class
     Thread(const Thread &);
@@ -86,8 +84,6 @@ class Thread
     void start();
     //! Blocks until thread termination
     void wait();
-    //! Cancel the running thread
-    void cancel();
     //! Returns thread status
     ThreadStatus getStatus() const;
 

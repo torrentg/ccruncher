@@ -41,7 +41,6 @@ using namespace ccruncher;
  */
 ccruncher::MonteCarlo::MonteCarlo(std::streambuf *s) : log(s), chol(nullptr), stop(nullptr)
 {
-  pthread_mutex_init(&mutex, nullptr);
   maxseconds = 0;
   numiterations = 0;
   maxiterations = 0;
@@ -63,7 +62,6 @@ ccruncher::MonteCarlo::MonteCarlo(std::streambuf *s) : log(s), chol(nullptr), st
 ccruncher::MonteCarlo::~MonteCarlo()
 {
   release();
-  pthread_mutex_destroy(&mutex);
 }
 
 /**************************************************************************/
@@ -72,7 +70,6 @@ void ccruncher::MonteCarlo::release()
   // removing threads
   for(auto &thread : threads) {
     if (thread != nullptr) {
-      thread->cancel();
       delete thread;
       thread = nullptr;
     }
@@ -594,7 +591,7 @@ bool ccruncher::MonteCarlo::append(int ithread, const std::vector<short> &vi,
   assert(losses != nullptr);
   assert(vi.size() == blocksize);
 
-  pthread_mutex_lock(&mutex);
+  mMutex.lock();
   bool more = true;
 
   try
@@ -648,7 +645,7 @@ bool ccruncher::MonteCarlo::append(int ithread, const std::vector<short> &vi,
 
   // exit function
   if (!more) nfthreads--;
-  pthread_mutex_unlock(&mutex);
+  mMutex.unlock();
   return(more);
 }
 
