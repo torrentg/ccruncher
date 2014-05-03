@@ -20,72 +20,57 @@
 //
 //===========================================================================
 
-#ifndef _Factor_
-#define _Factor_
+#ifndef _Rating_
+#define _Rating_
 
 #include <string>
-#include <cmath>
 
 namespace ccruncher {
 
 /**************************************************************************//**
- * @brief Object representing a factor/sector.
+ * @brief Object representing a rating.
  *
- * @see http://ccruncher.net/ifileref.html#factors
+ * @see http://ccruncher.net/ifileref.html#ratings
  */
-class Factor
+class Rating
 {
 
   private:
 
-    //! Factor name
+    //! Rating name
     std::string mName;
-    //! Factor description
+    //! Rating description
     std::string mDesc;
-    //! Factor loading
-    double mLoading;
 
   public:
 
     //! Constructor
-    Factor(const std::string &name="", double loading=NAN, const std::string &desc="");
-    //! Returns the factor name
+    Rating(const std::string &name="", const std::string &desc="");
+    //! Returns the rating name
     const std::string & getName() const;
-    //! Sets the factor name
+    //! Sets the rating name
     void setName(const std::string &name);
-    //! Returns the factor description
+    //! Returns the rating description
     const std::string & getDescription() const;
-    //! Sets the factor description
+    //! Sets the rating description
     void setDescription(const std::string &desc);
-    //! Returns the factor loading
-    double getLoading() const;
-    //! Sets the factor loading
-    void setLoading(double loading);
 
 };
 
 /**************************************************************************//**
- * @return Factor name.
+ * @return Rating name.
  */
-inline const std::string& ccruncher::Factor::getName() const
+inline const std::string& ccruncher::Rating::getName() const
 {
   return mName;
 }
 
 /**************************************************************************//**
- * @return Factor description.
+ * @return Rating description.
  */
-inline const std::string& ccruncher::Factor::getDescription() const
+inline const std::string& ccruncher::Rating::getDescription() const
 {
   return mDesc;
-}
-
-/**************************************************************************//**
- * @return Factor loading.
- */
-inline double ccruncher::Factor::getLoading() const
-{
-  return mLoading;
 }
 
 } // namespace

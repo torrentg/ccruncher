@@ -31,7 +31,7 @@
 namespace ccruncher {
 
 /**************************************************************************//**
- * @brief List of factors.
+ * @brief List of factors/sectors.
  *
  * @see http://ccruncher.net/ifileref.html#factors
  */

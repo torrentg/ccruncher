@@ -25,6 +25,7 @@ HEADERS += \
     src/params/Correlations.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \
+    src/params/Rating.hpp \
     src/params/Ratings.hpp \
     src/params/Factor.hpp \
     src/params/Factors.hpp \
@@ -80,6 +81,7 @@ SOURCES += \
     src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \
+    src/params/Rating.cpp \
     src/params/Ratings.cpp \
     src/params/Factor.cpp \
     src/params/Factors.cpp \

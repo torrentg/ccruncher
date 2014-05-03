@@ -165,7 +165,7 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
 
     assert(eu.ratings != nullptr);
     str = getAttributeValue(attributes, "rating");
-    irating = eu.ratings->getIndex(str);
+    irating = eu.ratings->indexOf(str);
     if (irating < 0) throw Exception("rating '" + string(str) + "' not found");
 
     assert(eu.factors != nullptr);

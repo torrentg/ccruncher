@@ -50,23 +50,23 @@ void ccruncher_test::RatingsTest::test1()
 
   ASSERT(5 == ratings.size());
 
-  ASSERT("A" == ratings.getName(0));
-  ASSERT("B" == ratings.getName(1));
-  ASSERT("D" == ratings.getName(2));
-  ASSERT("C" == ratings.getName(3));
-  ASSERT("E" == ratings.getName(4));
+  ASSERT("A" == ratings[0].getName());
+  ASSERT("B" == ratings[1].getName());
+  ASSERT("D" == ratings[2].getName());
+  ASSERT("C" == ratings[3].getName());
+  ASSERT("E" == ratings[4].getName());
 
-  ASSERT(0 == ratings.getIndex("A"));
-  ASSERT(1 == ratings.getIndex("B"));
-  ASSERT(2 == ratings.getIndex("D"));
-  ASSERT(3 == ratings.getIndex("C"));
-  ASSERT(4 == ratings.getIndex("E"));
+  ASSERT(0 == ratings.indexOf("A"));
+  ASSERT(1 == ratings.indexOf("B"));
+  ASSERT(2 == ratings.indexOf("D"));
+  ASSERT(3 == ratings.indexOf("C"));
+  ASSERT(4 == ratings.indexOf("E"));
 
-  ASSERT("very good" == ratings.getDescription(0));
-  ASSERT("good" == ratings.getDescription(1));
-  ASSERT("very bad" == ratings.getDescription(2));
-  ASSERT("bad" == ratings.getDescription(3));
-  ASSERT("defaulted" == ratings.getDescription(4));
+  ASSERT("very good" == ratings[0].getDescription());
+  ASSERT("good" == ratings[1].getDescription());
+  ASSERT("very bad" == ratings[2].getDescription());
+  ASSERT("bad" == ratings[3].getDescription());
+  ASSERT("defaulted" == ratings[4].getDescription());
 }
 
 //===========================================================================

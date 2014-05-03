@@ -165,7 +165,7 @@ void ccruncher::Inverses::setSplines(const DefaultProbabilities &dprobs)
     }
 
     if (dprobs.getMaxDate(irating) < t1) {
-      throw Exception("dprob[" + dprobs.getRatings().getName(irating) + "] not defined at " + t1.toString());
+      throw Exception("dprob[" + dprobs.getRatings()[irating].getName() + "] not defined at " + t1.toString());
     }
 
     int minday = getMinDay(irating, dprobs);

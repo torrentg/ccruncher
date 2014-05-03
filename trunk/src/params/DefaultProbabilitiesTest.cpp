@@ -81,7 +81,7 @@ void ccruncher_test::DefaultProbabilitiesTest::test1()
   ASSERT_EQUALS(pd.size(), 2);
   ASSERT_EQUALS(pd.getMaxDate(0), Date("1/1/2017"));
   ASSERT_EQUALS(pd.getIndexDefault(), 1);
-  ASSERT_EQUALS(pd.getRatings().size(), 2);
+  ASSERT_EQUALS(pd.getRatings().size(), 2ul);
   ASSERT_EQUALS(pd.getInterpolationType(0), "cspline");
   ASSERT_EQUALS(pd.getInterpolationType(1), "none");
 
@@ -226,7 +226,7 @@ void ccruncher_test::DefaultProbabilitiesTest::test5()
   ASSERT_EQUALS(pd.size(), 2);
   ASSERT_EQUALS(pd.getMaxDate(0), Date("1/1/2017"));
   ASSERT_EQUALS(pd.getIndexDefault(), 1);
-  ASSERT_EQUALS(pd.getRatings().size(), 2);
+  ASSERT_EQUALS(pd.getRatings().size(), 2ul);
   ASSERT_EQUALS(pd.getInterpolationType(0), "cspline");
   ASSERT_EQUALS(pd.getInterpolationType(1), "none");
 

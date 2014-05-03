@@ -142,15 +142,15 @@ class DefaultProbabilities : public ExpatHandlers
     //! Return index of default rating
     int getIndexDefault() const;
     //! Evalue pd for i-th rating at t
-    double evalue(int irating, double t) const;
+    double evalue(size_t irating, double t) const;
     //! Evalue pd for i-th rating at t
-    double evalue(int irating, const Date &d) const;
+    double evalue(size_t irating, const Date &d) const;
     //! Evalue pd inverse for i-th rating at given probability
-    double inverse(int irating, double val) const;
+    double inverse(size_t irating, double val) const;
     //! Return maximum defined date
-    Date getMaxDate(int irating) const;
+    Date getMaxDate(size_t irating) const;
     //! Return list of days where dprob is defined
-    std::vector<int> getDays(int irating) const;
+    std::vector<int> getDays(size_t irating) const;
     //! Return type of interpolation
     std::string getInterpolationType(int i) const;
 
