@@ -49,25 +49,25 @@ ccruncher_gui::FindDefines::FindDefines(const std::string &filename)
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
  * @param[in] eu Xml parsing data.
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher_gui::FindDefines::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher_gui::FindDefines::epstart(ExpatUserData &eu, const char *tag, const char **attributes)
 {
-  if (isEqual(name_,"ccruncher")) {
+  if (isEqual(tag,"ccruncher")) {
     // nothing to do
   }
-  else if (isEqual(name_,"title")) {
+  else if (isEqual(tag,"title")) {
     // nothing to do
   }
-  else if (isEqual(name_,"description")) {
+  else if (isEqual(tag,"description")) {
     // nothing to do
   }
-  else if (isEqual(name_,"defines")) {
+  else if (isEqual(tag,"defines")) {
     // nothing to do
   }
-  else if (isEqual(name_,"define")) {
+  else if (isEqual(tag,"define")) {
     string key = getStringAttribute(attributes, "name", "");
     string value = getStringAttribute(attributes, "value", "");
     defines[key] = value;

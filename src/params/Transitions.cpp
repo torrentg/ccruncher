@@ -143,13 +143,13 @@ void ccruncher::Transitions::insertTransition(const std::string &rating1,
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] name Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Transitions::epstart(ExpatUserData &, const char *name, const char **attributes)
+void ccruncher::Transitions::epstart(ExpatUserData &, const char *tag, const char **attributes)
 {
-  if (isEqual(name,"transitions")) {
+  if (isEqual(tag,"transitions")) {
     if (getNumAttributes(attributes) != 1) {
       throw Exception("invalid number of attributes in tag transitions");
     }
@@ -158,24 +158,24 @@ void ccruncher::Transitions::epstart(ExpatUserData &, const char *name, const ch
       if (period <= 0) throw Exception("attribute 'period' out of range");
     }
   }
-  else if (isEqual(name,"transition")) {
+  else if (isEqual(tag,"transition")) {
     string from = getStringAttribute(attributes, "from");
     string to = getStringAttribute(attributes, "to");
     double value = getDoubleAttribute(attributes, "value");
     insertTransition(from, to, value);
   }
   else {
-    throw Exception("unexpected tag '" + string(name) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name Element name.
+ * @param[in] tag Element name.
  */
-void ccruncher::Transitions::epend(ExpatUserData &, const char *name)
+void ccruncher::Transitions::epend(ExpatUserData &, const char *tag)
 {
-  if (isEqual(name,"transitions"))
+  if (isEqual(tag,"transitions"))
   {
     // non-informed elements are 0
     for(size_t i=0; i<size(); i++)

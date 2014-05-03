@@ -86,14 +86,13 @@ void ccruncher::Portfolio::checkObligor(Obligor *val)
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
  * @param[in] eu Xml parsing data.
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_,
-    const char **attributes)
+void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *tag, const char **attributes)
 {
-  if (isEqual(name_,"portfolio")) {
+  if (isEqual(tag,"portfolio")) {
     if (getNumAttributes(attributes) != 0) {
       throw Exception("attributes are not allowed in tag portfolio");
     }
@@ -103,30 +102,30 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *name_,
       throw Exception("required parameters not found");
     }
   }
-  else if (isEqual(name_,"obligor")) {
+  else if (isEqual(tag,"obligor")) {
     Obligor *obligor = new Obligor;
     vobligors.push_back(obligor);
-    eppush(eu, obligor, name_, attributes);
+    eppush(eu, obligor, tag, attributes);
   }
   else {
-    throw Exception("unexpected tag '" + string(name_) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  */
-void ccruncher::Portfolio::epend(ExpatUserData &, const char *name_)
+void ccruncher::Portfolio::epend(ExpatUserData &, const char *tag)
 {
-  if (isEqual(name_,"portfolio")) {
+  if (isEqual(tag,"portfolio")) {
     if (vobligors.empty()) {
       throw Exception("portfolio without obligors");
     }
     idassets.clear();
     idobligors.clear();
   }
-  else if (isEqual(name_,"obligor")) {
+  else if (isEqual(tag,"obligor")) {
     assert(!vobligors.empty());
     checkObligor(vobligors.back());
   }

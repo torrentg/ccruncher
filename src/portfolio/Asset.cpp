@@ -96,13 +96,13 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
  * @param[in] eu Xml parsing data.
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Asset::epstart(ExpatUserData &eu, const char *tag, const char **attributes)
 {
-  if (isEqual(name_,"values") && have_data == true)
+  if (isEqual(tag,"values") && have_data == true)
   {
     const char *str;
     DateValues values;
@@ -125,7 +125,7 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     
     data.push_back(values);
   }
-  else if (isEqual(name_,"belongs-to"))
+  else if (isEqual(tag,"belongs-to"))
   {
     assert(eu.segmentations != nullptr);
     const char *ssegmentation = getAttributeValue(attributes, "segmentation");
@@ -141,7 +141,7 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
 
     addBelongsTo(isegmentation, isegment);
   }
-  else if (isEqual(name_,"asset"))
+  else if (isEqual(tag,"asset"))
   {
     id = getStringAttribute(attributes, "id");
     date = getDateAttribute(attributes, "date");
@@ -153,24 +153,24 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *name_, const char 
     assert(eu.segmentations != nullptr);
     vsegments.resize(eu.segmentations->size(), 0);
   }
-  else if (isEqual(name_,"data"))
+  else if (isEqual(tag,"data"))
   {
     if (getNumAttributes(attributes) != 0) throw Exception("attributes are not allowed in tag data");
     else have_data = true;
   }
   else
   {
-    throw Exception("unexpected tag '" + string(name_) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  */
-void ccruncher::Asset::epend(ExpatUserData &, const char *name_)
+void ccruncher::Asset::epend(ExpatUserData &, const char *tag)
 {
-  if (isEqual(name_,"asset"))
+  if (isEqual(tag,"asset"))
   {
     // checking data size
     if (data.empty() || (data.size()==1 && data[0].date==date)) {

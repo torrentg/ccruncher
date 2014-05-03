@@ -97,11 +97,11 @@ class ExpatHandlers
   protected:
   
     //! Handler for open tag
-    virtual void epstart(ExpatUserData &eud, const char *name, const char **atts) = 0;
+    virtual void epstart(ExpatUserData &eud, const char *tag, const char **atts) = 0;
     //! Handler for closed tag
     virtual void epend(ExpatUserData &/*eud*/, const char */*name*/) {}
     //! Handler for data
-    virtual void epdata(ExpatUserData &eud, const char *name, const char *cdata, int len);
+    virtual void epdata(ExpatUserData &eud, const char *tag, const char *cdata, int len);
     //! Constructor
     ExpatHandlers() {}
     //! Destructor

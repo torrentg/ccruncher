@@ -125,35 +125,35 @@ void ccruncher::Correlations::insertCorrelation(const std::string &factor1,
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] name Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Correlations::epstart(ExpatUserData &, const char *name, const char **attributes)
+void ccruncher::Correlations::epstart(ExpatUserData &, const char *tag, const char **attributes)
 {
-  if (isEqual(name,"correlations")) {
+  if (isEqual(tag,"correlations")) {
     if (getNumAttributes(attributes) != 0) {
       throw Exception("unexpected attributes in tag 'correlations'");
     }
   }
-  else if (isEqual(name,"correlation")) {
+  else if (isEqual(tag,"correlation")) {
     string factor1 = getStringAttribute(attributes, "factor1");
     string factor2 = getStringAttribute(attributes, "factor2");
     double value = getDoubleAttribute(attributes, "value");
     insertCorrelation(factor1, factor2, value);
   }
   else {
-    throw Exception("unexpected tag '" + string(name) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name Element name.
+ * @param[in] tag Element name.
  */
-void ccruncher::Correlations::epend(ExpatUserData &, const char *name)
+void ccruncher::Correlations::epend(ExpatUserData &, const char *tag)
 {
-  if (isEqual(name,"correlations")) {
+  if (isEqual(tag,"correlations")) {
     validate();
   }
 }

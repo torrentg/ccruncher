@@ -26,7 +26,6 @@
 #include <expat.h>
 #include <zlib.h>
 #include "utils/ExpatHandlers.hpp"
-#include "utils/Exception.hpp"
 
 namespace ccruncher {
 
@@ -50,20 +49,20 @@ class ExpatParser
   private:
 
     //! Expat parser object
-    XML_Parser xmlparser;
+    XML_Parser mXmlParser;
     //! Expat user data
-    ExpatUserData userdata;
+    ExpatUserData mUserData;
     //! File checksum value
-    unsigned long checksum;
+    unsigned long mChecksum;
 
   private:
 
     //! startElement handler
-    static void startElement(void *ud, const char *name, const char **atts);
+    static void startElement(void *eud, const char *tag, const char **atts);
     //! endElement handler
-    static void endElement(void *ud, const char *name);
+    static void endElement(void *eud, const char *tag);
     //! characterData Handler
-    static void characterData(void *ud, const char *cdata, int len);
+    static void characterData(void *eud, const char *cdata, int len);
 
     //! Parse an xml file
     void parse(gzFile file, char *buf, size_t buffer_size, bool *stop);
@@ -87,7 +86,7 @@ class ExpatParser
     //! returns checksum value
     unsigned long getChecksum() const;
     //! returns user data
-    ExpatUserData& UserData() { return userdata; }
+    ExpatUserData& UserData() { return mUserData; }
 
 };
 

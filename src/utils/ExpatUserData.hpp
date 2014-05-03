@@ -24,14 +24,16 @@
 #define _ExpatUserData_
 
 #include <map>
+#include <stack>
 #include <vector>
 #include <string>
 #include <expat.h>
+#include <cassert>
 #include "utils/ExpatHandlers.hpp"
 
 namespace ccruncher {
 
-// forward declaration
+// forward declarations
 class ExpatHandlers;
 class Date;
 class Interest;
@@ -64,24 +66,27 @@ class ExpatUserData
       char name[20];
       //! Element handlers
       ExpatHandlers *handlers;
+      //! Constructor
+      ExpatUserDataToken(const char *n=nullptr, ExpatHandlers *h=nullptr) : handlers(h) {
+        assert(h != nullptr && n!=nullptr && strlen(n)<20);
+        strncpy(name, n, 20);
+      }
     };
 
   private:
 
     //! Stack of handlers
-    std::vector<ExpatUserDataToken> pila;
-    //! Stack position (current element)
-    int pila_pos;
+    std::stack<ExpatUserDataToken, std::vector<ExpatUserDataToken> > mStack;
     //! Current element name
-    const char *current_tag;
+    const char *mCurrentTag;
     //! Buffer used to apply defines
-    char *buffer;
+    char *mBuffer;
     //! Buffer size
-    size_t buffer_size;
+    size_t mBufferSize;
     //! Points to first char in current buffer
-    char *buffer_pos1;
+    char *mBufferPos1;
     //! Points to last char in current buffer
-    char *buffer_pos2;
+    char *mBufferPos2;
 
   private:
 
@@ -118,17 +123,17 @@ class ExpatUserData
     //! Assignment operator
     ExpatUserData & operator= (const ExpatUserData &);
     //! Returns current handlers
-    ExpatHandlers* getCurrentHandlers() const { return pila[pila_pos].handlers; }
+    ExpatHandlers* getCurrentHandlers() const { return mStack.top().handlers; }
     //! Returns current handlers element name
-    const char* getCurrentName() const { return pila[pila_pos].name; }
+    const char* getCurrentName() const { return mStack.top().name; }
     //! Remove current handlers
-    void removeCurrentHandlers() { pila_pos--; }
+    void removeCurrentHandlers() { mStack.pop(); }
     //! Set current handlers
     void setCurrentHandlers(const char *name, ExpatHandlers *eh);
     //! Set current tag name
-    void setCurrentTag(const char *t) { current_tag = t; }
+    void setCurrentTag(const char *t) { mCurrentTag = t; }
     //! Returns current tag name
-    const char *getCurrentTag() const { return current_tag; }
+    const char *getCurrentTag() const { return mCurrentTag; }
     //! Apply defines to the given string
     const char* applyDefines(const char *str);
 

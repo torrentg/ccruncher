@@ -158,28 +158,28 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m)
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
  * @param[in] eu Xml parsing data.
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::IData::epstart(ExpatUserData &eu, const char *tag, const char **attributes)
 {
-  if (isEqual(name_,"ccruncher") && !hasmaintag) {
+  if (isEqual(tag,"ccruncher") && !hasmaintag) {
     hasmaintag = true;
   }
   else if (!hasmaintag) {
-    throw Exception("unexpected tag '" + string(name_) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
-  else if (isEqual(name_,"title")) {
+  else if (isEqual(tag,"title")) {
     // nothing to do (see epdata method)
   }
-  else if (isEqual(name_,"description")) {
+  else if (isEqual(tag,"description")) {
     // nothing to do (see epdata method)
   }
-  else if (isEqual(name_,"defines") && hasdefinestag == 0) {
+  else if (isEqual(tag,"defines") && hasdefinestag == 0) {
     hasdefinestag = 1;
   }
-  else if (isEqual(name_,"define") && hasdefinestag == 1) {
+  else if (isEqual(tag,"define") && hasdefinestag == 1) {
     string key = getStringAttribute(attributes, "name");
     string value = getStringAttribute(attributes, "value");
     checkDefine(key, value);
@@ -192,41 +192,41 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
      // prevail over input file definitions.
     }
   }
-  else if (isEqual(name_,"parameters") && params.time0 == NAD) {
-    eppush(eu, &params, name_, attributes);
+  else if (isEqual(tag,"parameters") && params.time0 == NAD) {
+    eppush(eu, &params, tag, attributes);
   }
-  else if (isEqual(name_,"interest") && interest.size() == 0) {
+  else if (isEqual(tag,"interest") && interest.size() == 0) {
     interest.setDate(params.time0);
-    eppush(eu, &interest, name_, attributes);
+    eppush(eu, &interest, tag, attributes);
   }
-  else if (isEqual(name_,"ratings") && ratings.size() == 0) {
-    eppush(eu, &ratings, name_, attributes);
+  else if (isEqual(tag,"ratings") && ratings.size() == 0) {
+    eppush(eu, &ratings, tag, attributes);
   }
-  else if (isEqual(name_,"transitions") && transitions.size() == 0) {
+  else if (isEqual(tag,"transitions") && transitions.size() == 0) {
     transitions.setRatings(ratings);
-    eppush(eu, &transitions, name_, attributes);
+    eppush(eu, &transitions, tag, attributes);
   }
-  else if (isEqual(name_,"dprobs") && dprobs.size() == 0) {
+  else if (isEqual(tag,"dprobs") && dprobs.size() == 0) {
     dprobs.setRatings(ratings);
     dprobs.setDate(params.time0);
-    eppush(eu, &dprobs, name_, attributes);
+    eppush(eu, &dprobs, tag, attributes);
   }
-  else if (isEqual(name_,"factors") && factors.size() == 0) {
-    eppush(eu, &factors, name_, attributes);
+  else if (isEqual(tag,"factors") && factors.size() == 0) {
+    eppush(eu, &factors, tag, attributes);
   }
-  else if (isEqual(name_,"correlations") && correlations.size() == 0) {
+  else if (isEqual(tag,"correlations") && correlations.size() == 0) {
     correlations.setFactors(factors);
-    eppush(eu, &correlations, name_, attributes);
+    eppush(eu, &correlations, tag, attributes);
   }
-  else if (isEqual(name_,"segmentations") && segmentations.size() == 0) {
-    eppush(eu, &segmentations, name_, attributes);
+  else if (isEqual(tag,"segmentations") && segmentations.size() == 0) {
+    eppush(eu, &segmentations, tag, attributes);
   }
-  else if (isEqual(name_,"portfolio") && portfolio.getObligors().size() == 0) {
+  else if (isEqual(tag,"portfolio") && portfolio.getObligors().size() == 0) {
     if (!parse_portfolio) epstop(eu);
-    parsePortfolio(eu, name_, attributes);
+    parsePortfolio(eu, tag, attributes);
   }
   else {
-    throw Exception("unexpected tag '" + string(name_) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
 }
 
@@ -234,61 +234,61 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *name_, const char 
  * @see ExpatHandlers::epdata
  * @todo Catch cdata sections using XML_SetCdataSectionHandler.
  * @param[in,out] eu Xml parsing data.
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  * @param[in] data Chunck of data.
  * @param[in] len Data length.
  */
-void ccruncher::IData::epdata(ExpatUserData &eu, const char *name_, const char *data, int len)
+void ccruncher::IData::epdata(ExpatUserData &eu, const char *tag, const char *data, int len)
 {
-  if (isEqual(name_,"title")) {
+  if (isEqual(tag,"title")) {
     title.append(data, len);
   }
-  else if (isEqual(name_,"description")) {
+  else if (isEqual(tag,"description")) {
     description.append(data, len);
   }
   else {
-    ExpatHandlers::epdata(eu, name_, data, len);
+    ExpatHandlers::epdata(eu, tag, data, len);
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
  * @param[in,out] eu Xml parsing data.
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  */
-void ccruncher::IData::epend(ExpatUserData &eu, const char *name_)
+void ccruncher::IData::epend(ExpatUserData &eu, const char *tag)
 {
-  if (isEqual(name_,"ccruncher")) {
+  if (isEqual(tag,"ccruncher")) {
     validate();
   }
-  else if (isEqual(name_,"defines")) {
+  else if (isEqual(tag,"defines")) {
     hasdefinestag = 2;
   }
-  else if (isEqual(name_,"parameters")) {
+  else if (isEqual(tag,"parameters")) {
     eu.date1 = &(params.time0);
     eu.date2 = &(params.timeT);
   }
-  else if (isEqual(name_,"interest")) {
+  else if (isEqual(tag,"interest")) {
     eu.interest = &interest;
   }
-  else if (isEqual(name_,"ratings")) {
+  else if (isEqual(tag,"ratings")) {
     eu.ratings = &ratings;
   }
-  else if (isEqual(name_,"factors")) {
+  else if (isEqual(tag,"factors")) {
     eu.factors = &factors;
   }
-  else if (isEqual(name_,"segmentations")) {
+  else if (isEqual(tag,"segmentations")) {
     eu.segmentations = &segmentations;
   }
 }
 
 /**************************************************************************//**
  * @param[in] eu Xml parsing data.
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error parsing input file.
  */
-void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *tag, const char **attributes)
 {
   // we push interest to stack (is optional)
   eu.interest = &interest;
@@ -297,7 +297,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
 
   if (ref == "")
   {
-    eppush(eu, &portfolio, name_, attributes);
+    eppush(eu, &portfolio, tag, attributes);
   }
   else
   {

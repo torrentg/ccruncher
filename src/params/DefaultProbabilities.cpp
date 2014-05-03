@@ -296,18 +296,18 @@ void ccruncher::DefaultProbabilities::insertValue(const std::string &srating,
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] name Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::DefaultProbabilities::epstart(ExpatUserData &, const char *name, const char **attributes)
+void ccruncher::DefaultProbabilities::epstart(ExpatUserData &, const char *tag, const char **attributes)
 {
-  if (isEqual(name,"dprobs")) {
+  if (isEqual(tag,"dprobs")) {
     if (getNumAttributes(attributes) != 0) {
       throw Exception("attributes not allowed in tag 'dprobs'");
     }
   }
-  else if (isEqual(name,"dprob")) {
+  else if (isEqual(tag,"dprob")) {
     string srating = getStringAttribute(attributes, "rating");
     Date t(date);
     const char *str = getAttributeValue(attributes, "t");
@@ -321,17 +321,17 @@ void ccruncher::DefaultProbabilities::epstart(ExpatUserData &, const char *name,
     insertValue(srating, t, value);
   }
   else {
-    throw Exception("unexpected tag '" + string(name) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name Element name.
+ * @param[in] tag Element name.
  */
-void ccruncher::DefaultProbabilities::epend(ExpatUserData &, const char *name)
+void ccruncher::DefaultProbabilities::epend(ExpatUserData &, const char *tag)
 {
-  if (isEqual(name,"dprobs")) {
+  if (isEqual(tag,"dprobs")) {
     validate();
     setSplines();
   }

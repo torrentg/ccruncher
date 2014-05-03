@@ -55,19 +55,19 @@ void ccruncher::ExpatHandlers::epback(ExpatUserData &eud)
  * @see ExpatUserData
  * @param[in] eud Parser data shared by handlers.
  * @param[in] eh Object inherited from ExpatHandlers.
- * @param[in] name XML element name related to the new handlers.
+ * @param[in] tag XML element name related to the new handlers.
  * @param[in] atts Attributes to pass to process the new element.
  */
 void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud,
-    ExpatHandlers *eh, const char *name, const char **atts)
+    ExpatHandlers *eh, const char *tag, const char **atts)
 {
   assert(eud.getCurrentHandlers() == this);
 
   // adding new handlers to stack
-  eud.setCurrentHandlers(name, eh);
+  eud.setCurrentHandlers(tag, eh);
 
   // calling new handler
-  eh->epstart(eud, name, atts);
+  eh->epstart(eud, tag, atts);
 }
 
 /**************************************************************************//**
@@ -75,11 +75,11 @@ void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud,
  *          element's data info. Default action only allows spaces.
  * @see     IData#epdata as example.
  * @param[in] eud Parser data shared by handlers.
- * @param[in] name Element's name.
+ * @param[in] tag Element's name.
  * @param[in] cdata Fragment of data.
  * @param[in] len Length of the current data fragment.
  */
-void ccruncher::ExpatHandlers::epdata(ExpatUserData &/*eud*/, const char */*name*/,
+void ccruncher::ExpatHandlers::epdata(ExpatUserData &/*eud*/, const char */*tag*/,
     const char *cdata, int len)
 {
   // default simple rule: character data is not allowed
