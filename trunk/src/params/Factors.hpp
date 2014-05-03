@@ -25,9 +25,8 @@
 
 #include <string>
 #include <vector>
-#include <cmath>
+#include "params/Factor.hpp"
 #include "utils/ExpatHandlers.hpp"
-#include "utils/Exception.hpp"
 
 namespace ccruncher {
 
@@ -36,33 +35,8 @@ namespace ccruncher {
  *
  * @see http://ccruncher.net/ifileref.html#factors
  */
-class Factors : public ExpatHandlers
+class Factors : public ExpatHandlers, public std::vector<Factor>
 {
-
-  private:
-
-    //! Internal struct
-    struct Factor
-    {
-        //! Factor name
-        std::string name;
-        //! Factor description
-        std::string desc;
-        //! Factor loading
-        double loading;
-        //! Constructor
-        Factor(const std::string &n="", const std::string &d="", double v=NAN) : name(n), desc(d), loading(v) {}
-    };
-
-  private:
-
-    //! List of factors
-    std::vector<Factor> vfactors;
-
-  private:
-  
-    //! Add a factor to list
-    void insertFactor(const Factor &);
 
   protected:
   
@@ -73,20 +47,16 @@ class Factors : public ExpatHandlers
   
   public:
 
-    //! Default constructor
-    Factors() {}
-    //! Return the number of factors
-    int size() const;
+    //! Inherits std::vector constructors
+    using std::vector<Factor>::vector;
+    //! Inherits std::vector assignment operator
+    using std::vector<Factor>::operator=;
+    //! Adds a factor to this list
+    void add(const Factor &);
     //! Return the index of the factor
-    int getIndex(const char *name) const;
+    int indexOf(const char *name) const;
     //! Return the index of the factor
-    int getIndex(const std::string &name) const;
-    //! Return the i-th factor name
-    const std::string& getName(int i) const;
-    //! Return the i-th factor description
-    const std::string& getDescription(int i) const;
-    //! Return the i-th factor loading
-    double getLoading(int i) const;
+    int indexOf(const std::string &name) const;
     //! Return factor loadings
     std::vector<double> getLoadings() const;
 

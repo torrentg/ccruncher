@@ -237,9 +237,9 @@ void ccruncher::MonteCarlo::initModel(IData &idata)
     }
   }
 
-  assert((int)chol->size1 == idata.getFactors().size());
+  assert(chol->size1 == idata.getFactors().size());
   assert(chol->size1 == chol->size2);
-  assert((int)floadings1.size() == idata.getFactors().size());
+  assert(floadings1.size() == idata.getFactors().size());
 
   // exit function
   log << indent(-1);

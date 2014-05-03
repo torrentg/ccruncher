@@ -44,7 +44,7 @@ ccruncher::Correlations::Correlations(const Factors &factors_)
  */
 void ccruncher::Correlations::setFactors(const Factors &factors_)
 {
-  if (factors_.size() <= 0) {
+  if (factors_.size() == 0) {
     throw Exception("factors not found");
   }
   else {
@@ -83,8 +83,8 @@ int ccruncher::Correlations::size() const
 void ccruncher::Correlations::insertCorrelation(const std::string &factor1,
     const std::string &factor2, double value)
 {
-  int row = factors.getIndex(factor1);
-  int col = factors.getIndex(factor2);
+  int row = factors.indexOf(factor1);
+  int col = factors.indexOf(factor2);
 
   // checking index factor
   if (row < 0 || col < 0)
@@ -171,8 +171,8 @@ void ccruncher::Correlations::validate()
     {
       if (std::isnan(matrix[i][j]))
       {
-        throw Exception("correlation[" + factors.getName(i) +
-            "," + factors.getName(j) + "] not defined");
+        throw Exception("correlation[" + factors[i].getName() +
+            "," + factors[j].getName() + "] not defined");
       }
     }
   }

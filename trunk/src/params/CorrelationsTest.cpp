@@ -77,8 +77,8 @@ void ccruncher_test::CorrelationsTest::test1()
 
   ASSERT(2 == crm.size());
 
-  ASSERT_EQUALS_EPSILON(0.25, crm.getFactors().getLoading(0), 1e-12);
-  ASSERT_EQUALS_EPSILON(0.30, crm.getFactors().getLoading(1), 1e-12);
+  ASSERT_EQUALS_EPSILON(0.25, crm.getFactors()[0].getLoading(), 1e-12);
+  ASSERT_EQUALS_EPSILON(0.30, crm.getFactors()[1].getLoading(), 1e-12);
 
   for(int i=0; i<2; i++)
   {
