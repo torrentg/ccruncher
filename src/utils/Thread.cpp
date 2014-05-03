@@ -20,27 +20,18 @@
 //
 //===========================================================================
 
-#include "Thread.hpp"
-#include <exception>
 #include <cassert>
+#include "Thread.hpp"
 
 using namespace std;
 
-/**************************************************************************/
-ccruncher::Thread::Thread()
-{
-  setStatus(fresh);
-}
-
 /**************************************************************************//**
  * @details If there is a running task, this task will be stoped.
+ *
  */
 ccruncher::Thread::~Thread()
 {
-  if (mThread.joinable()) {
-    assert(false);
-    mThread.detach();
-  }
+  assert(!mThread.joinable());
 }
 
 /**************************************************************************//**
@@ -49,16 +40,12 @@ ccruncher::Thread::~Thread()
  */
 void ccruncher::Thread::launcher(Thread *x) noexcept
 {
-  try
-  {
+  try {
     assert(x != nullptr);
-    x->setStatus(running);
     x->run();
-    x->setStatus(finished);
   }
-  catch(...) 
-  {
-    x->setStatus(aborted);
+  catch(...) {
+    // nothing to do
   }
 }
 
@@ -66,54 +53,21 @@ void ccruncher::Thread::launcher(Thread *x) noexcept
  * @details If you want to execute the main class procedure in the current
  *          execution thread use Thread::run(). This method executes the
  *          Thread::run() method in a new thread.
+ * @exception system_error System is unable to create a new thread.
  */
 void ccruncher::Thread::start()
 {
-  if (getStatus() == running) return;
   assert(!mThread.joinable());
-  if (mThread.joinable()) return;
-  try {
-    setStatus(running);
-    mThread = std::thread(Thread::launcher, this);
-  }
-  catch(std::exception &) {
-    setStatus(aborted);
-  }
-}
-
-/**************************************************************************/
-void ccruncher::Thread::wait()
-{
-  if (getStatus() == running || mThread.joinable())
-  {
-    try {
-      assert(mThread.joinable());
-      mThread.join();
-      setStatus(finished);
-    }
-    catch(std::exception &) {
-      setStatus(aborted);
-    }
-  }
-}
-
-/**************************************************************************/
-ccruncher::Thread::ThreadStatus ccruncher::Thread::getStatus() const
-{
-  mMutex.lock();
-  ThreadStatus s = mStatus;
-  mMutex.unlock();
-  return s;
+  mThread = std::thread(Thread::launcher, this);
 }
 
 /**************************************************************************//**
- * @details This method avoids synchronization problems using a mutex.
- * @param s New thread status.
- */
-void ccruncher::Thread::setStatus(ThreadStatus s)
+* @exception system_error Invalid thread usage.
+*/
+void ccruncher::Thread::join()
 {
-  mMutex.lock();
-  mStatus = s;
-  mMutex.unlock();
+  if (mThread.joinable()) {
+    mThread.join();
+  }
 }
 
