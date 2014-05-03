@@ -159,36 +159,36 @@ int ccruncher::Segmentations::insertSegmentation(Segmentation &val)
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
  * @param[in] eu Xml parsing data.
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *tag, const char **attributes)
 {
-  if (isEqual(name_,"segmentations")) {
+  if (isEqual(tag,"segmentations")) {
     if (getNumAttributes(attributes) != 0) {
       throw Exception("attributes are not allowed in tag segmentations");
     }
   }
-  else if (isEqual(name_,"segmentation")) {
+  else if (isEqual(tag,"segmentation")) {
     auxsegmentation.reset();
-    eppush(eu, &auxsegmentation, name_, attributes);
+    eppush(eu, &auxsegmentation, tag, attributes);
   }
   else {
-    throw Exception("unexpected tag '" + string(name_) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  */
-void ccruncher::Segmentations::epend(ExpatUserData &, const char *name_)
+void ccruncher::Segmentations::epend(ExpatUserData &, const char *tag)
 {
-  if (isEqual(name_,"segmentation")) {
+  if (isEqual(tag,"segmentation")) {
     insertSegmentation(auxsegmentation);
   }
-  else if (isEqual(name_,"segmentations")) {
+  else if (isEqual(tag,"segmentations")) {
     validate();
     auxsegmentation.reset();
   }

@@ -24,22 +24,20 @@
 #include <cassert>
 #include "utils/ExpatUserData.hpp"
 
-#define MAX_STACK_SIZE 10
-
 using namespace std;
 using namespace ccruncher;
 
 /**************************************************************************/
 ccruncher::ExpatUserData::ExpatUserData(size_t buffersize) :
-  pila(MAX_STACK_SIZE), pila_pos(-1), current_tag(nullptr), buffer(nullptr),
-  buffer_size(buffersize), buffer_pos1(nullptr), buffer_pos2(nullptr),
+  mStack(), mCurrentTag(nullptr), mBuffer(nullptr),
+  mBufferSize(buffersize), mBufferPos1(nullptr), mBufferPos2(nullptr),
   date1(nullptr), date2(nullptr), interest(nullptr), ratings(nullptr),
   factors(nullptr), segmentations(nullptr)
 {
-  if (buffer_size == 0) buffer_size = 1;
-  buffer = new char[buffer_size];
-  buffer_pos1 = buffer + buffer_size + 1;
-  buffer_pos2 = buffer + buffer_size + 1;
+  if (mBufferSize == 0) mBufferSize = 1;
+  mBuffer = new char[mBufferSize];
+  mBufferPos1 = mBuffer + mBufferSize + 1;
+  mBufferPos2 = mBuffer + mBufferSize + 1;
 }
 
 /**************************************************************************//**
@@ -47,8 +45,8 @@ ccruncher::ExpatUserData::ExpatUserData(size_t buffersize) :
  * @param[in] o Object to replicate.
  */
 ccruncher::ExpatUserData::ExpatUserData(const ExpatUserData &o) :
-  pila(0), pila_pos(-1), current_tag(nullptr), buffer(nullptr),
-  buffer_size(0), buffer_pos1(nullptr), buffer_pos2(nullptr)
+  mStack(), mCurrentTag(nullptr), mBuffer(nullptr),
+  mBufferSize(0), mBufferPos1(nullptr), mBufferPos2(nullptr)
 {
   *this = o;
 }
@@ -56,7 +54,7 @@ ccruncher::ExpatUserData::ExpatUserData(const ExpatUserData &o) :
 /**************************************************************************/
 ccruncher::ExpatUserData::~ExpatUserData()
 {
-  if (buffer != nullptr) delete [] buffer;
+  if (mBuffer != nullptr) delete [] mBuffer;
 }
 
 /**************************************************************************//**
@@ -66,17 +64,16 @@ ExpatUserData & ccruncher::ExpatUserData::operator= (const ExpatUserData &o)
 {
   if (this != &o)
   {
-    pila = o.pila;
-    pila_pos = o.pila_pos;
+    mStack = o.mStack;
 
-    current_tag = o.current_tag;
+    mCurrentTag = o.mCurrentTag;
     defines = o.defines;
 
-    if (buffer != nullptr) delete [] buffer;
-    buffer_size = o.buffer_size;
-    buffer = new char[buffer_size];
-    buffer_pos1 = buffer + buffer_size + 1;
-    buffer_pos2 = buffer + buffer_size + 1;
+    if (mBuffer != nullptr) delete [] mBuffer;
+    mBufferSize = o.mBufferSize;
+    mBuffer = new char[mBufferSize];
+    mBufferPos1 = mBuffer + mBufferSize + 1;
+    mBufferPos2 = mBuffer + mBufferSize + 1;
   }
 
   return *this;
@@ -90,11 +87,7 @@ ExpatUserData & ccruncher::ExpatUserData::operator= (const ExpatUserData &o)
  */
 void ccruncher::ExpatUserData::setCurrentHandlers(const char *name, ExpatHandlers *eh)
 {
-  pila_pos++;
-  assert(pila_pos<MAX_STACK_SIZE);
-  pila[pila_pos].handlers = eh;
-  assert(strlen(name)<20);
-  strncpy(pila[pila_pos].name, name, 19);
+  mStack.push(ExpatUserDataToken(name, eh));
 }
 
 /**************************************************************************//**
@@ -105,24 +98,24 @@ void ccruncher::ExpatUserData::setCurrentHandlers(const char *name, ExpatHandler
  */
 const char* ccruncher::ExpatUserData::bufferPush(const char *str, size_t n)
 {
-  if (buffer_pos2+n+1 < buffer+buffer_size)
+  if (mBufferPos2+n+1 < mBuffer+mBufferSize)
   {
-    buffer_pos1 = buffer_pos2+1;
+    mBufferPos1 = mBufferPos2+1;
   }
-  else if (n < buffer_size)
+  else if (n < mBufferSize)
   {
-    buffer_pos1 = buffer;
+    mBufferPos1 = mBuffer;
   }
   else
   {
     throw Exception("buffer overflow");
   }
 
-  memcpy(buffer_pos1, str, n);
-  buffer_pos2 = buffer_pos1 + n;
-  *buffer_pos2 = 0;
+  memcpy(mBufferPos1, str, n);
+  mBufferPos2 = mBufferPos1 + n;
+  *mBufferPos2 = 0;
 
-  return buffer_pos1;
+  return mBufferPos1;
 }
 
 /**************************************************************************//**
@@ -133,27 +126,27 @@ const char* ccruncher::ExpatUserData::bufferPush(const char *str, size_t n)
  */
 const char* ccruncher::ExpatUserData::bufferAppend(const char *str, size_t n)
 {
-  if (buffer_pos2+n+1 < buffer+buffer_size)
+  if (mBufferPos2+n+1 < mBuffer+mBufferSize)
   {
-    memcpy(buffer_pos2, str, n);
-    buffer_pos2 += n;
-    *buffer_pos2 = 0;
+    memcpy(mBufferPos2, str, n);
+    mBufferPos2 += n;
+    *mBufferPos2 = 0;
   }
-  else if (buffer_pos2-buffer_pos1+n < buffer_size)
+  else if (mBufferPos2-mBufferPos1+n < mBufferSize)
   {
-    memcpy(buffer, buffer_pos1, buffer_pos2-buffer_pos1);
-    buffer_pos2 = buffer + (buffer_pos2-buffer_pos1);
-    buffer_pos1 = buffer;
-    memcpy(buffer_pos2, str, n);
-    buffer_pos2 += n;
-    *buffer_pos2 = 0;
+    memcpy(mBuffer, mBufferPos1, mBufferPos2-mBufferPos1);
+    mBufferPos2 = mBuffer + (mBufferPos2-mBufferPos1);
+    mBufferPos1 = mBuffer;
+    memcpy(mBufferPos2, str, n);
+    mBufferPos2 += n;
+    *mBufferPos2 = 0;
   }
   else
   {
     throw Exception("buffer overflow");
   }
 
-  return buffer_pos1;
+  return mBufferPos1;
 }
 
 /**************************************************************************//**

@@ -163,13 +163,13 @@ void ccruncher::Segmentation::insertSegment(const std::string &sname)
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Segmentation::epstart(ExpatUserData &, const char *name_, const char **attributes)
+void ccruncher::Segmentation::epstart(ExpatUserData &, const char *tag, const char **attributes)
 {
-  if (isEqual(name_,"segmentation")) {
+  if (isEqual(tag,"segmentation")) {
     if (getNumAttributes(attributes) < 2 || 3 < getNumAttributes(attributes)) {
       throw Exception("incorrect number of attributes in tag segmentation");
     }
@@ -190,22 +190,22 @@ void ccruncher::Segmentation::epstart(ExpatUserData &, const char *name_, const 
       throw Exception("unrecognized components attribute: '" + strcomp + "'");
     }
   }
-  else if (isEqual(name_,"segment")) {
+  else if (isEqual(tag,"segment")) {
     string sname = getStringAttribute(attributes, "name");
     insertSegment(sname);
   }
   else {
-    throw Exception("unexpected tag '" + string(name_) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  */
-void ccruncher::Segmentation::epend(ExpatUserData &, const char *name_)
+void ccruncher::Segmentation::epend(ExpatUserData &, const char *tag)
 {
-  if (isEqual(name_,"segmentation")) {
+  if (isEqual(tag,"segmentation")) {
     if (segments.size() == 1) {
       segments[0] = name;
     }

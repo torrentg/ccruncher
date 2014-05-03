@@ -288,13 +288,13 @@ void ccruncher::Interest::setSpline()
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char **attributes)
+void ccruncher::Interest::epstart(ExpatUserData &, const char *tag, const char **attributes)
 {
-  if (isEqual(name_,"interest"))
+  if (isEqual(tag,"interest"))
   {
     if (getNumAttributes(attributes) == 0) {
       type = Compound;
@@ -327,7 +327,7 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char
       throw Exception("incorrect number of attributes");
     }
   }
-  else if (isEqual(name_,"rate"))
+  else if (isEqual(tag,"rate"))
   {
     if (getNumAttributes(attributes) != 2) {
       throw Exception("incorrect number of attributes");
@@ -349,17 +349,17 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *name_, const char
   }
   else
   {
-    throw Exception("unexpected tag '" + string(name_) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  */
-void ccruncher::Interest::epend(ExpatUserData &, const char *name_)
+void ccruncher::Interest::epend(ExpatUserData &, const char *tag)
 {
-  if (isEqual(name_,"interest")) {
+  if (isEqual(tag,"interest")) {
     if (rates.empty()) {
       throw Exception("interest has no rates");
     }

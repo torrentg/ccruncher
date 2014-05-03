@@ -129,19 +129,19 @@ void ccruncher::Obligor::insertAsset(ExpatUserData &eu)
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
  * @param[in] eu Xml parsing data.
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const char **attributes)
+void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *tag, const char **attributes)
 {
-  if (isEqual(name_,"asset"))
+  if (isEqual(tag,"asset"))
   {
     Asset *asset = new Asset;
     vassets.push_back(asset);
-    eppush(eu, asset, name_, attributes);
+    eppush(eu, asset, tag, attributes);
   }
-  else if (isEqual(name_,"belongs-to"))
+  else if (isEqual(tag,"belongs-to"))
   {
     assert(eu.segmentations != nullptr);
     const char *ssegmentation = getAttributeValue(attributes, "segmentation");
@@ -157,7 +157,7 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
 
     addBelongsTo(isegmentation, isegment);
   }
-  else if (isEqual(name_,"obligor"))
+  else if (isEqual(tag,"obligor"))
   {
     const char *str = nullptr;
 
@@ -183,21 +183,21 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
   }
   else
   {
-    throw Exception("unexpected tag '" + string(name_) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
  * @param[in] eu Xml parsing data.
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  */
-void ccruncher::Obligor::epend(ExpatUserData &eu, const char *name_)
+void ccruncher::Obligor::epend(ExpatUserData &eu, const char *tag)
 {
-  if (isEqual(name_,"asset")) {
+  if (isEqual(tag,"asset")) {
     insertAsset(eu);
   }
-  else if (isEqual(name_,"obligor")) {
+  else if (isEqual(tag,"obligor")) {
 
     // check lgd values
     if (hasLGD() && !LGD::isvalid(lgd)) {

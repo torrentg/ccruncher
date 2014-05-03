@@ -48,32 +48,32 @@ ccruncher::Params::Params()
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
  * @param[in] eu Xml parsing data.
- * @param[in] name Element name.
+ * @param[in] tag Element name.
  * @param[in] atrs Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Params::epstart(ExpatUserData &eu, const char *name, const char **atrs)
+void ccruncher::Params::epstart(ExpatUserData &eu, const char *tag, const char **atrs)
 {
-  if (isEqual(name,"parameters")) {
+  if (isEqual(tag,"parameters")) {
     if (getNumAttributes(atrs) > 0) {
       throw Exception("attributes are not allowed in tag parameters");
     }
   }
-  else if (isEqual(name,"parameter")) {
+  else if (isEqual(tag,"parameter")) {
     parseParameter(eu, atrs);
   }
   else {
-    throw Exception("unexpected tag '" + string(name) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name Element name.
+ * @param[in] tag Element name.
  */
-void ccruncher::Params::epend(ExpatUserData &, const char *name)
+void ccruncher::Params::epend(ExpatUserData &, const char *tag)
 {
-  if (isEqual(name,"parameters")) {
+  if (isEqual(tag,"parameters")) {
     validate();
   }
 }
@@ -206,7 +206,7 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
   }
   else
   {
-    throw Exception("unexpected parameter: '" + name + "'");
+    throw Exception("unexpected attribute: '" + name + "'");
   }
 }
 

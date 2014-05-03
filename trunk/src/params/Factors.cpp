@@ -97,18 +97,18 @@ void ccruncher::Factors::add(const Factor &val)
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Factors::epstart(ExpatUserData &, const char *name_, const char **attributes)
+void ccruncher::Factors::epstart(ExpatUserData &, const char *tag, const char **attributes)
 {
-  if (isEqual(name_,"factors")) {
+  if (isEqual(tag,"factors")) {
     if (getNumAttributes(attributes) != 0) {
       throw Exception("attributes are not allowed in tag 'factors'");
     }
   }
-  else if (isEqual(name_,"factor")) {
+  else if (isEqual(tag,"factor")) {
     if (getNumAttributes(attributes) < 2 || getNumAttributes(attributes) > 3) {
       throw Exception("invalid number of attributes at tag 'factor'");
     }
@@ -120,17 +120,17 @@ void ccruncher::Factors::epstart(ExpatUserData &, const char *name_, const char 
     }
   }
   else {
-    throw Exception("unexpected tag '" + string(name_) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  */
-void ccruncher::Factors::epend(ExpatUserData &, const char *name_)
+void ccruncher::Factors::epend(ExpatUserData &, const char *tag)
 {
-  if (isEqual(name_,"factors")) {
+  if (isEqual(tag,"factors")) {
     if (this->empty()) {
       throw Exception("'factors' have no elements");
     }

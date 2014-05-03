@@ -78,18 +78,18 @@ void ccruncher::Ratings::add(const Rating &val)
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Ratings::epstart(ExpatUserData &, const char *name_, const char **attributes)
+void ccruncher::Ratings::epstart(ExpatUserData &, const char *tag, const char **attributes)
 {
-  if (isEqual(name_,"ratings")) {
+  if (isEqual(tag,"ratings")) {
     if (getNumAttributes(attributes) != 0) {
       throw Exception("attributes are not allowed in tag 'ratings'");
     }
   }
-  else if (isEqual(name_,"rating")) {
+  else if (isEqual(tag,"rating")) {
     if (getNumAttributes(attributes) < 1 || getNumAttributes(attributes) > 2) {
       throw Exception("invalid number of attributes in tag 'rating'");
     }
@@ -100,17 +100,17 @@ void ccruncher::Ratings::epstart(ExpatUserData &, const char *name_, const char 
     }
   }
   else {
-    throw Exception("unexpected tag '" + string(name_) + "'");
+    throw Exception("unexpected tag '" + string(tag) + "'");
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in] name_ Element name.
+ * @param[in] tag Element name.
  */
-void ccruncher::Ratings::epend(ExpatUserData &, const char *name_)
+void ccruncher::Ratings::epend(ExpatUserData &, const char *tag)
 {
-  if (isEqual(name_,"ratings")) {
+  if (isEqual(tag,"ratings")) {
     // minimum number of rating: default+non-default
     if (this->size() < 2) {
       throw Exception("required a minimum of 2 ratings");
