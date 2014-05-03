@@ -40,7 +40,6 @@ using namespace ccruncher;
  */
 ccruncher::IData::IData(streambuf *s) : log(s), curfile(nullptr)
 {
-  pthread_mutex_init(&mutex, nullptr);
   hasmaintag = false;
   hasdefinestag = 0;
   title = "";
@@ -55,7 +54,6 @@ ccruncher::IData::~IData()
 {
   assert(curfile == nullptr);
   if (curfile != nullptr) gzclose(curfile);
-  pthread_mutex_destroy(&mutex);
 }
 
 /**************************************************************************//**
@@ -90,26 +88,26 @@ void ccruncher::IData::init(const std::string &f,
       throw Exception("can't open file '" + filename + "'");
     }
 
-    pthread_mutex_lock(&mutex);
+    mMutex.lock();
     curfile = file;
     cursize = bytes;
-    pthread_mutex_unlock(&mutex);
+    mMutex.unlock();
 
     // big buffer to increase the speed of decompression
     gzbuffer(file, BUFFER_SIZE);
     parse(file, m);
 
-    pthread_mutex_lock(&mutex);
+    mMutex.lock();
     curfile = nullptr;
-    pthread_mutex_unlock(&mutex);
+    mMutex.unlock();
     gzclose(file);
   }
   catch(...)
   {
     if (file != nullptr) {
-      pthread_mutex_lock(&mutex);
+      mMutex.lock();
       curfile = nullptr;
-      pthread_mutex_unlock(&mutex);
+      mMutex.unlock();
       gzclose(file);
     }
     throw;
@@ -318,10 +316,10 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
       }
 
       size_t bytes = File::filesize(filepath);
-      pthread_mutex_lock(&mutex);
+      mMutex.lock();
       curfile = file;
       cursize = bytes;
-      pthread_mutex_unlock(&mutex);
+      mMutex.unlock();
 
       gzbuffer(file, BUFFER_SIZE);
       log << "included file name" << split << "["+filepath+"]" << endl;
@@ -339,17 +337,17 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *name_, cons
 
       log << "included file checksum (adler32)" << split << parser.getChecksum() << endl;
 
-      pthread_mutex_lock(&mutex);
+      mMutex.lock();
       curfile = prevfile;
-      pthread_mutex_unlock(&mutex);
+      mMutex.unlock();
       gzclose(file);
     }
     catch(std::exception &e)
     {
       if (file != nullptr) {
-        pthread_mutex_lock(&mutex);
+        mMutex.lock();
         curfile = prevfile;
-        pthread_mutex_unlock(&mutex);
+        mMutex.unlock();
         gzclose(file);
       }
       throw Exception(e, "error parsing file '" + ref + "'");
@@ -523,10 +521,10 @@ size_t ccruncher::IData::getFileSize() const
 size_t ccruncher::IData::getReadedSize() const
 {
   size_t ret = 0;
-  pthread_mutex_lock(&mutex);
+  mMutex.lock();
   if (curfile == nullptr) ret = cursize;
   else ret = gzoffset(curfile);
-  pthread_mutex_unlock(&mutex);
+  mMutex.unlock();
   return ret;
 }
 

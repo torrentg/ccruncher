@@ -23,10 +23,10 @@
 #ifndef _MonteCarlo_
 #define _MonteCarlo_
 
+#include <mutex>
 #include <vector>
 #include <fstream>
 #include <streambuf>
-#include <pthread.h>
 #include "kernel/IData.hpp"
 #include "kernel/Inverses.hpp"
 #include "kernel/Aggregator.hpp"
@@ -116,7 +116,7 @@ class MonteCarlo
     //! Number of finished threads
     int nfthreads;
     //! Ensures data consistence
-    pthread_mutex_t mutex;
+    std::mutex mMutex;
     //! Stop flag
     bool *stop;
     //! File indexes.csv

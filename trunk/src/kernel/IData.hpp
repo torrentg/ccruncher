@@ -27,7 +27,7 @@
 #include <string>
 #include <streambuf>
 #include <zlib.h>
-#include <pthread.h>
+#include <mutex>
 #include "portfolio/Portfolio.hpp"
 #include "params/Params.hpp"
 #include "params/Interest.hpp"
@@ -96,7 +96,7 @@ class IData : public ExpatHandlers
     //! Variable to stop parser
     bool *stop;
     //! Ensures data consistence
-    mutable pthread_mutex_t mutex;
+    mutable std::mutex mMutex;
     //! Input file
     gzFile curfile;
     //! Input file size

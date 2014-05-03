@@ -125,8 +125,7 @@ INCLUDEPATH += \
     $$PWD/src
 
 LIBS += \
-    -lm \
-    -lpthread
+    -lm
 
 unix {
   INCLUDEPATH += \
