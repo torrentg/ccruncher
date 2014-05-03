@@ -47,25 +47,25 @@ void ccruncher_test::FactorsTest::test1()
 
   ASSERT(2 == factors.size());
 
-  ASSERT_EQUALS(0, factors.getIndex("S1"));
-  ASSERT_EQUALS(1, factors.getIndex("S2"));
+  ASSERT_EQUALS(0, factors.indexOf("S1"));
+  ASSERT_EQUALS(1, factors.indexOf("S2"));
 
-  ASSERT("S1" == factors.getName(0));
-  ASSERT("S2" == factors.getName(1));
+  ASSERT("S1" == factors[0].getName());
+  ASSERT("S2" == factors[1].getName());
 
-  ASSERT_EQUALS_EPSILON(factors.getLoading(0), 0.1, 1e-14)
-  ASSERT_EQUALS_EPSILON(factors.getLoading(1), 0.2, 1e-14)
+  ASSERT_EQUALS_EPSILON(factors[0].getLoading(), 0.1, 1e-14)
+  ASSERT_EQUALS_EPSILON(factors[1].getLoading(), 0.2, 1e-14)
 
   vector<double> v = factors.getLoadings();
   ASSERT(v.size() == 2);
   ASSERT_EQUALS_EPSILON(v[0], 0.1, 1e-14)
   ASSERT_EQUALS_EPSILON(v[1], 0.2, 1e-14)
 
-  ASSERT("retail" == factors.getDescription(0));
-  ASSERT("" == factors.getDescription(1));
+  ASSERT("retail" == factors[0].getDescription());
+  ASSERT("" == factors[1].getDescription());
 
-  ASSERT(factors.getName(0) == "S1");
-  ASSERT(factors.getName(1) == "S2");
+  ASSERT(factors[0].getName() == "S1");
+  ASSERT(factors[1].getName() == "S2");
 }
 
 //===========================================================================

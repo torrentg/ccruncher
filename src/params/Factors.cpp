@@ -26,52 +26,13 @@
 using namespace std;
 
 /**************************************************************************//**
- * @return Number of factors.
- */
-int ccruncher::Factors::size() const
-{
-  return vfactors.size();
-}
-
-/**************************************************************************//**
- * @param[in] i Index of the factor.
- * @return Factor name.
- */
-const string& ccruncher::Factors::getName(int i) const
-{
-  assert(i >= 0 && i < (int) vfactors.size());
-  return vfactors[i].name;
-}
-
-/**************************************************************************//**
- * @param[in] i Index of the factor.
- * @return Factor description.
- */
-const string& ccruncher::Factors::getDescription(int i) const
-{
-  assert(i >= 0 && i < (int) vfactors.size());
-  return vfactors[i].desc;
-}
-
-/**************************************************************************//**
- * @param[in] i Index of the factor.
- * @return Factor loading in range [0,1].
- */
-double ccruncher::Factors::getLoading(int i) const
-{
-  assert(i >= 0 && i < (int) vfactors.size());
-  return vfactors[i].loading;
-}
-
-/**************************************************************************//**
  * @return Factor loadings list.
  */
 vector<double> ccruncher::Factors::getLoadings() const
 {
-  vector<double> w(vfactors.size(), NAN);
-  for(size_t i=0; i<vfactors.size(); i++)
-  {
-    w[i] = vfactors[i].loading;
+  vector<double> w(size(), NAN);
+  for(size_t i=0; i<this->size(); ++i) {
+    w[i] = (*this)[i].getLoading();
   }
   return w;
 }
@@ -80,12 +41,12 @@ vector<double> ccruncher::Factors::getLoadings() const
  * @param[in] name Factor name.
  * @return Index of the given factor, -1 if not found.
  */
-int ccruncher::Factors::getIndex(const char *name) const
+int ccruncher::Factors::indexOf(const char *name) const
 {
   assert(name != nullptr);
-  for(size_t i=0; i<vfactors.size(); i++)
+  for(size_t i=0; i<this->size(); i++)
   {
-    if (vfactors[i].name.compare(name) == 0)
+    if ((*this)[i].getName().compare(name) == 0)
     {
       return i;
     }
@@ -97,36 +58,36 @@ int ccruncher::Factors::getIndex(const char *name) const
  * @param[in] name Factor name.
  * @return Index of the given factor, -1 if not found.
  */
-int ccruncher::Factors::getIndex(const std::string &name) const
+int ccruncher::Factors::indexOf(const std::string &name) const
 {
-  return getIndex(name.c_str());
+  return indexOf(name.c_str());
 }
 
 /**************************************************************************//**
  * @param[in] val Factor to insert.
  * @throw Exception Factor repeated or loading out-of-range.
  */
-void ccruncher::Factors::insertFactor(const Factor &val)
+void ccruncher::Factors::add(const Factor &val)
 {
   // checking coherence
-  for(Factor &factor : vfactors)
+  for(Factor &factor : (*this))
   {
-    if (factor.name == val.name)
+    if (factor.getName() == val.getName())
     {
-      throw Exception("factor '" + val.name + "' repeated");
+      throw Exception("factor '" + val.getName() + "' repeated");
     }
   }
 
   // checking factor loading
-  if (val.loading < 0.0 || 1.0 < val.loading)
+  if (val.getLoading() < 0.0 || 1.0 < val.getLoading())
   {
-    string msg = "factor loading [" + val.name + "] out of range [0,1]";
+    string msg = "factor loading [" + val.getName() + "] out of range [0,1]";
     throw Exception(msg);
   }
 
   try
   {
-    vfactors.push_back(val);
+    this->push_back(val);
   }
   catch(std::exception &e)
   {
@@ -155,7 +116,7 @@ void ccruncher::Factors::epstart(ExpatUserData &, const char *name_, const char 
       string name = getStringAttribute(attributes, "name");
       string desc = getStringAttribute(attributes, "description", "");
       double loading = getDoubleAttribute(attributes, "loading");
-      insertFactor(Factor(name,desc,loading));
+      add(Factor(name,loading,desc));
     }
   }
   else {
@@ -170,7 +131,7 @@ void ccruncher::Factors::epstart(ExpatUserData &, const char *name_, const char 
 void ccruncher::Factors::epend(ExpatUserData &, const char *name_)
 {
   if (isEqual(name_,"factors")) {
-    if (vfactors.empty()) {
+    if (this->empty()) {
       throw Exception("'factors' have no elements");
     }
   }

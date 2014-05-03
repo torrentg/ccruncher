@@ -170,7 +170,7 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *name_, const cha
 
     assert(eu.factors != nullptr);
     str = getAttributeValue(attributes, "factor");
-    ifactor = eu.factors->getIndex(str);
+    ifactor = eu.factors->indexOf(str);
     if (ifactor < 0) throw Exception("factor '" + string(str) + "' not found");
 
     str = getAttributeValue(attributes, "lgd", nullptr);

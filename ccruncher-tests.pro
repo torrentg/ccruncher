@@ -8,6 +8,7 @@ HEADERS += \
     src/params/Params.hpp \
     src/params/Interest.hpp \
     src/params/Ratings.hpp \
+    src/params/Factor.hpp \
     src/params/Factors.hpp \
     src/params/Segmentations.hpp \
     src/params/Segmentation.hpp \
@@ -75,6 +76,7 @@ SOURCES += \
     src/params/Interest.cpp \
     src/params/Params.cpp \
     src/params/Ratings.cpp \
+    src/params/Factor.cpp \
     src/params/Factors.cpp \
     src/params/Segmentations.cpp \
     src/params/Segmentation.cpp \

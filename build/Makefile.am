@@ -47,6 +47,7 @@ ccruncher_cmd_SOURCES = \
     ../src/params/Interest.cpp\
     ../src/params/Ratings.cpp\
     ../src/params/Transitions.cpp\
+    ../src/params/Factor.cpp\
     ../src/params/Factors.cpp\
     ../src/params/Correlations.cpp\
     ../src/params/Segmentations.cpp\
@@ -82,6 +83,7 @@ ccruncher_cmd_SOURCES = \
     ../src/params/Interest.hpp\
     ../src/params/Ratings.hpp\
     ../src/params/Transitions.hpp\
+    ../src/params/Factor.hpp\
     ../src/params/Factors.hpp\
     ../src/params/Correlations.hpp\
     ../src/params/Segmentations.hpp\
@@ -167,6 +169,7 @@ ccruncher_tests_SOURCES = \
     ../src/portfolio/DateValues.cpp\
     ../src/portfolio/LGD.cpp\
     ../src/portfolio/EAD.cpp\
+    ../src/params/Factor.cpp\
     ../src/params/Factors.cpp\
     ../src/params/Ratings.cpp\
     ../src/params/Params.cpp\
@@ -231,6 +234,7 @@ ccruncher_tests_SOURCES = \
     ../src/portfolio/EAD.hpp\
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Obligor.hpp\
+    ../src/params/Factor.hpp\
     ../src/params/Factors.hpp\
     ../src/params/Ratings.hpp\
     ../src/params/Params.hpp\
