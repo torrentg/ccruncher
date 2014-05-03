@@ -21,41 +21,33 @@
 //===========================================================================
 
 #include <cassert>
-#include "params/Factor.hpp"
+#include "params/Rating.hpp"
 
 using namespace std;
 
 /**************************************************************************//**
- * @param[in] name Factor name.
- * @param[in] desc Factor description.
- * @param[in] loading Factor loading.
+ * @param[in] name Rating name.
+ * @param[in] desc Rating description.
  */
-ccruncher::Factor::Factor(const string &name, double loading, const string &desc) :
-    mName(name), mDesc(desc), mLoading(loading)
+ccruncher::Rating::Rating(const string &name, const string &desc) :
+    mName(name), mDesc(desc)
 {
   // nothing to do
 }
 
 /**************************************************************************//**
- * @param[in] name Factor name.
+ * @param[in] name Rating name.
  */
-void ccruncher::Factor::setName(const string &name)
+void ccruncher::Rating::setName(const string &name)
 {
   mName = name;
 }
 
 /**************************************************************************//**
- * @param[in] desc Factor description.
+ * @param[in] desc Rating description.
  */
-void ccruncher::Factor::setDescription(const string &desc)
+void ccruncher::Rating::setDescription(const string &desc)
 {
   mDesc = desc;
 }
 
-/**************************************************************************//**
- * @param[in] loading Factor loading.
- */
-void ccruncher::Factor::setLoading(double loading)
-{
-  mLoading = loading;
-}

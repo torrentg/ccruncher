@@ -25,8 +25,8 @@
 
 #include <string>
 #include <vector>
+#include "params/Rating.hpp"
 #include "utils/ExpatHandlers.hpp"
-#include "utils/Exception.hpp"
 
 namespace ccruncher {
 
@@ -35,31 +35,8 @@ namespace ccruncher {
  *
  * @see http://ccruncher.net/ifileref.html#ratings
  */
-class Ratings : public ExpatHandlers
+class Ratings : public ExpatHandlers, public std::vector<Rating>
 {
-
-  private:
-
-    //! Internal struct
-    struct Rating
-    {
-        //! Rating name
-        std::string name;
-        //! Rating description
-        std::string desc;
-        //! Constructor
-        Rating(const std::string &n="", const std::string &d="") : name(n), desc(d) {}
-    };
-
-  private:
-
-    //! Ratings list
-    std::vector<Rating> vratings;
-
-  private:
-  
-    //! insert a rating in the list
-    void insertRating(const Rating &);
 
   protected:
   
@@ -70,18 +47,16 @@ class Ratings : public ExpatHandlers
 
   public:
 
-    //! Default constructor
-    Ratings() {}
-    //! Number of ratings
-    int size() const;
+    //! Inherits std::vector constructors
+    using std::vector<Rating>::vector;
+    //! Inherits std::vector assignment operator
+    using std::vector<Rating>::operator=;
+    //! insert a rating in the list
+    void add(const Rating &);
     //! Return the index of the rating
-    int getIndex(const char *name) const;
+    int indexOf(const char *name) const;
     //! Return the index of the rating
-    int getIndex(const std::string &name) const;
-    //! Return i-th rating name
-    const std::string& getName(int i) const;
-    //! Return i-th rating description
-    const std::string& getDescription(int i) const;
+    int indexOf(const std::string &name) const;
 
 };
 

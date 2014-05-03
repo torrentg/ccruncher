@@ -426,13 +426,13 @@ void ccruncher_test::TransitionsTest::test6()
   for(int i=0; i<100; i++)
   {
     double u = 0.0 + 0.001*i - (i==0?0.0:1e-12);
-    ASSERT(dprobs.inverse(0,u)<=365.0);
+    ASSERT(dprobs.inverse(0ul,u)<=365.0);
   }
 
   for(int i=1; i<100; i++)
   {
     double u = 0.1 + 0.001*i;
-    ASSERT(dprobs.inverse(0,u)>365.0);
+    ASSERT(dprobs.inverse(0ul,u)>365.0);
   }
 }
 

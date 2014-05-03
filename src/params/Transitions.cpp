@@ -62,7 +62,7 @@ ccruncher::Transitions::Transitions(const Ratings &ratings_,
    const std::vector<std::vector<double>> &matrix_, int period_)
 {
   assert(period_ > 0);
-  assert(ratings_.size() == (int)matrix_.size());
+  assert(ratings_.size() == matrix_.size());
   setRatings(ratings_);
   period = period_;
   matrix = matrix_;
@@ -113,8 +113,8 @@ void ccruncher::Transitions::insertTransition(const std::string &rating1,
 {
   assert(size() > 0);
 
-  int row = ratings.getIndex(rating1);
-  int col = ratings.getIndex(rating2);
+  int row = ratings.indexOf(rating1);
+  int col = ratings.indexOf(rating2);
 
   // validating ratings
   if (row < 0 || col < 0)
@@ -212,7 +212,7 @@ void ccruncher::Transitions::validate()
 
     if (fabs(sum-1.0) > EPSILON)
     {
-      throw Exception("row transition[" + ratings.getName(i) + ",.] does not add up to 1");
+      throw Exception("row transition[" + ratings[i].getName() + ",.] does not add up to 1");
     }
   }
 

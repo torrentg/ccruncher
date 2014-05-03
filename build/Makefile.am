@@ -45,6 +45,7 @@ ccruncher_cmd_SOURCES = \
     ../src/kernel/Inverses.cpp\
     ../src/params/Params.cpp\
     ../src/params/Interest.cpp\
+    ../src/params/Rating.cpp\
     ../src/params/Ratings.cpp\
     ../src/params/Transitions.cpp\
     ../src/params/Factor.cpp\
@@ -81,6 +82,7 @@ ccruncher_cmd_SOURCES = \
     ../src/kernel/Inverses.hpp\
     ../src/params/Params.hpp\
     ../src/params/Interest.hpp\
+    ../src/params/Rating.hpp\
     ../src/params/Ratings.hpp\
     ../src/params/Transitions.hpp\
     ../src/params/Factor.hpp\
@@ -171,6 +173,7 @@ ccruncher_tests_SOURCES = \
     ../src/portfolio/EAD.cpp\
     ../src/params/Factor.cpp\
     ../src/params/Factors.cpp\
+    ../src/params/Rating.cpp\
     ../src/params/Ratings.cpp\
     ../src/params/Params.cpp\
     ../src/params/Transitions.cpp\
@@ -236,6 +239,7 @@ ccruncher_tests_SOURCES = \
     ../src/portfolio/Obligor.hpp\
     ../src/params/Factor.hpp\
     ../src/params/Factors.hpp\
+    ../src/params/Rating.hpp\
     ../src/params/Ratings.hpp\
     ../src/params/Params.hpp\
     ../src/params/Transitions.hpp\
