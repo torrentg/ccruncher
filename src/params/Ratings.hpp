@@ -54,9 +54,9 @@ class Ratings : public ExpatHandlers, public std::vector<Rating>
     //! insert a rating in the list
     void add(const Rating &);
     //! Return the index of the rating
-    int indexOf(const char *name) const;
+    size_t indexOf(const char *name) const;
     //! Return the index of the rating
-    int indexOf(const std::string &name) const;
+    size_t indexOf(const std::string &name) const;
 
 };
 

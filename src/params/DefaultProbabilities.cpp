@@ -248,7 +248,7 @@ string ccruncher::DefaultProbabilities::getInterpolationType(int i) const
  * @param[in] srating Rating identifier.
  * @param[in] t Date.
  * @param[in] value Default probability at time t for rating r.
- * @throw Exception Error inserting element.
+ * @throw Exception Error inserting element (eg. rating not found).
  */
 void ccruncher::DefaultProbabilities::insertValue(const std::string &srating,
                 const Date &t, double value)
@@ -256,13 +256,7 @@ void ccruncher::DefaultProbabilities::insertValue(const std::string &srating,
   assert(ratings.size() > 0);
   assert(date != NAD);
 
-  int irating = ratings.indexOf(srating);
-
-  // checking rating index
-  if (irating < 0)
-  {
-    throw Exception("unknow rating at dprob[" + srating + "," + Format::toString(t) + "]");
-  }
+  size_t irating = ratings.indexOf(srating);
 
   // validating time
   if (t < date)

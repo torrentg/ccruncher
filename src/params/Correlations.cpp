@@ -83,15 +83,8 @@ int ccruncher::Correlations::size() const
 void ccruncher::Correlations::insertCorrelation(const std::string &factor1,
     const std::string &factor2, double value)
 {
-  int row = factors.indexOf(factor1);
-  int col = factors.indexOf(factor2);
-
-  // checking index factor
-  if (row < 0 || col < 0)
-  {
-    string msg = "unknow factor [" + factor1 + "," + factor2 + "]";
-    throw Exception(msg);
-  }
+  size_t row = factors.indexOf(factor1);
+  size_t col = factors.indexOf(factor2);
 
   // checking for digonal value
   if (row == col)

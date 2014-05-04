@@ -137,7 +137,7 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *tag, const char **
     }
 
     const char *ssegment = getAttributeValue(attributes, "segment");
-    int isegment = segmentation.indexOf(ssegment);
+    size_t isegment = segmentation.indexOf(ssegment);
 
     addBelongsTo(isegmentation, isegment);
   }
