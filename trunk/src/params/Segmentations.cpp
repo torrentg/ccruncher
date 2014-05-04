@@ -73,14 +73,14 @@ int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const
 {
   for(size_t i=0; i<enabled.size(); i++)
   {
-    if (enabled[i].name.compare(sname) == 0)
+    if (enabled[i].getName().compare(sname) == 0)
     {
       return (int)i;
     }
   }
   for(size_t i=0; i<disabled.size(); i++)
   {
-    if (disabled[i].name.compare(sname) == 0)
+    if (disabled[i].getName().compare(sname) == 0)
     {
       return -(int)(i+1);
     }
@@ -105,13 +105,13 @@ void ccruncher::Segmentations::validate()
   int nbasic = 0;
   for(Segmentation &segmentation : enabled) {
     if (segmentation.size() == 1) {
-      str += (nbasic>0?", ":"") + segmentation.name;
+      str += (nbasic>0?", ":"") + segmentation.getName();
       nbasic++;
     }
   }
   for(Segmentation &segmentation : disabled) {
     if (segmentation.size() == 1) {
-      str += (nbasic>0?", ":"") + segmentation.name;
+      str += (nbasic>0?", ":"") + segmentation.getName();
       nbasic++;
     }
   }
@@ -130,16 +130,16 @@ int ccruncher::Segmentations::insertSegmentation(Segmentation &val)
   // checking coherence
   for(Segmentation &segmentation : enabled)
   {
-    if (segmentation.name == val.name)
+    if (segmentation.getName() == val.getName())
     {
-      throw Exception("segmentation name '" + val.name + "' repeated");
+      throw Exception("segmentation name '" + val.getName() + "' repeated");
     }
   }
   for(Segmentation &segmentation : disabled)
   {
-    if (segmentation.name == val.name)
+    if (segmentation.getName() == val.getName())
     {
-      throw Exception("segmentation name '" + val.name + "' repeated");
+      throw Exception("segmentation name '" + val.getName() + "' repeated");
     }
   }
 
@@ -216,7 +216,7 @@ void ccruncher::Segmentations::removeUnusedSegments()
 {
   for(Segmentation &segmentation : enabled)
   {
-    segmentation.removeUnusedSegments();
+    segmentation.recode();
   }
 }
 

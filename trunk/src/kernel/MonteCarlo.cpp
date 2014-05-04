@@ -422,7 +422,7 @@ void ccruncher::MonteCarlo::initAggregators(IData &idata)
   {
     const Segmentation &segmentation = idata.getSegmentations().getSegmentation(i);
     if (segmentation.size() > USHRT_MAX) {
-      throw Exception("segmentation '" + segmentation.name +
+      throw Exception("segmentation '" + segmentation.getName() +
                       "' exceeds the maximum number of segments");
     }
 

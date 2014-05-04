@@ -48,16 +48,16 @@ void ccruncher_test::SegmentationTest::test1()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sobj));
 
   ASSERT(sobj.isEnabled());
-  ASSERT("office" == sobj.name);
-  ASSERT(Segmentation::asset == sobj.components);
+  ASSERT("office" == sobj.getName());
+  ASSERT(Segmentation::asset == sobj.getType());
 
   ASSERT(5 == sobj.size());
 
-  ASSERT(0 == sobj.indexOfSegment("unassigned"));
-  ASSERT(1 == sobj.indexOfSegment("0001"));
-  ASSERT(2 == sobj.indexOfSegment("0002"));
-  ASSERT(3 == sobj.indexOfSegment("0003"));
-  ASSERT(4 == sobj.indexOfSegment("0004"));
+  ASSERT(0 == sobj.indexOf("unassigned"));
+  ASSERT(1 == sobj.indexOf("0001"));
+  ASSERT(2 == sobj.indexOf("0002"));
+  ASSERT(3 == sobj.indexOf("0003"));
+  ASSERT(4 == sobj.indexOf("0004"));
 
   sobj.addComponent(0);
   sobj.addComponent(0);
@@ -67,14 +67,14 @@ void ccruncher_test::SegmentationTest::test1()
   sobj.addComponent(3);
   sobj.addComponent(3);
 
-  sobj.removeUnusedSegments();
+  sobj.recode();
 
-  ASSERT(0 == sobj.indexOfSegment("0003"));
-  ASSERT(1 == sobj.indexOfSegment("unassigned"));
+  ASSERT(0 == sobj.indexOf("0003"));
+  ASSERT(1 == sobj.indexOf("unassigned"));
 
-  ASSERT( 1 == sobj.recode(0));
-  ASSERT(-1 == sobj.recode(1));
-  ASSERT(-1 == sobj.recode(2));
-  ASSERT( 0 == sobj.recode(3));
-  ASSERT(-1 == sobj.recode(4));
+  ASSERT(1 == sobj.recode(0));
+  ASSERT_THROW(sobj.recode(1));
+  ASSERT_THROW(sobj.recode(2));
+  ASSERT(0 == sobj.recode(3));
+  ASSERT_THROW(sobj.recode(4));
 }

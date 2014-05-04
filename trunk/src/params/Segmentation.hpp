@@ -53,20 +53,22 @@ class Segmentation : public ExpatHandlers
 
   private:
 
-    //! List of segments
-    std::vector<std::string> segments;
-    //! Number of components per segment
-    std::vector<size_t> numcomponents;
-    //! Recode map
-    std::vector<int> recode_map;
+    //! Segmentation name
+    std::string mName;
+    //! Type of components (obligors/assets)
+    ComponentsType mType;
     //! Enabled flag (true by default)
-    bool enabled;
+    bool mEnabled;
+    //! List of segmentation segments
+    std::vector<std::string> mSegments;
+    //! Number of elements per segment (used by recode)
+    std::vector<size_t> mNumElements;
+    //! Recode map (used by recode)
+    std::vector<size_t> mRecodeMap;
 
   private:
   
-    //! Inserts a segment into the list
-    void insertSegment(const std::string &);
-    //! Check name
+    //! Checks segment/segmentation name
     bool isValidName(const std::string &);
 
   protected:
@@ -77,36 +79,41 @@ class Segmentation : public ExpatHandlers
     virtual void epend(ExpatUserData &, const char *) override;
 
   public:
-
-    //! Segmentation name
-    std::string name;
-    //! Type of components (obligors/assets)
-    ComponentsType components;
-
-  public:
   
     //! Constructor
     Segmentation();
-    //! Number of segments
-    int size() const;
-    //! Returns i-th segment name
-    const std::string& getSegment(int i) const;
-    //! Return the index of the given segment
-    int indexOfSegment(const std::string &sname) const;
-    //! Return the index of the given segment
-    int indexOfSegment(const char *sname) const;
     //! Reset object content
     void reset();
+    //! Returns segmentation name
+    const std::string& getName() const { return mName; }
+    //! Sets segmentation name
+    void setName(const std::string &);
+    //! Returns type of components
+    ComponentsType getType() const { return mType; }
+    //! Sets the type of components
+    void setType(const ComponentsType &);
     //! Returns enabled flag
-    bool isEnabled() const;
+    bool isEnabled() const { return mEnabled; }
+    //! Sets the enabled flag
+    void setEnabled(bool b);
+    //! Number of segments
+    int size() const { return mSegments.size(); }
+    //! Returns i-th segment name
+    const std::string& getSegment(size_t i) const { return mSegments[i]; }
+    //! Adds a segment to this segmentation
+    void add(const std::string &segment);
+    //! Return the index of the given segment
+    size_t indexOf(const std::string &segment) const;
+    //! Return the index of the given segment
+    size_t indexOf(const char *segment) const;
     //! Return filename
     std::string getFilename(const std::string &path) const;
     //! Add components to segmentations stats
-    void addComponent(int);
-    //! Remove unused segments
-    void removeUnusedSegments();
-    //! Recode segment (all segments -> removed unused segments)
-    int recode(int) const;
+    void addComponent(size_t);
+    //! Recodes segments
+    void recode();
+    //! Recodes a segment
+    size_t recode(size_t) const;
 
 };
 

@@ -148,12 +148,12 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *tag, const char 
     int isegmentation = eu.segmentations->indexOfSegmentation(ssegmentation);
 
     const Segmentation &segmentation = eu.segmentations->getSegmentation(isegmentation);
-    if (segmentation.components != Segmentation::obligor) {
+    if (segmentation.getType() != Segmentation::obligor) {
       throw Exception("trying to assign an obligor to a segmentation composed of assets");
     }
 
     const char *ssegment = getAttributeValue(attributes, "segment");
-    int isegment = segmentation.indexOfSegment(ssegment);
+    int isegment = segmentation.indexOf(ssegment);
 
     addBelongsTo(isegmentation, isegment);
   }
@@ -209,7 +209,7 @@ void ccruncher::Obligor::epend(ExpatUserData &eu, const char *tag)
 
     // important: coding obligor-segments as asset-segments
     for(int i=0; i<(int)eu.segmentations->size(); i++) {
-      if (eu.segmentations->getSegmentation(i).components == Segmentation::obligor) {
+      if (eu.segmentations->getSegmentation(i).getType() == Segmentation::obligor) {
         for(Asset *asset : vassets) {
           asset->addBelongsTo(i, vsegments[i]);
         }
