@@ -29,7 +29,7 @@ using namespace std;
  * @param[in] name Rating name.
  * @return Index of the rating (-1 if rating not found).
  */
-int ccruncher::Ratings::indexOf(const char *name) const
+size_t ccruncher::Ratings::indexOf(const char *name) const
 {
   assert(name != nullptr);
   for(size_t i=0; i<this->size(); i++)
@@ -39,14 +39,14 @@ int ccruncher::Ratings::indexOf(const char *name) const
       return i;
     }
   }
-  return -1;
+  throw Exception("rating '" + string(name) + "' not found");
 }
 
 /**************************************************************************//**
  * @param[in] name Rating name.
  * @return Index of the rating (-1 if rating not found).
  */
-int ccruncher::Ratings::indexOf(const std::string &name) const
+size_t ccruncher::Ratings::indexOf(const std::string &name) const
 {
   return indexOf(name.c_str());
 }

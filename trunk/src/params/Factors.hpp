@@ -54,9 +54,9 @@ class Factors : public ExpatHandlers, public std::vector<Factor>
     //! Adds a factor to this list
     void add(const Factor &);
     //! Return the index of the factor
-    int indexOf(const char *name) const;
+    size_t indexOf(const char *name) const;
     //! Return the index of the factor
-    int indexOf(const std::string &name) const;
+    size_t indexOf(const std::string &name) const;
     //! Return factor loadings
     std::vector<double> getLoadings() const;
 

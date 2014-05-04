@@ -113,14 +113,8 @@ void ccruncher::Transitions::insertTransition(const std::string &rating1,
 {
   assert(size() > 0);
 
-  int row = ratings.indexOf(rating1);
-  int col = ratings.indexOf(rating2);
-
-  // validating ratings
-  if (row < 0 || col < 0)
-  {
-    throw Exception("undefined rating at transition[" + rating1 + "," + rating2 + "]");
-  }
+  size_t row = ratings.indexOf(rating1);
+  size_t col = ratings.indexOf(rating2);
 
   // validating value
   if (value < -EPSILON || value > (1.0+EPSILON))

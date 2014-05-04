@@ -41,7 +41,7 @@ vector<double> ccruncher::Factors::getLoadings() const
  * @param[in] name Factor name.
  * @return Index of the given factor, -1 if not found.
  */
-int ccruncher::Factors::indexOf(const char *name) const
+size_t ccruncher::Factors::indexOf(const char *name) const
 {
   assert(name != nullptr);
   for(size_t i=0; i<this->size(); i++)
@@ -51,14 +51,14 @@ int ccruncher::Factors::indexOf(const char *name) const
       return i;
     }
   }
-  return -1;
+  throw Exception("factor '" + string(name) + "' not found");
 }
 
 /**************************************************************************//**
  * @param[in] name Factor name.
  * @return Index of the given factor, -1 if not found.
  */
-int ccruncher::Factors::indexOf(const std::string &name) const
+size_t ccruncher::Factors::indexOf(const std::string &name) const
 {
   return indexOf(name.c_str());
 }

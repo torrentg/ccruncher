@@ -50,9 +50,8 @@ ccruncher::Obligor::Obligor(const Obligor &o)
 ccruncher::Obligor::Obligor(size_t nsegmentations) :
     vsegments(nsegmentations, 0), vassets()
 {
-  // setting default values
-  irating = -1;
-  ifactor = -1;
+  irating = 0;
+  ifactor = 0;
   id = "NON_ID";
   lgd = LGD(LGD::Fixed,NAN);
 }
@@ -153,7 +152,7 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *tag, const char 
     }
 
     const char *ssegment = getAttributeValue(attributes, "segment");
-    int isegment = segmentation.indexOf(ssegment);
+    size_t isegment = segmentation.indexOf(ssegment);
 
     addBelongsTo(isegmentation, isegment);
   }
@@ -166,12 +165,10 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *tag, const char 
     assert(eu.ratings != nullptr);
     str = getAttributeValue(attributes, "rating");
     irating = eu.ratings->indexOf(str);
-    if (irating < 0) throw Exception("rating '" + string(str) + "' not found");
 
     assert(eu.factors != nullptr);
     str = getAttributeValue(attributes, "factor");
     ifactor = eu.factors->indexOf(str);
-    if (ifactor < 0) throw Exception("factor '" + string(str) + "' not found");
 
     str = getAttributeValue(attributes, "lgd", nullptr);
     if (str != nullptr) {

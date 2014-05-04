@@ -47,8 +47,8 @@ void ccruncher_test::FactorsTest::test1()
 
   ASSERT(2 == factors.size());
 
-  ASSERT_EQUALS(0, factors.indexOf("S1"));
-  ASSERT_EQUALS(1, factors.indexOf("S2"));
+  ASSERT_EQUALS(0ul, factors.indexOf("S1"));
+  ASSERT_EQUALS(1ul, factors.indexOf("S2"));
 
   ASSERT("S1" == factors[0].getName());
   ASSERT("S2" == factors[1].getName());

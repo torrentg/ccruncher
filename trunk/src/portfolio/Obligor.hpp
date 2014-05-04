@@ -65,9 +65,9 @@ class Obligor : public ExpatHandlers
   public:
 
     //! Obligor rating
-    int irating;
+    size_t irating;
     //! Obligor factor
-    int ifactor;
+    size_t ifactor;
     //! Obligor identifier
     std::string id;
     //! Default lgd
