@@ -133,3 +133,25 @@ void ccruncher_test::RatingsTest::test4()
   Ratings ratings;
   ASSERT_THROW(xmlparser.parse(xmlcontent, &ratings));
 }
+
+//===========================================================================
+// test5
+//===========================================================================
+void ccruncher_test::RatingsTest::test5()
+{
+// creation from scratch
+  Ratings ratings;
+  ratings.add(Rating("A", "very good"));
+  ratings.add(Rating("B", "good"));
+  ratings.add(Rating("C", "bad"));
+  ratings.add(Rating("D", "very bad"));
+  ratings.add(Rating("E", "defaulted"));
+  ASSERT_EQUALS(5ul, ratings.size());
+  ASSERT_EQUALS(0ul, ratings.indexOf("A"));
+  ASSERT_EQUALS(1ul, ratings.indexOf("B"));
+  ASSERT_EQUALS(2ul, ratings.indexOf("C"));
+  ASSERT_EQUALS(3ul, ratings.indexOf("D"));
+  ASSERT_EQUALS(4ul, ratings.indexOf("E"));
+  ASSERT_THROW(ratings.indexOf("K"));
+}
+

@@ -81,7 +81,7 @@ class Segmentation : public ExpatHandlers
   public:
   
     //! Constructor
-    Segmentation();
+    Segmentation(const std::string &name="", ComponentsType type=asset, bool enabled=true);
     //! Reset object content
     void reset();
     //! Returns segmentation name

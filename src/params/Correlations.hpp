@@ -36,7 +36,7 @@ namespace ccruncher {
  *
  * @details This object represents the factor correlation matrix and
  *          provides the following functionalities:
- *            - Acces to matrix elements (read-only)
+ *            - Acces to matrix elements
  *            - Xml parsing (extending ExpatHandlers)
  *            - Cholesky matrix computation
  *
@@ -47,17 +47,8 @@ class Correlations : public ExpatHandlers
 
   private:
 
-    //! List of factors
-    Factors factors;
     //! Correlation matrix
-    std::vector<std::vector<double>> matrix;
-
-  private:
-
-    //! Insert a new matrix value
-    void insertCorrelation(const std::string &, const std::string &, double);
-    //! Validate matrix values
-    void validate();
+    std::vector<std::vector<double>> mMatrix;
 
   protected:
 
@@ -68,18 +59,18 @@ class Correlations : public ExpatHandlers
 
   public:
 
-    //! Default constructor
-    Correlations() {}
     //! Constructor
-    Correlations(const Factors &);
-    //! Set factors
-    void setFactors(const Factors &);
-    //! Return factors
-    const Factors& getFactors() const;
+    Correlations(size_t n=0);
+    //! Constructor
+    Correlations(const std::vector<std::vector<double>> &);
     //! Matrix dimension
-    int size() const;
+    size_t size() const;
     //! Matrix element access
-    const std::vector<double>& operator[] (int row) const;
+    const std::vector<double>& operator[] (size_t row) const;
+    //! Matrix element access
+    std::vector<double>& operator[] (size_t row);
+    //! Validate matrix content
+    bool isValid();
     //! Return Cholesky matrix
     gsl_matrix* getCholesky() const;
 

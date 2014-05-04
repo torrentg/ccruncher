@@ -86,7 +86,7 @@ class ExpatParser
     //! returns checksum value
     unsigned long getChecksum() const;
     //! returns user data
-    ExpatUserData& UserData() { return mUserData; }
+    ExpatUserData& getUserData() { return mUserData; }
 
 };
 

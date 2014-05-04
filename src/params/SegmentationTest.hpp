@@ -24,6 +24,7 @@
 #define _SegmentationTest_
 
 #include "utils/MiniCppUnit.hxx"
+#include "params/Segmentation.hpp"
 
 namespace ccruncher_test {
 
@@ -32,7 +33,9 @@ class SegmentationTest : public TestFixture<SegmentationTest>
 
   private:
 
+    void checks1(ccruncher::Segmentation &);
     void test1();
+    void test2();
 
 
   public:
@@ -40,6 +43,7 @@ class SegmentationTest : public TestFixture<SegmentationTest>
     TEST_FIXTURE(SegmentationTest)
     {
       TEST_CASE(test1);
+      TEST_CASE(test2);
     }
 
 };

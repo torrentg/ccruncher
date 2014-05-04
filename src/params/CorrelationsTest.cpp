@@ -65,24 +65,22 @@ void ccruncher_test::CorrelationsTest::test1()
     0.05, 1.00
   };
 
-  // creating xml
-  ExpatParser xmlparser;
-
   // factors list creation
   Factors factors = getFactors();
 
+  // creating xml
+  ExpatParser xmlparser;
+  xmlparser.getUserData().factors = &factors;
+
   // correlation matrix creation
-  Correlations crm(factors);
+  Correlations crm(factors.size());
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &crm));
 
   ASSERT(2 == crm.size());
 
-  ASSERT_EQUALS_EPSILON(0.25, crm.getFactors()[0].getLoading(), 1e-12);
-  ASSERT_EQUALS_EPSILON(0.30, crm.getFactors()[1].getLoading(), 1e-12);
-
-  for(int i=0; i<2; i++)
+  for(size_t i=0; i<2; i++)
   {
-    for(int j=0; j<2; j++)
+    for(size_t j=0; j<2; j++)
     {
       ASSERT_EQUALS_EPSILON(vmatrix[j+i*2], crm[i][j], EPSILON);
     }
@@ -100,14 +98,15 @@ void ccruncher_test::CorrelationsTest::test2()
       <correlation factor1='S1' factor2='S4' value='0.05'/>\n\
     </correlations>";
 
-  // creating xml
-  ExpatParser xmlparser;
-
   // factors list creation
   Factors factors = getFactors();
 
+  // creating xml
+  ExpatParser xmlparser;
+  xmlparser.getUserData().factors = &factors;
+
   // correlation matrix creation
-  Correlations crm(factors);
+  Correlations crm(factors.size());
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }
 
@@ -120,14 +119,15 @@ void ccruncher_test::CorrelationsTest::test3()
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <correlations/>";
 
-  // creating xml
-  ExpatParser xmlparser;
-
   // factors list creation
   Factors factors = getFactors();
 
+  // creating xml
+  ExpatParser xmlparser;
+  xmlparser.getUserData().factors = &factors;
+
   // correlation matrix creation
-  Correlations crm(factors);
+  Correlations crm(factors.size());
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }
 
@@ -142,13 +142,32 @@ void ccruncher_test::CorrelationsTest::test4()
       <correlation factor1='S1' factor2='S2' value='1.1'/>\n\
     </correlations>";
 
-  // creating xml
-  ExpatParser xmlparser;
-
   // factors list creation
   Factors factors = getFactors();
 
+  // creating xml
+  ExpatParser xmlparser;
+  xmlparser.getUserData().factors = &factors;
+
   // correlation matrix creation
-  Correlations crm(factors);
+  Correlations crm(factors.size());
   ASSERT_THROW(xmlparser.parse(xmlcontent, &crm));
 }
+
+//===========================================================================
+// test5
+//===========================================================================
+void ccruncher_test::CorrelationsTest::test5()
+{
+  // created from scratch
+  Correlations correlations(2);
+  correlations[0][0] = 1.0;
+  correlations[0][1] = 0.05;
+  correlations[1][0] = 0.05;
+  correlations[1][1] = 1.0;
+  ASSERT(correlations.isValid());
+  gsl_matrix *chol = nullptr;
+  ASSERT_NO_THROW(chol = correlations.getCholesky());
+  gsl_matrix_free(chol);
+}
+

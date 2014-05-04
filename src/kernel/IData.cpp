@@ -215,7 +215,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *tag, const char **
     eppush(eu, &factors, tag, attributes);
   }
   else if (isEqual(tag,"correlations") && correlations.size() == 0) {
-    correlations.setFactors(factors);
+    correlations = Correlations(factors.size());
     eppush(eu, &correlations, tag, attributes);
   }
   else if (isEqual(tag,"segmentations") && segmentations.size() == 0) {
@@ -327,12 +327,12 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *tag, const 
 
       ExpatParser parser;
       parser.setDefines(eu.defines);
-      parser.UserData().date1 = eu.date1;
-      parser.UserData().date2 = eu.date2;
-      parser.UserData().interest = eu.interest;
-      parser.UserData().ratings = eu.ratings;
-      parser.UserData().factors = eu.factors;
-      parser.UserData().segmentations = eu.segmentations;
+      parser.getUserData().date1 = eu.date1;
+      parser.getUserData().date2 = eu.date2;
+      parser.getUserData().interest = eu.interest;
+      parser.getUserData().ratings = eu.ratings;
+      parser.getUserData().factors = eu.factors;
+      parser.getUserData().segmentations = eu.segmentations;
       parser.parse(file, &portfolio, stop);
 
       log << "included file checksum (adler32)" << split << parser.getChecksum() << endl;
