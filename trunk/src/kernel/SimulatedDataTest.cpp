@@ -200,13 +200,13 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
   ExpatParser xmlparser;
   vector<Obligor*> obligors;
   
-  xmlparser.UserData().segmentations = &segmentations;
-  xmlparser.UserData().ratings = &ratings;
-  xmlparser.UserData().factors = &factors;
-  xmlparser.UserData().segmentations = &segmentations;
-  xmlparser.UserData().interest = &interest;
-  xmlparser.UserData().date1 = &time0;
-  xmlparser.UserData().date2 = &timeT;
+  xmlparser.getUserData().segmentations = &segmentations;
+  xmlparser.getUserData().ratings = &ratings;
+  xmlparser.getUserData().factors = &factors;
+  xmlparser.getUserData().segmentations = &segmentations;
+  xmlparser.getUserData().interest = &interest;
+  xmlparser.getUserData().date1 = &time0;
+  xmlparser.getUserData().date2 = &timeT;
 
   bp = new Obligor(5);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent1, bp));

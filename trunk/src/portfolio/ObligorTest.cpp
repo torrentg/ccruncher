@@ -186,13 +186,13 @@ void ccruncher_test::ObligorTest::test1()
 
   // creating xml
   ExpatParser xmlparser;
-  xmlparser.UserData().segmentations = &segmentations;
-  xmlparser.UserData().ratings = &ratings;
-  xmlparser.UserData().factors = &factors;
-  xmlparser.UserData().segmentations = &segmentations;
-  xmlparser.UserData().interest = &interest;
-  xmlparser.UserData().date1 = &time0;
-  xmlparser.UserData().date2 = &timeT;
+  xmlparser.getUserData().segmentations = &segmentations;
+  xmlparser.getUserData().ratings = &ratings;
+  xmlparser.getUserData().factors = &factors;
+  xmlparser.getUserData().segmentations = &segmentations;
+  xmlparser.getUserData().interest = &interest;
+  xmlparser.getUserData().date1 = &time0;
+  xmlparser.getUserData().date2 = &timeT;
 
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &obligor));
 
@@ -254,13 +254,13 @@ void ccruncher_test::ObligorTest::test2()
 
   // creating xml
   ExpatParser xmlparser;
-  xmlparser.UserData().segmentations = &segmentations;
-  xmlparser.UserData().ratings = &ratings;
-  xmlparser.UserData().factors = &factors;
-  xmlparser.UserData().segmentations = &segmentations;
-  xmlparser.UserData().interest = &interest;
-  xmlparser.UserData().date1 = &time0;
-  xmlparser.UserData().date2 = &timeT;
+  xmlparser.getUserData().segmentations = &segmentations;
+  xmlparser.getUserData().ratings = &ratings;
+  xmlparser.getUserData().factors = &factors;
+  xmlparser.getUserData().segmentations = &segmentations;
+  xmlparser.getUserData().interest = &interest;
+  xmlparser.getUserData().date1 = &time0;
+  xmlparser.getUserData().date2 = &timeT;
 
   ASSERT_THROW(xmlparser.parse(xmlcontent, &obligor));
 }
@@ -306,13 +306,13 @@ void ccruncher_test::ObligorTest::test3()
 
   // creating xml
   ExpatParser xmlparser;
-  xmlparser.UserData().segmentations = &segmentations;
-  xmlparser.UserData().ratings = &ratings;
-  xmlparser.UserData().factors = &factors;
-  xmlparser.UserData().segmentations = &segmentations;
-  xmlparser.UserData().interest = &interest;
-  xmlparser.UserData().date1 = &time0;
-  xmlparser.UserData().date2 = &timeT;
+  xmlparser.getUserData().segmentations = &segmentations;
+  xmlparser.getUserData().ratings = &ratings;
+  xmlparser.getUserData().factors = &factors;
+  xmlparser.getUserData().segmentations = &segmentations;
+  xmlparser.getUserData().interest = &interest;
+  xmlparser.getUserData().date1 = &time0;
+  xmlparser.getUserData().date2 = &timeT;
 
   ASSERT_THROW(xmlparser.parse(xmlcontent, &obligor));
 }
@@ -358,13 +358,13 @@ void ccruncher_test::ObligorTest::test4()
 
   // creating xml
   ExpatParser xmlparser;
-  xmlparser.UserData().segmentations = &segmentations;
-  xmlparser.UserData().ratings = &ratings;
-  xmlparser.UserData().factors = &factors;
-  xmlparser.UserData().segmentations = &segmentations;
-  xmlparser.UserData().interest = &interest;
-  xmlparser.UserData().date1 = &time0;
-  xmlparser.UserData().date2 = &timeT;
+  xmlparser.getUserData().segmentations = &segmentations;
+  xmlparser.getUserData().ratings = &ratings;
+  xmlparser.getUserData().factors = &factors;
+  xmlparser.getUserData().segmentations = &segmentations;
+  xmlparser.getUserData().interest = &interest;
+  xmlparser.getUserData().date1 = &time0;
+  xmlparser.getUserData().date2 = &timeT;
 
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &obligor));
 

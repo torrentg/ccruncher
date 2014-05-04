@@ -29,9 +29,11 @@
 using namespace std;
 
 /**************************************************************************/
-ccruncher::Segmentation::Segmentation()
+ccruncher::Segmentation::Segmentation(const string &name, ComponentsType type, bool enabled) :
+  mType(type), mEnabled(enabled)
 {
-  reset();
+  mName = name; // bypassing name validation (eg. allows void name '')
+  add(UNASSIGNED); // adding catcher segment
 }
 
 /**************************************************************************//**
@@ -41,8 +43,8 @@ ccruncher::Segmentation::Segmentation()
 void ccruncher::Segmentation::reset()
 {
   mName = "";
-  mEnabled = true;
   mType = obligor;
+  mEnabled = true;
   mSegments.clear();
   mNumElements.clear();
   mRecodeMap.clear();

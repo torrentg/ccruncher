@@ -268,7 +268,7 @@ bool ccruncher_gui::SimulationTask::checkConflicts()
       if (numlines != nlines) throw Exception("lines differ");
       if (segmentation.size() == 1) {
         if (headers.size() != 1) throw Exception("header differ");
-        if (headers[0] != segmentation.name) throw Exception("header differ");
+        if (headers[0] != segmentation.getName()) throw Exception("header differ");
       }
       else {
         if (segmentation.size() < (int)headers.size()) throw Exception("header differ");

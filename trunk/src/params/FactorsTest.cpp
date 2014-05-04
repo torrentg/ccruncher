@@ -127,3 +127,19 @@ void ccruncher_test::FactorsTest::test4()
   Factors factors;
   ASSERT_THROW(xmlparser.parse(xmlcontent, &factors));
 }
+
+//===========================================================================
+// test5
+//===========================================================================
+void ccruncher_test::FactorsTest::test5()
+{
+// creation from scratch
+  Factors factors;
+  factors.add(Factor("S1", 0.35, "industry"));
+  factors.add(Factor("S2", 0.2, "energy"));
+  ASSERT_EQUALS(2ul, factors.size());
+  ASSERT_EQUALS(0ul, factors.indexOf("S1"));
+  ASSERT_EQUALS(1ul, factors.indexOf("S2"));
+  ASSERT_THROW(factors.indexOf("Sx"));
+}
+

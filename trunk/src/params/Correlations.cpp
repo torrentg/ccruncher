@@ -24,42 +24,31 @@
 #include <cassert>
 #include <gsl/gsl_linalg.h>
 #include "params/Correlations.hpp"
-#include "utils/Format.hpp"
 
 using namespace std;
 using namespace ccruncher;
 
 /**************************************************************************//**
- * @param[in] factors_ List of defined factors.
- * @throw Exception List of factors is empty.
+ * @param[in] n Number of factors. Matrix dimension is nxn.
  */
-ccruncher::Correlations::Correlations(const Factors &factors_)
+ccruncher::Correlations::Correlations(size_t n)
 {
-  setFactors(factors_);
+  mMatrix.assign(n, vector<double>(n, NAN));
+  for(size_t i=0; i<n; i++) {
+    mMatrix[i][i] = 1.0;
+  }
 }
 
 /**************************************************************************//**
- * @param[in] factors_ List of defined factors.
- * @throw Exception List of factors is empty.
+ * @param[in] M Matrix values (M square matrix)
+ * @exception Non-valid correlation matrix.
  */
-void ccruncher::Correlations::setFactors(const Factors &factors_)
+ccruncher::Correlations::Correlations(const std::vector<std::vector<double>> &M)
 {
-  if (factors_.size() == 0) {
-    throw Exception("factors not found");
+  mMatrix = M;
+  if (!isValid()) {
+    throw Exception("invalid correlation matrix");
   }
-  else {
-    factors = factors_;
-    matrix.assign(size(), vector<double>(size(), NAN));
-    for(int i=0; i<size(); i++) {
-      matrix[i][i] = 1.0;
-    }
-  }
-}
-
-/**************************************************************************/
-const Factors& ccruncher::Correlations::getFactors() const
-{
-  return factors;
 }
 
 /**************************************************************************//**
@@ -67,73 +56,55 @@ const Factors& ccruncher::Correlations::getFactors() const
  *          number of factors.
  * @return The number of factors.
  */
-int ccruncher::Correlations::size() const
+size_t ccruncher::Correlations::size() const
 {
-  return factors.size();
-}
-
-/**************************************************************************//**
- * @details Decodes factor identifiers, check value range and inserts
- *          value in the matrix.
- * @param[in] factor1 Factor identifier.
- * @param[in] factor2 Factor identifier.
- * @param[in] value Correlation between factor1 and factor2.
- * @throw Exception Factor not found, repeated element, or invalid value.
- */
-void ccruncher::Correlations::insertCorrelation(const std::string &factor1,
-    const std::string &factor2, double value)
-{
-  size_t row = factors.indexOf(factor1);
-  size_t col = factors.indexOf(factor2);
-
-  // checking for digonal value
-  if (row == col)
-  {
-    if (value != 1.0) {
-      throw Exception("diagonal value distrinct than 1");
-    }
-    else {
-      return;
-    }
-  }
-
-  // checking non-diagonal value range
-  if (value < -1.0 || 1.0 < value)
-  {
-    string msg = "correlation value[" + factor1 + "," + factor2 + "] out of range [-1,+1]";
-    throw Exception(msg);
-  }
-
-  // checking that value don't exist
-  if (!std::isnan(matrix[row][col]) || !std::isnan(matrix[col][row]))
-  {
-    string msg = "correlation[" + factor1 + "," + factor2 + "] redefined";
-    throw Exception(msg);
-  }
-
-  // inserting value into matrix
-  matrix[row][col] = value;
-  matrix[col][row] = value;
+  return mMatrix.size();
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
+ * @param[in] eu Xml parsing data.
  * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Correlations::epstart(ExpatUserData &, const char *tag, const char **attributes)
+void ccruncher::Correlations::epstart(ExpatUserData &eu, const char *tag, const char **attributes)
 {
   if (isEqual(tag,"correlations")) {
     if (getNumAttributes(attributes) != 0) {
       throw Exception("unexpected attributes in tag 'correlations'");
     }
   }
-  else if (isEqual(tag,"correlation")) {
+  else if (isEqual(tag,"correlation"))
+  {
     string factor1 = getStringAttribute(attributes, "factor1");
     string factor2 = getStringAttribute(attributes, "factor2");
     double value = getDoubleAttribute(attributes, "value");
-    insertCorrelation(factor1, factor2, value);
+
+    // converting factors to indexes
+    size_t row = eu.factors->indexOf(factor1);
+    size_t col = eu.factors->indexOf(factor2);
+
+    // checking for diagonal value
+    if (row == col && value != 1.0) {
+        throw Exception("diagonal value distrinct than 1");
+    }
+
+    // checking non-diagonal value range
+    if (value < -1.0 || 1.0 < value) {
+      string msg = "correlation value[" + factor1 + "," + factor2 + "] out of range [-1,+1]";
+      throw Exception(msg);
+    }
+
+    // checking that value is not previously defined
+    if (!std::isnan(mMatrix[row][col]) || !std::isnan(mMatrix[col][row])) {
+      string msg = "correlation[" + factor1 + "," + factor2 + "] redefined";
+      throw Exception(msg);
+    }
+
+    // inserting value into matrix
+    mMatrix[row][col] = value;
+    mMatrix[col][row] = value;
   }
   else {
     throw Exception("unexpected tag '" + string(tag) + "'");
@@ -143,42 +114,84 @@ void ccruncher::Correlations::epstart(ExpatUserData &, const char *tag, const ch
 /**************************************************************************//**
  * @see ExpatHandlers::epend
  * @param[in] tag Element name.
+ * @exception Invalid correlation matrix.
  */
 void ccruncher::Correlations::epend(ExpatUserData &, const char *tag)
 {
   if (isEqual(tag,"correlations")) {
-    validate();
+    if (!isValid()) {
+      throw Exception("invalid correlation matrix");
+    }
   }
 }
 
 /**************************************************************************//**
  * @details Check that all matrix elements are set.
- * @throw Exception Correlation element not defined.
+ * @return true=valid correlation matrix, false=invalid correlation matrix.
  */
-void ccruncher::Correlations::validate()
+bool ccruncher::Correlations::isValid()
 {
-  // checking that all matrix elements exists
-  for(int i=0; i<size(); i++)
-  {
-    for(int j=0; j<size(); j++)
-    {
-      if (std::isnan(matrix[i][j]))
-      {
-        throw Exception("correlation[" + factors[i].getName() +
-            "," + factors[j].getName() + "] not defined");
+  size_t n = size();
+
+  // checking that has elements
+  if (mMatrix.empty()) return false;
+
+  // checking that is square
+  for(size_t i=0; i<n; i++) {
+    if (mMatrix[i].size() != n) {
+      return false;
+    }
+  }
+
+  // checking that values are in-range
+  for(size_t i=0; i<n; i++) {
+    for(size_t j=0; j<n; j++) {
+      double value = mMatrix[i][j];
+      if (std::isnan(value) || value < -1.0 || 1.0 < value) {
+        return false;
       }
     }
   }
+
+  // checking that is symmetric
+  for(size_t i=0; i<n; i++) {
+    for(size_t j=0; j<n; j++) {
+      if (mMatrix[i][j] != mMatrix[j][i]) {
+        return false;
+      }
+    }
+  }
+
+  // checking that is definite positive
+  try {
+    gsl_matrix *aux =  getCholesky();
+    gsl_matrix_free(aux);
+  }
+  catch(Exception &e) {
+    return false;
+  }
+
+  return true;
 }
 
 /**************************************************************************//**
  * @param[in] row Row index (0-based).
  * @return Row values.
  */
-const vector<double>& ccruncher::Correlations::operator[] (int row) const
+const vector<double>& ccruncher::Correlations::operator[] (size_t row) const
 {
-  assert(row >= 0 && row < (int)matrix.size());
-  return matrix[row];
+  assert(row < mMatrix.size());
+  return mMatrix[row];
+}
+
+/**************************************************************************//**
+ * @param[in] row Row index (0-based).
+ * @return Row values.
+ */
+vector<double>& ccruncher::Correlations::operator[] (size_t row)
+{
+  assert(row < mMatrix.size());
+  return mMatrix[row];
 }
 
 /**************************************************************************//**
@@ -192,17 +205,17 @@ gsl_matrix * ccruncher::Correlations::getCholesky() const
 {
   assert(size() > 0);
 
-  int k = size();
-  gsl_matrix *chol = gsl_matrix_alloc(k, k);
+  size_t n = size();
+  gsl_matrix *chol = gsl_matrix_alloc(n, n);
 
-  for(int i=0; i<k; i++)
+  for(size_t i=0; i<n; i++)
   {
     gsl_matrix_set(chol, i, i, 1.0);
 
-    for(int j=i+1; j<k; j++)
+    for(size_t j=i+1; j<n; j++)
     {
-      gsl_matrix_set(chol, i, j, matrix[i][j]);
-      gsl_matrix_set(chol, j, i, matrix[i][j]);
+      gsl_matrix_set(chol, i, j, mMatrix[i][j]);
+      gsl_matrix_set(chol, j, i, mMatrix[i][j]);
     }
   }
 
@@ -210,6 +223,7 @@ gsl_matrix * ccruncher::Correlations::getCholesky() const
   int rc = gsl_linalg_cholesky_decomp(chol);
   gsl_set_error_handler(eh);
   if (rc != GSL_SUCCESS) {
+    gsl_matrix_free(chol);
     throw Exception("correlation matrix non definite-positive");
   }
 

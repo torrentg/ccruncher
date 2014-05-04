@@ -46,7 +46,28 @@ void ccruncher_test::SegmentationTest::test1()
   // correlation matrix creation
   Segmentation sobj;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sobj));
+  checks1(sobj);
+}
 
+//===========================================================================
+// test2
+//===========================================================================
+void ccruncher_test::SegmentationTest::test2()
+{
+  // equals to test1 but created programatically
+  Segmentation segmentation("office", Segmentation::ComponentsType::asset, true);
+  segmentation.add("0001");
+  segmentation.add("0002");
+  segmentation.add("0003");
+  segmentation.add("0004");
+  checks1(segmentation);
+}
+
+//===========================================================================
+// check1
+//===========================================================================
+void ccruncher_test::SegmentationTest::checks1(Segmentation &sobj)
+{
   ASSERT(sobj.isEnabled());
   ASSERT("office" == sobj.getName());
   ASSERT(Segmentation::asset == sobj.getType());
@@ -78,3 +99,4 @@ void ccruncher_test::SegmentationTest::test1()
   ASSERT(0 == sobj.recode(3));
   ASSERT_THROW(sobj.recode(4));
 }
+
