@@ -70,11 +70,11 @@ void ccruncher_test::SegmentationsTest::test1()
   ASSERT(1 == sobj.indexOfSegmentation("products"));
   ASSERT(-3 == sobj.indexOfSegmentation("offices"));
 
-  ASSERT(sobj.getSegmentation(-1).name == "portfolio");
-  ASSERT(sobj.getSegmentation(-2).name == "size");
-  ASSERT(sobj.getSegmentation(-3).name == "offices");
-  ASSERT(sobj.getSegmentation(0).name == "sectors");
-  ASSERT(sobj.getSegmentation(1).name == "products");
+  ASSERT(sobj.getSegmentation(-1).getName() == "portfolio");
+  ASSERT(sobj.getSegmentation(-2).getName() == "size");
+  ASSERT(sobj.getSegmentation(-3).getName() == "offices");
+  ASSERT(sobj.getSegmentation(0).getName() == "sectors");
+  ASSERT(sobj.getSegmentation(1).getName() == "products");
 
   Asset asset(2);
 

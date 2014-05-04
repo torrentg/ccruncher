@@ -35,76 +35,48 @@ ccruncher::Segmentation::Segmentation()
 }
 
 /**************************************************************************//**
- * @return Number of segments.
- */
-int ccruncher::Segmentation::size() const
-{
-  return segments.size();
-}
-
-/**************************************************************************//**
- * @return The i-th segment name.
- */
-const string& ccruncher::Segmentation::getSegment(int i) const
-{
-  // assertions
-  assert(i >= 0 && i < (int) segments.size());
-
-  // return i-th segment
-  return segments[i];
-}
-
-/**************************************************************************//**
- * @param[in] sname Segment name.
- * @return The index of the given segment.
- * @throw Exception Segment name not found.
- */
-int ccruncher::Segmentation::indexOfSegment(const std::string &sname) const
-{
-  for(size_t i=0; i<segments.size(); i++)
-  {
-    if (segments[i] == sname)
-    {
-      return (int)i;
-    }
-  }
-
-  throw Exception("segment '" + sname + "' not found");
-}
-
-/**************************************************************************//**
- * @param[in] sname Segment name.
- * @return The index of the given segment.
- * @throw Exception Segment name not found.
- */
-int ccruncher::Segmentation::indexOfSegment(const char *sname) const
-{
-  assert(sname != nullptr);
-
-  for(size_t i=0; i<segments.size(); i++)
-  {
-    if (segments[i].compare(sname) == 0)
-    {
-      return (int)i;
-    }
-  }
-
-  throw Exception("segment '" + string(sname) + "' not found");
-}
-
-/**************************************************************************//**
  * @details Set default values that are valids. Defines the UNASSIGNED
  *          segment.
  */
 void ccruncher::Segmentation::reset()
 {
-  segments.clear();
-  numcomponents.clear();
-  recode_map.clear();
-  enabled = true;
-  insertSegment(UNASSIGNED); // adding catcher segment
-  name = "";
-  components = obligor;
+  mName = "";
+  mEnabled = true;
+  mType = obligor;
+  mSegments.clear();
+  mNumElements.clear();
+  mRecodeMap.clear();
+  add(UNASSIGNED); // adding catcher segment
+}
+
+/**************************************************************************//**
+ * @param[in] sname Segment name.
+ * @return The index of the given segment.
+ * @throw Exception Segment name not found.
+ */
+size_t ccruncher::Segmentation::indexOf(const std::string &sname) const
+{
+  return indexOf(sname.c_str());
+}
+
+/**************************************************************************//**
+ * @param[in] sname Segment name.
+ * @return The index of the given segment.
+ * @throw Exception Segment name not found.
+ */
+size_t ccruncher::Segmentation::indexOf(const char *sname) const
+{
+  assert(sname != nullptr);
+
+  for(size_t i=0; i<mSegments.size(); i++)
+  {
+    if (mSegments[i].compare(sname) == 0)
+    {
+      return i;
+    }
+  }
+
+  throw Exception("segment '" + string(sname) + "' not found");
 }
 
 /**************************************************************************//**
@@ -130,18 +102,36 @@ bool ccruncher::Segmentation::isValidName(const std::string &str)
 }
 
 /**************************************************************************//**
+ * @param[in] name Segmentation name.
+ */
+void ccruncher::Segmentation::setName(const std::string &name)
+{
+  if (!isValidName(name)) {
+    throw Exception("invalid segmentation name '" + name + "'");
+  }
+  mName = name;
+}
+
+/**************************************************************************//**
+ * @param[in] type Segmentation type.
+ */
+void ccruncher::Segmentation::setType(const ComponentsType &type)
+{
+  mType = type;
+}
+
+/**************************************************************************//**
  * @param[in] sname Segment name.
  * @throw Exception Invalid name or segment name repeated.
  */
-void ccruncher::Segmentation::insertSegment(const std::string &sname)
+void ccruncher::Segmentation::add(const std::string &sname)
 {
-  if (!isValidName(sname))
-  {
-    throw Exception("segment '" + sname + "' has an invalid name");
+  if (!isValidName(sname)) {
+    throw Exception("invalid segment name '" + sname + "'");
   }
 
   // checking coherence
-  for(string &segment : segments)
+  for(string &segment : mSegments)
   {
     if (segment == sname)
     {
@@ -152,8 +142,8 @@ void ccruncher::Segmentation::insertSegment(const std::string &sname)
   // inserting value
   try
   {
-    segments.push_back(sname);
-    numcomponents.push_back(0);
+    mSegments.push_back(sname);
+    mNumElements.push_back(0);
   }
   catch(std::exception &e)
   {
@@ -173,18 +163,18 @@ void ccruncher::Segmentation::epstart(ExpatUserData &, const char *tag, const ch
     if (getNumAttributes(attributes) < 2 || 3 < getNumAttributes(attributes)) {
       throw Exception("incorrect number of attributes in tag segmentation");
     }
-    name = getStringAttribute(attributes, "name");
-    if (!isValidName(name)) {
-      throw Exception("segmentation name '" + name + "' is not valid");
+    mName = getStringAttribute(attributes, "name");
+    if (!isValidName(mName)) {
+      throw Exception("segmentation name '" + mName + "' is not valid");
     }
-    enabled = getBooleanAttribute(attributes, "enabled", true);
+    mEnabled = getBooleanAttribute(attributes, "enabled", true);
     string strcomp = getStringAttribute(attributes, "components");
     // filling components variable
     if (strcomp == "asset") {
-      components = asset;
+      mType = asset;
     }
     else if (strcomp == "obligor") {
-      components = obligor;
+      mType = obligor;
     }
     else {
       throw Exception("unrecognized components attribute: '" + strcomp + "'");
@@ -192,7 +182,7 @@ void ccruncher::Segmentation::epstart(ExpatUserData &, const char *tag, const ch
   }
   else if (isEqual(tag,"segment")) {
     string sname = getStringAttribute(attributes, "name");
-    insertSegment(sname);
+    add(sname);
   }
   else {
     throw Exception("unexpected tag '" + string(tag) + "'");
@@ -206,16 +196,10 @@ void ccruncher::Segmentation::epstart(ExpatUserData &, const char *tag, const ch
 void ccruncher::Segmentation::epend(ExpatUserData &, const char *tag)
 {
   if (isEqual(tag,"segmentation")) {
-    if (segments.size() == 1) {
-      segments[0] = name;
+    if (mSegments.size() == 1) {
+      mSegments[0] = mName;
     }
   }
-}
-
-/**************************************************************************/
-bool ccruncher::Segmentation::isEnabled() const
-{
-  return enabled;
 }
 
 /**************************************************************************//**
@@ -225,7 +209,7 @@ bool ccruncher::Segmentation::isEnabled() const
  */
 string ccruncher::Segmentation::getFilename(const string &path) const
 {
-  return File::normalizePath(path) + name + ".csv";
+  return File::normalizePath(path) + mName + ".csv";
 }
 
 /**************************************************************************//**
@@ -234,11 +218,11 @@ string ccruncher::Segmentation::getFilename(const string &path) const
  *          Segmentation::removeUnusedSegments().
  * @param[in] isegment Segment index.
  */
-void ccruncher::Segmentation::addComponent(int isegment)
+void ccruncher::Segmentation::addComponent(size_t isegment)
 {
-  assert(0 <= isegment && isegment < (int)numcomponents.size());
-  if (0 <= isegment && isegment < (int)numcomponents.size()) {
-    numcomponents[isegment]++;
+  assert(isegment < mNumElements.size());
+  if (isegment < mNumElements.size()) {
+    mNumElements[isegment]++;
   }
 }
 
@@ -249,36 +233,38 @@ void ccruncher::Segmentation::addComponent(int isegment)
  *          about segment usage calling method
  *          Segmentation::addComponent(int isegment) for each component.
  */
-void ccruncher::Segmentation::removeUnusedSegments()
+void ccruncher::Segmentation::recode()
 {
-  assert(segments.size() == numcomponents.size());
+  assert(mSegments.size() == mNumElements.size());
 
   int pos = 0;
-  recode_map.clear();
-  for(size_t i=0; i<segments.size(); i++)
+  mRecodeMap.clear();
+
+  // removing unused segments
+  for(size_t i=0; i<mSegments.size(); i++)
   {
-    if (numcomponents[i] == 0) {
-      recode_map.push_back(-1);
-      segments.erase(segments.begin()+i);
-      numcomponents.erase(numcomponents.begin()+i);
+    if (mNumElements[i] == 0) {
+      mRecodeMap.push_back(SIZE_MAX);
+      mSegments.erase(mSegments.begin()+i);
+      mNumElements.erase(mNumElements.begin()+i);
       i--;
     }
     else {
-      recode_map.push_back(pos);
+      mRecodeMap.push_back(pos);
       pos++;
     }
   }
 
   // moving unassigned segment to the end
-  if (segments.size() > 1 && segments[0] == UNASSIGNED)
+  if (mSegments.size() > 1 && mSegments[0] == UNASSIGNED)
   {
-    segments.push_back(UNASSIGNED);
-    segments.erase(segments.begin());
-    numcomponents.push_back(numcomponents[0]);
-    numcomponents.erase(numcomponents.begin());
-    recode_map[0] = pos;
-    for(size_t i=0; i<recode_map.size(); i++) {
-      if (recode_map[i] > 0) recode_map[i]--;
+    mSegments.push_back(UNASSIGNED);
+    mSegments.erase(mSegments.begin());
+    mNumElements.push_back(mNumElements[0]);
+    mNumElements.erase(mNumElements.begin());
+    mRecodeMap[0] = pos;
+    for(size_t i=0; i<mRecodeMap.size(); i++) {
+      if (mRecodeMap[i] != 0 && mRecodeMap[i]!= SIZE_MAX) mRecodeMap[i]--;
     }
   }
 }
@@ -287,10 +273,14 @@ void ccruncher::Segmentation::removeUnusedSegments()
  * @details This method is used to recode assets' segments.
  * @param[in] isegment Segment index.
  * @return New segment index.
+ * @exception Trying to recode an unused segment.
  */
-int ccruncher::Segmentation::recode(int isegment) const
+size_t ccruncher::Segmentation::recode(size_t isegment) const
 {
-  assert(0 <= isegment && isegment < (int)recode_map.size());
-  return recode_map[isegment];
+  assert(isegment < mRecodeMap.size());
+  if (isegment >= mRecodeMap.size() || mRecodeMap[isegment] == SIZE_MAX) {
+    throw Exception("trying to recode an unused segment");
+  }
+  return mRecodeMap[isegment];
 }
 
