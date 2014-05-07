@@ -97,7 +97,7 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *tag, const cha
       throw Exception("attributes are not allowed in tag portfolio");
     }
     // check parameters needed to parse assets/obligors
-    if (eu.date1 == nullptr || eu.date2 == nullptr || eu.interest == nullptr ||
+    if (eu.date1 == NAD || eu.date2 == NAD || eu.interest == nullptr ||
         eu.ratings == nullptr || eu.factors == nullptr || eu.segmentations == nullptr) {
       throw Exception("required parameters not found");
     }

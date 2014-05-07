@@ -205,8 +205,8 @@ vector<Obligor*> ccruncher_test::SimulatedDataTest::getObligors()
   xmlparser.getUserData().factors = &factors;
   xmlparser.getUserData().segmentations = &segmentations;
   xmlparser.getUserData().interest = &interest;
-  xmlparser.getUserData().date1 = &time0;
-  xmlparser.getUserData().date2 = &timeT;
+  xmlparser.getUserData().date1 = time0;
+  xmlparser.getUserData().date2 = timeT;
 
   bp = new Obligor(5);
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent1, bp));

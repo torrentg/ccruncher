@@ -156,14 +156,14 @@ void ccruncher::MonteCarlo::initModel(IData &idata)
   log << indent(+1);
 
   // reading properties
-  maxseconds = idata.getParams().maxseconds;
-  maxiterations = idata.getParams().maxiterations;
-  time0 = idata.getParams().time0;
-  timeT = idata.getParams().timeT;
-  antithetic = idata.getParams().antithetic;
-  lhs_size = idata.getParams().lhs_size;
-  blocksize = idata.getParams().blocksize;
-  seed = idata.getParams().rng_seed;
+  maxseconds = idata.getParams().getMaxSeconds();
+  maxiterations = idata.getParams().getMaxIterations();
+  time0 = idata.getParams().getTime0();
+  timeT = idata.getParams().getTimeT();
+  antithetic = idata.getParams().getAntithetic();
+  lhs_size = idata.getParams().getLhsSize();
+  blocksize = idata.getParams().getBlockSize();
+  seed = idata.getParams().getRngSeed();
   if (seed == 0UL) {
     // use a seed based on clock
     seed = Utils::trand();
@@ -179,7 +179,7 @@ void ccruncher::MonteCarlo::initModel(IData &idata)
   log << "end date" << split << timeT << endl;
   log << "number of ratings" << split << idata.getRatings().size() << endl;
   log << "number of factors" << split << idata.getFactors().size() << endl;
-  log << "copula type" << split << idata.getParams().copula_type << endl;
+  log << "copula type" << split << idata.getParams().getCopula() << endl;
 
   DefaultProbabilities dprobs;
 

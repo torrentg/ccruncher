@@ -192,11 +192,11 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *tag, const char **
      // prevail over input file definitions.
     }
   }
-  else if (isEqual(tag,"parameters") && params.time0 == NAD) {
+  else if (isEqual(tag,"parameters") && params.size() == 0) {
     eppush(eu, &params, tag, attributes);
   }
   else if (isEqual(tag,"interest") && interest.size() == 0) {
-    interest.setDate(params.time0);
+    interest.setDate(params.getTime0());
     eppush(eu, &interest, tag, attributes);
   }
   else if (isEqual(tag,"ratings") && ratings.size() == 0) {
@@ -208,7 +208,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *tag, const char **
   }
   else if (isEqual(tag,"dprobs") && dprobs.size() == 0) {
     dprobs.setRatings(ratings);
-    dprobs.setDate(params.time0);
+    dprobs.setDate(params.getTime0());
     eppush(eu, &dprobs, tag, attributes);
   }
   else if (isEqual(tag,"factors") && factors.size() == 0) {
@@ -265,8 +265,8 @@ void ccruncher::IData::epend(ExpatUserData &eu, const char *tag)
     hasdefinestag = 2;
   }
   else if (isEqual(tag,"parameters")) {
-    eu.date1 = &(params.time0);
-    eu.date2 = &(params.timeT);
+    eu.date1 = params.getTime0();
+    eu.date2 = params.getTimeT();
   }
   else if (isEqual(tag,"interest")) {
     eu.interest = &interest;
@@ -360,7 +360,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *tag, const 
  */
 void ccruncher::IData::validate()
 {
-  if (params.maxiterations < 0) {
+  if (params.size() == 0) {
     throw Exception("section 'parameters' not defined");
   }
   else if (ratings.size() == 0) {

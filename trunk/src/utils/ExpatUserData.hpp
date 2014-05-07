@@ -30,12 +30,12 @@
 #include <expat.h>
 #include <cassert>
 #include "utils/ExpatHandlers.hpp"
+#include "utils/Date.hpp"
 
 namespace ccruncher {
 
 // forward declarations
 class ExpatHandlers;
-class Date;
 class Interest;
 class Ratings;
 class Factors;
@@ -100,9 +100,9 @@ class ExpatUserData
     //! List of defines
     std::map<std::string,std::string> defines;
     //! Initial date
-    ccruncher::Date *date1;
+    ccruncher::Date date1;
     //! Ending date
-    ccruncher::Date *date2;
+    ccruncher::Date date2;
     //! Yield curve
     ccruncher::Interest *interest;
     //! List of ratings

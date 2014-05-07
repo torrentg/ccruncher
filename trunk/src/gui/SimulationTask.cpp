@@ -315,7 +315,7 @@ bool ccruncher_gui::SimulationTask::checkConflicts()
 
     if (rc == 0) { // append
       fmode = 'a';
-      if (data.getParams().rng_seed != 0) {
+      if (data.getParams().getRngSeed() != 0) {
         QMessageBox::StandardButton val = QMessageBox::warning(nullptr, tr("CCruncher"),
            tr("You indicated a RNG seed distinct than 0.\n"
            "This can cause repeated values.\n"

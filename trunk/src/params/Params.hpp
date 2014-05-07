@@ -24,9 +24,9 @@
 #define _Params_
 
 #include <string>
+#include <map>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
-#include "utils/Exception.hpp"
 
 namespace ccruncher {
 
@@ -35,36 +35,8 @@ namespace ccruncher {
  *
  * @see http://ccruncher.net/ifileref.html#parameters
  */
-class Params : public ExpatHandlers
+class Params : public ExpatHandlers, public std::map<std::string,std::string>
 {
-
-  private:
-
-    //! Parse a parameter
-    void parseParameter(ExpatUserData &, const char **);
-    //! Validate object content
-    void validate() const;
-
-  public:
-
-    //! time.0 param value
-    Date time0;
-    //! time.T param value
-    Date timeT;
-    //! maxiterations param value
-    int maxiterations;
-    //! maxseconds param value
-    int maxseconds;
-    //! copula.type param value
-    std::string copula_type;
-    //! rng.seed param value
-    unsigned long rng_seed;
-    //! antithetic param value
-    bool antithetic;
-    //! lhs param value
-    unsigned short lhs_size;
-    //! blocksize param value
-    unsigned short blocksize;
 
   protected:
 
@@ -75,12 +47,32 @@ class Params : public ExpatHandlers
   
   public:
   
-    //! Constructor
-    Params();
-    //! Returns copula type as string (gaussian or t)
+    //! Inherits std::map constructors
+    using std::map<std::string,std::string>::map;
+    //! Returns starting time
+    Date getTime0() const;
+    //! Returns ending time
+    Date getTimeT() const;
+    //! Returns the number of MonteCarlo iterations
+    size_t getMaxIterations() const;
+    //! Returns the maximum execution time
+    size_t getMaxSeconds() const;
+    //! Returns copula
+    std::string getCopula() const;
+    //! Returns copula type
     std::string getCopulaType() const;
     //! Returns copula param (only t-copula)
     double getCopulaParam() const;
+    //! Returns RNG seed
+    unsigned long getRngSeed() const;
+    //! Returns antithetic flag
+    bool getAntithetic() const;
+    //! Returns LHS (latin hypercube sampling) size
+    unsigned short getLhsSize() const;
+    //! Returns simulation block size
+    unsigned short getBlockSize() const;
+    //! Validate object content
+    bool isValid(bool throwException=false) const;
 
 };
 

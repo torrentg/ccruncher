@@ -21,46 +21,59 @@
 //===========================================================================
 
 #include <climits>
+#include <limits>
 #include <cassert>
 #include "params/Params.hpp"
+#include "utils/Exception.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
+
+#define TIME0 "time.0"
+#define TIMET "time.T"
+#define MAXITERATIONS "maxiterations"
+#define MAXSECONDS "maxseconds"
+#define COPULA "copula.type"
+#define RNG_SEED "rng.seed"
+#define ANTITHETIC "antithetic"
+#define LHS "lhs"
+#define BLOCKSIZE "blocksize"
 
 using namespace std;
 using namespace ccruncher;
 
 /**************************************************************************//**
- * @details Set parameters to non-valid values.
- */
-ccruncher::Params::Params()
-{
-  time0 = NAD;
-  timeT = NAD;
-  maxiterations = -1L;
-  maxseconds = -1L;
-  copula_type = "";
-  rng_seed = 0L;
-  antithetic = false;
-  lhs_size = 1;
-  blocksize = 128;
-}
-
-/**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] eu Xml parsing data.
  * @param[in] tag Element name.
  * @param[in] atrs Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Params::epstart(ExpatUserData &eu, const char *tag, const char **atrs)
+void ccruncher::Params::epstart(ExpatUserData &, const char *tag, const char **atrs)
 {
   if (isEqual(tag,"parameters")) {
     if (getNumAttributes(atrs) > 0) {
-      throw Exception("attributes are not allowed in tag parameters");
+      throw Exception("unexpected attributes in tag parameters");
     }
   }
-  else if (isEqual(tag,"parameter")) {
-    parseParameter(eu, atrs);
+  else if (isEqual(tag,"parameter"))
+  {
+    if (getNumAttributes(atrs) > 2) {
+      throw Exception("unexpected attribute in tag parameter");
+    }
+
+    string name = getStringAttribute(atrs, "name");
+    if (name != TIME0 && name != TIMET && name != MAXITERATIONS &&
+        name != MAXSECONDS && name != COPULA && name != RNG_SEED &&
+        name != ANTITHETIC && name != LHS && name != BLOCKSIZE) {
+      throw Exception("unexpected parameter '" + name + "'");
+    }
+
+    string value = getStringAttribute(atrs, "value");
+    if (this->find(name) != this->end()) {
+      throw Exception("parameter '" + name + "' already defined");
+    }
+    else {
+      (*this)[name] = value;
+    }
   }
   else {
     throw Exception("unexpected tag '" + string(tag) + "'");
@@ -70,143 +83,12 @@ void ccruncher::Params::epstart(ExpatUserData &eu, const char *tag, const char *
 /**************************************************************************//**
  * @see ExpatHandlers::epend
  * @param[in] tag Element name.
+ * @exception Exception Parameters validations failed.
  */
 void ccruncher::Params::epend(ExpatUserData &, const char *tag)
 {
   if (isEqual(tag,"parameters")) {
-    validate();
-  }
-}
-
-/**************************************************************************//**
- * @return Copula type ('gaussian' or 't').
- * @throw Exception Invalid copula identifier.
- */
-string ccruncher::Params::getCopulaType() const
-{
-  // gaussian case
-  if (copula_type == "gaussian") {
-    return "gaussian";
-  }
-  // t-student case t(x)
-  else if (copula_type.length() >= 3 &&
-           copula_type.substr(0,2) == "t(" &&
-           copula_type.at(copula_type.length()-1) == ')') {
-    return "t";
-  }
-  // non-valid copula type
-  else {
-    throw Exception("invalid copula type: '" + copula_type + "'");
-  }
-}
-
-
-/**************************************************************************//**
- * @return Degrees of freedom of the t-copula (ndf>=2).
- * @throw Exception Invalid copula or copula params.
- */
-double ccruncher::Params::getCopulaParam() const
-{
-  if (getCopulaType() != "t") {
-    throw Exception("copula without params");
-  }
-  // t-student case t(x), where x is a integer
-  else {
-    string val = copula_type.substr(2, copula_type.length()-3);
-    double ndf = Parser::doubleValue(val);
-    if (ndf < 2.0)
-    {
-      throw Exception("t-student copula requires ndf >= 2");
-    }
-    return ndf;
-  }
-}
-
-/**************************************************************************//**
- * @param[in] attributes Xml element attributes.
- * @throw Exception Error processing xml data.
- */
-void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
-{
-  // reading attribute name
-  string name = getStringAttribute(attributes, "name");
-
-  if (name == "time.0")
-  {
-    if (time0 != NAD) throw Exception("parameter time.0 repeated");
-    else time0 = getDateAttribute(attributes, "value");
-  }
-  else if (name == "time.T")
-  {
-    if (timeT != NAD) throw Exception("parameter time.T repeated");
-    else timeT = getDateAttribute(attributes, "value");
-  }
-  else if (name == "maxiterations")
-  {
-    if (maxiterations >= 0L) throw Exception("parameter maxiterations repeated");
-    else maxiterations = getIntAttribute(attributes, "value");
-    if (maxiterations < 0L) throw Exception("parameter maxiterations out of range");
-  }
-  else if (name == "maxseconds")
-  {
-    if (maxseconds >= 0L) throw Exception("parameter maxseconds repeated");
-    else maxseconds = getIntAttribute(attributes, "value");
-    if (maxseconds < 0L) throw Exception("parameter maxseconds out of range");
-  }
-  else if (name == "copula.type")
-  {
-    if (copula_type != "") throw Exception("parameter copula.type repeated");
-    else copula_type = getStringAttribute(attributes, "value");
-    if (getCopulaType() == "t") {
-      getCopulaParam(); //parse and validate param
-    }
-  }
-  else if (name == "rng.seed")
-  {
-    long aux = getLongAttribute(attributes, "value");
-    rng_seed = *(reinterpret_cast<unsigned long *>(&aux));
-  }
-  else if (name == "antithetic")
-  {
-    antithetic = getBooleanAttribute(attributes, "value");
-  }
-  else if (name == "lhs")
-  {
-    try
-    {
-      if (getBooleanAttribute(attributes, "value") == false) {
-        lhs_size = 1;
-      }
-      else {
-        lhs_size = 1000;
-      }
-    }
-    catch(Exception &)
-    {
-      int aux = getIntAttribute(attributes, "value");
-      if (aux <= 0 || USHRT_MAX < aux) {
-        throw Exception("parameter lhs out of range [1," +
-                        Format::toString((int)USHRT_MAX) + "]");
-      }
-      else {
-        lhs_size = aux;
-      }
-    }
-  }
-  else if (name == "blocksize")
-  {
-    int aux = getIntAttribute(attributes, "value");
-    if (aux <= 0 || USHRT_MAX < aux) {
-      throw Exception("parameter blocksize out of range [1," +
-                      Format::toString((int)USHRT_MAX) + "]");
-    }
-    else {
-      blocksize = (unsigned short)(aux);
-    }
-  }
-  else
-  {
-    throw Exception("unexpected attribute: '" + name + "'");
+    isValid(true);
   }
 }
 
@@ -214,61 +96,243 @@ void ccruncher::Params::parseParameter(ExpatUserData &, const char **attributes)
  * @details Check that all variables are defined and have a valid value.
  * @throw Exception Error validating parameters.
  */
-void ccruncher::Params::validate() const
+bool ccruncher::Params::isValid(bool throwException) const
 {
-
-  if (time0 == NAD)
+  try
   {
-    throw Exception("parameter time.0 not defined");
-  }
+    if (getTime0() >= getTimeT()) {
+      throw Exception(TIME0 " >= " TIMET);
+    }
 
-  if (timeT == NAD)
+    if (getTimeT().getYear()-getTime0().getYear() > 101) {
+      throw Exception("more than 100 years between " TIME0 " and " TIMET);
+    }
+
+    if (getMaxIterations() == 0 && getMaxSeconds() == 0) {
+      throw Exception("non finite stop criteria");
+    }
+
+    getCopulaType();
+    getCopulaParam();
+    getRngSeed();
+    getLhsSize();
+
+    if (getAntithetic() && getBlockSize()%2 != 0) {
+      throw Exception(BLOCKSIZE " must be multiple of 2 when " ANTITHETIC " is enabled");
+    }
+
+    return true;
+  }
+  catch(Exception &e)
   {
-    throw Exception("parameter time.T not defined");
+    if (throwException) throw;
+    else return false;
   }
+}
 
-  if (time0 >= timeT)
-  {
-    throw Exception("time.0 >= time.T");
+/**************************************************************************//**
+ * @return Starting date.
+ * @exception Exception Invalid parameter value.
+ */
+Date ccruncher::Params::getTime0() const
+{
+  auto it = this->find(TIME0);
+  if (it == this->end()) {
+    throw Exception("parameter '" TIME0 "' not found");
   }
+  return Parser::dateValue(it->second);
+}
 
-  if (timeT.getYear()-time0.getYear() > 101) {
-    throw Exception("more than 100 years between time0 and timeT");
+/**************************************************************************//**
+ * @return Ending date.
+ * @exception Exception Invalid parameter value.
+ */
+Date ccruncher::Params::getTimeT() const
+{
+  auto it = this->find(TIMET);
+  if (it == this->end()) {
+    throw Exception("parameter '" TIMET "' not found");
   }
+  return Parser::dateValue(it->second);
+}
 
-  if (maxiterations < 0L)
-  {
-    throw Exception("parameter maxiterations not defined");
+/**************************************************************************//**
+ * @return Number of Monte Carlo iterations.
+ * @exception Exception Invalid parameter value.
+ */
+size_t ccruncher::Params::getMaxIterations() const
+{
+  auto it = this->find(MAXITERATIONS);
+  if (it == this->end()) {
+    throw Exception("parameter '" MAXITERATIONS "' not found");
   }
-
-  if (maxseconds < 0L)
-  {
-    throw Exception("parameter maxseconds not defined");
+  long num = Parser::longValue(it->second);
+  if (num < 0) {
+    throw Exception("parameter '" MAXITERATIONS "' < 0");
   }
+  return (size_t) num;
+}
 
-  if (copula_type == "")
-  {
-    throw Exception("parameter copula.type not defined");
+/**************************************************************************//**
+ * @return Maximum execution time (in seconds).
+ * @exception Exception Invalid parameter value.
+ */
+size_t ccruncher::Params::getMaxSeconds() const
+{
+  auto it = this->find(MAXSECONDS);
+  if (it == this->end()) {
+    throw Exception("parameter '" MAXSECONDS "' not found");
   }
-
-  if (maxiterations == 0 && maxseconds == 0)
-  {
-    throw Exception("non finite stop criteria");
+  long num = Parser::longValue(it->second);
+  if (num < 0) {
+    throw Exception("parameter '" MAXSECONDS "' < 0");
   }
+  return (size_t) num;
+}
 
-  if (lhs_size < 1)
-  {
-    throw Exception("parameter lhs not defined or less than 1");
+/**************************************************************************//**
+ * @return Copula, gaussian ot t(ndf).
+ * @throw Exception Invalid parameter value.
+ */
+std::string ccruncher::Params::getCopula() const
+{
+  auto it = this->find(COPULA);
+  if (it == this->end()) {
+    throw Exception("parameter '" COPULA "' not found");
   }
+  return it->second;
+}
 
-  if (blocksize < 1)
-  {
-    throw Exception("parameter blocksize not defined or less than 1");
+/**************************************************************************//**
+ * @return Copula type ('gaussian' or 't').
+ * @throw Exception Invalid parameter value.
+ */
+string ccruncher::Params::getCopulaType() const
+{
+  auto it = this->find(COPULA);
+  if (it == this->end()) {
+    throw Exception("parameter '" COPULA "' not found");
   }
+  string copula = it->second;
+  if (copula == "gaussian") {
+    return "gaussian";
+  }
+  else if (copula.length() >= 3 &&
+           copula.substr(0,2) == "t(" &&
+           copula.at(copula.length()-1) == ')') {
+    return "t";
+  }
+  else {
+    throw Exception("invalid copula type: '" + copula + "'");
+  }
+}
 
-  if (antithetic && blocksize%2 != 0)
-  {
-    throw Exception("blocksize must be multiple of 2 when antithetic is enabled");
+/**************************************************************************//**
+ * @return Degrees of freedom of the t-copula (ndf>=2).
+ * @throw Exception Invalid parameter value.
+ */
+double ccruncher::Params::getCopulaParam() const
+{
+  auto it = this->find(COPULA);
+  if (it == this->end()) {
+    throw Exception("parameter '" COPULA "' not found");
+  }
+  string copula = it->second;
+  if (copula == "gaussian") {
+    return std::numeric_limits<double>::infinity();
+  }
+  else if (copula.length() >= 3 &&
+           copula.substr(0,2) == "t(" &&
+           copula.at(copula.length()-1) == ')') {
+    string val = copula.substr(2, copula.length()-3);
+    double ndf = Parser::doubleValue(val);
+    if (ndf < 2.0) {
+      throw Exception("t-student copula requires ndf >= 2");
+    }
+    return ndf;
+  }
+  else {
+    throw Exception("invalid copula type: '" + copula + "'");
+  }
+}
+
+/**************************************************************************//**
+ * @return Rng seed.
+ * @throw Exception Invalid parameter value.
+ */
+unsigned long ccruncher::Params::getRngSeed() const
+{
+  auto it = this->find(RNG_SEED);
+  if (it == this->end()) {
+    return 0ul; // default value = '0'
+  }
+  long aux = Parser::longValue(it->second);
+  unsigned long seed = *(reinterpret_cast<unsigned long *>(&aux));
+  return seed;
+}
+
+/**************************************************************************//**
+ * @return Use antithetic method in Monte Carlo.
+ * @throw Exception Invalid parameter value.
+ */
+bool ccruncher::Params::getAntithetic() const
+{
+  auto it = this->find(ANTITHETIC);
+  if (it == this->end()) {
+    return false; // default value = 'false'
+  }
+  return Parser::boolValue(it->second);
+}
+
+/**************************************************************************//**
+ * @return Number of bins in the LHS method.
+ * @throw Exception Invalid parameter value.
+ */
+unsigned short ccruncher::Params::getLhsSize() const
+{
+  auto it = this->find(LHS);
+  if (it == this->end()) {
+    return 1; // default value = 'false'
+  }
+  string value = it->second;
+  try {
+    if (Parser::boolValue(value) == false) {
+      return 1;
+    }
+    else {
+      return 1000;
+    }
+  }
+  catch(Exception &) {
+    int aux = Parser::intValue(value);
+    if (aux <= 0 || USHRT_MAX < aux) {
+      throw Exception("parameter '" LHS "' out of range [1," +
+                      Format::toString((int)USHRT_MAX) + "]");
+    }
+    else {
+      return (unsigned short) aux;
+    }
+  }
+}
+
+/**************************************************************************//**
+ * @return Number of simultaneous simulations does by thread.
+ * @throw Exception Invalid parameter value.
+ */
+unsigned short ccruncher::Params::getBlockSize() const
+{
+  auto it = this->find(BLOCKSIZE);
+  if (it == this->end()) {
+    return 128; // default value = '128'
+  }
+  string value = it->second;
+  int aux = Parser::intValue(value);
+  if (aux <= 0 || USHRT_MAX < aux) {
+    throw Exception("parameter '" BLOCKSIZE "' out of range [1," +
+                    Format::toString((int)USHRT_MAX) + "]");
+  }
+  else {
+    return (unsigned short) aux;
   }
 }
 

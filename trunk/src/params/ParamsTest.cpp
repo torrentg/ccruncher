@@ -49,16 +49,15 @@ void ccruncher_test::ParamsTest::test1()
   Params params;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &params));
 
-  ASSERT(Date("18/02/2003") == params.time0);
-  ASSERT(Date("18/02/2008") == params.timeT);
-  ASSERT(3000 == params.maxiterations);
-  ASSERT(30000000 == params.maxseconds);
-  ASSERT("gaussian" == params.copula_type);
+  ASSERT(Date("18/02/2003") == params.getTime0());
+  ASSERT(Date("18/02/2008") == params.getTimeT());
+  ASSERT(3000 == params.getMaxIterations());
+  ASSERT(30000000 == params.getMaxSeconds());
   ASSERT("gaussian" == params.getCopulaType());
-  ASSERT(38765874L == params.rng_seed);
-  ASSERT(true == params.antithetic);
-  ASSERT(1 == params.lhs_size);
-  ASSERT(256 == params.blocksize);
+  ASSERT(38765874L == params.getRngSeed());
+  ASSERT(true == params.getAntithetic());
+  ASSERT(1 == params.getLhsSize());
+  ASSERT(256 == params.getBlockSize());
 }
 
 //===========================================================================
