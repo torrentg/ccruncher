@@ -49,8 +49,6 @@ class Ratings : public ExpatHandlers, public std::vector<Rating>
 
     //! Inherits std::vector constructors
     using std::vector<Rating>::vector;
-    //! Inherits std::vector assignment operator
-    using std::vector<Rating>::operator=;
     //! insert a rating in the list
     void add(const Rating &);
     //! Return the index of the rating

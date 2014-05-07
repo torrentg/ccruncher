@@ -31,7 +31,7 @@ using namespace ccruncher;
 ccruncher::ExpatUserData::ExpatUserData(size_t buffersize) :
   mStack(), mCurrentTag(nullptr), mBuffer(nullptr),
   mBufferSize(buffersize), mBufferPos1(nullptr), mBufferPos2(nullptr),
-  date1(nullptr), date2(nullptr), interest(nullptr), ratings(nullptr),
+  date1(NAD), date2(NAD), interest(nullptr), ratings(nullptr),
   factors(nullptr), segmentations(nullptr)
 {
   if (mBufferSize == 0) mBufferSize = 1;

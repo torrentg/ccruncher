@@ -116,8 +116,8 @@ void ccruncher::Obligor::insertAsset(ExpatUserData &eu)
   // preparing asset
   try
   {
-    assert(eu.date1 != nullptr && eu.date2 != nullptr && eu.interest != nullptr);
-    vassets[ila]->prepare(*(eu.date1), *(eu.date2), *(eu.interest));
+    assert(eu.date1 != NAD && eu.date2 != NAD && eu.interest != nullptr);
+    vassets[ila]->prepare(eu.date1, eu.date2, *(eu.interest));
   }
   catch(std::exception &e)
   {

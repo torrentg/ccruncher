@@ -27,7 +27,6 @@
 #include <gsl/gsl_matrix.h>
 #include "params/Factors.hpp"
 #include "utils/ExpatHandlers.hpp"
-#include "utils/Exception.hpp"
 
 namespace ccruncher {
 

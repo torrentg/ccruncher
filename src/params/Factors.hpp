@@ -49,8 +49,6 @@ class Factors : public ExpatHandlers, public std::vector<Factor>
 
     //! Inherits std::vector constructors
     using std::vector<Factor>::vector;
-    //! Inherits std::vector assignment operator
-    using std::vector<Factor>::operator=;
     //! Adds a factor to this list
     void add(const Factor &);
     //! Return the index of the factor
