@@ -53,6 +53,7 @@ ccruncher_cmd_SOURCES = \
     ../src/params/Correlations.cpp\
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
+    ../src/params/CDF.cpp\
     ../src/params/DefaultProbabilities.cpp\
     ../src/portfolio/Portfolio.cpp\
     ../src/portfolio/Obligor.cpp\
@@ -90,6 +91,7 @@ ccruncher_cmd_SOURCES = \
     ../src/params/Correlations.hpp\
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
+    ../src/params/CDF.hpp\
     ../src/params/DefaultProbabilities.hpp\
     ../src/portfolio/Portfolio.hpp\
     ../src/portfolio/Obligor.hpp\
@@ -146,6 +148,7 @@ ccruncher_tests_SOURCES = \
     ../src/params/RatingsTest.cpp\
     ../src/params/FactorsTest.cpp\
     ../src/params/TransitionsTest.cpp\
+    ../src/params/CDFTest.cpp\
     ../src/params/DefaultProbabilitiesTest.cpp\
     ../src/kernel/IDataTest.cpp\
     ../src/kernel/SimulatedDataTest.cpp\
@@ -181,6 +184,7 @@ ccruncher_tests_SOURCES = \
     ../src/params/Interest.cpp\
     ../src/params/Segmentations.cpp\
     ../src/params/Segmentation.cpp\
+    ../src/params/CDF.cpp\
     ../src/params/DefaultProbabilities.cpp\
     ../src/kernel/MonteCarlo.cpp\
     ../src/kernel/SimulatedData.cpp\
@@ -212,6 +216,7 @@ ccruncher_tests_SOURCES = \
     ../src/params/RatingsTest.hpp\
     ../src/params/FactorsTest.hpp\
     ../src/params/TransitionsTest.hpp\
+    ../src/params/CDFTest.hpp\
     ../src/params/DefaultProbabilitiesTest.hpp\
     ../src/kernel/IDataTest.hpp\
     ../src/kernel/SimulatedDataTest.hpp\
@@ -247,6 +252,7 @@ ccruncher_tests_SOURCES = \
     ../src/params/Interest.hpp\
     ../src/params/Segmentations.hpp\
     ../src/params/Segmentation.hpp\
+    ../src/params/CDF.hpp\
     ../src/params/DefaultProbabilities.hpp\
     ../src/kernel/MonteCarlo.hpp\
     ../src/kernel/SimulatedData.hpp\

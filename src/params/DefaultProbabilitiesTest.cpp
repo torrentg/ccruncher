@@ -20,8 +20,6 @@
 //
 //===========================================================================
 
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_randist.h>
 #include "params/DefaultProbabilities.hpp"
 #include "params/DefaultProbabilitiesTest.hpp"
 #include "utils/ExpatParser.hpp"
@@ -72,24 +70,24 @@ void ccruncher_test::DefaultProbabilitiesTest::test1()
 
   // ratings list creation
   Ratings ratings = getRatings();
+  xmlparser.getUserData().ratings = &ratings;
+  xmlparser.getUserData().date1 = date;
 
   // dprob function creation
-  DefaultProbabilities pd(ratings, date);
+  DefaultProbabilities pd;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &pd));
 
   // checking methods
-  ASSERT_EQUALS(pd.size(), 2);
-  ASSERT_EQUALS(pd.getMaxDate(0), Date("1/1/2017"));
-  ASSERT_EQUALS(pd.getIndexDefault(), 1);
-  ASSERT_EQUALS(pd.getRatings().size(), 2ul);
-  ASSERT_EQUALS(pd.getInterpolationType(0), "cspline");
-  ASSERT_EQUALS(pd.getInterpolationType(1), "none");
+  ASSERT_EQUALS(pd.size(), 2ul);
+  ASSERT_EQUALS(pd.getIndexDefault(), 1ul);
+  ASSERT_EQUALS(pd[0].getInterpolationType(), "cspline");
+  ASSERT_EQUALS(pd[1].getInterpolationType(), "none");
 
   // checking evalue method
   for(int i=0; i<4; i++)
   {
-    ASSERT_EQUALS_EPSILON(pd.evalue(0, dvalues[i]-date), pvalues0[i], EPSILON);
-    ASSERT_EQUALS_EPSILON(pd.evalue(1, dvalues[i]-date), 1.0, EPSILON)
+    ASSERT_EQUALS_EPSILON(pd[0].evalue(dvalues[i]-date), pvalues0[i], EPSILON);
+    ASSERT_EQUALS_EPSILON(pd[1].evalue(dvalues[i]-date), 1.0, EPSILON)
 
     if (i > 0)
     {
@@ -97,12 +95,12 @@ void ccruncher_test::DefaultProbabilitiesTest::test1()
       {
         double t = (dvalues[i-1]-date) + j*(dvalues[i]-dvalues[i-1])/100.0;
         // monotone
-        ASSERT(pd.evalue(0, dvalues[i-1]-date) < pd.evalue(0, t));
-        ASSERT(pd.evalue(0, t) < pd.evalue(0, dvalues[i]-date));
+        ASSERT(pd[0].evalue(dvalues[i-1]-date) < pd[0].evalue(t));
+        ASSERT(pd[0].evalue(t) < pd[0].evalue(dvalues[i]-date));
         // default = 1
-        ASSERT_EQUALS_EPSILON(pd.evalue(1, t), 1.0, EPSILON);
+        ASSERT_EQUALS_EPSILON(pd[1].evalue(t), 1.0, EPSILON);
         // inv(eval(t)) = t
-        ASSERT_EQUALS_EPSILON(pd.inverse(0, pd.evalue(0, t)), t, EPSILON);
+        ASSERT_EQUALS_EPSILON(pd[0].inverse(pd[0].evalue(t)), t, EPSILON);
       }
     }
   }
@@ -110,8 +108,8 @@ void ccruncher_test::DefaultProbabilitiesTest::test1()
   // checking inverse method
   for(int i=0; i<4; i++)
   {
-    ASSERT_EQUALS_EPSILON(pd.inverse(0, pvalues0[i]), dvalues[i]-date, EPSILON);
-    ASSERT_EQUALS_EPSILON(pd.inverse(1, pvalues0[i]), 0.0, EPSILON);
+    ASSERT_EQUALS_EPSILON(pd[0].inverse(pvalues0[i]), dvalues[i]-date, EPSILON);
+    ASSERT_EQUALS_EPSILON(pd[1].inverse(pvalues0[i]), 0.0, EPSILON);
 
     if (i > 0)
     {
@@ -119,10 +117,10 @@ void ccruncher_test::DefaultProbabilitiesTest::test1()
       {
         double p = pvalues0[i-1] + j*(pvalues0[i]-pvalues0[i-1])/100.0;
         // monotone
-        ASSERT(pd.inverse(0, pvalues0[i-1]) < pd.inverse(0, p));
-        ASSERT(pd.inverse(0, p) < pd.inverse(0, pvalues0[i]));
+        ASSERT(pd[0].inverse(pvalues0[i-1]) < pd[0].inverse(p));
+        ASSERT(pd[0].inverse(p) < pd[0].inverse(pvalues0[i]));
         // default = 0
-        ASSERT_EQUALS_EPSILON(pd.inverse(1, p), 0.0, EPSILON);
+        ASSERT_EQUALS_EPSILON(pd[1].inverse(p), 0.0, EPSILON);
       }
     }
   }
@@ -149,7 +147,10 @@ void ccruncher_test::DefaultProbabilitiesTest::test2()
   Ratings ratings = getRatings();
 
   // dprob function creation
-  DefaultProbabilities pd(ratings, Date("1/1/2012"));
+  DefaultProbabilities pd;
+
+  xmlparser.getUserData().ratings = &ratings;
+  xmlparser.getUserData().date1 = Date("1/1/2012");
   ASSERT_THROW(xmlparser.parse(xmlcontent, &pd));
 }
 
@@ -174,7 +175,10 @@ void ccruncher_test::DefaultProbabilitiesTest::test3()
   Ratings ratings = getRatings();
 
   // dprob function creation
-  DefaultProbabilities pd(ratings, Date("1/1/2012"));
+  DefaultProbabilities pd;
+
+  xmlparser.getUserData().ratings = &ratings;
+  xmlparser.getUserData().date1 = Date("1/1/2012");
   ASSERT_THROW(xmlparser.parse(xmlcontent, &pd));
 }
 
@@ -199,128 +203,18 @@ void ccruncher_test::DefaultProbabilitiesTest::test4()
   Ratings ratings = getRatings();
 
   // dprob function creation
-  DefaultProbabilities pd(ratings, Date("1/1/2012"));
+  DefaultProbabilities pd;
+
+  xmlparser.getUserData().ratings = &ratings;
+  xmlparser.getUserData().date1 = Date("1/1/2012");
   ASSERT_THROW(xmlparser.parse(xmlcontent, &pd));
 }
 
 //===========================================================================
-// test5 (equals than test1, but with diferent constructor)
-//===========================================================================
-void ccruncher_test::DefaultProbabilitiesTest::test5()
-{
-  Date date("1/1/2012");
-  Date dvalues[] = { Date("1/1/2012"), Date("1/1/2014"), Date("1/1/2015"), Date("1/1/2017") };
-  double pvalues0[] = { 0.0, 0.5, 0.75, 0.9 };
-  double pvalues1[] = { 1.0, 1.0, 1.00, 1.0 };
-
-  // ratings list creation
-  Ratings ratings = getRatings();
-
-  // dprob function creation
-  vector<vector<double>> mvalues(2);
-  mvalues[0] = vector<double>(pvalues0, pvalues0+4);
-  mvalues[1] = vector<double>(pvalues1, pvalues1+4);
-  DefaultProbabilities pd(ratings, Date("1/1/2012"), vector<Date>(dvalues, dvalues+4), mvalues);
-
-  // checking methods
-  ASSERT_EQUALS(pd.size(), 2);
-  ASSERT_EQUALS(pd.getMaxDate(0), Date("1/1/2017"));
-  ASSERT_EQUALS(pd.getIndexDefault(), 1);
-  ASSERT_EQUALS(pd.getRatings().size(), 2ul);
-  ASSERT_EQUALS(pd.getInterpolationType(0), "cspline");
-  ASSERT_EQUALS(pd.getInterpolationType(1), "none");
-
-  // checking evalue method
-  for(int i=0; i<4; i++)
-  {
-    ASSERT_EQUALS_EPSILON(pd.evalue(0, dvalues[i]-date), pvalues0[i], EPSILON);
-    ASSERT_EQUALS_EPSILON(pd.evalue(1, dvalues[i]-date), 1.0, EPSILON)
-
-    if (i > 0)
-    {
-      for(int j=1; j<100; j++)
-      {
-        double t = (dvalues[i-1]-date) + j*(dvalues[i]-dvalues[i-1])/100.0;
-        // monotone
-        ASSERT(pd.evalue(0, dvalues[i-1]-date) < pd.evalue(0, t));
-        ASSERT(pd.evalue(0, t) < pd.evalue(0, dvalues[i]-date));
-        // default = 1
-        ASSERT_EQUALS_EPSILON(pd.evalue(1, t), 1.0, EPSILON);
-        // inv(eval(t)) = t
-        ASSERT_EQUALS_EPSILON(pd.inverse(0, pd.evalue(0, t)), t, EPSILON);
-      }
-    }
-  }
-
-  // checking inverse method
-  for(int i=0; i<4; i++)
-  {
-    ASSERT_EQUALS_EPSILON(pd.inverse(0, pvalues0[i]), dvalues[i]-date, EPSILON);
-    ASSERT_EQUALS_EPSILON(pd.inverse(1, pvalues0[i]), 0.0, EPSILON);
-
-    if (i > 0)
-    {
-      for(int j=1; j<100; j++)
-      {
-        double p = pvalues0[i-1] + j*(pvalues0[i]-pvalues0[i-1])/100.0;
-        // monotone
-        ASSERT(pd.inverse(0, pvalues0[i-1]) < pd.inverse(0, p));
-        ASSERT(pd.inverse(0, p) < pd.inverse(0, pvalues0[i]));
-        // default = 0
-        ASSERT_EQUALS_EPSILON(pd.inverse(1, p), 0.0, EPSILON);
-      }
-    }
-  }
-}
-
-//===========================================================================
-// test6 (checks distribution assumptions)
-//===========================================================================
-void ccruncher_test::DefaultProbabilitiesTest::test6()
-{
-  double mvalues1[] = {0.0, 0.1};
-  double mvalues2[] = {1.0, 1.0};
-  Date dates[] = { Date("1/1/2012"), Date("1/1/2013") };
-  int ivalues[] = {0, 0};
-
-  // ratings list creation
-  Ratings ratings = getRatings();
-
-  // dprob function creation
-  vector<vector<double>> mvalues(2);
-  mvalues[0] = vector<double>(mvalues1, mvalues1+2);
-  mvalues[1] = vector<double>(mvalues2, mvalues2+2);
-  DefaultProbabilities pd(ratings, Date("1/1/2012"), vector<Date>(dates, dates+2), mvalues);
-
-  // creating randomizer
-  gsl_rng *rng = gsl_rng_alloc(gsl_rng_mt19937);
-
-  // checking values
-  for(int i=0;i<20000;i++)
-  {
-    double u = gsl_ran_flat (rng, 0.0, 1.0);
-    if (pd.inverse(0,u) > 12.0) {
-      ivalues[0]++;
-    }
-    else {
-      ivalues[1]++;
-    }
-  }
-
-  // deallocates randomizer
-  gsl_rng_free(rng);
-
-  // checking that P(X in [0,0.9]) = 0.9
-  ASSERT(ivalues[0] > 17500);  // exact value is 18000 (margin=500)
-  // checking that P(X in [0.9,1.0]) = 0.1
-  ASSERT(ivalues[1] < 2500);  // exact value is 2000 (margin=500)
-}
-
-//===========================================================================
-// test7
+// test6
 // check precision when pd are near 0%
 //===========================================================================
-void ccruncher_test::DefaultProbabilitiesTest::test7()
+void ccruncher_test::DefaultProbabilitiesTest::test6()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <dprobs>\n\
@@ -338,7 +232,10 @@ void ccruncher_test::DefaultProbabilitiesTest::test7()
   Ratings ratings = getRatings();
 
   // dprob function creation
-  DefaultProbabilities pd(ratings, Date("1/1/2012"));
+  DefaultProbabilities pd;
+
+  xmlparser.getUserData().ratings = &ratings;
+  xmlparser.getUserData().date1 = Date("1/1/2012");
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &pd));
 
   double pvalues[] = { 0.00005, 0.00010, 0.00100, 0.00200, 0.00300, 0.00400,
@@ -352,15 +249,15 @@ void ccruncher_test::DefaultProbabilitiesTest::test7()
   // checking values
   for(int i=0; i<13; i++)
   {
-    ASSERT_EQUALS_EPSILON(pd.inverse(0, pvalues[i]), tvalues[i], 1e-5);
+    ASSERT_EQUALS_EPSILON(pd[0].inverse(pvalues[i]), tvalues[i], 1e-5);
   }
 }
 
 //===========================================================================
-// test8
+// test7
 // case with dprob[t=0]=dprob[t=1]=dprob[t=2]=0
 //===========================================================================
-void ccruncher_test::DefaultProbabilitiesTest::test8()
+void ccruncher_test::DefaultProbabilitiesTest::test7()
 {
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <dprobs>\n\
@@ -382,16 +279,19 @@ void ccruncher_test::DefaultProbabilitiesTest::test8()
 
   // dprob function creation
   Date date("1/1/2012");
-  DefaultProbabilities pd(ratings, date);
+  DefaultProbabilities pd;
+
+  xmlparser.getUserData().ratings = &ratings;
+  xmlparser.getUserData().date1 = Date("1/1/2012");
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &pd));
 
   for(int i=0; i<=add(date,2,'M')-date; i++)
   {
-    ASSERT_EQUALS(pd.evalue(0, i), 0.0);
+    ASSERT_EQUALS(pd[0].evalue(i), 0.0);
   }
-  ASSERT(pd.evalue(0, (add(date,2,'M')-date)+1) > 0.0);
+  ASSERT(pd[0].evalue((add(date,2,'M')-date)+1) > 0.0);
 
 
-  ASSERT_EQUALS(pd.inverse(0, 0.0), add(date,2,'M')-date);
+  ASSERT_EQUALS(pd[0].inverse(0.0), add(date,2,'M')-date);
 }
 

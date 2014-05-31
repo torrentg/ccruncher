@@ -207,8 +207,6 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *tag, const char **
     eppush(eu, &transitions, tag, attributes);
   }
   else if (isEqual(tag,"dprobs") && dprobs.size() == 0) {
-    dprobs.setRatings(ratings);
-    dprobs.setDate(params.getTime0());
     eppush(eu, &dprobs, tag, attributes);
   }
   else if (isEqual(tag,"factors") && factors.size() == 0) {

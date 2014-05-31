@@ -54,14 +54,12 @@ class Inverses
 
   private:
 
-    //! Initial date
-    Date t0;
-    //! Ending date
-    Date t1;
+    //! Ending date (in days from starting date)
+    double mMaxT;
     //! Degrees of freedom (gaussian = negative or 0)
-    double ndf;
+    double mNdf;
     //! Function per rating
-    std::vector<gsl_spline*> splines;
+    std::vector<gsl_spline*> mSplines;
 
   private:
 
@@ -81,7 +79,7 @@ class Inverses
     //! Default constructor
     Inverses();
     //! Constructor
-    Inverses(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs);
+    Inverses(double ndf, double maxt, const DefaultProbabilities &dprobs);
     //! Copy constructor
     Inverses(const Inverses &);
     //! Destructor
@@ -89,11 +87,9 @@ class Inverses
     //! Assignment operator
     Inverses & operator=(const Inverses &);
     //! Initialize
-    void init(double ndf, const Date &maxdate, const DefaultProbabilities &dprobs);
+    void init(double ndf, double maxt, const DefaultProbabilities &dprobs);
     //! Evalue (return days from t0)
-    double evalue(int irating, double val) const;
-    //! Evalue (return date)
-    Date evalueAsDate(int irating, double val) const;
+    double evalue(size_t irating, double val) const;
 
 };
 
@@ -102,15 +98,15 @@ class Inverses
  * @param[in] irating Rating index.
  * @param[in] val Component of the multivariate t-student corresponding
  *            to the obligors factor.
- * @return Simulated default date as days from initial simulation date. If
+ * @return Simulated default date in days from initial simulation date. If
  *         simulated default date is far from ending simulation date then
  *         this method returns ending simulation 'date + 100 days'.
  */
-inline double ccruncher::Inverses::evalue(int irating, double val) const
+inline double ccruncher::Inverses::evalue(size_t irating, double val) const
 {
-  assert(irating < (int)splines.size());
+  assert(irating < (int)mSplines.size());
 
-  gsl_spline *spline = splines[irating];
+  gsl_spline *spline = mSplines[irating];
 
   if (spline == nullptr)
   {
@@ -134,19 +130,6 @@ inline double ccruncher::Inverses::evalue(int irating, double val) const
     // we don't use accel because values are random
     return gsl_spline_eval(spline, val, nullptr);
   }
-}
-
-/**************************************************************************//**
- * @see Inverses::evalue()
- * @param[in] irating Rating index.
- * @param[in] val Component of the multivariate t-student corresponding
- *            to the obligors factor.
- * @return Simulated default date.
- */
-inline Date ccruncher::Inverses::evalueAsDate(int irating, double val) const
-{
-  double days = evalue(irating, val);
-  return t0 + (long)ceil(days);
 }
 
 } // namespace

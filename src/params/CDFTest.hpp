@@ -20,43 +20,38 @@
 //
 //===========================================================================
 
-#ifndef _Ratings_
-#define _Ratings_
+#ifndef _CDFTest_
+#define _CDFTest_
 
-#include <string>
-#include <vector>
-#include "params/Rating.hpp"
-#include "utils/ExpatHandlers.hpp"
+#include "utils/MiniCppUnit.hxx"
+#include "params/Ratings.hpp"
 
-namespace ccruncher {
+namespace ccruncher_test {
 
-/**************************************************************************//**
- * @brief List of ratings.
- *
- * @see http://ccruncher.net/ifileref.html#ratings
- */
-class Ratings : public std::vector<Rating>, public ExpatHandlers
+class CDFTest : public TestFixture<CDFTest>
 {
 
-  protected:
-  
-    //! Directives to process an xml start tag element
-    virtual void epstart(ExpatUserData &, const char *, const char **) override;
-    //! Directives to process an xml end tag element
-    virtual void epend(ExpatUserData &, const char *) override;
+  private:
+
+    void test1();
+    void test2();
+    void test3();
+    void test4();
+
 
   public:
 
-    //! Inherits std::vector constructors
-    using std::vector<Rating>::vector;
-    //! insert a rating in the list
-    void add(const Rating &);
-    //! Return the index of the rating
-    size_t indexOf(const char *name) const;
-    //! Return the index of the rating
-    size_t indexOf(const std::string &name) const;
+    TEST_FIXTURE(CDFTest)
+    {
+      TEST_CASE(test1);
+      TEST_CASE(test2);
+      TEST_CASE(test3);
+      TEST_CASE(test4);
+    }
 
 };
+
+REGISTER_FIXTURE(CDFTest)
 
 } // namespace
 
