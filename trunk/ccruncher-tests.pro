@@ -14,6 +14,8 @@ HEADERS += \
     src/params/Segmentations.hpp \
     src/params/Segmentation.hpp \
     src/params/Transitions.hpp \
+    src/params/CDF.hpp \
+    src/params/DefaultProbabilities.hpp \
     src/params/TransitionsTest.hpp \
     src/params/SegmentationTest.hpp \
     src/params/SegmentationsTest.hpp \
@@ -22,7 +24,7 @@ HEADERS += \
     src/params/ParamsTest.hpp \
     src/params/InterestTest.hpp \
     src/params/CorrelationsTest.hpp \
-    src/params/DefaultProbabilities.hpp \
+    src/params/CDFTest.hpp \
     src/params/DefaultProbabilitiesTest.hpp \
     src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
@@ -83,6 +85,8 @@ SOURCES += \
     src/params/Segmentations.cpp \
     src/params/Segmentation.cpp \
     src/params/Transitions.cpp \
+    src/params/CDF.cpp \
+    src/params/DefaultProbabilities.cpp \
     src/params/TransitionsTest.cpp \
     src/params/SegmentationTest.cpp \
     src/params/SegmentationsTest.cpp \
@@ -91,7 +95,7 @@ SOURCES += \
     src/params/ParamsTest.cpp \
     src/params/InterestTest.cpp \
     src/params/CorrelationsTest.cpp \
-    src/params/DefaultProbabilities.cpp \
+    src/params/CDFTest.cpp \
     src/params/DefaultProbabilitiesTest.cpp \
     src/kernel/IData.cpp \
     src/kernel/Aggregator.cpp \

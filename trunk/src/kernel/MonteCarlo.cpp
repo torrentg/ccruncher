@@ -210,8 +210,8 @@ void ccruncher::MonteCarlo::initModel(IData &idata)
 
   // setting default probs info
   string strsplines;
-  for(int i=0; i<dprobs.size(); i++) {
-    strsplines += dprobs.getInterpolationType(i)[0];
+  for(CDF cdf : dprobs) {
+    strsplines += cdf.getInterpolationType()[0];
   }
   log << "default probability splines (linear, cubic, none)" << split << strsplines << endl;
 

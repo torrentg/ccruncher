@@ -26,6 +26,8 @@
 #include <string>
 #include <vector>
 #include <gsl/gsl_spline.h>
+#include "params/CDF.hpp"
+#include "params/PD.hpp"
 #include "params/Ratings.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
@@ -43,70 +45,8 @@ namespace ccruncher {
  *
  * @see http://ccruncher.net/ifileref.html#dprobs
  */
-class DefaultProbabilities : public ExpatHandlers
+class DefaultProbabilities : public std::vector<CDF>, public ExpatHandlers
 {
-
-  private:
-
-    //! Internal struct
-    struct pd
-    {
-      //! Time in days from starting date
-      int day;
-      //! Probability of default
-      double prob;
-      //! Constructor
-      pd(int d, double p) : day(d), prob(p) {}
-      //! Less-than operator
-      bool operator < (const pd &obj) const {
-       return day < obj.day;
-      }
-    };
-
-    //! Internal struct (root-finding)
-    struct fparams
-    {
-      gsl_spline *spline;
-      gsl_interp_accel *accel;
-      double y;
-    };
-
-  private:
-
-    //! Initial date
-    Date date;
-    //! Default probabilities for each rating
-    std::vector<std::vector<pd>> ddata;
-    //! List of ratings
-    Ratings ratings;
-    //! Index of the default rating
-    int indexdefault;
-    //! Spline for each rating
-    std::vector<gsl_spline *> splines;
-    //! Splines accelerators
-    std::vector<gsl_interp_accel *> accels;
-
-  private:
-
-    //! Root finding solver function
-    static double f(double x, void *params);
-    //! Root finding solver function
-    static double df(double x, void *params);
-    //! Root finding solver function
-    static void fdf (double x, void *params, double *y, double *dy);
-
-    //! Reset object content
-    void reset();
-    //! Insert a data value
-    void insertValue(const std::string &r1, const Date &t, double val);
-    //! Validate object content
-    void validate();
-    //! Set splines
-    void setSplines();
-    //! Inverse by root finding (bisection method)
-    double inverse_linear(gsl_spline *, double, gsl_interp_accel *) const;
-    //! Inverse by root finding (Newton method)
-    double inverse_cspline(gsl_spline *, double, gsl_interp_accel *) const;
 
   protected:
 
@@ -117,42 +57,12 @@ class DefaultProbabilities : public ExpatHandlers
 
   public:
 
-    //! Default constructor
-    DefaultProbabilities();
-    //! Copy constructor
-    DefaultProbabilities(const DefaultProbabilities &);
-    //! Constructor
-    DefaultProbabilities(const Ratings &, const Date &d);
-    //! Constructor
-    DefaultProbabilities(const Ratings &, const Date &d, const std::vector<Date> &dates, const std::vector<std::vector<double>> &values);
-    //! Destructor
-    virtual ~DefaultProbabilities() override;
-    //! Assignment operator
-    DefaultProbabilities & operator=(const DefaultProbabilities &);
-    //! Number of default probabilities functions
-    int size() const;
-    //! Set initial date
-    void setDate(const Date &);
-    //! Return initial date
-    Date getDate() const;
-    //! Set ratings
-    void setRatings(const Ratings &);
-    //! Return ratings
-    const Ratings & getRatings() const;
+    //! Inherits std::vector constructors
+    using std::vector<CDF>::vector;
     //! Return index of default rating
-    int getIndexDefault() const;
-    //! Evalue pd for i-th rating at t
-    double evalue(size_t irating, double t) const;
-    //! Evalue pd for i-th rating at t
-    double evalue(size_t irating, const Date &d) const;
-    //! Evalue pd inverse for i-th rating at given probability
-    double inverse(size_t irating, double val) const;
-    //! Return maximum defined date
-    Date getMaxDate(size_t irating) const;
-    //! Return list of days where dprob is defined
-    std::vector<int> getDays(size_t irating) const;
-    //! Return type of interpolation
-    std::string getInterpolationType(int i) const;
+    size_t getIndexDefault() const;
+    //! Validate object content
+    bool isValid(bool throwException=false) const;
 
 };
 

@@ -32,6 +32,7 @@ HEADERS += \
     src/params/Segmentations.hpp \
     src/params/Segmentation.hpp \
     src/params/Transitions.hpp \
+    src/params/CDF.hpp \
     src/params/DefaultProbabilities.hpp \
     src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
@@ -88,6 +89,7 @@ SOURCES += \
     src/params/Segmentations.cpp \
     src/params/Segmentation.cpp \
     src/params/Transitions.cpp \
+    src/params/CDF.cpp \
     src/params/DefaultProbabilities.cpp \
     src/kernel/IData.cpp \
     src/kernel/Aggregator.cpp \

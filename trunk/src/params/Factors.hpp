@@ -35,7 +35,7 @@ namespace ccruncher {
  *
  * @see http://ccruncher.net/ifileref.html#factors
  */
-class Factors : public ExpatHandlers, public std::vector<Factor>
+class Factors : public std::vector<Factor>, public ExpatHandlers
 {
 
   protected:

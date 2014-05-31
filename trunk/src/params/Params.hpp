@@ -35,7 +35,7 @@ namespace ccruncher {
  *
  * @see http://ccruncher.net/ifileref.html#parameters
  */
-class Params : public ExpatHandlers, public std::map<std::string,std::string>
+class Params : public std::map<std::string,std::string>, public ExpatHandlers
 {
 
   protected:

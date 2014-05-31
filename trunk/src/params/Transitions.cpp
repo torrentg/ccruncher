@@ -416,10 +416,16 @@ DefaultProbabilities ccruncher::Transitions::getDefaultProbabilities(const Date 
   cdfr(numrows, values);
 
   // creating dprobs function object
-  vector<Date> dates(numrows);
-  for(int i=0; i<numrows; i++) dates[i] = add(date, i*period, 'M');
-  DefaultProbabilities ret(ratings, date, dates, values);
-  return ret;
+  DefaultProbabilities dprobs(numrows);
+  for(int i=0; i<numrows; i++)
+  {
+    double t = add(date, i*period, 'M') - date;
+    for(size_t irating=0; irating < ratings.size(); i++) {
+      dprobs[irating].add(t, values[irating][i]);
+    }
+  }
+
+  return dprobs;
 }
 
 /**************************************************************************//**
