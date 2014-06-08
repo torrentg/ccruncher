@@ -42,7 +42,7 @@ ccruncher_cmd_SOURCES = \
     ../src/kernel/SimulatedData.cpp\
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
-    ../src/kernel/Inverses.cpp\
+    ../src/kernel/Inverse.cpp\
     ../src/params/Params.cpp\
     ../src/params/Interest.cpp\
     ../src/params/Rating.cpp\
@@ -80,7 +80,7 @@ ccruncher_cmd_SOURCES = \
     ../src/kernel/SimulatedData.hpp\
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
-    ../src/kernel/Inverses.hpp\
+    ../src/kernel/Inverse.hpp\
     ../src/params/Params.hpp\
     ../src/params/Interest.hpp\
     ../src/params/Rating.hpp\
@@ -190,7 +190,7 @@ ccruncher_tests_SOURCES = \
     ../src/kernel/SimulatedData.cpp\
     ../src/kernel/IData.cpp\
     ../src/kernel/Aggregator.cpp\
-    ../src/kernel/Inverses.cpp\
+    ../src/kernel/Inverse.cpp\
     \
     ../src/utils/MiniCppUnit.hxx\
     ../src/utils/TimerTest.hpp\
@@ -258,7 +258,7 @@ ccruncher_tests_SOURCES = \
     ../src/kernel/SimulatedData.hpp\
     ../src/kernel/IData.hpp\
     ../src/kernel/Aggregator.hpp\
-    ../src/kernel/Inverses.hpp\
+    ../src/kernel/Inverse.hpp\
     ../src/utils/config.h
 
 ccruncher_tests_CXXFLAGS =

@@ -39,7 +39,7 @@ HEADERS += \
     src/kernel/MonteCarlo.hpp \
     src/kernel/SimulatedData.hpp \
     src/kernel/SimulationThread.hpp \
-    src/kernel/Inverses.hpp \
+    src/kernel/Inverse.hpp \
     src/portfolio/LGD.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
@@ -96,7 +96,7 @@ SOURCES += \
     src/kernel/MonteCarlo.cpp \
     src/kernel/SimulatedData.cpp \
     src/kernel/SimulationThread.cpp \
-    src/kernel/Inverses.cpp \
+    src/kernel/Inverse.cpp \
     src/portfolio/LGD.cpp \
     src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \

@@ -26,8 +26,7 @@
 #include "params/CDF.hpp"
 #include "params/CDFTest.hpp"
 
-#define EPSILON1 1e-5
-#define EPSILON2 1e-3
+#define EPSILON 1e-5
 
 using namespace std;
 using namespace ccruncher;
@@ -82,16 +81,12 @@ void ccruncher_test::CDFTest::test2()
     double x = i/10.0;
     double y = gsl_cdf_tdist_P(+x, 12.0);
     double y1 = cdf.evalue(x);
-    ASSERT_EQUALS_EPSILON(y, y1, EPSILON1);
-    double x1 = cdf.inverse(y);
-    ASSERT_EQUALS_EPSILON(x, x1, EPSILON2);
+    ASSERT_EQUALS_EPSILON(y, y1, EPSILON);
 
     x += 0.05;
     y = gsl_cdf_tdist_P(+x, 12.0);
     y1 = cdf.evalue(x);
-    ASSERT_EQUALS_EPSILON(y, y1, EPSILON1);
-    x1 = cdf.inverse(y);
-    ASSERT_EQUALS_EPSILON(x, x1, EPSILON2);
+    ASSERT_EQUALS_EPSILON(y, y1, EPSILON);
   }
 }
 
@@ -115,7 +110,7 @@ void ccruncher_test::CDFTest::test3()
   // checking evalue method
   for(int i=0; i<4; i++)
   {
-    ASSERT_EQUALS_EPSILON(cdf.evalue(d[i]-d[0]), p[i], EPSILON1);
+    ASSERT_EQUALS_EPSILON(cdf.evalue(d[i]-d[0]), p[i], EPSILON);
 
     if (i > 0)
     {
@@ -125,25 +120,6 @@ void ccruncher_test::CDFTest::test3()
         // monotone
         ASSERT(cdf.evalue(d[i-1]-d[0]) < cdf.evalue(t));
         ASSERT(cdf.evalue(t) < cdf.evalue(d[i]-d[0]));
-        // inv(eval(t)) = t
-        ASSERT_EQUALS_EPSILON(cdf.inverse(cdf.evalue(t)), t, EPSILON1);
-      }
-    }
-  }
-
-  // checking inverse method
-  for(int i=0; i<4; i++)
-  {
-    ASSERT_EQUALS_EPSILON(cdf.inverse(p[i]), d[i]-d[0], EPSILON1);
-
-    if (i > 0)
-    {
-      for(int j=1; j<100; j++)
-      {
-        double x = p[i-1] + j*(p[i]-p[i-1])/100.0;
-        // monotone
-        ASSERT(cdf.inverse(p[i-1]) < cdf.inverse(x));
-        ASSERT(cdf.inverse(x) < cdf.inverse(p[i]));
       }
     }
   }
@@ -156,13 +132,11 @@ void ccruncher_test::CDFTest::test4()
 {
   CDF cdf(0.0, +INFINITY);
   cdf.add(0.0, 1.0);
-  ASSERT_EQUALS_EPSILON(cdf.evalue(-1.0), 0.0, EPSILON1);
-  ASSERT_EQUALS_EPSILON(cdf.evalue(-0.1), 0.0, EPSILON1);
-  ASSERT_EQUALS_EPSILON(cdf.evalue(0.0), 1.0, EPSILON1);
-  ASSERT_EQUALS_EPSILON(cdf.evalue(0.1), 1.0, EPSILON1);
-  ASSERT_EQUALS_EPSILON(cdf.evalue(10.0), 1.0, EPSILON1);
-  ASSERT_EQUALS_EPSILON(cdf.evalue(100.0), 1.0, EPSILON1);
-  ASSERT(cdf.inverse(0.0) > 0.0);
-  ASSERT(cdf.inverse(1.0) > 0.0);
+  ASSERT_EQUALS_EPSILON(cdf.evalue(-1.0), 0.0, EPSILON);
+  ASSERT_EQUALS_EPSILON(cdf.evalue(-0.1), 0.0, EPSILON);
+  ASSERT_EQUALS_EPSILON(cdf.evalue(0.0), 1.0, EPSILON);
+  ASSERT_EQUALS_EPSILON(cdf.evalue(0.1), 1.0, EPSILON);
+  ASSERT_EQUALS_EPSILON(cdf.evalue(10.0), 1.0, EPSILON);
+  ASSERT_EQUALS_EPSILON(cdf.evalue(100.0), 1.0, EPSILON);
 }
 

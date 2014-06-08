@@ -421,19 +421,11 @@ void ccruncher_test::TransitionsTest::test6()
   Transitions transitions(ratings);
   xmlparser.parse(xmlcontent2, &transitions);
   Transitions tone = transitions.scale(1);
-  DefaultProbabilities dprobs = tone.getDefaultProbabilities(Date("1/1/2010"), transitions.getPeriod()+1);
-
-  for(int i=0; i<100; i++)
-  {
-    double u = 0.0 + 0.001*i - (i==0?0.0:1e-12);
-    ASSERT(dprobs[0].inverse(u)<=365.0);
-  }
-
-  for(int i=1; i<100; i++)
-  {
-    double u = 0.1 + 0.001*i;
-    ASSERT(dprobs[0].inverse(u)>365.0);
-  }
+  vector<CDF> dprobs = tone.getCDFs(Date("1/1/2010"), transitions.getPeriod()+1);
+  ASSERT_EQUALS_EPSILON(0.0, dprobs[0].evalue(0.0), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.1, dprobs[0].evalue(365.0), EPSILON);
+  ASSERT_EQUALS_EPSILON(1.0, dprobs[1].evalue(0.0), EPSILON);
+  ASSERT_EQUALS_EPSILON(1.0, dprobs[1].evalue(365.0), EPSILON);
 }
 
 //===========================================================================

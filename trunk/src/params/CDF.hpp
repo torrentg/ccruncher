@@ -43,16 +43,6 @@ class CDF
 
   private:
 
-    //! Internal struct (root-finding)
-    struct fparams
-    {
-      gsl_spline *spline;
-      gsl_interp_accel *accel;
-      double y;
-    };
-
-  private:
-
     //! Minimum x value
     double mXmin = -INFINITY;
     //! Maximum x value
@@ -66,21 +56,10 @@ class CDF
 
   private:
 
-    //! Root finding solver function
-    static double f(double x, void *params);
-    //! Root finding solver function
-    static double df(double x, void *params);
-    //! Root finding solver function
-    static void fdf (double x, void *params, double *y, double *dy);
-
     //! Set spline
     void setSpline() const;
     //! Remove spline (free memory)
     void freeSpline();
-    //! Inverse by root finding (bisection method)
-    double inverseLinear(double) const;
-    //! Inverse by root finding (Newton method)
-    double inverseCubic(double) const;
 
   public:
 
@@ -106,8 +85,6 @@ class CDF
     void add(double x, double prob);
     //! Cdf value at time t (in days from starting date)
     double evalue(double x) const;
-    //! Cdf inverse value at probability prob (in [0,1])
-    double inverse(double prob) const;
     //! Returns interpolation type (l=linear, c=cubic, n=none)
     std::string getInterpolationType() const;
     //TODO: add method setAbsErr

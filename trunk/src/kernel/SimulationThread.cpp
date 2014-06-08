@@ -138,7 +138,7 @@ void ccruncher::SimulationThread::run()
 
         assert(!std::isnan(val));
         int r = obligors[iobligor].irating;
-        double days = inverses.evalue(r, val);
+        double days = inverses[r].evalue(val);
         Date ddate = time0 + (long)ceil(days);
 
         if (ddate <= timeT)

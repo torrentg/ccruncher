@@ -81,7 +81,7 @@ void ccruncher::DefaultProbabilities::epend(ExpatUserData &eu, const char *tag)
 
     for(size_t i=0; i<size(); i++)
     {
-      const vector<pair<double,double>> &points = (*this)[i].getPoints();
+      const auto &points = (*this)[i].getPoints();
 
       if (points.size() == 0) {
         if (idefault < 0) {

@@ -181,7 +181,7 @@ void ccruncher::MonteCarlo::initModel(IData &idata)
   log << "number of factors" << split << idata.getFactors().size() << endl;
   log << "copula type" << split << idata.getParams().getCopula() << endl;
 
-  DefaultProbabilities dprobs;
+  vector<CDF> dprobs;
 
   if (idata.hasDefaultProbabilities())
   {
@@ -199,7 +199,7 @@ void ccruncher::MonteCarlo::initModel(IData &idata)
 
     // computing default probability functions using transition matrix
     int months = (int) ceil(diff(time0, timeT, 'M'));
-    dprobs = tone.getDefaultProbabilities(time0, months+1);
+    dprobs = tone.getCDFs(time0, months+1);
   }
 
   // setting degrees of freedom
@@ -210,13 +210,16 @@ void ccruncher::MonteCarlo::initModel(IData &idata)
 
   // setting default probs info
   string strsplines;
-  for(CDF cdf : dprobs) {
+  for(CDF &cdf : dprobs) {
     strsplines += cdf.getInterpolationType()[0];
   }
   log << "default probability splines (linear, cubic, none)" << split << strsplines << endl;
 
   // model parameters
-  inverses.init(ndf, timeT, dprobs);
+  inverses.resize(dprobs.size());
+  for(size_t i=0; i<dprobs.size(); i++) {
+    inverses[i].init(ndf, timeT-time0, dprobs[i]);
+  }
   chol = idata.getCorrelations().getCholesky();
   floadings1 = idata.getFactors().getLoadings();
 

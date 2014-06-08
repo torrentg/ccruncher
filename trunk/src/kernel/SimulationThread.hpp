@@ -26,7 +26,7 @@
 #include <vector>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_rng.h>
-#include "kernel/Inverses.hpp"
+#include "kernel/Inverse.hpp"
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/SimulatedData.hpp"
 #include "utils/Date.hpp"
@@ -110,7 +110,7 @@ class SimulationThread : public Thread
     //! Factor loadings [sqrt(1-w_i^2)]
     const std::vector<double> &floadings2;
     //! Inverse functions
-    const Inverses &inverses;
+    const std::vector<Inverse> &inverses;
     //! Number of factors
     const size_t &numfactors;
     //! Degrees of freedom
