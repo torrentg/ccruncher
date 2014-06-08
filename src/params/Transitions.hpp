@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 #include "params/Ratings.hpp"
-#include "params/DefaultProbabilities.hpp"
+#include "params/CDF.hpp"
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
@@ -99,7 +99,7 @@ class Transitions : public ExpatHandlers
     //! Returns equivalent transition matrix that covers t months
     Transitions scale(int t) const;
     //! Computes default probabilities functions related to this transition matrix
-    DefaultProbabilities getDefaultProbabilities(const Date &date, int numrows) const;
+    std::vector<CDF> getCDFs(const Date &date, int numrows) const;
     //! Regularization error (|non_regularized| - |regularized|)
     double getRegularizationError() const;
     //! Matrix element access

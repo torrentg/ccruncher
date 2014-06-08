@@ -28,7 +28,7 @@
 #include <fstream>
 #include <streambuf>
 #include "kernel/IData.hpp"
-#include "kernel/Inverses.hpp"
+#include "kernel/Inverse.hpp"
 #include "kernel/Aggregator.hpp"
 #include "kernel/SimulatedData.hpp"
 #include "kernel/SimulationThread.hpp"
@@ -86,7 +86,7 @@ class MonteCarlo
     //! Degrees of freedom
     double ndf;
     //! Inverse functions
-    Inverses inverses;
+    std::vector<Inverse> inverses;
     //! Cholesky matrix (factor correlations)
     gsl_matrix *chol;
     //! Factor loadings (w_i)

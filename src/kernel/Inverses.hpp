@@ -104,7 +104,7 @@ class Inverses
  */
 inline double ccruncher::Inverses::evalue(size_t irating, double val) const
 {
-  assert(irating < (int)mSplines.size());
+  assert(irating < mSplines.size());
 
   gsl_spline *spline = mSplines[irating];
 

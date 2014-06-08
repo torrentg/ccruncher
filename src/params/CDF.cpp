@@ -22,8 +22,6 @@
 
 #include <cassert>
 #include <algorithm>
-#include <gsl/gsl_roots.h>
-#include <gsl/gsl_errno.h>
 #include "params/CDF.hpp"
 #include "utils/Exception.hpp"
 
@@ -31,10 +29,6 @@ using namespace std;
 using namespace ccruncher;
 
 #define EPSILON 1e-12
-#define MAX_ITER_BISECTION 100
-#define MAX_ITER_NEWTON 40
-// absolute error less than 1 sec (1/(24*60*60)=1.16e-5)
-#define ABS_ERR_ROOT 1e-7
 
 /**************************************************************************//**
  * @param[in] xmin Minimum x value.
@@ -188,151 +182,6 @@ void ccruncher::CDF::add(double x, double prob)
 }
 
 /**************************************************************************//**
- * @details Evaluate cdf taking care in the extremes.
- * @see http://www.gnu.org/software/gsl/manual/html_node/One-dimensional-Root_002dFinding.html
- * @param[in] x Value in range (-inf,+inf).
- * @param[in] params Root-finding function parameters (includes splines to use).
- * @return Probability, value in [0,1].
- */
-double ccruncher::CDF::f(double x, void *params)
-{
-  fparams *p = static_cast<fparams *>(params);
-  if (x <= p->spline->x[0]) {
-    double x0 = p->spline->x[0];
-    double y0 = p->spline->y[0];
-    double deriv = gsl_spline_eval_deriv(p->spline, x0, p->accel);
-    return y0 + deriv*(x-x0) - p->y;
-  }
-  else if (p->spline->x[p->spline->size-1] <= x) {
-    double x1 = p->spline->x[p->spline->size-1];
-    double y1 = p->spline->y[p->spline->size-1];
-    double deriv = gsl_spline_eval_deriv(p->spline, x1, p->accel);
-    return y1 + deriv*(x-x1) - p->y;
-  }
-  else {
-    return gsl_spline_eval(p->spline, x, p->accel) - p->y;
-  }
-}
-
-/**************************************************************************//**
- * @details Evaluate cdf'(x) -derivative- taking care in the extremes.
- * @see http://www.gnu.org/software/gsl/manual/html_node/One-dimensional-Root_002dFinding.html
- * @param[in] x Value in range (-inf,+inf).
- * @param[in] params Root-finding function parameters (includes splines to use).
- * @return Probability, value in [0,1].
- */
-double ccruncher::CDF::df(double x, void *params)
-{
-  fparams *p = static_cast<fparams *>(params);
-  if (x <= p->spline->x[0]) {
-    x = p->spline->x[0];
-  }
-  else if (p->spline->x[p->spline->size-1] <= x) {
-    x = p->spline->x[p->spline->size-1];
-  }
-  return gsl_spline_eval_deriv(p->spline, x, p->accel);
-}
-
-/**************************************************************************//**
- * @details Evaluate cdf(x) and cdf'(x) simultaneously.
- * @see http://www.gnu.org/software/gsl/manual/html_node/One-dimensional-Root_002dFinding.html
- * @param[in] x Value in range (-inf,+inf).
- * @param[in] params Root-finding function parameters (includes splines to use).
- * @param[out] y Probability, value in [0,1].
- * @param[out] dy Derivative of cdf at x (>= 0)
- */
-void ccruncher::CDF::fdf (double x, void *params, double *y, double *dy)
-{
-  *y = f(x, params);
-  *dy = df(x, params);
-}
-
-/**************************************************************************//**
- * @see http://www.gnu.org/software/gsl/manual/html_node/One-dimensional-Root_002dFinding.html
- * @param[in] y Probability in [0,1].
- * @return Value x satisfying cdf(x)=y.
- */
-double ccruncher::CDF::inverseLinear(double y) const
-{
-  assert(mSpline != nullptr);
-  assert(mAccel != nullptr);
-
-  int status;
-  int iter = 0;
-  double root = 0;
-  double x_lo = mSpline->x[0];
-  double x_hi = mSpline->x[mSpline->size-1];
-  gsl_function F;
-  fparams params = {mSpline, mAccel, y};
-
-  F.function = &ccruncher::CDF::f;
-  F.params = &params;
-
-  gsl_root_fsolver *solver = gsl_root_fsolver_alloc(gsl_root_fsolver_bisection);
-  gsl_root_fsolver_set(solver, &F, x_lo, x_hi);
-
-  do
-  {
-    iter++;
-    gsl_root_fsolver_iterate(solver);
-    root = gsl_root_fsolver_root(solver);
-    x_lo = gsl_root_fsolver_x_lower(solver);
-    x_hi = gsl_root_fsolver_x_upper(solver);
-    status = gsl_root_test_interval(x_lo, x_hi, ABS_ERR_ROOT, 0.0);
-  }
-  while (status == GSL_CONTINUE && iter < MAX_ITER_BISECTION);
-
-  gsl_root_fsolver_free(solver);
-
-  return root;
-}
-
-/**************************************************************************//**
- * @see http://www.gnu.org/software/gsl/manual/html_node/One-dimensional-Root_002dFinding.html
- * @param[in] y Probability in [0,1].
- * @return Value x satisfying cdf(x)=y.
- */
-double ccruncher::CDF::inverseCubic(double y) const
-{
-  assert(mSpline != nullptr);
-  assert(mAccel != nullptr);
-
-  int status;
-  int iter = 0;
-  double root = (mSpline->x[mSpline->size-1]+mSpline->x[0])/2.0;
-  double x0 = 0.0;
-  gsl_function_fdf FDF;
-  fparams params = {mSpline, mAccel, y};
-
-  FDF.f = &ccruncher::CDF::f;
-  FDF.df = &ccruncher::CDF::df;
-  FDF.fdf = &ccruncher::CDF::fdf;
-  FDF.params = &params;
-
-  gsl_root_fdfsolver *solver = gsl_root_fdfsolver_alloc(gsl_root_fdfsolver_newton);
-  gsl_root_fdfsolver_set(solver, &FDF, root);
-
-  do
-  {
-    iter++;
-    gsl_root_fdfsolver_iterate(solver);
-    x0 = root;
-    root = gsl_root_fdfsolver_root(solver);
-    status = gsl_root_test_delta(root, x0, ABS_ERR_ROOT, 0.0);
-  }
-  while (status == GSL_CONTINUE && iter < MAX_ITER_NEWTON);
-
-  gsl_root_fdfsolver_free(solver);
-
-  if (iter < MAX_ITER_NEWTON) {
-    return root;
-  }
-  else {
-    return inverseLinear(y);
-  }
-}
-
-/**************************************************************************//**
  * @details Internal method that creates the spline function.
  *          Create linear/cubic spline according to these rules:
  *          - less than 3 values -> linear
@@ -458,44 +307,6 @@ double ccruncher::CDF::evalue(double x) const
     double prob = gsl_spline_eval(mSpline, x, mAccel);
     assert(0.0 <= prob && prob <= 1.0);
     return prob;
-  }
-}
-
-/**************************************************************************//**
- * @details Evalue inv_cdf(prob), where prob is a probability. Cdf is
- *          invertible because it is an strictly increasing function.
- *          Inverse value is obtained by root-finding methods.
- * @note    Inverse of a spline isn't a spline.
- * @note    inv(spline(x,y)) != spline(y,x)
- * @note    This is not a high-performance method
- * @param[in] prob Probability, value in range [0,1].
- * @return Value x fulfiling cdf(x)=prob.
- * @exception Given prob out of range [0,1]
- */
-double ccruncher::CDF::inverse(double prob) const
-{
-  if (mSpline == nullptr) {
-    setSpline();
-  }
-
-  if (prob < 0.0 || prob > 1.0) {
-    throw Exception("prob out-of-range");
-  }
-
-  if (mData.back().second < prob) {
-    return mData.back().first + 1.0;
-  }
-  else {
-    if (mSpline->interp->type == gsl_interp_cspline) {
-      return inverseCubic(prob);
-    }
-    else if (mSpline->interp->type == gsl_interp_linear) {
-      return inverseLinear(prob);
-    }
-    else {
-      assert(false);
-      return NAN;
-    }
   }
 }
 

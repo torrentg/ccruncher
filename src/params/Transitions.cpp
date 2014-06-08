@@ -408,19 +408,18 @@ void ccruncher::Transitions::cdfr(size_t numrows, std::vector<std::vector<double
  * @return DefaultProbabilities related to this transition matrix.
  * @throw Exception Error creating DefaultProbabilities object.
  */
-DefaultProbabilities ccruncher::Transitions::getDefaultProbabilities(const Date &date,
-       int numrows) const
+vector<CDF> ccruncher::Transitions::getCDFs(const Date &date, int numrows) const
 {
   // computing CDFR
   vector<vector<double>> values(size(), vector<double>(numrows,NAN));
   cdfr(numrows, values);
 
   // creating dprobs function object
-  DefaultProbabilities dprobs(numrows);
+  vector<CDF> dprobs(size());
   for(int i=0; i<numrows; i++)
   {
     double t = add(date, i*period, 'M') - date;
-    for(size_t irating=0; irating < ratings.size(); i++) {
+    for(size_t irating=0; irating < ratings.size(); irating++) {
       dprobs[irating].add(t, values[irating][i]);
     }
   }
