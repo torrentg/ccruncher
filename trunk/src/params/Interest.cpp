@@ -225,7 +225,7 @@ void ccruncher::Interest::insertRate(const Rate &val)
   {
     if (abs(rate.d-val.d) == 0)
     {
-      throw Exception("rate time '" + val.t_str + "' repeated");
+      throw Exception("rate time repeated");
     }
   }
 
@@ -345,7 +345,7 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *tag, const char *
 
     double r = getDoubleAttribute(attributes, "r");
 
-    insertRate(Rate(d, diff(date, t, 'Y'), r, str));
+    insertRate(Rate(d, diff(date, t, 'Y'), r));
   }
   else
   {

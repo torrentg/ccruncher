@@ -64,30 +64,6 @@ class Factor
 
 };
 
-/**************************************************************************//**
- * @return Factor name.
- */
-inline const std::string& ccruncher::Factor::getName() const
-{
-  return mName;
-}
-
-/**************************************************************************//**
- * @return Factor description.
- */
-inline const std::string& ccruncher::Factor::getDescription() const
-{
-  return mDesc;
-}
-
-/**************************************************************************//**
- * @return Factor loading.
- */
-inline double ccruncher::Factor::getLoading() const
-{
-  return mLoading;
-}
-
 } // namespace
 
 #endif

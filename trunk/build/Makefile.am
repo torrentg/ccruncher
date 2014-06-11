@@ -152,7 +152,7 @@ ccruncher_tests_SOURCES = \
     ../src/params/DefaultProbabilitiesTest.cpp\
     ../src/kernel/IDataTest.cpp\
     ../src/kernel/SimulatedDataTest.cpp\
-    ../src/kernel/InversesTest.cpp\
+    ../src/kernel/InverseTest.cpp\
     \
     ../src/utils/Timer.cpp\
     ../src/utils/Parser.cpp\
@@ -220,7 +220,7 @@ ccruncher_tests_SOURCES = \
     ../src/params/DefaultProbabilitiesTest.hpp\
     ../src/kernel/IDataTest.hpp\
     ../src/kernel/SimulatedDataTest.hpp\
-    ../src/kernel/InversesTest.hpp\
+    ../src/kernel/InverseTest.hpp\
     \
     ../src/utils/Timer.hpp\
     ../src/utils/Parser.hpp\

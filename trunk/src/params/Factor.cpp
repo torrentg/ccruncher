@@ -59,3 +59,28 @@ void ccruncher::Factor::setLoading(double loading)
 {
   mLoading = loading;
 }
+
+/**************************************************************************//**
+ * @return Factor name.
+ */
+const std::string& ccruncher::Factor::getName() const
+{
+  return mName;
+}
+
+/**************************************************************************//**
+ * @return Factor description.
+ */
+const std::string& ccruncher::Factor::getDescription() const
+{
+  return mDesc;
+}
+
+/**************************************************************************//**
+ * @return Factor loading.
+ */
+double ccruncher::Factor::getLoading() const
+{
+  return mLoading;
+}
+

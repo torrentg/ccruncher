@@ -23,15 +23,9 @@
 #ifndef _DefaultProbabilities_
 #define _DefaultProbabilities_
 
-#include <string>
 #include <vector>
-#include <gsl/gsl_spline.h>
 #include "params/CDF.hpp"
-#include "params/PD.hpp"
-#include "params/Ratings.hpp"
 #include "utils/ExpatHandlers.hpp"
-#include "utils/Exception.hpp"
-#include "utils/Date.hpp"
 
 namespace ccruncher {
 
