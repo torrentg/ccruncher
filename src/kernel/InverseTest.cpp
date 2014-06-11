@@ -21,84 +21,35 @@
 //===========================================================================
 
 #include <gsl/gsl_cdf.h>
-#include "kernel/InversesTest.hpp"
-#include "kernel/Inverses.hpp"
-#include "utils/ExpatParser.hpp"
+#include "kernel/InverseTest.hpp"
+#include "kernel/Inverse.hpp"
+
+#define EPSILON 5e-2
 
 using namespace std;
 using namespace ccruncher;
 
 //===========================================================================
-// getRatings
-//===========================================================================
-Ratings ccruncher_test::InversesTest::getRatings()
-{
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <ratings>\n\
-      <rating name='A' description='alive'/>\n\
-      <rating name='E' description='default'/>\n\
-    </ratings>";
-
-  // creating xml
-  ExpatParser xmlparser;
-  Ratings ret;
-  xmlparser.parse(xmlcontent, &ret);
-
-  return ret;
-}
-
-//===========================================================================
-// getRatings
-//===========================================================================
-DefaultProbabilities ccruncher_test::InversesTest::getDefaultProbabilities(const Date &date)
-{
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <dprobs>\n\
-      <dprob rating='A' t='0D' value='0.00'/>\n\
-      <dprob rating='A' t='1Y' value='0.10'/>\n\
-    </dprobs>";
-
-  // creating xml
-  ExpatParser xmlparser;
-  Ratings ratings = getRatings();
-  DefaultProbabilities ret(ratings, date);
-  xmlparser.parse(xmlcontent, &ret);
-
-  return ret;
-}
-
-//===========================================================================
 // test1
 // gaussian case
 //===========================================================================
-void ccruncher_test::InversesTest::test1()
+void ccruncher_test::InverseTest::test1()
 {
-  Date date0("1/1/2012");
-  Date date1("1/1/2013");
-  DefaultProbabilities dprobs = getDefaultProbabilities(date0);
-  Inverses inverses(0.0, date1, dprobs);
+  CDF cdf(0.0, +INFINITY);
+  cdf.add(365.0, 0.1);
+  Inverse inverse(0.0, 365.0, cdf);
 
-  double minday = inverses.evalue(0, -1e100);
-  double maxday = inverses.evalue(0, +1e100);
-  double minval = gsl_cdf_ugaussian_Pinv(dprobs.evalue(0, minday));
-  double maxval = gsl_cdf_ugaussian_Pinv(dprobs.evalue(0, maxday));
+  double minval = gsl_cdf_ugaussian_Pinv(cdf.evalue(1.0));
+  double maxval = gsl_cdf_ugaussian_Pinv(cdf.evalue(365.0));
 
-  for(int i=1; i<10000; i++)
+  for(int i=0; i<10000; i++)
   {
     double x = minval + i*(maxval-minval)/10000.0;
-    double u = gsl_cdf_ugaussian_P(x);
-    double days1 = dprobs.inverse(0, u);
-    double days2 = inverses.evalue(0, x);
-    ASSERT_EQUALS_EPSILON(days1, days2, 1.0/24.0);
-  }
-
-  for(int i=1; i<=(date1-date0); i++)
-  {
-    Date date = date0 + i;
-    double u = dprobs.evalue(0, date);
-    double x = gsl_cdf_ugaussian_Pinv(u);
-    double d = inverses.evalue(0, x);
-    ASSERT_EQUALS((date-date0), (long)(d+0.5));
+    double t = inverse.evalue(x);
+    ASSERT(0.0 <= t && t <= 365.0);
+    double y = gsl_cdf_ugaussian_Pinv(cdf.evalue(t));
+cout << t << "\t" << x << std::endl;
+    ASSERT_EQUALS_EPSILON(x, y, EPSILON);
   }
 }
 
@@ -106,53 +57,39 @@ void ccruncher_test::InversesTest::test1()
 // test2
 // t-Student case
 //===========================================================================
-void ccruncher_test::InversesTest::test2()
+void ccruncher_test::InverseTest::test2()
 {
   double ndf = 3.0;
-  Date date0("1/1/2012");
-  Date date1("1/1/2013");
-  DefaultProbabilities dprobs = getDefaultProbabilities(date0);
-  Inverses inverses(ndf, date1, dprobs);
+  CDF cdf(0.0, +INFINITY);
+  cdf.add(365.0, 0.1);
+  Inverse inverse(ndf, 365.0, cdf);
 
-  double minday = inverses.evalue(0, -1e100);
-  double maxday = inverses.evalue(0, +1e100);
-  double minval = gsl_cdf_tdist_Pinv(dprobs.evalue(0, minday), ndf);
-  double maxval = gsl_cdf_tdist_Pinv(dprobs.evalue(0, maxday), ndf);
+  double minval = gsl_cdf_tdist_Pinv(cdf.evalue(1.0), ndf);
+  double maxval = gsl_cdf_tdist_Pinv(cdf.evalue(365.0), ndf);
 
-  for(int i=1; i<10000; i++)
+  for(int i=0; i<10000; i++)
   {
     double x = minval + i*(maxval-minval)/10000.0;
-    double u = gsl_cdf_tdist_P(x, ndf);
-    double days1 = dprobs.inverse(0, u);
-    double days2 = inverses.evalue(0, x);
-    ASSERT_EQUALS_EPSILON(days1, days2, 1.0/24.0);
-  }
-
-  for(int i=1; i<=(date1-date0); i++)
-  {
-    Date date = date0 + i;
-    double u = dprobs.evalue(0, date);
-    double x = gsl_cdf_tdist_Pinv(u, ndf);
-    double d = inverses.evalue(0, x);
-    ASSERT_EQUALS((date-date0), (long)(d+0.5));
+    double t = inverse.evalue(x);
+    ASSERT(0.0 <= t && t <= 365.0);
+    double y = gsl_cdf_tdist_Pinv(cdf.evalue(t), ndf);
+    ASSERT_EQUALS_EPSILON(x, y, EPSILON);
   }
 }
 
 //===========================================================================
 // test3
-// fails because maxdate bigger than dprob::maxDate
+// negative time range
 //===========================================================================
-void ccruncher_test::InversesTest::test3()
+void ccruncher_test::InverseTest::test3()
 {
   double ndf = 3.0;
-  Date date0("1/1/2012");
-  Date date1("1/1/2014");
-  DefaultProbabilities dprobs = getDefaultProbabilities(date0);
-  Inverses inverses;
-  ASSERT_THROW(inverses.init(ndf, date1, dprobs));
+  CDF cdf(0.0, +INFINITY);
+  cdf.add(365.0, 0.1);
+  Inverse inverse;
+  ASSERT_THROW(inverse.init(ndf, -365.0, cdf));
 }
-
-
+/*
 //===========================================================================
 // test6
 // check precision when pd are near 0%
@@ -237,4 +174,4 @@ void ccruncher_test::DefaultProbabilitiesTest::test7()
 
   ASSERT_EQUALS(pd[0].inverse(0.0), add(date,2,'M')-date);
 }
-
+*/

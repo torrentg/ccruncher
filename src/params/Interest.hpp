@@ -59,8 +59,6 @@ class Interest : public ExpatHandlers
     {
       public:
 
-        //! Time (as string)
-        std::string t_str;
         //! Time (in days from interest curve date)
         int d;
         //! Time (in years from interest curve date)
@@ -71,8 +69,7 @@ class Interest : public ExpatHandlers
       public:
 
         //! Constructor
-        Rate(int d_, double y_=0.0, double r_=0.0, const std::string &str="") :
-             t_str(str), d(d_), y(y_), r(r_) {}
+        Rate(int d_, double y_=0.0, double r_=0.0) : d(d_), y(y_), r(r_) {}
         //! Less-than operator
         bool operator<(const Rate &right ) const { return (d < right.d); }
     };

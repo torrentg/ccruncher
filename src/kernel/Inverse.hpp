@@ -28,22 +28,21 @@
 #include <cassert>
 #include <gsl/gsl_spline.h>
 #include "params/CDF.hpp"
-#include "utils/Date.hpp"
 
 namespace ccruncher {
 
 /**************************************************************************//**
- * @brief Functions used to simulate the default dates.
+ * @brief Function used to simulate the default times.
  *
- * @details Functions (one per rating) PDinv(t(x)) where:
+ * @details Function PDinv(t(x)) where:
  *          - t(x) is the cdf of the univariate t-student with ndf degrees
  *            of freedom.
  *          - PD_inv is the inverse of the default probability function of
  *            rating r.
  *          - x is the i-th component of a simulated multivariate t-student
  *            variable.
- *          the evaluation of theses functions is expensive. For this
- *          reason we compose it, and create a spline functions in order to
+ *          the evaluation of this function is expensive. For this
+ *          reason we compose it, and create a spline function in order to
  *          speed-up the evaluation.
  *
  * @see CCruncher's Technical Document. (section Simulation internals).

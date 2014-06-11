@@ -34,6 +34,7 @@ HEADERS += \
     src/kernel/SimulatedDataTest.hpp \
     src/kernel/IDataTest.hpp \
     src/kernel/Inverse.hpp \
+    src/kernel/InverseTest.hpp \
     src/portfolio/LGD.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
@@ -104,6 +105,7 @@ SOURCES += \
     src/kernel/SimulatedDataTest.cpp \
     src/kernel/IDataTest.cpp \
     src/kernel/Inverse.cpp \
+    src/kernel/InverseTest.cpp \
     src/portfolio/LGD.cpp \
     src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \

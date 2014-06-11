@@ -20,22 +20,17 @@
 //
 //===========================================================================
 
-#ifndef _InversesTest_
-#define _InversesTest_
+#ifndef _InverseTest_
+#define _InverseTest_
 
-#include "params/Ratings.hpp"
-#include "params/DefaultProbabilities.hpp"
 #include "utils/MiniCppUnit.hxx"
 
 namespace ccruncher_test {
 
-class InversesTest : public TestFixture<InversesTest>
+class InverseTest : public TestFixture<InverseTest>
 {
 
   private:
-
-    ccruncher::Ratings getRatings();
-    ccruncher::DefaultProbabilities getDefaultProbabilities(const ccruncher::Date &date);
 
     void test1();
     void test2();
@@ -43,7 +38,7 @@ class InversesTest : public TestFixture<InversesTest>
 
   public:
 
-    TEST_FIXTURE(InversesTest)
+    TEST_FIXTURE(InverseTest)
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
@@ -52,7 +47,7 @@ class InversesTest : public TestFixture<InversesTest>
 
 };
 
-REGISTER_FIXTURE(InversesTest)
+REGISTER_FIXTURE(InverseTest)
 
 } // namespace
 

@@ -22,7 +22,9 @@
 
 #include <cassert>
 #include "params/DefaultProbabilities.hpp"
+#include "params/Ratings.hpp"
 #include "utils/Format.hpp"
+#include "utils/Date.hpp"
 
 #define EPSILON 1e-12
 
