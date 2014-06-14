@@ -48,7 +48,6 @@ void ccruncher_test::InverseTest::test1()
     double t = inverse.evalue(x);
     ASSERT(0.0 <= t && t <= 365.0);
     double y = gsl_cdf_ugaussian_Pinv(cdf.evalue(t));
-cout << t << "\t" << x << std::endl;
     ASSERT_EQUALS_EPSILON(x, y, EPSILON);
   }
 }
@@ -89,89 +88,32 @@ void ccruncher_test::InverseTest::test3()
   Inverse inverse;
   ASSERT_THROW(inverse.init(ndf, -365.0, cdf));
 }
-/*
+
 //===========================================================================
-// test6
-// check precision when pd are near 0%
+// test4
+// invariant to catch changes
 //===========================================================================
-void ccruncher_test::DefaultProbabilitiesTest::test6()
+void ccruncher_test::InverseTest::test4()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <dprobs>\n\
-      <dprob rating='A' t='0D'  value='0.000'/>\n\
-      <dprob rating='A' t='12M' value='0.001'/>\n\
-      <dprob rating='A' t='24M' value='0.005'/>\n\
-      <dprob rating='A' t='48M' value='0.03'/>\n\
-      <!-- optionally you can add default rating info (value=0 always) -->\n\
-    </dprobs>";
+  CDF cdf(0.0, +INFINITY);
+  cdf.add(1*365.0, 0.01);
+  cdf.add(2*365.0, 0.02);
+  cdf.add(3*365.0, 0.05);
+  cdf.add(4*365.0, 0.10);
+  cdf.add(5*365.0, 0.17);
+  ASSERT_EQUALS(cdf.getInterpolationType(), "cspline");
 
-  // creating xml
-  ExpatParser xmlparser;
+  Inverse inverse(5.0, 5*365.0, cdf);
 
-  // ratings list creation
-  Ratings ratings = getRatings();
+  double xvalues[] = { -10.0, -9.0, -8.0, -7.0, -6.0, -5.0, -4.0, -3.0,
+                       -2.0, -1.0, 0.0 };
 
-  // dprob function creation
-  DefaultProbabilities pd;
+  double tvalues[] = { 2.79995, 4.61895, 8.0686, 14.9838, 30.2429, 67.4158,
+                       172.994, 599.476, 1103.77, 1925.0, 1925.0 };
 
-  xmlparser.getUserData().ratings = &ratings;
-  xmlparser.getUserData().date1 = Date("1/1/2012");
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &pd));
-
-  double pvalues[] = { 0.00005, 0.00010, 0.00100, 0.00200, 0.00300, 0.00400,
-                       0.00500, 0.00600, 0.00700, 0.00800, 0.00900, 0.01000,
-                       0.02000 };
-
-  double tvalues[] = { 31.1449, 61.3834, 366, 513.284, 605.83, 674.93,
-                       731, 778.854, 821.464, 860.461, 896.79, 931.055,
-                       1215.9 };
-
-  // checking values
-  for(int i=0; i<13; i++)
+  for(int i=0; i<11; i++)
   {
-    ASSERT_EQUALS_EPSILON(pd[0].inverse(pvalues[i]), tvalues[i], 1e-5);
+    ASSERT_EQUALS_EPSILON(inverse.evalue(xvalues[i]), tvalues[i], EPSILON);
   }
 }
 
-//===========================================================================
-// test7
-// case with dprob[t=0]=dprob[t=1]=dprob[t=2]=0
-//===========================================================================
-void ccruncher_test::DefaultProbabilitiesTest::test7()
-{
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <dprobs>\n\
-      <dprob rating='A' t='0M'  value='0.000'/>\n\
-      <dprob rating='A' t='1M'  value='0.000'/>\n\
-      <dprob rating='A' t='2M'  value='0.000'/>\n\
-      <dprob rating='A' t='3M'  value='0.0002'/>\n\
-      <dprob rating='A' t='12M' value='0.001'/>\n\
-      <dprob rating='A' t='24M' value='0.005'/>\n\
-      <dprob rating='A' t='48M' value='0.03'/>\n\
-      <!-- optionally you can add default rating info (value=0 always) -->\n\
-    </dprobs>";
-
-  // creating xml
-  ExpatParser xmlparser;
-
-  // ratings list creation
-  Ratings ratings = getRatings();
-
-  // dprob function creation
-  Date date("1/1/2012");
-  DefaultProbabilities pd;
-
-  xmlparser.getUserData().ratings = &ratings;
-  xmlparser.getUserData().date1 = Date("1/1/2012");
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &pd));
-
-  for(int i=0; i<=add(date,2,'M')-date; i++)
-  {
-    ASSERT_EQUALS(pd[0].evalue(i), 0.0);
-  }
-  ASSERT(pd[0].evalue((add(date,2,'M')-date)+1) > 0.0);
-
-
-  ASSERT_EQUALS(pd[0].inverse(0.0), add(date,2,'M')-date);
-}
-*/
