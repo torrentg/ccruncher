@@ -35,14 +35,14 @@ using namespace ccruncher;
  *            retrieved from the ExpatUserData object. Otherwise you need
  *            to specify the number of segmentations.
  */
-ccruncher::Asset::Asset(size_t nsegmentations) : vsegments(nsegmentations, 0), data()
+ccruncher::Asset::Asset(size_t nsegmentations) : mSegments(nsegmentations, 0), mValues()
 {
-  id = "NON_ASSIGNED";
+  mId = "NON_ASSIGNED";
   have_data = false;
-  date = NAD;
-  dlgd = LGD(LGD::Fixed,NAN);
+  mDate = NAD;
+  mDefaultLgd = LGD(LGD::Fixed,NAN);
   // initial reserve to avoid continuous reallocation
-  data.reserve(256);
+  mValues.reserve(256);
 }
 
 /**************************************************************************//**
@@ -62,15 +62,15 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
   assert(d1 <= d2);
 
   // assumes that data is sorted.
-  for(int i=0; i<(int)data.size(); i++) 
+  for(int i=0; i<(int)mValues.size(); i++) 
   {
-    if (d1 < data[i].date)
+    if (d1 < mValues[i].date)
     {
       if (pos1 < 0) {
         pos1 = i;
       }
       pos2 = i;
-      if (d2 <= data[i].date) {
+      if (d2 <= mValues[i].date) {
         break;
       }
     }
@@ -80,14 +80,14 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
 
   // memory shrink
   if (pos1 < 0) {
-    vector<DateValues>(0).swap(data);
+    vector<DateValues>(0).swap(mValues);
   }
   else {
-    vector<DateValues>(data.begin()+pos1, data.begin()+pos2+1).swap(data);
+    vector<DateValues>(mValues.begin()+pos1, mValues.begin()+pos2+1).swap(mValues);
   }
   
   // computing Current Net Value
-  for(DateValues &dv : data)
+  for(DateValues &dv : mValues)
   {
     dv.ead.mult(interest.getFactor(dv.date));
   }
@@ -109,7 +109,7 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *tag, const char **
 
     str = getAttributeValue(attributes, "t");
     if (isInterval(str)) {
-      values.date = date;
+      values.date = mDate;
       values.date.add(str);
     }
     else {
@@ -121,9 +121,9 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *tag, const char **
 
     str = getAttributeValue(attributes, "lgd", nullptr);
     if (str != nullptr) values.lgd = LGD(str);
-    else values.lgd = dlgd;
+    else values.lgd = mDefaultLgd;
     
-    data.push_back(values);
+    mValues.push_back(values);
   }
   else if (isEqual(tag,"belongs-to"))
   {
@@ -143,15 +143,15 @@ void ccruncher::Asset::epstart(ExpatUserData &eu, const char *tag, const char **
   }
   else if (isEqual(tag,"asset"))
   {
-    id = getStringAttribute(attributes, "id");
-    date = getDateAttribute(attributes, "date");
-    data.push_back(DateValues(date, EAD(EAD::Fixed,0.0), LGD(LGD::Fixed,0.0)));
+    mId = getStringAttribute(attributes, "id");
+    mDate = getDateAttribute(attributes, "date");
+    mValues.push_back(DateValues(mDate, EAD(EAD::Fixed,0.0), LGD(LGD::Fixed,0.0)));
     const char *str = getAttributeValue(attributes, "lgd", nullptr);
     if (str != nullptr) {
-      dlgd = LGD(str);
+      mDefaultLgd = LGD(str);
     }
     assert(eu.segmentations != nullptr);
-    vsegments.resize(eu.segmentations->size(), 0);
+    mSegments.resize(eu.segmentations->size(), 0);
   }
   else if (isEqual(tag,"data"))
   {
@@ -173,23 +173,23 @@ void ccruncher::Asset::epend(ExpatUserData &, const char *tag)
   if (isEqual(tag,"asset"))
   {
     // checking data size
-    if (data.empty() || (data.size()==1 && data[0].date==date)) {
+    if (mValues.empty() || (mValues.size()==1 && mValues[0].date==mDate)) {
       throw Exception("asset without data");
     }
 
     // sorting events by date
-    sort(data.begin(), data.end());
+    sort(mValues.begin(), mValues.end());
 
     // checking for dates previous to asset date
-    if (data[0].date < date)
+    if (mValues[0].date < mDate)
     {
       throw Exception("exist a date values previous to asset creation date");
     }
 
     // checking for repeated dates
-    for(unsigned int i=1; i<data.size(); i++)
+    for(unsigned int i=1; i<mValues.size(); i++)
     {
-      if (data[i-1].date == data[i].date)
+      if (mValues[i-1].date == mValues[i].date)
       {
         throw Exception("repeated date values");
       }
@@ -204,17 +204,17 @@ void ccruncher::Asset::epend(ExpatUserData &, const char *tag)
  */
 void ccruncher::Asset::addBelongsTo(int isegmentation, int isegment)
 {
-  assert(isegmentation < (int) vsegments.size());
+  assert(isegmentation < (int) mSegments.size());
   assert(isegment >= 0);
 
   if (isegmentation < 0) return;
 
-  if (vsegments[isegmentation] > 0)
+  if (mSegments[isegmentation] > 0)
   {
     throw Exception("belongs-to defined twice");
   }
 
-  vsegments[isegmentation] = isegment;
+  mSegments[isegmentation] = isegment;
 }
 
 /**************************************************************************//**
@@ -224,8 +224,8 @@ void ccruncher::Asset::addBelongsTo(int isegmentation, int isegment)
  */
 bool ccruncher::Asset::belongsTo(int isegmentation, int isegment) const
 {
-  assert(0 <= isegmentation && isegmentation < (int)vsegments.size());
-  return (vsegments[isegmentation]==isegment);
+  assert(0 <= isegmentation && isegmentation < (int)mSegments.size());
+  return (mSegments[isegmentation]==isegment);
 }
 
 /**************************************************************************//**
@@ -235,8 +235,8 @@ bool ccruncher::Asset::belongsTo(int isegmentation, int isegment) const
 int ccruncher::Asset::getSegment(int isegmentation) const
 {
   assert(isegmentation >= 0);
-  assert(isegmentation < (int) vsegments.size());
-  return vsegments[isegmentation];
+  assert(isegmentation < (int) mSegments.size());
+  return mSegments[isegmentation];
 }
 
 /**************************************************************************//**
@@ -244,7 +244,7 @@ int ccruncher::Asset::getSegment(int isegmentation) const
  */
 const std::vector<int>& ccruncher::Asset::getSegments() const
 {
-  return vsegments;
+  return mSegments;
 }
 
 /**************************************************************************//**
@@ -253,8 +253,8 @@ const std::vector<int>& ccruncher::Asset::getSegments() const
  */
 void ccruncher::Asset::setSegment(int isegmentation, int isegment)
 {
-  assert(0 <= isegmentation && isegmentation < (int)vsegments.size());
-  vsegments[isegmentation] = isegment;
+  assert(0 <= isegmentation && isegmentation < (int)mSegments.size());
+  mSegments[isegmentation] = isegment;
 }
 
 /**************************************************************************//**
@@ -263,7 +263,7 @@ void ccruncher::Asset::setSegment(int isegmentation, int isegment)
  */
 Date ccruncher::Asset::getMinDate() const
 {
-  return date;
+  return mDate;
 }
 
 /**************************************************************************//**
@@ -272,7 +272,7 @@ Date ccruncher::Asset::getMinDate() const
  */
 Date ccruncher::Asset::getMaxDate() const
 {
-  return data.back().date;
+  return mValues.back().date;
 }
 
 /**************************************************************************//**
@@ -283,19 +283,19 @@ Date ccruncher::Asset::getMaxDate() const
  */
 bool ccruncher::Asset::isActive(const Date &from, const Date &to)
 {
-  if (data.empty())
+  if (mValues.empty())
   {
     return false;
   }
-  if (from <= date && date <= to)
+  if (from <= mDate && mDate <= to)
   {
     return true;
   }
-  else if (from <= data.back().date && data.back().date <= to)
+  else if (from <= mValues.back().date && mValues.back().date <= to)
   {
     return true;
   }
-  else if (date <= from && to <= data.back().date)
+  else if (mDate <= from && to <= mValues.back().date)
   {
     return true;
   }
@@ -313,7 +313,7 @@ bool ccruncher::Asset::isActive(const Date &from, const Date &to)
  */
 bool ccruncher::Asset::requiresObligorLGD() const
 {
-  for(const DateValues &dv : data)
+  for(const DateValues &dv : mValues)
   {
     if (!LGD::isvalid(dv.lgd))
     {
@@ -326,7 +326,7 @@ bool ccruncher::Asset::requiresObligorLGD() const
 /**************************************************************************/
 const vector<DateValues>& ccruncher::Asset::getData() const
 {
-  return data;
+  return mValues;
 }
 
 /**************************************************************************//**
@@ -335,7 +335,7 @@ const vector<DateValues>& ccruncher::Asset::getData() const
  */
 void ccruncher::Asset::clearData()
 {
-  vector<DateValues>(0).swap(data);
+  vector<DateValues>(0).swap(mValues);
 }
 
 /**************************************************************************//**
@@ -352,13 +352,13 @@ const DateValues& ccruncher::Asset::getValues(const Date t) const
 {
   static const DateValues dvnf(NAD, EAD(EAD::Fixed,0.0), LGD(LGD::Fixed,1.0));
   
-  if (t <= date || data.empty() || data.back().date < t)
+  if (t <= mDate || mValues.empty() || mValues.back().date < t)
   {
     return dvnf;
   }
   else
   {
-    return *(lower_bound(data.begin(), data.end(), DateValues(t)));
+    return *(lower_bound(mValues.begin(), mValues.end(), DateValues(t)));
   }
 }
 

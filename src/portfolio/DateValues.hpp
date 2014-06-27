@@ -23,7 +23,6 @@
 #ifndef _DateValues_
 #define _DateValues_
 
-#include <cmath>
 #include "portfolio/EAD.hpp"
 #include "portfolio/LGD.hpp"
 #include "utils/Date.hpp"
@@ -53,7 +52,7 @@ class DateValues
   public:
 
     //! Constructor
-    explicit DateValues(Date d=Date(), const EAD &e=EAD(), const LGD &r=LGD());
+    explicit DateValues(Date d=Date(), const EAD &e=EAD(), const LGD &l=LGD());
     //! Less-than operator
     bool operator<(const DateValues &) const;
     //! Less-than operator
@@ -65,10 +64,10 @@ class DateValues
  * @details Operator required by sort functions.
  * @param[in] d DateValue date.
  * @param[in] e DateValue exposure.
- * @param[in] r DateValue loss given default.
+ * @param[in] l DateValue loss given default.
  */
-inline ccruncher::DateValues::DateValues(Date d, const EAD &e, const LGD &r) :
-    date(d), ead(e), lgd(r)
+inline ccruncher::DateValues::DateValues(Date d, const EAD &e, const LGD &l) :
+    date(d), ead(e), lgd(l)
 {
   // nothing to do
 }

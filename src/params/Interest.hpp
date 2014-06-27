@@ -77,17 +77,17 @@ class Interest : public ExpatHandlers
   private:
 
     //! Interest type
-    InterestType type;
+    InterestType mType;
     //! Interest curve date
-    Date date;
+    Date mDate;
     //! Rate values
-    std::vector<Rate> rates;
+    std::vector<Rate> mRates;
     //! Spline type
-    bool is_cubic_spline;
+    bool mCubicSpline;
     //! Spline curve
-    gsl_spline *spline;
+    gsl_spline *mSpline;
     //! Spline accelerator
-    gsl_interp_accel *accel;
+    gsl_interp_accel *mAccel;
 
   private:
 
@@ -108,7 +108,7 @@ class Interest : public ExpatHandlers
   public:
 
     //! Constructor
-    Interest(const Date &date_=NAD, InterestType type=Compound);
+    Interest(const Date &date=NAD, InterestType type=Compound);
     //! Copy constructor
     Interest(const Interest &);
     //! Destructor
@@ -120,11 +120,11 @@ class Interest : public ExpatHandlers
     //! Numbers of user-defined rates
     int size() const;
     //! Set initial date
-    void setDate(const Date &d);
+    void setDate(const Date &date);
     //! Returns rate at date
-    double getValue(const Date &date1) const;
+    double getValue(const Date &date) const;
     //! Returns factor to apply Net Present Value at time date1
-    double getFactor(const Date &date1) const;
+    double getFactor(const Date &date) const;
 
 };
 

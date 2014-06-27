@@ -28,11 +28,21 @@ using namespace std;
 using namespace ccruncher;
 
 /**************************************************************************//**
+ * @details Use this constructor to create a Segmentations object in a
+ *          programmatic way.
+ * @param[in] segmentations Enabled segmentations
+ */
+ccruncher::Segmentations::Segmentations(const vector<Segmentation> &segmentations)
+{
+  mEnabled = segmentations;
+}
+
+/**************************************************************************//**
  * @return Number of enabled segmentations
  */
 int ccruncher::Segmentations::size() const
 {
-  return enabled.size();
+  return mEnabled.size();
 }
 
 /**************************************************************************//**
@@ -45,12 +55,12 @@ int ccruncher::Segmentations::size() const
 const Segmentation& ccruncher::Segmentations::getSegmentation(int i) const
 {
   if (i >= 0) {
-    assert(i < (int) enabled.size());
-    return enabled[i];
+    assert(i < (int) mEnabled.size());
+    return mEnabled[i];
   }
   else {
-    assert(-1-i < (int) disabled.size());
-    return disabled[-1-i];
+    assert(-1-i < (int) mDisabled.size());
+    return mDisabled[-1-i];
   }
 }
 
@@ -71,16 +81,16 @@ int ccruncher::Segmentations::indexOfSegmentation(const std::string &sname) cons
  */
 int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const
 {
-  for(size_t i=0; i<enabled.size(); i++)
+  for(size_t i=0; i<mEnabled.size(); i++)
   {
-    if (enabled[i].getName().compare(sname) == 0)
+    if (mEnabled[i].getName().compare(sname) == 0)
     {
       return (int)i;
     }
   }
-  for(size_t i=0; i<disabled.size(); i++)
+  for(size_t i=0; i<mDisabled.size(); i++)
   {
-    if (disabled[i].getName().compare(sname) == 0)
+    if (mDisabled[i].getName().compare(sname) == 0)
     {
       return -(int)(i+1);
     }
@@ -97,19 +107,19 @@ int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const
  */
 void ccruncher::Segmentations::validate()
 {
-  if (enabled.empty()) {
+  if (mEnabled.empty()) {
     throw Exception("active segmentations not found");
   }
 
   string str;
   int nbasic = 0;
-  for(Segmentation &segmentation : enabled) {
+  for(Segmentation &segmentation : mEnabled) {
     if (segmentation.size() == 1) {
       str += (nbasic>0?", ":"") + segmentation.getName();
       nbasic++;
     }
   }
-  for(Segmentation &segmentation : disabled) {
+  for(Segmentation &segmentation : mDisabled) {
     if (segmentation.size() == 1) {
       str += (nbasic>0?", ":"") + segmentation.getName();
       nbasic++;
@@ -128,14 +138,14 @@ void ccruncher::Segmentations::validate()
 int ccruncher::Segmentations::insertSegmentation(Segmentation &val)
 {
   // checking coherence
-  for(Segmentation &segmentation : enabled)
+  for(Segmentation &segmentation : mEnabled)
   {
     if (segmentation.getName() == val.getName())
     {
       throw Exception("segmentation name '" + val.getName() + "' repeated");
     }
   }
-  for(Segmentation &segmentation : disabled)
+  for(Segmentation &segmentation : mDisabled)
   {
     if (segmentation.getName() == val.getName())
     {
@@ -146,13 +156,13 @@ int ccruncher::Segmentations::insertSegmentation(Segmentation &val)
   // inserting segmentation
   if (val.isEnabled())
   {
-    enabled.push_back(val);
-    return enabled.size()-1;
+    mEnabled.push_back(val);
+    return mEnabled.size()-1;
   }
   else
   {
-    disabled.push_back(val);
-    return -disabled.size();
+    mDisabled.push_back(val);
+    return -mDisabled.size();
   }
 }
 
@@ -171,8 +181,8 @@ void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *tag, const
     }
   }
   else if (isEqual(tag,"segmentation")) {
-    auxsegmentation.reset();
-    eppush(eu, &auxsegmentation, tag, attributes);
+    mAuxSegmentation.reset();
+    eppush(eu, &mAuxSegmentation, tag, attributes);
   }
   else {
     throw Exception("unexpected tag '" + string(tag) + "'");
@@ -186,11 +196,11 @@ void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *tag, const
 void ccruncher::Segmentations::epend(ExpatUserData &, const char *tag)
 {
   if (isEqual(tag,"segmentation")) {
-    insertSegmentation(auxsegmentation);
+    insertSegmentation(mAuxSegmentation);
   }
   else if (isEqual(tag,"segmentations")) {
     validate();
-    auxsegmentation.reset();
+    mAuxSegmentation.reset();
   }
 }
 
@@ -202,9 +212,9 @@ void ccruncher::Segmentations::epend(ExpatUserData &, const char *tag)
 void ccruncher::Segmentations::addComponents(const Asset *asset)
 {
   assert(asset != nullptr);
-  for(size_t i=0; i<enabled.size(); i++)
+  for(size_t i=0; i<mEnabled.size(); i++)
   {
-    enabled[i].addComponent(asset->getSegment(i));
+    mEnabled[i].addComponent(asset->getSegment(i));
   }
 }
 
@@ -214,7 +224,7 @@ void ccruncher::Segmentations::addComponents(const Asset *asset)
  */
 void ccruncher::Segmentations::removeUnusedSegments()
 {
-  for(Segmentation &segmentation : enabled)
+  for(Segmentation &segmentation : mEnabled)
   {
     segmentation.recode();
   }
@@ -227,10 +237,10 @@ void ccruncher::Segmentations::removeUnusedSegments()
 void ccruncher::Segmentations::recodeSegments(Asset *asset)
 {
   assert(asset != nullptr);
-  for(size_t i=0; i<enabled.size(); i++)
+  for(size_t i=0; i<mEnabled.size(); i++)
   {
     int old = asset->getSegment(i);
-    asset->setSegment(i, enabled[i].recode(old));
+    asset->setSegment(i, mEnabled[i].recode(old));
   }
 
 }

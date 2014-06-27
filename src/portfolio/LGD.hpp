@@ -24,10 +24,10 @@
 #define _LGD_
 
 #include <cmath>
+#include <string>
 #include <cassert>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
-#include "utils/Exception.hpp"
 
 namespace ccruncher {
 
@@ -72,11 +72,11 @@ class LGD
   private:
 
     //! Lgd type
-    Type type;
+    Type mType;
     //! Distribution parameter
-    double value1;
+    double mValue1;
     //! Distribution parameter
-    double value2;
+    double mValue2;
 
   private:
   
@@ -111,7 +111,7 @@ class LGD
 /**************************************************************************//**
  * @details Create a LGD with invalid values.
  */
-inline ccruncher::LGD::LGD() : type(Fixed), value1(NAN), value2(NAN)
+inline ccruncher::LGD::LGD() : mType(Fixed), mValue1(NAN), mValue2(NAN)
 {
   // nothing to do
 }
@@ -122,18 +122,18 @@ inline ccruncher::LGD::LGD() : type(Fixed), value1(NAN), value2(NAN)
  */
 inline double ccruncher::LGD::getValue(const gsl_rng *rng) const
 {
-  switch(type)
+  switch(mType)
   {
     case Fixed:
-      return value1;
+      return mValue1;
 
     case Beta:
       assert(rng != nullptr);
-      return gsl_ran_beta(rng, value1, value2);
+      return gsl_ran_beta(rng, mValue1, mValue2);
 
     case Uniform:
       assert(rng != nullptr);
-      return gsl_ran_flat(rng, value1, value2);
+      return gsl_ran_flat(rng, mValue1, mValue2);
 
     default:
       assert(false);

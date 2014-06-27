@@ -47,15 +47,15 @@ class Transitions : public ExpatHandlers
   private:
 
     //! Period (in months) that this transition matrix covers
-    int period;
+    int mPeriod;
     //! Matrix values
-    std::vector<std::vector<double>> matrix;
+    std::vector<std::vector<double>> mMatrix;
     //! List of ratings
-    Ratings ratings;
+    Ratings mRatings;
     //! Index of default rating
-    int indexdefault;
+    int mIndexDefault;
     //! Regularization error
-    double rerror;
+    double mRegularizationError;
 
   private:
 

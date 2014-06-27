@@ -28,7 +28,6 @@
 #include <vector>
 #include "portfolio/Obligor.hpp"
 #include "utils/ExpatHandlers.hpp"
-#include "utils/Exception.hpp"
 
 namespace ccruncher {
 
@@ -43,11 +42,11 @@ class Portfolio : public ExpatHandlers
   private:
 
     //! List of obligors
-    std::vector<Obligor *> vobligors;
+    std::vector<Obligor *> mObligors;
     //! Map used to check id obligor oneness
-    std::map<std::string,bool> idobligors;
+    std::map<std::string,bool> mIdObligors;
     //! Map used to check id asset oneness
-    std::map<std::string,bool> idassets;
+    std::map<std::string,bool> mIdAssets;
 
   private:
   

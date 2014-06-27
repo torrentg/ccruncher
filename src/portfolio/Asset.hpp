@@ -28,7 +28,6 @@
 #include "portfolio/DateValues.hpp"
 #include "params/Interest.hpp"
 #include "utils/Date.hpp"
-#include "utils/Exception.hpp"
 #include "utils/ExpatHandlers.hpp"
 
 namespace ccruncher {
@@ -50,15 +49,15 @@ class Asset : public ExpatHandlers
   private:
 
     //! Segmentation-segment relations
-    std::vector<int> vsegments;
+    std::vector<int> mSegments;
     //! Asset identifier
-    std::string id;
+    std::string mId;
     //! Asset creation date
-    Date date;
+    Date mDate;
     //! EAD-LGD values
-    std::vector<DateValues> data;
+    std::vector<DateValues> mValues;
     //! Default LGD
-    LGD dlgd;
+    LGD mDefaultLgd;
     //! Auxiliary variable (used by parser)
     bool have_data;
 
@@ -74,7 +73,7 @@ class Asset : public ExpatHandlers
     //! Constructor
     Asset(size_t nsegmentations=0);
     //! Return asset identifier
-    const std::string& getId() const { return id; }
+    const std::string& getId() const { return mId; }
     //! Add a segmentation-segment relation
     void addBelongsTo(int isegmentation, int isegment);
     //! Prepare data

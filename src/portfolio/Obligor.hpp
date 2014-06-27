@@ -27,7 +27,6 @@
 #include "portfolio/Asset.hpp"
 #include "portfolio/LGD.hpp"
 #include "utils/ExpatHandlers.hpp"
-#include "utils/Exception.hpp"
 
 namespace ccruncher {
 
@@ -46,9 +45,9 @@ class Obligor : public ExpatHandlers
   private:
 
     //! Segmentation-segment relations
-    std::vector<int> vsegments;
+    std::vector<int> mSegments;
     //! Obligor assets list
-    std::vector<Asset *> vassets;
+    std::vector<Asset *> mAssets;
 
   private: 
 
