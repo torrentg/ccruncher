@@ -28,6 +28,7 @@
 #include "params/Ratings.hpp"
 #include "params/Interest.hpp"
 #include "utils/Date.hpp"
+#include "utils/Exception.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -35,7 +36,7 @@ using namespace ccruncher;
 /**************************************************************************/
 ccruncher::Portfolio::~Portfolio()
 {
-  for(Obligor *obligor : vobligors)
+  for(Obligor *obligor : mObligors)
   {
     delete obligor;
   }
@@ -46,7 +47,7 @@ ccruncher::Portfolio::~Portfolio()
  */
 vector<Obligor *> & ccruncher::Portfolio::getObligors()
 {
-  return vobligors;
+  return mObligors;
 }
 
 /**************************************************************************//**
@@ -57,23 +58,23 @@ vector<Obligor *> & ccruncher::Portfolio::getObligors()
 void ccruncher::Portfolio::checkObligor(Obligor *val)
 {
   // checking if obligor id is previously defined
-  if(idobligors.find(val->id) != idobligors.end())
+  if(mIdObligors.find(val->id) != mIdObligors.end())
   {
     string msg = "obligor id '" + val->id + "' repeated";
     throw Exception(msg);
   }
   else
   {
-    idobligors[val->id] = true;
+    mIdObligors[val->id] = true;
   }
 
   // checking if assets id are previously defined
   for(Asset *asset : val->getAssets())
   {
     const string &id = asset->getId();
-    if (idassets.find(id) == idassets.end())
+    if (mIdAssets.find(id) == mIdAssets.end())
     {
-      idassets[id] = true;
+      mIdAssets[id] = true;
     }
     else 
     {
@@ -104,7 +105,7 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *tag, const cha
   }
   else if (isEqual(tag,"obligor")) {
     Obligor *obligor = new Obligor;
-    vobligors.push_back(obligor);
+    mObligors.push_back(obligor);
     eppush(eu, obligor, tag, attributes);
   }
   else {
@@ -119,15 +120,15 @@ void ccruncher::Portfolio::epstart(ExpatUserData &eu, const char *tag, const cha
 void ccruncher::Portfolio::epend(ExpatUserData &, const char *tag)
 {
   if (isEqual(tag,"portfolio")) {
-    if (vobligors.empty()) {
+    if (mObligors.empty()) {
       throw Exception("portfolio without obligors");
     }
-    idassets.clear();
-    idobligors.clear();
+    mIdAssets.clear();
+    mIdObligors.clear();
   }
   else if (isEqual(tag,"obligor")) {
-    assert(!vobligors.empty());
-    checkObligor(vobligors.back());
+    assert(!mObligors.empty());
+    checkObligor(mObligors.back());
   }
 }
 

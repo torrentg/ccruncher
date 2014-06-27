@@ -34,54 +34,54 @@ using namespace ccruncher;
 /**************************************************************************/
 ccruncher::Transitions::Transitions()
 {
-  period = -1;
-  indexdefault = -1;
-  rerror = 0.0;
+  mPeriod = -1;
+  mIndexDefault = -1;
+  mRegularizationError = 0.0;
 }
 
 /**************************************************************************//**
- * @param[in] ratings_ List of ratings.
+ * @param[in] ratings List of ratings.
  * @throw Exception Empty ratings list.
  */
-ccruncher::Transitions::Transitions(const Ratings &ratings_)
+ccruncher::Transitions::Transitions(const Ratings &ratings)
 {
-  setRatings(ratings_);
-  period = -1;
-  indexdefault = -1;
-  rerror = 0.0;
+  setRatings(ratings);
+  mPeriod = -1;
+  mIndexDefault = -1;
+  mRegularizationError = 0.0;
 }
 
 /**************************************************************************//**
  * @details Create a transition matrix providing matrix values as a whole.
- * @param[in] ratings_ List of ratings.
- * @param[in] matrix_ Matrix values.
- * @param[in] period_ Period (in months) covered by this matrix.
+ * @param[in] ratings List of ratings.
+ * @param[in] matrix Matrix values.
+ * @param[in] period Period (in months) covered by this matrix.
  * @throw Exception Error validating data.
  */
-ccruncher::Transitions::Transitions(const Ratings &ratings_,
-   const std::vector<std::vector<double>> &matrix_, int period_)
+ccruncher::Transitions::Transitions(const Ratings &ratings,
+   const std::vector<std::vector<double>> &matrix, int period)
 {
-  assert(period_ > 0);
-  assert(ratings_.size() == matrix_.size());
-  setRatings(ratings_);
-  period = period_;
-  matrix = matrix_;
-  rerror = 0.0;
+  assert(period > 0);
+  assert(ratings.size() == matrix.size());
+  setRatings(ratings);
+  mPeriod = period;
+  mMatrix = matrix;
+  mRegularizationError = 0.0;
   validate();
 }
 
 /**************************************************************************//**
- * @param[in] ratings_ List of ratings.
+ * @param[in] ratings List of ratings.
  * @throw Exception Void ratings list.
  */
-void ccruncher::Transitions::setRatings(const Ratings &ratings_)
+void ccruncher::Transitions::setRatings(const Ratings &ratings)
 {
-  if (ratings_.size() <= 0) {
+  if (ratings.size() <= 0) {
     throw Exception("ratings not found");
   }
 
-  ratings = ratings_;
-  matrix.assign(size(), vector<double>(size(), NAN));
+  mRatings = ratings;
+  mMatrix.assign(size(), vector<double>(size(), NAN));
 }
 
 /**************************************************************************//**
@@ -89,7 +89,7 @@ void ccruncher::Transitions::setRatings(const Ratings &ratings_)
  */
 size_t ccruncher::Transitions::size() const
 {
-  return ratings.size();
+  return mRatings.size();
 }
 
 /**************************************************************************//**
@@ -97,7 +97,7 @@ size_t ccruncher::Transitions::size() const
  */
 int ccruncher::Transitions::getPeriod() const
 {
-  return period;
+  return mPeriod;
 }
 
 /**************************************************************************//**
@@ -113,8 +113,8 @@ void ccruncher::Transitions::insertTransition(const std::string &rating1,
 {
   assert(size() > 0);
 
-  size_t row = ratings.indexOf(rating1);
-  size_t col = ratings.indexOf(rating2);
+  size_t row = mRatings.indexOf(rating1);
+  size_t col = mRatings.indexOf(rating2);
 
   // validating value
   if (value < -EPSILON || value > (1.0+EPSILON))
@@ -125,14 +125,14 @@ void ccruncher::Transitions::insertTransition(const std::string &rating1,
   }
 
   // checking that it is not previously defined
-  if (!std::isnan(matrix[row][col]))
+  if (!std::isnan(mMatrix[row][col]))
   {
     string msg = "transition[" + rating1 + "," + rating2 + "] redefined";
     throw Exception(msg);
   }
 
   // insert value into matrix
-  matrix[row][col] = value;
+  mMatrix[row][col] = value;
 }
 
 /**************************************************************************//**
@@ -148,8 +148,8 @@ void ccruncher::Transitions::epstart(ExpatUserData &, const char *tag, const cha
       throw Exception("invalid number of attributes in tag transitions");
     }
     else {
-      period = getIntAttribute(attributes, "period");
-      if (period <= 0) throw Exception("attribute 'period' out of range");
+      mPeriod = getIntAttribute(attributes, "period");
+      if (mPeriod <= 0) throw Exception("attribute 'period' out of range");
     }
   }
   else if (isEqual(tag,"transition")) {
@@ -176,9 +176,9 @@ void ccruncher::Transitions::epend(ExpatUserData &, const char *tag)
     {
       for(size_t j=0; j<size(); j++)
       {
-        if (std::isnan(matrix[i][j]))
+        if (std::isnan(mMatrix[i][j]))
         {
-          matrix[i][j] = 0.0;
+          mMatrix[i][j] = 0.0;
         }
       }
     }
@@ -201,25 +201,25 @@ void ccruncher::Transitions::validate()
 
     for(size_t j=0; j<size(); j++)
     {
-      sum += matrix[i][j];
+      sum += mMatrix[i][j];
     }
 
     if (fabs(sum-1.0) > EPSILON)
     {
-      throw Exception("row transition[" + ratings[i].getName() + ",.] does not add up to 1");
+      throw Exception("row transition[" + mRatings[i].getName() + ",.] does not add up to 1");
     }
   }
 
   // searching default rating
-  indexdefault = -1;
+  mIndexDefault = -1;
 
   for(size_t i=0; i<size(); i++)
   {
-    if (fabs(matrix[i][i]-1.0) < EPSILON)
+    if (fabs(mMatrix[i][i]-1.0) < EPSILON)
     {
-      if (indexdefault < 0)
+      if (mIndexDefault < 0)
       {
-        indexdefault = i;
+        mIndexDefault = i;
       }
       else
       {
@@ -227,20 +227,20 @@ void ccruncher::Transitions::validate()
       }
     }
   }
-  if (indexdefault < 0)
+  if (mIndexDefault < 0)
   {
     throw Exception("default rating not found");
   }
 
   // TODO: check that any rating can be defaulted
   vector<bool> defaultable(size(), false);
-  defaultable[indexdefault] = true;
+  defaultable[mIndexDefault] = true;
   size_t num = 1;
   for(size_t n=0; n<size(); n++) {
     for(size_t i=0; i<size(); i++) {
       if (!defaultable[i]) {
         for(size_t j=0; j<size(); j++) {
-          if (matrix[i][j] > EPSILON && defaultable[j]) {
+          if (mMatrix[i][j] > EPSILON && defaultable[j]) {
             defaultable[i] = true;
             num++;
             break;
@@ -260,7 +260,7 @@ void ccruncher::Transitions::validate()
  */
 int ccruncher::Transitions::getIndexDefault() const
 {
-  return indexdefault;
+  return mIndexDefault;
 }
 
 /**************************************************************************//**
@@ -276,17 +276,17 @@ void ccruncher::Transitions::regularize()
 {
   // computes the regularization error (sub-inf matrix norm)
   // note: regularized matrix has sub-inf norm = 1
-  rerror = 0.0;
+  mRegularizationError = 0.0;
   for(size_t i=0; i<size(); i++)
   {
     double sum = 0.0;
     for(size_t j=0; j<size(); j++)
     {
-      sum += fabs(matrix[i][j]);
+      sum += fabs(mMatrix[i][j]);
     }
-    if (fabs(sum-1.0) > rerror)
+    if (fabs(sum-1.0) > mRegularizationError)
     {
-      rerror = fabs(sum-1.0);
+      mRegularizationError = fabs(sum-1.0);
     }
   }
 
@@ -301,14 +301,14 @@ void ccruncher::Transitions::regularize()
       lambda = 0.0;
       for(size_t j=0; j<size(); j++)
       {
-        lambda += matrix[i][j];
+        lambda += mMatrix[i][j];
       }
       lambda = (lambda-1.0)/(double)(size());
       for(size_t j=0; j<size(); j++)
       {
-        if (matrix[i][j] != 0.0)
+        if (mMatrix[i][j] != 0.0)
         {
-          matrix[i][j] -= lambda;
+          mMatrix[i][j] -= lambda;
         }
       }
 
@@ -316,9 +316,9 @@ void ccruncher::Transitions::regularize()
       stop = true;
       for(size_t j=0; j<size(); j++)
       {
-        if (matrix[i][j] < 0.0) 
+        if (mMatrix[i][j] < 0.0)
         {
-          matrix[i][j] = 0.0;
+          mMatrix[i][j] = 0.0;
           stop = false;
         }
       }
@@ -338,8 +338,8 @@ Transitions ccruncher::Transitions::scale(int t) const
   try
   {
     Transitions ret(*this);
-    PowMatrix::pow(matrix, double(t)/double(getPeriod()), ret.matrix);
-    ret.period = t;
+    PowMatrix::pow(mMatrix, double(t)/double(getPeriod()), ret.mMatrix);
+    ret.mPeriod = t;
     ret.regularize();
     return ret;
   }
@@ -359,7 +359,7 @@ Transitions ccruncher::Transitions::scale(int t) const
 void ccruncher::Transitions::cdfr(size_t numrows, std::vector<std::vector<double>> &ret) const
 {
   // making assertions
-  assert(indexdefault >= 0);
+  assert(mIndexDefault >= 0);
   assert(numrows > 1);
   assert(numrows < 15000);
   assert(ret.size() == size());
@@ -379,17 +379,17 @@ void ccruncher::Transitions::cdfr(size_t numrows, std::vector<std::vector<double
   // filling CDFR(.,0)
   for(size_t i=0; i<size(); i++)
   {
-    ret[i][0] = aux[i][indexdefault];
+    ret[i][0] = aux[i][mIndexDefault];
   }
 
   // filling CDFR(.,t)
   for(size_t t=1; t<numrows; t++)
   {
-    prod(aux, matrix, tmp);
+    prod(aux, mMatrix, tmp);
 
     for(size_t i=0; i<size(); i++)
     {
-      ret[i][t] = tmp[i][indexdefault];
+      ret[i][t] = tmp[i][mIndexDefault];
     }
 
     for(size_t i=0; i<size(); i++) {
@@ -418,8 +418,8 @@ vector<CDF> ccruncher::Transitions::getCDFs(const Date &date, int numrows) const
   vector<CDF> dprobs(size());
   for(int i=0; i<numrows; i++)
   {
-    double t = add(date, i*period, 'M') - date;
-    for(size_t irating=0; irating < ratings.size(); irating++) {
+    double t = add(date, i*mPeriod, 'M') - date;
+    for(size_t irating=0; irating < mRatings.size(); irating++) {
       dprobs[irating].add(t, values[irating][i]);
     }
   }
@@ -433,7 +433,7 @@ vector<CDF> ccruncher::Transitions::getCDFs(const Date &date, int numrows) const
  */
 double ccruncher::Transitions::getRegularizationError() const
 {
-  return rerror;
+  return mRegularizationError;
 }
 
 /**************************************************************************//**
@@ -471,7 +471,7 @@ void ccruncher::Transitions::prod(const vector<vector<double>> &M1,
  */
 const vector<double>& ccruncher::Transitions::operator[] (int row) const
 {
-  assert(row >= 0 && row < (int)matrix.size());
-  return matrix[row];
+  assert(row >= 0 && row < (int)mMatrix.size());
+  return mMatrix[row];
 }
 

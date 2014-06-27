@@ -28,6 +28,7 @@
 #include "params/Ratings.hpp"
 #include "params/Factors.hpp"
 #include "utils/Date.hpp"
+#include "utils/Exception.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -48,7 +49,7 @@ ccruncher::Obligor::Obligor(const Obligor &o)
  *            to specify the number of segmentations.
  */
 ccruncher::Obligor::Obligor(size_t nsegmentations) :
-    vsegments(nsegmentations, 0), vassets()
+    mSegments(nsegmentations, 0), mAssets()
 {
   irating = 0;
   ifactor = 0;
@@ -59,11 +60,11 @@ ccruncher::Obligor::Obligor(size_t nsegmentations) :
 /**************************************************************************/
 ccruncher::Obligor::~Obligor()
 {
-  for(Asset *asset : vassets)
+  for(Asset *asset : mAssets)
   {
     if (asset != nullptr) delete asset;
   }
-  vassets.clear();
+  mAssets.clear();
 }
 
 /**************************************************************************//**
@@ -77,18 +78,18 @@ Obligor& ccruncher::Obligor::operator=(const Obligor &o)
   id = o.id;
   lgd = o.lgd;
 
-  vsegments = o.vsegments;
+  mSegments = o.mSegments;
 
-  for(Asset *asset : vassets) {
+  for(Asset *asset : mAssets) {
     if (asset != nullptr) delete asset;
   }
-  vassets.assign(o.vassets.size(), nullptr);
-  for(size_t i=0; i<vassets.size(); i++)
+  mAssets.assign(o.mAssets.size(), nullptr);
+  for(size_t i=0; i<mAssets.size(); i++)
   {
-    if (o.vassets[i] != nullptr)
+    if (o.mAssets[i] != nullptr)
     {
-      vassets[i] = new Asset;
-      *(vassets[i]) = *(o.vassets[i]);
+      mAssets[i] = new Asset;
+      *(mAssets[i]) = *(o.mAssets[i]);
     }
   }
 
@@ -101,15 +102,15 @@ Obligor& ccruncher::Obligor::operator=(const Obligor &o)
  */
 void ccruncher::Obligor::insertAsset(ExpatUserData &eu)
 {
-  int ila = vassets.size()-1;
+  int ila = mAssets.size()-1;
 
   // checking coherence
   // TODO: remove this check because Portfolio rechecks
   for(int i=0; i<ila; i++)
   {
-    if (vassets[i]->getId() == vassets[ila]->getId())
+    if (mAssets[i]->getId() == mAssets[ila]->getId())
     {
-      throw Exception("asset identifier '" + vassets[ila]->getId() + "' repeated");
+      throw Exception("asset identifier '" + mAssets[ila]->getId() + "' repeated");
     }
   }
 
@@ -117,7 +118,7 @@ void ccruncher::Obligor::insertAsset(ExpatUserData &eu)
   try
   {
     assert(eu.date1 != NAD && eu.date2 != NAD && eu.interest != nullptr);
-    vassets[ila]->prepare(eu.date1, eu.date2, *(eu.interest));
+    mAssets[ila]->prepare(eu.date1, eu.date2, *(eu.interest));
   }
   catch(std::exception &e)
   {
@@ -137,7 +138,7 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *tag, const char 
   if (isEqual(tag,"asset"))
   {
     Asset *asset = new Asset;
-    vassets.push_back(asset);
+    mAssets.push_back(asset);
     eppush(eu, asset, tag, attributes);
   }
   else if (isEqual(tag,"belongs-to"))
@@ -176,7 +177,7 @@ void ccruncher::Obligor::epstart(ExpatUserData &eu, const char *tag, const char 
     }
 
     assert(eu.segmentations != nullptr);
-    vsegments.resize(eu.segmentations->size(), 0);
+    mSegments.resize(eu.segmentations->size(), 0);
   }
   else
   {
@@ -202,13 +203,13 @@ void ccruncher::Obligor::epend(ExpatUserData &eu, const char *tag)
     }
     
     // shrinking memory
-    vector<Asset*>(vassets.begin(),vassets.end()).swap(vassets);
+    vector<Asset*>(mAssets.begin(),mAssets.end()).swap(mAssets);
 
     // important: coding obligor-segments as asset-segments
     for(int i=0; i<(int)eu.segmentations->size(); i++) {
       if (eu.segmentations->getSegmentation(i).getType() == Segmentation::obligor) {
-        for(Asset *asset : vassets) {
-          asset->addBelongsTo(i, vsegments[i]);
+        for(Asset *asset : mAssets) {
+          asset->addBelongsTo(i, mSegments[i]);
         }
       }
     }
@@ -222,7 +223,7 @@ void ccruncher::Obligor::epend(ExpatUserData &eu, const char *tag)
  */
 bool ccruncher::Obligor::isActive(const Date &from, const Date &to)
 {
-  for(Asset *asset : vassets)
+  for(Asset *asset : mAssets)
   {
     if (asset->isActive(from,to))
     {
@@ -239,17 +240,17 @@ bool ccruncher::Obligor::isActive(const Date &from, const Date &to)
  */
 void ccruncher::Obligor::addBelongsTo(int isegmentation, int isegment)
 {
-  assert(isegmentation < (int) vsegments.size());
+  assert(isegmentation < (int) mSegments.size());
   assert(isegment >= 0);
 
   if (isegmentation < 0) return;
 
-  if (vsegments[isegmentation] > 0)
+  if (mSegments[isegmentation] > 0)
   {
     throw Exception("belongs-to defined twice");
   }
 
-  vsegments[isegmentation] = isegment;
+  mSegments[isegmentation] = isegment;
 }
 
 /**************************************************************************//**
@@ -259,7 +260,7 @@ void ccruncher::Obligor::addBelongsTo(int isegmentation, int isegment)
  */
 bool ccruncher::Obligor::belongsTo(int isegmentation, int isegment)
 {
-  return (vsegments[isegmentation]==isegment);
+  return (mSegments[isegmentation]==isegment);
 }
 
 /**************************************************************************//**
@@ -269,8 +270,8 @@ bool ccruncher::Obligor::belongsTo(int isegmentation, int isegment)
 int ccruncher::Obligor::getSegment(int isegmentation)
 {
   assert(isegmentation >= 0);
-  assert(isegmentation < (int)vsegments.size());
-  return vsegments[isegmentation];
+  assert(isegmentation < (int)mSegments.size());
+  return mSegments[isegmentation];
 }
 
 /**************************************************************************//**
@@ -278,7 +279,7 @@ int ccruncher::Obligor::getSegment(int isegmentation)
  */
 vector<Asset *> & ccruncher::Obligor::getAssets()
 {
-  return vassets;
+  return mAssets;
 }
 
 /**************************************************************************//**
@@ -287,7 +288,7 @@ vector<Asset *> & ccruncher::Obligor::getAssets()
  */
 bool ccruncher::Obligor::hasLGD() const
 {
-  for(Asset *asset : vassets)
+  for(Asset *asset : mAssets)
   {
     if (asset->requiresObligorLGD())
     {

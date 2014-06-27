@@ -5,6 +5,7 @@ CCRUNCHER TODO
 Current works
 -------------------
   * move to C++11
+  * stock/asset/index case
 
 Future works
 -------------------

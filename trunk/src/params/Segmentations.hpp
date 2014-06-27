@@ -45,11 +45,11 @@ class Segmentations : public ExpatHandlers
   private:
 
     //! List of enabled segmentations
-    std::vector<Segmentation> enabled;
+    std::vector<Segmentation> mEnabled;
     //! List of disabled segmentations
-    std::vector<Segmentation> disabled;
+    std::vector<Segmentation> mDisabled;
     //! Auxiliary variable (used by parser)
-    Segmentation auxsegmentation;
+    Segmentation mAuxSegmentation;
 
   private:
   
@@ -69,6 +69,8 @@ class Segmentations : public ExpatHandlers
 
     //! Constructor
     Segmentations() {}
+    //! Constructor
+    Segmentations(const std::vector<Segmentation> &segmentations);
     //! Number of enabled segmentations
     int size() const;
     //! [] operator (i>=0 -> enabled, i<0 -> disabled)

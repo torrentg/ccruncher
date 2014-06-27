@@ -24,11 +24,10 @@
 #include <cctype>
 #include <cstring>
 #include <cstdio>
-#include <cmath>
-#include <cassert>
 #include <gsl/gsl_cdf.h>
 #include "portfolio/EAD.hpp"
 #include "utils/Parser.hpp"
+#include "utils/Exception.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -84,14 +83,14 @@ ccruncher::EAD::EAD(const char *cstr)
           if (p == aux+len_pars) {
             throw Exception("invalid number of arguments");
           }
-          value2 = Parser::doubleValue(p+1);
+          mValue2 = Parser::doubleValue(p+1);
         }
-        value1 = Parser::doubleValue(aux);
+        mValue1 = Parser::doubleValue(aux);
         if (distrs[i].nargs == 1) {
-          init(distrs[i].type, value1, NAN);
+          init(distrs[i].type, mValue1, NAN);
         }
         else {
-          init(distrs[i].type, value1, value2);
+          init(distrs[i].type, mValue1, mValue2);
         }
         return;
       }
@@ -99,8 +98,8 @@ ccruncher::EAD::EAD(const char *cstr)
   }
 
   // fixed value case
-  value1 = Parser::doubleValue(cstr);
-  init(Fixed, value1, NAN);
+  mValue1 = Parser::doubleValue(cstr);
+  init(Fixed, mValue1, NAN);
 }
 
 /**************************************************************************//**
@@ -176,9 +175,9 @@ void ccruncher::EAD::init(Type t, double a, double b)
     if (!valid(t, a, b)) throw Exception("invalid ead");
   }
 
-  type = t;
-  value1 = a;
-  value2 = b;
+  mType = t;
+  mValue1 = a;
+  mValue2 = b;
 }
 
 /**************************************************************************//**
@@ -186,7 +185,7 @@ void ccruncher::EAD::init(Type t, double a, double b)
  */
 ccruncher::EAD::Type ccruncher::EAD::getType() const
 {
-  return type;
+  return mType;
 }
 
 /**************************************************************************//**
@@ -194,7 +193,7 @@ ccruncher::EAD::Type ccruncher::EAD::getType() const
  */
 double ccruncher::EAD::getValue1() const
 {
-  return value1;
+  return mValue1;
 }
 
 /**************************************************************************//**
@@ -202,7 +201,7 @@ double ccruncher::EAD::getValue1() const
  */
 double ccruncher::EAD::getValue2() const
 {
-  return value2;
+  return mValue2;
 }
 
 /**************************************************************************//**
@@ -211,7 +210,7 @@ double ccruncher::EAD::getValue2() const
  */
 bool ccruncher::EAD::isvalid(const EAD &x)
 {
-  return valid(x.type, x.value1, x.value2);
+  return valid(x.mType, x.mValue1, x.mValue2);
 }
 
 /**************************************************************************//**
@@ -222,42 +221,42 @@ bool ccruncher::EAD::isvalid(const EAD &x)
  */
 void ccruncher::EAD::mult(double factor)
 {
-  switch(type)
+  switch(mType)
   {
     case Fixed:
-      value1 *= factor;
+      mValue1 *= factor;
       break;
 
     case Lognormal:
       // http://en.wikipedia.org/wiki/Log-normal_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Lognormal-Distribution.html
-      value1 += log(factor);
+      mValue1 += log(factor);
       break;
 
     case Exponential:
       // http://en.wikipedia.org/wiki/Exponential_distribution (<-not)
       // http://www.gnu.org/software/gsl/manual/html_node/The-Exponential-Distribution.html (<-this)
-      value1 *= factor;
+      mValue1 *= factor;
       break;
 
     case Uniform:
       // http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29
       // http://www.gnu.org/software/gsl/manual/html_node/The-Flat-_0028Uniform_0029-Distribution.html
-      value1 *= factor;
-      value2 *= factor;
+      mValue1 *= factor;
+      mValue2 *= factor;
       break;
 
     case Gamma:
       // http://en.wikipedia.org/wiki/Gamma_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Gamma-Distribution.html
-      value2 *= factor;
+      mValue2 *= factor;
       break;
 
     case Normal:
       // http://en.wikipedia.org/wiki/Normal_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Gaussian-Distribution.html
-      value1 *= factor;
-      value2 *= factor*factor;
+      mValue1 *= factor;
+      mValue2 *= factor*factor;
       break;
 
     default:
@@ -274,40 +273,40 @@ void ccruncher::EAD::mult(double factor)
  */
 double ccruncher::EAD::getExpected() const
 {
-  switch(type)
+  switch(mType)
   {
     case Fixed:
-      return value1;
+      return mValue1;
 
     case Lognormal:
       // http://en.wikipedia.org/wiki/Log-normal_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Lognormal-Distribution.html
-      return exp(value1+value2*value2/2.0);
+      return exp(mValue1+mValue2*mValue2/2.0);
 
     case Exponential:
       // http://en.wikipedia.org/wiki/Exponential_distribution (<-not)
       // http://www.gnu.org/software/gsl/manual/html_node/The-Exponential-Distribution.html (<-this)
-      return value1;
+      return mValue1;
 
     case Uniform:
       // http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29
       // http://www.gnu.org/software/gsl/manual/html_node/The-Flat-_0028Uniform_0029-Distribution.html
-      return (value1+value2)/2.0;
+      return (mValue1+mValue2)/2.0;
 
     case Gamma:
       // http://en.wikipedia.org/wiki/Gamma_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Gamma-Distribution.html
-      return value1*value2;
+      return mValue1*mValue2;
 
     case Normal:
       // http://en.wikipedia.org/wiki/Normal_distribution
       // http://en.wikipedia.org/wiki/Truncated_normal_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Gaussian-Distribution.html
       {
-        double x = -value1/value2;
+        double x = -mValue1/mValue2;
         double v1 = gsl_ran_ugaussian_pdf(x);
         double v2 = gsl_cdf_ugaussian_P(x);
-        return value1 + value2*v1/(1.0-v2);
+        return mValue1 + mValue2*v1/(1.0-v2);
       }
 
     default:

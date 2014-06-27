@@ -31,15 +31,15 @@ using namespace std;
 using namespace ccruncher;
 
 /**************************************************************************//**
- * @param[in] date_ Date on wich the curve is defined.
- * @param[in] type_ Type of interest to apply.
+ * @param[in] date Date on which the curve is defined.
+ * @param[in] type Type of interest to apply.
  */
-ccruncher::Interest::Interest(const Date &date_, InterestType type_) :
-    spline(nullptr), accel(nullptr)
+ccruncher::Interest::Interest(const Date &date, InterestType type) :
+    mSpline(nullptr), mAccel(nullptr)
 {
-  type = type_;
-  date = date_;
-  is_cubic_spline = false;
+  mType = type;
+  mDate = date;
+  mCubicSpline = false;
 }
 
 /**************************************************************************//**
@@ -54,12 +54,12 @@ ccruncher::Interest::Interest(const Interest &o)
 /**************************************************************************/
 ccruncher::Interest::~Interest()
 {
-  if (spline != nullptr) {
-    gsl_spline_free(spline);
+  if (mSpline != nullptr) {
+    gsl_spline_free(mSpline);
   }
 
-  if (accel != nullptr) {
-    gsl_interp_accel_free(accel);
+  if (mAccel != nullptr) {
+    gsl_interp_accel_free(mAccel);
   }
 }
 
@@ -69,46 +69,46 @@ ccruncher::Interest::~Interest()
  */
 Interest & ccruncher::Interest::operator=(const Interest &o)
 {
-  type = o.type;
-  date = o.date;
-  rates = o.rates;
-  is_cubic_spline = o.is_cubic_spline;
+  mType = o.mType;
+  mDate = o.mDate;
+  mRates = o.mRates;
+  mCubicSpline = o.mCubicSpline;
 
-  if (spline != nullptr) {
-    gsl_spline_free(spline);
+  if (mSpline != nullptr) {
+    gsl_spline_free(mSpline);
   }
 
-  if (accel != nullptr) {
-    gsl_interp_accel_free(accel);
+  if (mAccel != nullptr) {
+    gsl_interp_accel_free(mAccel);
   }
 
-  if (o.spline != nullptr) {
-    spline = gsl_spline_alloc(o.spline->interp->type, o.spline->size);
-    gsl_spline_init(spline, o.spline->x, o.spline->y, o.spline->size);
+  if (o.mSpline != nullptr) {
+    mSpline = gsl_spline_alloc(o.mSpline->interp->type, o.mSpline->size);
+    gsl_spline_init(mSpline, o.mSpline->x, o.mSpline->y, o.mSpline->size);
   }
   else {
-    spline = nullptr;
+    mSpline = nullptr;
   }
 
-  if (o.accel != nullptr) {
-    accel = gsl_interp_accel_alloc();
-    gsl_interp_accel_reset(accel);
+  if (o.mAccel != nullptr) {
+    mAccel = gsl_interp_accel_alloc();
+    gsl_interp_accel_reset(mAccel);
   }
   else {
-    accel = nullptr;
+    mAccel = nullptr;
   }
 
   return *this;
 }
 
 /**************************************************************************//**
- * @param[in] d Initial date.
+ * @param[in] date Initial date.
  * @throw Exception Invalid date.
  */
-void ccruncher::Interest::setDate(const Date &d)
+void ccruncher::Interest::setDate(const Date &date)
 {
-  if (d == NAD) throw Exception("invalid date");
-  date = d;
+  if (date == NAD) throw Exception("invalid date");
+  mDate = date;
 }
 
 /**************************************************************************//**
@@ -116,7 +116,7 @@ void ccruncher::Interest::setDate(const Date &d)
  */
 ccruncher::Interest::InterestType ccruncher::Interest::getType() const
 {
-  return type;
+  return mType;
 }
 
 /**************************************************************************//**
@@ -124,7 +124,7 @@ ccruncher::Interest::InterestType ccruncher::Interest::getType() const
  */
 int ccruncher::Interest::size() const
 {
-  return (int) rates.size();
+  return (int) mRates.size();
 }
 
 /**************************************************************************//**
@@ -137,36 +137,36 @@ void ccruncher::Interest::getValues(int d, double *t, double *r) const
 {
   assert(0 <= d);
 
-  int n = spline->size - 1;
+  int n = mSpline->size - 1;
 
-  if (spline->x[n] <= d) {
-    double df = gsl_spline_eval_deriv(spline, spline->x[n], accel);
-    *r = spline->y[n] + df*(d-spline->x[n]);
-    *t = rates[n].y + (double)(d-rates[n].d)/365.0;
+  if (mSpline->x[n] <= d) {
+    double df = gsl_spline_eval_deriv(mSpline, mSpline->x[n], mAccel);
+    *r = mSpline->y[n] + df*(d-mSpline->x[n]);
+    *t = mRates[n].y + (double)(d-mRates[n].d)/365.0;
   }
-  else if (d <= spline->x[0]) {
-    double df = gsl_spline_eval_deriv(spline, spline->x[0], accel);
-    *r = spline->y[0] + df*(d-spline->x[0]);
-    *t = rates[0].y * (double)(d)/(double)(rates[0].d);
+  else if (d <= mSpline->x[0]) {
+    double df = gsl_spline_eval_deriv(mSpline, mSpline->x[0], mAccel);
+    *r = mSpline->y[0] + df*(d-mSpline->x[0]);
+    *t = mRates[0].y * (double)(d)/(double)(mRates[0].d);
   }
   else {
-    *r = gsl_spline_eval(spline, d, accel);
-    size_t pos = accel->cache;
-    *t = rates[pos].y + (double)(d-rates[pos].d)/(double)(rates[pos+1].d-rates[pos].d) * (rates[pos+1].y-rates[pos].y);
+    *r = gsl_spline_eval(mSpline, d, mAccel);
+    size_t pos = mAccel->cache;
+    *t = mRates[pos].y + (double)(d-mRates[pos].d)/(double)(mRates[pos+1].d-mRates[pos].d) * (mRates[pos+1].y-mRates[pos].y);
   }
 }
 
 /**************************************************************************//**
  * @details Compute rate at day d-date0, where date0 is the curve's date.
- * @param[in] d Date.
+ * @param[in] date Date.
  * @return Rate to apply. 0 if d <= date0.
  */
-double ccruncher::Interest::getValue(const Date &d) const
+double ccruncher::Interest::getValue(const Date &date) const
 {
-  if (date == NAD || rates.size() == 0 || d <= date) return 0.0;
+  if (mDate == NAD || mRates.size() == 0 || date <= mDate) return 0.0;
 
   double r, t;
-  getValues(d-date, &t, &r);
+  getValues(date-mDate, &t, &r);
   return r;
 }
 
@@ -174,25 +174,25 @@ double ccruncher::Interest::getValue(const Date &d) const
  * @details This factor transport a money value from date1 to date0
  *          where date0 is the interest curve date. Factor is computed
  *          according to interest type (simple/compound/continuous)
- * @param[in] d Date.
+ * @param[in] date Date.
  * @return Factor to apply.
  */
-double ccruncher::Interest::getFactor(const Date &d) const
+double ccruncher::Interest::getFactor(const Date &date) const
 {
-  if (date == NAD || rates.size() == 0 || d <= date) return 1.0;
+  if (mDate == NAD || mRates.size() == 0 || date <= mDate) return 1.0;
 
   double r, t;
-  getValues(d-date, &t, &r);
+  getValues(date-mDate, &t, &r);
 
-  if (type == Simple)
+  if (mType == Simple)
   {
     return 1.0/(1.0+r*t);
   }
-  else if (type == Compound)
+  else if (mType == Compound)
   {
     return 1.0/pow(1.0+r, t);
   }
-  else if (type == Continuous)
+  else if (mType == Continuous)
   {
     return 1.0/exp(r*t);
   }
@@ -211,9 +211,9 @@ double ccruncher::Interest::getFactor(const Date &d) const
  */
 void ccruncher::Interest::insertRate(const Rate &val)
 {
-  assert(date != NAD);
+  assert(mDate != NAD);
 
-  if (date == NAD) throw Exception("interest curve without date");
+  if (mDate == NAD) throw Exception("interest curve without date");
 
   if (val.d < 0)
   {
@@ -221,7 +221,7 @@ void ccruncher::Interest::insertRate(const Rate &val)
   }
 
   // checking if previously defined
-  for(Rate &rate : rates)
+  for(Rate &rate : mRates)
   {
     if (abs(rate.d-val.d) == 0)
     {
@@ -239,7 +239,7 @@ void ccruncher::Interest::insertRate(const Rate &val)
   // inserting value
   try
   {
-    rates.push_back(val);
+    mRates.push_back(val);
   }
   catch(std::exception &e)
   {
@@ -255,13 +255,13 @@ void ccruncher::Interest::insertRate(const Rate &val)
  */
 void ccruncher::Interest::setSpline()
 {
-  assert(spline == nullptr && accel == nullptr);
-  size_t n = rates.size();
+  assert(mSpline == nullptr && mAccel == nullptr);
+  size_t n = mRates.size();
 
-  if (!is_cubic_spline && n < gsl_interp_type_min_size(gsl_interp_linear)) {
+  if (!mCubicSpline && n < gsl_interp_type_min_size(gsl_interp_linear)) {
     throw Exception("insuficient number of rates to define a linear spline");
   }
-  if (is_cubic_spline && n < gsl_interp_type_min_size(gsl_interp_cspline)) {
+  if (mCubicSpline && n < gsl_interp_type_min_size(gsl_interp_cspline)) {
     throw Exception("insuficient number of rates to define a cubic spline");
   }
 
@@ -270,20 +270,20 @@ void ccruncher::Interest::setSpline()
 
   for(size_t i=0; i<n; i++)
   {
-    x[i] = rates[i].d;
-    y[i] = rates[i].r;
+    x[i] = mRates[i].d;
+    y[i] = mRates[i].r;
   }
 
-  if (is_cubic_spline) {
-    spline = gsl_spline_alloc(gsl_interp_cspline, n);
+  if (mCubicSpline) {
+    mSpline = gsl_spline_alloc(gsl_interp_cspline, n);
   }
   else {
-    spline = gsl_spline_alloc(gsl_interp_linear, n);
+    mSpline = gsl_spline_alloc(gsl_interp_linear, n);
   }
 
-  gsl_spline_init(spline, &(x[0]), &(y[0]), n);
-  assert(spline->size == n);
-  accel = gsl_interp_accel_alloc();
+  gsl_spline_init(mSpline, &(x[0]), &(y[0]), n);
+  assert(mSpline->size == n);
+  mAccel = gsl_interp_accel_alloc();
 }
 
 /**************************************************************************//**
@@ -297,28 +297,28 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *tag, const char *
   if (isEqual(tag,"interest"))
   {
     if (getNumAttributes(attributes) == 0) {
-      type = Compound;
+      mType = Compound;
     }
     else if (getNumAttributes(attributes) <= 2)
     {
       string str = Utils::trim(getStringAttribute(attributes, "type"));
       str = Utils::lowercase(str);
       if (str == "simple") {
-        type = Simple;
+        mType = Simple;
       }
       else if (str == "compound") {
-        type = Compound;
+        mType = Compound;
       }
       else if (str == "continuous") {
-        type = Continuous;
+        mType = Continuous;
       }
       else  {
         throw Exception("unrecognized interest type");
       }
 
       str = getStringAttribute(attributes, "spline", "linear");
-      if (str == "cubic") is_cubic_spline = true;
-      else if (str == "linear") is_cubic_spline = false;
+      if (str == "cubic") mCubicSpline = true;
+      else if (str == "linear") mCubicSpline = false;
       else {
         throw Exception("unrecognized spline type");
       }
@@ -333,7 +333,7 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *tag, const char *
       throw Exception("incorrect number of attributes");
     }
 
-    Date t(date);
+    Date t(mDate);
     const char *str = getAttributeValue(attributes, "t");
     if (isInterval(str)) {
       t.add(str);
@@ -341,11 +341,11 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *tag, const char *
     else {
       t = Date(str);
     }
-    int d = t - date;
+    int d = t - mDate;
 
     double r = getDoubleAttribute(attributes, "r");
 
-    insertRate(Rate(d, diff(date, t, 'Y'), r));
+    insertRate(Rate(d, diff(mDate, t, 'Y'), r));
   }
   else
   {
@@ -360,10 +360,10 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *tag, const char *
 void ccruncher::Interest::epend(ExpatUserData &, const char *tag)
 {
   if (isEqual(tag,"interest")) {
-    if (rates.empty()) {
+    if (mRates.empty()) {
       throw Exception("interest has no rates");
     }
-    sort(rates.begin(), rates.end());
+    sort(mRates.begin(), mRates.end());
     setSpline();
   }
 }

@@ -14,7 +14,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
+// You should have received a copy of the GNU GeneExceptionral Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
@@ -27,6 +27,7 @@
 #include <cassert>
 #include "portfolio/LGD.hpp"
 #include "utils/Parser.hpp"
+#include "utils/Exception.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -78,17 +79,17 @@ ccruncher::LGD::LGD(const char *cstr)
         if (p == aux+len_pars) {
           throw Exception("invalid number of arguments");
         }
-        value2 = Parser::doubleValue(p+1);
-        value1 = Parser::doubleValue(aux);
-        init(distrs[i].type, value1, value2);
+        mValue2 = Parser::doubleValue(p+1);
+        mValue1 = Parser::doubleValue(aux);
+        init(distrs[i].type, mValue1, mValue2);
         return;
       }
     }
   }
 
   // fixed value case
-  value1 = Parser::doubleValue(cstr);
-  init(Fixed, value1, NAN);
+  mValue1 = Parser::doubleValue(cstr);
+  init(Fixed, mValue1, NAN);
 }
 
 /**************************************************************************//**
@@ -152,9 +153,9 @@ void ccruncher::LGD::init(Type t, double a, double b)
     if (!valid(t, a, b)) throw Exception("invalid lgd");
   }
   
-  type = t;
-  value1 = a;
-  value2 = b;
+  mType = t;
+  mValue1 = a;
+  mValue2 = b;
 }
 
 /**************************************************************************//**
@@ -162,7 +163,7 @@ void ccruncher::LGD::init(Type t, double a, double b)
  */
 ccruncher::LGD::Type ccruncher::LGD::getType() const
 {
-  return type;
+  return mType;
 }
 
 /**************************************************************************//**
@@ -170,7 +171,7 @@ ccruncher::LGD::Type ccruncher::LGD::getType() const
  */
 double ccruncher::LGD::getValue1() const
 {
-  return value1;
+  return mValue1;
 }
 
 /**************************************************************************//**
@@ -178,7 +179,7 @@ double ccruncher::LGD::getValue1() const
  */
 double ccruncher::LGD::getValue2() const
 {
-  return value2;
+  return mValue2;
 }
 
 /**************************************************************************//**
@@ -187,6 +188,6 @@ double ccruncher::LGD::getValue2() const
  */
 bool ccruncher::LGD::isvalid(const LGD &x)
 {
-  return valid(x.type, x.value1, x.value2);
+  return valid(x.mType, x.mValue1, x.mValue2);
 }
 

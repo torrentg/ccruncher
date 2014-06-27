@@ -24,10 +24,10 @@
 #define _EAD_
 
 #include <cmath>
+#include <string>
 #include <cassert>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
-#include "utils/Exception.hpp"
 
 namespace ccruncher {
 
@@ -77,11 +77,11 @@ class EAD
   private:
 
     //! Exposure type
-    Type type;
+    Type mType;
     //! Distribution parameter
-    double value1;
+    double mValue1;
     //! Distribution parameter
-    double value2;
+    double mValue2;
 
   private:
   
@@ -121,7 +121,7 @@ class EAD
 /**************************************************************************//**
  * @details Create a EAD with invalid values.
  */
-inline ccruncher::EAD::EAD() : type(Fixed), value1(NAN), value2(NAN)
+inline ccruncher::EAD::EAD() : mType(Fixed), mValue1(NAN), mValue2(NAN)
 {
   // nothing to do
 }
@@ -132,30 +132,30 @@ inline ccruncher::EAD::EAD() : type(Fixed), value1(NAN), value2(NAN)
  */
 inline double ccruncher::EAD::getValue(const gsl_rng *rng) const
 {
-  switch(type)
+  switch(mType)
   {
     case Fixed:
-      return value1;
+      return mValue1;
 
     case Lognormal:
       assert(rng != nullptr);
-      return gsl_ran_lognormal(rng, value1, value2);
+      return gsl_ran_lognormal(rng, mValue1, mValue2);
 
     case Exponential:
       assert(rng != nullptr);
-      return gsl_ran_exponential(rng, value1);
+      return gsl_ran_exponential(rng, mValue1);
 
     case Uniform:
       assert(rng != nullptr);
-      return gsl_ran_flat(rng, value1, value2);
+      return gsl_ran_flat(rng, mValue1, mValue2);
 
     case Gamma:
       assert(rng != nullptr);
-      return gsl_ran_gamma(rng, value1, value2);
+      return gsl_ran_gamma(rng, mValue1, mValue2);
 
     case Normal:
       assert(rng != nullptr);
-      return std::max(0.0, value1 + gsl_ran_gaussian(rng, value2));
+      return std::max(0.0, mValue1 + gsl_ran_gaussian(rng, mValue2));
 
     default:
       assert(false);
