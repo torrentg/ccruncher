@@ -2082,6 +2082,60 @@ file (e.g., 2000*\$EUR2USD).
 \chapter{Additional Topics}
 
 %------------------------------------------------------------------------------
+% MODELING DEFAULT TIMES USING MARKET DATA
+%------------------------------------------------------------------------------
+\section{Modeling Default Times Using Market Data}
+
+In some cases, historical data of portfolio defaults is not available, but 
+current debtors are listed on a stock exchange. In this section we calibrate 
+the default times model discussed in chapter~\ref{chap:mdt} using the obligors' 
+quotes instead of the historical records of defaults.
+
+As we have seen, the multivariate default times model has two components: the 
+marginal distributions of default times, $F_i$, and a t-Student copula which is 
+determined by the factors loadings $w_i$, the sector correlation matrix $R$, 
+and the degrees of freedom $\nu$.
+
+The first component can be obtained using the 1-year probabilities of default 
+and the exponential distribution exposed in the section~\ref{pdfsv}. The 1-year 
+PDs can be provided by Moody's or any other rating agency, or computed using 
+the Merton's model, the Black-Cox model, etc.
+
+The parameters of the second component, the copula, can be estimated using
+proposition~\ref{prop:pemh} replacing the observed annual number of defaults
+by the simulated number of defaults given an asset price model. We consider
+the multivariate standard Geometric Brownian Motion model:
+\begin{displaymath}
+  d S_t = \mu S_t\ dt + \sigma S_t\ dW_t
+\end{displaymath}
+where $S_t$ are the asset prices, $\mu$ are the expected annual returns, $\sigma$ 
+are the annualized volatilities, and $W_t$ is a multivariate Brownian Motion. We 
+can simulate asset prices using the discretized version of the model:
+\begin{displaymath}
+	S_{t+\Delta t} = S_t \cdot \exp\left(
+	\left(\mu - \frac{\sigma^2}{2}\right) \Delta t +
+	\left(\sigma \sqrt{\Delta t}\right) \epsilon_t
+	\right)
+\end{displaymath}
+where $S_t$ are the asset prices at time $t$, $\Delta t$ is a time increment
+(eg. 1 day), $\mu$ are the expected annual returns, $\sigma$ are the annualized 
+volatilities, and $\epsilon_t$ is a $N(0,C)$ random sample being $C$ a correlation 
+matrix.
+
+We consider that a company defaults when the asset value achieves a preset level. 
+This level always is lower than current value and depends on the annual probability 
+of default. Figure~\ref{fig:market1} displays the asset prices of three companys
+over a year (250 working days). Note that one company cross the $80\%$ level
+at the end of the year causing a default event.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.98\textwidth]{market1}
+	\caption{Simulating defaults using market data}
+	\label{fig:market1}
+\end{figure}
+
+%------------------------------------------------------------------------------
 % RISK SENSITIVITY
 %------------------------------------------------------------------------------
 \section{Risk Sensitivity}
