@@ -2103,8 +2103,31 @@ the Merton's model, the Black-Cox model, etc.
 
 The parameters of the second component, the copula, can be estimated using
 proposition~\ref{prop:pemh} replacing the observed annual number of defaults
-by the simulated number of defaults given an asset price model. We consider
-the multivariate standard Geometric Brownian Motion model:
+by the simulated number of defaults given an asset price model. 
+We consider that a company defaults when the asset value achieves a preset level. 
+This level always is lower than current value and depends on the annual probability 
+of default. Figure~\ref{fig:market1} displays the asset prices of three companys
+over a year (250 working days). Note that one company cross the $80\%$ level
+at the end of the year causing a default event.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.98\textwidth]{market1}
+	\caption{Simulating defaults using market data}
+	\label{fig:market1}
+\end{figure}
+
+The naïve application of the proposed method has the following problems: 
+\begin{inparaenum}[1)]
+	\item usually there are few companies resulting in a large number of 
+	simulations containing no defaults,
+	\item usually the companies default levels are very low, increasing
+	the above problem.
+\end{inparaenum}
+
+To ilustrate the simulation of the number of default we use the multivariate standard 
+Geometric Brownian Motion model exposed below, but you can replace it by your prefered 
+asset prices model:
 \begin{displaymath}
   d S_t = \mu S_t\ dt + \sigma S_t\ dW_t
 \end{displaymath}
@@ -2122,18 +2145,6 @@ where $S_t$ are the asset prices at time $t$, $\Delta t$ is a time increment
 volatilities, and $\epsilon_t$ is a $N(0,C)$ random sample being $C$ a correlation 
 matrix.
 
-We consider that a company defaults when the asset value achieves a preset level. 
-This level always is lower than current value and depends on the annual probability 
-of default. Figure~\ref{fig:market1} displays the asset prices of three companys
-over a year (250 working days). Note that one company cross the $80\%$ level
-at the end of the year causing a default event.
-
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.98\textwidth]{market1}
-	\caption{Simulating defaults using market data}
-	\label{fig:market1}
-\end{figure}
 
 %------------------------------------------------------------------------------
 % RISK SENSITIVITY
