@@ -404,13 +404,6 @@ between obligors is determined by obligors' industrial sectors. CCruncher
 assumes that the dependence structure is a t-Student copula, specifically 
 a t-Student multi-factor copula in which the factors are the industrial sectors.
 
-This document details the obligors' default times model, gives methods to 
-estimate the model parameters, details the procedure to simulate the portfolio 
-loss distribution, and provides the formulas to quantify the credit risk. 
-Furthermore, it explores the risk sensitivity for some parameters, encourages 
-transferring the parameters uncertainty to the credit risk measures, and 
-exposes a method to optimize the portfolio credit risk.
-
 CCruncher requires a portfolio with a buy-and-hold policy in which each obligor 
 has a rating assigned and belongs to a single economic sector. An example of 
 such a credit portfolio could be an SMEs loan portfolio (buy-and-hold policy, 
@@ -448,10 +441,10 @@ The content is organized into three chapters. The first chapter details the
 distribution used to simulate the obligors' default times, and provides methods 
 to estimate the copula parameters. The second chapter describes how to obtain 
 the portfolio loss distribution and quantify the portfolio credit risk.
-Finally, the third chapter covers three important topics: risk sensitivity,
-parameters uncertainty, and portfolio optimization. In order to facilitate 
-reading, those issues that are important to understanding the content and 
-require a detailed discussion have been relegated to appendices.
+Finally, the third chapter covers four important topics: model calibration using
+market data, risk sensitivity, parameters uncertainty, and portfolio optimization. 
+In order to facilitate reading, those issues that are important to understanding 
+the content and require a detailed discussion have been relegated to appendices.
 
 
 %==============================================================================
@@ -467,7 +460,7 @@ loss of the portfolio, but they have nothing to say about measures related
 to economic capital such as VaR or ES. This is because these measures strongly 
 depend on the dependence between obligors, and models mentioned above do not 
 refer to this concept. This chapter develops the multivariate model exploiting 
-the existing PD models.
+the existing models for PD, exposure and recovery.
 
 %------------------------------------------------------------------------------
 % THE COPULA MODEL
@@ -1090,10 +1083,10 @@ avoids these problems.
 The sample correlation coefficient of 20 Gaussian values has a high 
 uncertainty~\cite[pp. 217-221]{kenney:1951}. This stylized fact reflects our 
 situation because we are trying to estimate factor correlations among other 
-values. Uncertainty is exacerbated because our variables are latent and we 
-are estimating from observations of type count-data. Thus, considering the 
-estimated parameters as fixed values such as the Maximum Likelihood estimator 
-is a naive and risky proposition. 
+values. Uncertainty is exacerbated because our variables are continuous and 
+latent but we are estimating from observations of type count-data. Thus, 
+considering the estimated parameters as fixed values such as the Maximum 
+Likelihood estimator is a naive and risky proposition. 
 The Bayesian approach appears more appropriate~\cite{gossl:2005,tarashev:2010}
 because it considers the uncertainty of the parameters. Later we will see 
 how to transfer this uncertainty to the assessment of credit risk.
@@ -1161,11 +1154,14 @@ of this algorithm adapted to our case.
 	because this is constant and cancels into the M-H algorithm.
 \end{proposition}
 
-If you are interested in the Maximum Likelihood estimator, you can obtain an
-approximation of it taking the simulated parameter $\theta^{(0)}$ that maximizes
-$L(\theta^{(0)}) \cdot \prod_{t=1}^{T} \psi(\theta^{(0)}) \cdot \phi(\theta^{(0)})$ 
+If you are interested in the Maximum Likelihood estimation, you can obtain an
+approximation using the M-H simulated parameters $\theta^{(i)}$. For each simulated 
+set of parameters compute the unconditional likelihood function
+$l(\theta^{(i)}) = L(\theta^{(i)}) \cdot \prod_{t=1}^{T} \psi(\theta^{(i)}) \cdot \phi(\theta^{(i)})$, 
 in which $L$ is the conditional likelihood exposed in definition \ref{def:clik},
-$\psi$ is the pdf of $\chi_{\nu}^2$, and $\phi$ is the pdf of $N(\vec{0},R)$.
+$\psi$ is the pdf of $\chi_{\nu}^2$, and $\phi$ is the pdf of $N(\vec{0},R)$. Then, an 
+approximation of the Maximum Likelihood estimation is the simulated set of parameter 
+$\theta^{(MH)}$ satisfying $l(\theta^{(MH)}) \ge l(\theta^{(i)})\ \forall i$.
 
 \begin{example}[Model parameters estimation]
 	\label{ex:calib}
@@ -1405,8 +1401,8 @@ Criterion (DIC) values, etc.
 
 Figure~\ref{fig:lnlblock} displays the hierarchy of the portfolio components.
 As we observed in chapter~\ref{chap:mdt}, each obligor belongs to a single 
-sector/factor and has a PD with the distribution $F_i$, depending on its 
-rating. CCruncher considers that obligors' default times distribution has 
+sector/factor and has a PD depending only on its rating. 
+CCruncher considers that obligors' default times distribution has 
 marginals $F_i$ and a t-Student multi-factor copula with $\nu$ degrees of 
 freedom, factor loadings $\vec{w}$, and factor correlation matrix $R$.
 
@@ -1457,10 +1453,9 @@ the de-facto international financial risk regulation framework.
 		\end{array}
 		\right\}
 	\end{displaymath}
-	$\text{EAD}_i^j$ can be a function dependent of time when these amounts 
-	are fixed and known in advance (e.g., loan, bond) or can be a distribution
-	defined over time when we have a model that supports it 
-	(e.g., line of credit).
+	$\text{EAD}_i^j$ is a function when these amounts are fixed and known in 
+	advance (e.g., loan, bond) or can be a distribution defined over time when 
+	we have a model that supports it (e.g., line of credit).
 \end{definition}
 
 \begin{definition}[Loss Given Default (LGD)]
@@ -1475,8 +1470,8 @@ the de-facto international financial risk regulation framework.
 		\end{array}
 		\right\}
 	\end{displaymath}
-	$\text{LGD}_i^j$ can be a function dependent of time or can be a 
-	distribution defined over time when we have a model that supports it. 
+	$\text{LGD}_i^j$ is a function or can be a distribution defined over 
+	time when we have a model that supports it. 
 \end{definition}
 
 \begin{example}[10-year Bond]
@@ -2121,7 +2116,7 @@ The naïve application of the proposed method has the following problems:
 \begin{inparaenum}[1)]
 	\item usually there are few companies resulting in a large number of 
 	simulations containing no defaults,
-	\item usually the companies default levels are very low, increasing
+	\item usually the company default levels are very low, increasing
 	the above problem.
 \end{inparaenum}
 
