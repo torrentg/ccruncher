@@ -2,37 +2,25 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
-    <title>CCruncher: open-source project for credit risk modeling</title>
-    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="description" content="Open-source project for credit risk modeling" />
     <meta name="keywords" content="Credit Risk Modeling, Sectorial Correlation, Multi-factor Model, Gaussian Copula, T-Student Copula, Monte Carlo, VAR, Value at Risk, CVaR, Expected Shortfall, Ratings, Transition Matrix, Open Source, creditvar, copula approach, risk sensitivity, portfolio optimization" />
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <script src="ccruncher.js" type="text/javascript"></script>
+    <title>CCruncher: open-source project for credit risk modeling</title>
+    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
   </head>
 
-  <body onload="adaptBackground();">
-    <div id="main-container">
-    <div id="page-header" style="background:#005080;">
-      <table><tr>
-        <td style="vertical-align:middle;">
-          <a href="index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
-            &nbsp;CCRUNCHER
-          </a>
-        </td>
-        <td>
-          <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
-        </td>
-        <td style="vertical-align:middle; font-size:14pt; color:white; width:100%">
+  <body>
+    <div id="container">
+      <div id="header">
+        <span class="cell">
+          <a href="index.html" class="title">&nbsp;CCRUNCHER</a>
+        </span>
+        <span class="cell subtitle">
           Open-Source Project for<br/>Credit Risk Modeling
-        </td>
-        <td style="vertical-align: middle;">
-          <a href="index.html">
-            <img src="logo.png" alt="logo" height="80" style="margin-right:10px; border:0"/>
-          </a>
-        </td>
-      </tr>
-      </table>
+        </span>
+        <span class="cell">
+          <img src="logo.png" alt="logo" height="80" style="padding-right: 1em;"/>
+        </span>
       </div>
       <div id="navbar">
         <ul>
@@ -68,10 +56,10 @@
           </li>
         </ul>
       </div>
-
-    <img src="creditvar.png" alt="credit VaR" width="300" style="float:right; margin: 20px -20px 0px 20px;"/>
+      <div id="content">
 
     <h2>Overview</h2>
+    <img src="creditvar.png" alt="credit VaR" width="300" style="float:right; margin: 20px -20px 0px 20px;"/>
     <p>
       CCruncher is a project for quantifying portfolio credit risk
       using the copula approach. It is a framework consisting of two elements:
@@ -105,16 +93,17 @@
     <p>
       The current version is <span class="version">2.5.0</span>.
     </p>
-
-    <div id="page-footer">
-      <span id="copyright" >
-        Copyright &copy; 2004-2014 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
-      </span>
-      <span id="modified">
-        Last modified: 13-Apr-2014
-      </span>
     </div>
 
-  </div>
+      <div id="footer">
+        <span id="copyright" >
+          Copyright &copy; 2004-2014 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+        </span>
+        <span id="modified">
+          Last modified: 13-Jul-2014
+        </span>
+      </div>
+
+    </div>
   </body>
 </html>

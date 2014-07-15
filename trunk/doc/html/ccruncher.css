@@ -4,64 +4,87 @@
 	http://line25.com/tutorials/how-to-create-a-pure-css-dropdown-menu
 */
 
-body {
+html,body {
 	padding: 0px;
 	margin: 0px;
-	background: #BABBAD url('background.jpg') top center repeat-y;
-	font: normal 10pt verdana,arial,sans-serif;
+	background: #BABBAD;
+	font: normal 90% verdana,arial,sans-serif;
 	line-height: 1.5;
 	color: black;
+	height: 100%;
 }
 
-#main-container {
-	width: 750px;
+#container {
+	max-width: 960px;
+	min-height: 100%; 
 	margin: 0 auto;
 	clear: both;
-	padding: 10px 25px 1px 25px;
+	padding: 0.5em 1em 0.5em 1em;
 	background-color: white;
 }
 
-#page-header {
-	margin: 0px 0px 0px -25px;
+#header {
 	background: #005080;
-	height:auto;
-	width: 800px;
-	-moz-border-radius: 7px 7px 0px 0px;
+	height: auto;
+	width: 100%;
 	border-radius: 7px 7px 0px 0px;
+	display: table; 
+	color: white; 
 }
 
-#page-footer {
-	margin: 30px 0px 20px -25px;
+#header .cell {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+#header .title {
+	font-size: 250%; 
+	color: white; 
+	text-decoration: none; 
+	border-right: solid 3px red; 
+	padding-right: 0.3em; 
+	margin-right: 0.5em;
+}
+
+#header .subtitle {
+	width: 100%; 
+	font-size: 150%; 
+	line-height: 1.5;
+}
+
+#content {
+	padding: 0px 2em;
+}
+
+#footer {
+	margin: 4em 0px 1em 0px;
 	background: #E0E0E0;
-	height: 40px;
-	width: 800px;
-	-moz-border-radius: 5px;
 	border-radius: 5px;
-	font-size:smaller;
-	line-height:40px;
-}
-
-#page-footer #copyright {
+	font-size: smaller;
+	line-height: 4em;
+	height: 4em;
+	width: 100%;
 	text-align: center;
-	width: 75%;
-	display: inline-block;
 }
 
-#page-footer #modified {
+#footer #copyright {
+	white-space: nowrap;
+	width: 75%;
+}
+
+#footer #modified {
 	float: right;
 	white-space: nowrap;
-	text-align: right;
 	font-weight: bold;
-	padding-right: 10px;
+	padding-right: 1em;
 }
 
 #navbar {
-	margin: 0px 0px 30px -25px;
 	background: #005080;
-	width: 800px;
-	-moz-border-radius: 7px 7px 0px 0px;
+	width: 100%;
 	border-radius: 0px 0px 7px 7px;
 	text-align: center;
+	border-top: 1px solid #eee;
 }
 
 #navbar ul {
@@ -81,10 +104,6 @@ body {
 
 #navbar ul li {
 	float: left;
-}
-
-#navbar > ul > li > a {
-	border-top: 1px solid #eee;
 }
 
 #navbar ul a:link, #navbar ul a:visited {
@@ -172,7 +191,6 @@ tr.odd, tr.b {
 }
 
 pre {
-	font-size: 80%;
 	font-family: monospace;
 	margin: 0;
 	padding-left: 2em;
@@ -183,7 +201,6 @@ pre {
 }
 
 code {
-	font-size: 80%;
 	font-family: monospace;
 }
 
