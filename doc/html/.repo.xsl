@@ -14,39 +14,25 @@
   <xsl:template match="/">
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
-        <title>
-          CCruncher repo: 
-          <xsl:value-of select="/svn/index/@path"/>
-        </title>
-          <title>CCruncher repository</title>
-          <link rel="stylesheet" href="/ccruncher.css" type="text/css"/>
-          <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1"/>
-          <script src="/ccruncher.js" type="text/javascript"></script>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="robots" content="noarchive"/>
+        <title>
+          CCruncher repo: <xsl:value-of select="/svn/index/@path"/>
+        </title>
+        <link rel="stylesheet" href="/ccruncher.css" type="text/css"/>
       </head>
-      <body onload="adaptBackground();">
-    <div id="main-container">
-    <div id="page-header" style="background:#005080;">
-      <table><tr>
-        <td style="vertical-align:middle;">
-          <a href="/index.html" style="text-decoration:none; color:white; font-size:26pt; font-weight:normal;">
-            &nbsp;CCRUNCHER
-          </a>
-        </td>
-        <td>
-          <div style="height:50px; width:3px; border-left:solid 3px red; margin-left:5px; margin-right:5px; "></div>
-        </td>
-        <td style="vertical-align:middle; font-size:14pt; color:white; width:100%">
-          <span style="display:block">Open-Source Project for</span>Credit Risk Modeling
-        </td>
-        <td style="vertical-align: middle;">
-          <a href="/index.html">
-            <img src="/logo.png" alt="logo" height="80" style="margin-right:10px; border:0"/>
-          </a>
-        </td>
-      </tr>
-      </table>
+      <body>
+    <div id="container">
+      <div id="header">
+        <span class="cell">
+          <a href="/index.html" class="title">&nbsp;CCRUNCHER</a>
+        </span>
+        <span class="cell subtitle">
+          Open-Source Project for<br/>Credit Risk Modeling
+        </span>
+        <span class="cell">
+          <img src="/logo.png" alt="logo" height="80" style="padding-right: 1em;"/>
+        </span>
       </div>
       <div id="navbar">
         <ul>
@@ -82,6 +68,7 @@
           </li>
         </ul>
       </div>
+      <div id="content">
 
 <h1>Repository of Source Code</h1>
 <h2>CCruncher - Revision <xsl:value-of select="/svn/index/@rev"/>: <xsl:value-of select="/svn/index/@path"/></h2>
@@ -96,14 +83,16 @@
   </xsl:apply-templates>
 </ul>
 </p>
-    <div id="page-footer">
-      <span id="copyright" >
-        Copyright &copy; 2004-2014 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
-      </span>
-      <span id="modified">
-        Last modified: 13-Apr-2014
-      </span>
-    </div>
+</div>
+
+      <div id="footer">
+        <span id="copyright" >
+          Copyright &copy; 2004-2014 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
+        </span>
+        <span id="modified">
+          Last modified: 15-Jul-2014
+        </span>
+      </div>
 
   </div>
 
