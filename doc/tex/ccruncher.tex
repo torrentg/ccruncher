@@ -2099,11 +2099,11 @@ the Merton's model, the Black-Cox model, etc.
 The parameters of the second component, the copula, can be estimated using
 proposition~\ref{prop:pemh} replacing the observed annual number of defaults
 by the simulated number of defaults given an asset price model. 
-We consider that a company defaults when the asset value achieves a preset level. 
-This level always is lower than current value and depends on the annual probability 
-of default. Figure~\ref{fig:market1} displays the asset prices of three companys
-over a year (250 working days). Note that one company cross the $80\%$ level
-at the end of the year causing a default event.
+We consider that a company defaults when the asset value cross a preset threshold. 
+This threshold always is lower than current value and depends on the annual 
+probability of default. Figure~\ref{fig:market1} displays the asset prices of 
+three companys over a year (250 working days). Note that one company cross the 
+threshold $80\%$ at the end of the year causing a default event.
 
 \begin{figure}[!ht]
 	\centering
@@ -2112,23 +2112,9 @@ at the end of the year causing a default event.
 	\label{fig:market1}
 \end{figure}
 
-The naïve application of the proposed method has the following problems: 
-\begin{inparaenum}[1)]
-	\item usually there are few companies resulting in a large number of 
-	simulations containing no defaults,
-	\item usually the company default levels are very low, increasing
-	the above problem.
-\end{inparaenum}
-
-To ilustrate the simulation of the number of default we use the multivariate standard 
-Geometric Brownian Motion model exposed below, but you can replace it by your prefered 
-asset prices model:
-\begin{displaymath}
-  d S_t = \mu S_t\ dt + \sigma S_t\ dW_t
-\end{displaymath}
-where $S_t$ are the asset prices, $\mu$ are the expected annual returns, $\sigma$ 
-are the annualized volatilities, and $W_t$ is a multivariate Brownian Motion. We 
-can simulate asset prices using the discretized version of the model:
+To simulate the asset price paths you can use your prefered model. In this 
+section we use the multivariate standard Geometric Brownian Motion model 
+exposed below:
 \begin{displaymath}
 	S_{t+\Delta t} = S_t \cdot \exp\left(
 	\left(\mu - \frac{\sigma^2}{2}\right) \Delta t +
@@ -2140,6 +2126,73 @@ where $S_t$ are the asset prices at time $t$, $\Delta t$ is a time increment
 volatilities, and $\epsilon_t$ is a $N(0,C)$ random sample being $C$ a correlation 
 matrix.
 
+The direct application of the proposed method has the following drawbacks: 
+\begin{inparaenum}[1)]
+	\item usually there are few companies resulting in a large number of 
+	simulations containing no defaults,
+	\item usually the company default thresholds are very low, causing a
+	very low ratio of defaults.
+\end{inparaenum}
+
+The first drawback can be avoided considering $n$ replicas for each considered
+firm. With this consideration, the correlation matrix takes the form of a 
+correlation block matrix allowing the usage of the Gaussian multi-factor model
+(see definition \ref{def:gmfm}) to generate random samples from a multivariate 
+Gaussian with a correlation block matrix.
+
+The second drawback can be avoided increasing the thresholds instead of using
+the values induced by the PDs. This is because correlations doesn't depend 
+on PDs or default thresholds. We set the threshold values trying that 
+defaults/no-defaults ratios be close to $1$ in order to minimize the error in 
+the calibration procedure. The PDs linked to these new thresholds (required in 
+the parameters estimation procedure) can be obtained using the empirical values:
+\begin{displaymath}
+	\tilde{p_i} = \sum_{t=1}^{T} \frac{K_i^t}{N_i^t}
+\end{displaymath}
+where $p_i$ is the 1-year probability of default of the i-th factor, $T$ is the
+number of simulations, $K_i^t$ is the number of simulated defaults in the
+t-th simulation and i-th factor, and $N_i^t$ is the number of firms of the t-th 
+simulation and i-th factor (constant value for all simulations).
+
+Finally, for practical reasons 
+we use relative asset prices (current asset price equals to 1) instead of 
+absolute values.
+
+%TODO: cal tenir en compte la volatilitat, la PD la calculem a partir de la mitjana
+
+\begin{algorithm}[Simulating defaults using a market model]
+	\label{alg:sdumm}
+	Let a portfolio be categorized in $s$ sectors and $r$ ratings.
+	Assume a multivariate default times distribution with marginals $F_i$
+	and a t-Student multi-factor copula $C_{\nu,\vec{w},R}^{\text{t}}$.
+	We can then simulate a sample of size $M$ of the portfolio loss distribution
+	at time $T$ by performing the following:
+	\begin{enumerate}
+		\item Compute the Cholesky decomposition of $R = L \cdot L^\intercal$
+		\item For $m=1,\dots,M$ repeat the following steps:
+		\begin{itemize}
+			\item $\text{Loss}^m = 0$
+			\item Simulate $s$ independent $N(0,1)$, $\vec{y}$
+			\item Simulate factors doing $\vec{z} = L \cdot \vec{y}$
+			\item Simulate $\upsilon \sim \chi_{\nu}^2$
+			\item For each obligor $i=1,\dots,n$ repeat the following steps:
+			\begin{itemize}
+				\item Set $si = $ i-th obligor sector index
+				\item Set $ri = $ i-th obligor rating index
+				\item Simulate $\epsilon \sim N(0,1)$
+				\item Compute $x_i = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_{si} \cdot z_{si} + \sqrt{1-w_{si}^2} \cdot \epsilon \right)$
+				\item Compute $t_i = F_{ri}^{-1}\left(t_{\nu}(x_i)\right)$
+				\item if $t_i \le T$, then for each asset $j$ belonging to i-th obligor
+				\begin{itemize}
+					\item Evaluate or simulate $\text{EAD}_i^j(t_i)$
+					\item Evaluate or simulate $\text{LGD}_i^j(t_i)$
+					\item $\text{Loss}^m = \text{Loss}^m + \text{EAD}_i^j(t_i) \cdot \text{LGD}_i^j(t_i)$
+				\end{itemize}
+			\end{itemize}
+			\item print $\text{Loss}^m$
+		\end{itemize}
+	\end{enumerate}
+\end{algorithm}
 
 %------------------------------------------------------------------------------
 % RISK SENSITIVITY
