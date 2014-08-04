@@ -1,7 +1,7 @@
 
 //===========================================================================
 //
-// CreditCruncher - A portfolio credit risk valorator
+// CCruncher - A portfolio credit risk valorator
 // Copyright (C) 2004-2014 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ using namespace ccruncher;
 //===========================================================================
 void ccruncher_test::IDataTest::test1()
 {
-  // simple creditcruncher XML
+  // simple CCruncher XML
   string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
   <ccruncher>\n\
     <title>set your title here</title>\n\
