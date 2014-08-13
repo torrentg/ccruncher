@@ -40,7 +40,7 @@ nobligors = [
 ]
 
 ndefaults = [
-  > tail -n+2 data/test05/sector-rating.csv | head -n 1000 | sed "s/\.00,/,/g; s/\.00/;/"
+  > tail -n+7 data/test05/sector-rating.csv | head -n 1000 | sed "s/\.00,/,/g; s/\.00/;/"
 ]
 
 //NU.init = [15]
