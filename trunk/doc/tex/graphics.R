@@ -869,7 +869,7 @@ dev.off()
 
 
 # ================================================
-# market data
+# market data (illustration default)
 # ================================================
 library(mvtnorm)
 
@@ -904,4 +904,86 @@ lines(rep(0.8,251), lty=2, col=2)
 points(217,0.8, pch=19, col=2)
 grid()
 dev.off()
+
+
+# ================================================
+# distribution defaults using market model
+# each distribution corresponds to a threshold
+# ================================================
+
+# read simulated defaults in a file (1 column)
+readDefaults <- function(filename)
+{
+  data <- read.csv(filename, header=FALSE, comment.char="#")
+  return(data[,1])
+}
+
+pdf(file="market2.pdf", width=7, height=4)
+par(mar=c(4,4,0.5,0.1), cex.axis=0.75, cex.lab=0.75, cex.main=1, cex.sub=1)
+
+leglabs = NULL
+myxbreaks = 0.01*(0:100)
+myybreaks = 0.001*(0:150)
+filenames = list.files(pattern = "*.out")
+plot(0, 0, xlim=c(0,1), ylim=c(0,0.15), yaxt="n", xaxt="n", xlab='% of defaults', ylab='Density')
+axis(1, at=pretty(myxbreaks), paste0(pretty(myxbreaks)*100, " %"), las=TRUE)
+axis(2, at=pretty(myybreaks), paste0(pretty(myybreaks)*100, " %"), las=TRUE)
+numcol = 1
+for(i in 1:length(filenames)) {
+  if ((i%%2) != 1) next
+  filename = filenames[i]
+  threshold = as.double(substr(filename,11,14))
+  if (threshold < 0.67) next
+  D = readDefaults(filename)
+  D = D/2000
+  h = hist(D, breaks=myxbreaks, plot=FALSE)
+  x = h$mids
+  y = h$counts/length(D)
+  #lines(x, y, type='l', col=i)
+  #lines(spline(x, y, xmin=0, xmax=1, method='n', n=100), type='l', col=i )
+  # smoothing histograms
+  lo <- loess(y~x, span=0.20, data.frame(x=x, y=y))
+  lines(x, sapply(predict(lo, data.frame(x=x)), max, 0), type='l', col=numcol )
+  leglabs = c(leglabs, paste(threshold*100,"%",sep=""))
+  numcol = numcol+1
+}
+legend(0.3, 0.15, leglabs, cex=0.7, lty=1, col=1:numcol, ncol=3)
+grid()
+
+dev.off()
+
+# ================================================
+# probability of default depending of threshold
+# ================================================
+
+# read simulated defaults in a file (1 column)
+readDefaults <- function(filename)
+{
+  data <- read.csv(filename, header=FALSE, comment.char="#")
+  return(data[,1])
+}
+
+pdf(file="market3.pdf", width=7, height=4)
+par(mar=c(4,4,0.5,0.1), cex.axis=0.75, cex.lab=0.75, cex.main=1, cex.sub=1)
+
+myxbreaks = 0.01*(40:100)
+myybreaks = 0.01*(0:100)
+filenames = list.files(pattern = "*.out")
+x = NULL
+y = NULL
+for(i in 1:length(filenames)) {
+  filename = filenames[i]
+  threshold = as.double(substr(filename,11,14))
+  #if (threshold < 0.67) next
+  D = readDefaults(filename)
+  x = c(x, threshold)
+  y = c(y, mean(D/2000))
+}
+plot(x, y, xlim=c(0.4,1), ylim=c(0,1), yaxt="n", xaxt="n", xlab='Threshold', ylab='Probability of default', type='l')
+axis(1, at=pretty(myxbreaks), paste0(pretty(myxbreaks)*100, " %"), las=TRUE)
+axis(2, at=pretty(myybreaks), paste0(pretty(myybreaks)*100, " %"), las=TRUE)
+grid()
+
+dev.off()
+
 
