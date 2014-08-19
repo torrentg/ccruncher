@@ -987,3 +987,39 @@ grid()
 dev.off()
 
 
+# ================================================
+# calibration independent on threshold
+# ================================================
+
+# read simulated values in a file (4 columns)
+readValues <- function(filename)
+{
+  data <- read.csv(filename, header=TRUE, comment.char="#", sep="\t")
+  return(data[,2])
+}
+
+pdf(file="market4.pdf", width=7, height=4)
+par(mar=c(4,4,0.5,0.1), cex.axis=0.75, cex.lab=0.75, cex.main=1, cex.sub=1)
+
+myxbreaks = 0.01*(40:100)
+myybreaks = 0.01*(20:30)
+filenames = list.files(pattern = "*[0-9]\\.out")
+x = NULL
+y = NULL
+z = NULL
+for(i in 1:length(filenames)) {
+  filename = filenames[i]
+  threshold = as.double(substr(filename,11,14))
+  #if (threshold < 0.67) next
+  W = readValues(filename)
+  x = c(x, threshold)
+  y = c(y, mean(W[10000:50000]))
+  z = c(z, var(W[10000:50000]))
+}
+plot(x, y, xlim=c(0.4,1), ylim=c(0.2,0.3), yaxt="n", xaxt="n", xlab='Threshold', ylab='W', type='l')
+axis(1, at=pretty(myxbreaks), paste0(pretty(myxbreaks)*100, " %"), las=TRUE)
+axis(2, at=pretty(myybreaks), paste0(pretty(myybreaks)*100, " %"), las=TRUE)
+grid()
+
+dev.off()
+
