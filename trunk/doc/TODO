@@ -6,6 +6,9 @@ Current works
 -------------------
   * move to C++11
   * stock/asset/index case
+  * mention to Gibbs sampler?
+  * create F() and Finv(t()) output
+  * equal spline type in F() and Finv(t())
 
 Future works
 -------------------
@@ -16,7 +19,6 @@ Future works
      - PD functions can mix transition matrix and dprobs
   * improve model
      - add grouped t-copula support
-     - allow evaluation in multiple time horizons
      - consider that an obligor could belong to a weighted sum of factors
   * improve functional tests
      - examples based on real data

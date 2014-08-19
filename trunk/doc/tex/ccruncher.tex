@@ -1096,23 +1096,30 @@ density of the number of defaults, thus implying that the parameters to be
 inferred are $\nu,\vec{w},R$ \ul{and the latent variables 
 $\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T$}.
 
-\begin{definition}[Conditional likelihood]
+\begin{definition}[Likelihood function]
 	\label{def:clik}
 	Assume a set of observations $\{K^t, N^t\}_{t=1,\dots,T}$ in which $N^t$ 
 	and $K^t$ are vectors representing the number of obligors and defaulted 
-	obligors in each sector-rating bucket. We define the conditional 
-	likelihood of these observations as
+	obligors in each sector-rating bucket. We define the likelihood of these 
+	observations as
 	\begin{displaymath}
 		\begin{array}{l}
-			L(\nu,\vec{w},R \mid \upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\ ;\ K^1,\dots,K^T) = \\
-			= \displaystyle \prod_{t=1}^T K(k_{11}^t,\dots,k_{sr}^t \mid \upsilon^t,\vec{z}^t\ ;\ \nu,\vec{w},R) = \\
+			L(\nu,\vec{w},R,\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\ ;\ K^1,\dots,K^T) = \\
+			= \displaystyle \prod_{t=1}^T 
+			\psi_{\nu}(\upsilon^t) \cdot \phi_{R}(\vec{z}^t) \cdot
+			K(k_{11}^t,\dots,k_{sr}^t \mid \upsilon^t,\vec{z}^t\ ;\ \nu,\vec{w},R) = \\
 			= \displaystyle
-			\prod_{t=1}^T \prod_{i=1}^s \prod_{j=1}^r 
+			\prod_{t=1}^T 
+			\psi_{\nu}(\upsilon^t) \cdot \phi_{R}(\vec{z}^t)
+			\prod_{i=1}^s \prod_{j=1}^r 
 			\binom{n_{ij}^t}{k_{ij}^t} \cdot
 			H_{ij}(\upsilon^t,z_i^t)^{k_{ij}^t} \cdot
 			\left( 1 - H_{ij}(\upsilon^t,z_i^t) \right)^{n_{ij}^t-k_{ij}^t}
 		\end{array}
 	\end{displaymath}
+	in which $\psi_{\nu}$ is the pdf of $\chi_{\nu}^2$, $\phi_{R}$ is the pdf 
+	of $N(\vec{0},R)$, and $H_{ij}$ is the function defined in 
+	proposition~\ref{prop:cdand}.
 \end{definition}
 
 We apply the Metropolis-Hastings algorithm to this conditional likelihood  
@@ -1131,37 +1138,16 @@ of this algorithm adapted to our case.
 		\begin{tabular}{lll}
 			\textbullet & parameters $\theta \equiv \{ \nu,\vec{w},R,\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\}$ & \\
 			\textbullet & observations $y \equiv \{K^t, N^t\}_{t=1,\dots,T}$ & \\
-			\textbullet & likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R  \mid \upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$ & see definition \ref{def:clik} \\
+			\textbullet & likelihood $f(y \mid \theta) \equiv L(\nu,\vec{w},R,\upsilon^1,\vec{z}^1,\dots,\upsilon^T,\vec{z}^T\ ;\ K^1,\dots,K^T)$ & see definition \ref{def:clik} \\
 			\textbullet & proposal distributions $q_j(\theta_j \mid \theta_j') \equiv N(\theta,\sigma_j)$ & all parameters\\
-			\textbullet & prior distribution $\nu \equiv \text{Unif}(2,1000)$ & \\
+			\textbullet & prior distribution $\nu \equiv \text{Unif}(2,300)$ & \\
 			\textbullet & prior distribution $w_i \equiv \text{Unif}(0,1)$ & $i=1,\dots,s$ \\
-			\textbullet & prior distribution $r_{ij} \equiv \Xi_{ij}(\vec{z}^1,\dots,\vec{z}^T,R)$ & $i=1,\dots,s \quad j>i$ \\ %, 
-			\textbullet & prior distribution $\vec{z}^t \equiv N(\vec{0},R)$ & $t=1,\dots,T$ \\
-			\textbullet & prior distribution $\upsilon^t \equiv \chi_{\nu}^2$ & $t=1,\dots,T$ \\
+			\textbullet & prior distribution $r_{ij} \equiv \text{Unif}(-1,+1)$ & $i=1,\dots,s \quad j>i$ \\
+			\textbullet & prior distribution $\vec{z}^t \equiv \text{Unif}(-10,+10)$ & $t=1,\dots,T$ \\
+			\textbullet & prior distribution $\upsilon^t \equiv \text{Unif}(0,1000)$ & $t=1,\dots,T$ \\
 		\end{tabular}
 	\end{listliketab}
-	~\\
-	~\\
-	The pdf of the distribution $\Xi_{ij}(\vec{z}^1,\dots,\vec{z}^T,R)$ is
-	\begin{displaymath}
-		\xi_{ij}(r_{ij}\ ;\ \vec{z}^1,\dots,\vec{z}^T,R) = \frac
-		{\displaystyle \prod_{t=1}^{T} \phi\left( \vec{z}^t\ ;\ \vec{0}, R(r_{ij},i,j) \right)}
-		{\displaystyle \int \prod_{t=1}^{T} \phi\left( \vec{z}^t\ ;\ \vec{0}, R(x,i,j) \right) \ud x}
-	\end{displaymath}
-	in which $\phi$ is the pdf of the multivariate $N(\vec{0},R)$ distribution,
-	and $R(x,i,j)$ is the matrix $R$ with the cell $(i,j)$ value 
-	replaced by $x$. We do not need to know the limits of the integral
-	because this is constant and cancels into the M-H algorithm.
 \end{proposition}
-
-If you are interested in the Maximum Likelihood estimation, you can obtain an
-approximation using the M-H simulated parameters $\theta^{(i)}$. For each simulated 
-set of parameters compute the unconditional likelihood function
-$l(\theta^{(i)}) = L(\theta^{(i)}) \cdot \prod_{t=1}^{T} \psi(\theta^{(i)}) \cdot \phi(\theta^{(i)})$, 
-in which $L$ is the conditional likelihood exposed in definition \ref{def:clik},
-$\psi$ is the pdf of $\chi_{\nu}^2$, and $\phi$ is the pdf of $N(\vec{0},R)$. Then, an 
-approximation of the Maximum Likelihood estimation is the simulated set of parameter 
-$\theta^{(MH)}$ satisfying $l(\theta^{(MH)}) \ge l(\theta^{(i)})\ \forall i$.
 
 \begin{example}[Model parameters estimation]
 	\label{ex:calib}
@@ -2154,13 +2140,11 @@ number of simulations, $K_i^t$ is the number of simulated defaults in the
 t-th simulation and i-th factor, and $N_i^t$ is the number of firms of the t-th 
 simulation and i-th factor (constant value for all simulations).
 
-Finally, for practical reasons 
-we use relative asset prices (current asset price equals to 1) instead of 
-absolute values.
+Finally, for practical reasons we use relative asset prices (current asset price 
+equals to 1) instead of absolute values. Now we are able to present the algorithm
+to simulate the annual number of default using a stock prices model.
 
-%TODO: cal tenir en compte la volatilitat, la PD la calculem a partir de la mitjana
-
-\begin{algorithm}[Simulating defaults using a market model]
+\begin{algorithm}[Annual number of default simulation using a stock prices model]
 	\label{alg:sdumm}
 	Let a portfolio be categorized in $s$ sectors and $r$ ratings.
 	Assume a multivariate default times distribution with marginals $F_i$
@@ -2168,15 +2152,22 @@ absolute values.
 	We can then simulate a sample of size $M$ of the portfolio loss distribution
 	at time $T$ by performing the following:
 	\begin{enumerate}
-		\item Compute the Cholesky decomposition of $R = L \cdot L^\intercal$
-		\item For $m=1,\dots,M$ repeat the following steps:
+		\item Compute the Cholesky decomposition of $C = L \cdot L^\intercal$
+		\item For $t=1,\dots,nt$ repeat the following steps:
 		\begin{itemize}
-			\item $\text{Loss}^m = 0$
-			\item Simulate $s$ independent $N(0,1)$, $\vec{y}$
-			\item Simulate factors doing $\vec{z} = L \cdot \vec{y}$
-			\item Simulate $\upsilon \sim \chi_{\nu}^2$
-			\item For each obligor $i=1,\dots,n$ repeat the following steps:
+			\item For $d=1,\dots,nd$ repeat the following steps:
 			\begin{itemize}
+				\item Simulate $s$ independent $N(0,1)$, $\vec{y}$
+				\item Simulate $\vec{z}^d = L \cdot \vec{y}$
+			\end{itemize}
+			\item For each obligor $i=1,\dots,no$ repeat the following steps:
+			\begin{itemize}
+				\item For each obligor's replica $j=1,\dots,nr$ repeat the following steps:
+				\begin{itemize}
+					\item Simulate $nd$ independent $N(0,1)$, $\vec{y}$
+					\item $X = w[j]*Z[,j] + sqrt(1-w[j]^2)* \vec{y}$
+					\item Simulate $\vec{z}^d = L \cdot \vec{y}$
+				\end{itemize}
 				\item Set $si = $ i-th obligor sector index
 				\item Set $ri = $ i-th obligor rating index
 				\item Simulate $\epsilon \sim N(0,1)$
@@ -2193,6 +2184,8 @@ absolute values.
 		\end{itemize}
 	\end{enumerate}
 \end{algorithm}
+
+%TODO: cal tenir en compte la volatilitat
 
 %------------------------------------------------------------------------------
 % RISK SENSITIVITY
