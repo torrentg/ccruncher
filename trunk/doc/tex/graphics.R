@@ -873,7 +873,7 @@ dev.off()
 # ================================================
 library(mvtnorm)
 
-set.seed(4)
+set.seed(6)
 sigma = c(0.15, 0.13, 0.17)
 R = matrix(nrow=3, ncol=3, byrow=TRUE, data=c(0.4,0.3,0.25,0.3,0.35,0.15,0.25,0.15,0.3))
 levels = c(0.75, 0.75, 0.75)
@@ -896,15 +896,18 @@ for(t in 1:tsteps)
 
 pdf(file="market1.pdf", width=7, height=3)
 par(mar=c(4,4,0.5,0.1), cex.axis=0.75, cex.lab=0.75, cex.main=1, cex.sub=1)
-plot(S[,1],type='l',col=24, xlab="Time (in days)", ylab="Asset price", yaxt="n", ylim=c(min(S),max(S)))
+plot(S[,1],type='l',col=2, xlab="Time (in days)", ylab="Asset price", yaxt="n", ylim=c(min(S),max(S)))
 axis(2, at=pretty(c(S[,1],S[,2],S[,3])), paste0(pretty(c(S[,1],S[,2],S[,3]))*100, " %"), las=TRUE)
-lines(S[,2],type='l',col=35)
-lines(S[,3],type='l',col=28)
-lines(rep(0.8,251), lty=2, col=2)
-points(217,0.8, pch=19, col=2)
+lines(S[,2],type='l',col=3)
+lines(S[,3],type='l',col=4)
+lines(rep(1.0,251), lty=2, col=24)
+lines(rep(0.9,251), lty=2, col=2)
+points(251,S[251,1], pch=19, col=2)
+points(251,S[251,2], pch=19, col=3)
+points(251,S[251,3], pch=19, col=4)
 grid()
-dev.off()
 
+dev.off()
 
 # ================================================
 # distribution defaults using market model
