@@ -2078,18 +2078,22 @@ determined by the factors loadings $w_i$, the sector correlation matrix $R$,
 and the degrees of freedom $\nu$.
 
 The first component can be obtained using the 1-year probabilities of default 
-and the exponential distribution exposed in the section~\ref{pdfsv}. The 1-year 
-PDs can be provided by Moody's or any other rating agency, or computed using 
-the Merton's model, the Black-Cox model, etc.
+and the exponential distribution exposed in the section~\ref{pdfsv}. These 
+1-year PDs can be provided by Moody's or any other rating agency, or computed 
+using the Merton's model, the Black-Cox model, etc.
 
-The parameters of the second component, the copula, can be estimated using
-proposition~\ref{prop:pemh} replacing the observed annual number of defaults
-by the simulated number of defaults given an asset price model. 
-We consider that a company defaults when the asset value cross a preset threshold. 
-This threshold always is lower than current value and depends on the annual 
-probability of default. Figure~\ref{fig:market1} displays the asset prices of 
-three companys over a year (250 working days). Note that one company cross the 
-threshold $80\%$ at the end of the year causing a default event.
+The parameters of the second component, the copula, can be estimated applying
+proposition~\ref{prop:pemh} to the number of defaults simulated using an asset 
+prices model.
+
+We consider that a company defaults when the asset value is below a preset 
+threshold at the end of the period (usually 1-year). This threshold always is 
+lower than current value and depends on the annual probability of default. 
+Figure~\ref{fig:market1} displays the asset prices of three companies over a 
+year (250 working days). Note that the \emph{red} company ends below the 
+threshold $80\%$ causing a default event; the \emph{blue} company cross the 
+threshold but finally ends with a value just above the threshold avoiding
+the default event.
 
 \begin{figure}[!ht]
 	\centering
@@ -2098,9 +2102,8 @@ threshold $80\%$ at the end of the year causing a default event.
 	\label{fig:market1}
 \end{figure}
 
-To simulate the asset price paths you can use your prefered model. In this 
-section we use the multivariate standard Geometric Brownian Motion model 
-exposed below:
+To simulate the asset price paths we use the multivariate standard Geometric 
+Brownian Motion model exposed below:
 \begin{displaymath}
 	S_{t+\Delta t} = S_t \cdot \exp\left(
 	\left(\mu - \frac{\sigma^2}{2}\right) \Delta t +
@@ -2109,29 +2112,33 @@ exposed below:
 \end{displaymath}
 where $S_t$ are the asset prices at time $t$, $\Delta t$ is a time increment
 (eg. 1 day), $\mu$ are the expected annual returns, $\sigma$ are the annualized 
-volatilities, and $\epsilon_t$ is a $N(0,C)$ random sample being $C$ a correlation 
-matrix.
+volatilities, and $\epsilon_t$ is a $N(0,C)$ being $C$ a correlation matrix.
 
 The direct application of the proposed method has the following drawbacks: 
 \begin{inparaenum}[1)]
 	\item usually there are few companies resulting in a large number of 
 	simulations containing no defaults,
-	\item usually the company default thresholds are very low, causing a
-	very low ratio of defaults.
+	\item usually the thresholds are very low, causing a very low ratio of 
+	defaults.
 \end{inparaenum}
 
 The first drawback can be avoided considering $n$ replicas for each considered
-firm. With this consideration, the correlation matrix takes the form of a 
+firm. With this instruction, the correlation matrix takes the form of a 
 correlation block matrix allowing the usage of the Gaussian multi-factor model
 (see definition \ref{def:gmfm}) to generate random samples from a multivariate 
 Gaussian with a correlation block matrix.
 
 The second drawback can be avoided increasing the thresholds instead of using
-the values induced by the PDs. This is because correlations doesn't depend 
-on PDs or default thresholds. We set the threshold values trying that 
-defaults/no-defaults ratios be close to $1$ in order to minimize the error in 
-the calibration procedure. The PDs linked to these new thresholds (required in 
-the parameters estimation procedure) can be obtained using the empirical values:
+the values induced by the PDs. We have checked numerically that correlations 
+doesn't depend on thresholds. This statement is not true if we consider that
+default ocurres at first cross instead of the value at the end of the period 
+(european vs. american option type). In this case, we observed that the induced
+copula is slightly asymmetrical.
+
+We set the threshold values trying that defaults/no-defaults ratios be close 
+to $0.5$ in order to minimize the error in the calibration procedure. The PDs 
+linked to these new thresholds (required in the parameters estimation procedure) 
+can be obtained using the empirical values:
 \begin{displaymath}
 	\tilde{p_i} = \sum_{t=1}^{T} \frac{K_i^t}{N_i^t}
 \end{displaymath}
@@ -2141,8 +2148,9 @@ t-th simulation and i-th factor, and $N_i^t$ is the number of firms of the t-th
 simulation and i-th factor (constant value for all simulations).
 
 Finally, for practical reasons we use relative asset prices (current asset price 
-equals to 1) instead of absolute values. Now we are able to present the algorithm
-to simulate the annual number of default using a stock prices model.
+equals to $1$) instead of absolute values. Now we are able to present the algorithm
+to simulate the annual number of default using the multivariate Brownian Motion 
+model for stock prices.
 
 \begin{algorithm}[Annual number of default simulation using a stock prices model]
 	\label{alg:sdumm}
@@ -2153,35 +2161,34 @@ to simulate the annual number of default using a stock prices model.
 	at time $T$ by performing the following:
 	\begin{enumerate}
 		\item Compute the Cholesky decomposition of $C = L \cdot L^\intercal$
-		\item For $t=1,\dots,nt$ repeat the following steps:
+		\item If nsims $= M$, stop
+		\item Simulate the factors paths.\\
+		For $t=1,\dots,n_t$ repeat the following steps:
 		\begin{itemize}
-			\item For $d=1,\dots,nd$ repeat the following steps:
-			\begin{itemize}
-				\item Simulate $s$ independent $N(0,1)$, $\vec{y}$
-				\item Simulate $\vec{z}^d = L \cdot \vec{y}$
-			\end{itemize}
-			\item For each obligor $i=1,\dots,no$ repeat the following steps:
-			\begin{itemize}
-				\item For each obligor's replica $j=1,\dots,nr$ repeat the following steps:
-				\begin{itemize}
-					\item Simulate $nd$ independent $N(0,1)$, $\vec{y}$
-					\item $X = w[j]*Z[,j] + sqrt(1-w[j]^2)* \vec{y}$
-					\item Simulate $\vec{z}^d = L \cdot \vec{y}$
-				\end{itemize}
-				\item Set $si = $ i-th obligor sector index
-				\item Set $ri = $ i-th obligor rating index
-				\item Simulate $\epsilon \sim N(0,1)$
-				\item Compute $x_i = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_{si} \cdot z_{si} + \sqrt{1-w_{si}^2} \cdot \epsilon \right)$
-				\item Compute $t_i = F_{ri}^{-1}\left(t_{\nu}(x_i)\right)$
-				\item if $t_i \le T$, then for each asset $j$ belonging to i-th obligor
-				\begin{itemize}
-					\item Evaluate or simulate $\text{EAD}_i^j(t_i)$
-					\item Evaluate or simulate $\text{LGD}_i^j(t_i)$
-					\item $\text{Loss}^m = \text{Loss}^m + \text{EAD}_i^j(t_i) \cdot \text{LGD}_i^j(t_i)$
-				\end{itemize}
-			\end{itemize}
-			\item print $\text{Loss}^m$
+			\item Simulate $s$ independent $N(0,1)$, $\vec{y}$
+			\item Simulate $\vec{z}^t = L \cdot \vec{y}$
 		\end{itemize}
+		\item For each company $i=1,\dots,s$ repeat the following steps:
+		\begin{itemize}
+			\item For each replica $j=1,\dots,n_i$ repeat the following steps:
+			\begin{itemize}
+				\item Simulate $t$ independent $N(0,1)$, $\vec{\epsilon}$
+				\item $\vec{x} = w_i \cdot \vec{z_i} + \sqrt{1-w_i^2} \cdot \vec{\epsilon}$
+				\item $\vec{r} = \frac{\left(\mu - \frac{\sigma^2}{2}\right)}{t} + \frac{\sigma}{\sqrt{t}} \cdot \vec{x}$
+			\end{itemize}
+			\item Set $si = $ i-th obligor sector index
+			\item Set $ri = $ i-th obligor rating index
+			\item Simulate $\epsilon \sim N(0,1)$
+			\item Compute $x_i = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_{si} \cdot z_{si} + \sqrt{1-w_{si}^2} \cdot \epsilon \right)$
+			\item Compute $t_i = F_{ri}^{-1}\left(t_{\nu}(x_i)\right)$
+			\item if $t_i \le T$, then for each asset $j$ belonging to i-th obligor
+			\begin{itemize}
+				\item Evaluate or simulate $\text{EAD}_i^j(t_i)$
+				\item Evaluate or simulate $\text{LGD}_i^j(t_i)$
+				\item $\text{Loss}^m = \text{Loss}^m + \text{EAD}_i^j(t_i) \cdot \text{LGD}_i^j(t_i)$
+			\end{itemize}
+		\end{itemize}
+		\item print $\text{Loss}^m$
 	\end{enumerate}
 \end{algorithm}
 
