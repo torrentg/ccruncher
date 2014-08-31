@@ -1936,20 +1936,17 @@ consumed by this sub-portfolio.
 %------------------------------------------------------------------------------
 \section{Simulation Details}
 
-\textbf{Variance reduction}. CCruncher generates random samples from the 
+\textbf{Antithetic variates}. CCruncher generates random samples from the 
 portfolio loss distribution. This sample is used to estimate the risk measures 
 (e.g., VaR) using the statistics described in section~\ref{sec:riskm} or any 
 other required by the analyst. Any one of these measures, considered 
 individually, can be formulated as a Monte Carlo problem and can apply some 
 variance reduction techniques (e.g., importance sampling~\cite{brereton:2012}), 
-but not simultaneously. For this reason, the variance reduction techniques 
-used in CCruncher do not seek an increase in precision, but an improvement 
-in the overall results in some manner. The applied variance reduction procedures 
-implemented in CCruncher are antithetic variates and Latin hypercube 
-sampling. You can found more info at appendix~\ref{ap:vr}.
+but not simultaneously. CCruncher implements the antithetic variates method
+(see appendix~\ref{ap:vr}) in order to increase the simulation speed instead
+to reduce the EL variance.
 
-\emph{Antithetic variates}. In CCruncher the random sampling of the portfolio 
-loss distribution is 
+In CCruncher the random sampling of the portfolio loss distribution is 
 performed using $g(X)$ in which $X$ is a multivariate t-Student distribution 
 and $g(x) = F^{-1}(t_{\nu}(x))$. We use the fact that the multivariate 
 t-Student distribution $X$ is symmetrical, that is, $(x_1,\dots,x_n)$ is 
@@ -1960,12 +1957,6 @@ in the reusing of the simulated random numbers to increase the simulation
 speed. When we use the antithetic method to sample the default times and 
 there are some stochastic EADs or LGDs, we use distinct EADs' and LGDs' 
 random values for each variate.
-
-\emph{Latin hypercube sampling}. In CCruncher, the random variables that can be 
-sampled using the LHS 
-technique are the degrees of freedom $\nu$, and the factors $\vec{z}$. 
-The aim is to ensure a uniform scanning of these variables so that the
-extreme cases are represented.
 
 \textbf{EAD and LGD interpolation}. Given an asset, CCruncher knows its EAD 
 and LGD values at fixed times $\{t_1,\dots,t_n\}$ provided by the user. When 
@@ -4019,7 +4010,7 @@ not independent of one another; in fact, they form a multivariate distribution.
 %------------------------------------------------------------------------------
 % VARIANCE REDUCTION
 %------------------------------------------------------------------------------
-\section{Variance Reduction}
+\section{Antithetic variates}
 \label{ap:vr}
 
 The Monte Carlo method consists of sampling a distribution and averaging 
@@ -4028,9 +4019,9 @@ of this method is the low rate of convergence, on the order $1/\sqrt{N}$.
 Variance reduction methods are procedures used to increase the precision 
 of the estimates of the Monte Carlo method. The main procedures are common 
 random numbers, antithetic variates, control variates, importance sampling 
-and stratified sampling.
+and stratified sampling. This section outlines contains the antithetic 
+variates method.
 
-\subsection{Antithetic variates}
 We estimate $E(g(X))$ using the Monte Carlo method. Assume $Y_1$ and 
 $Y_2$ as random variables with the identical distribution $g(X)$. 
 This indicates that $E(g(X)) = E(Y_1) = E(Y_2) = E(\frac{Y_1+Y_2}{2})$ and
@@ -4110,65 +4101,6 @@ of $2{\times}N$ simulated values from $Y_1$ or $Y_2$.
  
  result
 
-\end{lstlisting}
-
-\subsection{Latin Hypercube Sampling (LHS)}
-This variance reduction technique belongs to the stratified sampling family. 
-It consists of dividing the total probability range [0,1] in $N$ equispaced 
-segments. Then we create a sample of size $N$ picking a random value from 
-each segment using a uniform distribution and applying the inverse transform 
-sampling. Finally we shuffle the sample to obtain the desired distribution 
-random values. When we have two independent random variables, we repeat the 
-above procedure for each of them, obtaining the Latin Square effect: the 
-generated random points are in a reticle in which each row and column has 
-only one point. The procedure for three or more independent variables is 
-identical, and it is called Latin Hypercube Sampling~\cite{glasserman:1997}.
-
-When the random variables are dependent, the previous schema does not work, 
-and it is reformulated recurring to copulas and the rank statistic~\cite{wolfgang:2008}. 
-In this case, the number of bins affects the quality of the generated values, 
-the larger the better.
-
-\begin{example}
-	We compare the estimated density of $N(0,1)$ using a sample of 100 
-	simulated values without using LHS and a sample of 100 simulated values 
-	using LHS. Listing~\ref{sc:lhs} exposes the R script, and 
-	figure~\ref{fig:lhs} displays the results.
-\end{example}
-
-\begin{figure}[!ht]
-	\centering
-	\subcaptionbox{Empirical cdf (without lhs)}{
-		\includegraphics[width=7cm]{lhs1}
-	}
-	\subcaptionbox{Empirical cdf (using lhs)}{
-		\includegraphics[width=7cm]{lhs2}
-	}
-	\caption{Latin Hypercube Sampling example (1-dim)}
-	\label{fig:lhs} 
-\end{figure}
-
-\begin{lstlisting}[language=R, label=sc:lhs, caption=Latin Hypercube Sampling example (R script)]
-
- rlhs <- function(nblocks, icdf, ...) 
- {
-   ret = rep(NA,nblocks)
-   for(i in 1:nblocks) {
-     u = runif(1, min=(i-1)/nblocks, max=i/nblocks)
-     ret[i] = icdf(u, ...)
-   }
-   ret = sample(ret)
-   return(ret)
- }
-
- x1 = rnorm(100, mean=0, sd=1)
- cdf1 = ecdf(x1)
- plot(cdf1, verticals=TRUE, pch=-1, ylab="prob", main="");
- 
- x2 = rlhs(100, qnorm, mean=0, sd=1)
- cdf2 = ecdf(x2)
- plot(cdf2, verticals=TRUE, pch=-1, ylab="prob", main="");
- 
 \end{lstlisting}
 
 

@@ -35,7 +35,6 @@
 #define COPULA "copula.type"
 #define RNG_SEED "rng.seed"
 #define ANTITHETIC "antithetic"
-#define LHS "lhs"
 #define BLOCKSIZE "blocksize"
 
 using namespace std;
@@ -63,7 +62,7 @@ void ccruncher::Params::epstart(ExpatUserData &, const char *tag, const char **a
     string name = getStringAttribute(atrs, "name");
     if (name != TIME0 && name != TIMET && name != MAXITERATIONS &&
         name != MAXSECONDS && name != COPULA && name != RNG_SEED &&
-        name != ANTITHETIC && name != LHS && name != BLOCKSIZE) {
+        name != ANTITHETIC && name != BLOCKSIZE) {
       throw Exception("unexpected parameter '" + name + "'");
     }
 
@@ -115,7 +114,6 @@ bool ccruncher::Params::isValid(bool throwException) const
     getCopulaType();
     getCopulaParam();
     getRngSeed();
-    getLhsSize();
 
     if (getAntithetic() && getBlockSize()%2 != 0) {
       throw Exception(BLOCKSIZE " must be multiple of 2 when " ANTITHETIC " is enabled");
@@ -282,37 +280,6 @@ bool ccruncher::Params::getAntithetic() const
     return false; // default value = 'false'
   }
   return Parser::boolValue(it->second);
-}
-
-/**************************************************************************//**
- * @return Number of bins in the LHS method.
- * @throw Exception Invalid parameter value.
- */
-unsigned short ccruncher::Params::getLhsSize() const
-{
-  auto it = this->find(LHS);
-  if (it == this->end()) {
-    return 1; // default value = 'false'
-  }
-  string value = it->second;
-  try {
-    if (Parser::boolValue(value) == false) {
-      return 1;
-    }
-    else {
-      return 1000;
-    }
-  }
-  catch(Exception &) {
-    int aux = Parser::intValue(value);
-    if (aux <= 0 || USHRT_MAX < aux) {
-      throw Exception("parameter '" LHS "' out of range [1," +
-                      Format::toString((int)USHRT_MAX) + "]");
-    }
-    else {
-      return (unsigned short) aux;
-    }
-  }
 }
 
 /**************************************************************************//**

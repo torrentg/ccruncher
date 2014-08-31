@@ -70,8 +70,6 @@ class SimulationTask : public QThread
     std::map<std::string,std::string> defines;
     //! Output file creation mode
     char fmode;
-    //! Indexes creation flag
-    bool indexes;
     //! Number of threads
     unsigned char ithreads;
     //! Input data
@@ -99,8 +97,7 @@ class SimulationTask : public QThread
     //! Set streambuf
     void setStreamBuf(std::streambuf *);
     //! Set data info
-    void setData(const std::string &, const std::map<std::string,std::string> &,
-                 const std::string &, unsigned char, bool );
+    void setData(const std::string &, const std::map<std::string,std::string> &, const std::string &, unsigned char);
     //! Thread task
     virtual void run() override;
     //! Stop current execution

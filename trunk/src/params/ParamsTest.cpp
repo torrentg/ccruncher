@@ -41,7 +41,6 @@ void ccruncher_test::ParamsTest::test1()
       <parameter name='copula.type' value='gaussian'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
       <parameter name='antithetic' value='true'/>\n\
-      <parameter name='lhs' value='false'/>\n\
       <parameter name='blocksize' value='256'/>\n\
     </parameters>";
 
@@ -56,7 +55,6 @@ void ccruncher_test::ParamsTest::test1()
   ASSERT("gaussian" == params.getCopulaType());
   ASSERT(38765874L == params.getRngSeed());
   ASSERT(true == params.getAntithetic());
-  ASSERT(1 == params.getLhsSize());
   ASSERT(256 == params.getBlockSize());
 }
 
@@ -122,7 +120,6 @@ void ccruncher_test::ParamsTest::test4()
       <parameter name='copula.type' value='gaussian'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
       <parameter name='antithetic' value='true'/>\n\
-      <parameter name='lhs' value='false'/>\n\
       <parameter name='blocksize' value='257'/>\n\
     </parameters>";
 

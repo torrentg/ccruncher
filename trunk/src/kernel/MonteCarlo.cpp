@@ -45,7 +45,6 @@ ccruncher::MonteCarlo::MonteCarlo(std::streambuf *s) : log(s), chol(nullptr), st
   numiterations = 0;
   maxiterations = 0;
   antithetic = false;
-  lhs_size = 1;
   blocksize = 1;
   seed = 0UL;
   hash = 0;
@@ -161,7 +160,6 @@ void ccruncher::MonteCarlo::initModel(IData &idata)
   time0 = idata.getParams().getTime0();
   timeT = idata.getParams().getTimeT();
   antithetic = idata.getParams().getAntithetic();
-  lhs_size = idata.getParams().getLhsSize();
   blocksize = idata.getParams().getBlockSize();
   seed = idata.getParams().getRngSeed();
   if (seed == 0UL) {
@@ -230,13 +228,10 @@ void ccruncher::MonteCarlo::initModel(IData &idata)
   }
 
   // performance tip: chol contains w·chol (to avoid multiplications)
-  // if LHS>1 this is not possible and mults are done in SimulationThread
-  if (lhs_size == 1) {
-    for(size_t i=0; i<chol->size1; i++) {
-      for(size_t j=0; j<chol->size2; j++) {
-        double val = gsl_matrix_get(chol, i, j)*floadings1[i];
-        gsl_matrix_set(chol, i, j, val);
-      }
+  for(size_t i=0; i<chol->size1; i++) {
+    for(size_t j=0; j<chol->size2; j++) {
+      double val = gsl_matrix_get(chol, i, j)*floadings1[i];
+      gsl_matrix_set(chol, i, j, val);
     }
   }
 
@@ -513,7 +508,6 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   log << "maximum execution time (seconds)" << split << maxseconds << endl;
   log << "maximum number of iterations" << split << maxiterations << endl;
   log << "antithetic mode" << split << antithetic << endl;
-  log << "latin hypercube sampling" << split << (lhs_size==1?"false":Format::toString(size_t(lhs_size))) << endl;
   log << "block size" << split << blocksize << endl;
   log << "number of threads" << split << int(numthreads) << endl;
   log << indent(-1);
@@ -555,10 +549,6 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
 
   // closing aggregators
   Timer timer3_aux(true);
-  if (findexes.is_open())
-  {
-    findexes.close();
-  }
   for(auto &aggregator : aggregators)
   {
     delete aggregator;
@@ -577,8 +567,6 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
 }
 
 /**************************************************************************//**
- * @param[in] ithread Thread identifier.
- * @param[in] vi Vector of indexes (info related to lhs & antithetic usage).
  * @param[in] losses Simulated data. This is an array with the following
  *            structure: X1, X2, X3, ..., Xk where Xi is an array containing
  *            the data of the i-th simulation (k = blocksize). Xi has the
@@ -588,28 +576,19 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
  *            Li is the simulated loss of the i-th segment (n = number of
  *            segments of the segmentation).
  */
-bool ccruncher::MonteCarlo::append(int ithread, const std::vector<short> &vi,
-    const double *losses) noexcept
+bool ccruncher::MonteCarlo::append(const double *losses) noexcept
 {
   assert(losses != nullptr);
-  assert(vi.size() == blocksize);
 
   mMutex.lock();
   bool more = true;
 
   try
   {
-    for(size_t iblock=0; iblock<vi.size(); iblock++)
+    for(size_t iblock=0; iblock<blocksize; iblock++)
     {
-      // trace indexes (if required)
-      if (findexes.is_open()) {
-        findexes << ithread << ", " << std::abs(int(vi[iblock]))
-                 << ", " << (vi[iblock]<0?1:0) << "\n";
-      }
-
       // aggregating simulation result
-      for(size_t i=0; i<aggregators.size(); i++)
-      {
+      for(size_t i=0; i<aggregators.size(); i++) {
         aggregators[i]->append(losses);
         losses += numSegmentsBySegmentation[i];
       }
@@ -618,18 +597,13 @@ bool ccruncher::MonteCarlo::append(int ithread, const std::vector<short> &vi,
       numiterations++;
 
       // printing hashes
-      if (hash > 0 && numiterations%hash == 0)
-      {
+      if (hash > 0 && numiterations%hash == 0) {
         log << '.' << flush;
       }
 
-      // checking stop criterias
+      // checking maximum number of iterations stop criterion
       assert(nfthreads > 0);
-      if (
-           (maxiterations > 0 && numiterations + (nfthreads-1)*blocksize >= maxiterations) ||
-           (stop != nullptr && *stop)
-         )
-      {
+      if (maxiterations > 0 && numiterations + (nfthreads-1)*blocksize >= maxiterations) {
         more = false;
         break;
       }
@@ -646,6 +620,11 @@ bool ccruncher::MonteCarlo::append(int ithread, const std::vector<short> &vi,
     more = false;
   }
 
+  // checking stop requested by user
+  if (stop != nullptr && *stop) {
+    more = false;
+  }
+
   // exit function
   if (!more) nfthreads--;
   mMutex.unlock();
@@ -655,24 +634,11 @@ bool ccruncher::MonteCarlo::append(int ithread, const std::vector<short> &vi,
 /**************************************************************************//**
  * @param[in] path Path to oputput directory.
  * @param[in] mode Output file mode (a=append, w=overwrite, c=create).
- * @param[in] indexes Create file indexes.csv containing info about simulation
- *            procedure.
- * @throw std::exception Error creating files.
  */
-void ccruncher::MonteCarlo::setFilePath(const string &path, char mode, bool indexes)
+void ccruncher::MonteCarlo::setFilePath(const string &path, char mode)
 {
   fpath = path;
   fmode = mode;
-
-  if (indexes)
-  {
-    string filename = File::normalizePath(fpath) + "indexes.csv";
-    findexes.exceptions(ios::failbit | ios::badbit);
-    findexes.open(filename.c_str(), ios::out|(fmode=='a'?(ios::app):(ios::trunc)));
-    if (fmode != 'a' || (fmode == 'a' && File::filesize(filename) == 0)) {
-      findexes << "\"thread\", \"lhs\", \"antithetic\"" << std::endl;
-    }
-  }
 }
 
 /**************************************************************************//**

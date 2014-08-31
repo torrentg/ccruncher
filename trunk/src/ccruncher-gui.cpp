@@ -87,13 +87,12 @@ int main(int argc, char *argv[])
   QMap<QString,QVariant> properties;
 
   // short options
-  const char* const options1 = "hi" ;
+  const char* const options1 = "h" ;
 
   // long options (name + has_arg + flag + val)
   const struct option options2[] =
   {
       { "help",         0,  nullptr,  'h' },
-      { "indexes",      0,  nullptr,  'i' },
       { "version",      0,  nullptr,  301 },
       { "nice",         1,  nullptr,  302 },
       { "threads",      1,  nullptr,  304 },
@@ -125,10 +124,6 @@ int main(int argc, char *argv[])
       case 'h': // -h or --help (show help and exit)
           help();
           return 0;
-
-      case 'i': // -i --indexes
-          properties["indexes"] = QVariant(true);
-          break;
 
       case 301: // --version (show version and exit)
           version();
@@ -271,7 +266,6 @@ void help()
   "\n"
   "Mandatory arguments to long options are mandatory for short options too.\n"
   "\n"
-  "  -i, --indexes           create file indexes.csv with info about simulation\n"
 #if !defined(_WIN32)
   "      --nice=NICEVAL      set process priority to NICEVAL (see nice command)\n"
 #endif
@@ -285,8 +279,8 @@ void help()
   "  1   finished with errors\n"
   "\n"
   "Examples:\n"
+  "  basic             ccruncher-gui\n"
   "  multiple files    ccruncher-gui samples/test04.xml data/*.csv\n"
-  "  indexes creation  ccruncher-gui -i samples/test04.xml\n"
   "\n"
   "Report bugs to gtorrent@ccruncher.net. Please include the output of\n"
   "'ccruncher-gui --info' in the body of your report and attach the input\n"

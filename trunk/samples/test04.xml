@@ -46,7 +46,6 @@ How to check results?
     <define name="numsims" value="200000"/>
     <define name="copula" value="gaussian"/>
     <define name="antithetic" value="false"/>
-    <define name="lhs" value="false"/>
     <define name="blocksize" value="128" />
   </defines>
 
@@ -61,7 +60,6 @@ How to check results?
     <parameter name="copula.type" value="$copula"/>
     <parameter name="rng.seed" value="0"/>
     <parameter name="antithetic" value="$antithetic"/>
-    <parameter name="lhs" value="$lhs"/>
     <parameter name="blocksize" value="$blocksize"/>
   </parameters>
 

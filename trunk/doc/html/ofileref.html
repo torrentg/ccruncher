@@ -109,14 +109,6 @@
         <td class="c4">1 or more</td>
       </tr>
       <tr class="a">
-        <td class="c1"><a href="#indexes">indexes.csv</a></td>
-        <td class="c2">
-          Additional info about simulated values.
-        </td>
-        <td class="c3">CSV</td>
-        <td class="c4">0 or 1</td>
-      </tr>
-      <tr class="b">
         <td class="c1"><a href="#trace">ccruncher.out</a></td>
         <td class="c2">
           Execution trace.
@@ -195,43 +187,6 @@
     </p>
 
 <!-- ==================================================== -->
-<!--    indexes                                           -->
-<!-- ==================================================== -->
-    <a name="indexes"></a>
-    <h2>indexes.csv</h2>
-    <pre>
-
-"thread", "lhs", "antithetic"
-1, 1, 0
-1, 1, 0
-2, 1, 1
-2, 1, 0
-1, 1, 1
-2, 1, 0
-...
-1, 21, 0
-1, 21, 1
-...
-2, 51, 0
-2, 51, 1
-    </pre>
-    <p>
-      This file contains additional info about simulated values. Its creation
-      is managed by the '-i' argument in ccruncher-cmd or ccruncher-gui programs.
-      We recommend disabling this option and not generate this file unless you 
-      are checking the program or trying to apply some variance reduction 
-      technique.
-    </p>
-    <p>
-      Each row contains information about the corresponding simulation.
-      The first column (thread) contains the thread index (starting at 1) that 
-      performed the simulation. The second column contains the Latin Hypercube 
-      Sampling batch (where each batch consists of <i>lhs sample size</i> 
-      simulations). Finally, the third column (antithetic) indicates (0=false, 
-      1=true) if this simulation is an antithetic variate or not.
-    </p>
-
-<!-- ==================================================== -->
 <!--    trace                                             -->
 <!-- ==================================================== -->
     <a name="trace"></a>
@@ -256,7 +211,6 @@ reading input file *************************************************************
   define (input file)                                             numsims=200000
   define (input file)                                            copula=t(12.54)
   define (input file)                                            antithetic=true
-  define (input file)                                                   lhs=1000
   define (input file)                                                     seed=0
   file checksum (adler32)                                             1900187585
   elapsed time parsing data                                         00:00:00.028
@@ -290,7 +244,6 @@ Monte Carlo ********************************************************************
     maximum execution time (seconds)                                       86400
     maximum number of iterations                                          200000
     antithetic mode                                                         true
-    latin hypercube sampling                                                1000
     block size                                                               128
     number of threads                                                          4
   running Monte Carlo [1000 simulations per hash] ------------------------------
@@ -325,7 +278,7 @@ general information ************************************************************
           Copyright &copy; 2004-2014 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </span>
         <span id="modified">
-          Last modified: 15-Jul-2014
+          Last modified: 31-Aug-2014
         </span>
       </div>
 

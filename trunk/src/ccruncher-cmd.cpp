@@ -61,7 +61,6 @@ int inice = -999;
 size_t ihash = 1000;
 unsigned char ithreads = 0;
 map<string,string> defines;
-bool indexes = false;
 bool stop = false;
 
 /**************************************************************************//**
@@ -105,7 +104,7 @@ void gsl_handler(const char * reason, const char *file, int line, int gsl_errno)
 int main(int argc, char *argv[])
 {
   // short options
-  const char* const options1 = "hawiD:o:" ;
+  const char* const options1 = "hawD:o:" ;
 
   // long options (name + has_arg + flag + val)
   const struct option options2[] =
@@ -113,7 +112,6 @@ int main(int argc, char *argv[])
       { "help",         0,  nullptr,  'h' },
       { "append",       0,  nullptr,  'a' },
       { "overwrite",    0,  nullptr,  'w' },
-      { "indexes",      0,  nullptr,  'i' },
       { "define",       1,  nullptr,  'D' },
       { "output",       1,  nullptr,  'o' },
       { "version",      0,  nullptr,  301 },
@@ -178,10 +176,6 @@ int main(int argc, char *argv[])
             return 1;
           }
           cmode = curropt;
-          break;
-
-      case 'i': // -i --indexes
-          indexes = true;
           break;
 
       case 'o': // -o dir, --output=dir (set output files path)
@@ -347,7 +341,7 @@ void run() throw(Exception)
 
     // creating simulation object
     MonteCarlo montecarlo(cout.rdbuf());
-    montecarlo.setFilePath(spath, cmode, indexes);
+    montecarlo.setFilePath(spath, cmode);
     montecarlo.setData(*idata);
     delete idata;
 
@@ -417,7 +411,6 @@ void help()
   "  -a, --append            output data is appended to existing files\n"
   "  -w, --overwrite         existing output files are overwritten\n"
   "  -o, --output=DIRECTORY  directory where output files will be placed\n"
-  "  -i, --indexes           create file indexes.csv with info about simulation\n"
 #if !defined(_WIN32)
   "      --nice=NICEVAL      set process priority to NICEVAL (see nice command)\n"
 #endif

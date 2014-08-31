@@ -208,7 +208,6 @@
   &lt;parameter name="copula.type" value="t($ndf)"/&gt;
   &lt;parameter name="rng.seed" value="0"/&gt;
   &lt;parameter name="antithetic" value="true"/&gt;
-  &lt;parameter name="lhs" value="false"/&gt;
   &lt;parameter name="blocksize" value="128"/&gt;
 &lt;/parameters&gt;
     </pre>
@@ -292,7 +291,6 @@
         <td class="c1">antithetic</td>
         <td class="c2">
           Specifies whether to use the 'antithetic' variance reduction technique.
-          File <code>indexes.csv</code> contains info about the simulated values.
           If you have doubts about setting this parameter then set it to 'false', 
           otherwise set it to 'true'.
           <br/>
@@ -301,21 +299,6 @@
         <td class="c3">boolean</td>
       </tr>
       <tr class="a">
-        <td class="c1">lhs</td>
-        <td class="c2">
-          Specifies whether to use the 'Latin Hypercube Sampling' variance reduction 
-          technique on the random variables <i>S</i> and <i>Z</i>. 
-          If you have doubts about setting this parameter then set it to 'false', 
-          otherwise set the sample size. If LHS is set and there is more than one 
-          factor, then make sure that the sample size is high enough (eg. 1000),
-          otherwise you can obtain incorrect results.
-          File <code>indexes.csv</code> contains info about the simulated values.
-          <br/>
-          This parameter is optional. Default value is 'false'. 
-        </td>
-        <td class="c3">boolean<br/>integer</td>
-      </tr>
-      <tr class="b">
         <td class="c1">blocksize</td>
         <td class="c2">
           Number of simultaneous simulations realized for each thread. 
@@ -1239,7 +1222,7 @@
           Copyright &copy; 2004-2014 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </span>
         <span id="modified">
-          Last modified: 15-Jul-2014
+          Last modified: 31-Aug-2014
         </span>
       </div>
 
