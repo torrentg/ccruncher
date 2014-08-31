@@ -95,6 +95,10 @@ class LGD
     LGD(const std::string &);
     //! Constructor
     LGD(Type, double a, double b=NAN);
+    //! Comparison operator
+    bool operator==(const LGD &o) const;
+    //! Comparison operator
+    bool operator!=(const LGD &o) const;
     //! Returns type
     Type getType() const;
     //! Returns distribution parameter

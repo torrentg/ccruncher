@@ -338,27 +338,3 @@ void ccruncher::Asset::clearData()
   vector<DateValues>(0).swap(mValues);
 }
 
-/**************************************************************************//**
- * @deprecated Currently this method is unused in the simulation. This task
- *          is done in the SimulationThread::simuleObligorLoss(). The
- *          method is preserved to test the procedure.
- * @return The DateValue at given date:
- *         - (NAD,0,1) if t <= asset creation date
- *         - (NAD,0,1) if asset has 0 date-values
- *         - (NAD,0,1) if t > last date-values
- *         - otherwise, returns the smallest date-values that is not less than t
- */
-const DateValues& ccruncher::Asset::getValues(const Date t) const
-{
-  static const DateValues dvnf(NAD, EAD(EAD::Fixed,0.0), LGD(LGD::Fixed,1.0));
-  
-  if (t <= mDate || mValues.empty() || mValues.back().date < t)
-  {
-    return dvnf;
-  }
-  else
-  {
-    return *(lower_bound(mValues.begin(), mValues.end(), DateValues(t)));
-  }
-}
-

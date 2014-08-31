@@ -119,11 +119,11 @@ void ccruncher::SimulationThread::run()
         x[j] = s[j] * (z[j*numfactors+ifactor] + floadings2[ifactor]*rnorm());
       }
 
-      double val = NAN;
-
       // simulating obligor loss
       for(size_t j=0; j<blocksize; j++)
       {
+        double val = NAN;
+
         if (!antithetic) {
           val = x[j];
         }

@@ -34,6 +34,7 @@ class LGDTest : public TestFixture<LGDTest>
 
     void test1();
     void test2();
+    void test3();
 
 
   public:
@@ -42,6 +43,7 @@ class LGDTest : public TestFixture<LGDTest>
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
+      TEST_CASE(test3);
     }
 
 };

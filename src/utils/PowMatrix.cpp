@@ -163,9 +163,9 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret)
   GSL_REAL(z0)=0.0; GSL_IMAG(z0) = 0.0;
   GSL_REAL(z1)=1.0; GSL_IMAG(z1) = 0.0;
   gsl_matrix_complex_set_zero(LU);
-  gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, z1, VEPS, VAPS, z0, LU  );
+  gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, z1, VEPS, VAPS, z0, LU);
   gsl_matrix_complex_set_zero(VAPS);
-  gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, z1, LU  , SPEV, z0, VAPS);
+  gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, z1, LU, SPEV, z0, VAPS);
   gsl_matrix_complex_free(VEPS);
   gsl_matrix_complex_free(SPEV);
   gsl_matrix_complex_free(LU);

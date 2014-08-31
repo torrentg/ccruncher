@@ -29,6 +29,8 @@
 #include "utils/Parser.hpp"
 #include "utils/Exception.hpp"
 
+#define EPSILON 1e-14
+
 using namespace std;
 using namespace ccruncher;
 
@@ -110,6 +112,27 @@ ccruncher::LGD::LGD(const std::string &str)
 ccruncher::LGD::LGD(Type t, double a, double b)
 {
   init(t, a, b);
+}
+
+/**************************************************************************//**
+ * @param[in] o LGD instance to compare.
+ * @return true=are equal, false=otherwise.
+ */
+bool ccruncher::LGD::operator==(const LGD &o) const
+{
+  if (mType != o.mType) return false;
+  else if (!std::isnan(mValue1) && std::abs(mValue1-o.mValue1) > EPSILON) return false;
+  else if (!std::isnan(mValue2) && std::abs(mValue2-o.mValue2) > EPSILON) return false;
+  else return true;
+}
+
+/**************************************************************************//**
+ * @param[in] o LGD instance to compare.
+ * @return true=are distinct, false=otherwise.
+ */
+bool ccruncher::LGD::operator!=(const LGD &o) const
+{
+  return !(*this == o);
 }
 
 /**************************************************************************//**

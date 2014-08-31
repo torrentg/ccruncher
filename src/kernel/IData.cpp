@@ -67,13 +67,14 @@ void ccruncher::IData::init(const std::string &f,
     const std::map<std::string,std::string> &m, bool *s, bool p)
 {
   gzFile file = nullptr;
-  size_t bytes = 0;
   filename = f;
   stop = s;
   parse_portfolio = p;
 
   try
   {
+    size_t bytes = 0;
+
     if (filename == STDIN_FILENAME) {
       file = gzdopen(fileno(stdin), "rb");
       bytes = 0;

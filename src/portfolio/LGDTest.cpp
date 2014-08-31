@@ -138,3 +138,18 @@ void ccruncher_test::LGDTest::test2()
   ASSERT_THROW(LGD("beta(0.2,0.3,0.4)"));   // more than 2 args
 }
 
+//===========================================================================
+// test3. comparison
+//===========================================================================
+void ccruncher_test::LGDTest::test3()
+{
+  ASSERT(LGD("0.5") == LGD("0.5"));
+  ASSERT(LGD("0.6") != LGD("0.5"));
+
+  ASSERT(LGD("uniform(0.2,0.3)") == LGD("uniform(0.2,0.3)"));
+  ASSERT(LGD("uniform(0.1,0.3)") != LGD("uniform(0.2,0.3)"));
+
+  ASSERT(LGD("beta(0.5,0.25)") == LGD("beta(0.5,0.25)"));
+  ASSERT(LGD("beta(0.6,0.25)") != LGD("beta(0.5,0.25)"));
+}
+
