@@ -92,8 +92,6 @@ class Asset : public ExpatHandlers
     Date getMinDate() const;
     //! Returns maximum event date (restricted to prepared events)
     Date getMaxDate() const;
-    //! Used to test SimulationThread::simule lower_bound
-    const DateValues& getValues(const Date t) const;
     //! Indicates if this asset use obligor lgd
     bool requiresObligorLGD() const;
     //! Returns reference to data

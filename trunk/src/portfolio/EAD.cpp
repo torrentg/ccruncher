@@ -29,6 +29,8 @@
 #include "utils/Parser.hpp"
 #include "utils/Exception.hpp"
 
+#define EPSILON 1e-14
+
 using namespace std;
 using namespace ccruncher;
 
@@ -120,6 +122,27 @@ ccruncher::EAD::EAD(const std::string &str)
 ccruncher::EAD::EAD(Type t, double a, double b)
 {
   init(t, a, b);
+}
+
+/**************************************************************************//**
+ * @param[in] o EAD instance to compare.
+ * @return true=are equal, false=otherwise.
+ */
+bool ccruncher::EAD::operator==(const EAD &o) const
+{
+  if (mType != o.mType) return false;
+  else if (!std::isnan(mValue1) && std::abs(mValue1-o.mValue1) > EPSILON) return false;
+  else if (!std::isnan(mValue2) && std::abs(mValue2-o.mValue2) > EPSILON) return false;
+  else return true;
+}
+
+/**************************************************************************//**
+ * @param[in] o EAD instance to compare.
+ * @return true=are distinct, false=otherwise.
+ */
+bool ccruncher::EAD::operator!=(const EAD &o) const
+{
+  return !(*this == o);
 }
 
 /**************************************************************************//**

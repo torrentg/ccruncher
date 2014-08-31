@@ -137,47 +137,40 @@ void ccruncher_test::AssetTest::test1()
   asset.setSegment(4, 10);
   ASSERT(asset.getSegment(4) == 10);
 
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/1995")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/01/1995")).lgd.getValue(), EPSILON);
-  
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/1999")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/01/1999")).lgd.getValue(), EPSILON);
-  
-  ASSERT_EQUALS_EPSILON(570.0, asset.getValues(Date("31/12/1999")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("31/12/1999")).lgd.getValue(), EPSILON);
+  ASSERT(asset.getData().size() == 8);
 
-  ASSERT_EQUALS_EPSILON(570.0, asset.getValues(Date("01/01/2000")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/01/2000")).lgd.getValue(), EPSILON);
+  // first (implicit) datevalue
+  ASSERT(asset.getData()[0].date == Date("01/01/1999"));
+  ASSERT(asset.getData()[0].ead == EAD("0"));
+  ASSERT(asset.getData()[0].lgd == LGD("0"));
 
-  ASSERT_EQUALS_EPSILON(560.0, asset.getValues(Date("02/01/2000")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("02/01/2000")).lgd.getValue(), EPSILON);
+  ASSERT(asset.getData()[1].date == Date("01/01/2000"));
+  ASSERT(asset.getData()[1].ead == EAD("570"));
+  ASSERT(asset.getData()[1].lgd == LGD("0.2"));
 
-  ASSERT_EQUALS_EPSILON(560.0, asset.getValues(Date("01/07/2000")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/07/2000")).lgd.getValue(), EPSILON);
+  ASSERT(asset.getData()[2].date == Date("01/07/2000"));
+  ASSERT(asset.getData()[2].ead == EAD("560"));
+  ASSERT(asset.getData()[2].lgd == LGD("0.2"));
 
-  ASSERT_EQUALS_EPSILON(550.0, asset.getValues(Date("01/01/2001")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/01/2001")).lgd.getValue(), EPSILON);
+  ASSERT(asset.getData()[3].date == Date("01/01/2001"));
+  ASSERT(asset.getData()[3].ead == EAD("550"));
+  ASSERT(asset.getData()[3].lgd == LGD("0.2"));
 
-  ASSERT_EQUALS_EPSILON(540.0, asset.getValues(Date("01/07/2001")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/07/2001")).lgd.getValue(), EPSILON);
+  ASSERT(asset.getData()[4].date == Date("01/07/2001"));
+  ASSERT(asset.getData()[4].ead == EAD("540"));
+  ASSERT(asset.getData()[4].lgd == LGD("0.2"));
 
-  ASSERT_EQUALS_EPSILON(530.0, asset.getValues(Date("01/01/2002")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/01/2002")).lgd.getValue(), EPSILON);
+  ASSERT(asset.getData()[5].date == Date("01/01/2002"));
+  ASSERT(asset.getData()[5].ead == EAD("530"));
+  ASSERT(asset.getData()[5].lgd == LGD("0.2"));
 
-  ASSERT_EQUALS_EPSILON(520.0, asset.getValues(Date("01/07/2002")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/07/2002")).lgd.getValue(), EPSILON);
+  ASSERT(asset.getData()[6].date == Date("01/07/2002"));
+  ASSERT(asset.getData()[6].ead == EAD("520"));
+  ASSERT(asset.getData()[6].lgd == LGD("0.2"));
 
-  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/01/2003")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/01/2003")).lgd.getValue(), EPSILON);
-
-  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/01/2010")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/01/2010")).lgd.getValue(), EPSILON);
-
-  ASSERT_EQUALS_EPSILON(10.0, asset.getValues(Date("01/07/2020")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("01/07/2020")).lgd.getValue(), EPSILON);
-
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/07/2021")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(1.0, asset.getValues(Date("01/07/2021")).lgd.getValue(), EPSILON);
+  ASSERT(asset.getData()[7].date == Date("01/07/2020"));
+  ASSERT(asset.getData()[7].ead == EAD("10"));
+  ASSERT(asset.getData()[7].lgd == LGD("0.2"));
 }
 
 //===========================================================================
@@ -278,12 +271,12 @@ void ccruncher_test::AssetTest::test4()
   
   // doing assertions
   ASSERT(asset.requiresObligorLGD());
-  ASSERT(!LGD::isvalid(asset.getValues(Date("10/01/2007")).lgd));
-  ASSERT(!LGD::isvalid(asset.getValues(Date("15/01/2007")).lgd));
-  ASSERT(LGD::isvalid(asset.getValues(Date("10/01/2008")).lgd));
-  ASSERT(!LGD::isvalid(asset.getValues(Date("10/01/2009")).lgd));
-  ASSERT(!LGD::isvalid(asset.getValues(Date("15/01/2009")).lgd));
-  ASSERT(LGD::isvalid(asset.getValues(Date("10/01/2010")).lgd));
+  ASSERT(asset.getData().size() == 5);
+  ASSERT(LGD::isvalid(asset.getData()[0].lgd));
+  ASSERT(!LGD::isvalid(asset.getData()[1].lgd));
+  ASSERT(LGD::isvalid(asset.getData()[2].lgd));
+  ASSERT(!LGD::isvalid(asset.getData()[3].lgd));
+  ASSERT(LGD::isvalid(asset.getData()[4].lgd));
 }
 
 //===========================================================================
@@ -322,14 +315,14 @@ void ccruncher_test::AssetTest::test5()
 
   ASSERT_NO_THROW(asset.prepare(time0, timeT, interest));
   
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("01/01/2004")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(5000.0, asset.getValues(Date("12/01/2005")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.7, asset.getValues(Date("12/01/2005")).lgd.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(5000.0, asset.getValues(Date("01/07/2005")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.6, asset.getValues(Date("01/07/2005")).lgd.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(1000.0, asset.getValues(Date("10/01/2010")).ead.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.2, asset.getValues(Date("10/01/2010")).lgd.getValue(), EPSILON);
-  ASSERT_EQUALS_EPSILON(0.0, asset.getValues(Date("16/01/2010")).ead.getValue(), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getData()[0].ead.getValue(nullptr), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.0, asset.getData()[0].lgd.getValue(nullptr), EPSILON);
+  ASSERT_EQUALS_EPSILON(5000.0, asset.getData()[1].ead.getValue(nullptr), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.7, asset.getData()[1].lgd.getValue(nullptr), EPSILON);
+  ASSERT_EQUALS_EPSILON(4000.0, asset.getData()[3].ead.getValue(nullptr), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.5, asset.getData()[3].lgd.getValue(nullptr), EPSILON);
+  ASSERT_EQUALS_EPSILON(1000.0, asset.getData()[6].ead.getValue(nullptr), EPSILON);
+  ASSERT_EQUALS_EPSILON(0.2, asset.getData()[6].lgd.getValue(nullptr), EPSILON);
 }
 
 //===========================================================================
@@ -386,124 +379,5 @@ void ccruncher_test::AssetTest::test7()
   xmlparser.getUserData().segmentations = &segs;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
   ASSERT(asset.requiresObligorLGD());
-}
-
-//===========================================================================
-// test8 (getValues)
-//===========================================================================
-void ccruncher_test::AssetTest::test8()
-{
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <asset id='op1' date='01/01/1999'>\n\
-        <belongs-to segmentation='products' segment='bond'/>\n\
-        <belongs-to segmentation='offices' segment='0003'/>\n\
-        <data>\n\
-          <values t='01/01/2000' ead='570.0' lgd='20%' />\n\
-          <values t='01/07/2000' ead='560.0' lgd='20%' />\n\
-          <values t='01/01/2001' ead='550.0' lgd='20%' />\n\
-          <values t='01/07/2001' ead='540.0' lgd='20%' />\n\
-          <values t='01/01/2002' ead='530.0' lgd='20%' />\n\
-          <values t='01/07/2002' ead='520.0' lgd='20%' />\n\
-          <values t='01/07/2020' ead='10.0' lgd='20%' />\n\
-        </data>\n\
-      </asset>";
-
-  // creating xml
-  ExpatParser xmlparser;
-
-  Date time0 = Date("1/1/1997");
-  Date timeT = Date("1/7/2040");
-
-  // segmentations object creation
-  Segmentations segs = getSegmentations();
-  Interest interest = getInterest(time0);
-
-  // asset object creation
-  Asset asset;
-  xmlparser.getUserData().segmentations = &segs;
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
-  ASSERT_NO_THROW(asset.prepare(time0, timeT, interest));
-
-  // assertions
-  ASSERT_EQUALS(NAD, asset.getValues(Date("01/01/1995")).date);
-  
-  ASSERT_EQUALS(NAD, asset.getValues(Date("31/12/1998")).date);
-  ASSERT_EQUALS(NAD, asset.getValues(Date("01/01/1999")).date);
-  ASSERT_EQUALS(Date("01/01/2000"), asset.getValues(Date("02/01/1999")).date);
-  
-  ASSERT_EQUALS(Date("01/01/2000"), asset.getValues(Date("31/12/1999")).date);
-  ASSERT_EQUALS(Date("01/01/2000"), asset.getValues(Date("01/01/2000")).date);
-  ASSERT_EQUALS(Date("01/07/2000"), asset.getValues(Date("02/01/2000")).date);
-
-  ASSERT_EQUALS(Date("01/07/2000"), asset.getValues(Date("01/06/2000")).date);
-  ASSERT_EQUALS(Date("01/07/2000"), asset.getValues(Date("01/07/2000")).date);
-
-  ASSERT_EQUALS(Date("01/01/2001"), asset.getValues(Date("01/12/2000")).date);
-  ASSERT_EQUALS(Date("01/01/2001"), asset.getValues(Date("01/01/2001")).date);
-  
-  ASSERT_EQUALS(Date("01/07/2001"), asset.getValues(Date("01/06/2001")).date);
-  ASSERT_EQUALS(Date("01/07/2001"), asset.getValues(Date("01/07/2001")).date);
-
-  ASSERT_EQUALS(Date("01/01/2002"), asset.getValues(Date("01/12/2001")).date);
-  ASSERT_EQUALS(Date("01/01/2002"), asset.getValues(Date("01/01/2002")).date);
-
-  ASSERT_EQUALS(Date("01/07/2002"), asset.getValues(Date("01/06/2002")).date);
-  ASSERT_EQUALS(Date("01/07/2002"), asset.getValues(Date("01/07/2002")).date);
-
-  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/06/2020")).date);
-  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/07/2020")).date);
-
-  ASSERT_EQUALS(NAD, asset.getValues(Date("01/01/2035")).date);
-}
-
-
-//===========================================================================
-// test9 (getValues)
-//===========================================================================
-void ccruncher_test::AssetTest::test9()
-{
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-      <asset id='op1' date='01/01/1999'>\n\
-        <belongs-to segmentation='products' segment='bond'/>\n\
-        <belongs-to segmentation='offices' segment='0003'/>\n\
-        <data>\n\
-          <values t='01/01/2000' ead='570.0' lgd='20%' />\n\
-          <values t='01/07/2000' ead='560.0' lgd='20%' />\n\
-          <values t='01/01/2001' ead='550.0' lgd='20%' />\n\
-          <values t='01/07/2001' ead='540.0' lgd='20%' />\n\
-          <values t='01/01/2002' ead='530.0' lgd='20%' />\n\
-          <values t='01/07/2002' ead='520.0' lgd='20%' />\n\
-          <values t='01/07/2020' ead='10.0' lgd='20%' />\n\
-        </data>\n\
-      </asset>";
-
-  // creating xml
-  ExpatParser xmlparser;
-
-  Date time0 = Date("1/1/2004");
-  Date timeT = Date("1/7/2011");
-
-  // segmentations object creation
-  Segmentations segs = getSegmentations();
-  Interest interest = getInterest(time0);
-
-  // asset object creation
-  Asset asset;
-  xmlparser.getUserData().segmentations = &segs;
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &asset));
-  ASSERT_NO_THROW(asset.prepare(time0, timeT, interest));
-
-  // assertions
-  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/01/2003")).date);
-  
-  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("31/12/2003")).date);
-  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/01/2004")).date);
-  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("02/01/2004")).date);
-
-  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/01/2009")).date);
-  
-  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/06/2011")).date);
-  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("01/07/2011")).date);
-  ASSERT_EQUALS(Date("01/07/2020"), asset.getValues(Date("02/07/2011")).date);
 }
 

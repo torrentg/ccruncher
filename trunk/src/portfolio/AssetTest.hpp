@@ -44,8 +44,6 @@ class AssetTest : public TestFixture<AssetTest>
     void test5();
     void test6();
     void test7();
-    void test8();
-    void test9();
 
 
   public:
@@ -59,8 +57,6 @@ class AssetTest : public TestFixture<AssetTest>
       TEST_CASE(test5);
       TEST_CASE(test6);
       TEST_CASE(test7);
-      TEST_CASE(test8);
-      TEST_CASE(test9);
     }
 
 };

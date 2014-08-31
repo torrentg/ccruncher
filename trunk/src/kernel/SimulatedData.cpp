@@ -96,17 +96,20 @@ ccruncher::SimulatedAsset::~SimulatedAsset()
 /**************************************************************************/
 ccruncher::SimulatedAsset& ccruncher::SimulatedAsset::operator=(const SimulatedAsset &o)
 {
-  mindate = o.mindate;
-  maxdate = o.maxdate;
-  if (o.begin == nullptr) {
-    begin = nullptr;
-    end = nullptr;
-  }
-  else {
-    size_t len = o.end - o.begin;
-    begin = new DateValues[len];
-    end = begin + len;
-    memcpy(begin, o.begin, len*sizeof(DateValues));
+  if (this != &o)
+  {
+    mindate = o.mindate;
+    maxdate = o.maxdate;
+    if (o.begin == nullptr) {
+      begin = nullptr;
+      end = nullptr;
+    }
+    else {
+      size_t len = o.end - o.begin;
+      begin = new DateValues[len];
+      end = begin + len;
+      memcpy(begin, o.begin, len*sizeof(DateValues));
+    }
   }
   return *this;
 }

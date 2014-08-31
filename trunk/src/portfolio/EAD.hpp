@@ -100,6 +100,10 @@ class EAD
     EAD(const std::string &);
     //! Constructor
     EAD(Type, double a, double b=NAN);
+    //! Comparison operator
+    bool operator==(const EAD &o) const;
+    //! Comparison operator
+    bool operator!=(const EAD &o) const;
     //! Exposure type
     Type getType() const;
     //! Returns distribution parameter
