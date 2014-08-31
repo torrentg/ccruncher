@@ -46,7 +46,6 @@ ccruncher_gui::SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s),
   status_ = finished;
   fmode = 'w';
   stop_ = false;
-  indexes = false;
   ithreads = 0;
   setTerminationEnabled(false);
 }
@@ -92,7 +91,7 @@ void ccruncher_gui::SimulationTask::run()
 
     // creating simulation object
     montecarlo = new MonteCarlo(log.rdbuf());
-    montecarlo->setFilePath(odir, fmode, indexes);
+    montecarlo->setFilePath(odir, fmode);
     montecarlo->setData(*idata);
 
     // simulating
@@ -129,16 +128,14 @@ void ccruncher_gui::SimulationTask::stop()
  * @param[in] m_ List of defines.
  * @param[in] d_ Output directory.
  * @param[in] n Number of threads.
- * @param[in] i Create file indexes.csv?
  */
 void ccruncher_gui::SimulationTask::setData(const std::string &f_,
   const std::map<std::string,std::string> &m_, const std::string &d_,
-  unsigned char n, bool i)
+  unsigned char n)
 {
   ifile = f_;
   defines = m_;
   odir = d_;
-  indexes = i;
   ithreads = n;
   assert(ithreads > 0);
 }

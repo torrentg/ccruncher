@@ -9,7 +9,6 @@ Current works
   * mention to Gibbs sampler?
   * create F() and Finv(t()) output
   * equal spline type in F() and Finv(t())
-  * remove LHS support (code, param, indexes.csv, html doc)
   * try the new parallelization algorithm (openmp)
   * replace MonteCarlo::setData() by setParams(), setRatings(), etc.
 

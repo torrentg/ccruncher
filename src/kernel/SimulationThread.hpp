@@ -46,7 +46,6 @@ class MonteCarlo;
  *          - RNG management
  *          - RNG gaussian pool (performance reasons)
  *          - Blocksize (simultaneous simulations, performance reasons)
- *          - Latin Hypercube Sampling management (LHS)
  *          - Antithetic management
  *          - Simulate obligors default times
  *          - Simulate asset losses
@@ -55,41 +54,9 @@ class MonteCarlo;
  *          threads.
  *
  * @see MonteCarlo
- *
- * @note Note on LHS method
- *       We allow LHS variance reduction technique only on random variables
- *       S and Z. We don't do LHS in X (all the obligors) because:
- *       - we can exhaust memory when num_obligors and lhs_size  are high
- *       - lhs with dependence is ineficient (beta eval)
- *       - if we use quick version (0.5 instead of beta) gives discrete values
- *       Observe that lhs_size=1 means that LHS is disabled.
- *
- * @note Variance reduction papers
- *       - 'Monte Carlo methods for security pricing'
- *         by Phelim Boyle, Mark Broadie, Paul Glasserman
- *       - 'A user's guide to LHS: Sandia's Latin Hypercube Sampling Software'
- *         by Gregory D. Wyss, Kelly H. Jorgensen
- *       - 'Latin hypercube sampling with dependence and applications in finance'
- *         by Natalie Packham, Wolfgang Schmidt
  */
 class SimulationThread : public Thread
 {
-
-  private:
-
-    /**
-     * @brief Internal struct (RNG functor)
-     * @details Used by random_shuffle function
-     */
-    struct frand
-    {
-      //! RNG object
-      const gsl_rng *rng;
-      //! Constructor
-      frand(const gsl_rng *r) : rng(r) {}
-      //!  Return a non-negative value less than its argument
-      int operator()(int limit) const { return gsl_rng_uniform_int(rng, limit); }
-    };
 
   private:
 
@@ -125,8 +92,6 @@ class SimulationThread : public Thread
     const size_t &numsegments;
     //! Block size
     const unsigned short &blocksize;
-    //! Lhs sample size
-    const unsigned short &lhs_size;
 
     //! Thread identifier
     int id;
@@ -146,19 +111,6 @@ class SimulationThread : public Thread
     std::vector<double> s;
     //! Gaussian/T-Student values
     std::vector<double> x;
-    //! Indexes
-    std::vector<short> indexes;
-
-    //! Lhs current trial
-    size_t lhs_pos;
-    //! Number of lhs samples
-    size_t lhs_num;
-    //! Lhs sample multivariate normal (factors)
-    std::vector<double> lhs_values_z;
-    //! Lhs sample chi square
-    std::vector<double> lhs_values_s;
-    //! Auxiliar vector
-    std::vector<std::pair<double,size_t>> lhs_aux;
 
     //! Elapsed time creating random numbers
     Timer timer1;
@@ -169,11 +121,6 @@ class SimulationThread : public Thread
 
   private:
 
-    //! Comparator used to obtain ranks
-    static bool pcomparator(const std::pair<double,size_t> &, const std::pair<double,size_t> &);
-
-    //! Simule latent variables
-    void simuleLatentVars();
     //! Simule obligor
     void simuleObligorLoss(const SimulatedObligor &, Date, const SimulatedAsset *,
                            const unsigned short *, double *) const noexcept;

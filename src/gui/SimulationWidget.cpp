@@ -259,13 +259,9 @@ void ccruncher_gui::SimulationWidget::submit()
     if (properties.find("ithreads") != properties.end()) {
       ithreads = (unsigned char)(properties["ithreads"].toInt());
     }
-    bool indexes = false;
-    if (properties.find("indexes") != properties.end()) {
-      indexes = properties["indexes"].toBool();
-    }
     string ifile = ui->ifile->text().toStdString();
     string odir = ui->odir->text().toStdString();
-    task.setData(ifile, defines, odir, ithreads, indexes);
+    task.setData(ifile, defines, odir, ithreads);
     bool rc = task.checkConflicts();
     if (rc) {
       if (fout.is_open()) fout.close();

@@ -25,7 +25,6 @@
 
 #include <mutex>
 #include <vector>
-#include <fstream>
 #include <streambuf>
 #include "kernel/IData.hpp"
 #include "kernel/Inverse.hpp"
@@ -95,8 +94,6 @@ class MonteCarlo
     std::vector<double> floadings2;
     //! Antithetic method flag
     bool antithetic;
-    //! Latin hypercube sample size
-    unsigned short lhs_size;
     //! Block size
     unsigned short blocksize;
     //! RNG seed
@@ -119,8 +116,6 @@ class MonteCarlo
     std::mutex mMutex;
     //! Stop flag
     bool *stop;
-    //! File indexes.csv
-    std::ofstream findexes;
 
   private:
   
@@ -139,7 +134,7 @@ class MonteCarlo
     //! Averaged exposures by segment
     std::vector<double> getExposures(int isegmentation, IData &) const;
     //! Append simulation result
-    bool append(int ithread, const std::vector<short> &, const double *) noexcept;
+    bool append(const double *) noexcept;
     //! Non-copyable class
     MonteCarlo(const MonteCarlo &);
     //! Non-copyable class
@@ -152,7 +147,7 @@ class MonteCarlo
     //! Destructor
     ~MonteCarlo();
     //! Set path for output files
-    void setFilePath(const std::string &path, char mode, bool indexes=false);
+    void setFilePath(const std::string &path, char mode);
     //! Initiliaze this class
     void setData(IData &);
     //! Execute Monte Carlo

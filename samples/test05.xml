@@ -26,7 +26,7 @@ Expected Results:
   Expected Loss = 334*5%+333*10%+333*20% = 116.6
 
   Tip: Use CCBinf to check that simulated values comes from the given
-  parameters. Disable antithetic and lhs modes before to proceed.
+  parameters. Disable antithetic mode before to proceed.
   Use the following template as input file:
   
 # ------------------------------ begin CCBINF input file
@@ -74,7 +74,6 @@ S.level = [0.44]
     <define name="R12" value="25%"/>
     <define name="copula" value="t($NU)"/>
     <define name="antithetic" value="true"/>
-    <define name="lhs" value="1000"/>
     <define name="seed" value="0"/>
   </defines>
 
@@ -89,7 +88,6 @@ S.level = [0.44]
     <parameter name="copula.type" value="$copula"/>
     <parameter name="rng.seed" value="$seed"/>
     <parameter name="antithetic" value="$antithetic"/>
-    <parameter name="lhs" value="$lhs"/>
     <parameter name="blocksize" value="128"/>
   </parameters>
 

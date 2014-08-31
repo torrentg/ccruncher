@@ -67,8 +67,6 @@ class Params : public std::map<std::string,std::string>, public ExpatHandlers
     unsigned long getRngSeed() const;
     //! Returns antithetic flag
     bool getAntithetic() const;
-    //! Returns LHS (latin hypercube sampling) size
-    unsigned short getLhsSize() const;
     //! Returns simulation block size
     unsigned short getBlockSize() const;
     //! Validate object content
