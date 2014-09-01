@@ -31,8 +31,6 @@
 using namespace std;
 using namespace ccruncher;
 
-#define GAUSSIAN_POOL_SIZE 512
-
 /**************************************************************************//**
  * @param[in] ti Thread identifier.
  * @param[in] mc MonteCarlo manager.
@@ -55,8 +53,6 @@ ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned l
 
   rng = gsl_rng_alloc(gsl_rng_mt19937);
   gsl_rng_set(rng, seed);
-  rngpool.resize(GAUSSIAN_POOL_SIZE);
-  rngpool_pos = GAUSSIAN_POOL_SIZE;
 
   losses.resize(numsegments*blocksize, 0.0);
 
@@ -84,8 +80,6 @@ void ccruncher::SimulationThread::run()
   timer2.reset();
   timer3.reset();
 
-  rngpool_pos = GAUSSIAN_POOL_SIZE;
-
   while(more)
   {
     // simulating latent values (fill arrays z and s)
@@ -104,10 +98,14 @@ void ccruncher::SimulationThread::run()
       unsigned char ifactor = obligors[iobligor].ifactor;
 
       // simulating default times
+      Timer timer11(true);
       for(size_t j=0; j<x.size(); j++)
       {
-        x[j] = s[j] * (z[j*numfactors+ifactor] + floadings2[ifactor]*rnorm());
+        x[j] = s[j] * (z[j*numfactors+ifactor] + floadings2[ifactor]*gsl_ran_gaussian_ziggurat(rng, 1.0));
       }
+      timer11.stop();
+      timer1 += timer11.read();
+      timer2 -= timer11.read();
 
       // simulating obligor loss
       for(size_t j=0; j<blocksize; j++)
@@ -183,7 +181,7 @@ void ccruncher::SimulationThread::rmvnorm()
 
   for(size_t n=0; n<s.size(); n++) {
     for(size_t i=0; i<numfactors; i++) {
-      auxz.data[i] = rnorm();
+      auxz.data[i] = gsl_ran_gaussian_ziggurat(rng, 1.0);
     }
     gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, chol, &auxz);
     auxz.data += numfactors;
@@ -269,37 +267,5 @@ double ccruncher::SimulationThread::getElapsedTime2()
 double ccruncher::SimulationThread::getElapsedTime3()
 {
   return timer3.read();
-}
-
-/**************************************************************************//**
- * @return Simulated N(0,1) value.
- */
-inline double ccruncher::SimulationThread::rnorm()
-{
-  rngpool_pos++;
-  if (rngpool_pos >= GAUSSIAN_POOL_SIZE) fillGaussianPool();
-  return rngpool[rngpool_pos];
-}
-
-/**************************************************************************//**
- * @details We use the ziggurat algorithm because is very fast but only if
- *          it is called consecutively.
- */
-void ccruncher::SimulationThread::fillGaussianPool()
-{
-  Timer timer(false);
-  if (timer2.isRunning()) timer.start();
-
-  for(size_t i=0; i<GAUSSIAN_POOL_SIZE; i++)
-  {
-    rngpool[i] = gsl_ran_gaussian_ziggurat(rng, 1.0);
-  }
-  rngpool_pos = 0;
-
-  if (timer.isRunning()) {
-    timer.stop();
-    timer1 += timer.read();
-    timer2 -= timer.read();
-  }
 }
 
