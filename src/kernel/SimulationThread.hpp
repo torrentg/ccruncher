@@ -44,7 +44,6 @@ class MonteCarlo;
  *
  * @details This class does the following tasks:
  *          - RNG management
- *          - RNG gaussian pool (performance reasons)
  *          - Blocksize (simultaneous simulations, performance reasons)
  *          - Antithetic management
  *          - Simulate obligors default times
@@ -98,10 +97,6 @@ class SimulationThread : public Thread
 
     //! Random number generator
     gsl_rng *rng;
-    //! Gaussian random values pool
-    std::vector<double> rngpool;
-    //! Current position in rngpool
-    size_t rngpool_pos;
 
     //! Asset loss values
     std::vector<double> losses;
@@ -128,10 +123,6 @@ class SimulationThread : public Thread
     void rchisq();
     //! Factors random generation
     void rmvnorm();
-    //! Returns a univariate gaussian from rngpool
-    double rnorm();
-    //! Fills gaussian variates pool
-    void fillGaussianPool();
     //! Non-copyable class
     SimulationThread(const SimulationThread &);
     //! Non-copyable class
