@@ -80,13 +80,13 @@ void ccruncher_test::SegmentationTest::checks1(Segmentation &sobj)
   ASSERT(3 == sobj.indexOf("0003"));
   ASSERT(4 == sobj.indexOf("0004"));
 
-  sobj.addComponent(0);
-  sobj.addComponent(0);
-  sobj.addComponent(0);
-  sobj.addComponent(3);
-  sobj.addComponent(3);
-  sobj.addComponent(3);
-  sobj.addComponent(3);
+  sobj.increaseSegmentCounter(0);
+  sobj.increaseSegmentCounter(0);
+  sobj.increaseSegmentCounter(0);
+  sobj.increaseSegmentCounter(3);
+  sobj.increaseSegmentCounter(3);
+  sobj.increaseSegmentCounter(3);
+  sobj.increaseSegmentCounter(3);
 
   sobj.recode();
 

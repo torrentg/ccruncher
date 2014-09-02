@@ -109,7 +109,7 @@ class Segmentation : public ExpatHandlers
     //! Return filename
     std::string getFilename(const std::string &path) const;
     //! Add components to segmentations stats
-    void addComponent(size_t);
+    void increaseSegmentCounter(size_t);
     //! Recodes segments
     void recode();
     //! Recodes a segment

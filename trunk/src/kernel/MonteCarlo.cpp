@@ -325,7 +325,7 @@ void ccruncher::MonteCarlo::initAssets(IData &idata)
       {
         numassets++;
         numdatevalues += ptra->getData().size();
-        idata.getSegmentations().addComponents(ptra);
+        idata.getSegmentations().increaseSegmentCounters(ptra);
       }
     }
   }

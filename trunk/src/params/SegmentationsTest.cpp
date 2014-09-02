@@ -80,11 +80,11 @@ void ccruncher_test::SegmentationsTest::test1()
 
   asset.setSegment(0, 2);
   asset.setSegment(1, 0);
-  sobj.addComponents(&asset);
+  sobj.increaseSegmentCounters(&asset);
 
   asset.setSegment(0, 1);
   asset.setSegment(1, 1);
-  sobj.addComponents(&asset);
+  sobj.increaseSegmentCounters(&asset);
 
   sobj.removeUnusedSegments();
 

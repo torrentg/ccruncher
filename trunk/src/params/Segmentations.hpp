@@ -80,7 +80,7 @@ class Segmentations : public ExpatHandlers
     //! Return the index of the given segmentation
     int indexOfSegmentation(const char *sname) const;
     //! Add components to segmentations stats
-    void addComponents(const Asset *);
+    void increaseSegmentCounters(const Asset *);
     //! Remove unused segments
     void removeUnusedSegments();
     //! Recode segments removing unused segments
