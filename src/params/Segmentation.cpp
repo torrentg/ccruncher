@@ -69,15 +69,11 @@ size_t ccruncher::Segmentation::indexOf(const std::string &sname) const
 size_t ccruncher::Segmentation::indexOf(const char *sname) const
 {
   assert(sname != nullptr);
-
-  for(size_t i=0; i<mSegments.size(); i++)
-  {
-    if (mSegments[i].compare(sname) == 0)
-    {
+  for(size_t i=0; i<mSegments.size(); i++) {
+    if (mSegments[i].compare(sname) == 0) {
       return i;
     }
   }
-
   throw Exception("segment '" + string(sname) + "' not found");
 }
 
@@ -133,10 +129,8 @@ void ccruncher::Segmentation::add(const std::string &sname)
   }
 
   // checking coherence
-  for(string &segment : mSegments)
-  {
-    if (segment == sname)
-    {
+  for(string &segment : mSegments) {
+    if (segment == sname) {
       throw Exception("segment '" + sname + "' repeated");
     }
   }
@@ -215,12 +209,12 @@ string ccruncher::Segmentation::getFilename(const string &path) const
 }
 
 /**************************************************************************//**
- * @details Adds a component to the i-th segment. Thus reports that segment
+ * @details Adds a hit to the i-th segment. Thus reports that segment
  *          is used by someone and don't be removed by method
  *          Segmentation::removeUnusedSegments().
  * @param[in] isegment Segment index.
  */
-void ccruncher::Segmentation::addComponent(size_t isegment)
+void ccruncher::Segmentation::increaseSegmentCounter(size_t isegment)
 {
   assert(isegment < mNumElements.size());
   if (isegment < mNumElements.size()) {

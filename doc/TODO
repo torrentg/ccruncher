@@ -11,6 +11,8 @@ Current works
   * equal spline type in F() and Finv(t())
   * try the new parallelization algorithm (openmp)
   * replace MonteCarlo::setData() by setParams(), setRatings(), etc.
+  * refactor Segmentations (ExpatHandlers), Segmentation (as vector<unsigned short>)
+  * refactor Portfolio (ExpatHandlers), Obligor and Asset (basic data)
 
 Future works
 -------------------

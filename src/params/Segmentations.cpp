@@ -81,17 +81,13 @@ int ccruncher::Segmentations::indexOfSegmentation(const std::string &sname) cons
  */
 int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const
 {
-  for(size_t i=0; i<mEnabled.size(); i++)
-  {
-    if (mEnabled[i].getName().compare(sname) == 0)
-    {
+  for(size_t i=0; i<mEnabled.size(); i++) {
+    if (mEnabled[i].getName().compare(sname) == 0) {
       return (int)i;
     }
   }
-  for(size_t i=0; i<mDisabled.size(); i++)
-  {
-    if (mDisabled[i].getName().compare(sname) == 0)
-    {
+  for(size_t i=0; i<mDisabled.size(); i++) {
+    if (mDisabled[i].getName().compare(sname) == 0) {
       return -(int)(i+1);
     }
   }
@@ -125,8 +121,7 @@ void ccruncher::Segmentations::validate()
       nbasic++;
     }
   }
-  if (nbasic > 1)
-  {
+  if (nbasic > 1) {
     throw Exception("found duplicated segmentations [" + str + "]");
   }
 }
@@ -138,29 +133,23 @@ void ccruncher::Segmentations::validate()
 int ccruncher::Segmentations::insertSegmentation(Segmentation &val)
 {
   // checking coherence
-  for(Segmentation &segmentation : mEnabled)
-  {
-    if (segmentation.getName() == val.getName())
-    {
+  for(Segmentation &segmentation : mEnabled) {
+    if (segmentation.getName() == val.getName()) {
       throw Exception("segmentation name '" + val.getName() + "' repeated");
     }
   }
-  for(Segmentation &segmentation : mDisabled)
-  {
-    if (segmentation.getName() == val.getName())
-    {
+  for(Segmentation &segmentation : mDisabled) {
+    if (segmentation.getName() == val.getName()) {
       throw Exception("segmentation name '" + val.getName() + "' repeated");
     }
   }
 
   // inserting segmentation
-  if (val.isEnabled())
-  {
+  if (val.isEnabled()) {
     mEnabled.push_back(val);
     return mEnabled.size()-1;
   }
-  else
-  {
+  else {
     mDisabled.push_back(val);
     return -mDisabled.size();
   }
@@ -205,16 +194,15 @@ void ccruncher::Segmentations::epend(ExpatUserData &, const char *tag)
 }
 
 /**************************************************************************//**
- * @details Calls method Segmentation::addComponent() for each segment
- *          adscribed to the given asset.
+ * @details Calls method Segmentation::increaseSegmentCounter() for each
+ *          segment adscribed to the given asset.
  * @param[in] asset Asset.
  */
-void ccruncher::Segmentations::addComponents(const Asset *asset)
+void ccruncher::Segmentations::increaseSegmentCounters(const Asset *asset)
 {
   assert(asset != nullptr);
-  for(size_t i=0; i<mEnabled.size(); i++)
-  {
-    mEnabled[i].addComponent(asset->getSegment(i));
+  for(size_t i=0; i<mEnabled.size(); i++) {
+    mEnabled[i].increaseSegmentCounter(asset->getSegment(i));
   }
 }
 
@@ -224,8 +212,7 @@ void ccruncher::Segmentations::addComponents(const Asset *asset)
  */
 void ccruncher::Segmentations::removeUnusedSegments()
 {
-  for(Segmentation &segmentation : mEnabled)
-  {
+  for(Segmentation &segmentation : mEnabled) {
     segmentation.recode();
   }
 }
@@ -237,8 +224,7 @@ void ccruncher::Segmentations::removeUnusedSegments()
 void ccruncher::Segmentations::recodeSegments(Asset *asset)
 {
   assert(asset != nullptr);
-  for(size_t i=0; i<mEnabled.size(); i++)
-  {
+  for(size_t i=0; i<mEnabled.size(); i++) {
     int old = asset->getSegment(i);
     asset->setSegment(i, mEnabled[i].recode(old));
   }
