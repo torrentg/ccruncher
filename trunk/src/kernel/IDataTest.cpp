@@ -43,7 +43,7 @@ void ccruncher_test::IDataTest::test1()
       <parameter name='time.T' value='18/02/2005'/>\n\
       <parameter name='maxiterations' value='3000'/>\n\
       <parameter name='maxseconds' value='30000000'/>\n\
-      <parameter name='copula.type' value='gaussian'/>\n\
+      <parameter name='copula' value='gaussian'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
       <parameter name='antithetic' value='true'/>\n\
     </parameters>\n\

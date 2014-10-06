@@ -88,6 +88,8 @@ class Inverse
     void init(double ndf, double maxt, const CDF &cdf);
     //! Evalue (return days from t0)
     double evalue(double val) const;
+    //! Returns interpolation type (l=linear, c=cubic, n=none)
+    std::string getInterpolationType() const;
 
 };
 

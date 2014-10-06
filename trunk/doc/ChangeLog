@@ -6,8 +6,10 @@ version 2.5.0 (???. 2014)
 --------------------------
   * MCMC algorithm reviewed
   * code moved from C++98 to C++11
+  * code refactoring
   * html site refactoring
   * removed support to LHS
+  * parameter 'copula.type' renamed to 'copula'
 
 version 2.4.1 (Mar. 2014)
 --------------------------

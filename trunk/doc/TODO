@@ -4,15 +4,16 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * move to C++11
   * stock/asset/index case
   * mention to Gibbs sampler?
   * create F() and Finv(t()) output
   * equal spline type in F() and Finv(t())
   * try the new parallelization algorithm (openmp)
-  * replace MonteCarlo::setData() by setParams(), setRatings(), etc.
-  * refactor Segmentations (ExpatHandlers), Segmentation (as vector<unsigned short>)
-  * refactor Portfolio (ExpatHandlers), Obligor and Asset (basic data)
+  * review class Interest
+  * Timer: start_time + total convert from double -> timeval
+          use clock_gettime(CLOCK_MONOTONIC) instead of gettimeofday()
+          see http://stackoverflow.com/questions/6498972/faster-equivalent-of-gettimeofday
+  * append test (Asset::prepare, Portfolio - unused segmentations, asset values, etc. -)
 
 Future works
 -------------------

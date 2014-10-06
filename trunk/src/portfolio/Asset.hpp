@@ -24,80 +24,40 @@
 #define _Asset_
 
 #include <vector>
-#include "portfolio/LGD.hpp"
 #include "portfolio/DateValues.hpp"
 #include "params/Interest.hpp"
-#include "utils/Date.hpp"
-#include "utils/ExpatHandlers.hpp"
 
 namespace ccruncher {
 
 /**************************************************************************//**
  * @brief Financial asset with credit risk.
  *
- * @details Asset is described in terms of LGD and EAD. If the number of
- *          assets is high (eg. 10000) then memory is used to preserve
- *          unused data (like DateValues out of the analyzed range or
- *          data that is duplicated). For this reason, unused data is
- *          deleted when they are no longer needed.
+ * @details An asset is a list of DateValues (date-ead-lgd) sorted by date
+ *          and a list of segmentation-segment indexes. It is your
+ *          responsability to mantain these list with valid values.
+ *          We recommend to set the first value to the asset creation
+ *          date with a non valid EAD.
  *
  * @see http://ccruncher.net/ifileref.html#portfolio
  */
-class Asset : public ExpatHandlers
+class Asset
 {
 
-  private:
+  public:
 
+    //! Asset datevalues
+    std::vector<DateValues> values;
     //! Segmentation-segment relations
-    std::vector<int> mSegments;
-    //! Asset identifier
-    std::string mId;
-    //! Asset creation date
-    Date mDate;
-    //! EAD-LGD values
-    std::vector<DateValues> mValues;
-    //! Default LGD
-    LGD mDefaultLgd;
-    //! Auxiliary variable (used by parser)
-    bool have_data;
-
-  protected:
-  
-    //! Directives to process an xml start tag element
-    virtual void epstart(ExpatUserData &, const char *, const char **) override;
-    //! Directives to process an xml end tag element
-    virtual void epend(ExpatUserData &, const char *) override;
+    std::vector<ushort> segments;
 
   public:
 
     //! Constructor
-    Asset(size_t nsegmentations=0);
-    //! Return asset identifier
-    const std::string& getId() const { return mId; }
-    //! Add a segmentation-segment relation
-    void addBelongsTo(int isegmentation, int isegment);
+    Asset(ushort nsegmentations=0) : segments(nsegmentations, 0) {}
     //! Prepare data
     void prepare(const Date &d1, const Date &d2, const Interest &interest);
-    //! Check if this asset belongs to segmentation-segment
-    bool belongsTo(int isegmentation, int isegment) const;
-    //! Return the asset's segment of the given segmentation
-    int getSegment(int isegmentation) const;
-    //! Return the list of segments
-    const std::vector<int>& getSegments() const;
-    //! Set the given segment to segmentation
-    void setSegment(int isegmentation, int isegment);
     //! Indicates if this asset has info in date1-date2
-    bool isActive(const Date &, const Date &);
-    //! Returns minimum event date (restricted to prepared events)
-    Date getMinDate() const;
-    //! Returns maximum event date (restricted to prepared events)
-    Date getMaxDate() const;
-    //! Indicates if this asset use obligor lgd
-    bool requiresObligorLGD() const;
-    //! Returns reference to data
-    const std::vector<DateValues>& getData() const;
-    //! Clears data
-    void clearData();
+    bool isActive(const Date &, const Date &) const;
 
 };
 

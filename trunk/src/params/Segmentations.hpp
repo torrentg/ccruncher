@@ -31,32 +31,13 @@
 
 namespace ccruncher {
 
-// forward declaration
-class Asset;
-
 /**************************************************************************//**
  * @brief List of segmentations.
  *
  * @see http://ccruncher.net/ifileref.html#segmentations
  */
-class Segmentations : public ExpatHandlers
+class Segmentations : public std::vector<Segmentation>, public ExpatHandlers
 {
-
-  private:
-
-    //! List of enabled segmentations
-    std::vector<Segmentation> mEnabled;
-    //! List of disabled segmentations
-    std::vector<Segmentation> mDisabled;
-    //! Auxiliary variable (used by parser)
-    Segmentation mAuxSegmentation;
-
-  private:
-  
-    //! Insert a segmentation to list
-    int insertSegmentation(Segmentation &);
-    //! Validate object content
-    void validate();
 
   protected:
   
@@ -67,24 +48,19 @@ class Segmentations : public ExpatHandlers
   
   public:
 
-    //! Constructor
-    Segmentations() {}
-    //! Constructor
-    Segmentations(const std::vector<Segmentation> &segmentations);
-    //! Number of enabled segmentations
-    int size() const;
-    //! [] operator (i>=0 -> enabled, i<0 -> disabled)
-    const Segmentation& getSegmentation(int i) const;
+    //! Inherits std::vector constructors
+    using std::vector<Segmentation>::vector;
     //! Return the index of the given segmentation
-    int indexOfSegmentation(const std::string &sname) const;
+    ushort indexOf(const std::string &sname) const;
     //! Return the index of the given segmentation
-    int indexOfSegmentation(const char *sname) const;
-    //! Add components to segmentations stats
-    void increaseSegmentCounters(const Asset *);
-    //! Remove unused segments
-    void removeUnusedSegments();
-    //! Recode segments removing unused segments
-    void recodeSegments(Asset *);
+    ushort indexOf(const char *sname) const;
+
+  public:
+
+    //! Validate a list of segmentations
+    static bool isValid(const std::vector<Segmentation> &segmentations, bool throwException=false);
+    //! Returns the number of enabled segmentations
+    static ushort numEnabledSegmentations(const std::vector<Segmentation> &segmentations);
 
 };
 

@@ -20,6 +20,7 @@
 //
 //===========================================================================
 
+#include <cmath>
 #include <numeric>
 #include <algorithm>
 #include <cassert>
@@ -32,14 +33,12 @@ using namespace std;
 using namespace ccruncher;
 
 /**************************************************************************//**
- * @param[in] ti Thread identifier.
  * @param[in] mc MonteCarlo manager.
  * @param[in] seed RNG seed.
  */
-ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned long seed) :
-  Thread(), montecarlo(mc), obligors(mc.obligors), assets(mc.assets), segments(mc.segments),
-  numSegmentsBySegmentation(mc.numSegmentsBySegmentation), chol(mc.chol),
-  floadings1(mc.floadings1), floadings2(mc.floadings2), inverses(mc.inverses),
+ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, ulong seed) :
+  Thread(), montecarlo(mc), obligors(mc.obligors), numSegmentsBySegmentation(mc.numSegmentsBySegmentation), 
+  chol(mc.chol), floadings1(mc.floadings1), floadings2(mc.floadings2), inverses(mc.inverses),
   numfactors(mc.chol->size1), ndf(mc.ndf), time0(mc.time0), timeT(mc.timeT),
   antithetic(mc.antithetic), numsegments(mc.numsegments),
   blocksize(mc.blocksize), rng(nullptr), losses(0)
@@ -49,16 +48,13 @@ ccruncher::SimulationThread::SimulationThread(int ti, MonteCarlo &mc, unsigned l
   assert(numfactors == floadings1.size());
   assert(antithetic?(blocksize%2!=0?false:true):true);
 
-  id = ti;
-
   rng = gsl_rng_alloc(gsl_rng_mt19937);
   gsl_rng_set(rng, seed);
 
-  losses.resize(numsegments*blocksize, 0.0);
-
-  x.resize(blocksize/(antithetic?2:1));
-  z.resize((blocksize*numfactors)/(antithetic?2:1));
-  s.resize(blocksize/(antithetic?2:1));
+  losses.assign(numsegments*blocksize, 0.0);
+  x.assign(blocksize/(antithetic?2:1), 0.0);
+  z.assign((blocksize*numfactors)/(antithetic?2:1), 0.0);
+  s.assign(blocksize/(antithetic?2:1), 1.0);
 }
 
 /**************************************************************************/
@@ -93,14 +89,12 @@ void ccruncher::SimulationThread::run()
     // reset aggregated values
     fill(losses.begin(), losses.end(), 0.0);
 
-    for(size_t iobligor=0, iasset=0, isegment=0; iobligor<obligors.size(); iobligor++)
+    for(size_t iobligor=0; iobligor<obligors.size(); iobligor++)
     {
-      unsigned char ifactor = obligors[iobligor].ifactor;
-
       // simulating default times
       Timer timer11(true);
-      for(size_t j=0; j<x.size(); j++)
-      {
+      unsigned char ifactor = obligors[iobligor].ifactor;
+      for(size_t j=0; j<x.size(); j++) {
         x[j] = s[j] * (z[j*numfactors+ifactor] + floadings2[ifactor]*gsl_ran_gaussian_ziggurat(rng, 1.0));
       }
       timer11.stop();
@@ -124,22 +118,17 @@ void ccruncher::SimulationThread::run()
           }
         }
 
-        assert(!std::isnan(val));
+        assert(std::isfinite(val));
         int r = obligors[iobligor].irating;
         double days = inverses[r].evalue(val);
-        Date ddate = time0 + (long)ceil(days);
+        Date timeDefault = time0 + (long)ceil(days);
 
-        if (ddate <= timeT)
+        if (timeDefault <= timeT)
         {
-          const SimulatedAsset *ptr_assets = &(assets[iasset]);
-          const unsigned short *ptr_segments = &(segments[isegment]);
           double *ptr_losses = (double*) &(losses[j*numsegments]);
-          simuleObligorLoss(obligors[iobligor], ddate, ptr_assets, ptr_segments, ptr_losses);
+          simuleObligorLoss(obligors[iobligor], timeDefault, ptr_losses);
         }
       }
-
-      iasset += obligors[iobligor].numassets;
-      isegment += obligors[iobligor].numassets * numSegmentsBySegmentation.size();
     }
     timer2.stop();
 
@@ -161,9 +150,6 @@ void ccruncher::SimulationThread::rchisq()
       if (chisq < 1e-14) chisq = 1e-14; //avoid division by 0
       s[n] = sqrt(ndf/chisq);
     }
-  }
-  else {
-    std::fill(s.begin(), s.end(), 1.0);
   }
 }
 
@@ -193,36 +179,29 @@ void ccruncher::SimulationThread::rmvnorm()
  *          them in the corresponding segmentation-segment.
  * @param[in] obligor Obligor to simulate.
  * @param[in] dtime Default time.
- * @param[in] vassets List of assets.
- * @param[in] vsegments List of segments.
- * @param[out] vlosses Cumulated losses by segmentation-segment.
+ * @param[out] closses Cumulated losses by segmentation-segment.
  */
-void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obligor,
-    Date dtime, const SimulatedAsset *vassets, const unsigned short *vsegments,
-    double *vlosses) const noexcept
+void ccruncher::SimulationThread::simuleObligorLoss(const Obligor &obligor, Date dtime, double *closses) const noexcept
 {
-  assert(vassets != nullptr);
-  assert(vsegments != nullptr);
-  assert(vlosses != nullptr);
+  assert(closses != nullptr);
 
   double obligor_lgd = NAN;
 
-  for(unsigned short i=0; i<obligor.numassets; i++)
+  for(size_t i=0; i<obligor.assets.size(); i++)
   {
+    const Asset &asset = obligor.assets[i];
+    
     // evalue asset loss
-    if (dtime <= vassets[i].maxdate && vassets[i].mindate <= dtime)
+    if (asset.values.front().date <= dtime && dtime <= asset.values.back().date)
     {
-      DateValues *values = lower_bound(vassets[i].begin, vassets[i].end, dtime);
-      assert(dtime <= (vassets[i].end-1)->date);
-      double ead = values->ead.getValue(rng);
-      double lgd = values->lgd.getValue(rng);
+      auto item = lower_bound(asset.values.begin(), asset.values.end(), dtime);
+      double ead = item->ead.getValue(rng);
+      double lgd = item->lgd.getValue(rng);
 
       // non-lgd means that is inherited from obligor
-      if (std::isnan(lgd))
-      {
-        if (std::isnan(obligor_lgd))
-        {
-          obligor_lgd = obligor.ref.lgd.getValue(rng);
+      if (std::isnan(lgd)) {
+        if (std::isnan(obligor_lgd)) {
+          obligor_lgd = obligor.lgd.getValue(rng);
         }
         lgd = obligor_lgd;
       }
@@ -231,16 +210,14 @@ void ccruncher::SimulationThread::simuleObligorLoss(const SimulatedObligor &obli
       double loss = ead * lgd;
 
       // aggregate asset loss in the correspondent segment loss
-      // remember: obligor segments was recoded to assets segments
-      double *closses = vlosses;
-      for(size_t j=0; j<numSegmentsBySegmentation.size(); j++)
+      double *vlosses = closses;
+      for(size_t iSegmentation=0; iSegmentation<numSegmentsBySegmentation.size(); iSegmentation++)
       {
-        unsigned short isegment = vsegments[j];
-        assert(isegment < numSegmentsBySegmentation[j]);
-        closses[isegment] += loss;
-        closses += numSegmentsBySegmentation[j];
+        ushort isegment = asset.segments[iSegmentation];
+        assert(isegment < numSegmentsBySegmentation[iSegmentation]);
+        vlosses[isegment] += loss;
+        vlosses += numSegmentsBySegmentation[iSegmentation];
       }
-      vsegments += numSegmentsBySegmentation.size();
     }
   }
 }

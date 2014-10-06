@@ -37,6 +37,7 @@ class RatingsTest : public TestFixture<RatingsTest>
     void test3();
     void test4();
     void test5();
+    void test6();
 
 
   public:
@@ -48,6 +49,7 @@ class RatingsTest : public TestFixture<RatingsTest>
       TEST_CASE(test3);
       TEST_CASE(test4);
       TEST_CASE(test5);
+      TEST_CASE(test6);
     }
 
 };

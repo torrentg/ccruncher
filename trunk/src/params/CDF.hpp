@@ -31,10 +31,10 @@
 namespace ccruncher {
 
 /**************************************************************************//**
- * @brief CDF defined by user at some points.
+ * @brief User-defined CDF (Cumulative Distribution Function).
  *
- * @details This class allows to evaluate the cdf function and its inverse
- *          interpolating the given points using linear or cubic splines.
+ * @details This class allows to evaluate the cdf function interpolating
+ *          the user-defined points using linear or cubic splines.
  *
  * @see http://ccruncher.net/ifileref.html#dprobs
  */

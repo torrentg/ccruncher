@@ -19,7 +19,6 @@ HEADERS += \
     src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
     src/kernel/MonteCarlo.hpp \
-    src/kernel/SimulatedData.hpp \
     src/kernel/SimulationThread.hpp \
     src/kernel/Inverse.hpp \
     src/portfolio/LGD.hpp \
@@ -61,7 +60,6 @@ SOURCES += \
     src/kernel/IData.cpp \
     src/kernel/Aggregator.cpp \
     src/kernel/MonteCarlo.cpp \
-    src/kernel/SimulatedData.cpp \
     src/kernel/SimulationThread.cpp \
     src/kernel/Inverse.cpp \
     src/portfolio/LGD.cpp \

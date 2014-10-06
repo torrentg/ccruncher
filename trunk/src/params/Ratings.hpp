@@ -49,12 +49,15 @@ class Ratings : public std::vector<Rating>, public ExpatHandlers
 
     //! Inherits std::vector constructors
     using std::vector<Rating>::vector;
-    //! insert a rating in the list
-    void add(const Rating &);
     //! Return the index of the rating
-    size_t indexOf(const char *name) const;
+    unsigned char indexOf(const char *name) const;
     //! Return the index of the rating
-    size_t indexOf(const std::string &name) const;
+    unsigned char indexOf(const std::string &name) const;
+
+  public:
+
+    //! Validate a list of ratings
+    static bool isValid(const std::vector<Rating> &ratings, bool throwException=false);
 
 };
 

@@ -61,7 +61,7 @@ class SimulationTask : public QThread
     static size_t num_running_sims;
 
     //! Logger
-    ccruncher::Logger log;
+    ccruncher::Logger logger;
     //! Input filename
     std::string ifile;
     //! Output directory

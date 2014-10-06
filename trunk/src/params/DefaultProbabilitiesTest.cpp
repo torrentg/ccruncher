@@ -79,7 +79,7 @@ void ccruncher_test::DefaultProbabilitiesTest::test1()
 
   // checking methods
   ASSERT_EQUALS(pd.size(), 2ul);
-  ASSERT_EQUALS(pd.getIndexDefault(), 1ul);
+  ASSERT_EQUALS(DefaultProbabilities::getIndexDefault(pd), (unsigned char)1);
   ASSERT_EQUALS(pd[0].getInterpolationType(), "cspline");
   ASSERT_EQUALS(pd[1].getInterpolationType(), "linear");
 
@@ -186,5 +186,47 @@ void ccruncher_test::DefaultProbabilitiesTest::test4()
   xmlparser.getUserData().ratings = &ratings;
   xmlparser.getUserData().date1 = Date("1/1/2012");
   ASSERT_THROW(xmlparser.parse(xmlcontent, &pd));
+}
+
+//===========================================================================
+// test5
+//===========================================================================
+void ccruncher_test::DefaultProbabilitiesTest::test5()
+{
+  // create DefaultProbabilties from scratch
+  DefaultProbabilities dprobs;
+
+  // rating A
+  CDF cdf1(0.0, +INFINITY);
+  cdf1.add(1*365.0+1, 0.001);
+  cdf1.add(2*365.0+1, 0.005);
+  cdf1.add(4*365.0+2, 0.03);
+
+  dprobs.push_back(cdf1);
+  ASSERT(!DefaultProbabilities::isValid(dprobs));
+
+  // rating B
+  CDF cdf2(0.0, +INFINITY);
+  cdf2.add(1*365.0+1, 0.005);
+  cdf2.add(2*365.0+1, 0.007);
+  cdf2.add(4*365.0+2, 0.04);
+
+  dprobs.push_back(cdf2);
+  ASSERT(!DefaultProbabilities::isValid(dprobs));
+
+  // default rating
+  CDF cdf3(0.0, +INFINITY);
+  cdf3.add(0.0, 1.0);
+
+  dprobs.push_back(cdf3);
+  ASSERT(DefaultProbabilities::isValid(dprobs));
+  ASSERT(DefaultProbabilities::getIndexDefault(dprobs) == 2);
+
+  // default rating (again)
+  CDF cdf4(0.0, +INFINITY);
+  cdf4.add(0.0, 1.0);
+
+  dprobs.push_back(cdf4);
+  ASSERT(!DefaultProbabilities::isValid(dprobs));
 }
 

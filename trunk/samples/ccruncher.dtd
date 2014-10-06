@@ -52,7 +52,7 @@
     EMPTY
 >
 <!ATTLIST parameter 
-    name (time.0|time.T|maxiterations|maxseconds|copula.type|rng.seed|antithetic|blocksize) #REQUIRED
+    name (time.0|time.T|maxiterations|maxseconds|copula|rng.seed|antithetic|blocksize) #REQUIRED
     value CDATA #REQUIRED
 >
 

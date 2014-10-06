@@ -63,6 +63,11 @@ void ccruncher_test::EADTest::test1()
     ASSERT(r4.getType() == EAD::Fixed);
     ASSERT_EQUALS_EPSILON(r4.getValue1(), 800.0, EPSILON);
     ASSERT_EQUALS_EPSILON(r4.getExpected(), 800.0, EPSILON);
+
+    EAD r5(3000.0);
+    ASSERT(r5.getType() == EAD::Fixed);
+    ASSERT_EQUALS_EPSILON(r5.getValue1(), 3000.0, EPSILON);
+    ASSERT_EQUALS_EPSILON(r5.getExpected(), 3000.0, EPSILON);
   }
 
   // lognormal distribution

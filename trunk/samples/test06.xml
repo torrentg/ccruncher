@@ -25,7 +25,7 @@
     <parameter name="time.T" value="01/01/2006"/>
     <parameter name="maxiterations" value="$numsims"/>
     <parameter name="maxseconds" value="86400"/>
-    <parameter name="copula.type" value="$copula"/>
+    <parameter name="copula" value="$copula"/>
     <parameter name="rng.seed" value="0"/>
     <parameter name="antithetic" value="$antithetic"/>
     <parameter name="blocksize" value="$blocksize"/>

@@ -35,7 +35,7 @@ namespace ccruncher {
  * @details These functions provides the probability of default (PD) at
  *          a given time (t) for a fixed rating (r): PD(t;r).
  *          This class provides methods to retrieve them from the xml
- *          input file, and evaluate them using spline interpolation.
+ *          input file and check if the content is valid.
  *
  * @see http://ccruncher.net/ifileref.html#dprobs
  */
@@ -53,10 +53,13 @@ class DefaultProbabilities : public std::vector<CDF>, public ExpatHandlers
 
     //! Inherits std::vector constructors
     using std::vector<CDF>::vector;
+
+  public:
+
     //! Return index of default rating
-    size_t getIndexDefault() const;
+    static unsigned char getIndexDefault(const std::vector<CDF> &dprobs);
     //! Validate object content
-    bool isValid(bool throwException=false) const;
+    static bool isValid(const std::vector<CDF> &dprobs, bool throwException=false);
 
 };
 

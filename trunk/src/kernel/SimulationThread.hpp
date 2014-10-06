@@ -28,7 +28,6 @@
 #include <gsl/gsl_rng.h>
 #include "kernel/Inverse.hpp"
 #include "kernel/MonteCarlo.hpp"
-#include "kernel/SimulatedData.hpp"
 #include "utils/Date.hpp"
 #include "utils/Timer.hpp"
 #include "utils/Thread.hpp"
@@ -43,7 +42,6 @@ class MonteCarlo;
  * @brief Monte Carlo simulation
  *
  * @details This class does the following tasks:
- *          - RNG management
  *          - Blocksize (simultaneous simulations, performance reasons)
  *          - Antithetic management
  *          - Simulate obligors default times
@@ -62,13 +60,9 @@ class SimulationThread : public Thread
     //! Monte Carlo parent
     MonteCarlo &montecarlo;
     //! List of simulated obligors
-    const std::vector<SimulatedObligor> &obligors;
-    //! List of simulated assets
-    const std::vector<SimulatedAsset> &assets;
-    //! List of obligor-segments
-    const std::vector<unsigned short> &segments;
+    const std::vector<Obligor> &obligors;
     //! Number of segments for each segmentation
-    const std::vector<unsigned short> &numSegmentsBySegmentation;
+    const std::vector<ushort> &numSegmentsBySegmentation;
     //! Cholesky matrix (see MonteCarlo::initModel())
     const gsl_matrix *chol;
     //! Factor loadings [w_i]
@@ -90,14 +84,10 @@ class SimulationThread : public Thread
     //! Total number of segments
     const size_t &numsegments;
     //! Block size
-    const unsigned short &blocksize;
-
-    //! Thread identifier
-    int id;
+    const ushort &blocksize;
 
     //! Random number generator
     gsl_rng *rng;
-
     //! Asset loss values
     std::vector<double> losses;
     //! Simulated factors
@@ -106,7 +96,6 @@ class SimulationThread : public Thread
     std::vector<double> s;
     //! Gaussian/T-Student values
     std::vector<double> x;
-
     //! Elapsed time creating random numbers
     Timer timer1;
     //! Elapsed time simulating obligors & segmentations
@@ -117,8 +106,7 @@ class SimulationThread : public Thread
   private:
 
     //! Simule obligor
-    void simuleObligorLoss(const SimulatedObligor &, Date, const SimulatedAsset *,
-                           const unsigned short *, double *) const noexcept;
+    void simuleObligorLoss(const Obligor &, Date, double *) const noexcept;
     //! Chi-square random generation
     void rchisq();
     //! Factors random generation
@@ -131,7 +119,7 @@ class SimulationThread : public Thread
   public:
 
     //! Constructor
-    SimulationThread(int, MonteCarlo &, unsigned long seed);
+    SimulationThread(MonteCarlo &, ulong seed);
     //! Destructor
     virtual ~SimulationThread() override;
     //! Thread main function

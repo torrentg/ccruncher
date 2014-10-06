@@ -55,41 +55,33 @@ void ccruncher_test::SegmentationsTest::test1()
     </segmentation>\n\
   </segmentations>";
 
-  // creating xml
-  ExpatParser xmlparser;
-
-  // segmentation object creation
   Segmentations sobj;
+
+  // empty list
+  ASSERT(!Segmentations::isValid(sobj));
+
+  // parse xml
+  ExpatParser xmlparser;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sobj));
+  ASSERT(Segmentations::isValid(sobj));
 
-  ASSERT(2 == sobj.size());
+  ASSERT(5 == sobj.size());
+  ASSERT(Segmentations::numEnabledSegmentations(sobj) == 2);
 
-  ASSERT(-1 == sobj.indexOfSegmentation("portfolio"));
-  ASSERT(0 == sobj.indexOfSegmentation("sectors"));
-  ASSERT(-2 == sobj.indexOfSegmentation("size"));
-  ASSERT(1 == sobj.indexOfSegmentation("products"));
-  ASSERT(-3 == sobj.indexOfSegmentation("offices"));
+  ASSERT(0 == sobj.indexOf("portfolio"));
+  ASSERT(1 == sobj.indexOf("sectors"));
+  ASSERT(2 == sobj.indexOf("size"));
+  ASSERT(3 == sobj.indexOf("products"));
+  ASSERT(4 == sobj.indexOf("offices"));
 
-  ASSERT(sobj.getSegmentation(-1).getName() == "portfolio");
-  ASSERT(sobj.getSegmentation(-2).getName() == "size");
-  ASSERT(sobj.getSegmentation(-3).getName() == "offices");
-  ASSERT(sobj.getSegmentation(0).getName() == "sectors");
-  ASSERT(sobj.getSegmentation(1).getName() == "products");
+  ASSERT(sobj[0].getName() == "portfolio");
+  ASSERT(sobj[1].getName() == "sectors");
+  ASSERT(sobj[2].getName() == "size");
+  ASSERT(sobj[3].getName() == "products");
+  ASSERT(sobj[4].getName() == "offices");
 
-  Asset asset(2);
-
-  asset.setSegment(0, 2);
-  asset.setSegment(1, 0);
-  sobj.increaseSegmentCounters(&asset);
-
-  asset.setSegment(0, 1);
-  asset.setSegment(1, 1);
-  sobj.increaseSegmentCounters(&asset);
-
-  sobj.removeUnusedSegments();
-
-  sobj.recodeSegments(&asset);
-  ASSERT(asset.getSegment(0) == 0);
-  ASSERT(asset.getSegment(1) == 0);
+  // repeated segmentation name
+  sobj.push_back(Segmentation("offices", Segmentation::ComponentsType::obligor));
+  ASSERT(!Segmentations::isValid(sobj));
 }
 

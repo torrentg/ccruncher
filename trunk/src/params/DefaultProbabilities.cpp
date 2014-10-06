@@ -20,6 +20,7 @@
 //
 //===========================================================================
 
+#include <climits>
 #include <cassert>
 #include "params/DefaultProbabilities.hpp"
 #include "params/Ratings.hpp"
@@ -92,7 +93,7 @@ void ccruncher::DefaultProbabilities::epend(ExpatUserData &eu, const char *tag)
           idefault  = i;
         }
         else {
-          string str = (*(eu.ratings))[i].getName();
+          string str = (*(eu.ratings))[i].name;
           throw Exception("dprob for rating '" + str + "' not set");
         }
       }
@@ -102,28 +103,34 @@ void ccruncher::DefaultProbabilities::epend(ExpatUserData &eu, const char *tag)
     }
 
     // checking content
-    isValid(true);
+    isValid(*this, true);
   }
 }
 
 /**************************************************************************//**
  * @details Internal method. Sorts data, identifies default rating, fills
  *          info not entered by user, and checks data.
+ * @param[in] dprobs List of CDFs to check.
+ * @param[in] throwException Throw an exception if validation fails.
  * @throw Exception Validation error.
  */
-bool ccruncher::DefaultProbabilities::isValid(bool throwException) const
+bool ccruncher::DefaultProbabilities::isValid(const std::vector<CDF> &dprobs, bool throwException)
 {
   try
   {
-    size_t idefault = getIndexDefault();
+    if (dprobs.size() < 2 || dprobs.size() > UCHAR_MAX) {
+      throw Exception("invalid number of ratings");
+    }
+
+    unsigned char idefault = getIndexDefault(dprobs);
 
     // finding empty cdf's or with range bad-defined
-    for(size_t i=0; i<size(); i++)
+    for(size_t i=0; i<dprobs.size(); i++)
     {
-      if (i != idefault && (*this)[i].evalue(0.0) > EPSILON) {
+      if (i != idefault && dprobs[i].evalue(0.0) > EPSILON) {
         throw Exception("cdf with dprob(0) > 0");
       }
-      if ((*this)[i].getPoints().back().second < EPSILON) {
+      if (dprobs[i].getPoints().back().second < EPSILON) {
         throw Exception("cdf with dprob(x) = 0 for all x");
       }
     }
@@ -141,12 +148,17 @@ bool ccruncher::DefaultProbabilities::isValid(bool throwException) const
  * @return Index (0-based) of the 'default' rating. -1 if not found.
  * @throw Exception default rating not found
  */
-size_t ccruncher::DefaultProbabilities::getIndexDefault() const
+unsigned char ccruncher::DefaultProbabilities::getIndexDefault(const std::vector<CDF> &dprobs)
 {
-  for(size_t i=0; i<size(); i++)
-  {
-    if ((*this)[i].evalue(0.0) > 1.0-EPSILON) {
-      return i;
+  if (dprobs.size() < 2) {
+    throw Exception("required a minimum of 2 ratings");
+  }
+  if (dprobs.size() > UCHAR_MAX) {
+    throw Exception("number of ratings bigger than " + Format::toString(UCHAR_MAX));
+  }
+  for(size_t i=0; i<dprobs.size(); i++) {
+    if (dprobs[i].evalue(0.0) > 1.0-EPSILON) {
+      return (unsigned char) i;
     }
   }
   throw Exception("default rating not found");

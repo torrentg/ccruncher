@@ -27,15 +27,20 @@
 #include "utils/Exception.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
+#include "utils/Utils.hpp"
 
 #define TIME0 "time.0"
 #define TIMET "time.T"
 #define MAXITERATIONS "maxiterations"
 #define MAXSECONDS "maxseconds"
-#define COPULA "copula.type"
-#define RNG_SEED "rng.seed"
+#define COPULA "copula"
+#define RNGSEED "rng.seed"
 #define ANTITHETIC "antithetic"
 #define BLOCKSIZE "blocksize"
+
+#define DEFAULT_RNGSEED "0"
+#define DEFAULT_ANTITHETIC "false"
+#define DEFAULT_BLOCKSIZE "128"
 
 using namespace std;
 using namespace ccruncher;
@@ -61,7 +66,7 @@ void ccruncher::Params::epstart(ExpatUserData &, const char *tag, const char **a
 
     string name = getStringAttribute(atrs, "name");
     if (name != TIME0 && name != TIMET && name != MAXITERATIONS &&
-        name != MAXSECONDS && name != COPULA && name != RNG_SEED &&
+        name != MAXSECONDS && name != COPULA && name != RNGSEED &&
         name != ANTITHETIC && name != BLOCKSIZE) {
       throw Exception("unexpected parameter '" + name + "'");
     }
@@ -111,8 +116,7 @@ bool ccruncher::Params::isValid(bool throwException) const
       throw Exception("non finite stop criteria");
     }
 
-    getCopulaType();
-    getCopulaParam();
+    getNdf();
     getRngSeed();
 
     if (getAntithetic() && getBlockSize()%2 != 0) {
@@ -129,16 +133,43 @@ bool ccruncher::Params::isValid(bool throwException) const
 }
 
 /**************************************************************************//**
+ * @param[in] key Parameter key.
+ * @param[in] defaultValue Value to return if key not found.
+ * @return Parameter value.
+ */
+string ccruncher::Params::getParamValue(const std::string &key, const std::string &defaultValue) const
+{
+  auto it = this->find(key);
+  if (it == this->end()) {
+    return defaultValue;
+  }
+  else {
+    return it->second;
+  }
+}
+
+/**************************************************************************//**
+ * @param[in] key Parameter key.
+ * @return Parameter value.
+ * @exception Exception Parameter not found.
+ */
+string ccruncher::Params::getParamValue(const std::string &key) const
+{
+  auto it = this->find(key);
+  if (it == this->end()) {
+    throw Exception("parameter '" + key + "' not found");
+  }
+  return it->second;
+}
+
+/**************************************************************************//**
  * @return Starting date.
  * @exception Exception Invalid parameter value.
  */
 Date ccruncher::Params::getTime0() const
 {
-  auto it = this->find(TIME0);
-  if (it == this->end()) {
-    throw Exception("parameter '" TIME0 "' not found");
-  }
-  return Parser::dateValue(it->second);
+  string value = getParamValue(TIME0);
+  return Parser::dateValue(value);
 }
 
 /**************************************************************************//**
@@ -147,11 +178,8 @@ Date ccruncher::Params::getTime0() const
  */
 Date ccruncher::Params::getTimeT() const
 {
-  auto it = this->find(TIMET);
-  if (it == this->end()) {
-    throw Exception("parameter '" TIMET "' not found");
-  }
-  return Parser::dateValue(it->second);
+  string value = getParamValue(TIMET);
+  return Parser::dateValue(value);
 }
 
 /**************************************************************************//**
@@ -160,11 +188,8 @@ Date ccruncher::Params::getTimeT() const
  */
 size_t ccruncher::Params::getMaxIterations() const
 {
-  auto it = this->find(MAXITERATIONS);
-  if (it == this->end()) {
-    throw Exception("parameter '" MAXITERATIONS "' not found");
-  }
-  long num = Parser::longValue(it->second);
+  string value = getParamValue(MAXITERATIONS);
+  long num = Parser::longValue(value);
   if (num < 0) {
     throw Exception("parameter '" MAXITERATIONS "' < 0");
   }
@@ -177,11 +202,8 @@ size_t ccruncher::Params::getMaxIterations() const
  */
 size_t ccruncher::Params::getMaxSeconds() const
 {
-  auto it = this->find(MAXSECONDS);
-  if (it == this->end()) {
-    throw Exception("parameter '" MAXSECONDS "' not found");
-  }
-  long num = Parser::longValue(it->second);
+  string value = getParamValue(MAXSECONDS);
+  long num = Parser::longValue(value);
   if (num < 0) {
     throw Exception("parameter '" MAXSECONDS "' < 0");
   }
@@ -194,50 +216,19 @@ size_t ccruncher::Params::getMaxSeconds() const
  */
 std::string ccruncher::Params::getCopula() const
 {
-  auto it = this->find(COPULA);
-  if (it == this->end()) {
-    throw Exception("parameter '" COPULA "' not found");
-  }
-  return it->second;
+  return getParamValue(COPULA);
 }
 
 /**************************************************************************//**
- * @return Copula type ('gaussian' or 't').
- * @throw Exception Invalid parameter value.
- */
-string ccruncher::Params::getCopulaType() const
-{
-  auto it = this->find(COPULA);
-  if (it == this->end()) {
-    throw Exception("parameter '" COPULA "' not found");
-  }
-  string copula = it->second;
-  if (copula == "gaussian") {
-    return "gaussian";
-  }
-  else if (copula.length() >= 3 &&
-           copula.substr(0,2) == "t(" &&
-           copula.at(copula.length()-1) == ')') {
-    return "t";
-  }
-  else {
-    throw Exception("invalid copula type: '" + copula + "'");
-  }
-}
-
-/**************************************************************************//**
+ * @details If gaussian copula returns a non-valid ndf (<= 0).
  * @return Degrees of freedom of the t-copula (ndf>=2).
  * @throw Exception Invalid parameter value.
  */
-double ccruncher::Params::getCopulaParam() const
+double ccruncher::Params::getNdf() const
 {
-  auto it = this->find(COPULA);
-  if (it == this->end()) {
-    throw Exception("parameter '" COPULA "' not found");
-  }
-  string copula = it->second;
+  string copula = getCopula();
   if (copula == "gaussian") {
-    return std::numeric_limits<double>::infinity();
+    return -1.0;
   }
   else if (copula.length() >= 3 &&
            copula.substr(0,2) == "t(" &&
@@ -255,17 +246,21 @@ double ccruncher::Params::getCopulaParam() const
 }
 
 /**************************************************************************//**
+ * @details If seed not defined by user or equals to 0, then returns a
+ *          value based on clock.
  * @return Rng seed.
  * @throw Exception Invalid parameter value.
  */
-unsigned long ccruncher::Params::getRngSeed() const
+ulong ccruncher::Params::getRngSeed() const
 {
-  auto it = this->find(RNG_SEED);
-  if (it == this->end()) {
-    return 0ul; // default value = '0'
+  ulong seed = 0UL;
+  string value = getParamValue(RNGSEED, DEFAULT_RNGSEED);
+  long aux = Parser::longValue(value);
+  seed = *(reinterpret_cast<ulong *>(&aux));
+  if (seed == 0UL) {
+    // seed based on clock
+    seed = Utils::trand();
   }
-  long aux = Parser::longValue(it->second);
-  unsigned long seed = *(reinterpret_cast<unsigned long *>(&aux));
   return seed;
 }
 
@@ -275,24 +270,17 @@ unsigned long ccruncher::Params::getRngSeed() const
  */
 bool ccruncher::Params::getAntithetic() const
 {
-  auto it = this->find(ANTITHETIC);
-  if (it == this->end()) {
-    return false; // default value = 'false'
-  }
-  return Parser::boolValue(it->second);
+  string value = getParamValue(ANTITHETIC, DEFAULT_ANTITHETIC);
+  return Parser::boolValue(value);
 }
 
 /**************************************************************************//**
  * @return Number of simultaneous simulations does by thread.
  * @throw Exception Invalid parameter value.
  */
-unsigned short ccruncher::Params::getBlockSize() const
+ushort ccruncher::Params::getBlockSize() const
 {
-  auto it = this->find(BLOCKSIZE);
-  if (it == this->end()) {
-    return 128; // default value = '128'
-  }
-  string value = it->second;
+  string value = getParamValue(BLOCKSIZE, DEFAULT_BLOCKSIZE);
   int aux = Parser::intValue(value);
   if (aux <= 0 || USHRT_MAX < aux) {
     throw Exception("parameter '" BLOCKSIZE "' out of range [1," +

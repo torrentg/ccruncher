@@ -23,7 +23,6 @@
 #ifndef _Correlations_
 #define _Correlations_
 
-#include <string>
 #include <gsl/gsl_matrix.h>
 #include "params/Factors.hpp"
 #include "utils/ExpatHandlers.hpp"
@@ -35,19 +34,13 @@ namespace ccruncher {
  *
  * @details This object represents the factor correlation matrix and
  *          provides the following functionalities:
- *            - Acces to matrix elements
  *            - Xml parsing (extending ExpatHandlers)
  *            - Cholesky matrix computation
  *
  * @see http://ccruncher.net/ifileref.html#correlations
  */
-class Correlations : public ExpatHandlers
+class Correlations : public std::vector<std::vector<double>>, public ExpatHandlers
 {
-
-  private:
-
-    //! Correlation matrix
-    std::vector<std::vector<double>> mMatrix;
 
   protected:
 
@@ -59,19 +52,16 @@ class Correlations : public ExpatHandlers
   public:
 
     //! Constructor
-    Correlations(size_t n=0);
-    //! Constructor
-    Correlations(const std::vector<std::vector<double>> &);
-    //! Matrix dimension
-    size_t size() const;
-    //! Matrix element access
-    const std::vector<double>& operator[] (size_t row) const;
-    //! Matrix element access
-    std::vector<double>& operator[] (size_t row);
+    Correlations(size_t dim=0);
+    //! Inherits std::vector constructors
+    using std::vector<std::vector<double>>::vector;
+
+  public:
+
     //! Validate matrix content
-    bool isValid();
+    static bool isValid(const std::vector<std::vector<double>> &M, bool throwException=false);
     //! Return Cholesky matrix
-    gsl_matrix* getCholesky() const;
+    static gsl_matrix* getCholesky(const std::vector<std::vector<double>> &M);
 
 };
 

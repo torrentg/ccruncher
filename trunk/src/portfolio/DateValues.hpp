@@ -57,6 +57,10 @@ class DateValues
     bool operator<(const DateValues &) const;
     //! Less-than operator
     bool operator<(const Date &) const;
+    //! Comparison operator
+    bool operator==(const DateValues &o) const;
+    //! Comparison operator
+    bool operator!=(const DateValues &o) const;
 
 };
 
@@ -90,6 +94,27 @@ inline bool ccruncher::DateValues::operator<(const DateValues &right) const
 inline bool ccruncher::DateValues::operator<(const Date &right) const
 {
   return (date < right);
+}
+
+/**************************************************************************//**
+ * @param[in] o Instance to compare.
+ * @return true=are equal, false=otherwise.
+ */
+inline bool ccruncher::DateValues::operator==(const DateValues &o) const
+{
+  if (date != o.date) return false;
+  else if (ead != o.ead) return false;
+  else if (lgd != o.lgd) return false;
+  else return true;
+}
+
+/**************************************************************************//**
+ * @param[in] o EAD instance to compare.
+ * @return true=are distinct, false=otherwise.
+ */
+inline bool ccruncher::DateValues::operator!=(const DateValues &o) const
+{
+  return !(*this == o);
 }
 
 } // namespace

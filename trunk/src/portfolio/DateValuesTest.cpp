@@ -36,4 +36,9 @@ void ccruncher_test::DateValuesTest::test1()
 
   // checking that sorts by date
   ASSERT(val1 < val2);
+
+  // checking comparators
+  ASSERT(val1 == val1);
+  ASSERT(val1 != val2);
 }
+
