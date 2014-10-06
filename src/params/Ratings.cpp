@@ -20,8 +20,10 @@
 //
 //===========================================================================
 
+#include <climits>
 #include <cassert>
 #include "params/Ratings.hpp"
+#include "utils/Format.hpp"
 
 using namespace std;
 
@@ -29,14 +31,13 @@ using namespace std;
  * @param[in] name Rating name.
  * @return Index of the rating (-1 if rating not found).
  */
-size_t ccruncher::Ratings::indexOf(const char *name) const
+unsigned char ccruncher::Ratings::indexOf(const char *name) const
 {
   assert(name != nullptr);
-  for(size_t i=0; i<this->size(); i++)
-  {
-    if ((*this)[i].getName().compare(name) == 0)
-    {
-      return i;
+  assert(this->size() <= UCHAR_MAX);
+  for(size_t i=0; i<this->size(); i++) {
+    if ((*this)[i].name.compare(name) == 0) {
+      return (unsigned char) i;
     }
   }
   throw Exception("rating '" + string(name) + "' not found");
@@ -46,34 +47,9 @@ size_t ccruncher::Ratings::indexOf(const char *name) const
  * @param[in] name Rating name.
  * @return Index of the rating (-1 if rating not found).
  */
-size_t ccruncher::Ratings::indexOf(const std::string &name) const
+unsigned char ccruncher::Ratings::indexOf(const std::string &name) const
 {
   return indexOf(name.c_str());
-}
-
-/**************************************************************************//**
- * @param[in] val Rating to insert.
- * @throw Exception Rating name repeated.
- */
-void ccruncher::Ratings::add(const Rating &val)
-{
-  // checking coherence
-  for(Rating &rating : (*this))
-  {
-    if (rating.getName() == val.getName())
-    {
-      throw Exception("rating name '" + val.getName() + "' repeated");
-    }
-  }
-
-  try
-  {
-    this->push_back(val);
-  }
-  catch(std::exception &e)
-  {
-    throw Exception(e);
-  }
 }
 
 /**************************************************************************//**
@@ -96,7 +72,7 @@ void ccruncher::Ratings::epstart(ExpatUserData &, const char *tag, const char **
     else {
       string name = getStringAttribute(attributes, "name");
       string desc = getStringAttribute(attributes, "description", "");
-      add(Rating(name,desc));
+      this->push_back(Rating(name,desc));
     }
   }
   else {
@@ -111,10 +87,40 @@ void ccruncher::Ratings::epstart(ExpatUserData &, const char *tag, const char **
 void ccruncher::Ratings::epend(ExpatUserData &, const char *tag)
 {
   if (isEqual(tag,"ratings")) {
-    // minimum number of rating: default+non-default
-    if (this->size() < 2) {
+    isValid(*this, true);
+  }
+}
+
+/**************************************************************************//**
+ * @param[in] ratings List of ratings.
+ * @param[in] throwException Throw an exception if validation fails.
+ * @throw Exception Invalid number of ratings or rating name repeated.
+ */
+bool ccruncher::Ratings::isValid(const std::vector<Rating> &ratings, bool throwException)
+{
+  try
+  {
+    if (ratings.size() < 2) {
       throw Exception("required a minimum of 2 ratings");
     }
+    if (ratings.size() > UCHAR_MAX) {
+      throw Exception("number of ratings bigger than " + Format::toString(UCHAR_MAX));
+    }
+
+    // checking for duplicated elements
+    for(size_t i=0; i<ratings.size(); i++) {
+      for(size_t j=i+1; j<ratings.size(); j++) {
+        if (ratings[i].name == ratings[j].name) {
+          throw Exception("rating name '" + ratings[i].name + "' repeated");
+        }
+      }
+    }
+    return true;
+  }
+  catch(Exception &)
+  {
+    if (throwException) throw;
+    else return false;
   }
 }
 

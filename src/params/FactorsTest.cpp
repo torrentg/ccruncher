@@ -47,25 +47,25 @@ void ccruncher_test::FactorsTest::test1()
 
   ASSERT(2 == factors.size());
 
-  ASSERT_EQUALS(0ul, factors.indexOf("S1"));
-  ASSERT_EQUALS(1ul, factors.indexOf("S2"));
+  ASSERT_EQUALS((unsigned char)0, factors.indexOf("S1"));
+  ASSERT_EQUALS((unsigned char)1, factors.indexOf("S2"));
 
-  ASSERT("S1" == factors[0].getName());
-  ASSERT("S2" == factors[1].getName());
+  ASSERT("S1" == factors[0].name);
+  ASSERT("S2" == factors[1].name);
 
-  ASSERT_EQUALS_EPSILON(factors[0].getLoading(), 0.1, 1e-14)
-  ASSERT_EQUALS_EPSILON(factors[1].getLoading(), 0.2, 1e-14)
+  ASSERT_EQUALS_EPSILON(factors[0].loading, 0.1, 1e-14)
+  ASSERT_EQUALS_EPSILON(factors[1].loading, 0.2, 1e-14)
 
-  vector<double> v = factors.getLoadings();
+  vector<double> v = Factors::getLoadings(factors);
   ASSERT(v.size() == 2);
   ASSERT_EQUALS_EPSILON(v[0], 0.1, 1e-14)
   ASSERT_EQUALS_EPSILON(v[1], 0.2, 1e-14)
 
-  ASSERT("retail" == factors[0].getDescription());
-  ASSERT("" == factors[1].getDescription());
+  ASSERT("retail" == factors[0].description);
+  ASSERT("" == factors[1].description);
 
-  ASSERT(factors[0].getName() == "S1");
-  ASSERT(factors[1].getName() == "S2");
+  ASSERT(factors[0].name == "S1");
+  ASSERT(factors[1].name == "S2");
 }
 
 //===========================================================================
@@ -135,11 +135,30 @@ void ccruncher_test::FactorsTest::test5()
 {
 // creation from scratch
   Factors factors;
-  factors.add(Factor("S1", 0.35, "industry"));
-  factors.add(Factor("S2", 0.2, "energy"));
+  factors.push_back(Factor("S1", 0.35, "industry"));
+  factors.push_back(Factor("S2", 0.2, "energy"));
+  ASSERT(Factors::isValid(factors));
+  vector<double> loadings = Factors::getLoadings(factors);
+  ASSERT(Factors::isValid(loadings));
   ASSERT_EQUALS(2ul, factors.size());
-  ASSERT_EQUALS(0ul, factors.indexOf("S1"));
-  ASSERT_EQUALS(1ul, factors.indexOf("S2"));
+  ASSERT_EQUALS((unsigned char)0, factors.indexOf("S1"));
+  ASSERT_EQUALS((unsigned char)1, factors.indexOf("S2"));
   ASSERT_THROW(factors.indexOf("Sx"));
+}
+
+//===========================================================================
+// test6
+//===========================================================================
+void ccruncher_test::FactorsTest::test6()
+{
+// creation from scratch
+  Factors factors;
+  factors.push_back(Factor("S1", 0.35, "industry"));
+  factors.push_back(Factor("S2", 0.2, "energy"));
+  factors.push_back(Factor("S1", 0.2, "coco")); // repeated identifier
+  ASSERT(!Factors::isValid(factors));
+  vector<double> loadings = Factors::getLoadings(factors);
+  loadings[0] += 1.0;
+  ASSERT(!Factors::isValid(loadings));
 }
 

@@ -29,9 +29,7 @@ HEADERS += \
     src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
     src/kernel/MonteCarlo.hpp \
-    src/kernel/SimulatedData.hpp \
     src/kernel/SimulationThread.hpp \
-    src/kernel/SimulatedDataTest.hpp \
     src/kernel/IDataTest.hpp \
     src/kernel/Inverse.hpp \
     src/kernel/InverseTest.hpp \
@@ -42,6 +40,7 @@ HEADERS += \
     src/portfolio/DateValues.hpp \
     src/portfolio/Asset.hpp \
     src/portfolio/LGDTest.hpp \
+    src/portfolio/PortfolioTest.hpp \
     src/portfolio/ObligorTest.hpp \
     src/portfolio/EADTest.hpp \
     src/portfolio/DateValuesTest.hpp \
@@ -100,9 +99,7 @@ SOURCES += \
     src/kernel/IData.cpp \
     src/kernel/Aggregator.cpp \
     src/kernel/MonteCarlo.cpp \
-    src/kernel/SimulatedData.cpp \
     src/kernel/SimulationThread.cpp \
-    src/kernel/SimulatedDataTest.cpp \
     src/kernel/IDataTest.cpp \
     src/kernel/Inverse.cpp \
     src/kernel/InverseTest.cpp \
@@ -113,6 +110,7 @@ SOURCES += \
     src/portfolio/DateValues.cpp \
     src/portfolio/Asset.cpp \
     src/portfolio/LGDTest.cpp \
+    src/portfolio/PortfolioTest.cpp \
     src/portfolio/ObligorTest.cpp \
     src/portfolio/EADTest.cpp \
     src/portfolio/DateValuesTest.cpp \

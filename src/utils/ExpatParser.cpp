@@ -292,7 +292,7 @@ void ccruncher::ExpatParser::setDefines(const std::map<std::string,std::string> 
  * @return The checksum (adler32) of the XML content (previous to defines
  *         replacement).
  */
-unsigned long ccruncher::ExpatParser::getChecksum() const
+ulong ccruncher::ExpatParser::getChecksum() const
 {
   return mChecksum;
 }

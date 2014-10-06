@@ -24,8 +24,6 @@
 #define _AssetTest_
 
 #include "utils/MiniCppUnit.hxx"
-#include "params/Segmentations.hpp"
-#include "params/Interest.hpp"
 
 namespace ccruncher_test {
 
@@ -34,16 +32,8 @@ class AssetTest : public TestFixture<AssetTest>
 
   private:
 
-    ccruncher::Segmentations getSegmentations();
-    ccruncher::Interest getInterest(const ccruncher::Date &date);
-
     void test1();
     void test2();
-    void test3();
-    void test4();
-    void test5();
-    void test6();
-    void test7();
 
 
   public:
@@ -52,11 +42,6 @@ class AssetTest : public TestFixture<AssetTest>
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
-      TEST_CASE(test3);
-      TEST_CASE(test4);
-      TEST_CASE(test5);
-      TEST_CASE(test6);
-      TEST_CASE(test7);
     }
 
 };

@@ -20,34 +20,3 @@
 //
 //===========================================================================
 
-#include <cassert>
-#include "params/Rating.hpp"
-
-using namespace std;
-
-/**************************************************************************//**
- * @param[in] name Rating name.
- * @param[in] desc Rating description.
- */
-ccruncher::Rating::Rating(const string &name, const string &desc) :
-    mName(name), mDesc(desc)
-{
-  // nothing to do
-}
-
-/**************************************************************************//**
- * @param[in] name Rating name.
- */
-void ccruncher::Rating::setName(const string &name)
-{
-  mName = name;
-}
-
-/**************************************************************************//**
- * @param[in] desc Rating description.
- */
-void ccruncher::Rating::setDescription(const string &desc)
-{
-  mDesc = desc;
-}
-

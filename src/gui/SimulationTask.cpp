@@ -38,7 +38,7 @@ size_t ccruncher_gui::SimulationTask::num_running_sims = 0;
 /**************************************************************************//**
  * @param[in] s CCruncher execution trace destination.
  */
-ccruncher_gui::SimulationTask::SimulationTask(streambuf *s) : QThread(), log(s),
+ccruncher_gui::SimulationTask::SimulationTask(streambuf *s) : QThread(), logger(s),
     idata(nullptr), montecarlo(nullptr)
 {
   ifile = "";
@@ -65,7 +65,7 @@ ccruncher_gui::SimulationTask::~SimulationTask()
  */
 void ccruncher_gui::SimulationTask::setStreamBuf(std::streambuf *s)
 {
-  log.rdbuf(s);
+  logger.rdbuf(s);
 }
 
 /**************************************************************************//**
@@ -82,37 +82,36 @@ void ccruncher_gui::SimulationTask::run()
     stop_ = false;
 
     // header
-    log << header << endl;
+    logger << header << endl;
 
     // parsing input file
     setStatus(reading);
-    idata = new IData(log.rdbuf());
+    idata = new IData(logger.rdbuf());
     idata->init(ifile, defines, &stop_);
 
     // creating simulation object
-    montecarlo = new MonteCarlo(log.rdbuf());
-    montecarlo->setFilePath(odir, fmode);
-    montecarlo->setData(*idata);
+    montecarlo = new MonteCarlo(logger.rdbuf());
+    montecarlo->setData(*idata, odir, fmode);
 
     // simulating
     setStatus(simulating);
     montecarlo->run(ithreads, 0, &stop_);
 
     // footer
-    log << footer(timer) << endl;
+    logger << footer(timer) << endl;
     setStatus(finished);
   }
   catch(std::exception &e)
   {
-    log << indent(-100) << endl;
-    log << e.what() << endl;
+    logger << indent(-100) << endl;
+    logger << e.what() << endl;
     if (stop_) setStatus(stopped);
     else setStatus(failed);
   }
   catch(...)
   {
-    log << indent(-100) << endl;
-    log << "panic: unknow error" << endl;
+    logger << indent(-100) << endl;
+    logger << "panic: unknow error" << endl;
     setStatus(failed);
   }
 }
@@ -196,7 +195,7 @@ MonteCarlo* ccruncher_gui::SimulationTask::getMonteCarlo()
  */
 Logger& ccruncher_gui::SimulationTask::getLogger()
 {
-  return log;
+  return logger;
 }
 
 /**************************************************************************//**
@@ -248,9 +247,9 @@ bool ccruncher_gui::SimulationTask::checkConflicts()
   vector<string> badfiles;
   size_t numlines = 0;
 
-  for(int i=0; i<data.getSegmentations().size(); i++)
+  for(ushort isegmentation=0; isegmentation<data.getSegmentations().size(); isegmentation++)
   {
-    const Segmentation &segmentation = data.getSegmentations().getSegmentation(i);
+    const Segmentation &segmentation = data.getSegmentations()[isegmentation];
     string filename = segmentation.getFilename(odir);
     if (!QFileInfo(QString(filename.c_str())).exists()) {
       nonfiles.push_back(filename);

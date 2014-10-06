@@ -36,31 +36,22 @@ namespace ccruncher {
 class Factor
 {
 
-  private:
+  public:
 
     //! Factor name
-    std::string mName;
+    std::string name;
     //! Factor description
-    std::string mDesc;
+    std::string description;
     //! Factor loading
-    double mLoading;
+    double loading;
 
   public:
 
+    //! Constructor (to use in initializer list constructors)
+    Factor(const char *nam) : name(nam), description(""), loading(NAN) {}
     //! Constructor
-    Factor(const std::string &name="", double loading=NAN, const std::string &desc="");
-    //! Returns the factor name
-    const std::string & getName() const;
-    //! Sets the factor name
-    void setName(const std::string &name);
-    //! Returns the factor description
-    const std::string & getDescription() const;
-    //! Sets the factor description
-    void setDescription(const std::string &desc);
-    //! Returns the factor loading
-    double getLoading() const;
-    //! Sets the factor loading
-    void setLoading(double loading);
+    Factor(const std::string &nam="", double load=NAN, const std::string &desc="")
+      : name(nam), description(desc), loading(load) {}
 
 };
 

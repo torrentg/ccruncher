@@ -19,7 +19,7 @@
     <parameter name="time.T" value="15/07/2015"/>
     <parameter name="maxiterations" value="$numsims"/>
     <parameter name="maxseconds" value="3600"/>
-    <parameter name="copula.type" value="t($ndf)"/>
+    <parameter name="copula" value="t($ndf)"/>
     <parameter name="rng.seed" value="0"/>
     <parameter name="antithetic" value="true"/>
     <parameter name="blocksize" value="128"/>

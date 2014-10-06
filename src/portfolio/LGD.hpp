@@ -95,6 +95,8 @@ class LGD
     LGD(const std::string &);
     //! Constructor
     LGD(Type, double a, double b=NAN);
+    //! Constructor
+    LGD(double);
     //! Comparison operator
     bool operator==(const LGD &o) const;
     //! Comparison operator
@@ -107,8 +109,11 @@ class LGD
     double getValue2() const;
     //! Returns lgd
     double getValue(const gsl_rng *rng=nullptr) const;
+
+  public:
+
     //! Check if it is a Non-A-LGD value
-    static bool isvalid(const LGD &);
+    static bool isValid(const LGD &);
 
 };
 
@@ -116,6 +121,14 @@ class LGD
  * @details Create a LGD with invalid values.
  */
 inline ccruncher::LGD::LGD() : mType(Fixed), mValue1(NAN), mValue2(NAN)
+{
+  // nothing to do
+}
+
+/**************************************************************************//**
+ * @details Create a LGD of type fixed.
+ */
+inline ccruncher::LGD::LGD(double x) : mType(Fixed), mValue1(x), mValue2(NAN)
 {
   // nothing to do
 }

@@ -64,7 +64,7 @@ class IData : public ExpatHandlers
   private:
 
     //! Logger
-    Logger log;
+    Logger logger;
     //! Input filename
     std::string filename;
     //! Simulation title
@@ -132,36 +132,39 @@ class IData : public ExpatHandlers
     virtual ~IData() override;
     //! Initialize content
     void init(const std::string &f, const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *stop_=nullptr, bool parse_portfolio_=true);
+
     //! Returns simulation title
-    const std::string &getTitle() const;
+    const std::string & getTitle() const { return title; }
     //! Returns simulation description
-    const std::string & getDescription() const;
+    const std::string & getDescription() const { return description; }
     //! Returns simulation params
-    Params & getParams();
+    const Params & getParams() const { return params; }
     //! Returns simulation yield curve
-    Interest & getInterest();
+    const Interest & getInterest() const { return interest; }
     //! Returns simulation ratings
-    Ratings & getRatings();
+    const Ratings & getRatings() const { return ratings; }
     //! Returns simulation transition matrix
-    Transitions & getTransitions();
+    const Transitions & getTransitions() const { return transitions; }
     //! Returns default probabilities functions
-    DefaultProbabilities & getDefaultProbabilities();
+    const DefaultProbabilities & getDefaultProbabilities() const { return dprobs; }
     //! Returns simulation factors
-    Factors & getFactors();
+    const Factors & getFactors() const { return factors; }
     //! Returns simulation correlation matrix
-    Correlations & getCorrelations();
+    const Correlations & getCorrelations() const { return correlations; }
     //! Returns simulation correlations
-    Segmentations & getSegmentations();
+    const Segmentations & getSegmentations() const { return segmentations; }
     //! Returns simulation portfolio
-    Portfolio & getPortfolio();
+    const Portfolio & getPortfolio() const { return portfolio; }
+    Portfolio & getPortfolio() { return portfolio; }
+    
     //! Indicates if dprobs tag is defined
     bool hasDefaultProbabilities() const;
+    //! Return input file name
+    const std::string & getFilename() const { return filename; }
     //! Returns input file size (in bytes)
     size_t getFileSize() const;
     //! Returns readed bytes
     size_t getReadedSize() const;
-    //! Return input file name
-    std::string getFilename() const;
 
 };
 

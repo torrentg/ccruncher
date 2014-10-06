@@ -231,7 +231,7 @@ double ccruncher::EAD::getValue2() const
  * @param[in] x EAD to check.
  * @return true=valid, false=invalid.
  */
-bool ccruncher::EAD::isvalid(const EAD &x)
+bool ccruncher::EAD::isValid(const EAD &x)
 {
   return valid(x.mType, x.mValue1, x.mValue2);
 }

@@ -24,22 +24,24 @@
 #define _MonteCarlo_
 
 #include <mutex>
+#include <string>
 #include <vector>
 #include <streambuf>
 #include "kernel/IData.hpp"
 #include "kernel/Inverse.hpp"
-#include "kernel/Aggregator.hpp"
-#include "kernel/SimulatedData.hpp"
-#include "kernel/SimulationThread.hpp"
+#include "params/CDF.hpp"
+#include "params/Segmentation.hpp"
+#include "params/Transitions.hpp"
+#include "portfolio/Obligor.hpp"
 #include "utils/Date.hpp"
 #include "utils/Timer.hpp"
 #include "utils/Logger.hpp"
-#include "utils/Exception.hpp"
 
 namespace ccruncher {
 
-// forward declaration
+// forward declarations
 class SimulationThread;
+class Aggregator;
 
 /**************************************************************************//**
  * @brief Monte Carlo simulation.
@@ -61,23 +63,19 @@ class MonteCarlo
   private:
 
     //! Logger
-    Logger log;
+    Logger logger;
     //! List of simulated obligors
-    std::vector<SimulatedObligor> obligors;
-    //! List of simulated assets
-    std::vector<SimulatedAsset> assets;
-    //! List of obligor-segments
-    std::vector<unsigned short> segments;
+    std::vector<Obligor> obligors;
     //! Number of segments for each segmentation
-    std::vector<unsigned short> numSegmentsBySegmentation;
+    std::vector<ushort> numSegmentsBySegmentation;
     //! Total number of segments (included in all segmentations)
     size_t numsegments;
     //! List of aggregators
     std::vector<Aggregator *> aggregators;
     //! Maximum number of iterations
-    int maxiterations;
+    size_t maxiterations;
     //! Maximum execution time
-    int maxseconds;
+    size_t maxseconds;
     //! Initial date
     Date time0;
     //! Ending date
@@ -95,44 +93,30 @@ class MonteCarlo
     //! Antithetic method flag
     bool antithetic;
     //! Block size
-    unsigned short blocksize;
+    ushort blocksize;
     //! RNG seed
-    unsigned long seed;
+    ulong seed;
     //! Hash (0=non show hashes) (default=0)
-    size_t hash;
-    //! Directory for output files
-    std::string fpath;
-    //! Output file mode (a=append, w=overwrite, c=create)
-    char fmode;
-    //! Time account
+    size_t mHash;
+    //! Simulation elapsed time
     Timer timer;
     //! Simulation threads
     std::vector<SimulationThread*> threads;
     //! Number of iterations done
-    int numiterations;
+    size_t numiterations;
     //! Number of finished threads
-    int nfthreads;
+    size_t nfthreads;
     //! Ensures data consistence
     std::mutex mMutex;
     //! Stop flag
-    bool *stop;
+    bool *mStop;
 
   private:
   
     //! Deallocate memory
-    void release();
-    //! Initialize params
-    void initParams(IData &);
-    //! Initialize obligors
-    void initObligors(IData &);
-    //! Initialize assets
-    void initAssets(IData &);
-    //! Initialize simulation parameters
-    void initModel(IData &);
-    //! Initialize aggregators
-    void initAggregators(IData &);
+    void freeMemory();
     //! Averaged exposures by segment
-    std::vector<double> getExposures(int isegmentation, IData &) const;
+    std::vector<double> getSegmentationExposures(ushort isegmentation, ushort numSegments) const;
     //! Append simulation result
     bool append(const double *) noexcept;
     //! Non-copyable class
@@ -146,16 +130,31 @@ class MonteCarlo
     MonteCarlo(std::streambuf *s=nullptr);
     //! Destructor
     ~MonteCarlo();
-    //! Set path for output files
-    void setFilePath(const std::string &path, char mode);
+
+    //! Set simulation parameters
+    void setParams(const std::map<std::string,std::string> &parameters);
+    //! Set default probabilities (using default probabilities)
+    void setDefaultProbabilities(const std::vector<CDF> &dprobs);
+    //! Set default probabilities (using transition matrix)
+    double setDefaultProbabilities(const Transitions &transitions);
+    //! Set factor loadings
+    void setFactorLoadings(const std::vector<double> &loadings);
+    //! Set correlation matrix
+    void setCorrelations(const std::vector<std::vector<double>> &correlations);
+    //! Set obligors' portfolio
+    void setObligors(std::vector<Obligor> &obligors);
+    //! Set segmentations
+    void setSegmentations(const std::vector<Segmentation> &segmentations, const std::string &path, char mode);
+
     //! Initiliaze this class
-    void setData(IData &);
+    void setData(IData &data, const std::string &path, char mode);
     //! Execute Monte Carlo
-    void run(unsigned char numthreads, size_t nhash, bool *stop_=nullptr);
+    void run(unsigned char numthreads, size_t nhash=0, bool *stop=nullptr);
+
     //! Returns number of iterations done
-    int getNumIterations() const;
+    size_t getNumIterations() const;
     //! Returns maximum number of iterations to do
-    int getMaxIterations() const;
+    size_t getMaxIterations() const;
 
   public:
   

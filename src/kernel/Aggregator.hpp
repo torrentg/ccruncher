@@ -47,11 +47,13 @@ class Aggregator
   private:
 
     //! Segmentation name
-    std::string filename;
+    std::string mFilename;
     //! Output file stream
-    std::ofstream fout;
+    std::ofstream mFile;
     //! Number of segments
-    int numsegments;
+    ushort mNumSegments;
+    //! Open file mode
+    unsigned char mMode;
 
   private:
 
@@ -63,16 +65,17 @@ class Aggregator
   public:
 
     //! Constructor
-    Aggregator(const Segmentation &, const std::string &, char,
-               const std::string &, const std::vector<double> &exposures=std::vector<double>(0));
+    Aggregator(const std::string &mFilename, char mode, ushort numSegments);
     //! Destructor
     ~Aggregator();
+    //! Set header info
+    void printHeader(const Segmentation &, const std::vector<double> &exposures);
     //! Append data to aggregator
     void append(const double *);
     //! Force flush data to disk
     void flush();
-    //! Return the number of segments
-    int size() const;
+    //! Return file name
+    const std::string &getFilename() const { return mFilename; }
 
 };
 

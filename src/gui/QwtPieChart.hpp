@@ -64,7 +64,7 @@ class QwtPieChart : public QwtPlotSeriesItem
     //! Center (in pixels)
     mutable QPoint center;
     //! Internal rng seed
-    mutable unsigned long seed;
+    mutable ulong seed;
 
   private:
 

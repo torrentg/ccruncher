@@ -209,7 +209,7 @@ double ccruncher::LGD::getValue2() const
  * @param[in] x EADLGD check.
  * @return true=valid, false=invalid.
  */
-bool ccruncher::LGD::isvalid(const LGD &x)
+bool ccruncher::LGD::isValid(const LGD &x)
 {
   return valid(x.mType, x.mValue1, x.mValue2);
 }

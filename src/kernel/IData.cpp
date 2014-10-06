@@ -23,7 +23,6 @@
 #include <cstdio>
 #include <cassert>
 #include "kernel/IData.hpp"
-#include "utils/Logger.hpp"
 #include "utils/File.hpp"
 #include "utils/Format.hpp"
 #include "utils/Timer.hpp"
@@ -38,7 +37,7 @@ using namespace ccruncher;
  * @see http://www.cplusplus.com/reference/streambuf/streambuf/
  * @param[in] s Streambuf where the trace will be written.
  */
-ccruncher::IData::IData(streambuf *s) : log(s), curfile(nullptr)
+ccruncher::IData::IData(streambuf *s) : logger(s), curfile(nullptr)
 {
   hasmaintag = false;
   hasdefinestag = 0;
@@ -125,20 +124,20 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m)
   try
   {
     // output header
-    log << "reading input file" << flood('*') << endl;
-    log << indent(+1);
+    logger << "reading input file" << flood('*') << endl;
+    logger << indent(+1);
 
     // trace file info
-    log << "file name" << split << "["+filename+"]" << endl;
+    logger << "file name" << split << "["+filename+"]" << endl;
     if (filename != STDIN_FILENAME)
     {
-      log << "file size" << split << Format::bytes(File::filesize(filename)) << endl;
+      logger << "file size" << split << Format::bytes(File::filesize(filename)) << endl;
     }
 
     // trace defines
     for(auto &it : m) {
       checkDefine(it.first, it.second);
-      log << "define (user defined)" << split << it.first+"="+it.second << endl;
+      logger << "define (user defined)" << split << it.first+"="+it.second << endl;
     }
 
     // parsing
@@ -146,9 +145,9 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m)
     ExpatParser parser;
     parser.setDefines(m);
     parser.parse(file, this, stop);
-    log << "file checksum (adler32)" << split << parser.getChecksum() << endl;
-    log << "elapsed time parsing data" << split << timer << endl;
-    log << indent(-1);
+    logger << "file checksum (adler32)" << split << parser.getChecksum() << endl;
+    logger << "elapsed time parsing data" << split << timer << endl;
+    logger << indent(-1);
   }
   catch(std::exception &e)
   {
@@ -185,7 +184,7 @@ void ccruncher::IData::epstart(ExpatUserData &eu, const char *tag, const char **
     string value = getStringAttribute(attributes, "value");
     checkDefine(key, value);
     if (eu.defines.find(key) == eu.defines.end()) {
-      log << "define (input file)" << split << key+"="+value << endl;
+      logger << "define (input file)" << split << key+"="+value << endl;
       eu.defines[key] = value;
     }
     else {
@@ -321,8 +320,8 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *tag, const 
       mMutex.unlock();
 
       gzbuffer(file, BUFFER_SIZE);
-      log << "included file name" << split << "["+filepath+"]" << endl;
-      log << "included file size" << split << Format::bytes(bytes) << endl;
+      logger << "included file name" << split << "["+filepath+"]" << endl;
+      logger << "included file size" << split << Format::bytes(bytes) << endl;
 
       ExpatParser parser;
       parser.setDefines(eu.defines);
@@ -334,7 +333,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *tag, const 
       parser.getUserData().segmentations = eu.segmentations;
       parser.parse(file, &portfolio, stop);
 
-      log << "included file checksum (adler32)" << split << parser.getChecksum() << endl;
+      logger << "included file checksum (adler32)" << split << parser.getChecksum() << endl;
 
       mMutex.lock();
       curfile = prevfile;
@@ -380,94 +379,6 @@ void ccruncher::IData::validate()
   else if (portfolio.getObligors().size() == 0) {
     throw Exception("section 'portfolio' not defined");
   }
-}
-
-/**************************************************************************//**
- * @return Simulation title.
- */
-const string & ccruncher::IData::getTitle() const
-{
-  return title;
-}
-
-/**************************************************************************//**
- * @return Simulation description.
- */
-const string & ccruncher::IData::getDescription() const
-{
-  return description;
-}
-
-/**************************************************************************//**
- * @return Simulation parameters.
- */
-Params & ccruncher::IData::getParams()
-{
-  return params;
-}
-
-/**************************************************************************//**
- * @return Simulation yield curve.
- */
-Interest & ccruncher::IData::getInterest()
-{
-  return interest;
-}
-
-/**************************************************************************//**
- * @return Simulation ratings.
- */
-Ratings & ccruncher::IData::getRatings()
-{
-  return ratings;
-}
-
-/**************************************************************************//**
- * @return Simulation transition matrix.
- */
-Transitions & ccruncher::IData::getTransitions()
-{
-  return transitions;
-}
-
-/**************************************************************************//**
- * @return Simulation default probabilities functions.
- */
-DefaultProbabilities &ccruncher::IData::getDefaultProbabilities()
-{
-  return dprobs;
-}
-
-/**************************************************************************//**
- * @return Simulation factors.
- */
-Factors & ccruncher::IData::getFactors()
-{
-  return factors;
-}
-
-/**************************************************************************//**
- * @return Simulation factor correlations matrix.
- */
-Correlations & ccruncher::IData::getCorrelations()
-{
-  return correlations;
-}
-
-/**************************************************************************//**
- * @return Simulation segmentations.
- */
-Segmentations & ccruncher::IData::getSegmentations()
-{
-  return segmentations;
-}
-
-/**************************************************************************//**
- * @return Simulation portfolio.
- */
-Portfolio & ccruncher::IData::getPortfolio()
-{
-  return portfolio;
 }
 
 /**************************************************************************//**
@@ -525,13 +436,5 @@ size_t ccruncher::IData::getReadedSize() const
   else ret = gzoffset(curfile);
   mMutex.unlock();
   return ret;
-}
-
-/**************************************************************************//**
- * @return Input file name.
- */
-std::string ccruncher::IData::getFilename() const
-{
-  return filename;
 }
 

@@ -20,35 +20,24 @@
 //
 //===========================================================================
 
+#include <climits>
 #include <cassert>
 #include "params/Factors.hpp"
+#include "utils/Format.hpp"
 
 using namespace std;
-
-/**************************************************************************//**
- * @return Factor loadings list.
- */
-vector<double> ccruncher::Factors::getLoadings() const
-{
-  vector<double> w(size(), NAN);
-  for(size_t i=0; i<this->size(); ++i) {
-    w[i] = (*this)[i].getLoading();
-  }
-  return w;
-}
 
 /**************************************************************************//**
  * @param[in] name Factor name.
  * @return Index of the given factor, -1 if not found.
  */
-size_t ccruncher::Factors::indexOf(const char *name) const
+unsigned char ccruncher::Factors::indexOf(const char *name) const
 {
   assert(name != nullptr);
-  for(size_t i=0; i<this->size(); i++)
-  {
-    if ((*this)[i].getName().compare(name) == 0)
-    {
-      return i;
+  assert(this->size() <= UCHAR_MAX);
+  for(size_t i=0; i<this->size(); i++) {
+    if ((*this)[i].name.compare(name) == 0) {
+      return (unsigned char) i;
     }
   }
   throw Exception("factor '" + string(name) + "' not found");
@@ -58,41 +47,9 @@ size_t ccruncher::Factors::indexOf(const char *name) const
  * @param[in] name Factor name.
  * @return Index of the given factor, -1 if not found.
  */
-size_t ccruncher::Factors::indexOf(const std::string &name) const
+unsigned char ccruncher::Factors::indexOf(const std::string &name) const
 {
   return indexOf(name.c_str());
-}
-
-/**************************************************************************//**
- * @param[in] val Factor to insert.
- * @throw Exception Factor repeated or loading out-of-range.
- */
-void ccruncher::Factors::add(const Factor &val)
-{
-  // checking coherence
-  for(Factor &factor : (*this))
-  {
-    if (factor.getName() == val.getName())
-    {
-      throw Exception("factor '" + val.getName() + "' repeated");
-    }
-  }
-
-  // checking factor loading
-  if (val.getLoading() < 0.0 || 1.0 < val.getLoading())
-  {
-    string msg = "factor loading [" + val.getName() + "] out of range [0,1]";
-    throw Exception(msg);
-  }
-
-  try
-  {
-    this->push_back(val);
-  }
-  catch(std::exception &e)
-  {
-    throw Exception(e);
-  }
 }
 
 /**************************************************************************//**
@@ -116,7 +73,7 @@ void ccruncher::Factors::epstart(ExpatUserData &, const char *tag, const char **
       string name = getStringAttribute(attributes, "name");
       string desc = getStringAttribute(attributes, "description", "");
       double loading = getDoubleAttribute(attributes, "loading");
-      add(Factor(name,loading,desc));
+      this->push_back(Factor(name,loading,desc));
     }
   }
   else {
@@ -131,9 +88,89 @@ void ccruncher::Factors::epstart(ExpatUserData &, const char *tag, const char **
 void ccruncher::Factors::epend(ExpatUserData &, const char *tag)
 {
   if (isEqual(tag,"factors")) {
-    if (this->empty()) {
+    isValid(*this, true);
+  }
+}
+
+/**************************************************************************//**
+ * @param[in] factors List of factors.
+ * @param[in] throwException Throw an exception if validation fails.
+ * @throw Exception Invalid number of factors, or duplicated factor name,
+ *        or factor loadings out of range.
+ */
+bool ccruncher::Factors::isValid(const std::vector<Factor> &factors, bool throwException)
+{
+  try
+  {
+    if (factors.empty()) {
       throw Exception("'factors' have no elements");
     }
+    if (factors.size() > UCHAR_MAX) {
+      throw Exception("number of factors bigger than " + Format::toString(UCHAR_MAX));
+    }
+
+    // checking for duplicated elements
+    for(size_t i=0; i<factors.size(); i++) {
+      for(size_t j=i+1; j<factors.size(); j++) {
+        if (factors[i].name == factors[j].name) {
+          throw Exception("factor name '" + factors[i].name + "' repeated");
+        }
+      }
+    }
+    
+    // checking factor loading ranges
+    vector<double> loadings = getLoadings(factors);
+    isValid(loadings, true);
+    
+    return true;
   }
+  catch(Exception &)
+  {
+    if (throwException) throw;
+    else return false;
+  }
+}
+
+/**************************************************************************//**
+ * @param[in] loadings List of factors loadings.
+ * @param[in] throwException Throw an exception if validation fails.
+ * @throw Exception Invalid number of factors, or factor loadings out of range.
+ */
+bool ccruncher::Factors::isValid(const std::vector<double> &loadings, bool throwException)
+{
+  try
+  {
+    if (loadings.empty() || loadings.size() > UCHAR_MAX) {
+      throw Exception("loadings has invalid length");
+    }
+
+    // checking factor loading ranges
+    for(size_t i=0; i<loadings.size(); i++) {
+      if (loadings[i] < 0.0 || 1.0 < loadings[i]) {
+        string msg = "factor loading out of range [0,1]";
+        throw Exception(msg);
+      }
+    }
+
+    return true;
+  }
+  catch(Exception &)
+  {
+    if (throwException) throw;
+    else return false;
+  }
+}
+
+/**************************************************************************//**
+ * @param[in] factors List of factors.
+ * @return Factor loadings list.
+ */
+vector<double> ccruncher::Factors::getLoadings(const vector<Factor> &factors)
+{
+  vector<double> w(factors.size(), NAN);
+  for(size_t i=0; i<factors.size(); ++i) {
+    w[i] = factors[i].loading;
+  }
+  return w;
 }
 

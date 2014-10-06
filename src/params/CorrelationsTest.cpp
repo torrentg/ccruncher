@@ -73,7 +73,7 @@ void ccruncher_test::CorrelationsTest::test1()
   xmlparser.getUserData().factors = &factors;
 
   // correlation matrix creation
-  Correlations crm(factors.size());
+  Correlations crm;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &crm));
 
   ASSERT(2 == crm.size());
@@ -165,9 +165,26 @@ void ccruncher_test::CorrelationsTest::test5()
   correlations[0][1] = 0.05;
   correlations[1][0] = 0.05;
   correlations[1][1] = 1.0;
-  ASSERT(correlations.isValid());
+  ASSERT(Correlations::isValid(correlations));
   gsl_matrix *chol = nullptr;
-  ASSERT_NO_THROW(chol = correlations.getCholesky());
+  ASSERT_NO_THROW(chol = Correlations::getCholesky(correlations));
   gsl_matrix_free(chol);
+}
+
+//===========================================================================
+// test6
+// non definite-positive
+//===========================================================================
+void ccruncher_test::CorrelationsTest::test6()
+{
+  Correlations correlations(2);
+  correlations[0][0] = 1.0;
+  correlations[0][1] = 1.1;
+  correlations[1][0] = 1.1;
+  correlations[1][1] = 1.0;
+  ASSERT(!Correlations::isValid(correlations));
+  gsl_matrix *chol = nullptr;
+  ASSERT_THROW(chol = Correlations::getCholesky(correlations));
+  ASSERT(chol == nullptr)
 }
 

@@ -21,44 +21,27 @@
 //===========================================================================
 
 #include <cmath>
+#include <string>
 #include <cassert>
 #include <gsl/gsl_linalg.h>
 #include "params/Correlations.hpp"
+
+#define EPSILON 1e-14
 
 using namespace std;
 using namespace ccruncher;
 
 /**************************************************************************//**
- * @param[in] n Number of factors. Matrix dimension is nxn.
+ * @details Creates an identity matrix of dimension dim x dim
  */
-ccruncher::Correlations::Correlations(size_t n)
+ccruncher::Correlations::Correlations(size_t dim)
 {
-  mMatrix.assign(n, vector<double>(n, NAN));
-  for(size_t i=0; i<n; i++) {
-    mMatrix[i][i] = 1.0;
+  if (dim > 0) {
+    this->assign(dim, vector<double>(dim, 0.0));
+    for(size_t i=0; i<dim; i++) {
+      (*this)[i][i] = 1.0;
+    }
   }
-}
-
-/**************************************************************************//**
- * @param[in] M Matrix values (M square matrix)
- * @exception Non-valid correlation matrix.
- */
-ccruncher::Correlations::Correlations(const std::vector<std::vector<double>> &M)
-{
-  mMatrix = M;
-  if (!isValid()) {
-    throw Exception("invalid correlation matrix");
-  }
-}
-
-/**************************************************************************//**
- * @details The correlation matrix is a square matrix nxn where n is
- *          number of factors.
- * @return The number of factors.
- */
-size_t ccruncher::Correlations::size() const
-{
-  return mMatrix.size();
 }
 
 /**************************************************************************//**
@@ -74,6 +57,13 @@ void ccruncher::Correlations::epstart(ExpatUserData &eu, const char *tag, const 
     if (getNumAttributes(attributes) != 0) {
       throw Exception("unexpected attributes in tag 'correlations'");
     }
+    this->clear();
+    assert(eu.factors != nullptr);
+    size_t numFactors = eu.factors->size();
+    assign(numFactors, vector<double>(numFactors, NAN));
+    for(size_t i=0; i<numFactors; i++) {
+      (*this)[i][i] = 1.0;
+    }
   }
   else if (isEqual(tag,"correlation"))
   {
@@ -83,11 +73,13 @@ void ccruncher::Correlations::epstart(ExpatUserData &eu, const char *tag, const 
 
     // converting factors to indexes
     size_t row = eu.factors->indexOf(factor1);
+    assert(row < this->size());
     size_t col = eu.factors->indexOf(factor2);
+    assert(col < this->at(row).size());
 
     // checking for diagonal value
     if (row == col && value != 1.0) {
-        throw Exception("diagonal value distrinct than 1");
+      throw Exception("diagonal value distrinct than 1");
     }
 
     // checking non-diagonal value range
@@ -97,14 +89,14 @@ void ccruncher::Correlations::epstart(ExpatUserData &eu, const char *tag, const 
     }
 
     // checking that value is not previously defined
-    if (!std::isnan(mMatrix[row][col]) || !std::isnan(mMatrix[col][row])) {
+    if (!std::isnan((*this)[row][col]) || !std::isnan((*this)[col][row])) {
       string msg = "correlation[" + factor1 + "," + factor2 + "] redefined";
       throw Exception(msg);
     }
 
     // inserting value into matrix
-    mMatrix[row][col] = value;
-    mMatrix[col][row] = value;
+    (*this)[row][col] = value;
+    (*this)[col][row] = value;
   }
   else {
     throw Exception("unexpected tag '" + string(tag) + "'");
@@ -119,79 +111,61 @@ void ccruncher::Correlations::epstart(ExpatUserData &eu, const char *tag, const 
 void ccruncher::Correlations::epend(ExpatUserData &, const char *tag)
 {
   if (isEqual(tag,"correlations")) {
-    if (!isValid()) {
-      throw Exception("invalid correlation matrix");
-    }
+    isValid(*this, true);
   }
 }
 
 /**************************************************************************//**
  * @details Check that all matrix elements are set.
+ * @param[in] M Correlatoin matrix values.
+ * @param[in] throwException Throw an exception if validation fails.
  * @return true=valid correlation matrix, false=invalid correlation matrix.
  */
-bool ccruncher::Correlations::isValid()
+bool ccruncher::Correlations::isValid(const std::vector<std::vector<double> > &M, bool throwException)
 {
-  size_t n = size();
-
-  // checking that has elements
-  if (mMatrix.empty()) return false;
-
-  // checking that is square
-  for(size_t i=0; i<n; i++) {
-    if (mMatrix[i].size() != n) {
-      return false;
+  try
+  {
+    // checking that has elements
+    if (M.empty()) {
+      throw Exception("correlation matrix is empty");
     }
-  }
 
-  // checking that values are in-range
-  for(size_t i=0; i<n; i++) {
-    for(size_t j=0; j<n; j++) {
-      double value = mMatrix[i][j];
-      if (std::isnan(value) || value < -1.0 || 1.0 < value) {
-        return false;
+    // checking that is square
+    for(size_t i=0; i<M.size(); i++) {
+      if (M[i].size() != M.size()) {
+        throw Exception("non-square correlation matrix");
       }
     }
-  }
 
-  // checking that is symmetric
-  for(size_t i=0; i<n; i++) {
-    for(size_t j=0; j<n; j++) {
-      if (mMatrix[i][j] != mMatrix[j][i]) {
-        return false;
+    // checking that values are in-range
+    for(size_t i=0; i<M.size(); i++) {
+      if (std::abs(M[i][i]-1.0) > EPSILON) {
+        throw Exception("correlation matrix with a diagonal element distinct than 1");
+      }
+      for(size_t j=0; j<M.size(); j++) {
+        double value = M[i][j];
+        if (std::isnan(value) || value < -1.0 || 1.0 < value) {
+          throw Exception("value out of range [-1,+1]");
+        }
       }
     }
+
+    // checking that is symmetric
+    for(size_t i=0; i<M.size(); i++) {
+      for(size_t j=0; j<M.size(); j++) {
+        if (std::abs(M[i][j]-M[j][i]) > EPSILON) {
+          throw Exception("non-symmetric correlation matrix");
+        }
+      }
+    }
+
+    return true;
   }
-
-  // checking that is definite positive
-  try {
-    gsl_matrix *aux =  getCholesky();
-    gsl_matrix_free(aux);
+  catch(Exception &)
+  {
+    if (throwException) throw;
+    else return false;
   }
-  catch(Exception &e) {
-    return false;
-  }
-
-  return true;
-}
-
-/**************************************************************************//**
- * @param[in] row Row index (0-based).
- * @return Row values.
- */
-const vector<double>& ccruncher::Correlations::operator[] (size_t row) const
-{
-  assert(row < mMatrix.size());
-  return mMatrix[row];
-}
-
-/**************************************************************************//**
- * @param[in] row Row index (0-based).
- * @return Row values.
- */
-vector<double>& ccruncher::Correlations::operator[] (size_t row)
-{
-  assert(row < mMatrix.size());
-  return mMatrix[row];
 }
 
 /**************************************************************************//**
@@ -201,21 +175,18 @@ vector<double>& ccruncher::Correlations::operator[] (size_t row)
  * @return Cholesky matrix.
  * @throw Exception Correlation matrix is not definite-posivite.
  */
-gsl_matrix * ccruncher::Correlations::getCholesky() const
+gsl_matrix * ccruncher::Correlations::getCholesky(const std::vector<std::vector<double>> &M)
 {
-  assert(size() > 0);
+  assert(M.size() > 0);
 
-  size_t n = size();
+  size_t n = M.size();
   gsl_matrix *chol = gsl_matrix_alloc(n, n);
 
-  for(size_t i=0; i<n; i++)
-  {
+  for(size_t i=0; i<n; i++) {
     gsl_matrix_set(chol, i, i, 1.0);
-
-    for(size_t j=i+1; j<n; j++)
-    {
-      gsl_matrix_set(chol, i, j, mMatrix[i][j]);
-      gsl_matrix_set(chol, j, i, mMatrix[i][j]);
+    for(size_t j=i+1; j<n; j++) {
+      gsl_matrix_set(chol, i, j, M[i][j]);
+      gsl_matrix_set(chol, j, i, M[i][j]);
     }
   }
 

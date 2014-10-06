@@ -33,9 +33,9 @@ class SegmentationTest : public TestFixture<SegmentationTest>
 
   private:
 
-    void checks1(ccruncher::Segmentation &);
     void test1();
     void test2();
+    void test3();
 
 
   public:
@@ -44,6 +44,7 @@ class SegmentationTest : public TestFixture<SegmentationTest>
     {
       TEST_CASE(test1);
       TEST_CASE(test2);
+      TEST_CASE(test3);
     }
 
 };

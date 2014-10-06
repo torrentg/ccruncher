@@ -23,13 +23,7 @@
 #ifndef _ObligorTest_
 #define _ObligorTest_
 
-#include <vector>
 #include "utils/MiniCppUnit.hxx"
-#include "params/Ratings.hpp"
-#include "params/Factors.hpp"
-#include "params/Interest.hpp"
-#include "utils/Date.hpp"
-#include "params/Segmentations.hpp"
 
 namespace ccruncher_test {
 
@@ -38,15 +32,7 @@ class ObligorTest : public TestFixture<ObligorTest>
 
   private:
 
-    ccruncher::Ratings getRatings();
-    ccruncher::Factors getFactors();
-    ccruncher::Segmentations getSegmentations();
-    ccruncher::Interest getInterest(const ccruncher::Date &);
-
     void test1();
-    void test2();
-    void test3();
-    void test4();
 
 
   public:
@@ -54,9 +40,6 @@ class ObligorTest : public TestFixture<ObligorTest>
     TEST_FIXTURE(ObligorTest)
     {
       TEST_CASE(test1);
-      TEST_CASE(test2);
-      TEST_CASE(test3);
-      TEST_CASE(test4);
     }
 
 };

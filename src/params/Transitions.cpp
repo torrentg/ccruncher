@@ -206,7 +206,7 @@ void ccruncher::Transitions::validate()
 
     if (fabs(sum-1.0) > EPSILON)
     {
-      throw Exception("row transition[" + mRatings[i].getName() + ",.] does not add up to 1");
+      throw Exception("row transition[" + mRatings[i].name + ",.] does not add up to 1");
     }
   }
 
@@ -280,13 +280,12 @@ void ccruncher::Transitions::regularize()
   for(size_t i=0; i<size(); i++)
   {
     double sum = 0.0;
-    for(size_t j=0; j<size(); j++)
-    {
+    for(size_t j=0; j<size(); j++) {
       sum += fabs(mMatrix[i][j]);
     }
-    if (fabs(sum-1.0) > mRegularizationError)
-    {
-      mRegularizationError = fabs(sum-1.0);
+    double error = fabs(sum-1.0);
+    if (error > mRegularizationError) {
+      mRegularizationError = error;
     }
   }
 

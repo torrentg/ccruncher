@@ -20,9 +20,10 @@
 //
 //===========================================================================
 
+#include <vector>
+#include <algorithm>
 #include "params/Segmentation.hpp"
 #include "params/SegmentationTest.hpp"
-#include "utils/ExpatParser.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -32,21 +33,31 @@ using namespace ccruncher;
 //===========================================================================
 void ccruncher_test::SegmentationTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <segmentation name='office' components='asset'>\n\
-      <segment name='0001'/>\n\
-      <segment name='0002'/>\n\
-      <segment name='0003'/>\n\
-      <segment name='0004'/>\n\
-    </segmentation>";
+  /*
+    <segmentation name='office' components='asset'>
+      <segment name='0001'/>
+      <segment name='0002'/>
+      <segment name='0003'/>
+      <segment name='0004'/>
+    </segmentation>
+  */
+  Segmentation segmentation("office", Segmentation::ComponentsType::asset, true);
+  segmentation.addSegment("0001");
+  segmentation.addSegment("0002");
+  segmentation.addSegment("0003");
+  segmentation.addSegment("0004");
 
-  // creating xml
-  ExpatParser xmlparser;
+  ASSERT(segmentation.isEnabled());
+  ASSERT("office" == segmentation.getName());
+  ASSERT(Segmentation::ComponentsType::asset == segmentation.getType());
 
-  // correlation matrix creation
-  Segmentation sobj;
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &sobj));
-  checks1(sobj);
+  ASSERT(5 == segmentation.size());
+
+  ASSERT(0 == segmentation.indexOf("unassigned"));
+  ASSERT(1 == segmentation.indexOf("0001"));
+  ASSERT(2 == segmentation.indexOf("0002"));
+  ASSERT(3 == segmentation.indexOf("0003"));
+  ASSERT(4 == segmentation.indexOf("0004"));
 }
 
 //===========================================================================
@@ -54,49 +65,40 @@ void ccruncher_test::SegmentationTest::test1()
 //===========================================================================
 void ccruncher_test::SegmentationTest::test2()
 {
-  // equals to test1 but created programatically
-  Segmentation segmentation("office", Segmentation::ComponentsType::asset, true);
-  segmentation.add("0001");
-  segmentation.add("0002");
-  segmentation.add("0003");
-  segmentation.add("0004");
-  checks1(segmentation);
+  /*
+    <segmentation name='portfolio' components='obligor'/>
+  */
+  Segmentation segmentation("portfolio");
+  ASSERT_THROW(segmentation.setType("obligors")); // 'obligors' instead of 'obligor'
+  segmentation.setType("obligor");
+  ASSERT(segmentation.getType() == Segmentation::ComponentsType::obligor);
+  segmentation.setEnabled(true);
+
+  ASSERT(segmentation.getName() == "portfolio");
+  ASSERT_THROW(segmentation.indexOf("XXX"));
+  ASSERT(segmentation.isEnabled());
 }
 
 //===========================================================================
-// check1
+// test3
 //===========================================================================
-void ccruncher_test::SegmentationTest::checks1(Segmentation &sobj)
+void ccruncher_test::SegmentationTest::test3()
 {
-  ASSERT(sobj.isEnabled());
-  ASSERT("office" == sobj.getName());
-  ASSERT(Segmentation::asset == sobj.getType());
+  vector<Segmentation> segmentations;
+  segmentations.push_back(Segmentation("segmentation1",Segmentation::ComponentsType::asset, true));
+  segmentations.push_back(Segmentation("segmentation2",Segmentation::ComponentsType::obligor, false));
+  segmentations.push_back(Segmentation("segmentation3",Segmentation::ComponentsType::asset, true));
+  segmentations.push_back(Segmentation("segmentation4",Segmentation::ComponentsType::obligor, false));
+  segmentations.push_back(Segmentation("segmentation5",Segmentation::ComponentsType::asset, true));
+  segmentations.push_back(Segmentation("segmentation6",Segmentation::ComponentsType::obligor, true));
 
-  ASSERT(5 == sobj.size());
+  stable_sort(segmentations.begin(), segmentations.end());
 
-  ASSERT(0 == sobj.indexOf("unassigned"));
-  ASSERT(1 == sobj.indexOf("0001"));
-  ASSERT(2 == sobj.indexOf("0002"));
-  ASSERT(3 == sobj.indexOf("0003"));
-  ASSERT(4 == sobj.indexOf("0004"));
-
-  sobj.increaseSegmentCounter(0);
-  sobj.increaseSegmentCounter(0);
-  sobj.increaseSegmentCounter(0);
-  sobj.increaseSegmentCounter(3);
-  sobj.increaseSegmentCounter(3);
-  sobj.increaseSegmentCounter(3);
-  sobj.increaseSegmentCounter(3);
-
-  sobj.recode();
-
-  ASSERT(0 == sobj.indexOf("0003"));
-  ASSERT(1 == sobj.indexOf("unassigned"));
-
-  ASSERT(1 == sobj.recode(0));
-  ASSERT_THROW(sobj.recode(1));
-  ASSERT_THROW(sobj.recode(2));
-  ASSERT(0 == sobj.recode(3));
-  ASSERT_THROW(sobj.recode(4));
+  ASSERT(segmentations[0].getName() == "segmentation1");
+  ASSERT(segmentations[1].getName() == "segmentation3");
+  ASSERT(segmentations[2].getName() == "segmentation5");
+  ASSERT(segmentations[3].getName() == "segmentation6");
+  ASSERT(segmentations[4].getName() == "segmentation2");
+  ASSERT(segmentations[5].getName() == "segmentation4");
 }
 

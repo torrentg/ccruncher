@@ -220,7 +220,7 @@
 			<xsd:enumeration value="time.T"/>
 			<xsd:enumeration value="maxiterations"/>
 			<xsd:enumeration value="maxseconds"/>
-			<xsd:enumeration value="copula.type"/>
+			<xsd:enumeration value="copula"/>
 			<xsd:enumeration value="rng.seed"/>
 			<xsd:enumeration value="antithetic"/>
 			<xsd:enumeration value="blocksize"/>

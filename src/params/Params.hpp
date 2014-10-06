@@ -45,6 +45,13 @@ class Params : public std::map<std::string,std::string>, public ExpatHandlers
     //! Directives to process an xml end tag element
     virtual void epend(ExpatUserData &, const char *) override;
   
+  private:
+
+    //! Returns parameter value
+    std::string getParamValue(const std::string &key) const;
+    //! Returns parameter value
+    std::string getParamValue(const std::string &key, const std::string &defaultValue) const;
+
   public:
   
     //! Inherits std::map constructors
@@ -59,16 +66,14 @@ class Params : public std::map<std::string,std::string>, public ExpatHandlers
     size_t getMaxSeconds() const;
     //! Returns copula
     std::string getCopula() const;
-    //! Returns copula type
-    std::string getCopulaType() const;
-    //! Returns copula param (only t-copula)
-    double getCopulaParam() const;
+    //! Returns the t-student copula degrees of freedom
+    double getNdf() const;
     //! Returns RNG seed
-    unsigned long getRngSeed() const;
+    ulong getRngSeed() const;
     //! Returns antithetic flag
     bool getAntithetic() const;
     //! Returns simulation block size
-    unsigned short getBlockSize() const;
+    ushort getBlockSize() const;
     //! Validate object content
     bool isValid(bool throwException=false) const;
 

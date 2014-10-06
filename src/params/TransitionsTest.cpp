@@ -24,6 +24,7 @@
 #include "params/Transitions.hpp"
 #include "params/TransitionsTest.hpp"
 #include "utils/ExpatParser.hpp"
+#include "params/Ratings.hpp"
 
 using namespace std;
 using namespace ccruncher;

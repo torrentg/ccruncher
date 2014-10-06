@@ -20,36 +20,36 @@
 //
 //===========================================================================
 
-#ifndef _Rating_
-#define _Rating_
+#ifndef _PortfolioTest_
+#define _PortfolioTest_
 
-#include <string>
+#include "utils/MiniCppUnit.hxx"
+#include "params/Segmentations.hpp"
 
-namespace ccruncher {
+namespace ccruncher_test {
 
-/**************************************************************************//**
- * @brief Object representing a rating.
- *
- * @see http://ccruncher.net/ifileref.html#ratings
- */
-class Rating
+class PortfolioTest : public TestFixture<PortfolioTest>
 {
 
+  private:
+
+    ccruncher::Segmentations getSegmentations();
+
+    void test1();
+    void test2();
+
+
   public:
 
-    //! Rating name
-    std::string name;
-    //! Rating description
-    std::string description;
-
-  public:
-
-    //! Constructor (to use in initializer list constructors)
-    Rating(const char *nam) : name(nam), description("") {}
-    //! Constructor
-    Rating(const std::string &nam="", const std::string &desc="") : name(nam), description(desc) {}
+    TEST_FIXTURE(PortfolioTest)
+    {
+      TEST_CASE(test1);
+      TEST_CASE(test2);
+    }
 
 };
+
+REGISTER_FIXTURE(PortfolioTest)
 
 } // namespace
 

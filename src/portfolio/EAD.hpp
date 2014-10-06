@@ -100,6 +100,8 @@ class EAD
     EAD(const std::string &);
     //! Constructor
     EAD(Type, double a, double b=NAN);
+    //! Constructor
+    EAD(double);
     //! Comparison operator
     bool operator==(const EAD &o) const;
     //! Comparison operator
@@ -117,8 +119,10 @@ class EAD
     //! Apply current net value factor
     void mult(double);
 
+  public:
+
     //! Check if it is a Non-A-EAD value
-    static bool isvalid(const EAD &);
+    static bool isValid(const EAD &);
 
 };
 
@@ -126,6 +130,14 @@ class EAD
  * @details Create a EAD with invalid values.
  */
 inline ccruncher::EAD::EAD() : mType(Fixed), mValue1(NAN), mValue2(NAN)
+{
+  // nothing to do
+}
+
+/**************************************************************************//**
+ * @details Create a EAD of type fixed.
+ */
+inline ccruncher::EAD::EAD(double x) : mType(Fixed), mValue1(x), mValue2(NAN)
 {
   // nothing to do
 }

@@ -20,149 +20,46 @@
 //
 //===========================================================================
 
+#include <climits>
 #include <cassert>
 #include "params/Segmentations.hpp"
-#include "portfolio/Asset.hpp"
+#include "utils/Format.hpp"
 
 using namespace std;
 using namespace ccruncher;
 
 /**************************************************************************//**
- * @details Use this constructor to create a Segmentations object in a
- *          programmatic way.
- * @param[in] segmentations Enabled segmentations
+ * @param[in] sname Segmentation name.
+ * @return Index of the segmentation.
+ * @throw Exception Segmentation not found.
  */
-ccruncher::Segmentations::Segmentations(const vector<Segmentation> &segmentations)
+ushort ccruncher::Segmentations::indexOf(const std::string &sname) const
 {
-  mEnabled = segmentations;
-}
-
-/**************************************************************************//**
- * @return Number of enabled segmentations
- */
-int ccruncher::Segmentations::size() const
-{
-  return mEnabled.size();
-}
-
-/**************************************************************************//**
- * @details Index with negative values (i<0) refers to disabled
- *          segmentations. Index with positive values (>=0) refers to
- *          enabled segmentations.
- * @param[in] i Index of the segmentation.
- * @return Requested segmentation.
- */
-const Segmentation& ccruncher::Segmentations::getSegmentation(int i) const
-{
-  if (i >= 0) {
-    assert(i < (int) mEnabled.size());
-    return mEnabled[i];
-  }
-  else {
-    assert(-1-i < (int) mDisabled.size());
-    return mDisabled[-1-i];
-  }
+  return indexOf(sname.c_str());
 }
 
 /**************************************************************************//**
  * @param[in] sname Segmentation name.
- * @return Index of the segmentation (negative if disabled, positive otherwise).
+ * @return Index of the segmentation.
  * @throw Exception Segmentation not found.
  */
-int ccruncher::Segmentations::indexOfSegmentation(const std::string &sname) const
+ushort ccruncher::Segmentations::indexOf(const char *sname) const
 {
-  return indexOfSegmentation(sname.c_str());
-}
-
-/**************************************************************************//**
- * @param[in] sname Segmentation name.
- * @return Index of the segmentation (negative if disabled, positive otherwise).
- * @throw Exception Segmentation not found.
- */
-int ccruncher::Segmentations::indexOfSegmentation(const char *sname) const
-{
-  for(size_t i=0; i<mEnabled.size(); i++) {
-    if (mEnabled[i].getName().compare(sname) == 0) {
-      return (int)i;
-    }
-  }
-  for(size_t i=0; i<mDisabled.size(); i++) {
-    if (mDisabled[i].getName().compare(sname) == 0) {
-      return -(int)(i+1);
+  for(size_t i=0; i<this->size(); i++) {
+    if ((*this)[i].getName().compare(sname) == 0) {
+      return (ushort)i;
     }
   }
   throw Exception("segmentation '" + string(sname) + "' not found");
 }
 
 /**************************************************************************//**
- * @details Check that exist enabled segmentations. Also checks that at
- *          most there is only one basic segmentation (segmentation with
- *          only the unassigned segment). In this case results are the same
- *          regardless of the type of components.
- * @throw Exception Validation error.
- */
-void ccruncher::Segmentations::validate()
-{
-  if (mEnabled.empty()) {
-    throw Exception("active segmentations not found");
-  }
-
-  string str;
-  int nbasic = 0;
-  for(Segmentation &segmentation : mEnabled) {
-    if (segmentation.size() == 1) {
-      str += (nbasic>0?", ":"") + segmentation.getName();
-      nbasic++;
-    }
-  }
-  for(Segmentation &segmentation : mDisabled) {
-    if (segmentation.size() == 1) {
-      str += (nbasic>0?", ":"") + segmentation.getName();
-      nbasic++;
-    }
-  }
-  if (nbasic > 1) {
-    throw Exception("found duplicated segmentations [" + str + "]");
-  }
-}
-
-/**************************************************************************//**
- * @param[in] val Segmentation to insert.
- * @throw Exception Repeated segmentation name.
- */
-int ccruncher::Segmentations::insertSegmentation(Segmentation &val)
-{
-  // checking coherence
-  for(Segmentation &segmentation : mEnabled) {
-    if (segmentation.getName() == val.getName()) {
-      throw Exception("segmentation name '" + val.getName() + "' repeated");
-    }
-  }
-  for(Segmentation &segmentation : mDisabled) {
-    if (segmentation.getName() == val.getName()) {
-      throw Exception("segmentation name '" + val.getName() + "' repeated");
-    }
-  }
-
-  // inserting segmentation
-  if (val.isEnabled()) {
-    mEnabled.push_back(val);
-    return mEnabled.size()-1;
-  }
-  else {
-    mDisabled.push_back(val);
-    return -mDisabled.size();
-  }
-}
-
-/**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] eu Xml parsing data.
  * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *tag, const char **attributes)
+void ccruncher::Segmentations::epstart(ExpatUserData &, const char *tag, const char **attributes)
 {
   if (isEqual(tag,"segmentations")) {
     if (getNumAttributes(attributes) != 0) {
@@ -170,8 +67,23 @@ void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *tag, const
     }
   }
   else if (isEqual(tag,"segmentation")) {
-    mAuxSegmentation.reset();
-    eppush(eu, &mAuxSegmentation, tag, attributes);
+    if (getNumAttributes(attributes) < 2 || 3 < getNumAttributes(attributes)) {
+      throw Exception("incorrect number of attributes in tag segmentation");
+    }
+    string name = getStringAttribute(attributes, "name");
+    bool enabled = getBooleanAttribute(attributes, "enabled", true);
+    string components = getStringAttribute(attributes, "components");
+    Segmentation segmentation(name);
+    segmentation.setEnabled(enabled);
+    segmentation.setType(components);
+    this->push_back(segmentation);
+  }
+  else if (isEqual(tag,"segment")) {
+    if (this->empty()) {
+      throw Exception("segment without segmentation");
+    }
+    string name = getStringAttribute(attributes, "name");
+    this->back().addSegment(name);
   }
   else {
     throw Exception("unexpected tag '" + string(tag) + "'");
@@ -185,49 +97,79 @@ void ccruncher::Segmentations::epstart(ExpatUserData &eu, const char *tag, const
 void ccruncher::Segmentations::epend(ExpatUserData &, const char *tag)
 {
   if (isEqual(tag,"segmentation")) {
-    insertSegmentation(mAuxSegmentation);
+    // nothing to do
   }
   else if (isEqual(tag,"segmentations")) {
-    validate();
-    mAuxSegmentation.reset();
+    isValid(*this, true);
   }
 }
 
 /**************************************************************************//**
- * @details Calls method Segmentation::increaseSegmentCounter() for each
- *          segment adscribed to the given asset.
- * @param[in] asset Asset.
+ * @details Performs the following checks:
+ *          - non-empty
+ *          - size less than 65535
+ *          - non duplicated segmentation names
+ *          - 0 or 1 basic (only 1 segment) segmentation.
+ * @param[in] segmentations List of segmentations.
+ * @param[in] throwException Throw an exception if validation fails.
+ * @throw Exception Validation error.
  */
-void ccruncher::Segmentations::increaseSegmentCounters(const Asset *asset)
+bool ccruncher::Segmentations::isValid(const std::vector<Segmentation> &segmentations, bool throwException)
 {
-  assert(asset != nullptr);
-  for(size_t i=0; i<mEnabled.size(); i++) {
-    mEnabled[i].increaseSegmentCounter(asset->getSegment(i));
+  try
+  {
+    if (segmentations.empty()) {
+      throw Exception("segmentations not found");
+    }
+    if (segmentations.size() > USHRT_MAX) {
+      throw Exception("number of segmentations bigger than " + Format::toString(USHRT_MAX));
+    }
+
+    // check for duplicated elements
+    for(size_t i=0; i<segmentations.size(); i++) {
+      for(size_t j=i+1; j<segmentations.size(); j++) {
+        if (segmentations[i].getName() == segmentations[j].getName()) {
+          throw Exception("segmentation name '" + segmentations[i].getName() + "' repeated");
+        }
+      }
+    }
+
+    // check that only exist 0 or 1 'portfolio' segmentation
+    /*
+    string str;
+    int nbasic = 0;
+    for(const Segmentation &segmentation : segmentations) {
+      if (segmentation.size() == 1) {
+        str += (nbasic>0?", ":"") + segmentation.getName();
+        nbasic++;
+      }
+    }
+    if (nbasic > 1) {
+      throw Exception("found duplicated segmentations [" + str + "]");
+    }
+    */
+
+    return true;
+  }
+  catch(Exception &)
+  {
+    if (throwException) throw;
+    else return false;
   }
 }
 
 /**************************************************************************//**
- * @details Calls method Segmentation::removeUnusedSegments() for each
- *          enabled segmentation.
+ * @param[in] segmentations List of segmentations.
  */
-void ccruncher::Segmentations::removeUnusedSegments()
+//! Returns the number of enabled segmentations
+ushort ccruncher::Segmentations::numEnabledSegmentations(const std::vector<Segmentation> &segmentations)
 {
-  for(Segmentation &segmentation : mEnabled) {
-    segmentation.recode();
+  ushort ret = 0;
+  for(const Segmentation &segmentation : segmentations) {
+    if (segmentation.isEnabled()) {
+      ret ++;
+    }
   }
-}
-
-/**************************************************************************//**
- * @details Calls method Segmentation::recodeSegments() for each segment
- *          adscribed to the given asset.
- */
-void ccruncher::Segmentations::recodeSegments(Asset *asset)
-{
-  assert(asset != nullptr);
-  for(size_t i=0; i<mEnabled.size(); i++) {
-    int old = asset->getSegment(i);
-    asset->setSegment(i, mEnabled[i].recode(old));
-  }
-
+  return ret;
 }
 

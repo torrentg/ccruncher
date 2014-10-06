@@ -321,8 +321,7 @@ void run() throw(Exception)
   gsl_set_error_handler(gsl_handler);
 
   // checking output directory
-  if (!File::existDir(spath))
-  {
+  if (!File::existDir(spath)) {
     throw Exception("output '" + spath + "' not exist");
   }
 
@@ -331,33 +330,19 @@ void run() throw(Exception)
   log << copyright << endl;
   log << header << endl;
 
-  IData *idata = nullptr;
+  // parsing input file
+  IData idata(cout.rdbuf());
+  idata.init(sfilename, defines, &stop);
 
-  try
-  {
-    // parsing input file
-    idata = new IData(cout.rdbuf());
-    idata->init(sfilename, defines, &stop);
+  // creating simulation object
+  MonteCarlo montecarlo(cout.rdbuf());
+  montecarlo.setData(idata, spath, cmode);
 
-    // creating simulation object
-    MonteCarlo montecarlo(cout.rdbuf());
-    montecarlo.setFilePath(spath, cmode);
-    montecarlo.setData(*idata);
-    delete idata;
+  // running simulation
+  montecarlo.run(ithreads, ihash, &stop);
 
-    // running simulation
-    montecarlo.run(ithreads, ihash, &stop);
-
-    // footer
-    log << footer(timer) << endl;
-  }
-  catch(...)
-  {
-    if (idata != nullptr) {
-      delete idata;
-    }
-    throw;
-  }
+  // footer
+  log << footer(timer) << endl;
 }
 
 /**************************************************************************//**

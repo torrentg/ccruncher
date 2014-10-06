@@ -50,11 +50,11 @@ void ccruncher_test::RatingsTest::test1()
 
   ASSERT(5 == ratings.size());
 
-  ASSERT("A" == ratings[0].getName());
-  ASSERT("B" == ratings[1].getName());
-  ASSERT("D" == ratings[2].getName());
-  ASSERT("C" == ratings[3].getName());
-  ASSERT("E" == ratings[4].getName());
+  ASSERT("A" == ratings[0].name);
+  ASSERT("B" == ratings[1].name);
+  ASSERT("D" == ratings[2].name);
+  ASSERT("C" == ratings[3].name);
+  ASSERT("E" == ratings[4].name);
 
   ASSERT(0 == ratings.indexOf("A"));
   ASSERT(1 == ratings.indexOf("B"));
@@ -62,11 +62,11 @@ void ccruncher_test::RatingsTest::test1()
   ASSERT(3 == ratings.indexOf("C"));
   ASSERT(4 == ratings.indexOf("E"));
 
-  ASSERT("very good" == ratings[0].getDescription());
-  ASSERT("good" == ratings[1].getDescription());
-  ASSERT("very bad" == ratings[2].getDescription());
-  ASSERT("bad" == ratings[3].getDescription());
-  ASSERT("defaulted" == ratings[4].getDescription());
+  ASSERT("very good" == ratings[0].description);
+  ASSERT("good" == ratings[1].description);
+  ASSERT("very bad" == ratings[2].description);
+  ASSERT("bad" == ratings[3].description);
+  ASSERT("defaulted" == ratings[4].description);
 }
 
 //===========================================================================
@@ -141,17 +141,40 @@ void ccruncher_test::RatingsTest::test5()
 {
 // creation from scratch
   Ratings ratings;
-  ratings.add(Rating("A", "very good"));
-  ratings.add(Rating("B", "good"));
-  ratings.add(Rating("C", "bad"));
-  ratings.add(Rating("D", "very bad"));
-  ratings.add(Rating("E", "defaulted"));
+  ratings.push_back(Rating("A", "very good"));
+  ratings.push_back(Rating("B", "good"));
+  ratings.push_back(Rating("C", "bad"));
+  ratings.push_back(Rating("D", "very bad"));
+  ratings.push_back(Rating("E", "defaulted"));
   ASSERT_EQUALS(5ul, ratings.size());
-  ASSERT_EQUALS(0ul, ratings.indexOf("A"));
-  ASSERT_EQUALS(1ul, ratings.indexOf("B"));
-  ASSERT_EQUALS(2ul, ratings.indexOf("C"));
-  ASSERT_EQUALS(3ul, ratings.indexOf("D"));
-  ASSERT_EQUALS(4ul, ratings.indexOf("E"));
+  ASSERT_EQUALS((unsigned char)0, ratings.indexOf("A"));
+  ASSERT_EQUALS((unsigned char)1, ratings.indexOf("B"));
+  ASSERT_EQUALS((unsigned char)2, ratings.indexOf("C"));
+  ASSERT_EQUALS((unsigned char)3, ratings.indexOf("D"));
+  ASSERT_EQUALS((unsigned char)4, ratings.indexOf("E"));
   ASSERT_THROW(ratings.indexOf("K"));
+  ASSERT(Ratings::isValid(ratings));
+}
+
+//===========================================================================
+// test6
+//===========================================================================
+void ccruncher_test::RatingsTest::test6()
+{
+// creation from scratch
+  vector<Rating> ratings;
+
+  ratings.push_back(Rating("A", "very good"));
+
+  // less than 2 ratings
+  ASSERT(!Ratings::isValid(ratings));
+
+  ratings.push_back(Rating("A", "good"));
+  ratings.push_back(Rating("C", "bad"));
+  ratings.push_back(Rating("D", "very bad"));
+  ratings.push_back(Rating("E", "defaulted"));
+
+  // repeated rating
+  ASSERT(!Ratings::isValid(ratings));
 }
 

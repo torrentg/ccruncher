@@ -38,7 +38,7 @@ void ccruncher_test::ParamsTest::test1()
       <parameter name='time.T' value='18/02/2008'/>\n\
       <parameter name='maxiterations' value='3000'/>\n\
       <parameter name='maxseconds' value='30000000'/>\n\
-      <parameter name='copula.type' value='gaussian'/>\n\
+      <parameter name='copula' value='gaussian'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
       <parameter name='antithetic' value='true'/>\n\
       <parameter name='blocksize' value='256'/>\n\
@@ -52,7 +52,7 @@ void ccruncher_test::ParamsTest::test1()
   ASSERT(Date("18/02/2008") == params.getTimeT());
   ASSERT(3000 == params.getMaxIterations());
   ASSERT(30000000 == params.getMaxSeconds());
-  ASSERT("gaussian" == params.getCopulaType());
+  ASSERT("gaussian" == params.getCopula());
   ASSERT(38765874L == params.getRngSeed());
   ASSERT(true == params.getAntithetic());
   ASSERT(256 == params.getBlockSize());
@@ -70,7 +70,7 @@ void ccruncher_test::ParamsTest::test2()
       <parameter name='time.T' value='21/03/2001'/>\n\
       <parameter name='maxiterations' value='3000'/>\n\
       <parameter name='maxseconds' value='30000000'/>\n\
-      <parameter name='copula.type' value='gaussian'/>\n\
+      <parameter name='copula' value='gaussian'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
       <parameter name='antithetic' value='true'/>\n\
     </parameters>";
@@ -82,7 +82,7 @@ void ccruncher_test::ParamsTest::test2()
 
 //===========================================================================
 // test3
-// test copula_type param (case t-student)
+// test copula param (case t-student)
 //===========================================================================
 void ccruncher_test::ParamsTest::test3()
 {
@@ -92,7 +92,7 @@ void ccruncher_test::ParamsTest::test3()
       <parameter name='time.T' value='12/08/2010'/>\n\
       <parameter name='maxiterations' value='3000'/>\n\
       <parameter name='maxseconds' value='30000000'/>\n\
-      <parameter name='copula.type' value='t(3)'/>\n\
+      <parameter name='copula' value='t(3)'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
       <parameter name='antithetic' value='true'/>\n\
     </parameters>";
@@ -101,8 +101,7 @@ void ccruncher_test::ParamsTest::test3()
   Params params;
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &params));
 
-  ASSERT(params.getCopulaType() == "t");
-  ASSERT(params.getCopulaParam() == 3.0);
+  ASSERT(params.getNdf() == 3.0);
 }
 
 //===========================================================================
@@ -117,7 +116,7 @@ void ccruncher_test::ParamsTest::test4()
       <parameter name='time.T' value='18/02/2008'/>\n\
       <parameter name='maxiterations' value='3000'/>\n\
       <parameter name='maxseconds' value='30000000'/>\n\
-      <parameter name='copula.type' value='gaussian'/>\n\
+      <parameter name='copula' value='gaussian'/>\n\
       <parameter name='rng.seed' value='38765874'/>\n\
       <parameter name='antithetic' value='true'/>\n\
       <parameter name='blocksize' value='257'/>\n\

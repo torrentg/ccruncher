@@ -62,11 +62,11 @@ string ccruncher::Utils::timestamp()
  *          It has microseconds resolution.
  * @return Value based on current time.
  */
-unsigned long ccruncher::Utils::trand()
+ulong ccruncher::Utils::trand()
 {
   timeval tv;
   gettimeofday(&tv,nullptr);
-  return (unsigned long)(tv.tv_sec)*1000000UL + (unsigned long)(tv.tv_usec);
+  return (ulong)(tv.tv_sec)*1000000UL + (ulong)(tv.tv_usec);
 }
 
 /**************************************************************************//**

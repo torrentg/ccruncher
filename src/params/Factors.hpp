@@ -49,14 +49,19 @@ class Factors : public std::vector<Factor>, public ExpatHandlers
 
     //! Inherits std::vector constructors
     using std::vector<Factor>::vector;
-    //! Adds a factor to this list
-    void add(const Factor &);
     //! Return the index of the factor
-    size_t indexOf(const char *name) const;
+    unsigned char indexOf(const char *name) const;
     //! Return the index of the factor
-    size_t indexOf(const std::string &name) const;
+    unsigned char indexOf(const std::string &name) const;
+
+  public:
+
+    //! Validate a list of factors
+    static bool isValid(const std::vector<Factor> &factors, bool throwException=false);
+    //! Validate a list of factor loadings
+    static bool isValid(const std::vector<double> &loadings, bool throwException=false);
     //! Return factor loadings
-    std::vector<double> getLoadings() const;
+    static std::vector<double> getLoadings(const std::vector<Factor> &factors);
 
 };
 

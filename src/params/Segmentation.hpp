@@ -25,20 +25,19 @@
 
 #include <string>
 #include <vector>
-#include "utils/ExpatHandlers.hpp"
 
 namespace ccruncher {
 
 /**************************************************************************//**
  * @brief Portfolio segmentation.
  *
- * @details This class provides methods to read a segmentation from the
- *          xml input file. Offers a method to remove the unused segments
- *          in order to minimize the memory allocation/access in the simulation.
+ * @details This class provides methods to recode segment names to indexes
+ *          and to recode segment indexes removing unused segment in order
+ *          to minimize the memory allocation/access in the simulation.
  *
  * @see http://ccruncher.net/ifileref.html#segmentations
  */
-class Segmentation : public ExpatHandlers
+class Segmentation
 {
 
   public:
@@ -46,9 +45,9 @@ class Segmentation : public ExpatHandlers
     //! Type of segmentation's components
     enum ComponentsType
     {
-      asset,     //!< Segmentation of assets
-      obligor,   //!< Segmentation of obligors
-      undefined  //!< Not defined
+      undefined=0, //!< Not defined
+      obligor=1,   //!< Segmentation of obligors
+      asset=2      //!< Segmentation of assets
     };
 
   private:
@@ -61,29 +60,16 @@ class Segmentation : public ExpatHandlers
     bool mEnabled;
     //! List of segmentation segments
     std::vector<std::string> mSegments;
-    //! Number of elements per segment (used by recode)
-    std::vector<size_t> mNumElements;
-    //! Recode map (used by recode)
-    std::vector<size_t> mRecodeMap;
 
   private:
   
     //! Checks segment/segmentation name
-    bool isValidName(const std::string &);
-
-  protected:
-  
-    //! Directives to process an xml start tag element
-    virtual void epstart(ExpatUserData &, const char *, const char **) override;
-    //! Directives to process an xml end tag element
-    virtual void epend(ExpatUserData &, const char *) override;
+    bool isValidName(const std::string &) const;
 
   public:
   
     //! Constructor
-    Segmentation(const std::string &name="", ComponentsType type=asset, bool enabled=true);
-    //! Reset object content
-    void reset();
+    Segmentation(const std::string &name="", ComponentsType type=asset, bool enabled=true, bool hasUnassigned=true);
     //! Returns segmentation name
     const std::string& getName() const { return mName; }
     //! Sets segmentation name
@@ -92,28 +78,26 @@ class Segmentation : public ExpatHandlers
     ComponentsType getType() const { return mType; }
     //! Sets the type of components
     void setType(const ComponentsType &);
+    //! Sets the type of components
+    void setType(const std::string &);
     //! Returns enabled flag
     bool isEnabled() const { return mEnabled; }
     //! Sets the enabled flag
     void setEnabled(bool b);
     //! Number of segments
-    int size() const { return mSegments.size(); }
+    ushort size() const { return (ushort) mSegments.size(); }
     //! Returns i-th segment name
-    const std::string& getSegment(size_t i) const { return mSegments[i]; }
+    const std::string& getSegment(ushort i) const;
     //! Adds a segment to this segmentation
-    void add(const std::string &segment);
+    void addSegment(const std::string &segment);
     //! Return the index of the given segment
-    size_t indexOf(const std::string &segment) const;
+    ushort indexOf(const std::string &segment) const;
     //! Return the index of the given segment
-    size_t indexOf(const char *segment) const;
+    ushort indexOf(const char *segment) const;
     //! Return filename
     std::string getFilename(const std::string &path) const;
-    //! Add components to segmentations stats
-    void increaseSegmentCounter(size_t);
-    //! Recodes segments
-    void recode();
-    //! Recodes a segment
-    size_t recode(size_t) const;
+    //! Less-than operator
+    bool operator<(const Segmentation &obj) const;
 
 };
 

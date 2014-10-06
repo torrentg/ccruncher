@@ -155,6 +155,11 @@ double ccruncher::Inverse::icdf(double u) const
  */
 void ccruncher::Inverse::setSpline(const CDF &cdf)
 {
+  if (mSpline != nullptr) {
+    gsl_spline_free(mSpline);
+    mSpline = nullptr;
+  }
+
   if (cdf.evalue(0.0) > 1.0-EPSILON) {
     return; // default rating
   }
@@ -240,6 +245,7 @@ void ccruncher::Inverse::setSpline(vector<int> &days, vector<double> &cache)
 
   if (mSpline != nullptr) {
     gsl_spline_free(mSpline);
+    mSpline = nullptr;
   }
 
   vector<double> x(days.size(), 0.0);
@@ -291,5 +297,20 @@ int ccruncher::Inverse::getWorstDay(vector<double> &cache)
   }
 
   return ret;
+}
+
+/**************************************************************************//**
+ * @details Returned values are:
+ *          - "none": not interpolated.
+ *          - "linear": linear interpolation.
+ *          - "cspline": cubic spline interpolation.
+ * @return Type of interpolation used.
+ */
+string ccruncher::Inverse::getInterpolationType() const
+{
+  if (mSpline == nullptr) {
+    return "none";
+  }
+  return gsl_interp_name(mSpline->interp);
 }
 
