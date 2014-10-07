@@ -99,3 +99,19 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
   }
 }
 
+/**************************************************************************//**
+ * @details Check if all asset's DateValues have defined the LGD. If exist
+ *          a DateValue without LGD this means that obligor's LGD will be
+ *          used.
+ * @return true = exist a DateValue that requires obligor LGD, false otherwise.
+ */
+bool ccruncher::Asset::requiresObligorLGD() const
+{
+  for(size_t i=0; i<values.size(); i++) {
+    if (!LGD::isValid(values[i].lgd)) {
+      return true;
+    }
+  }
+  return false;
+}
+

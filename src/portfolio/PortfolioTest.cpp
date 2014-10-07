@@ -86,12 +86,13 @@ void ccruncher_test::PortfolioTest::test1()
           </data>\n\
         </asset>\n\
       </obligor>\n\
-      <obligor rating='B' factor='S1' id='cif2'>\n\
+      <obligor rating='B' factor='S1' id='cif2' lgd='30%'>\n\
         <belongs-to segmentation='size' segment='medium'/>\n\
         <asset id='op3' date='01/07/1999'>\n\
           <belongs-to segmentation='offices' segment='0002'/>\n\
           <data>\n\
             <values t='01/01/2000' ead='560.0' lgd='25%' />\n\
+            <values t='01/01/2001' ead='560.0' />\n\
           </data>\n\
         </asset>\n\
       </obligor>\n\
@@ -155,12 +156,13 @@ void ccruncher_test::PortfolioTest::test1()
 
   ASSERT(obligors[1].irating == 1);
   ASSERT(obligors[1].ifactor == 0);
-  ASSERT(std::isnan(obligors[1].lgd.getValue1()));
+  ASSERT_EQUALS_EPSILON(obligors[1].lgd.getValue1(), 0.3, EPSILON);
   ASSERT(obligors[1].assets.size() == 1);
 
-  ASSERT(obligors[1].assets[0].values.size() == 2);
+  ASSERT(obligors[1].assets[0].values.size() == 3);
   ASSERT(obligors[1].assets[0].values[0] == DateValues(Date("01/07/1999"),NAN,1.0));
   ASSERT(obligors[1].assets[0].values[1] == DateValues(Date("01/01/2000"),560.0,0.25));
+  ASSERT(obligors[1].assets[0].values[2] == DateValues(Date("01/01/2001"),560.0,NAN));
   ASSERT(obligors[1].assets[0].segments.size() == segmentations.size());
   ASSERT(obligors[1].assets[0].segments[0] == 0);
   ASSERT(obligors[1].assets[0].segments[1] == 1);
@@ -250,7 +252,7 @@ void ccruncher_test::PortfolioTest::test2()
   Portfolio portfolio3;
   ASSERT_THROW(xmlparser.parse(xmlcontent3, &portfolio3));
 
-  // malformed xml (datevalue previous to asset creation date)
+  // malformed xml (datevalue previous or equal to asset creation date)
   string xmlcontent4 = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <portfolio>\n\
       <obligor rating='C' factor='S2' id='cif1' lgd='80%'>\n\
@@ -264,5 +266,20 @@ void ccruncher_test::PortfolioTest::test2()
 
   Portfolio portfolio4;
   ASSERT_THROW(xmlparser.parse(xmlcontent4, &portfolio4));
+
+  // lgd not set (nor datavalue, nor asset, nor obligor)
+  string xmlcontent5 = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <portfolio>\n\
+      <obligor rating='C' factor='S2' id='cif1'>\n\
+        <asset id='op1' date='01/01/1999'>\n\
+          <data>\n\
+            <values t='01/01/1999' ead='560.0' />\n\
+          </data>\n\
+        </asset>\n\
+      </obligor>\n\
+    </portfolio>";
+
+  Portfolio portfolio5;
+  ASSERT_THROW(xmlparser.parse(xmlcontent5, &portfolio5));
 }
 

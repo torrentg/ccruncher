@@ -125,7 +125,8 @@ void ccruncher::Portfolio::epstartPortfolio(ExpatUserData &eu, const char **attr
   }
 
   // check parameters needed to parse assets/obligors
-  if (eu.ratings == nullptr || eu.factors == nullptr || eu.segmentations == nullptr) {
+  if (eu.ratings == nullptr || eu.factors == nullptr || eu.segmentations == nullptr ||
+      eu.date1 == NAD || eu.date2 == NAD || eu.interest == nullptr) {
     throw Exception("required parameters not found");
   }
 
@@ -297,6 +298,15 @@ void ccruncher::Portfolio::ependObligor(ExpatUserData &eu)
     throw Exception("obligor without assets");
   }
 
+  // check that lgds can be resolved
+  if (!LGD::isValid(obligor.lgd)) {
+    for(Asset &asset : obligor.assets) {
+      if (asset.requiresObligorLGD()) {
+        throw Exception("obligor hasn't lgd, but an asset requires obligor lgd");
+      }
+    }
+  }
+
   // assign obligor-segmentations to his assets
   for(ushort isegmentation=0; isegmentation<obligorSegments.size(); isegmentation++) {
     if (obligorSegments[isegmentation] > 0) {
@@ -367,20 +377,6 @@ void ccruncher::Portfolio::ependPortfolio(ExpatUserData &eu)
   Segmentations &segmentations = *(eu.segmentations);
   vector<Segmentation> aux = recodeSegments(segmentations);
   segmentations.swap(aux);
-}
-
-/**************************************************************************//**
- * @details Removes unused segmentations and unused segments.
- */
-void ccruncher::Portfolio::reset()
-{
-  mStage = 0;
-  mNumSegmentations = 0;
-  assetLGD = LGD();
-  vector<Obligor>().swap(mObligors);
-  vector<ushort>().swap(obligorSegments);
-  mIdAssets = map<std::string,size_t>();
-  mIdObligors = map<std::string,size_t>();
 }
 
 /**************************************************************************//**

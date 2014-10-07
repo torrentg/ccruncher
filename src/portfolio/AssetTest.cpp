@@ -47,6 +47,8 @@ void ccruncher_test::AssetTest::test1()
   asset.values.push_back(DateValues(Date("01/01/2016"), 100.0, 0.75));
   asset.values.push_back(DateValues(Date("01/07/2016"), 100.0, 0.70));
 
+  ASSERT(!asset.requiresObligorLGD());
+
   ASSERT(asset.isActive(Date("01/01/2010"), Date("01/07/2014")));
   ASSERT(asset.isActive(Date("01/01/2016"), Date("01/07/2020")));
   ASSERT(asset.isActive(Date("01/07/2014"), Date("01/01/2015")));
@@ -55,7 +57,7 @@ void ccruncher_test::AssetTest::test1()
 }
 
 //===========================================================================
-// test2.
+// test2
 //===========================================================================
 void ccruncher_test::AssetTest::test2()
 {
@@ -66,6 +68,8 @@ void ccruncher_test::AssetTest::test2()
   asset.values.push_back(DateValues(Date("15/01/2008"), 1000.0, 0.2));
   asset.values.push_back(DateValues(Date("15/01/2009"), 1000.0));
   asset.values.push_back(DateValues(Date("15/01/2010"), 1000.0, 0.2));
+
+  ASSERT(asset.requiresObligorLGD());
 
   Date time0("01/01/2005");
   Date timeT("01/01/2011");
@@ -80,5 +84,60 @@ void ccruncher_test::AssetTest::test2()
   ASSERT(asset.values[2].date == Date("15/01/2008"));
   ASSERT(asset.values[3].date == Date("15/01/2009"));
   ASSERT(asset.values[4].date == Date("15/01/2010"));
+}
+
+//===========================================================================
+// test3
+//===========================================================================
+void ccruncher_test::AssetTest::test3()
+{
+  Asset asset;
+
+  asset.values.push_back(DateValues(Date("10/01/2005"), NAN, 1.00));
+  asset.values.push_back(DateValues(Date("15/01/2005"), 5000.0, 0.7));
+  asset.values.push_back(DateValues(Date("15/01/2006"), 5000.0, 0.6));
+  asset.values.push_back(DateValues(Date("15/01/2007"), 4000.0, 0.5));
+  asset.values.push_back(DateValues(Date("15/01/2008"), 3000.0, 0.4));
+  asset.values.push_back(DateValues(Date("15/01/2009"), 2000.0, 0.3));
+  asset.values.push_back(DateValues(Date("15/01/2010"), 1000.0, 0.2));
+
+  Date time0("10/01/2005");
+  Date timeT("01/07/2007");
+  Interest interest(time0);
+
+  asset.prepare(time0, timeT, interest);
+
+  // doing assertions
+  ASSERT(asset.values.size() == 5);
+  ASSERT(asset.values[0].date == Date("10/01/2005"));
+  ASSERT(asset.values[4].date == Date("15/01/2008"));
+}
+
+
+//===========================================================================
+// test4
+//===========================================================================
+void ccruncher_test::AssetTest::test4()
+{
+  Asset asset;
+
+  asset.values.push_back(DateValues(Date("10/01/2005"), NAN, 1.00));
+  asset.values.push_back(DateValues(Date("15/01/2005"), 5000.0, 0.7));
+  asset.values.push_back(DateValues(Date("15/01/2006"), 5000.0, 0.6));
+  asset.values.push_back(DateValues(Date("15/01/2007"), 4000.0, 0.5));
+  asset.values.push_back(DateValues(Date("15/01/2008"), 3000.0, 0.4));
+  asset.values.push_back(DateValues(Date("15/01/2009"), 2000.0, 0.3));
+  asset.values.push_back(DateValues(Date("15/01/2010"), 1000.0, 0.2));
+
+  Date time0("01/07/2006");
+  Date timeT("01/07/2008");
+  Interest interest(time0);
+
+  asset.prepare(time0, timeT, interest);
+
+  // doing assertions
+  ASSERT(asset.values.size() == 3);
+  ASSERT(asset.values[0].date == Date("15/01/2007"));
+  ASSERT(asset.values[2].date == Date("15/01/2009"));
 }
 
