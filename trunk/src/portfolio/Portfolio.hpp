@@ -36,6 +36,13 @@ namespace ccruncher {
 /**************************************************************************//**
  * @brief  List of obligors.
  *
+ * @details This class provides support for parsing portfolio from the xml
+ *          input file. Unused data is removed, this include:
+ *            - unactive obligors (no asset in date range time0-time1)
+ *            - asset data values out of date range time0-time1
+ *            - disabled segmentations
+ *            - unused segments
+ *
  * @see http://ccruncher.net/ifileref.html#portfolio
  */
 class Portfolio : public ExpatHandlers
@@ -101,8 +108,6 @@ class Portfolio : public ExpatHandlers
 
     //! Returns obligors list
     std::vector<Obligor> & getObligors() { return mObligors; }
-    //! Free memory
-    void reset();
 
 };
 

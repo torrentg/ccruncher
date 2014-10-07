@@ -58,6 +58,8 @@ class Asset
     void prepare(const Date &d1, const Date &d2, const Interest &interest);
     //! Indicates if this asset has info in date1-date2
     bool isActive(const Date &, const Date &) const;
+    //! Indicates if this asset use obligor lgd
+    bool requiresObligorLGD() const;
 
 };
 
