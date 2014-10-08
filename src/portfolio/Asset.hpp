@@ -35,8 +35,8 @@ namespace ccruncher {
  * @details An asset is a list of DateValues (date-ead-lgd) sorted by date
  *          and a list of segmentation-segment indexes. It is your
  *          responsability to mantain these list with valid values.
- *          We recommend to set the first value to the asset creation
- *          date with a non valid EAD.
+ *          We recommend to inform the creation date as the first DateValue
+ *          with ead=0 and lgd=0.
  *
  * @see http://ccruncher.net/ifileref.html#portfolio
  */
@@ -59,7 +59,7 @@ class Asset
     //! Indicates if this asset has info in date1-date2
     bool isActive(const Date &, const Date &) const;
     //! Indicates if this asset use obligor lgd
-    bool requiresObligorLGD() const;
+    bool requiresObligorLGD(const Date &d1, const Date &d2) const;
 
 };
 

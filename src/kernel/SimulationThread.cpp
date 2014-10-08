@@ -192,7 +192,7 @@ void ccruncher::SimulationThread::simuleObligorLoss(const Obligor &obligor, Date
     const Asset &asset = obligor.assets[i];
     
     // evalue asset loss
-    if (asset.values.front().date <= dtime && dtime <= asset.values.back().date)
+    if (dtime <= asset.values.back().date)
     {
       auto item = lower_bound(asset.values.begin(), asset.values.end(), dtime);
       double ead = item->ead.getValue(rng);
