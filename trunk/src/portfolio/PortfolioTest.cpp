@@ -127,7 +127,7 @@ void ccruncher_test::PortfolioTest::test1()
   ASSERT(obligors[0].assets.size() == 2);
 
   ASSERT(obligors[0].assets[0].values.size() == 7);
-  ASSERT(obligors[0].assets[0].values[0] == DateValues(Date("01/01/1999"),NAN,1.0));
+  ASSERT(obligors[0].assets[0].values[0] == DateValues(Date("01/01/1999"),0.0,0.0));
   ASSERT(obligors[0].assets[0].values[1] == DateValues(Date("01/01/2000"),560.0,0.2));
   ASSERT(obligors[0].assets[0].values[2] == DateValues(Date("01/07/2000"),550.0,0.2));
   ASSERT(obligors[0].assets[0].values[3] == DateValues(Date("01/01/2001"),540.0,0.8)); // lgd inherited from asset
@@ -142,7 +142,7 @@ void ccruncher_test::PortfolioTest::test1()
   ASSERT(obligors[0].assets[0].segments[4] == 2);
 
   ASSERT(obligors[0].assets[1].values.size() == 5);
-  ASSERT(obligors[0].assets[1].values[0] == DateValues(Date("01/01/2000"),NAN,1.0));
+  ASSERT(obligors[0].assets[1].values[0] == DateValues(Date("01/01/2000"),0.0,0.0));
   ASSERT(obligors[0].assets[1].values[1] == DateValues(Date("01/01/2001"),590.0,0.3));
   ASSERT(obligors[0].assets[1].values[2] == DateValues(Date("01/07/2001"),575.0,0.3));
   ASSERT(obligors[0].assets[1].values[3] == DateValues(Date("01/01/2002"),560.0,0.8)); // lgd inherited from asset
@@ -160,7 +160,7 @@ void ccruncher_test::PortfolioTest::test1()
   ASSERT(obligors[1].assets.size() == 1);
 
   ASSERT(obligors[1].assets[0].values.size() == 3);
-  ASSERT(obligors[1].assets[0].values[0] == DateValues(Date("01/07/1999"),NAN,1.0));
+  ASSERT(obligors[1].assets[0].values[0] == DateValues(Date("01/07/1999"),0.0,0.0));
   ASSERT(obligors[1].assets[0].values[1] == DateValues(Date("01/01/2000"),560.0,0.25));
   ASSERT(obligors[1].assets[0].values[2] == DateValues(Date("01/01/2001"),560.0,NAN));
   ASSERT(obligors[1].assets[0].segments.size() == segmentations.size());
@@ -281,5 +281,46 @@ void ccruncher_test::PortfolioTest::test2()
 
   Portfolio portfolio5;
   ASSERT_THROW(xmlparser.parse(xmlcontent5, &portfolio5));
+}
+
+//===========================================================================
+// test3
+//===========================================================================
+void ccruncher_test::PortfolioTest::test3()
+{
+  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <portfolio>\n\
+      <obligor rating='A' factor='S1' id='001'>\n\
+        <belongs-to segmentation='sectors' segment='S1'/>\n\
+        <asset id='op1' date='01/01/2005'>\n\
+          <data>\n\
+            <values t='01/01/2007' ead='1.0' lgd='100%' />\n\
+          </data>\n\
+        </asset>\n\
+      </obligor>\n\
+    </portfolio>";
+
+  // previous objects
+  Date date1("01/01/2005");
+  Date date2("01/01/2006");
+  Interest interest(date1);
+  Ratings ratings = {"A", "E"};
+  Factors factors = {"S1"};
+  Segmentations segmentations = getSegmentations();
+
+  // creating xml
+  ExpatParser xmlparser;
+  xmlparser.getUserData().date1 = date1;
+  xmlparser.getUserData().date2 = date2;
+  xmlparser.getUserData().interest = &interest;
+  xmlparser.getUserData().ratings = &ratings;
+  xmlparser.getUserData().factors = &factors;
+  xmlparser.getUserData().segmentations = &segmentations;
+
+  // portfolio creation
+  Portfolio portfolio;
+  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &portfolio));
+  const vector<Obligor> &obligors = portfolio.getObligors();
+  ASSERT(obligors.size() == 1);
 }
 

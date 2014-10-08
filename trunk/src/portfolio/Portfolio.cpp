@@ -193,7 +193,7 @@ void ccruncher::Portfolio::epstartAsset(ExpatUserData &, const char **attributes
   else assetLGD = LGD(LGD::Fixed,NAN);
 
   Asset asset(mNumSegmentations);
-  asset.values.push_back(DateValues(date, NAN, 1.0));
+  asset.values.push_back(DateValues(date, 0.0, 0.0));
   assert(!mObligors.empty());
   mObligors.back().assets.push_back(asset);
 }
@@ -301,7 +301,7 @@ void ccruncher::Portfolio::ependObligor(ExpatUserData &eu)
   // check that lgds can be resolved
   if (!LGD::isValid(obligor.lgd)) {
     for(Asset &asset : obligor.assets) {
-      if (asset.requiresObligorLGD()) {
+      if (asset.requiresObligorLGD(eu.date1, eu.date2)) {
         throw Exception("obligor hasn't lgd, but an asset requires obligor lgd");
       }
     }

@@ -37,20 +37,16 @@ using namespace ccruncher;
  */
 bool ccruncher::Asset::isActive(const Date &from, const Date &to) const
 {
+  assert(from <= to);
+
   if (values.empty()) {
     return false;
   }
-  else if (from <= values.front().date && values.front().date <= to) {
-    return true;
-  }
-  else if (from <= values.back().date && values.back().date <= to) {
-    return true;
-  }
-  else if (values.front().date <= from && to <= values.back().date) {
-    return true;
+  else if (values.back().date < from) {
+    return false;
   }
   else {
-    return false;
+    return true;
   }
 }
 
@@ -68,12 +64,17 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
 {
   assert(d1 <= d2);
 
+  // sort values
+  if (!is_sorted(values.begin(), values.end())) {
+    sort(values.begin(), values.end());
+  }
+
   int pos1=-1, pos2=-1;
 
-  // assumes that data is sorted.
+  // search range to preserve
   for(int i=0; i<(int)values.size(); i++)
   {
-    if (d1 <= values[i].date) {
+    if (d1 < values[i].date) {
       if (pos1 < 0) {
         pos1 = i;
       }
@@ -105,11 +106,14 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
  *          used.
  * @return true = exist a DateValue that requires obligor LGD, false otherwise.
  */
-bool ccruncher::Asset::requiresObligorLGD() const
+bool ccruncher::Asset::requiresObligorLGD(const Date &d1, const Date &d2) const
 {
   for(size_t i=0; i<values.size(); i++) {
-    if (!LGD::isValid(values[i].lgd)) {
-      return true;
+    if ((d1 < values[i].date && values[i].date <= d2) ||
+        (i > 0 && d1 < values[i-1].date && values[i-1].date < d2)) {
+      if (!LGD::isValid(values[i].lgd)) {
+        return true;
+      }
     }
   }
   return false;
