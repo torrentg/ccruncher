@@ -98,11 +98,11 @@ class SimulationThread : public Thread
   private:
 
     //! Simule obligor
-    void simuleObligorLoss(const Obligor &, Date, double *) const noexcept;
+    void simuleObligorLoss(const Obligor &obligor, Date dtime, std::vector<double> &losses) const noexcept;
     //! Chi-square random generation
     void rchisq(std::vector<double> &s);
     //! Factors random generation
-    void rmvnorm(std::vector<double> &z);
+    void rmvnorm(std::vector<std::vector<double>> &z);
     //! Non-copyable class
     SimulationThread(const SimulationThread &);
     //! Non-copyable class

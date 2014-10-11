@@ -65,8 +65,8 @@ ccruncher::SimulationThread::~SimulationThread()
  */
 void ccruncher::SimulationThread::run()
 {
-  vector<double> losses(numsegments*blocksize, 0.0);
-  vector<double> z((blocksize*numfactors)/(antithetic?2:1), 0.0);
+  vector<vector<double>> losses(blocksize, vector<double>(numsegments, 0.0));
+  vector<vector<double>> z(blocksize/(antithetic?2:1), vector<double>(numfactors, 0.0));
   vector<double> s(blocksize/(antithetic?2:1), 1.0);
   vector<double> x(blocksize/(antithetic?2:1), 0.0);
   bool more = true;
@@ -86,7 +86,9 @@ void ccruncher::SimulationThread::run()
     timer2.resume();
 
     // reset aggregated values
-    fill(losses.begin(), losses.end(), 0.0);
+    for(size_t i=0; i<losses.size(); i++) {
+      fill(losses[i].begin(), losses[i].end(), 0.0);
+    }
 
     for(size_t iobligor=0; iobligor<obligors.size(); iobligor++)
     {
@@ -94,7 +96,7 @@ void ccruncher::SimulationThread::run()
       Timer timer11(true);
       unsigned char ifactor = obligors[iobligor].ifactor;
       for(size_t j=0; j<x.size(); j++) {
-        x[j] = s[j] * (z[j*numfactors+ifactor] + floadings2[ifactor]*gsl_ran_gaussian_ziggurat(rng, 1.0));
+        x[j] = s[j] * (z[j][ifactor] + floadings2[ifactor]*gsl_ran_gaussian_ziggurat(rng, 1.0));
       }
       timer11.stop();
       timer1 += timer11.read();
@@ -124,8 +126,7 @@ void ccruncher::SimulationThread::run()
 
         if (timeDefault <= timeT)
         {
-          double *ptr_losses = (double*) &(losses[j*numsegments]);
-          simuleObligorLoss(obligors[iobligor], timeDefault, ptr_losses);
+          simuleObligorLoss(obligors[iobligor], timeDefault, losses[j]);
         }
       }
     }
@@ -133,7 +134,7 @@ void ccruncher::SimulationThread::run()
 
     // data transfer
     timer3.resume();
-    more = montecarlo.append((double*) &(losses[0]));
+    more = montecarlo.append(losses);
     timer3.stop();
   }
 }
@@ -157,23 +158,21 @@ void ccruncher::SimulationThread::rchisq(vector<double> &ret)
  * @details Fill the matrix z with random multivariate Gaussian values.
  * @param[out] ret Vector to fill.
  */
-void ccruncher::SimulationThread::rmvnorm(vector<double> &ret)
+void ccruncher::SimulationThread::rmvnorm(vector<vector<double>> &ret)
 {
   gsl_vector aux;
   aux.size = numfactors;
   aux.stride = 1;
-  aux.data = (double *) &(ret[0]);
+  aux.data = nullptr;
   aux.block = nullptr;
   aux.owner = 0;
 
-  size_t num = ret.size()/numfactors;
-
-  for(size_t n=0; n<num; n++) {
+  for(size_t n=0; n<ret.size(); n++) {
+    aux.data = ret[n].data();
     for(size_t i=0; i<numfactors; i++) {
       aux.data[i] = gsl_ran_gaussian_ziggurat(rng, 1.0);
     }
     gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, chol, &aux);
-    aux.data += numfactors;
   }
 }
 
@@ -182,12 +181,10 @@ void ccruncher::SimulationThread::rmvnorm(vector<double> &ret)
  *          them in the corresponding segmentation-segment.
  * @param[in] obligor Obligor to simulate.
  * @param[in] dtime Default time.
- * @param[out] closses Cumulated losses by segmentation-segment.
+ * @param[out] losses Cumulated losses by segmentation-segment.
  */
-void ccruncher::SimulationThread::simuleObligorLoss(const Obligor &obligor, Date dtime, double *closses) const noexcept
+void ccruncher::SimulationThread::simuleObligorLoss(const Obligor &obligor, Date dtime, vector<double> &losses) const noexcept
 {
-  assert(closses != nullptr);
-
   double obligor_lgd = NAN;
 
   for(size_t i=0; i<obligor.assets.size(); i++)
@@ -214,13 +211,13 @@ void ccruncher::SimulationThread::simuleObligorLoss(const Obligor &obligor, Date
       assert(std::isfinite(loss));
 
       // aggregate asset loss in the correspondent segment loss
-      double *vlosses = closses;
+      double *plosses = losses.data();
       for(size_t iSegmentation=0; iSegmentation<numSegmentsBySegmentation.size(); iSegmentation++)
       {
         ushort isegment = asset.segments[iSegmentation];
         assert(isegment < numSegmentsBySegmentation[iSegmentation]);
-        vlosses[isegment] += loss;
-        vlosses += numSegmentsBySegmentation[iSegmentation];
+        plosses[isegment] += loss;
+        plosses += numSegmentsBySegmentation[iSegmentation];
       }
     }
   }

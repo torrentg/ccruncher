@@ -118,7 +118,7 @@ class MonteCarlo
     //! Averaged exposures by segment
     std::vector<double> getSegmentationExposures(ushort isegmentation, ushort numSegments) const;
     //! Append simulation result
-    bool append(const double *) noexcept;
+    bool append(const std::vector<std::vector<double>> &losses) noexcept;
     //! Non-copyable class
     MonteCarlo(const MonteCarlo &);
     //! Non-copyable class

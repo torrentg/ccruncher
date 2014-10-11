@@ -121,7 +121,7 @@ void ccruncher::Correlations::epend(ExpatUserData &, const char *tag)
  * @param[in] throwException Throw an exception if validation fails.
  * @return true=valid correlation matrix, false=invalid correlation matrix.
  */
-bool ccruncher::Correlations::isValid(const std::vector<std::vector<double> > &M, bool throwException)
+bool ccruncher::Correlations::isValid(const std::vector<std::vector<double>> &M, bool throwException)
 {
   try
   {
