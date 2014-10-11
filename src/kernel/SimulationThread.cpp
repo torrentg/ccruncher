@@ -41,7 +41,7 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, ulong seed) :
   chol(mc.chol), floadings1(mc.floadings1), floadings2(mc.floadings2), inverses(mc.inverses),
   numfactors(mc.chol->size1), ndf(mc.ndf), time0(mc.time0), timeT(mc.timeT),
   antithetic(mc.antithetic), numsegments(mc.numsegments),
-  blocksize(mc.blocksize), rng(nullptr), losses(0)
+  blocksize(mc.blocksize), rng(nullptr)
 {
   assert(chol != nullptr);
   assert(blocksize > 0);
@@ -50,11 +50,6 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, ulong seed) :
 
   rng = gsl_rng_alloc(gsl_rng_mt19937);
   gsl_rng_set(rng, seed);
-
-  losses.assign(numsegments*blocksize, 0.0);
-  x.assign(blocksize/(antithetic?2:1), 0.0);
-  z.assign((blocksize*numfactors)/(antithetic?2:1), 0.0);
-  s.assign(blocksize/(antithetic?2:1), 1.0);
 }
 
 /**************************************************************************/
@@ -70,6 +65,10 @@ ccruncher::SimulationThread::~SimulationThread()
  */
 void ccruncher::SimulationThread::run()
 {
+  vector<double> losses(numsegments*blocksize, 0.0);
+  vector<double> z((blocksize*numfactors)/(antithetic?2:1), 0.0);
+  vector<double> s(blocksize/(antithetic?2:1), 1.0);
+  vector<double> x(blocksize/(antithetic?2:1), 0.0);
   bool more = true;
 
   timer1.reset();
@@ -78,10 +77,10 @@ void ccruncher::SimulationThread::run()
 
   while(more)
   {
-    // simulating latent values (fill arrays z and s)
+    // simulating latent variables
     timer1.resume();
-    rchisq();
-    rmvnorm();
+    rchisq(s);
+    rmvnorm(z);
     timer1.stop();
 
     timer2.resume();
@@ -141,36 +140,40 @@ void ccruncher::SimulationThread::run()
 
 /**************************************************************************//**
  * @details Fill the vector s with random chi-square values.
+ * @param[out] ret Vector to fill.
  */
-void ccruncher::SimulationThread::rchisq()
+void ccruncher::SimulationThread::rchisq(vector<double> &ret)
 {
   if (ndf > 0.0) {
-    for(size_t n=0; n<s.size(); n++) {
+    for(size_t n=0; n<ret.size(); n++) {
       double chisq = gsl_ran_chisq(rng, ndf);
       if (chisq < 1e-14) chisq = 1e-14; //avoid division by 0
-      s[n] = sqrt(ndf/chisq);
+      ret[n] = sqrt(ndf/chisq);
     }
   }
 }
 
 /**************************************************************************//**
  * @details Fill the matrix z with random multivariate Gaussian values.
+ * @param[out] ret Vector to fill.
  */
-void ccruncher::SimulationThread::rmvnorm()
+void ccruncher::SimulationThread::rmvnorm(vector<double> &ret)
 {
-  gsl_vector auxz;
-  auxz.size = numfactors;
-  auxz.stride = 1;
-  auxz.data = (double *) &(z[0]);
-  auxz.block = nullptr;
-  auxz.owner = 0;
+  gsl_vector aux;
+  aux.size = numfactors;
+  aux.stride = 1;
+  aux.data = (double *) &(ret[0]);
+  aux.block = nullptr;
+  aux.owner = 0;
 
-  for(size_t n=0; n<s.size(); n++) {
+  size_t num = ret.size()/numfactors;
+
+  for(size_t n=0; n<num; n++) {
     for(size_t i=0; i<numfactors; i++) {
-      auxz.data[i] = gsl_ran_gaussian_ziggurat(rng, 1.0);
+      aux.data[i] = gsl_ran_gaussian_ziggurat(rng, 1.0);
     }
-    gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, chol, &auxz);
-    auxz.data += numfactors;
+    gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, chol, &aux);
+    aux.data += numfactors;
   }
 }
 
@@ -208,6 +211,7 @@ void ccruncher::SimulationThread::simuleObligorLoss(const Obligor &obligor, Date
 
       // compute asset loss
       double loss = ead * lgd;
+      assert(std::isfinite(loss));
 
       // aggregate asset loss in the correspondent segment loss
       double *vlosses = closses;

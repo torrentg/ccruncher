@@ -10,9 +10,6 @@ Current works
   * equal spline type in F() and Finv(t())
   * try the new parallelization algorithm (openmp)
   * review class Interest
-  * Timer: start_time + total convert from double -> timeval
-          use clock_gettime(CLOCK_MONOTONIC) instead of gettimeofday()
-          see http://stackoverflow.com/questions/6498972/faster-equivalent-of-gettimeofday
   * append test (Asset::prepare, Portfolio - unused segmentations, asset values, etc. -)
 
 Future works
