@@ -88,14 +88,6 @@ class SimulationThread : public Thread
 
     //! Random number generator
     gsl_rng *rng;
-    //! Asset loss values
-    std::vector<double> losses;
-    //! Simulated factors
-    std::vector<double> z;
-    //! Simulated Chi-square values
-    std::vector<double> s;
-    //! Gaussian/T-Student values
-    std::vector<double> x;
     //! Elapsed time creating random numbers
     Timer timer1;
     //! Elapsed time simulating obligors & segmentations
@@ -108,9 +100,9 @@ class SimulationThread : public Thread
     //! Simule obligor
     void simuleObligorLoss(const Obligor &, Date, double *) const noexcept;
     //! Chi-square random generation
-    void rchisq();
+    void rchisq(std::vector<double> &s);
     //! Factors random generation
-    void rmvnorm();
+    void rmvnorm(std::vector<double> &z);
     //! Non-copyable class
     SimulationThread(const SimulationThread &);
     //! Non-copyable class

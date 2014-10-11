@@ -35,10 +35,8 @@ using namespace ccruncher;
  * @return True if this asset has credit risk in the given time range,
  *         false otherwise.
  */
-bool ccruncher::Asset::isActive(const Date &from, const Date &to) const
+bool ccruncher::Asset::isActive(const Date &from, const Date &) const
 {
-  assert(from <= to);
-
   if (values.empty()) {
     return false;
   }
