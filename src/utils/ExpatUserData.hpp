@@ -76,7 +76,7 @@ class ExpatUserData
   private:
 
     //! Stack of handlers
-    std::stack<ExpatUserDataToken, std::vector<ExpatUserDataToken> > mStack;
+    std::stack<ExpatUserDataToken, std::vector<ExpatUserDataToken>> mStack;
     //! Current element name
     const char *mCurrentTag;
     //! Buffer used to apply defines

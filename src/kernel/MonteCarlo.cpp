@@ -499,33 +499,34 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
 }
 
 /**************************************************************************//**
- * @param[in] losses Simulated data. This is an array with the following
- *            structure: X1, X2, X3, ..., Xk where Xi is an array containing
- *            the data of the i-th simulation (k = blocksize). Xi has the
- *            following structure: S1, S2, ..., Sm where Si are the segments
+ * @param[in] losses Simulated data. It is a matrix where each row contains
+ *            the losses of one simulation. Rows have the following
+ *            structure: S1, S2, ..., Sm where Si are the segments
  *            losses of the i-th segmentation (m=number of segmentations).
  *            Finally, Si has the following structure: L1, L2, ..., Ln where
  *            Li is the simulated loss of the i-th segment (n = number of
  *            segments of the segmentation).
  */
-bool ccruncher::MonteCarlo::append(const double *losses) noexcept
+bool ccruncher::MonteCarlo::append(const vector<vector<double>> &losses) noexcept
 {
   assert(!aggregators.empty());
   assert(aggregators.size() == numSegmentsBySegmentation.size());
-  assert(losses != nullptr);
   assert(nfthreads > 0);
-  
+  assert(losses.size() == blocksize);
+
   bool more = true;
   mMutex.lock();
 
   try
   {
-    for(size_t iblock=0; iblock<blocksize; iblock++)
+    for(size_t iblock=0; iblock<losses.size(); iblock++)
     {
       // aggregating simulation result
+      assert(losses[iblock].size() == numsegments);
+      const double *plosses = losses[iblock].data();
       for(size_t i=0; i<aggregators.size(); i++) {
-        aggregators[i]->append(losses);
-        losses += numSegmentsBySegmentation[i];
+        aggregators[i]->append(plosses);
+        plosses += numSegmentsBySegmentation[i];
       }
 
       // counter increment
