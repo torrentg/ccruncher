@@ -97,6 +97,8 @@ class SimulationThread : public Thread
 
   private:
 
+    //! Returns the j-th component of x taking into account the antithetic mode
+    double getValue(const std::vector<double> &x, size_t j);
     //! Simule obligor
     void simuleObligorLoss(const Obligor &obligor, Date dtime, std::vector<double> &losses) const noexcept;
     //! Chi-square random generation

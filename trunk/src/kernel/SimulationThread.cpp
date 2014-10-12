@@ -105,27 +105,12 @@ void ccruncher::SimulationThread::run()
       // simulating obligor loss
       for(size_t j=0; j<blocksize; j++)
       {
-        double val = NAN;
-
-        if (!antithetic) {
-          val = x[j];
-        }
-        else {
-          if (j%2) {
-            val = +x[j/2];
-          }
-          else {
-            val = -x[j/2];
-          }
-        }
-
-        assert(std::isfinite(val));
-        int r = obligors[iobligor].irating;
+        double val = getValue(x, j);
+        unsigned char r = obligors[iobligor].irating;
         double days = inverses[r].evalue(val);
         Date timeDefault = time0 + (long)ceil(days);
 
-        if (timeDefault <= timeT)
-        {
+        if (timeDefault <= timeT) {
           simuleObligorLoss(obligors[iobligor], timeDefault, losses[j]);
         }
       }
@@ -136,6 +121,26 @@ void ccruncher::SimulationThread::run()
     timer3.resume();
     more = montecarlo.append(losses);
     timer3.stop();
+  }
+}
+
+/**************************************************************************//**
+ * @param[in] x Vector of simulated t-student values (only iobligor component).
+ * @param[in] j Index of the simulation into the block.
+ * @return t-Student component.
+ */
+inline double ccruncher::SimulationThread::getValue(const vector<double> &x, size_t j)
+{
+  if (!antithetic) {
+    return x[j];
+  }
+  else {
+    if (j%2) {
+      return +x[j/2];
+    }
+    else {
+      return -x[j/2];
+    }
   }
 }
 

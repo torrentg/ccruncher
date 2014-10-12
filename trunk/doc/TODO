@@ -8,7 +8,6 @@ Current works
   * mention to Gibbs sampler?
   * create F() and Finv(t()) output
   * equal spline type in F() and Finv(t())
-  * try the new parallelization algorithm (openmp)
   * review class Interest
   * append test (Asset::prepare, Portfolio - unused segmentations, asset values, etc. -)
 
