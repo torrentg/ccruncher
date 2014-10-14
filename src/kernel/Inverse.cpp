@@ -131,7 +131,7 @@ int ccruncher::Inverse::getMinDay(const CDF &cdf) const
  * @param[in] u Probability value in [0,1].
  * @return Quantile of the gaussian/t-Student distribution.
  */
-double ccruncher::Inverse::icdf(double u) const
+double ccruncher::Inverse::tinv(double u) const
 {
   assert(0.0 <= u && u <= 1.0);
   if (mNdf <= 0.0) return gsl_cdf_ugaussian_Pinv(u);
@@ -173,8 +173,8 @@ void ccruncher::Inverse::setSpline(const CDF &cdf)
   if (maxday <= minday) {
     // constant function
     mSpline = gsl_spline_alloc(gsl_interp_linear, 2);
-    mSpline->x[0] = icdf(cdf.evalue(maxday));
-    mSpline->x[1] = icdf(cdf.evalue(maxday));
+    mSpline->x[0] = tinv(cdf.evalue(maxday));
+    mSpline->x[1] = tinv(cdf.evalue(maxday));
     mSpline->y[0] = maxday;
     mSpline->y[1] = maxday;
     return;
@@ -195,7 +195,7 @@ void ccruncher::Inverse::setSpline(const CDF &cdf)
   // we create a temporary cache because icdf is very expensive
   vector<double> cache(maxday+1, NAN);
   for(int i=minday; i<=maxday; i++) {
-    cache[i] = icdf(cdf.evalue((double)i));
+    cache[i] = tinv(cdf.evalue((double)i));
   }
 
   do
@@ -237,7 +237,7 @@ void ccruncher::Inverse::setSpline(const CDF &cdf)
 
 /**************************************************************************//**
  * @param[in] days List of days ().
- * @param[in] cache icdf(dp(t)) values evaluated at days.
+ * @param[in] cache tinv(dp(t)) values evaluated at days.
  */
 void ccruncher::Inverse::setSpline(vector<int> &days, vector<double> &cache)
 {
@@ -254,7 +254,7 @@ void ccruncher::Inverse::setSpline(vector<int> &days, vector<double> &cache)
   for(size_t i=0; i<days.size(); i++)
   {
     y[i] = days[i];
-    x[i] = cache[days[i]]; //icdf(dprobs.evalue(irating, y[i]));
+    x[i] = cache[days[i]]; //tinv(dprobs.evalue(irating, y[i]));
     //TODO: manage +inf, -inf cases
   }
 
@@ -269,7 +269,7 @@ void ccruncher::Inverse::setSpline(vector<int> &days, vector<double> &cache)
 
 /**************************************************************************//**
  * @details Evaluate current spline at returns worst accurate day.
- * @param[in] cache icdf(dp(t)) values evaluated at days.
+ * @param[in] cache tinv(dp(t)) values evaluated at days.
  * @return Worst day, if all days are accurate, returns 0.
  */
 int ccruncher::Inverse::getWorstDay(vector<double> &cache)

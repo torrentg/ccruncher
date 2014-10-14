@@ -62,7 +62,7 @@ class Inverse
   private:
 
     //! Inverse cumulative distribution function (gaussian/t-student)
-    double icdf(double) const;
+    double tinv(double) const;
     //! Return minimum day
     int getMinDay(const CDF &cdf) const;
     //! Set splines

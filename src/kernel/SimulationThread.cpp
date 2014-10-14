@@ -71,19 +71,11 @@ void ccruncher::SimulationThread::run()
   vector<double> x(blocksize/(antithetic?2:1), 0.0);
   bool more = true;
 
-  timer1.reset();
-  timer2.reset();
-  timer3.reset();
-
   while(more)
   {
     // simulating latent variables
-    timer1.resume();
     rchisq(s);
     rmvnorm(z);
-    timer1.stop();
-
-    timer2.resume();
 
     // reset aggregated values
     for(size_t i=0; i<losses.size(); i++) {
@@ -93,14 +85,10 @@ void ccruncher::SimulationThread::run()
     for(size_t iobligor=0; iobligor<obligors.size(); iobligor++)
     {
       // simulating default times
-      Timer timer11(true);
       unsigned char ifactor = obligors[iobligor].ifactor;
       for(size_t j=0; j<x.size(); j++) {
         x[j] = s[j] * (z[j][ifactor] + floadings2[ifactor]*gsl_ran_gaussian_ziggurat(rng, 1.0));
       }
-      timer11.stop();
-      timer1 += timer11.read();
-      timer2 -= timer11.read();
 
       // simulating obligor loss
       for(size_t j=0; j<blocksize; j++)
@@ -115,12 +103,9 @@ void ccruncher::SimulationThread::run()
         }
       }
     }
-    timer2.stop();
 
     // data transfer
-    timer3.resume();
     more = montecarlo.append(losses);
-    timer3.stop();
   }
 }
 
@@ -226,29 +211,5 @@ void ccruncher::SimulationThread::simuleObligorLoss(const Obligor &obligor, Date
       }
     }
   }
-}
-
-/**************************************************************************//**
- * @return Elapsed time creating random numbers (in seconds).
- */
-double ccruncher::SimulationThread::getElapsedTime1()
-{
-  return timer1.read();
-}
-
-/**************************************************************************//**
- * @return Elapsed time simulating losses (in seconds).
- */
-double ccruncher::SimulationThread::getElapsedTime2()
-{
-  return timer2.read();
-}
-
-/**************************************************************************//**
- * @return Elapsed time writing to disk (in seconds).
- */
-double ccruncher::SimulationThread::getElapsedTime3()
-{
-  return timer3.read();
 }
 

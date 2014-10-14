@@ -465,35 +465,23 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   }
 
   // awaiting threads
-  double etime1 = 0.0; // elapsed time generating random numbers
-  double etime2 = 0.0; // elapsed time simulating losses
-  double etime3 = 0.0; // elapsed time writting to disk
-
   for(int i=0; i<numthreads; i++) {
     threads[i]->join();
-    etime1 += threads[i]->getElapsedTime1();
-    etime2 += threads[i]->getElapsedTime2();
-    etime3 += threads[i]->getElapsedTime3();
     delete threads[i];
     threads[i] = nullptr;
   }
   threads.clear();
 
   // closing aggregators
-  Timer timer3_aux(true);
   for(size_t i=0; i<aggregators.size(); i++) {
     delete aggregators[i];
     aggregators[i] = nullptr;
   }
   aggregators.clear();
-  etime3 += timer3_aux.stop();
 
   // exit function
   if (nhash > 0) logger << endl;
   logger << "simulations realized" << split << numiterations << endl;
-  logger << "elapsed time creating random numbers" << split << Timer::format(etime1/numthreads) << endl;
-  logger << "elapsed time simulating losses" << split << Timer::format(etime2/numthreads) << endl;
-  logger << "elapsed time writing data to disk" << split << Timer::format(etime3/numthreads) << endl;
   logger << "total simulation time" << split << timer << endl;
   logger << indent(-2) << endl;
 }

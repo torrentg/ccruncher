@@ -88,12 +88,6 @@ class SimulationThread : public Thread
 
     //! Random number generator
     gsl_rng *rng;
-    //! Elapsed time creating random numbers
-    Timer timer1;
-    //! Elapsed time simulating obligors & segmentations
-    Timer timer2;
-    //! Elapsed time writing to disk
-    Timer timer3;
 
   private:
 
@@ -118,12 +112,6 @@ class SimulationThread : public Thread
     virtual ~SimulationThread() override;
     //! Thread main function
     virtual void run() override;
-    //! Returns elapsed time creating random numbers
-    double getElapsedTime1();
-    //! Returns elapsed time simulating default times
-    double getElapsedTime2();
-    //! Returns elapsed time writting to disk
-    double getElapsedTime3();
 
 };
 
