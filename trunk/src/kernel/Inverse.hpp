@@ -68,7 +68,7 @@ class Inverse
     //! Set splines
     void setSpline(const CDF &cdf);
     //! Set spline
-    void setSpline(std::vector<int> &days, std::vector<double> &cache);
+    void setSpline(std::vector<int> &days, std::vector<double> &cache, bool forceLinear);
     //! Return the worst unaccurate day
     int getWorstDay(std::vector<double> &cache);
 

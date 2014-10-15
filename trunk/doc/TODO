@@ -6,13 +6,12 @@ Current works
 -------------------
   * stock/asset/index case
   * mention to Gibbs sampler?
-  * create F() and Finv(t()) output
-  * equal spline type in F() and Finv(t())
   * review class Interest
   * append test (Asset::prepare, Portfolio - unused segmentations, asset values, etc. -)
 
 Future works
 -------------------
+  * create F() and Finv(t()) output
   * investigate how correlation depends on time
   * technical features
      - move to Qt5
