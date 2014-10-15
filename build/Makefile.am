@@ -13,25 +13,11 @@ EXTRA_DIST = \
     ../ccruncher-tests.pro \
     ../Doxyfile
 
-noinst_LIBRARIES = libsim.a
-
 bin_PROGRAMS = ccruncher-cmd
 
 check_PROGRAMS = ccruncher-tests
 
 TESTS = ccruncher-tests
-
-# -------------------------------------------------------------
-# per-object specific compilation options
-# http://www.gnu.org/software/automake/manual/html_node/Per_002dObject-Flags.html
-# -------------------------------------------------------------
-
-libsim_a_SOURCES = \
-    ../src/kernel/SimulationThread.cpp \
-    ../src/kernel/SimulationThread.hpp
-
-libsim_a_CXXFLAGS = 
-# -ftree-vectorize -msse2 -ffast-math -ftree-vectorizer-verbose=2
 
 # -------------------------------------------------------------
 # ccruncher-cmd
@@ -42,6 +28,7 @@ ccruncher_cmd_SOURCES = \
     ../src/kernel/IData.cpp \
     ../src/kernel/Aggregator.cpp \
     ../src/kernel/Inverse.cpp \
+    ../src/kernel/SimulationThread.cpp \
     ../src/params/Params.cpp \
     ../src/params/Interest.cpp \
     ../src/params/Rating.cpp \
@@ -79,6 +66,7 @@ ccruncher_cmd_SOURCES = \
     ../src/kernel/IData.hpp \
     ../src/kernel/Aggregator.hpp \
     ../src/kernel/Inverse.hpp \
+    ../src/kernel/SimulationThread.hpp \
     ../src/params/Params.hpp \
     ../src/params/Interest.hpp \
     ../src/params/Rating.hpp \
@@ -114,7 +102,7 @@ ccruncher_cmd_SOURCES = \
     ../src/utils/config.h
 
 ccruncher_cmd_CXXFLAGS =
-ccruncher_cmd_LDADD = libsim.a
+ccruncher_cmd_LDADD =
 ccruncher_cmd_LDFLAGS =
 
 # -------------------------------------------------------------
@@ -188,6 +176,7 @@ ccruncher_tests_SOURCES = \
     ../src/kernel/IData.cpp \
     ../src/kernel/Aggregator.cpp \
     ../src/kernel/Inverse.cpp \
+    ../src/kernel/SimulationThread.cpp \
     \
     ../src/utils/MiniCppUnit.hxx\
     ../src/utils/TimerTest.hpp \
@@ -255,9 +244,10 @@ ccruncher_tests_SOURCES = \
     ../src/kernel/IData.hpp \
     ../src/kernel/Aggregator.hpp \
     ../src/kernel/Inverse.hpp \
+    ../src/kernel/SimulationThread.hpp \
     ../src/utils/config.h
 
 ccruncher_tests_CXXFLAGS =
-ccruncher_tests_LDADD = libsim.a
+ccruncher_tests_LDADD =
 ccruncher_tests_LDFLAGS =
 

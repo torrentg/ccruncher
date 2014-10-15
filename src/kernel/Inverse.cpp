@@ -229,7 +229,8 @@ void ccruncher::Inverse::setSpline(const CDF &cdf)
         days.insert(pos1, alternatives[1]);
       }
     }
-    setSpline(days, cache);
+    bool forceLinear = (cdf.getInterpolationType() == "linear");
+    setSpline(days, cache, forceLinear);
     dayko = getWorstDay(cache);
   }
   while(dayko > 0 && (int)days.size() < mMaxT);
@@ -238,8 +239,9 @@ void ccruncher::Inverse::setSpline(const CDF &cdf)
 /**************************************************************************//**
  * @param[in] days List of days ().
  * @param[in] cache tinv(dp(t)) values evaluated at days.
+ * @param[in] itype Preferred interpolation type: cspline, linear
  */
-void ccruncher::Inverse::setSpline(vector<int> &days, vector<double> &cache)
+void ccruncher::Inverse::setSpline(vector<int> &days, vector<double> &cache, bool forceLinear)
 {
   assert(days.size() >= 2);
 
@@ -258,7 +260,7 @@ void ccruncher::Inverse::setSpline(vector<int> &days, vector<double> &cache)
     //TODO: manage +inf, -inf cases
   }
 
-  if (gsl_interp_type_min_size(gsl_interp_cspline) <= x.size()) {
+  if (gsl_interp_type_min_size(gsl_interp_cspline) <= x.size() && !forceLinear) {
     mSpline = gsl_spline_alloc(gsl_interp_cspline, x.size());
   }
   else {
