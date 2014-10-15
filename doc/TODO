@@ -7,7 +7,6 @@ Current works
   * stock/asset/index case
   * mention to Gibbs sampler?
   * review class Interest
-  * append test (Asset::prepare, Portfolio - unused segmentations, asset values, etc. -)
 
 Future works
 -------------------

@@ -117,3 +117,18 @@ void ccruncher_test::InverseTest::test4()
   }
 }
 
+//===========================================================================
+// test5
+// preserves linear interpolation
+//===========================================================================
+void ccruncher_test::InverseTest::test5()
+{
+  CDF cdf(0.0, +INFINITY);
+  cdf.add(1*365.0, 0.001);
+  cdf.add(2*365.0, 0.2);
+  ASSERT_EQUALS(cdf.getInterpolationType(), "linear");
+
+  Inverse inverse(5.0, 2*365.0, cdf);
+  ASSERT(inverse.getInterpolationType() == "linear");
+}
+

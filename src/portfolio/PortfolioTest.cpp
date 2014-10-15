@@ -173,7 +173,6 @@ void ccruncher_test::PortfolioTest::test1()
 
 //===========================================================================
 // test2
-// repeated identifiers
 //===========================================================================
 void ccruncher_test::PortfolioTest::test2()
 {
@@ -252,7 +251,7 @@ void ccruncher_test::PortfolioTest::test2()
   Portfolio portfolio3;
   ASSERT_THROW(xmlparser.parse(xmlcontent3, &portfolio3));
 
-  // malformed xml (datevalue previous or equal to asset creation date)
+  // datevalue previous or equal to asset creation date
   string xmlcontent4 = "<?xml version='1.0' encoding='UTF-8'?>\n\
     <portfolio>\n\
       <obligor rating='C' factor='S2' id='cif1' lgd='80%'>\n\
@@ -273,7 +272,7 @@ void ccruncher_test::PortfolioTest::test2()
       <obligor rating='C' factor='S2' id='cif1'>\n\
         <asset id='op1' date='01/01/1999'>\n\
           <data>\n\
-            <values t='01/01/1999' ead='560.0' />\n\
+            <values t='01/01/2000' ead='560.0' />\n\
           </data>\n\
         </asset>\n\
       </obligor>\n\
@@ -281,10 +280,43 @@ void ccruncher_test::PortfolioTest::test2()
 
   Portfolio portfolio5;
   ASSERT_THROW(xmlparser.parse(xmlcontent5, &portfolio5));
+
+  // unrecognized segmentation
+  string xmlcontent6 = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <portfolio>\n\
+      <obligor rating='C' factor='S2' id='cif1' lgd='80%'>\n\
+        <belongs-to segmentation='XXX' segment='S1'/>\n\
+        <asset id='op1' date='01/01/1999'>\n\
+          <data>\n\
+            <values t='01/01/2000' ead='560.0' />\n\
+          </data>\n\
+        </asset>\n\
+      </obligor>\n\
+    </portfolio>";
+
+  Portfolio portfolio6;
+  ASSERT_THROW(xmlparser.parse(xmlcontent6, &portfolio6));
+
+  // unrecognized segment
+  string xmlcontent7 = "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <portfolio>\n\
+      <obligor rating='C' factor='S2' id='cif1' lgd='80%'>\n\
+        <belongs-to segmentation='sectors' segment='XXX'/>\n\
+        <asset id='op1' date='01/01/1999'>\n\
+          <data>\n\
+            <values t='01/01/2000' ead='560.0' />\n\
+          </data>\n\
+        </asset>\n\
+      </obligor>\n\
+    </portfolio>";
+
+  Portfolio portfolio7;
+  ASSERT_THROW(xmlparser.parse(xmlcontent7, &portfolio7));
 }
 
 //===========================================================================
 // test3
+// date values after ending date
 //===========================================================================
 void ccruncher_test::PortfolioTest::test3()
 {
@@ -293,6 +325,7 @@ void ccruncher_test::PortfolioTest::test3()
       <obligor rating='A' factor='S1' id='001'>\n\
         <belongs-to segmentation='sectors' segment='S1'/>\n\
         <asset id='op1' date='01/01/2005'>\n\
+          <belongs-to segmentation='offices' segment='0001'/>\n\
           <data>\n\
             <values t='01/01/2007' ead='1.0' lgd='100%' />\n\
           </data>\n\
@@ -307,6 +340,7 @@ void ccruncher_test::PortfolioTest::test3()
   Ratings ratings = {"A", "E"};
   Factors factors = {"S1"};
   Segmentations segmentations = getSegmentations();
+  segmentations.back().setEnabled(false);
 
   // creating xml
   ExpatParser xmlparser;
@@ -322,5 +356,6 @@ void ccruncher_test::PortfolioTest::test3()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &portfolio));
   const vector<Obligor> &obligors = portfolio.getObligors();
   ASSERT(obligors.size() == 1);
+  ASSERT(segmentations.size() == 4);
 }
 
