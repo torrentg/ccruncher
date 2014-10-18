@@ -2078,13 +2078,14 @@ proposition~\ref{prop:pemh} to the number of defaults simulated using an asset
 prices model.
 
 We consider that a company defaults when the asset value is below a preset 
-threshold at the end of the period (usually 1-year). This threshold always is 
+threshold at the end of the period (usually 1-year). This threshold is 
 lower than current value and depends on the annual probability of default. 
 Figure~\ref{fig:market1} displays the asset prices of three companies over a 
 year (250 working days). Note that the \emph{red} company ends below the 
 threshold $80\%$ causing a default event; the \emph{blue} company cross the 
 threshold but finally ends with a value just above the threshold avoiding
-the default event.
+the default event; finally the \emph{green} company ends the year without 
+any remarkable incident.
 
 \begin{figure}[!ht]
 	\centering
@@ -2105,7 +2106,8 @@ where $S_t$ are the asset prices at time $t$, $\Delta t$ is a time increment
 (eg. 1 day), $\mu$ are the expected annual returns, $\sigma$ are the annualized 
 volatilities, and $\epsilon_t$ is a $N(0,C)$ being $C$ a correlation matrix.
 
-The direct application of the proposed method has the following drawbacks: 
+The direct application of the proposed method has the following drawbacks
+that prevent the estimation of the parameters:
 \begin{inparaenum}[1)]
 	\item usually there are few companies resulting in a large number of 
 	simulations containing no defaults,
@@ -2120,11 +2122,11 @@ correlation block matrix allowing the usage of the Gaussian multi-factor model
 Gaussian with a correlation block matrix.
 
 The second drawback can be avoided increasing the thresholds instead of using
-the values induced by the PDs. We have checked numerically that correlations 
-doesn't depend on thresholds. This statement is not true if we consider that
-default ocurres at first cross instead of the value at the end of the period 
-(european vs. american option type). In this case, we observed that the induced
-copula is slightly asymmetrical.
+the values induced by the 1-year PDs. We have checked numerically that 
+correlations doesn't depend on thresholds. This statement is not true if we 
+consider that default ocurres at first cross instead of the value at the end 
+of the period (european vs. american option type). In this case, we observed 
+that the induced copula is slightly asymmetrical.
 
 We set the threshold values trying that defaults/no-defaults ratios be close 
 to $0.5$ in order to minimize the error in the calibration procedure. The PDs 
@@ -2143,14 +2145,22 @@ equals to $1$) instead of absolute values. Now we are able to present the algori
 to simulate the annual number of default using the multivariate Brownian Motion 
 model for stock prices. This is based in the standard multivariate Geometric 
 Brownian model and the Gaussian multi-factor :
-ERRORHERE
+
 \begin{displaymath}
-	X_{i,j}^t = w_i \cdot Z_i^t + \sqrt{1-w_i^2} \cdot \epsilon
-	\\
-	S_{t+\Delta t} = S_t \cdot \exp\left(
-	\left(\mu - \frac{\sigma^2}{2}\right) \Delta t +
-	\left(\sigma \sqrt{\Delta t}\right) X_{i,j}^t
-	\right)
+	\begin{array}{l}
+		S_{i,j}^0 = 100\%
+		\\
+		Z^t \sim N(0,C)
+		\\
+		X_{i,j}^t = w_i \cdot Z_i^t + \sqrt{1-w_i^2} \cdot \epsilon_{i,j}^t
+		\\
+		S_{i,j}^{t+\Delta t} = S_{i,j}^t \cdot \exp\left(
+		\left(\mu_i - \frac{\sigma_i^2}{2}\right) \Delta t +
+		\left(\sigma_i \sqrt{\Delta t}\right) X_{i,j}^t
+		\right)
+		\\
+		S_{i,j}^T < \chi_i \rightarrow \text{defaulted}
+	\end{array}
 \end{displaymath}
 
 \begin{algorithm}[Annual number of defaults simulation using a stock prices model]

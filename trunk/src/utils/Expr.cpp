@@ -394,7 +394,7 @@ void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
     {
       tokens.pop_back();
       tokens.pop_back();
-      pos -= 2;
+      //pos -= 2;
       break;
     }
 
@@ -465,7 +465,7 @@ void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
       tokens[pos-2].dat.x = operators[tokens[pos].dat.n].func(tokens[pos-2].dat.x,tokens[pos-1].dat.x);
       tokens.pop_back();
       tokens.pop_back();
-      pos -= 2;
+      //pos -= 2;
       break;
     }
 
@@ -489,7 +489,7 @@ void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
         tokens[pos-2].dat.x = f(tokens[pos-2].dat.x,tokens[pos-1].dat.x);
         tokens.pop_back();
         tokens.pop_back();
-        pos -= 2;
+        //pos -= 2;
         break;
       }
 
@@ -501,7 +501,7 @@ void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
         tokens.pop_back();
         tokens.pop_back();
         tokens.pop_back();
-        pos -= 3;
+        //pos -= 3;
         break;
       }
     }

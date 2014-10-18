@@ -51,7 +51,7 @@ const ccruncher::EAD::Distr ccruncher::EAD::distrs[] = {
  * @param[in] cstr String with exposure value/distribution.
  * @throw Exception Invalid exposure.
  */
-ccruncher::EAD::EAD(const char *cstr)
+ccruncher::EAD::EAD(const char *cstr) : EAD()
 {
   assert(cstr != nullptr);
   if (cstr == nullptr) throw Exception("null ead value");
@@ -108,9 +108,9 @@ ccruncher::EAD::EAD(const char *cstr)
  * @param[in] str String with exposure value/distribution.
  * @throw Exception Invalid exposure.
  */
-ccruncher::EAD::EAD(const std::string &str)
+ccruncher::EAD::EAD(const std::string &str) : EAD(str.c_str())
 {
-  *this = EAD(str.c_str());
+  // nothing to do
 }
 
 /**************************************************************************//**
