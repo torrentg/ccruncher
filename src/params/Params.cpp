@@ -112,10 +112,6 @@ bool ccruncher::Params::isValid(bool throwException) const
       throw Exception("more than 100 years between " TIME0 " and " TIMET);
     }
 
-    if (getMaxIterations() == 0 && getMaxSeconds() == 0) {
-      throw Exception("non finite stop criteria");
-    }
-
     getNdf();
     getRngSeed();
 

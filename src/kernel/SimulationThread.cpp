@@ -87,6 +87,7 @@ void ccruncher::SimulationThread::run()
       // simulating default times
       unsigned char ifactor = obligors[iobligor].ifactor;
       for(size_t j=0; j<x.size(); j++) {
+        // z[i] values are already multiplied by w[i] (see chol matrix creation)
         x[j] = s[j] * (z[j][ifactor] + floadings2[ifactor]*gsl_ran_gaussian_ziggurat(rng, 1.0));
       }
 
