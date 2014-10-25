@@ -277,8 +277,7 @@ please cite it when using it for credit risk analysis.
 \newglossaryentry{glos:cbm}{name={\ensuremath{B_s(\vec{n},\vec{d},M)}},
 	description={Covariance $s {\times} s$ block matrix in which $\vec{n}$ 
 	are the number of individuals per block, $\vec{d}$ are the 
-	diagonal values, and $M$ are the non-diagonal block values.
-	See section \ref{ap:cbm}.},
+	diagonal values, and $M$ are the block values. See section \ref{ap:cbm}.},
 	sort=140
 }
 \newglossaryentry{glos:mvt}{name={\ensuremath{t_d(\nu,\vec{\mu},\Sigma)}},
@@ -421,7 +420,7 @@ The advantages of CCruncher are as follows:
 	\item these EADs and LGDs can be stochastic values;
 	\item EADs and LGDs can vary over time; 
 	\item CCruncher allows risk disaggregation;
-	\item CCruncher does not presuppose a uniform transition matrix;
+	\item CCruncher does not presuppose a static transition matrix;
 	\item factor correlations are appropriately considered; and
 	\item the uncertainty of parameters is considered.
 \end{inparaenum}
@@ -456,7 +455,7 @@ the content and require a detailed discussion have been relegated to appendices.
 Financial institutions have statistical models that assigns a probability of 
 default to each obligor as well as statistical models for the exposure and 
 recovery of each operation. These models allow us to estimate the expected 
-loss of the portfolio, but they have nothing to say about measures related 
+loss of the portfolio, but are insufficient to estimate the measures related 
 to economic capital such as VaR or ES. This is because these measures strongly 
 depend on the dependence between obligors, and models mentioned above do not 
 refer to this concept. This chapter develops the multivariate model exploiting 
@@ -504,9 +503,9 @@ reasons:
 \end{itemize}
 
 The following proposition reformulates $F$ in terms of the multivariate 
-t-Student distribution. This result, combined with the t-Student multi-factor 
-model, provides an efficient simulation algorithm and allows estimating the 
-parameters.
+t-Student distribution. This result, combined with the Gaussian multi-factor 
+distribution, provides an efficient simulation algorithm and allows estimating
+the parameters.
 
 \begin{proposition}[Multivariate default times distribution]
 	\label{prop:dtd}
@@ -622,27 +621,27 @@ As we have observed, proposition~\ref{prop:dtd} establishes the link between
 the t-Student copula and the multivariate t-Student distribution. Now, we are
 interested in formulating this multivariate t-Student distribution with 
 correlation matrix $\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$ as a t-Student 
-multi-factor model.
+multi-factor distribution.
 
 The multivariate t-Student distribution relies on the multivariate Gaussian
 distribution (see proposition~\ref{prop:mtschar}). The multivariate Gaussian 
-with a correlation block matrix can be expressed as a multi-factor model in 
-most cases (see proposition~\ref{prop:ibne}). The cases that aren't covered 
+with a correlation block matrix can be expressed as a multi-factor distribution
+in most cases (see proposition~\ref{prop:ibne}). The cases that aren't covered 
 are those that contain negative intra-sectorial correlations and those 
 containing inter-sectorial correlations that are too high. The number of these 
 cases tends toward $0$ when the number of obligors by sector tends to $\infty$ 
 (see proposition~\ref{prop:gmfamgb}). Because we are modeling sectors composed 
 of thousands of obligors (although our portfolio may contain only a few), we 
-can assume that for our purposes, the t-Student multi-factor model maps the 
-multivariate t-Student distribution.
+can assume that for our purposes, the t-Student multi-factor distribution maps 
+the multivariate t-Student distribution.
 
-\begin{proposition}[t-Student distr.\ as a multi-factor model]
+\begin{proposition}[t-Student distr.\ as a multi-factor distribution]
 	\label{prop:tmfm}
 	Let a random vector $X=(X_1,\dots,X_n)$ be with a multivariate t-Student 
 	distribution $t_n(\nu,\vec{0},\widehat{R})$ in which 
 	$\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$ is a correlation block matrix 
 	and $n_i$ sizes are high enough. Then $X$ can be written as a t-Student 
-	multi-factor model as follows:
+	multi-factor distribution as follows:
 	\begin{displaymath}
 		X_i^j = \sqrt{\frac{\nu}{V}} \cdot 
 		\left( w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j \right)
@@ -670,16 +669,16 @@ multivariate t-Student distribution.
 \end{proposition}
 
 We call t-Student multi-factor copula to the copula of the t-Student 
-multi-factor model. As we have observed, the t-Student multi-factor copula 
-($C_{\nu,\vec{w},R}^{\text{t}}$) is merely a t-Student copula 
+multi-factor distribution. As we have observed, the t-Student multi-factor 
+copula ($C_{\nu,\vec{w},R}^{\text{t}}$) is merely a t-Student copula 
 ($C_{\nu,\widehat{R}}^{\text{t}}$).
 
-Note that we expressed the multi-factor model in terms of the factor loadings 
-and the factor correlation matrix instead of the more concise form based on 
-the covariance matrix. We do this because the factor loadings have a treatment 
-distinct from the factor correlation in the estimation procedure.
+Note that we expressed the multi-factor distribution in terms of the factor 
+loadings and the factor correlation matrix instead of the more concise form 
+based on the covariance matrix. We do this because the factor loadings have 
+a treatment distinct from the factor correlation in the estimation procedure.
 
-The t-Student multi-factor model combined with the corollary~\ref{cor:dts1} 
+The t-Student multi-factor distribution combined with the corollary~\ref{cor:dts1} 
 provides an efficient algorithm to simulate the obligors' default times 
 disclosed in the next corollary. Later we will use this algorithm to simulate
 the portfolio losses.
@@ -777,7 +776,7 @@ order to estimate the copula parameters.
 
 Below, we provide an algorithm to simulate the annual number of defaults. The 
 algorithm is a direct application of the multivariate default times distribution
-and the t-Student multi-factor model (see propositions~\ref{prop:dtd} 
+using the t-Student multi-factor distribution (see propositions~\ref{prop:dtd} 
 and~\ref{prop:tmfm}). We will use it to generate samples with which to 
 test the parameters estimation procedures. 
 
@@ -1440,8 +1439,8 @@ the de-facto international financial risk regulation framework.
 		\right\}
 	\end{displaymath}
 	$\text{EAD}_i^j$ is a function when these amounts are fixed and known in 
-	advance (e.g., loan, bond) or can be a distribution defined over time when 
-	we have a model that supports it (e.g., line of credit).
+	advance (e.g., loan, bond) or can be a distribution defined over time 
+	(e.g., line of credit).
 \end{definition}
 
 \begin{definition}[Loss Given Default (LGD)]
@@ -1456,8 +1455,7 @@ the de-facto international financial risk regulation framework.
 		\end{array}
 		\right\}
 	\end{displaymath}
-	$\text{LGD}_i^j$ is a function or can be a distribution defined over 
-	time when we have a model that supports it. 
+	$\text{LGD}_i^j$ is a function or can be a distribution defined over time.
 \end{definition}
 
 \begin{example}[10-year Bond]
@@ -2118,9 +2116,9 @@ that prevent the estimation of the parameters:
 
 The first drawback can be avoided considering $n$ replicas for each considered
 firm. With this instruction, the correlation matrix takes the form of a 
-correlation block matrix allowing the usage of the Gaussian multi-factor model
-(see definition \ref{def:gmfm}) to generate random samples from a multivariate 
-Gaussian with a correlation block matrix.
+correlation block matrix allowing the usage of the Gaussian multi-factor 
+distribution (see definition \ref{def:gmfm}) to generate random samples from 
+a multivariate Gaussian with a correlation block matrix.
 
 The second drawback can be avoided increasing the thresholds \footnote{ We have 
 checked numerically that correlations doesn't depend on thresholds. This 
@@ -2142,9 +2140,8 @@ simulation and i-th factor (constant value for all simulations).
 
 Finally, for practical reasons we use relative asset prices (current asset price 
 equals to $1$) instead of absolute values. Now we are able to present the algorithm
-to simulate the annual number of default using the multivariate Brownian Motion 
-model for stock prices. This is based in the standard multivariate Geometric 
-Brownian model and the Gaussian multi-factor :
+to simulate the annual number of defaults using the multivariate Geometric Brownian 
+Motion model for stock prices and the Gaussian multi-factor distribution.
 
 \begin{algorithm}[Annual number of defaults simulation using a stock prices model]
 	\label{alg:sdumm}
@@ -2168,9 +2165,9 @@ Brownian model and the Gaussian multi-factor :
 				\begin{itemize}
 					\item Simulate the correlated Gaussian value \\
 					$x = w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \epsilon$ ~where~ $\epsilon \sim N(0,1)$
-					\item Simulate the asset price \\
+					\item Simulate the asset price 1-year ahead (in \%)\\
 					$p = \exp\left(\left(\mu_i - \frac{\sigma_i^2}{2}\right) + \sigma_i \cdot x\right)$
-					\item Check for default event \\
+					\item Check for the default event \\
 					If $p < T_i$ then $K_i = K_i + 1$
 				\end{itemize}
 			\end{itemize}
@@ -3486,13 +3483,13 @@ in~\cite{torrent:2011}.
 %------------------------------------------------------------------------------
 % MULTI-FACTOR GAUSSIAN MODEL
 %------------------------------------------------------------------------------
-\section{Multi-Factor Gaussian Model}
+\section{Multi-Factor Gaussian Distribution}
 \label{ap:mfgm}
 ~\\
-\begin{definition}[Gaussian multi-factor model]
+\begin{definition}[Gaussian multi-factor distribution]
 	\label{def:gmfm}
 	We say that a multivariate distribution $X$ follows a Gaussian multi-factor
-	model if it can be expressed in this form:
+	distribution if it can be expressed in this form:
 	\begin{displaymath}
 		X_i^j = w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j
 		\quad \text{ where } \left\{
@@ -3522,9 +3519,9 @@ in~\cite{torrent:2011}.
 	\end{displaymath}
 \end{definition}
 
-\begin{proposition}[The Gaussian multi-factor model is a Gaussian distribution]
+\begin{proposition}[The Gaussian multi-factor distribution is a Gaussian distribution]
 	\label{prop:gmfigs}
-	The Gaussian multi-factor model defined by factor loadings $\vec{w}$,
+	The Gaussian multi-factor distribution defined by factor loadings $\vec{w}$,
 	the factor correlation matrix $R$, and $n = \sum_{i=1}^k n_i$ is a 
 	multivariate Gaussian distribution with an $n {\times} n$ block 
 	correlation matrix $\widehat{R}=B_k(\vec{n},\vec{1},\Sigma)$ 
@@ -3532,7 +3529,7 @@ in~\cite{torrent:2011}.
 \end{proposition}
 \begin{proof}
 	We check that the correlation between components of the Gaussian multi-factor 
-	model fulfill the equivalence.
+	distribution fulfill the equivalence.
 	
 	Version with the correlation matrix $R$:
 	\begin{displaymath}
@@ -3583,21 +3580,21 @@ in~\cite{torrent:2011}.
 	\\
 \end{proof}
 
-\begin{proposition}[Gaussian multi-factor model $\subsetneq$ multivariate Gaussian block]
+\begin{proposition}[Gaussian multi-factor distribution $\subsetneq$ multivariate Gaussian block]
 	\label{prop:ibne}
-	Any multi-factor model can be expressed as a multivariate Gaussian 
-	block; however, there are multivariate Gaussian blocks that cannot be 
-	expressed as a Gaussian multi-factor model.
+	Any Gaussian multi-factor distribution can be expressed as a multivariate 
+	Gaussian block; however, there are multivariate Gaussian blocks that cannot be 
+	expressed as a Gaussian multi-factor distribution.
 \end{proposition}
 \begin{proof}
-	Proposition~\ref{prop:gmfigs} states that any multi-factor model 
+	Proposition~\ref{prop:gmfigs} states that any multi-factor distribution 
 	is a multivariate Gaussian composed of blocks.
 	Next we see that the reciprocal is false. Let 
 	$\widehat{R} = B_k(\vec{n},\vec{1},\Sigma)$, the Gaussian distribution 
 	correlation matrix. We use the equivalence 
 	$\Sigma_{ij} = w_i \cdot w_j \cdot R_{ij}$ stated in 
 	proposition~\ref{prop:gmfigs} to determine the cases that cannot be 
-	expressed as a multi-factor model.
+	expressed as a multi-factor distribution.
 
 	\emph{Case 1}. Factor loading with imaginary values.
 	\begin{displaymath}
@@ -3663,12 +3660,12 @@ in~\cite{torrent:2011}.
 \end{proof}
 
 It is disturbing that multivariate block Gaussian distributions exist
-that cannot be expressed as a multi-factor model. Fortunately, the 
+that cannot be expressed as a multi-factor distribution. Fortunately, the 
 cases in which this occurs have no practical application to credit risk
 modeling in which the number of obligors in each block is higher. 
 The following proposition clarifies this theme.
 
-\begin{proposition}[Gaussian multi-factor model $\approx$ multivariate Gaussian block]
+\begin{proposition}[Gaussian multi-factor distribution $\approx$ multivariate Gaussian block]
 	\label{prop:gmfamgb}
 	Assume $X \sim N(\vec{0},\widehat{R})$ in which 
 	$\widehat{R}=B_k(\vec{n},\vec{1},\Sigma)$ is a correlation block matrix. 
@@ -3677,9 +3674,9 @@ The following proposition clarifies this theme.
 \end{proposition}
 \begin{proof}
 	We revise the cases in which the multivariate Gaussian distribution cannot
-	be expressed as a multi-factor model, and we use proposition~\ref{prop1}
-	to ascertain that if $n_i$ values are large enough, then 
-	that is indeed a valid multi-factor model.
+	be expressed as a Gaussian multi-factor distribution, and we use 
+	proposition~\ref{prop1} to ascertain that if $n_i$ values are large enough, 
+	then that is indeed a valid Gaussian multi-factor distribution.
 	
 	\emph{Case 1}. Factor loading with imaginary values.
 	\begin{adjustwidth}{1cm}{0pt}
