@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2014-10-18 19:12:51+02:00"
+#define BUILD_DATE "2014-10-26 06:20:18+01:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -68,7 +68,7 @@
 #define HAVE_SQRT 1
 
 /* Define to 1 if stdbool.h conforms to C99. */
-/* #undef HAVE_STDBOOL_H */
+#define HAVE_STDBOOL_H 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
