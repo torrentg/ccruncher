@@ -9,6 +9,7 @@ Current works
 
 Future works
 -------------------
+  * inverse nodes limited to datevalues dates!
   * create F() and Finv(t()) output
   * investigate how correlation depends on time
   * technical features
@@ -21,4 +22,3 @@ Future works
      - consider that an obligor could belong to a weighted sum of factors
   * improve functional tests
      - examples based on real data
- 
