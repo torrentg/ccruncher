@@ -103,7 +103,7 @@ class MainWindow : public QMainWindow
     //! Open a file
     void openFile(const QUrl &url);
     //! Update tool bars
-    void updateToolBars(QMdiSubWindow *window);
+    void updateContextualInfo(QMdiSubWindow *window);
     //! Process http request
     void processHttpRequest(QNetworkReply *);
     //! Post a message in the status bar

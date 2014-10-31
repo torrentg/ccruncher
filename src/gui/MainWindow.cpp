@@ -60,6 +60,7 @@ ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidge
   // creating toolbar
   mainToolBar = addToolBar(tr("Main"));
   mainToolBar->addAction(ui->actionOpen);
+  ui->menuActions->setEnabled(false);
 
   setWindowTitle(tr("CCruncher"));
 
@@ -67,7 +68,7 @@ ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidge
   connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(selectFile()));
   connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
   connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
-  connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateToolBars(QMdiSubWindow*)));
+  connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateContextualInfo(QMdiSubWindow*)));
   connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(setStatusMsg()));
 
   // sending http request
@@ -146,7 +147,7 @@ void ccruncher_gui::MainWindow::dropEvent(QDropEvent* event)
  * @details Main tool bar depend on current mdi sub-windows.
  * @param[in] window Current sub-window.
  */
-void ccruncher_gui::MainWindow::updateToolBars(QMdiSubWindow *window)
+void ccruncher_gui::MainWindow::updateContextualInfo(QMdiSubWindow *window)
 {
   if (window == nullptr)
   {
@@ -157,6 +158,7 @@ void ccruncher_gui::MainWindow::updateToolBars(QMdiSubWindow *window)
       // last subwindow removed
       //removeToolBar(childToolBar);
       childToolBar = nullptr;
+      ui->menuActions->setEnabled(false);
     }
     else {
       // nothing to do
@@ -168,10 +170,13 @@ void ccruncher_gui::MainWindow::updateToolBars(QMdiSubWindow *window)
     QToolBar *toolbar = (child?child->getToolBar():nullptr);
     if (childToolBar != toolbar) {
       removeToolBar(childToolBar);
+      ui->menuActions->clear();
       childToolBar = toolbar;
       if (childToolBar != nullptr) {
         addToolBar(childToolBar);
         childToolBar->setVisible(true);
+        ui->menuActions->addActions(childToolBar->actions());
+        ui->menuActions->setEnabled(true);
       }
     }
   }

@@ -28,6 +28,7 @@
 #include <getopt.h>
 #include <unistd.h>
 #include <cstdlib>
+#include <clocale>
 #include <exception>
 #include <gsl/gsl_errno.h>
 #include <QApplication>
@@ -177,7 +178,6 @@ int main(int argc, char *argv[])
 
   Application app(argc, argv);
   QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-  setlocale(LC_ALL, "C"); // sets decimal point to sprintf
 
   gsl_set_error_handler(gsl_handler);
 
@@ -190,6 +190,7 @@ int main(int argc, char *argv[])
     }
 
     MainWindow w(properties);
+    setlocale(LC_ALL, "C"); // sets decimal point to sprintf and strtod
     w.show();
 
     // opening files given as argument
