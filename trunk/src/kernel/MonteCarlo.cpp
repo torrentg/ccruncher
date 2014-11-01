@@ -214,8 +214,13 @@ void ccruncher::MonteCarlo::setParams(const map<string,string> &parameters)
   timeT = params.getTimeT();
   antithetic = params.getAntithetic();
   blocksize = params.getBlockSize();
-  seed = params.getRngSeed();
   ndf = params.getNdf();
+  seed = params.getRngSeed();
+
+  // seed based on clock (if not set)
+  if (seed == 0UL) {
+    seed = Utils::trand();
+  }
 }
 
 /**************************************************************************//**

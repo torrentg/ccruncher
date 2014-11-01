@@ -6,6 +6,9 @@ Current works
 -------------------
   * stock/asset/index case
   * review class Interest
+  * add 'View' menu (toolbar, statusbar)
+  * add 'Window' menu (window list, tab vs sub-window)
+  * in 'Help' menu add pdf + input file info
 
 Future works
 -------------------

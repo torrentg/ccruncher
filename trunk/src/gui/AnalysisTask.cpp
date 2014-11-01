@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include <clocale>
 #include <cassert>
 #include <gsl/gsl_sf_gamma.h>
 #include "gui/AnalysisTask.hpp"
@@ -204,6 +205,7 @@ void ccruncher_gui::AnalysisTask::run()
     statvals.clear();
     contribs.clear();
     msgerr = "";
+    setlocale(LC_ALL, "C"); // sets decimal point to sprintf and strtod
 
     switch(mode_)
     {

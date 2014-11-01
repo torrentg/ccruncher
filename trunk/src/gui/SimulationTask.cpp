@@ -20,6 +20,7 @@
 //
 //===========================================================================
 
+#include <clocale>
 #include <QFileInfo>
 #include <QMessageBox>
 #include "gui/SimulationTask.hpp"
@@ -73,13 +74,13 @@ void ccruncher_gui::SimulationTask::setStreamBuf(std::streambuf *s)
  */
 void ccruncher_gui::SimulationTask::run()
 {
-  Timer timer(true);
-
-  free();
-
   try
   {
+    Timer timer(true);
     stop_ = false;
+
+    free();
+    setlocale(LC_ALL, "C"); // sets decimal point to sprintf and strtod
 
     // header
     logger << header << endl;

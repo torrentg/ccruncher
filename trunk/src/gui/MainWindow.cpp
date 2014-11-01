@@ -40,7 +40,7 @@ using namespace std;
  * @param[in] parent Widget parent.
  */
 ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidget *parent) : QMainWindow(parent),
-  ui(new Ui::MainWindow), mainToolBar(nullptr), childToolBar(nullptr), properties(map),
+  ui(new Ui::MainWindow), toolBar(nullptr), properties(map),
   network(this)
 {
   ui->setupUi(this);
@@ -58,9 +58,8 @@ ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidge
   setCentralWidget(mdiArea);
 
   // creating toolbar
-  mainToolBar = addToolBar(tr("Main"));
-  mainToolBar->addAction(ui->actionOpen);
-  ui->menuActions->setEnabled(false);
+  toolBar = addToolBar(tr("toolbar"));
+  updateContextualActions(QList<QAction*>());
 
   setWindowTitle(tr("CCruncher"));
 
@@ -68,7 +67,7 @@ ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidge
   connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(selectFile()));
   connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
   connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
-  connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateContextualInfo(QMdiSubWindow*)));
+  connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateSubWindow(QMdiSubWindow*)));
   connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(setStatusMsg()));
 
   // sending http request
@@ -147,39 +146,52 @@ void ccruncher_gui::MainWindow::dropEvent(QDropEvent* event)
  * @details Main tool bar depend on current mdi sub-windows.
  * @param[in] window Current sub-window.
  */
-void ccruncher_gui::MainWindow::updateContextualInfo(QMdiSubWindow *window)
+void ccruncher_gui::MainWindow::updateSubWindow(QMdiSubWindow *window)
 {
   if (window == nullptr)
   {
     if (!mdiArea->hasFocus() && mdiArea->subWindowList().size() > 0) {
       // mdiarea has lost focus, nothing to do
     }
-    else if (childToolBar != nullptr) {
-      // last subwindow removed
-      //removeToolBar(childToolBar);
-      childToolBar = nullptr;
-      ui->menuActions->setEnabled(false);
-    }
     else {
-      // nothing to do
+      // last subwindow removed
+      updateContextualActions(QList<QAction*>());
     }
   }
   else
   {
     MdiChildWidget* child = dynamic_cast<MdiChildWidget*>(window->widget());
     QToolBar *toolbar = (child?child->getToolBar():nullptr);
-    if (childToolBar != toolbar) {
-      removeToolBar(childToolBar);
-      ui->menuActions->clear();
-      childToolBar = toolbar;
-      if (childToolBar != nullptr) {
-        addToolBar(childToolBar);
-        childToolBar->setVisible(true);
-        ui->menuActions->addActions(childToolBar->actions());
-        ui->menuActions->setEnabled(true);
-      }
+    if (toolbar == nullptr) {
+      updateContextualActions(QList<QAction*>());
+    }
+    else {
+      toolbar->setVisible(false);
+      updateContextualActions(toolbar->actions());
     }
   }
+}
+
+/**************************************************************************//**
+ * @details Action list are not deleted by toolbar or menu.
+ * @param[in] actions Contextual action list to display.
+ */
+void ccruncher_gui::MainWindow::updateContextualActions(const QList<QAction *> &actions)
+{
+  toolBar->clear();
+  toolBar->addAction(ui->actionOpen);
+
+  ui->menuActions->clear();
+
+  if (actions.size() == 0) {
+    ui->menuActions->setEnabled(false);
+    return;
+  }
+
+  toolBar->addSeparator();
+  toolBar->addActions(actions);
+  ui->menuActions->addActions(actions);
+  ui->menuActions->setEnabled(true);
 }
 
 /**************************************************************************/

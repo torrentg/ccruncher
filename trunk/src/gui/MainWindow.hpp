@@ -59,9 +59,7 @@ class MainWindow : public QMainWindow
     //! Mdi area
     QMdiArea *mdiArea;
     //! Main tool bar
-    QToolBar *mainToolBar;
-    //! Child tool bar
-    QToolBar *childToolBar;
+    QToolBar *toolBar;
     //! Default properties
     QMap<QString,QVariant> properties;
     //! Network manager
@@ -71,6 +69,8 @@ class MainWindow : public QMainWindow
 
     //! Find mdi child
     QMdiSubWindow *findMdiChild(const QString &filename);
+    //! Update toolbar and 'Actions' menu
+    void updateContextualActions(const QList<QAction *> &actions);
 
   protected:
 
@@ -103,9 +103,9 @@ class MainWindow : public QMainWindow
     //! Open a file
     void openFile(const QUrl &url);
     //! Update tool bars
-    void updateContextualInfo(QMdiSubWindow *window);
+    void updateSubWindow(QMdiSubWindow *window);
     //! Process http request
-    void processHttpRequest(QNetworkReply *);
+    void processHttpRequest(QNetworkReply *reply);
     //! Post a message in the status bar
     void setStatusMsg(const QString &msg="");
 

@@ -36,6 +36,7 @@
 #include <QVariant>
 #include <QMap>
 #include <QFileInfo>
+#include <QLocale>
 #include "gui/MainWindow.hpp"
 #include "gui/Application.hpp"
 #include "utils/Utils.hpp"
@@ -176,21 +177,23 @@ int main(int argc, char *argv[])
 
   //chdir("..");
 
-  Application app(argc, argv);
-  QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
 
+  setlocale(LC_ALL, "C"); // sets decimal point to sprintf and strtod
+  QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+  QLocale::setDefault(QLocale::c());
   gsl_set_error_handler(gsl_handler);
 
   // run application
   try
   {
+    Application app(argc, argv);
+
     // setting new nice value (modify scheduling priority)
     if (inice != -999) {
       setnice(inice);
     }
 
     MainWindow w(properties);
-    setlocale(LC_ALL, "C"); // sets decimal point to sprintf and strtod
     w.show();
 
     // opening files given as argument
