@@ -27,7 +27,6 @@
 #include "utils/Exception.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Format.hpp"
-#include "utils/Utils.hpp"
 
 #define TIME0 "time.0"
 #define TIMET "time.T"
@@ -253,10 +252,6 @@ ulong ccruncher::Params::getRngSeed() const
   string value = getParamValue(RNGSEED, DEFAULT_RNGSEED);
   long aux = Parser::longValue(value);
   seed = *(reinterpret_cast<ulong *>(&aux));
-  if (seed == 0UL) {
-    // seed based on clock
-    seed = Utils::trand();
-  }
   return seed;
 }
 
