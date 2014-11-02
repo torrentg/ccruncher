@@ -251,11 +251,16 @@ bool ccruncher_gui::SimulationTask::checkConflicts()
   for(ushort isegmentation=0; isegmentation<data.getSegmentations().size(); isegmentation++)
   {
     const Segmentation &segmentation = data.getSegmentations()[isegmentation];
+    if (!segmentation.isEnabled()) {
+      continue;
+    }
+
     string filename = segmentation.getFilename(odir);
     if (!QFileInfo(QString(filename.c_str())).exists()) {
       nonfiles.push_back(filename);
       continue;
     }
+
     try
     {
       CsvFile csv(filename);
