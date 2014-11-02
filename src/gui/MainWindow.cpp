@@ -45,32 +45,35 @@ ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidge
 {
   ui->setupUi(this);
   setAcceptDrops(true);
+  setWindowTitle(tr("CCruncher"));
 
   // setting mdi area
   mdiArea = new QMdiArea;
-  mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  mdiArea->setViewMode(QMdiArea::TabbedView);
-  mdiArea->setTabsClosable(true);
-  mdiArea->setTabShape(QTabWidget::Rounded); //QTabWidget::Triangular
-  mdiArea->setTabsMovable(true);
-  mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
   setCentralWidget(mdiArea);
 
   // creating toolbar
   toolBar = addToolBar(tr("toolbar"));
   updateContextualActions(QList<QAction*>());
 
-  setWindowTitle(tr("CCruncher"));
+  // setting view mode
+  ui->actionToolbar->setChecked(true);
+  viewToolBar(true);
+  ui->actionStatusbar->setChecked(true);
+  viewStatusBar(true);
+  ui->actionTabbedWindows->setChecked(true);
+  viewTabbedWindows(true);
 
   connect(&network, SIGNAL(finished(QNetworkReply*)), this, SLOT(processHttpRequest(QNetworkReply*)));
   connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(selectFile()));
   connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
   connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
+  connect(ui->actionToolbar, SIGNAL(triggered(bool)), this, SLOT(viewToolBar(bool)));
+  connect(ui->actionStatusbar, SIGNAL(triggered(bool)), this, SLOT(viewStatusBar(bool)));
+  connect(ui->actionTabbedWindows, SIGNAL(triggered(bool)), this, SLOT(viewTabbedWindows(bool)));
   connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateSubWindow(QMdiSubWindow*)));
   connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(setStatusMsg()));
 
-  // sending http request
+  // checking last version
   QUrl url("http://www.ccruncher.net/version?m=gui&v=" VERSION);
   network.get(QNetworkRequest(url));
 
@@ -392,5 +395,42 @@ void ccruncher_gui::MainWindow::processHttpRequest(QNetworkReply *reply)
 void ccruncher_gui::MainWindow::setStatusMsg(const QString &msg)
 {
   statusBar()->showMessage(msg);
+}
+
+/**************************************************************************//**
+ * @param[in] visible Toolbar visibility flag.
+ */
+void ccruncher_gui::MainWindow::viewToolBar(bool visible)
+{
+  toolBar->setVisible(visible);
+}
+
+/**************************************************************************//**
+ * @param[in] visible Statusbar visibility flag.
+ */
+void ccruncher_gui::MainWindow::viewStatusBar(bool visible)
+{
+  ui->statusBar->setVisible(visible);
+}
+
+/**************************************************************************//**
+ * @param[in] visible Statusbar visibility flag.
+ */
+void ccruncher_gui::MainWindow::viewTabbedWindows(bool enable)
+{
+  mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
+
+  if (enable) {
+cout << "coco1" << endl;
+    mdiArea->setViewMode(QMdiArea::TabbedView);
+    mdiArea->setTabsClosable(true);
+    mdiArea->setTabShape(QTabWidget::Rounded); //QTabWidget::Triangular
+    mdiArea->setTabsMovable(true);
+  }
+  else {
+    mdiArea->setViewMode(QMdiArea::SubWindowView);
+  }
 }
 
