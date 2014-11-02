@@ -68,6 +68,7 @@ ccruncher_gui::MainWindow::MainWindow(const QMap<QString, QVariant> &map, QWidge
   connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
   connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
   connect(ui->actionToolbar, SIGNAL(triggered(bool)), this, SLOT(viewToolBar(bool)));
+  connect(toolBar, SIGNAL(visibilityChanged(bool)), this, SLOT(viewToolBar(bool)));
   connect(ui->actionStatusbar, SIGNAL(triggered(bool)), this, SLOT(viewStatusBar(bool)));
   connect(ui->actionTabbedWindows, SIGNAL(triggered(bool)), this, SLOT(viewTabbedWindows(bool)));
   connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateSubWindow(QMdiSubWindow*)));
@@ -403,6 +404,7 @@ void ccruncher_gui::MainWindow::setStatusMsg(const QString &msg)
 void ccruncher_gui::MainWindow::viewToolBar(bool visible)
 {
   toolBar->setVisible(visible);
+  ui->actionToolbar->setChecked(visible);
 }
 
 /**************************************************************************//**
@@ -423,7 +425,6 @@ void ccruncher_gui::MainWindow::viewTabbedWindows(bool enable)
   mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
 
   if (enable) {
-cout << "coco1" << endl;
     mdiArea->setViewMode(QMdiArea::TabbedView);
     mdiArea->setTabsClosable(true);
     mdiArea->setTabShape(QTabWidget::Rounded); //QTabWidget::Triangular
