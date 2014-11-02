@@ -108,6 +108,12 @@ class MainWindow : public QMainWindow
     void processHttpRequest(QNetworkReply *reply);
     //! Post a message in the status bar
     void setStatusMsg(const QString &msg="");
+    //! Enable/disable tool bar
+    void viewToolBar(bool visible);
+    //! Enable/disable status bar
+    void viewStatusBar(bool visible);
+    //! Enable/disable tabbed windows
+    void viewTabbedWindows(bool enable);
 
 };
 

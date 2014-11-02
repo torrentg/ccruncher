@@ -10,6 +10,8 @@ version 2.5.0 (???. 2014)
   * html site refactoring
   * removed support to LHS
   * parameter 'copula.type' renamed to 'copula'
+  * added 'actions'and 'view' menus in ccruncher-gui
+  * fixed a bug related to user language and number format
 
 version 2.4.1 (Mar. 2014)
 --------------------------
