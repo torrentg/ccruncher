@@ -2066,28 +2066,26 @@ the multivariate default times model discussed in chapter~\ref{chap:mdt} using
 the obligors' quotes instead of the historical records of defaults.
 
 As we have seen, the multivariate default times model has two components: the 
-marginal distributions of default times, $F_i$, and a t-Student copula which is 
-determined by the factors loadings $w_i$, the sector correlation matrix $R$, 
-and the degrees of freedom $\nu$.
+marginal distributions of default times, $F_i$, and a multi-factor t-Student 
+copula $C_{\nu,\vec{w},R}^{\text{t}}$.
 
 The first component can be obtained using the 1-year probabilities of default 
 and the exponential distribution exposed in the section~\ref{pdfsv}. These 
 1-year PDs can be provided by a rating agency, or computed using the Merton's 
-model, the Black-Cox model, etc.
+model, etc.
 
-The parameters of the second component, the copula, can be estimated applying
+The parameters of the second component (factors loadings $\vec{w}$, sector 
+correlation matrix $R$, degrees of freedom $\nu$) can be estimated applying 
 proposition~\ref{prop:pemh} to the number of defaults simulated using an asset 
 prices model.
 
 We consider that a company defaults when the asset value is below a preset 
-threshold at the end of the period (usually 1-year). This threshold is 
-lower than current value and depends on the annual probability of default. 
-Figure~\ref{fig:market1} displays the asset prices of three companies over a 
-year (250 working days). Note that the \emph{red} company ends below the 
-threshold $80\%$ causing a default event; the \emph{blue} company cross the 
-threshold but finally ends with a value just above the threshold avoiding
-the default event; finally the \emph{green} company ends the year without 
-any remarkable incident.
+threshold at the end of the period (usually 1-year). Figure~\ref{fig:market1} 
+displays the asset prices of three companies over a year (250 working days). 
+Note that the \emph{red} company ends below the threshold $80\%$ causing a 
+default event; the \emph{blue} company cross the threshold but finally ends 
+with a value just above the threshold avoiding the default event; finally the 
+\emph{green} company ends the year without any remarkable incident.
 
 \begin{figure}[!ht]
 	\centering
@@ -2117,7 +2115,54 @@ any remarkable incident.
 \end{proposition}
 
 \begin{proof}
-	BLABLABLA
+	Without loss of generality, we consider relative asset prices $S^0_i=1$ 
+	instead of absolute values, and the case where there are only 2 companies
+	($n=2$) and $t_1 < t_2$. We determine the distribution of default times 
+	doing:
+	\arraycolsep=1.4pt\def\arraystretch{1.8}
+	\begin{displaymath}
+		\begin{array}{l}
+			F(t_1,\dots,t_n) = 
+			\Pr\{ T_1 \le t_1 , T_2 \le t_2 \} = 
+			\Pr\left\{ S_1^{t_1} \le f_1(t_1), S_2^{t_2} \le f_2(t_2) \right\} = 
+			\\
+			\Pr\left\{ \ln(S_1^{t_1}) \le \ln(f_1(t_1)), \ln(S_2^{t_2}) \le \ln(f_2(t_2)) \right\} = 
+			\\
+			\Pr\left\{ 
+				\ln\left(\exp\left(\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1\right)\right) \le \ln(f_1(t_1)),\right.
+			\\
+			\quad\left.
+				\ln\left(S_2^{t_1}\cdot\exp\left(\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2\right)\right) \le \ln(f_2(t_2)) 
+			\right\} =
+			\\
+			\Pr\left\{ 
+				\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 \le \ln(f_1(t_1)),\right.
+			\\
+			\quad\left.
+				\ln(S_2^{t_1}) + \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2 \le \ln(f_2(t_2)) 
+			\right\} =
+			\\
+			\Pr\left\{ 
+				\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 \le \ln(f_1(t_1)),\right.
+			\\
+			\quad\left.
+				\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_1 + \sigma_2 \sqrt{t_1} \cdot \epsilon_2' +
+				\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2'' \le \ln(f_2(t_2)) 
+			\right\} =
+			\\
+			\Pr\left\{ 
+				\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 \le \ln(f_1(t_1)),
+				\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2 + \sigma_2 \sqrt{t_2} \cdot \epsilon_2 \le \ln(f_2(t_2)) 
+			\right\} =
+			\\
+			\Pr\left\{ 
+				\epsilon_1 \le \frac{\ln(f_1(t_1))-\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1}{\sigma_1 \sqrt{t_1}},
+				\epsilon_2 \le \frac{\ln(f_2(t_2))-\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2}{\sigma_2 \sqrt{t_2}}
+			\right\} =
+			\\
+			\dots
+		\end{array}
+	\end{displaymath}
 \end{proof}
 
 The direct application of the proposed method has the following drawbacks
