@@ -2180,22 +2180,31 @@ correlation block matrix allowing the usage of the Gaussian multi-factor
 distribution (see definition \ref{def:gmfm}) to generate random samples from 
 a multivariate Gaussian with a correlation block matrix.
 
-The second drawback can be avoided increasing the thresholds\footnote{ We have 
-checked numerically that correlations doesn't depend on thresholds. This 
-statement is not true if we consider that default ocurres at first cross 
+The second drawback can be avoided increasing the thresholds levels\footnote{ 
+We have checked numerically that correlations doesn't depend on thresholds. 
+This statement is not true if we consider that default ocurres at first cross 
 instead of the value at the end of the period (european vs. american style 
 option).} instead of using the values induced by the 1-year PDs. We 
 adjust the threshold values such that the defaulted ratios are close to $0.5$ 
-dwells in order to minimize the error in the calibration procedure. The PDs 
-linked to these new thresholds (required in the parameters estimation procedure) 
-can be obtained using the empirical values:
+dwells in order to minimize the error in the calibration procedure. In the 
+following lines we derive the link between $p_i$ (1-year probability of default) 
+and $x_i$ (the threshold).
 \begin{displaymath}
-	\tilde{p_i} = \sum_{t=1}^{T} \frac{k_i^t}{n_i^t}
+	\begin{array}{l}
+		\Pr\{S_i^1 < x_i\} = 
+		\Pr\left\{\exp\left(\left(\mu_i-\frac{\sigma_i^2}{2}\right) + \sigma_i\cdot\epsilon_i\right) < x_i\right\} =
+		\Pr\left\{\left(\mu_i-\frac{\sigma_i^2}{2}\right) + \sigma_i\cdot\epsilon_i < \ln(x_i)\right\} =
+		\\
+		\Pr\left\{\epsilon_i < \frac{\ln(x_i)-\mu_i+\frac{\sigma_i^2}{2}}{\sigma_i}\right\} = 
+		\Phi\left(\frac{\ln(x_i)-\mu_i+\frac{\sigma_i^2}{2}}{\sigma_i}\right) = p_i
+		\\
+		x_i = \exp\left(\sigma_i\cdot\Phi^{-1}(p_i) + \mu_i - \frac{\sigma_i^2}{2}\right)
+	\end{array}
 \end{displaymath}
-where $p_i$ is the 1-year probability of default of the i-th factor, $T$ is the
-number of simulations, $k_i^t$ is the number of simulated defaults in the
-t-th simulation and i-th factor, and $n_i^t$ is the number of firms of the t-th 
-simulation and i-th factor (constant value for all simulations).
+where $i$ is the index of the stock price, $S_i^1$ is the 1-year stock price, 
+$x_i$ is the threshold, $\mu_i$ is the expected annual return, $\sigma_i$ is 
+the annualized volatility, $p_i$ is the 1-year probability of default, and 
+$\Phi$ is the cdf of the univariate Gaussian distribution.
 
 Finally, for practical reasons we use relative asset prices (current asset price 
 equals to $1$) instead of absolute values. Now we are able to present the algorithm
