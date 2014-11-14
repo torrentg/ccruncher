@@ -2087,8 +2087,8 @@ with a value just above the threshold avoiding the default event; finally the
 	\label{fig:market1}
 \end{figure}
 
-In the following result we see that this scenario generates a multivariate 
-default times distribution with a Gaussian copula. Further, the correlation 
+In the following result we see that this scenario can result in a multivariate 
+default times distribution with a Gaussian copula. In this case, the correlation 
 of the Gaussian copula matches the correlation of Brownian Motion.
 
 \begin{proposition}[Multivariate default times distribution]
@@ -2102,13 +2102,16 @@ of the Gaussian copula matches the correlation of Brownian Motion.
 		h_i(t) = \exp\left(\sigma_i\sqrt{t}\cdot\Phi^{-1}(F_i(t)) + \left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)
 	\end{displaymath}
 	where $F_i(t)$ are cumulative distribution functions (cdf) with support
-	$[0,\infty)$, then the multivariate default times has marginals $F_i(t)$
+	$[0,\infty)$, and $\Phi^{-1}$ is the inverse of the univariate Gaussian 
+	distribution,
+	
+	then the multivariate default times has marginals $F_i(t)$
 	and a Gaussian copula with correlation matrix $R$.
 \end{proposition}
 
 \begin{proof}
 	The solutions of the stochastic differential equation of the Geometric 
-	Brownian maotion satisfy
+	Brownian motion satisfy
 	\begin{displaymath}
 		S_i^{t+\Delta t} = S_i^t \cdot \exp\left(
 		\left(\mu_i - \frac{\sigma_i^2}{2}\right) \Delta t +
@@ -2168,9 +2171,8 @@ of the Gaussian copula matches the correlation of Brownian Motion.
 		\end{array}
 	\end{displaymath}
 	
-	Finally, replacing the threshold functions in the multivariate default times 
-	distribution shows that the multivariate default times has a Gaussian 
-	copula with correlation matrix $R$ (see proposition~\ref{prop:dtd})
+	Finally, we replace the threshold functions $h_i(t)$ by the expression 
+	given in the statement.
 	\begin{displaymath}
 		\begin{array}{l}
 			F(t_1,t_2) = 
@@ -2178,14 +2180,42 @@ of the Gaussian copula matches the correlation of Brownian Motion.
 			H\left( \Phi^{-1}(F_1(t_1)), \Phi^{-1}(F_2(t_2)) \right)
 		\end{array}
 	\end{displaymath}
-	where $H$ is the multivariate Gaussian cdf with correlation matrix $R$, and 
-	$\Phi^{-1}$ is the inverse of the univariate Gaussian distribution.
+	where $H$ is the cdf of the multivariate Gaussian with correlation matrix $R$.
+	
+	Acording to proposition~\ref{prop:dtd}, the final form of the multivariate
+	default times distribution corresponds to a distribution function with 
+	marginals $F_i(t)$ and a Gaussian copula with correlation matrix $R$.
 	
 \end{proof}
 
-As we have seen, the multivariate default times model has two components: the 
-marginal distributions of default times, $F_i$, and a multi-factor t-Student 
-copula $C_{\nu,\vec{w},R}^{\text{t}}$.
+This result enables us to evaluate the credit risk of a portfolio of listed 
+companies using the default times copula model exposed in chapter~\ref{chap:mdt}.
+The multivariate default times has two components: the marginal distributions 
+of default times, $F_i$, and a multi-factor t-Student copula 
+$C_{\nu,\vec{w},R}^{\text{t}}$.
+
+The marginals $F_i(t)$ can be approximated using additional information. If we 
+have the 1-year PDs of the companies, provided by a credit rating agency like 
+Moody's or calculated using the Merton method or a similar method, then we can 
+assume the exponential distribution as exposed in section~\ref{pdfsv}. However, 
+if the transition matrix is available, then we can improve the marginals 
+$F_i(t)$ as described in section~\ref{pdftm}.
+
+The copula to use is the Gaussian copula, that is, the simplest case of the 
+t-student copula. The parameters of the corresponding multi-factor t-Student 
+copula are the degrees of freedom $\nu=\infty$, the factor loadings $w_i=1$, 
+and a correlation matrix $R$ exactly equal to the correlation matrix of the 
+Brownian Motion, that is, $C_{\infty,\vec{1},R}^{\text{t}}$.
+
+\begin{example}[Modeling a portfolio of bonds issued by listed companies]
+	SET EXAMPLE HERE.
+\end{example}
+
+
+
+As we have seen in chapter~\ref{chap:mdt}, the multivariate default times model 
+has two components: the marginal distributions of default times, $F_i$, and a 
+multi-factor t-Student copula $C_{\nu,\vec{w},R}^{\text{t}}$.
 
 The first component can be obtained using the 1-year probabilities of default 
 and the exponential distribution exposed in the section~\ref{pdfsv}. These 
@@ -2304,10 +2334,6 @@ same\footnote{ This is not intended as a formal proof.}. The following example
 justifies this assertion numerically.
 
 %TODO: cal tenir en compte la volatilitat
-
-\begin{example}[Modeling a portfolio of bonds issued by listed companies]
-	SET EXAMPLE HERE.
-\end{example}
 
 \textbf{Conclusion}. BLABLABLA asset prices model and default times model
 have exactly the same dependence structure. BLABLABLA.
