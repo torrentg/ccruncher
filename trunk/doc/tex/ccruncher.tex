@@ -2098,12 +2098,13 @@ of the Gaussian copula matches the correlation of Brownian Motion.
 	the asset price at time $t$ is below the threshold $h_i(t)$.
 	
 	If the threshold functions have the form
-		\begin{displaymath}
-		h_i(t) = \exp\left(\sigma_i\sqrt{t}\cdot\Phi^{-1}(F_i(t)) + \left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)
+	\begin{displaymath}
+		h_i(t) = \exp\left(\sigma_i\sqrt{t}\cdot\Phi^{-1}(F_i(t)) + 
+		\ln(S_i^0) + \left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)
 	\end{displaymath}
 	where $F_i(t)$ are cumulative distribution functions (cdf) with support
-	$[0,\infty)$, and $\Phi^{-1}$ is the inverse of the univariate Gaussian 
-	distribution,
+	$[0,\infty)$, $S_i^0$ are the asset prices at time $0$, and $\Phi^{-1}$ is 
+	the inverse of the univariate Gaussian distribution,
 	
 	then the multivariate default times has marginals $F_i(t)$
 	and a Gaussian copula with correlation matrix $R$.
@@ -2123,61 +2124,63 @@ of the Gaussian copula matches the correlation of Brownian Motion.
 	return, $\sigma_i$ is the annualized volatility, and $\epsilon_i$ is the 
 	i-th component of a $N(0,R)$ being $R$ the correlation matrix.
 
-	Without loss of generality, we consider relative asset prices $S^0_i=1$ 
-	instead of absolute values, and the case where there are only 2 companies
-	($n=2$) and $t_1 < t_2$. 
+	Without loss of generality, we consider that there are only 2 companies
+	($n=2$), and $t_1 < t_2$. 
 	
 	We derive the multivariate default times distribution
 	\arraycolsep=1.4pt\def\arraystretch{1.8}
+	{\small
 	\begin{displaymath}
 		\begin{array}{l}
-			F(t_1,t_2) = 
-			\Pr\{ T_1 \le t_1 , T_2 \le t_2 \} = 
-			\Pr\left\{ S_1^{t_1} \le h_1(t_1), S_2^{t_2} \le h_2(t_2) \right\} = 
+			F(t_1,\ t_2) = 
+			\Pr\{ T_1 \le t_1,\ T_2 \le t_2 \} = 
+			\Pr\left\{ S_1^{t_1} \le h_1(t_1),\ S_2^{t_2} \le h_2(t_2) \right\} = 
 			\\
-			\Pr\left\{ \ln(S_1^{t_1}) \le \ln(h_1(t_1)), \ln(S_2^{t_2}) \le \ln(h_2(t_2)) \right\} = 
+			\Pr\left\{ \ln(S_1^{t_1}) \le \ln(h_1(t_1)),\ \ln(S_2^{t_2}) \le \ln(h_2(t_2)) \right\} = 
 			\\
 			\Pr\left\{ 
-				\ln\left(\exp\left(\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1\right)\right) \le \ln(h_1(t_1)),\right.
+				\ln\left(S_1^0\cdot\exp\left(\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1\right)\right) \le \ln(h_1(t_1)), \right.
 			\\
 			\quad\ \ \left.
 				\ln\left(S_2^{t_1}\cdot\exp\left(\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2''\right)\right) \le \ln(h_2(t_2)) 
 			\right\} =
 			\\
 			\Pr\left\{ 
-				\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 \le \ln(h_1(t_1)),\right.
+				\ln(S_1^0) + \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 \le \ln(h_1(t_1)),\right.
 			\\
 			\quad\ \ \left.
 				\ln(S_2^{t_1}) + \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2'' \le \ln(h_2(t_2)) 
 			\right\} =
 			\\
 			\Pr\left\{ 
-				\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 \le \ln(h_1(t_1)),\right.
+				\ln(S_1^0) + \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 \le \ln(h_1(t_1)),\right.
 			\\
 			\quad\ \ \left.
+				\ln(S_2^0) +
 				\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_1 + \sigma_2 \sqrt{t_1} \cdot \epsilon_2' +
 				\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2'' \le \ln(h_2(t_2)) 
 			\right\} =
 			\\
 			\Pr\left\{ 
-				\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 \le \ln(h_1(t_1)),
-				\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2 + \sigma_2 \sqrt{t_2} \cdot \epsilon_2 \le \ln(h_2(t_2)) 
+				\ln(S_1^0) + \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 \le \ln(h_1(t_1)),
+				\ \ln(S_2^0) + \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2 + \sigma_2 \sqrt{t_2} \cdot \epsilon_2 \le \ln(h_2(t_2)) 
 			\right\} =
 			\\
 			\Pr\left\{ 
-				\epsilon_1 \le \frac{\ln(h_1(t_1))-\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1}{\sigma_1 \sqrt{t_1}},
-				\epsilon_2 \le \frac{\ln(h_2(t_2))-\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2}{\sigma_2 \sqrt{t_2}}
+				\epsilon_1 \le \frac{\ln(h_1(t_1)) - \ln(S_1^0) - \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1}{\sigma_1 \sqrt{t_1}},
+				\ \epsilon_2 \le \frac{\ln(h_2(t_2)) - \ln(S_2^0) - \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2}{\sigma_2 \sqrt{t_2}}
 			\right\}
 		\end{array}
-	\end{displaymath}
+	\end{displaymath}\par}
 	
+	where $\epsilon$, $\epsilon'$, $\epsilon''$ are $N(0,R)$. 
 	Finally, we replace the threshold functions $h_i(t)$ by the expression 
-	given in the statement.
+	given in the statement, resulting
 	\begin{displaymath}
 		\begin{array}{l}
-			F(t_1,t_2) = 
-			\Pr\left\{ \epsilon_1 \le \Phi^{-1}(F_1(t_1)), \epsilon_2 \le \Phi^{-1}(F_2(t_2)) \right\} = 
-			H\left( \Phi^{-1}(F_1(t_1)), \Phi^{-1}(F_2(t_2)) \right)
+			F(t_1,\ t_2) = 
+			\Pr\left\{ \epsilon_1 \le \Phi^{-1}(F_1(t_1)),\ \epsilon_2 \le \Phi^{-1}(F_2(t_2)) \right\} = 
+			H\left( \Phi^{-1}(F_1(t_1)),\ \Phi^{-1}(F_2(t_2)) \right)
 		\end{array}
 	\end{displaymath}
 	where $H$ is the cdf of the multivariate Gaussian with correlation matrix $R$.
@@ -2187,6 +2190,14 @@ of the Gaussian copula matches the correlation of Brownian Motion.
 	marginals $F_i(t)$ and a Gaussian copula with correlation matrix $R$.
 	
 \end{proof}
+
+The probability of default under the Merton's framework is~\cite{ERROR}
+\begin{displaymath}
+	F_i(t) = \Phi\left( -\frac{\ln\left(\frac{A}{D} e^{rt}\right)}{\sigma_A\sqrt{t}} + \frac{\sigma_A \sqrt{t}}{2}\right)
+\end{displaymath}
+
+
+
 
 This result enables us to evaluate the credit risk of a portfolio of listed 
 companies using the default times copula model exposed in chapter~\ref{chap:mdt}.
