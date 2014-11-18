@@ -2101,6 +2101,7 @@ of the Gaussian copula matches the correlation of Brownian Motion.
 	\begin{displaymath}
 		h_i(t) = \exp\left(\sigma_i\sqrt{t}\cdot\Phi^{-1}(F_i(t)) + 
 		\ln(S_i^0) + \left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)
+		\qquad i=1,\dots,n
 	\end{displaymath}
 	where $F_i(t)$ are cumulative distribution functions (cdf) with support
 	$[0,\infty)$, $S_i^0$ are the asset prices at time $0$, and $\Phi^{-1}$ is 
@@ -2121,8 +2122,8 @@ of the Gaussian copula matches the correlation of Brownian Motion.
 	\end{displaymath}
 	where $n$ is the number of assets, $S_i^t$ is the i-th asset price at 
 	time $t$, $\Delta t$ is a time increment, $\mu_i$ is the expected annual 
-	return, $\sigma_i$ is the annualized volatility, and $\epsilon_i$ is the 
-	i-th component of a $N(0,R)$ being $R$ the correlation matrix.
+	return, $\sigma_i$ is the annualized volatility, and $\epsilon \sim N(0,R)$ 
+	being $R$ the correlation matrix.
 
 	Without loss of generality, we consider that there are only 2 companies
 	($n=2$), and $t_1 < t_2$. 
