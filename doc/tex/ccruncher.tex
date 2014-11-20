@@ -2192,14 +2192,6 @@ of the Gaussian copula matches the correlation of Brownian Motion.
 	
 \end{proof}
 
-The probability of default under the Merton's framework is~\cite{ERROR}
-\begin{displaymath}
-	F_i(t) = \Phi\left( -\frac{\ln\left(\frac{A}{D} e^{rt}\right)}{\sigma_A\sqrt{t}} + \frac{\sigma_A \sqrt{t}}{2}\right)
-\end{displaymath}
-
-
-
-
 This result enables us to evaluate the credit risk of a portfolio of listed 
 companies using the default times copula model exposed in chapter~\ref{chap:mdt}.
 The multivariate default times has two components: the marginal distributions 
@@ -3306,6 +3298,37 @@ proposition.
 	\caption{PDs derived from annual values}
 	\label{fig:pdfsv}
 \end{figure}
+
+\subsection{Obtaining PDs from Merton's model}
+
+The probability of default under the Merton's framework~\cite{kmv:2003} is
+\begin{displaymath}
+	F_i(t) = \Phi\left( -\frac{\ln\left(\frac{A_i}{D_i} e^{rt}\right) + 
+	\left(\mu_i-\frac{\sigma_{i}^2}{2}\right)\cdot t}{\sigma_{i}\sqrt{t}}\right)
+\end{displaymath}
+where $A_i$ is the firm's asset value, $D_i$ is the book value of the debt, 
+$\mu_i$ is the expected annual return, $\sigma_i$ is the annualized 
+volatility, and $r$ is the risk free rate.
+
+\begin{displaymath}
+	F_i(0) = 0 
+	\implies 
+	\lim_{t \to 0} -\frac{\ln\left(\frac{A_i}{D_i} e^{rt}\right) + 
+	\left(\mu_i-\frac{\sigma_{i}^2}{2}\right)\cdot t}{\sigma_{i}\sqrt{t}} = -\infty
+	\implies
+	\ln\left(\frac{A_i}{D_i}\right) > 0
+	\implies
+	A_i > D_i
+\end{displaymath}
+
+\begin{displaymath}
+	F_i(\infty) = \infty
+	\implies 
+	\lim_{t \to \infty} -\frac{\ln\left(\frac{A_i}{D_i} e^{rt}\right) + 
+	\left(\mu_i-\frac{\sigma_{i}^2}{2}\right)\cdot t}{\sigma_{i}\sqrt{t}} = \infty
+	\implies
+	r + \mu < \frac{\sigma_i^2}{2}
+\end{displaymath}
 
 \subsection{Obtaining PDs from advanced models}
 
