@@ -188,6 +188,39 @@ grid();
 dev.off();
 
 # ================================================
+# PDs from Merton's model
+# ================================================
+
+f <- function(sigma, L, t, r, mu)
+{
+  d2 = (log(L*exp(r*t)) + (mu-(sigma^2)/2)*t)/(sigma*sqrt(t))
+  return(pnorm(-d2))
+}
+
+ratings = c("AAA", "AA", "A", "BBB", "BB", "B", "CCC", "default")
+n = length(ratings)
+L = 1.2
+r = 0.0
+mu = r
+sigma = rep(0, n)
+
+for(i in 1:(n-1)) {
+  sigma[i] = uniroot(function(sigma, L, t, r, mu, z) {f(sigma, L, t, r, mu)-z}, c(0,10), L=L, t=1, r=r, mu=mu, z=p[i])$root
+}
+
+t = 0:100
+PD = matrix(nrow=100+1, ncol=n, 0)
+PD[,n] = 1
+for(i in 1:(n-1)) {
+  PD[1,i] = 0
+  for(j in 1:100) {
+    PD[j+1,i] = f(sigma[i], L, j, r, mu)
+  }
+}
+
+matplot(t, PD, type='l', xlab='Time in years', ylab='PD', lty=1:8, col=1:6); 
+
+# ================================================
 # Correlation Coefficient--Bivariate Normal Distribution
 # see http://mathworld.wolfram.com/CorrelationCoefficientBivariateNormalDistribution.html
 # ================================================
