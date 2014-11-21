@@ -3300,35 +3300,76 @@ proposition.
 \end{figure}
 
 \subsection{Obtaining PDs from Merton's model}
+\label{pdfmm}
 
-The probability of default under the Merton's framework~\cite{kmv:2003} is
+In this section we expose the probability of default functions resulting of the
+Merton's model~\cite[sec. 3.3]{bluhm:2002}. This method assesses the probability 
+of default of a listed company based on market information. 
+If we assume that the firm's debt amount remains constant over time considering 
+devaluation, then the probability of default under the Merton's 
+framework~\cite{kmv:2003} is
 \begin{displaymath}
-	F_i(t) = \Phi\left( -\frac{\ln\left(\frac{A_i}{D_i} e^{rt}\right) + 
+	F_i(t) = \Phi\left( -\frac{\ln\left(\frac{A_i}{D_i \cdot e^{rt}} \right) + 
 	\left(\mu_i-\frac{\sigma_{i}^2}{2}\right)\cdot t}{\sigma_{i}\sqrt{t}}\right)
 \end{displaymath}
-where $A_i$ is the firm's asset value, $D_i$ is the book value of the debt, 
-$\mu_i$ is the expected annual return, $\sigma_i$ is the annualized 
-volatility, and $r$ is the risk free rate.
-
+where $\Phi$ is the univariate Gaussian cdf, $A_i$ is the firm's asset value, 
+$D_i$ is the book value of the debt, $\mu_i$ is the firm's asset value drift, 
+$\sigma_i$ is the firm's asset value volatility, and $r$ is the risk free rate. 
+We verify that this is a valid distribution function.
 \begin{displaymath}
-	F_i(0) = 0 
-	\implies 
-	\lim_{t \to 0} -\frac{\ln\left(\frac{A_i}{D_i} e^{rt}\right) + 
-	\left(\mu_i-\frac{\sigma_{i}^2}{2}\right)\cdot t}{\sigma_{i}\sqrt{t}} = -\infty
-	\implies
-	\ln\left(\frac{A_i}{D_i}\right) > 0
-	\implies
-	A_i > D_i
+	\begin{array}{l}
+		F_i(0) = 0 
+		\implies 
+		\displaystyle\lim_{t \to 0} -\frac{\ln\left(\frac{A_i}{D_i \cdot e^{rt}} \right) + 
+		\left(\mu_i-\frac{\sigma_{i}^2}{2}\right)\cdot t}{\sigma_{i}\sqrt{t}} = -\infty
+		\implies
+		\ln\left(\frac{A_i}{D_i}\right) > 0
+		\implies
+		A_i > D_i
+		\\
+		F_i(\infty) = \infty
+		\implies 
+		\displaystyle\lim_{t \to \infty} -\frac{\ln\left(\frac{A_i}{D_i \cdot e^{rt}} \right) + 
+		\left(\mu_i-\frac{\sigma_{i}^2}{2}\right)\cdot t}{\sigma_{i}\sqrt{t}} = \infty
+		\implies
+		-r + \mu < \frac{\sigma_i^2}{2}
+	\end{array}
 \end{displaymath}
 
-\begin{displaymath}
-	F_i(\infty) = \infty
-	\implies 
-	\lim_{t \to \infty} -\frac{\ln\left(\frac{A_i}{D_i} e^{rt}\right) + 
-	\left(\mu_i-\frac{\sigma_{i}^2}{2}\right)\cdot t}{\sigma_{i}\sqrt{t}} = \infty
-	\implies
-	r + \mu < \frac{\sigma_i^2}{2}
-\end{displaymath}
+Both conditions are reasonable. The first one indicates that the current market 
+value of the company must exceed the value of its debt. The second one tells us 
+that the expected annual return should be close to the risk-free rate.
+
+\begin{example}
+	\label{ex:pdfmm}
+	We draw the Merton's probability of default functions so that they are 
+	comparable to the functions of the previous examples. For this reason
+	we consider that the annual probabilities of default are those from the 
+	1-year regularized transition matrix displayed in table~\ref{tmatrix1}. 
+	Furthermore we fix the asset value drifts to the risk free rate ($\mu_i=r$) 
+	and assumes, arbitrary, that $A_i/D_i = 1.2$. The remaining unknows 
+	$\sigma_i$ are determined resolving the ecuation
+	\begin{displaymath}
+		F_i(1) = p_i = \Phi\left( -\frac{\ln\left(\frac{A_i}{D_i} \right)  
+		-\frac{\sigma_{i}^2}{2}}{\sigma_{i}}\right)
+	\end{displaymath}
+	The following table exposes the parameters of the probabilities of default
+	functions.
+	\begin{displaymath}
+		\begin{array}{c|ccccc}
+			          &    p_i\text{ (in \%)}  & A_i/D_i &  \mu_i & & \sigma_i \\
+			\hline
+			\text{AAA} &  0.0009 &   1.2   &   r    & \to & 0.0422 \\
+			\text{AA}  &  0.0077 &   1.2   &   r    & \to & 0.0479 \\
+			\text{A}   &  0.0600 &   1.2   &   r    & \to & 0.0558 \\
+			\text{BBB} &  0.1800 &   1.2   &   r    & \to & 0.0620 \\
+			\text{BB}  &  1.0599 &   1.2   &   r    & \to & 0.0778 \\
+			\text{B}   &  5.2003 &   1.2   &   r    & \to & 0.1085 \\
+			\text{CCC} & 19.7846 &   1.2   &   r    & \to & 0.1928 \\
+		\end{array}
+	\end{displaymath}
+
+\end{example}
 
 \subsection{Obtaining PDs from advanced models}
 
