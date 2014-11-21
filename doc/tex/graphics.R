@@ -199,6 +199,7 @@ f <- function(sigma, L, t, r, mu)
 
 ratings = c("AAA", "AA", "A", "BBB", "BB", "B", "CCC", "default")
 n = length(ratings)
+p = A3[,n]
 L = 1.2
 r = 0.0
 mu = r
