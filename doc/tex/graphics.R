@@ -219,7 +219,30 @@ for(i in 1:(n-1)) {
   }
 }
 
+pdf(file="pdfmm1.pdf")
+par(mar=c(5,4,1,1))
 matplot(t, PD, type='l', xlab='Time in years', ylab='PD', lty=1:8, col=1:6); 
+legend(80, 0.35, ratings, cex=0.9, lty=1:8, col=1:6)
+grid();
+dev.off();
+
+t = 0:120
+PD = matrix(nrow=121, ncol=n, 0)
+PD[,n] = 1
+for(i in 1:(n-1)) {
+  PD[1,i] = 0
+  for(j in 1:120) {
+    PD[j+1,i] = f(sigma[i], L, j/12, r, mu)
+  }
+}
+
+pdf(file="pdfmm2.pdf")
+par(mar=c(5,4,1,1))
+matplot(t, PD[,1:7], type='l', xlab='Time in months', ylab='PD', lty=1:8, col=1:6); 
+legend(5, 0.5, ratings[1:7], cex=0.9, lty=1:8, col=1:6)
+grid();
+dev.off();
+
 
 # ================================================
 # Correlation Coefficient--Bivariate Normal Distribution
