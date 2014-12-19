@@ -139,7 +139,7 @@ class AnalysisWidget: public MdiChildWidget
     //! Change confidence
     void changeConfidence();
     //! Set status
-    void setStatus(int);
+    void setStatus(ccruncher_gui::AnalysisTask::status);
     //! Stop current action
     void stop();
     //! Copy data to clipboard

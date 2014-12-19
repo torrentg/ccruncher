@@ -44,7 +44,7 @@ ccruncher_gui::SimulationTask::SimulationTask(streambuf *s) : QThread(), logger(
 {
   ifile = "";
   odir = "";
-  status_ = finished;
+  status_ = status::finished;
   fmode = 'w';
   stop_ = false;
   ithreads = 0;
@@ -86,7 +86,7 @@ void ccruncher_gui::SimulationTask::run()
     logger << header << endl;
 
     // parsing input file
-    setStatus(reading);
+    setStatus(status::reading);
     idata = new IData(logger.rdbuf());
     idata->init(ifile, defines, &stop_);
 
@@ -95,25 +95,25 @@ void ccruncher_gui::SimulationTask::run()
     montecarlo->setData(*idata, odir, fmode);
 
     // simulating
-    setStatus(simulating);
+    setStatus(status::simulating);
     montecarlo->run(ithreads, 0, &stop_);
 
     // footer
     logger << footer(timer) << endl;
-    setStatus(finished);
+    setStatus(status::finished);
   }
   catch(std::exception &e)
   {
     logger << indent(-100) << endl;
     logger << e.what() << endl;
-    if (stop_) setStatus(stopped);
-    else setStatus(failed);
+    if (stop_) setStatus(status::stopped);
+    else setStatus(status::failed);
   }
   catch(...)
   {
     logger << indent(-100) << endl;
     logger << "panic: unknow error" << endl;
-    setStatus(failed);
+    setStatus(status::failed);
   }
 }
 
@@ -149,14 +149,14 @@ void ccruncher_gui::SimulationTask::setStatus(status s)
 
   switch(status_)
   {
-    case reading:
+    case status::reading:
       num_running_sims++;
       break;
-    case simulating:
+    case status::simulating:
       break;
-    case stopped:
-    case failed:
-    case finished:
+    case status::stopped:
+    case status::failed:
+    case status::finished:
       assert(num_running_sims > 0);
       num_running_sims--;
       break;
@@ -164,7 +164,7 @@ void ccruncher_gui::SimulationTask::setStatus(status s)
       assert(false);
   }
 
-  emit statusChanged((int)s);
+  emit statusChanged(s);
 }
 
 /**************************************************************************//**

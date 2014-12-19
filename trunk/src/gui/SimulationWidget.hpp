@@ -136,7 +136,7 @@ class SimulationWidget : public MdiChildWidget
     //! Defines dialog
     void showDefines();
     //! Set status
-    void setStatus(int);
+    void setStatus(ccruncher_gui::SimulationTask::status);
     //! Open csv files
     void openData();
 

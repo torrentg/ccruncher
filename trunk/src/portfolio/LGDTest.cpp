@@ -36,74 +36,74 @@ void ccruncher_test::LGDTest::test1()
 {
   // fixed values
   {
-    LGD r0 = LGD(LGD::Fixed,NAN);
-    ASSERT(r0.getType() == LGD::Fixed);
+    LGD r0 = LGD(LGD::Type::Fixed,NAN);
+    ASSERT(r0.getType() == LGD::Type::Fixed);
     ASSERT(std::isnan(r0.getValue1()));
     ASSERT(std::isnan(r0.getValue2()));
   
     LGD r1;
-    ASSERT(r1.getType() == LGD::Fixed);
+    ASSERT(r1.getType() == LGD::Type::Fixed);
     ASSERT(std::isnan(r1.getValue1()));
     ASSERT(std::isnan(r1.getValue2()));
   
-    LGD r2(LGD::Fixed,1.0);
-    ASSERT(r2.getType() == LGD::Fixed);
+    LGD r2(LGD::Type::Fixed,1.0);
+    ASSERT(r2.getType() == LGD::Type::Fixed);
     ASSERT_EQUALS_EPSILON(r2.getValue1(), 1.0, EPSILON);
     ASSERT(std::isnan(r2.getValue2()));
 
     LGD r3("0.25");
-    ASSERT(r3.getType() == LGD::Fixed);
+    ASSERT(r3.getType() == LGD::Type::Fixed);
     ASSERT_EQUALS_EPSILON(r3.getValue1(), 0.25, EPSILON);
     ASSERT(std::isnan(r3.getValue2()));
 
     LGD r4("0.35");
-    ASSERT(r4.getType() == LGD::Fixed);
+    ASSERT(r4.getType() == LGD::Type::Fixed);
     ASSERT_EQUALS_EPSILON(r4.getValue1(), 0.35, EPSILON);
     ASSERT(std::isnan(r4.getValue2()));
   }
 
   // uniform distribution
   {
-    LGD r0(LGD::Uniform, 0.0, 1.0);
-    ASSERT(r0.getType() == LGD::Uniform);
+    LGD r0(LGD::Type::Uniform, 0.0, 1.0);
+    ASSERT(r0.getType() == LGD::Type::Uniform);
     ASSERT_EQUALS_EPSILON(r0.getValue1(), 0.0, EPSILON);
     ASSERT_EQUALS_EPSILON(r0.getValue2(), 1.0, EPSILON);
 
-    LGD r1(LGD::Uniform, 0.25, 0.5);
-    ASSERT(r1.getType() == LGD::Uniform);
+    LGD r1(LGD::Type::Uniform, 0.25, 0.5);
+    ASSERT(r1.getType() == LGD::Type::Uniform);
     ASSERT_EQUALS_EPSILON(r1.getValue1(), 0.25, EPSILON);
     ASSERT_EQUALS_EPSILON(r1.getValue2(), 0.5, EPSILON);
 
     LGD r2("uniform(0.2,0.3)");
-    ASSERT(r2.getType() == LGD::Uniform);
+    ASSERT(r2.getType() == LGD::Type::Uniform);
     ASSERT_EQUALS_EPSILON(r2.getValue1(), 0.2, EPSILON);
     ASSERT_EQUALS_EPSILON(r2.getValue2(), 0.3, EPSILON);
 
     LGD r3("uniform( +0.2, +0.3 )");
-    ASSERT(r3.getType() == LGD::Uniform);
+    ASSERT(r3.getType() == LGD::Type::Uniform);
     ASSERT_EQUALS_EPSILON(r3.getValue1(), 0.2, EPSILON);
     ASSERT_EQUALS_EPSILON(r3.getValue2(), 0.3, EPSILON);
   }
 
   // beta distribution
   {
-    LGD r0(LGD::Beta, 0.5, 0.25);
-    ASSERT(r0.getType() == LGD::Beta);
+    LGD r0(LGD::Type::Beta, 0.5, 0.25);
+    ASSERT(r0.getType() == LGD::Type::Beta);
     ASSERT_EQUALS_EPSILON(r0.getValue1(), 0.5, EPSILON);
     ASSERT_EQUALS_EPSILON(r0.getValue2(), 0.25, EPSILON);
   
-    LGD r1(LGD::Beta, 0.5, 0.25);
-    ASSERT(r1.getType() == LGD::Beta);
+    LGD r1(LGD::Type::Beta, 0.5, 0.25);
+    ASSERT(r1.getType() == LGD::Type::Beta);
     ASSERT_EQUALS_EPSILON(r1.getValue1(), 0.5, EPSILON);
     ASSERT_EQUALS_EPSILON(r1.getValue2(), 0.25, EPSILON);
   
     LGD r2("beta(0.2,0.3)");
-    ASSERT(r2.getType() == LGD::Beta);
+    ASSERT(r2.getType() == LGD::Type::Beta);
     ASSERT_EQUALS_EPSILON(r2.getValue1(), 0.2, EPSILON);
     ASSERT_EQUALS_EPSILON(r2.getValue2(), 0.3, EPSILON);
 
     LGD r3("beta( +0.2, +0.3 )");
-    ASSERT(r3.getType() == LGD::Beta);
+    ASSERT(r3.getType() == LGD::Type::Beta);
     ASSERT_EQUALS_EPSILON(r3.getValue1(), 0.2, EPSILON);
     ASSERT_EQUALS_EPSILON(r3.getValue2(), 0.3, EPSILON);
   }
@@ -115,32 +115,32 @@ void ccruncher_test::LGDTest::test1()
 void ccruncher_test::LGDTest::test2()
 {
   // fixed values
-  ASSERT_THROW(LGD(LGD::Fixed,-0.5));       // distinct than [0,1]
-  ASSERT_THROW(LGD(LGD::Fixed,+1.5));       // distinct than [0,1]
-  ASSERT_THROW(LGD("a"));                   // unrecognized variable
-  ASSERT_NO_THROW(LGD(LGD::Fixed,NAN));     // fixed & distinct than [0,1]
+  ASSERT_THROW(LGD(LGD::Type::Fixed,-0.5));       // distinct than [0,1]
+  ASSERT_THROW(LGD(LGD::Type::Fixed,+1.5));       // distinct than [0,1]
+  ASSERT_THROW(LGD("a"));                         // unrecognized variable
+  ASSERT_NO_THROW(LGD(LGD::Type::Fixed,NAN));     // fixed & distinct than [0,1]
 
   // uniform
-  ASSERT_THROW(LGD(LGD::Uniform,-0.5,+0.5));  // out-of range [0,1]
-  ASSERT_THROW(LGD(LGD::Uniform,+0.5,+1.5));  // out-of range [0,1]
-  ASSERT_THROW(LGD(LGD::Uniform,+0.5,+0.25)); // uniform & value2 <= value1
-  ASSERT_THROW(LGD("uniform(0.2,0.3"));       // lacks ending ')'
-  ASSERT_THROW(LGD("uniform(0.2)"));          // only 1 argument
-  ASSERT_THROW(LGD("uniform(0.2,0.3,0.4"));   // more than 2 arguments
+  ASSERT_THROW(LGD(LGD::Type::Uniform,-0.5,+0.5));  // out-of range [0,1]
+  ASSERT_THROW(LGD(LGD::Type::Uniform,+0.5,+1.5));  // out-of range [0,1]
+  ASSERT_THROW(LGD(LGD::Type::Uniform,+0.5,+0.25)); // uniform & value2 <= value1
+  ASSERT_THROW(LGD("uniform(0.2,0.3"));             // lacks ending ')'
+  ASSERT_THROW(LGD("uniform(0.2)"));                // only 1 argument
+  ASSERT_THROW(LGD("uniform(0.2,0.3,0.4"));         // more than 2 arguments
 
   // beta
-  ASSERT_THROW(LGD(LGD::Beta,-0.5,+0.5));   // beta & value1 <= 0.0
-  ASSERT_THROW(LGD(LGD::Beta,+0.5,-0.5));   // beta & value1 <= 0.0
-  ASSERT_THROW(LGD("beta(0.2,0.3"));        // lacks ending ')'
-  ASSERT_THROW(LGD("beta (0.2,0.3)"));      // additional space
-  ASSERT_THROW(LGD("beta(a,0.3)"));         // invalid number
-  ASSERT_THROW(LGD("beta(+0.2,-0.3)"));     // negative argument
-  ASSERT_THROW(LGD("beta(-0.2,+0.3)"));     // negative argument
-  ASSERT_THROW(LGD("beta(0.2,)"));          // lacks argument 2
-  ASSERT_THROW(LGD("beto(0.5,0.25)"));      // beto != beta
-  ASSERT_THROW(LGD("beta[0.5,0.25]"));      // invalid delimiters
-  ASSERT_THROW(LGD("beta(0.2)"));           // only 1 arg
-  ASSERT_THROW(LGD("beta(0.2,0.3,0.4)"));   // more than 2 args
+  ASSERT_THROW(LGD(LGD::Type::Beta,-0.5,+0.5));   // beta & value1 <= 0.0
+  ASSERT_THROW(LGD(LGD::Type::Beta,+0.5,-0.5));   // beta & value1 <= 0.0
+  ASSERT_THROW(LGD("beta(0.2,0.3"));              // lacks ending ')'
+  ASSERT_THROW(LGD("beta (0.2,0.3)"));            // additional space
+  ASSERT_THROW(LGD("beta(a,0.3)"));               // invalid number
+  ASSERT_THROW(LGD("beta(+0.2,-0.3)"));           // negative argument
+  ASSERT_THROW(LGD("beta(-0.2,+0.3)"));           // negative argument
+  ASSERT_THROW(LGD("beta(0.2,)"));                // lacks argument 2
+  ASSERT_THROW(LGD("beto(0.5,0.25)"));            // beto != beta
+  ASSERT_THROW(LGD("beta[0.5,0.25]"));            // invalid delimiters
+  ASSERT_THROW(LGD("beta(0.2)"));                 // only 1 arg
+  ASSERT_THROW(LGD("beta(0.2,0.3,0.4)"));         // more than 2 args
 }
 
 //===========================================================================

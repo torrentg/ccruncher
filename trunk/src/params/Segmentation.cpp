@@ -31,7 +31,7 @@
 using namespace std;
 
 /**************************************************************************/
-ccruncher::Segmentation::Segmentation(const string &name, ComponentsType type, bool enabled, bool hasUnassigned) :
+ccruncher::Segmentation::Segmentation(const string &name, Type type, bool enabled, bool hasUnassigned) :
   mName(name), mType(type), mEnabled(enabled)
 {
   if (hasUnassigned) {
@@ -101,7 +101,7 @@ void ccruncher::Segmentation::setName(const std::string &name)
 /**************************************************************************//**
  * @param[in] type Segmentation type.
  */
-void ccruncher::Segmentation::setType(const ComponentsType &type)
+void ccruncher::Segmentation::setType(const Type &type)
 {
   mType = type;
 }
@@ -113,10 +113,10 @@ void ccruncher::Segmentation::setType(const ComponentsType &type)
 void ccruncher::Segmentation::setType(const std::string &type)
 {
   if (type == "asset") {
-    mType = ComponentsType::asset;
+    mType = Type::asset;
   }
   else if (type == "obligor") {
-    mType = ComponentsType::obligor;
+    mType = Type::obligor;
   }
   else {
     throw Exception("unrecognized components: '" + type + "'");

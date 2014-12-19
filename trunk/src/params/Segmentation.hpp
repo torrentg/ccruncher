@@ -43,7 +43,7 @@ class Segmentation
   public:
 
     //! Type of segmentation's components
-    enum ComponentsType
+    enum class Type
     {
       undefined=0, //!< Not defined
       obligor=1,   //!< Segmentation of obligors
@@ -55,7 +55,7 @@ class Segmentation
     //! Segmentation name
     std::string mName;
     //! Type of components (obligors/assets)
-    ComponentsType mType;
+    Type mType;
     //! Enabled flag (true by default)
     bool mEnabled;
     //! List of segmentation segments
@@ -69,15 +69,15 @@ class Segmentation
   public:
   
     //! Constructor
-    Segmentation(const std::string &name="", ComponentsType type=asset, bool enabled=true, bool hasUnassigned=true);
+    Segmentation(const std::string &name="", Type type=Type::asset, bool enabled=true, bool hasUnassigned=true);
     //! Returns segmentation name
     const std::string& getName() const { return mName; }
     //! Sets segmentation name
     void setName(const std::string &);
     //! Returns type of components
-    ComponentsType getType() const { return mType; }
+    Type getType() const { return mType; }
     //! Sets the type of components
-    void setType(const ComponentsType &);
+    void setType(const Type &);
     //! Sets the type of components
     void setType(const std::string &);
     //! Returns enabled flag

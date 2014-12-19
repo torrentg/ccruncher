@@ -103,7 +103,7 @@ class Expr
   public:
 
     //! Type of compiled instruction
-    enum TokenType
+    enum class TokenType
     {
       OPERATOR = 0,           //!< Usual operators (eg. +,-,*,/,^)
       NUMBER = 1,             //!< Number, only double type is supported (eg. 3.25)

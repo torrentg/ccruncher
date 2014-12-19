@@ -34,7 +34,7 @@ using namespace ccruncher;
  * @param[in] date Date on which the curve is defined.
  * @param[in] type Type of interest to apply.
  */
-ccruncher::Interest::Interest(const Date &date, InterestType type) :
+ccruncher::Interest::Interest(const Date &date, Type type) :
     mSpline(nullptr), mAccel(nullptr)
 {
   mType = type;
@@ -114,7 +114,7 @@ void ccruncher::Interest::setDate(const Date &date)
 /**************************************************************************//**
  * @return The interest type.
  */
-ccruncher::Interest::InterestType ccruncher::Interest::getType() const
+ccruncher::Interest::Type ccruncher::Interest::getType() const
 {
   return mType;
 }
@@ -184,15 +184,15 @@ double ccruncher::Interest::getFactor(const Date &date) const
   double r, t;
   getValues(date-mDate, &t, &r);
 
-  if (mType == Simple)
+  if (mType == Type::Simple)
   {
     return 1.0/(1.0+r*t);
   }
-  else if (mType == Compound)
+  else if (mType == Type::Compound)
   {
     return 1.0/pow(1.0+r, t);
   }
-  else if (mType == Continuous)
+  else if (mType == Type::Continuous)
   {
     return 1.0/exp(r*t);
   }
@@ -297,20 +297,20 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *tag, const char *
   if (isEqual(tag,"interest"))
   {
     if (getNumAttributes(attributes) == 0) {
-      mType = Compound;
+      mType = Type::Compound;
     }
     else if (getNumAttributes(attributes) <= 2)
     {
       string str = Utils::trim(getStringAttribute(attributes, "type"));
       str = Utils::lowercase(str);
       if (str == "simple") {
-        mType = Simple;
+        mType = Type::Simple;
       }
       else if (str == "compound") {
-        mType = Compound;
+        mType = Type::Compound;
       }
       else if (str == "continuous") {
-        mType = Continuous;
+        mType = Type::Continuous;
       }
       else  {
         throw Exception("unrecognized interest type");

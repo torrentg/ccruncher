@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 #include <QThread>
+#include <QMetaType>
 #include <gsl/gsl_histogram.h>
 #include "utils/CsvFile.hpp"
 #include "utils/Exception.hpp"
@@ -95,11 +96,12 @@ class kahan
 class AnalysisTask : public QThread
 {
     Q_OBJECT
+    Q_ENUMS(ccruncher_gui::AnalysisTask::status)
 
   public:
 
-    // enum operation modes
-    enum mode
+    // operation modes
+    enum class mode
     {
       none=0,             //!< None
       histogram=1,        //!< Histogram
@@ -111,7 +113,7 @@ class AnalysisTask : public QThread
     };
 
     // status types
-    enum status
+    enum class status
     {
       reading=1,   //!< Readind data
       running=2,   //!< Doing data analysis
@@ -212,11 +214,13 @@ class AnalysisTask : public QThread
   signals:
 
     //! Status updated
-    void statusChanged(int);
+    void statusChanged(ccruncher_gui::AnalysisTask::status);
 
 };
 
 } // namespace
+
+Q_DECLARE_METATYPE(ccruncher_gui::AnalysisTask::status)
 
 #endif
 

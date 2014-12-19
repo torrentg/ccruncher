@@ -190,7 +190,7 @@ void ccruncher::Portfolio::epstartAsset(ExpatUserData &, const char **attributes
 
   const char *str = getAttributeValue(attributes, "lgd", nullptr);
   if (str != nullptr) assetLGD = LGD(str);
-  else assetLGD = LGD(LGD::Fixed,NAN);
+  else assetLGD = LGD(LGD::Type::Fixed,NAN);
 
   Asset asset(mNumSegmentations);
   asset.values.push_back(DateValues(date, 0.0, 0.0));
@@ -217,7 +217,7 @@ void ccruncher::Portfolio::epstartBelongsto(ExpatUserData &eu, const char **attr
 
   if (mStage == 2) // obligor
   {
-    if (segmentation.getType() != Segmentation::ComponentsType::obligor) {
+    if (segmentation.getType() != Segmentation::Type::obligor) {
       throw Exception("trying to assign an obligor to a segmentation composed of assets");
     }
     assert(!mObligors.empty());
@@ -225,7 +225,7 @@ void ccruncher::Portfolio::epstartBelongsto(ExpatUserData &eu, const char **attr
   }
   else if (mStage == 3) //asset
   {
-    if (segmentation.getType() != Segmentation::ComponentsType::asset) {
+    if (segmentation.getType() != Segmentation::Type::asset) {
       throw Exception("trying to assign an asset to a segmentation composed of obligors");
     }
     assert(!mObligors.empty());

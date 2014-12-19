@@ -36,10 +36,10 @@ using namespace ccruncher_gui;
 /**************************************************************************/
 ccruncher_gui::AnalysisTask::AnalysisTask() : QThread(), hist(nullptr)
 {
-  mode_ = none;
+  mode_ = mode::none;
   progress = 0.0f;
   msgerr = "";
-  setStatus(finished);
+  setStatus(status::finished);
   setTerminationEnabled(false);
 }
 
@@ -71,22 +71,22 @@ void ccruncher_gui::AnalysisTask::setData(mode m, int s, double p)
   mode_ = m;
   switch(m)
   {
-    case histogram:
+    case mode::histogram:
       isegment = s;
       numbins = (size_t)(p+0.5);
       break;
-    case evolution_el:
+    case mode::evolution_el:
       isegment = s;
       break;
-    case evolution_var:
-    case evolution_es:
+    case mode::evolution_var:
+    case mode::evolution_es:
       isegment = s;
       percentile = p;
       assert(0.0 < p && p < 1.0);
       break;
-    case contribution_el:
+    case mode::contribution_el:
       break;
-    case contribution_es:
+    case mode::contribution_es:
       percentile = p;
       assert(0.0 < p && p < 1.0);
       break;
@@ -144,7 +144,7 @@ const std::vector<contrib>& ccruncher_gui::AnalysisTask::getContributions() cons
 void ccruncher_gui::AnalysisTask::readData(int col, std::vector<double> &ret)
 {
   try {
-    setStatus(reading);
+    setStatus(status::reading);
     ret.clear();
     // if col<0 return rowsums
     csv.getColumn(col, ret, &stop_);
@@ -173,7 +173,7 @@ void ccruncher_gui::AnalysisTask::readData(int col, std::vector<double> &ret)
 void ccruncher_gui::AnalysisTask::readData(std::vector<std::vector<double>> &content)
 {
   try {
-    setStatus(reading);
+    setStatus(status::reading);
     content.clear();
     csv.getColumns(content, &stop_);
     if (stop_) throw StopException();
@@ -209,37 +209,37 @@ void ccruncher_gui::AnalysisTask::run()
 
     switch(mode_)
     {
-      case histogram: {
+      case mode::histogram: {
         vector<double> values;
         readData(isegment, values);
         runHistogram(values);
         break;
       }
-      case evolution_el: {
+      case mode::evolution_el: {
         vector<double> values;
         readData(isegment, values);
         runEvolutionEL(values);
         break;
       }
-      case evolution_var: {
+      case mode::evolution_var: {
         vector<double> values;
         readData(isegment, values);
         runEvolutionVAR(values);
         break;
       }
-      case evolution_es: {
+      case mode::evolution_es: {
         vector<double> values;
         readData(isegment, values);
         runEvolutionES(values);
         break;
       }
-      case contribution_el: {
+      case mode::contribution_el: {
         vector<vector<double>> content;
         readData(content);
         runContributionEL(content);
         break;
       }
-      case contribution_es: {
+      case mode::contribution_es: {
         vector<vector<double>> content;
         readData(content);
         runContributionES(content);
@@ -248,17 +248,17 @@ void ccruncher_gui::AnalysisTask::run()
       default:
         assert(false);
     }
-    setStatus(finished);
+    setStatus(status::finished);
   }
   catch(StopException &e1)
   {
     assert(stop_);
-    setStatus(stopped);
+    setStatus(status::stopped);
   }
   catch(std::exception &e2)
   {
     msgerr += (msgerr.empty()?"":"\n") + string(e2.what());
-    setStatus(failed);
+    setStatus(status::failed);
   }
 }
 
@@ -269,7 +269,7 @@ void ccruncher_gui::AnalysisTask::run()
  */
 void ccruncher_gui::AnalysisTask::runHistogram(const std::vector<double> &values)
 {
-  setStatus(running);
+  setStatus(status::running);
 
   if (hist != nullptr) {
     gsl_histogram_free(hist);
@@ -323,7 +323,7 @@ void ccruncher_gui::AnalysisTask::runHistogram(const std::vector<double> &values
  */
 void ccruncher_gui::AnalysisTask::runEvolutionEL(const std::vector<double> &values)
 {
-  setStatus(running);
+  setStatus(status::running);
   statvals.clear();
 
   size_t numpoints = std::min(values.size(), (size_t)2048);
@@ -365,7 +365,7 @@ void ccruncher_gui::AnalysisTask::runEvolutionEL(const std::vector<double> &valu
  */
 void ccruncher_gui::AnalysisTask::runEvolutionVAR(std::vector<double> &values)
 {
-  setStatus(running);
+  setStatus(status::running);
   statvals.clear();
 
   size_t numpoints = std::min(values.size(), (size_t)100); //2048
@@ -497,7 +497,7 @@ statval ccruncher_gui::AnalysisTask::valueAtRisk(double percentile,
  */
 void ccruncher_gui::AnalysisTask::runEvolutionES(std::vector<double> &values)
 {
-  setStatus(running);
+  setStatus(status::running);
   statvals.clear();
 
   size_t numpoints = std::min(values.size(), (size_t)100); //2048
@@ -570,7 +570,7 @@ statval ccruncher_gui::AnalysisTask::expectedShortfall(double percentile,
  */
 void ccruncher_gui::AnalysisTask::runContributionEL(const std::vector<std::vector<double>> &content)
 {
-  setStatus(running);
+  setStatus(status::running);
 
   statvals.clear();
   statvals.reserve(1);
@@ -635,7 +635,7 @@ void ccruncher_gui::AnalysisTask::runContributionEL(const std::vector<std::vecto
  */
 void ccruncher_gui::AnalysisTask::runContributionES(std::vector<std::vector<double>> &content)
 {
-  setStatus(running);
+  setStatus(status::running);
 
   statvals.clear();
   statvals.reserve(1);
@@ -718,7 +718,7 @@ void ccruncher_gui::AnalysisTask::stop()
 void ccruncher_gui::AnalysisTask::setStatus(status s)
 {
   status_ = s;
-  emit statusChanged((int)s);
+  emit statusChanged(s);
 }
 
 /**************************************************************************//**
