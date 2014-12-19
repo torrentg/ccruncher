@@ -45,7 +45,7 @@ class Interest : public ExpatHandlers
   public:
 
     //! Type of interest
-    enum InterestType
+    enum class Type
     {
       Simple,    //!< Simple interest
       Compound,  //!< Compounded (yearly) interest
@@ -77,7 +77,7 @@ class Interest : public ExpatHandlers
   private:
 
     //! Interest type
-    InterestType mType;
+    Type mType;
     //! Interest curve date
     Date mDate;
     //! Rate values
@@ -108,7 +108,7 @@ class Interest : public ExpatHandlers
   public:
 
     //! Constructor
-    Interest(const Date &date=NAD, InterestType type=Compound);
+    Interest(const Date &date=NAD, Type type=Type::Compound);
     //! Copy constructor
     Interest(const Interest &);
     //! Destructor
@@ -116,7 +116,7 @@ class Interest : public ExpatHandlers
     //! Assignment operator
     Interest & operator=(const Interest &);
     //! Return interest type
-    InterestType getType() const;
+    Type getType() const;
     //! Numbers of user-defined rates
     int size() const;
     //! Set initial date

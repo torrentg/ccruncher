@@ -26,6 +26,7 @@
 #include <string>
 #include <map>
 #include <QThread>
+#include <QMetaType>
 #include "utils/Logger.hpp"
 
 // forward declaration
@@ -42,11 +43,12 @@ namespace ccruncher_gui {
 class SimulationTask : public QThread
 {
     Q_OBJECT
+    Q_ENUMS(ccruncher_gui::SimulationTask::status)
 
   public:
 
     //! Status types
-    enum status
+    enum class status
     {
       reading=1,    //!< Reading input file
       simulating=2, //!< Doing Monte Carlo
@@ -121,11 +123,13 @@ class SimulationTask : public QThread
   signals:
 
     //! Status updated
-    void statusChanged(int);
+    void statusChanged(ccruncher_gui::SimulationTask::status);
 
 };
 
 } // namespace
+
+Q_DECLARE_METATYPE(ccruncher_gui::SimulationTask::status)
 
 #endif
 

@@ -135,7 +135,7 @@ bool ccruncher::Expr::isFunction(const char *ptr, token *tok, char **endptr)
     size_t len = strlen(functions[i].id);
     if(strncmp(ptr, functions[i].id, len) == 0 && !isalnum(*(ptr+len)))
     {
-      tok->type = FUNCTION;
+      tok->type = TokenType::FUNCTION;
       tok->dat.n = i;
       *endptr = const_cast<char*>(ptr+len);
       return true;
@@ -158,7 +158,7 @@ bool ccruncher::Expr::isConstant(const char *ptr, token *tok, char **endptr)
     size_t len = strlen(constants[i].id);
     if(strncmp(ptr, constants[i].id, len) == 0 && !isalnum(*(ptr+len)))
     {
-      tok->type = CONSTANT;
+      tok->type = TokenType::CONSTANT;
       tok->dat.n = i;
       *endptr = const_cast<char*>(ptr+len);
       return true;
@@ -181,7 +181,7 @@ bool ccruncher::Expr::isOperator(const char *ptr, token *tok, char **endptr)
     size_t len = strlen(operators[i].id);
     if(strncmp(ptr, operators[i].id, len) == 0)
     {
-      tok->type = OPERATOR;
+      tok->type = TokenType::OPERATOR;
       tok->dat.n = i;
       *endptr = const_cast<char*>(ptr+len);
       return true;
@@ -207,7 +207,7 @@ bool ccruncher::Expr::isNumber(const char *ptr, token *tok, char **endptr)
   }
   else
   {
-    tok->type = NUMBER;
+    tok->type = TokenType::NUMBER;
     return true;
   }
 }
@@ -230,7 +230,7 @@ bool ccruncher::Expr::isVariable(const char *ptr, token *tok, char **endptr, std
     size_t len = variables[i].id.size();
     if(strncmp(ptr, variables[i].id.c_str(), len) == 0 && !isalnum(*(ptr+len)) && *(ptr+len) != '_')
     {
-      tok->type = VARIABLE;
+      tok->type = TokenType::VARIABLE;
       tok->dat.n = i;
       *endptr = const_cast<char*>(ptr+len);
       return true;
@@ -249,7 +249,7 @@ bool ccruncher::Expr::isVariable(const char *ptr, token *tok, char **endptr, std
   {
     var.ptr = nullptr;
     variables.push_back(var);
-    tok->type = VARIABLE;
+    tok->type = TokenType::VARIABLE;
     tok->dat.n = variables.size()-1;
     *endptr = const_cast<char*>(ptr);
     return true;
@@ -271,27 +271,27 @@ void ccruncher::Expr::next(const char *ptr, token *tok, char **endptr, std::vect
 
   if (*ptr == '\0')
   {
-    tok->type = END;
+    tok->type = TokenType::END;
     *endptr = const_cast<char*>(ptr);
     return;
   }
   else if (*ptr == CHAR_PARENTHESIS_OPEN)
   {
-    tok->type = PARENTHESIS_OPEN;
+    tok->type = TokenType::PARENTHESIS_OPEN;
     tok->dat.n = 0;
     *endptr = const_cast<char*>(ptr+1);
     return;
   }
   else if (*ptr == CHAR_PARENTHESIS_CLOSE)
   {
-    tok->type = PARENTHESIS_CLOSE;
+    tok->type = TokenType::PARENTHESIS_CLOSE;
     tok->dat.n = 0;
     *endptr = const_cast<char*>(ptr+1);
     return;
   }
   else if (*ptr == CHAR_ARGUMENT_SEPARATOR)
   {
-    tok->type = ARGUMENT_SEPARATOR;
+    tok->type = TokenType::ARGUMENT_SEPARATOR;
     tok->dat.n = 0;
     *endptr = const_cast<char*>(ptr+1);
     return;
@@ -310,7 +310,7 @@ void ccruncher::Expr::next(const char *ptr, token *tok, char **endptr, std::vect
  */
 inline bool ccruncher::Expr::isValue(TokenType type)
 {
-  if (type == NUMBER || type == VARIABLE || type == CONSTANT) return true;
+  if (type == TokenType::NUMBER || type == TokenType::VARIABLE || type == TokenType::CONSTANT) return true;
   else return false;
 }
 
@@ -324,29 +324,29 @@ inline bool ccruncher::Expr::isValue(TokenType type)
  */
 void ccruncher::Expr::check(token *prevtok, token *curtok)
 {
-  if (prevtok->type == FUNCTION && functions[prevtok->dat.n].args == 0)
+  if (prevtok->type == TokenType::FUNCTION && functions[prevtok->dat.n].args == 0)
   {
-    if (isValue(curtok->type) || (curtok->type==FUNCTION && functions[curtok->dat.n].args != 0) || curtok->type == PARENTHESIS_OPEN) return;
+    if (isValue(curtok->type) || (curtok->type==TokenType::FUNCTION && functions[curtok->dat.n].args != 0) || curtok->type == TokenType::PARENTHESIS_OPEN) return;
     else throw Exception("syntax error");
   }
-  else if (isValue(curtok->type) || curtok->type == FUNCTION)
+  else if (isValue(curtok->type) || curtok->type == TokenType::FUNCTION)
   {
-    if (isValue(prevtok->type) || prevtok->type == FUNCTION || prevtok->type == PARENTHESIS_CLOSE) throw Exception("syntax error");
+    if (isValue(prevtok->type) || prevtok->type == TokenType::FUNCTION || prevtok->type == TokenType::PARENTHESIS_CLOSE) throw Exception("syntax error");
     else return;
   }
-  else if (curtok->type == OPERATOR)
+  else if (curtok->type == TokenType::OPERATOR)
   {
-    if (prevtok->type == OPERATOR || prevtok->type == FUNCTION || prevtok->type == PARENTHESIS_OPEN || prevtok->type == ARGUMENT_SEPARATOR || prevtok->type == END) throw Exception("syntax error");
+    if (prevtok->type == TokenType::OPERATOR || prevtok->type == TokenType::FUNCTION || prevtok->type == TokenType::PARENTHESIS_OPEN || prevtok->type == TokenType::ARGUMENT_SEPARATOR || prevtok->type == TokenType::END) throw Exception("syntax error");
     else return;
   }
-  else if (curtok->type == PARENTHESIS_OPEN)
+  else if (curtok->type == TokenType::PARENTHESIS_OPEN)
   {
-    if (isValue(prevtok->type) || prevtok->type == PARENTHESIS_CLOSE) throw Exception("syntax error");
+    if (isValue(prevtok->type) || prevtok->type == TokenType::PARENTHESIS_CLOSE) throw Exception("syntax error");
     else return;
   }
-  else if (curtok->type == PARENTHESIS_CLOSE || curtok->type == ARGUMENT_SEPARATOR || curtok->type == END)
+  else if (curtok->type == TokenType::PARENTHESIS_CLOSE || curtok->type == TokenType::ARGUMENT_SEPARATOR || curtok->type == TokenType::END)
   {
-    if (prevtok->type == OPERATOR || prevtok->type == FUNCTION || prevtok->type == PARENTHESIS_OPEN || prevtok->type == ARGUMENT_SEPARATOR || prevtok->type == END) throw Exception("syntax error");
+    if (prevtok->type == TokenType::OPERATOR || prevtok->type == TokenType::FUNCTION || prevtok->type == TokenType::PARENTHESIS_OPEN || prevtok->type == TokenType::ARGUMENT_SEPARATOR || prevtok->type == TokenType::END) throw Exception("syntax error");
     else return;
   }
   assert(false);
@@ -368,21 +368,21 @@ void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
   while(true)
   {
     // RULE: NUMBER -> no simplification
-    if (tokens[pos].type==NUMBER || tokens[pos].type==END)
+    if (tokens[pos].type==TokenType::NUMBER || tokens[pos].type==TokenType::END)
     {
       break;
     }
 
     // RULE: replace CONSTANT -> NUMBER
-    if (tokens[pos].type==CONSTANT)
+    if (tokens[pos].type==TokenType::CONSTANT)
     {
-      tokens[pos].type = NUMBER;
+      tokens[pos].type = TokenType::NUMBER;
       tokens[pos].dat.x = constants[tokens[pos].dat.n].x;
       break;
     }
 
     // RULE: remove plus sign
-    if (tokens[pos].type==FUNCTION && tokens[pos].dat.n==0)
+    if (tokens[pos].type==TokenType::FUNCTION && tokens[pos].dat.n==0)
     {
       tokens.pop_back();
       pos--;
@@ -390,7 +390,7 @@ void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
     }
 
     // RULE: remove double minus signs (eg. -(-x) -> x)
-    if (pos >= 2 && tokens[pos].type==FUNCTION && tokens[pos].dat.n==1 && tokens[pos-1].type==FUNCTION && tokens[pos-1].dat.n==1)
+    if (pos >= 2 && tokens[pos].type==TokenType::FUNCTION && tokens[pos].dat.n==1 && tokens[pos-1].type==TokenType::FUNCTION && tokens[pos-1].dat.n==1)
     {
       tokens.pop_back();
       tokens.pop_back();
@@ -399,9 +399,9 @@ void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
     }
 
     // RULE: simplify minus sign (eg. -subexp*3 -> subexp*(-3), -subexp/3 -> subexp/(-3))
-    if (pos >= 2 && tokens[pos].type==OPERATOR && (tokens[pos].dat.n==2 || tokens[pos].dat.n==3) && tokens[pos-1].type==NUMBER && tokens[pos-2].type==FUNCTION && tokens[pos-2].dat.n==1)
+    if (pos >= 2 && tokens[pos].type==TokenType::OPERATOR && (tokens[pos].dat.n==2 || tokens[pos].dat.n==3) && tokens[pos-1].type==TokenType::NUMBER && tokens[pos-2].type==TokenType::FUNCTION && tokens[pos-2].dat.n==1)
     {
-      tokens[pos-2].type = NUMBER;
+      tokens[pos-2].type = TokenType::NUMBER;
       tokens[pos-2].dat.x = -tokens[pos-1].dat.x;
       tokens[pos-1] = tokens[pos];
       tokens.pop_back();
@@ -410,7 +410,7 @@ void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
     }
 
     // RULE: numbers always at the end (eg. 1+x -> x+1, 2*x -> x*2)
-    if (pos >= 2 && tokens[pos].type==OPERATOR && (tokens[pos].dat.n==0 || tokens[pos].dat.n==2) && tokens[pos-1].type==VARIABLE && tokens[pos-2].type==NUMBER)
+    if (pos >= 2 && tokens[pos].type==TokenType::OPERATOR && (tokens[pos].dat.n==0 || tokens[pos].dat.n==2) && tokens[pos-1].type==TokenType::VARIABLE && tokens[pos-2].type==TokenType::NUMBER)
     {
       token aux = tokens[pos-2];
       tokens[pos-2] = tokens[pos-1];
@@ -419,7 +419,7 @@ void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
     }
 
     // RULE: two consecutive operators with equal precedence
-    if (pos >= 3 && tokens[pos].type==OPERATOR && tokens[pos-1].type==NUMBER && tokens[pos-2].type==OPERATOR && operators[tokens[pos].dat.n].prec==operators[tokens[pos-2].dat.n].prec && tokens[pos-3].type==NUMBER)
+    if (pos >= 3 && tokens[pos].type==TokenType::OPERATOR && tokens[pos-1].type==TokenType::NUMBER && tokens[pos-2].type==TokenType::OPERATOR && operators[tokens[pos].dat.n].prec==operators[tokens[pos-2].dat.n].prec && tokens[pos-3].type==TokenType::NUMBER)
     {
       // precedence '+' (eg. subexp+1+2 -> subexp+3, subexp+1-2 -> subexp+(-1), subexp-1+2 -> subexp+1, subexp-1-2 -> subexp+(-3))
       if (operators[tokens[pos].dat.n].prec == 0)
@@ -459,9 +459,9 @@ void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
     }
 
     // RULE: apply operator
-    if (pos >= 2 && tokens[pos].type == OPERATOR && tokens[pos-1].type == NUMBER && tokens[pos-2].type == NUMBER)
+    if (pos >= 2 && tokens[pos].type == TokenType::OPERATOR && tokens[pos-1].type == TokenType::NUMBER && tokens[pos-2].type == TokenType::NUMBER)
     {
-      tokens[pos-2].type = NUMBER;
+      tokens[pos-2].type = TokenType::NUMBER;
       tokens[pos-2].dat.x = operators[tokens[pos].dat.n].func(tokens[pos-2].dat.x,tokens[pos-1].dat.x);
       tokens.pop_back();
       tokens.pop_back();
@@ -470,22 +470,22 @@ void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
     }
 
     // RULE: apply function
-    if (tokens[pos].type == FUNCTION)
+    if (tokens[pos].type == TokenType::FUNCTION)
     {
-      if (pos >= 1 && functions[tokens[pos].dat.n].args <= 1 && tokens[pos-1].type == NUMBER)
+      if (pos >= 1 && functions[tokens[pos].dat.n].args <= 1 && tokens[pos-1].type == TokenType::NUMBER)
       {
         ffunc1 f = (ffunc1) functions[tokens[pos].dat.n].ptr;
-        tokens[pos-1].type = NUMBER;
+        tokens[pos-1].type = TokenType::NUMBER;
         tokens[pos-1].dat.x = f(tokens[pos-1].dat.x);
         tokens.pop_back();
         pos--;
         break;
       }
 
-      if (pos >= 2 && functions[tokens[pos].dat.n].args == 2 && tokens[pos-1].type == NUMBER && tokens[pos-2].type == NUMBER)
+      if (pos >= 2 && functions[tokens[pos].dat.n].args == 2 && tokens[pos-1].type == TokenType::NUMBER && tokens[pos-2].type == TokenType::NUMBER)
       {
         ffunc2 f = (ffunc2) functions[tokens[pos].dat.n].ptr;
-        tokens[pos-2].type = NUMBER;
+        tokens[pos-2].type = TokenType::NUMBER;
         tokens[pos-2].dat.x = f(tokens[pos-2].dat.x,tokens[pos-1].dat.x);
         tokens.pop_back();
         tokens.pop_back();
@@ -493,10 +493,10 @@ void ccruncher::Expr::push(token &tok, std::vector<token> &tokens)
         break;
       }
 
-      if (pos >= 3 && functions[tokens[pos].dat.n].args == 3 && tokens[pos-1].type == NUMBER && tokens[pos-2].type == NUMBER && tokens[pos-3].type == NUMBER)
+      if (pos >= 3 && functions[tokens[pos].dat.n].args == 3 && tokens[pos-1].type == TokenType::NUMBER && tokens[pos-2].type == TokenType::NUMBER && tokens[pos-3].type == TokenType::NUMBER)
       {
         ffunc3 f = (ffunc3) functions[tokens[pos].dat.n].ptr;
-        tokens[pos-3].type = NUMBER;
+        tokens[pos-3].type = TokenType::NUMBER;
         tokens[pos-3].dat.x = f(tokens[pos-3].dat.x,tokens[pos-2].dat.x,tokens[pos-1].dat.x);
         tokens.pop_back();
         tokens.pop_back();
@@ -540,7 +540,7 @@ void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables,
   const char *ptr = str;
   char *endptr;
 
-  prevtok.type = END;
+  prevtok.type = TokenType::END;
 
   try
   {
@@ -549,11 +549,11 @@ void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables,
       next(ptr, &curtok, &endptr,variables);
 
       // special cases: '+' and '-' functions
-      if (curtok.type == OPERATOR && (curtok.dat.n == 0 || curtok.dat.n == 1))
+      if (curtok.type == TokenType::OPERATOR && (curtok.dat.n == 0 || curtok.dat.n == 1))
       {
-        if (prevtok.type == END || prevtok.type == PARENTHESIS_OPEN || prevtok.type == ARGUMENT_SEPARATOR)
+        if (prevtok.type == TokenType::END || prevtok.type == TokenType::PARENTHESIS_OPEN || prevtok.type == TokenType::ARGUMENT_SEPARATOR)
         {
-          curtok.type = FUNCTION;
+          curtok.type = TokenType::FUNCTION;
         }
       }
 
@@ -563,26 +563,26 @@ void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables,
       {
         push(curtok, tokens);
       }
-      else if (curtok.type == FUNCTION)
+      else if (curtok.type == TokenType::FUNCTION)
       {
         pile.push(curtok);
       }
-      else if (curtok.type == ARGUMENT_SEPARATOR)
+      else if (curtok.type == TokenType::ARGUMENT_SEPARATOR)
       {
-        while(!pile.empty() && pile.top().type != PARENTHESIS_OPEN)
+        while(!pile.empty() && pile.top().type != TokenType::PARENTHESIS_OPEN)
         {
           push(pile.top(), tokens);
           pile.pop();
         }
 
-        if (pile.empty() || pile.top().type != PARENTHESIS_OPEN) throw Exception("parenthesis matching");
+        if (pile.empty() || pile.top().type != TokenType::PARENTHESIS_OPEN) throw Exception("parenthesis matching");
 
         assert(!numargs.empty());
         numargs.top()++;
       }
-      else if (curtok.type == OPERATOR)
+      else if (curtok.type == TokenType::OPERATOR)
       {
-        if (!pile.empty() && pile.top().type == FUNCTION && functions[pile.top().dat.n].args == 0)
+        if (!pile.empty() && pile.top().type == TokenType::FUNCTION && functions[pile.top().dat.n].args == 0)
         {
           push(pile.top(), tokens);
           pile.pop();
@@ -590,7 +590,7 @@ void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables,
 
         if (operators[curtok.dat.n].left)
         {
-          while(!pile.empty() && pile.top().type == OPERATOR && operators[curtok.dat.n].prec <= operators[pile.top().dat.n].prec)
+          while(!pile.empty() && pile.top().type == TokenType::OPERATOR && operators[curtok.dat.n].prec <= operators[pile.top().dat.n].prec)
           {
             push(pile.top(), tokens);
             pile.pop();
@@ -598,7 +598,7 @@ void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables,
         }
         else
         {
-          while(!pile.empty() && pile.top().type == OPERATOR && operators[curtok.dat.n].prec < operators[pile.top().dat.n].prec)
+          while(!pile.empty() && pile.top().type == TokenType::OPERATOR && operators[curtok.dat.n].prec < operators[pile.top().dat.n].prec)
           {
             push(pile.top(), tokens);
             pile.pop();
@@ -606,27 +606,27 @@ void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables,
         }
         pile.push(curtok);
       }
-      else if (curtok.type == PARENTHESIS_OPEN)
+      else if (curtok.type == TokenType::PARENTHESIS_OPEN)
       {
         pile.push(curtok);
         numargs.push(1);
       }
-      else if (curtok.type == PARENTHESIS_CLOSE)
+      else if (curtok.type == TokenType::PARENTHESIS_CLOSE)
       {
-        while(!pile.empty() && pile.top().type != PARENTHESIS_OPEN)
+        while(!pile.empty() && pile.top().type != TokenType::PARENTHESIS_OPEN)
         {
           push(pile.top(), tokens);
           pile.pop();
         }
 
-        if (!pile.empty() && pile.top().type == PARENTHESIS_OPEN) pile.pop();
+        if (!pile.empty() && pile.top().type == TokenType::PARENTHESIS_OPEN) pile.pop();
         else throw Exception("parenthesis matching");
 
-        if ((pile.empty() || pile.top().type != FUNCTION) && numargs.top() != 1) {
+        if ((pile.empty() || pile.top().type != TokenType::FUNCTION) && numargs.top() != 1) {
           throw Exception("unexpected arguments");
         }
 
-        if (!pile.empty() && pile.top().type == FUNCTION && functions[pile.top().dat.n].args > 0)
+        if (!pile.empty() && pile.top().type == TokenType::FUNCTION && functions[pile.top().dat.n].args > 0)
         {
           int n = functions[pile.top().dat.n].args;
           if (n != numargs.top()) throw Exception("invalid number of arguments");
@@ -634,7 +634,7 @@ void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables,
           pile.pop();
         }
 
-        if (!pile.empty() && pile.top().type == FUNCTION && functions[pile.top().dat.n].args == 0)
+        if (!pile.empty() && pile.top().type == TokenType::FUNCTION && functions[pile.top().dat.n].args == 0)
         {
           push(pile.top(), tokens);
           pile.pop();
@@ -643,11 +643,11 @@ void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables,
         assert(!numargs.empty());
         numargs.pop();
       }
-      else if (curtok.type == END)
+      else if (curtok.type == TokenType::END)
       {
         while(!pile.empty())
         {
-          if (pile.top().type != PARENTHESIS_OPEN)
+          if (pile.top().type != TokenType::PARENTHESIS_OPEN)
           {
             push(pile.top(), tokens);
             pile.pop();
@@ -694,24 +694,24 @@ int ccruncher::Expr::link(std::vector<token> &tokens, const std::vector<variable
     // replacing indexes by references
     switch(tokens[i].type)
     {
-      case FUNCTION: {
+      case TokenType::FUNCTION: {
         if (tokens[i].dat.n >= int(NUMFUNCTIONS)) throw Exception("function not found");
-        if (functions[tokens[i].dat.n].args <= 1) tokens[i].type = FUNCTION1;
-        else if (functions[tokens[i].dat.n].args == 2) tokens[i].type = FUNCTION2;
-        else if (functions[tokens[i].dat.n].args == 3) tokens[i].type = FUNCTION3;
+        if (functions[tokens[i].dat.n].args <= 1) tokens[i].type = TokenType::FUNCTION1;
+        else if (functions[tokens[i].dat.n].args == 2) tokens[i].type = TokenType::FUNCTION2;
+        else if (functions[tokens[i].dat.n].args == 3) tokens[i].type = TokenType::FUNCTION3;
         tokens[i].dat.pfunc = functions[tokens[i].dat.n].ptr;
         break;
       }
-      case OPERATOR: {
-        tokens[i].type = FUNCTION2;
+      case TokenType::OPERATOR: {
+        tokens[i].type = TokenType::FUNCTION2;
         if (tokens[i].dat.n >= int(NUMOPERATORS)) throw Exception("operator not found");
         else tokens[i].dat.pfunc = (ffunc0) operators[tokens[i].dat.n].func;
         break;
       }
-      case VARIABLE: {
+      case TokenType::VARIABLE: {
         if (tokens[i].dat.n >= (int)variables.size()) throw Exception("variable not found");
         if (variables[tokens[i].dat.n].ptr == nullptr) throw Exception("variable not linked");
-        tokens[i].type = VALREF;
+        tokens[i].type = TokenType::VALREF;
         tokens[i].dat.ptr = variables[tokens[i].dat.n].ptr;
         break;
       }
@@ -721,22 +721,22 @@ int ccruncher::Expr::link(std::vector<token> &tokens, const std::vector<variable
     // computing stack size & validating tokens
     switch(tokens[i].type)
     {
-      case VALREF:
-      case NUMBER: {
+      case TokenType::VALREF:
+      case TokenType::NUMBER: {
         size++;
         if (size > max_size) max_size = size;
         break;
       }
-      case FUNCTION2: {
+      case TokenType::FUNCTION2: {
         size--;
         break;
       }
-      case FUNCTION3: {
+      case TokenType::FUNCTION3: {
         size -= 2;
         break;
       }
-      case FUNCTION1:
-      case END:
+      case TokenType::FUNCTION1:
+      case TokenType::END:
         break;
       default:
         throw Exception("corrupted stack");
@@ -780,36 +780,36 @@ double ccruncher::Expr::eval(const token *tokens, size_t maxsize)
   {
     switch(tokens[i].type)
     {
-      case VALREF: {
+      case TokenType::VALREF: {
         if (cont >= maxsize) throw Exception("stack size too low");
         values[cont] = *((double*)tokens[i].dat.ptr);
         cont++;
         break;
       }
-      case NUMBER: {
+      case TokenType::NUMBER: {
         if (cont >= maxsize) throw Exception("stack size too low");
         values[cont] = tokens[i].dat.x;
         cont++;
         break;
       }
-      case FUNCTION1: {
+      case TokenType::FUNCTION1: {
         ffunc1 f = (ffunc1) tokens[i].dat.pfunc;
         values[cont-1] = f(values[cont-1]);
         break;
       }
-      case FUNCTION2: {
+      case TokenType::FUNCTION2: {
         ffunc2 f = (ffunc2) tokens[i].dat.pfunc;
         values[cont-2] = f(values[cont-2],values[cont-1]);
         cont--;
         break;
       }
-      case FUNCTION3: {
+      case TokenType::FUNCTION3: {
         ffunc3 f = (ffunc3) tokens[i].dat.pfunc;
         values[cont-3] = f(values[cont-3],values[cont-2],values[cont-1]);
         cont -= 2;
         break;
       }
-      case END:
+      case TokenType::END:
         if (cont != 1) throw Exception("corrupted stack");
         return values[0];
       default:
@@ -863,34 +863,34 @@ void ccruncher::Expr::debug(const std::vector<token> &tokens, const std::vector<
 
     switch(tokens[i].type)
     {
-      case NUMBER:
+      case TokenType::NUMBER:
         cout << "NUM\t" << tokens[i].dat.x << endl;
         break;
-      case VARIABLE:
+      case TokenType::VARIABLE:
         cout << "VAR\t" << variables[tokens[i].dat.n].id << endl;
         break;
-      case CONSTANT:
+      case TokenType::CONSTANT:
         cout << "CONST\t" << constants[tokens[i].dat.n].id << endl;
         break;
-      case OPERATOR:
+      case TokenType::OPERATOR:
         cout << "OPER\t" << operators[tokens[i].dat.n].id << endl;
         break;
-      case FUNCTION:
+      case TokenType::FUNCTION:
         cout << "FUNC\t" << functions[tokens[i].dat.n].id << endl;
         break;
-      case END:
+      case TokenType::END:
         cout << "END" << endl;
         break;
-      case FUNCTION1:
+      case TokenType::FUNCTION1:
         cout << "FUNC1\t" << getFunctionName(tokens[i].dat.pfunc) << endl;
         break;
-      case FUNCTION2:
+      case TokenType::FUNCTION2:
         cout << "FUNC2\t" << getFunctionName(tokens[i].dat.pfunc) << endl;
         break;
-      case FUNCTION3:
+      case TokenType::FUNCTION3:
         cout << "FUNC3\t" << getFunctionName(tokens[i].dat.pfunc) << endl;
         break;
-      case VALREF:
+      case TokenType::VALREF:
         cout << "VALREF\t";
         for(size_t j=0; j<variables.size(); j++) {
           if (variables[j].ptr == tokens[j].dat.ptr) {

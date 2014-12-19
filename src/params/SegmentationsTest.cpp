@@ -81,7 +81,7 @@ void ccruncher_test::SegmentationsTest::test1()
   ASSERT(sobj[4].getName() == "offices");
 
   // repeated segmentation name
-  sobj.push_back(Segmentation("offices", Segmentation::ComponentsType::obligor));
+  sobj.push_back(Segmentation("offices", Segmentation::Type::obligor));
   ASSERT(!Segmentations::isValid(sobj));
 }
 

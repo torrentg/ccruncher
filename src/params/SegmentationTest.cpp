@@ -41,7 +41,7 @@ void ccruncher_test::SegmentationTest::test1()
       <segment name='0004'/>
     </segmentation>
   */
-  Segmentation segmentation("office", Segmentation::ComponentsType::asset, true);
+  Segmentation segmentation("office", Segmentation::Type::asset, true);
   segmentation.addSegment("0001");
   segmentation.addSegment("0002");
   segmentation.addSegment("0003");
@@ -49,7 +49,7 @@ void ccruncher_test::SegmentationTest::test1()
 
   ASSERT(segmentation.isEnabled());
   ASSERT("office" == segmentation.getName());
-  ASSERT(Segmentation::ComponentsType::asset == segmentation.getType());
+  ASSERT(Segmentation::Type::asset == segmentation.getType());
 
   ASSERT(5 == segmentation.size());
 
@@ -71,7 +71,7 @@ void ccruncher_test::SegmentationTest::test2()
   Segmentation segmentation("portfolio");
   ASSERT_THROW(segmentation.setType("obligors")); // 'obligors' instead of 'obligor'
   segmentation.setType("obligor");
-  ASSERT(segmentation.getType() == Segmentation::ComponentsType::obligor);
+  ASSERT(segmentation.getType() == Segmentation::Type::obligor);
   segmentation.setEnabled(true);
 
   ASSERT(segmentation.getName() == "portfolio");
@@ -85,12 +85,12 @@ void ccruncher_test::SegmentationTest::test2()
 void ccruncher_test::SegmentationTest::test3()
 {
   vector<Segmentation> segmentations;
-  segmentations.push_back(Segmentation("segmentation1",Segmentation::ComponentsType::asset, true));
-  segmentations.push_back(Segmentation("segmentation2",Segmentation::ComponentsType::obligor, false));
-  segmentations.push_back(Segmentation("segmentation3",Segmentation::ComponentsType::asset, true));
-  segmentations.push_back(Segmentation("segmentation4",Segmentation::ComponentsType::obligor, false));
-  segmentations.push_back(Segmentation("segmentation5",Segmentation::ComponentsType::asset, true));
-  segmentations.push_back(Segmentation("segmentation6",Segmentation::ComponentsType::obligor, true));
+  segmentations.push_back(Segmentation("segmentation1",Segmentation::Type::asset, true));
+  segmentations.push_back(Segmentation("segmentation2",Segmentation::Type::obligor, false));
+  segmentations.push_back(Segmentation("segmentation3",Segmentation::Type::asset, true));
+  segmentations.push_back(Segmentation("segmentation4",Segmentation::Type::obligor, false));
+  segmentations.push_back(Segmentation("segmentation5",Segmentation::Type::asset, true));
+  segmentations.push_back(Segmentation("segmentation6",Segmentation::Type::obligor, true));
 
   stable_sort(segmentations.begin(), segmentations.end());
 

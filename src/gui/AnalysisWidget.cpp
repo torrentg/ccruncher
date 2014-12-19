@@ -29,6 +29,7 @@
 #include <QClipboard>
 #include <QToolTip>
 #include <QMimeData>
+#include <QMetaType>
 #include <qwt_plot_grid.h>
 #include <qwt_plot_histogram.h>
 #include <qwt_plot_curve.h>
@@ -128,7 +129,8 @@ ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *
 
   // signals & slots
   connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
-  connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
+  qRegisterMetaType<ccruncher_gui::AnalysisTask::status>();
+  connect(&task, SIGNAL(statusChanged(ccruncher_gui::AnalysisTask::status)), this, SLOT(setStatus(ccruncher_gui::AnalysisTask::status)), Qt::QueuedConnection);
 
   // open file & display
   ui->segment->blockSignals(true);
@@ -232,10 +234,10 @@ void ccruncher_gui::AnalysisWidget::submit()
     switch(iview)
     {
       case 1:
-        task.setData(AnalysisTask::contribution_el);
+        task.setData(AnalysisTask::mode::contribution_el);
         break;
       case 3:
-        task.setData(AnalysisTask::contribution_es, -1, ui->percentile->value()/100.0);
+        task.setData(AnalysisTask::mode::contribution_es, -1, ui->percentile->value()/100.0);
         break;
       default:
         assert(false);
@@ -246,16 +248,16 @@ void ccruncher_gui::AnalysisWidget::submit()
     switch(iview)
     {
       case 0:
-        task.setData(AnalysisTask::histogram, isegment, ui->numbins->value());
+        task.setData(AnalysisTask::mode::histogram, isegment, ui->numbins->value());
         break;
       case 1:
-        task.setData(AnalysisTask::evolution_el, isegment);
+        task.setData(AnalysisTask::mode::evolution_el, isegment);
         break;
       case 2:
-        task.setData(AnalysisTask::evolution_var, isegment, ui->percentile->value()/100.0);
+        task.setData(AnalysisTask::mode::evolution_var, isegment, ui->percentile->value()/100.0);
         break;
       case 3:
-        task.setData(AnalysisTask::evolution_es, isegment, ui->percentile->value()/100.0);
+        task.setData(AnalysisTask::mode::evolution_es, isegment, ui->percentile->value()/100.0);
         break;
       default:
         assert(false);
@@ -275,7 +277,7 @@ void ccruncher_gui::AnalysisWidget::draw()
 {
   mutex.lock();
 
-  if (task.getStatus() == AnalysisTask::reading)
+  if (task.getStatus() == AnalysisTask::status::reading)
   {
     size_t totalbytes = task.getCsvFile().getFileSize();
     size_t readedbytes = task.getCsvFile().getReadedSize();
@@ -296,16 +298,16 @@ void ccruncher_gui::AnalysisWidget::draw()
       task_progress = task.getProgress();
       switch(task.getMode())
       {
-        case AnalysisTask::histogram:
+        case AnalysisTask::mode::histogram:
           drawHistogram();
           break;
-        case AnalysisTask::evolution_el:
-        case AnalysisTask::evolution_var:
-        case AnalysisTask::evolution_es:
+        case AnalysisTask::mode::evolution_el:
+        case AnalysisTask::mode::evolution_var:
+        case AnalysisTask::mode::evolution_es:
           drawCurve();
           break;
-        case AnalysisTask::contribution_el:
-        case AnalysisTask::contribution_es:
+        case AnalysisTask::mode::contribution_el:
+        case AnalysisTask::mode::contribution_es:
           drawPiechart();
           break;
         default:
@@ -618,11 +620,11 @@ void ccruncher_gui::AnalysisWidget::changePercentile()
 /**************************************************************************//**
  * @param[in] val New Status.
  */
-void ccruncher_gui::AnalysisWidget::setStatus(int val)
+void ccruncher_gui::AnalysisWidget::setStatus(AnalysisTask::status val)
 {
   switch(val)
   {
-    case AnalysisTask::reading:
+    case AnalysisTask::status::reading:
       emit newStatusMsg("reading ...");
       actionStop->setEnabled(true);
       ui->plot->setEnabled(false);
@@ -631,7 +633,7 @@ void ccruncher_gui::AnalysisWidget::setStatus(int val)
       progress->fadein();
       timer.start(REFRESH_MS);
       break;
-    case AnalysisTask::running: {
+    case AnalysisTask::status::running: {
       emit newStatusMsg("analyzing ...");
       size_t readedbytes = task.getCsvFile().getReadedSize();
       QString str = Format::bytes(readedbytes).c_str();
@@ -641,7 +643,7 @@ void ccruncher_gui::AnalysisWidget::setStatus(int val)
       ui->plot->setEnabled(true);
       break;
     }
-    case AnalysisTask::failed:
+    case AnalysisTask::status::failed:
       QMessageBox::warning(this, "CCruncher", QString("Error reading data.\n") + task.getMsgErr().c_str());
       actionStop->setEnabled(false);
       progress->fadeout();
@@ -650,7 +652,7 @@ void ccruncher_gui::AnalysisWidget::setStatus(int val)
       draw();
       emit newStatusMsg("error: " + QString(task.getMsgErr().c_str()));
       break;
-    case AnalysisTask::stopped:
+    case AnalysisTask::status::stopped:
       actionStop->setEnabled(false);
       progress->fadeout();
       ui->plot->setEnabled(true);
@@ -658,7 +660,7 @@ void ccruncher_gui::AnalysisWidget::setStatus(int val)
       draw();
       emit newStatusMsg("stopped");
       break;
-    case AnalysisTask::finished:
+    case AnalysisTask::status::finished:
       actionStop->setEnabled(false);
       progress->fadeout();
       ui->plot->setEnabled(true);

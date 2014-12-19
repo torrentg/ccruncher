@@ -45,7 +45,7 @@ class LGD
   public:
 
     //! Loss given default types
-    enum Type
+    enum class Type
     { 
       Fixed=1,   //!< Fixed value in [0,1]
       Uniform=2, //!< Uniform distribution
@@ -120,7 +120,7 @@ class LGD
 /**************************************************************************//**
  * @details Create a LGD with invalid values.
  */
-inline ccruncher::LGD::LGD() : mType(Fixed), mValue1(NAN), mValue2(NAN)
+inline ccruncher::LGD::LGD() : mType(Type::Fixed), mValue1(NAN), mValue2(NAN)
 {
   // nothing to do
 }
@@ -128,7 +128,7 @@ inline ccruncher::LGD::LGD() : mType(Fixed), mValue1(NAN), mValue2(NAN)
 /**************************************************************************//**
  * @details Create a LGD of type fixed.
  */
-inline ccruncher::LGD::LGD(double x) : mType(Fixed), mValue1(x), mValue2(NAN)
+inline ccruncher::LGD::LGD(double x) : mType(Type::Fixed), mValue1(x), mValue2(NAN)
 {
   // nothing to do
 }
@@ -141,14 +141,14 @@ inline double ccruncher::LGD::getValue(const gsl_rng *rng) const
 {
   switch(mType)
   {
-    case Fixed:
+    case Type::Fixed:
       return mValue1;
 
-    case Beta:
+    case Type::Beta:
       assert(rng != nullptr);
       return gsl_ran_beta(rng, mValue1, mValue2);
 
-    case Uniform:
+    case Type::Uniform:
       assert(rng != nullptr);
       return gsl_ran_flat(rng, mValue1, mValue2);
 

@@ -38,8 +38,8 @@ using namespace ccruncher;
 // supported LGD distributions
 //=============================================================
 const ccruncher::LGD::Distr ccruncher::LGD::distrs[] = {
-  {"uniform", 7, Uniform},
-  {"beta", 4, Beta}
+  {"uniform", 7, Type::Uniform},
+  {"beta", 4, Type::Beta}
 };
 
 #define NUMDISTRS (sizeof(distrs)/sizeof(Distr))
@@ -91,7 +91,7 @@ ccruncher::LGD::LGD(const char *cstr)
 
   // fixed value case
   mValue1 = Parser::doubleValue(cstr);
-  init(Fixed, mValue1, NAN);
+  init(Type::Fixed, mValue1, NAN);
 }
 
 /**************************************************************************//**
@@ -145,15 +145,15 @@ bool ccruncher::LGD::valid(Type t, double a, double b)
 {
   switch(t)
   {
-    case Fixed:
+    case Type::Fixed:
       if (a < 0.0 || a > 1.0 || std::isnan(a)) return false;
       else return true;
 
-    case Beta:
+    case Type::Beta:
       if (a <= 0.0 || b <= 0.0 || std::isnan(a) || std::isnan(b)) return false;
       else return true;
 
-    case Uniform:
+    case Type::Uniform:
       if (a < 0.0 || 1.0 < b || b <= a || std::isnan(a) || std::isnan(b)) return false;
       else return true;
 
@@ -171,7 +171,7 @@ bool ccruncher::LGD::valid(Type t, double a, double b)
  */
 void ccruncher::LGD::init(Type t, double a, double b)
 {
-  if (t != Fixed || !std::isnan(a))
+  if (t != Type::Fixed || !std::isnan(a))
   {
     if (!valid(t, a, b)) throw Exception("invalid lgd");
   }

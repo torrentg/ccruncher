@@ -37,16 +37,16 @@ using namespace ccruncher;
 Segmentations ccruncher_test::PortfolioTest::getSegmentations()
 {
   Segmentations segmentations;
-  segmentations.push_back(Segmentation("portfolio", Segmentation::ComponentsType::asset));
-  segmentations.push_back(Segmentation("sectors", Segmentation::ComponentsType::obligor));
+  segmentations.push_back(Segmentation("portfolio", Segmentation::Type::asset));
+  segmentations.push_back(Segmentation("sectors", Segmentation::Type::obligor));
   segmentations.back().addSegment("S1");
   segmentations.back().addSegment("S2");
-  segmentations.push_back(Segmentation("size", Segmentation::ComponentsType::obligor));
+  segmentations.push_back(Segmentation("size", Segmentation::Type::obligor));
   segmentations.back().addSegment("big");
   segmentations.back().addSegment("medium");
-  segmentations.push_back(Segmentation("products", Segmentation::ComponentsType::asset));
+  segmentations.push_back(Segmentation("products", Segmentation::Type::asset));
   segmentations.back().addSegment("bond");
-  segmentations.push_back(Segmentation("offices", Segmentation::ComponentsType::asset));
+  segmentations.push_back(Segmentation("offices", Segmentation::Type::asset));
   segmentations.back().addSegment("0001");
   segmentations.back().addSegment("0002");
   segmentations.back().addSegment("0003");
@@ -183,7 +183,7 @@ void ccruncher_test::PortfolioTest::test2()
   Ratings ratings = {"A", "B", "C", "D", "E"};
   Factors factors = {"S1", "S2"};
   Segmentations segmentations;
-  segmentations.push_back(Segmentation("portfolio", Segmentation::ComponentsType::asset));
+  segmentations.push_back(Segmentation("portfolio", Segmentation::Type::asset));
 
   // creating xml
   ExpatParser xmlparser;

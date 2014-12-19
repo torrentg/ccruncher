@@ -26,6 +26,7 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QCleanlooksStyle>
+#include <QMetaType>
 #include "ui_SimulationWidget.h"
 #include "gui/SimulationWidget.hpp"
 #include "gui/MainWindow.hpp"
@@ -95,7 +96,8 @@ ccruncher_gui::SimulationWidget::SimulationWidget(const QString &filename, QWidg
 
   task.setStreamBuf(&qstream);
   connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
-  connect(&task, SIGNAL(statusChanged(int)), this, SLOT(setStatus(int)), Qt::QueuedConnection);
+  qRegisterMetaType<ccruncher_gui::SimulationTask::status>();
+  connect(&task, SIGNAL(statusChanged(ccruncher_gui::SimulationTask::status)), this, SLOT(setStatus(ccruncher_gui::SimulationTask::status)), Qt::QueuedConnection);
   connect(&qstream, SIGNAL(print(const QString &)), this, SLOT(log(const QString &)), Qt::QueuedConnection);
   connect(ui->log, SIGNAL(anchorClicked(const QUrl &)), this, SIGNAL(anchorClicked(const QUrl &)));
   ui->ifile->setText(filename);
@@ -367,7 +369,7 @@ void ccruncher_gui::SimulationWidget::draw()
 {
   mutex.lock();
 
-  if (task.getStatus() == SimulationTask::reading)
+  if (task.getStatus() == SimulationTask::status::reading)
   {
     if (task.getIData() == nullptr) return;
     size_t mbytes = task.getIData()->getFileSize();
@@ -464,12 +466,12 @@ void ccruncher_gui::SimulationWidget::closeEvent(QCloseEvent *event)
 /**************************************************************************//**
  * @param[in] val New status.
  */
-void ccruncher_gui::SimulationWidget::setStatus(int val)
+void ccruncher_gui::SimulationWidget::setStatus(SimulationTask::status val)
 {
   mutex.lock();
   switch(val)
   {
-    case SimulationTask::reading:
+    case SimulationTask::status::reading:
       ui->progress->setValue(0);
       ui->odir->setEnabled(false);
       ui->odirButton->setEnabled(false);
@@ -482,7 +484,7 @@ void ccruncher_gui::SimulationWidget::setStatus(int val)
       progress->fadein();
       timer.start(REFRESH_MS);
       break;
-    case SimulationTask::simulating: {
+    case SimulationTask::status::simulating: {
       progress->ui->progress->setFormat("");
       progress->ui->progress->setValue(100);
       actionAnal->setEnabled(true);
@@ -490,15 +492,15 @@ void ccruncher_gui::SimulationWidget::setStatus(int val)
       task.free(1);
       break;
     }
-    case SimulationTask::failed: {
+    case SimulationTask::status::failed: {
       QPalette pal = ui->progress->palette();
       pal.setColor(QPalette::Highlight, Qt::red);
       ui->progress->setPalette(pal);
     }
-    case SimulationTask::stopped:
+    case SimulationTask::status::stopped:
       // let progress bar unchanged (if maxsims>0), 100% otherwise
       progress->fadeout();
-    case SimulationTask::finished:
+    case SimulationTask::status::finished:
       timer.stop();
       task.free();
       if (fout.is_open()) fout.close();

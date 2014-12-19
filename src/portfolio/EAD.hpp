@@ -45,7 +45,7 @@ class EAD
   public:
 
     //! Exposure types
-    enum Type
+    enum class Type
     { 
       Fixed=1,       //!< Fixed value ($)
       Lognormal=2,   //!< Lognormal distribution
@@ -129,7 +129,7 @@ class EAD
 /**************************************************************************//**
  * @details Create a EAD with invalid values.
  */
-inline ccruncher::EAD::EAD() : mType(Fixed), mValue1(NAN), mValue2(NAN)
+inline ccruncher::EAD::EAD() : mType(Type::Fixed), mValue1(NAN), mValue2(NAN)
 {
   // nothing to do
 }
@@ -137,7 +137,7 @@ inline ccruncher::EAD::EAD() : mType(Fixed), mValue1(NAN), mValue2(NAN)
 /**************************************************************************//**
  * @details Create a EAD of type fixed.
  */
-inline ccruncher::EAD::EAD(double x) : mType(Fixed), mValue1(x), mValue2(NAN)
+inline ccruncher::EAD::EAD(double x) : mType(Type::Fixed), mValue1(x), mValue2(NAN)
 {
   // nothing to do
 }
@@ -150,26 +150,26 @@ inline double ccruncher::EAD::getValue(const gsl_rng *rng) const
 {
   switch(mType)
   {
-    case Fixed:
+    case Type::Fixed:
       return mValue1;
 
-    case Lognormal:
+    case Type::Lognormal:
       assert(rng != nullptr);
       return gsl_ran_lognormal(rng, mValue1, mValue2);
 
-    case Exponential:
+    case Type::Exponential:
       assert(rng != nullptr);
       return gsl_ran_exponential(rng, mValue1);
 
-    case Uniform:
+    case Type::Uniform:
       assert(rng != nullptr);
       return gsl_ran_flat(rng, mValue1, mValue2);
 
-    case Gamma:
+    case Type::Gamma:
       assert(rng != nullptr);
       return gsl_ran_gamma(rng, mValue1, mValue2);
 
-    case Normal:
+    case Type::Normal:
       assert(rng != nullptr);
       return std::max(0.0, mValue1 + gsl_ran_gaussian(rng, mValue2));
 

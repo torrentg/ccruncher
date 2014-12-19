@@ -38,11 +38,11 @@ using namespace ccruncher;
 // supported EAD distributions
 //=============================================================
 const ccruncher::EAD::Distr ccruncher::EAD::distrs[] = {
-  {"lognormal", 9, 2, Lognormal},
-  {"exponential", 11, 1, Exponential},
-  {"uniform", 7, 2, Uniform},
-  {"gamma", 5, 2, Gamma},
-  {"normal", 6, 2, Normal}
+  {"lognormal", 9, 2, Type::Lognormal},
+  {"exponential", 11, 1, Type::Exponential},
+  {"uniform", 7, 2, Type::Uniform},
+  {"gamma", 5, 2, Type::Gamma},
+  {"normal", 6, 2, Type::Normal}
 };
 
 #define NUMDISTRS (sizeof(distrs)/sizeof(Distr))
@@ -101,7 +101,7 @@ ccruncher::EAD::EAD(const char *cstr) : EAD()
 
   // fixed value case
   mValue1 = Parser::doubleValue(cstr);
-  init(Fixed, mValue1, NAN);
+  init(Type::Fixed, mValue1, NAN);
 }
 
 /**************************************************************************//**
@@ -155,27 +155,27 @@ bool ccruncher::EAD::valid(Type t, double a, double b)
 {
   switch(t)
   {
-    case Fixed:
+    case Type::Fixed:
       if (std::isnan(a) || a < 0.0) return false;
       else return true;
 
-    case Lognormal:
+    case Type::Lognormal:
       if (std::isnan(a) || std::isnan(b) || a < 0.0 || b <= 0.0) return false;
       else return true;
 
-    case Exponential:
+    case Type::Exponential:
       if (std::isnan(a) || a <= 0.0) return false;
       else return true;
 
-    case Uniform:
+    case Type::Uniform:
       if (std::isnan(a) || std::isnan(b) || a < 0.0 || b <= a) return false;
       else return true;
 
-    case Gamma:
+    case Type::Gamma:
       if (std::isnan(a) || std::isnan(b) || a <= 0.0 || b <= 0.0) return false;
       else return true;
 
-    case Normal:
+    case Type::Normal:
       if (std::isnan(a) || std::isnan(b) || a <= 0.0 || b <= 0.0) return false;
       else return true;
 
@@ -193,7 +193,7 @@ bool ccruncher::EAD::valid(Type t, double a, double b)
  */
 void ccruncher::EAD::init(Type t, double a, double b)
 {
-  if (t != Fixed || !std::isnan(a))
+  if (t != Type::Fixed || !std::isnan(a))
   {
     if (!valid(t, a, b)) throw Exception("invalid ead");
   }
@@ -246,36 +246,36 @@ void ccruncher::EAD::mult(double factor)
 {
   switch(mType)
   {
-    case Fixed:
+    case Type::Fixed:
       mValue1 *= factor;
       break;
 
-    case Lognormal:
+    case Type::Lognormal:
       // http://en.wikipedia.org/wiki/Log-normal_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Lognormal-Distribution.html
       mValue1 += log(factor);
       break;
 
-    case Exponential:
+    case Type::Exponential:
       // http://en.wikipedia.org/wiki/Exponential_distribution (<-not)
       // http://www.gnu.org/software/gsl/manual/html_node/The-Exponential-Distribution.html (<-this)
       mValue1 *= factor;
       break;
 
-    case Uniform:
+    case Type::Uniform:
       // http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29
       // http://www.gnu.org/software/gsl/manual/html_node/The-Flat-_0028Uniform_0029-Distribution.html
       mValue1 *= factor;
       mValue2 *= factor;
       break;
 
-    case Gamma:
+    case Type::Gamma:
       // http://en.wikipedia.org/wiki/Gamma_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Gamma-Distribution.html
       mValue2 *= factor;
       break;
 
-    case Normal:
+    case Type::Normal:
       // http://en.wikipedia.org/wiki/Normal_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Gaussian-Distribution.html
       mValue1 *= factor;
@@ -298,30 +298,30 @@ double ccruncher::EAD::getExpected() const
 {
   switch(mType)
   {
-    case Fixed:
+    case Type::Fixed:
       return mValue1;
 
-    case Lognormal:
+    case Type::Lognormal:
       // http://en.wikipedia.org/wiki/Log-normal_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Lognormal-Distribution.html
       return exp(mValue1+mValue2*mValue2/2.0);
 
-    case Exponential:
+    case Type::Exponential:
       // http://en.wikipedia.org/wiki/Exponential_distribution (<-not)
       // http://www.gnu.org/software/gsl/manual/html_node/The-Exponential-Distribution.html (<-this)
       return mValue1;
 
-    case Uniform:
+    case Type::Uniform:
       // http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29
       // http://www.gnu.org/software/gsl/manual/html_node/The-Flat-_0028Uniform_0029-Distribution.html
       return (mValue1+mValue2)/2.0;
 
-    case Gamma:
+    case Type::Gamma:
       // http://en.wikipedia.org/wiki/Gamma_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Gamma-Distribution.html
       return mValue1*mValue2;
 
-    case Normal:
+    case Type::Normal:
       // http://en.wikipedia.org/wiki/Normal_distribution
       // http://en.wikipedia.org/wiki/Truncated_normal_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Gaussian-Distribution.html
