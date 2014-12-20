@@ -23,6 +23,7 @@
 #include <cmath>
 #include <climits>
 #include <algorithm>
+#include <utility>
 #include <cassert>
 #include "portfolio/Portfolio.hpp"
 #include "portfolio/Asset.hpp"
@@ -169,7 +170,7 @@ void ccruncher::Portfolio::epstartObligor(ExpatUserData &eu, const char **attrib
     obligor.lgd = LGD(str);
   }
 
-  mObligors.push_back(obligor);
+  mObligors.push_back(move(obligor));
   fill(obligorSegments.begin(), obligorSegments.end(), 0);
 }
 
@@ -198,7 +199,7 @@ void ccruncher::Portfolio::epstartAsset(ExpatUserData &, const char **attributes
   Asset asset(mNumSegmentations);
   asset.values.push_back(DateValues(date, 0.0, 0.0));
   assert(!mObligors.empty());
-  mObligors.back().assets.push_back(asset);
+  mObligors.back().assets.push_back(move(asset));
 }
 
 /**************************************************************************//**
@@ -285,7 +286,7 @@ void ccruncher::Portfolio::epstartValues(ExpatUserData &, const char **attribute
     throw Exception("values with date previous or equal to asset creation date");
   }
 
-  asset.values.push_back(item);
+  asset.values.push_back(move(item));
 }
 
 /**************************************************************************//**
