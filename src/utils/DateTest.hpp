@@ -32,6 +32,7 @@ class DateTest : public TestFixture<DateTest>
 
   private:
 
+    void test_nad();
     void test_constructors();
     void test_valid();
     void test_gets();
@@ -46,6 +47,7 @@ class DateTest : public TestFixture<DateTest>
 
     TEST_FIXTURE(DateTest)
     {
+      TEST_CASE(test_nad);
       TEST_CASE(test_constructors);
       TEST_CASE(test_valid);
       TEST_CASE(test_gets);

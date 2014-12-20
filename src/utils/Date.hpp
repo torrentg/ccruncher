@@ -32,10 +32,6 @@
 
 namespace ccruncher {
 
-//! NAD = Not A Date = Date(0,0,0)
-static const long nad[1] = { 1721026L };
-#define NAD (*(const ccruncher::Date *) nad)
-
 /**************************************************************************//**
  * @brief   Specific instant in time with day precision.
  *
@@ -93,7 +89,7 @@ class Date
   public:
 
     //! Default constructor
-    Date();
+    constexpr Date();
     //! Constructor
     Date(const int day, const int month, const int year);
     //! Constructor
@@ -191,10 +187,16 @@ bool isInterval(const char *str);
  * @details Create a new object with a non-valid date (NAD). Current
  *          timestamp is not used due to performance reasons.
  */
-inline ccruncher::Date::Date() : lJulianDay(1721026L)
+inline constexpr ccruncher::Date::Date() : lJulianDay(1721026L)
 {
     // nothing to do
 }
+
+/**************************************************************************//**
+ * @details NAD means Not-A-Date value. Use it as a macro.
+ *          NAD = 0/0/0 = Date(0,0,0) = Date()
+ */
+constexpr Date NAD;
 
 /**************************************************************************//**
  * @param[in] date Date to assign.

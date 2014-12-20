@@ -29,18 +29,31 @@
 using namespace ccruncher;
 
 //===========================================================================
+// test_nad
+//===========================================================================
+void ccruncher_test::DateTest::test_nad()
+{
+  Date date0 = NAD;
+  long *lptr = (long*)(&date0);
+  ASSERT(*lptr == 1721026L);
+  date0 = Date();
+  ASSERT(*lptr == 1721026L);
+  date0 = Date(1,1,0);
+  date0 -= 1 + Date::numDaysInMonth(0,0);
+  ASSERT(*lptr == 1721026L);
+}
+
+//===========================================================================
 // test_constructors
 //===========================================================================
 void ccruncher_test::DateTest::test_constructors()
 {
-  Date invalid_date = Date();
   Date date1 = Date(25,7,2001);
   Date date2 = Date("25/07/2001");
   Date date3 = Date(date2);
   Date date4 = Date(1,1,2012);
   Date now = Date(time(nullptr));
 
-  ASSERT(nad[0] == *((long*)(&invalid_date)));
   ASSERT(date1 == date2);
   ASSERT(date2 == date3);
   ASSERT(date3 == date2);
