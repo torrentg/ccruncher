@@ -26,16 +26,6 @@ using namespace std;
 using namespace ccruncher;
 
 /**************************************************************************//**
- * @details Operator required by sort functions.
- * @param[in] obj Object to compare.
- * @return true if rating index < object's rating index.
- */
-bool ccruncher::Obligor::operator<(const Obligor &obj) const
-{
-  return (irating < obj.irating);
-}
-
-/**************************************************************************//**
  * Checks if any of its assets is active in the given time range.
  * @param[in] from Starting simulation date.
  * @param[in] to Ending simulation date.

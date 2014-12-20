@@ -187,14 +187,3 @@ string ccruncher::Segmentation::getFilename(const string &path) const
   return File::normalizePath(path) + mName + ".csv";
 }
 
-/**************************************************************************//**
- * @details This method is used to sort by enabled.
- * @param[in] obj Segmentation to compare.
- * @return true if this object is less than obj.
- */
-bool ccruncher::Segmentation::operator<(const Segmentation &obj) const
-{
-  if (mEnabled && !(obj.mEnabled)) return true;
-  else return false;
-}
-

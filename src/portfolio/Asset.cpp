@@ -62,7 +62,7 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
 {
   assert(d1 <= d2);
 
-  // sort values
+  // sort values by date
   if (!is_sorted(values.begin(), values.end())) {
     sort(values.begin(), values.end());
   }

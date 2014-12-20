@@ -52,7 +52,6 @@ void ccruncher_test::ObligorTest::test1()
   obligor2.irating = 0;
   obligor2.ifactor = 4;
 
-  ASSERT(obligor2 < obligor1);
   ASSERT(obligor1.isActive(Date("01/07/2013"), Date("01/07/2014")));
   ASSERT(!obligor2.isActive(Date("01/07/2013"), Date("01/07/2014")));
 }
