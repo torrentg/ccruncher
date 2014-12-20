@@ -23,6 +23,7 @@
 #include <cstdio>
 #include <cctype>
 #include <cassert>
+#include <algorithm>
 #include <expat.h>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Parser.hpp"
@@ -83,12 +84,8 @@ void ccruncher::ExpatHandlers::epdata(ExpatUserData &/*eud*/, const char */*tag*
     const char *cdata, int len)
 {
   // default simple rule: character data is not allowed
-  for(int i=0; i<len; i++)
-  {
-    if (!isspace(cdata[i]))
-    {
-      throw Exception("unexpected text parsing xml: '" + string(cdata, len) + "'");
-    }
+  if (!all_of(cdata, cdata+len, static_cast<int(*)(int)>(isspace))) {
+    throw Exception("unexpected text parsing xml: '" + string(cdata, len) + "'");
   }
 }
 
@@ -118,10 +115,8 @@ const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, cons
   assert(atts != nullptr);
   assert(attname != nullptr);
 
-  for(int i=0; atts[i]; i+=2)
-  {
-    if (strcmp(attname,atts[i]) == 0)
-    {
+  for(int i=0; atts[i]; i+=2) {
+    if (strcmp(attname,atts[i]) == 0) {
       return atts[i+1];
     }
   }
@@ -144,10 +139,8 @@ const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, cons
   assert(atts != nullptr);
   assert(attname != nullptr);
 
-  for(int i=0; atts[i]; i+=2)
-  {
-    if (strcmp(attname,atts[i]) == 0)
-    {
+  for(int i=0; atts[i]; i+=2) {
+    if (strcmp(attname,atts[i]) == 0) {
       return atts[i+1];
     }
   }
@@ -184,12 +177,10 @@ string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const cha
 {
   const char *val = getAttributeValue(atts, attname, nullptr);
 
-  if (val != nullptr)
-  {
+  if (val != nullptr) {
     return string(val);
   }
-  else
-  {
+  else {
     return defval;
   }
 }
@@ -225,12 +216,10 @@ int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const char *att
 {
   const char *val = getAttributeValue(atts, attname, nullptr);
 
-  if (val != nullptr)
-  {
+  if (val != nullptr) {
     return Parser::intValue(val);
   }
-  else
-  {
+  else {
     return defval;
   }
 }
@@ -266,12 +255,10 @@ long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const char *a
 {
   const char *val = getAttributeValue(atts, attname, nullptr);
 
-  if (val != nullptr)
-  {
+  if (val != nullptr) {
     return Parser::longValue(val);
   }
-  else
-  {
+  else {
     return defval;
   }
 }
@@ -307,12 +294,10 @@ double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const cha
 {
   const char *val = getAttributeValue(atts, attname, nullptr);
 
-  if (val != nullptr)
-  {
+  if (val != nullptr) {
     return Parser::doubleValue(val);
   }
-  else
-  {
+  else {
     return defval;
   }
 }
@@ -348,12 +333,10 @@ Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const char *a
 {
   const char *val = getAttributeValue(atts, attname, nullptr);
 
-  if (val != nullptr)
-  {
+  if (val != nullptr) {
     return Parser::dateValue(val);
   }
-  else
-  {
+  else {
     return defval;
   }
 }
@@ -389,12 +372,10 @@ bool ccruncher::ExpatHandlers::getBooleanAttribute(const char **atts, const char
 {
   const char *val = getAttributeValue(atts, attname, nullptr);
 
-  if (val != nullptr)
-  {
+  if (val != nullptr) {
     return Parser::boolValue(val);
   }
-  else
-  {
+  else {
     return defval;
   }
 }
@@ -407,8 +388,7 @@ int ccruncher::ExpatHandlers::getNumAttributes(const char **atts) const
 {
   int ret = 0;
 
-  for(int i=0; atts[i]; i+=2)
-  {
+  for(int i=0; atts[i]; i+=2) {
     ret++;
   }
 
