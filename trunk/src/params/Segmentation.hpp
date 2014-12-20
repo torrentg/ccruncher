@@ -96,8 +96,6 @@ class Segmentation
     ushort indexOf(const char *segment) const;
     //! Return filename
     std::string getFilename(const std::string &path) const;
-    //! Less-than operator
-    bool operator<(const Segmentation &obj) const;
 
 };
 

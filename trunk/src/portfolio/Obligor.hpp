@@ -54,8 +54,6 @@ class Obligor
 
     //! Constructor
     Obligor() : ifactor(0), irating(0) {}
-    //! Less-than operator
-    bool operator<(const Obligor &obj) const;
     //! Indicates if this obligor has values in date1-date2
     bool isActive(const Date &, const Date &) const;
 

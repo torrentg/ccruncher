@@ -79,26 +79,3 @@ void ccruncher_test::SegmentationTest::test2()
   ASSERT(segmentation.isEnabled());
 }
 
-//===========================================================================
-// test3
-//===========================================================================
-void ccruncher_test::SegmentationTest::test3()
-{
-  vector<Segmentation> segmentations;
-  segmentations.push_back(Segmentation("segmentation1",Segmentation::Type::asset, true));
-  segmentations.push_back(Segmentation("segmentation2",Segmentation::Type::obligor, false));
-  segmentations.push_back(Segmentation("segmentation3",Segmentation::Type::asset, true));
-  segmentations.push_back(Segmentation("segmentation4",Segmentation::Type::obligor, false));
-  segmentations.push_back(Segmentation("segmentation5",Segmentation::Type::asset, true));
-  segmentations.push_back(Segmentation("segmentation6",Segmentation::Type::obligor, true));
-
-  stable_sort(segmentations.begin(), segmentations.end());
-
-  ASSERT(segmentations[0].getName() == "segmentation1");
-  ASSERT(segmentations[1].getName() == "segmentation3");
-  ASSERT(segmentations[2].getName() == "segmentation5");
-  ASSERT(segmentations[3].getName() == "segmentation6");
-  ASSERT(segmentations[4].getName() == "segmentation2");
-  ASSERT(segmentations[5].getName() == "segmentation4");
-}
-

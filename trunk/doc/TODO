@@ -9,12 +9,19 @@ Current works
   * add 'Window' menu (window list, tab vs sub-window)
   * in 'Help' menu add pdf + input file info
   * change 'About' dialog (look&feel similar to libreoffice)
+  * move semantics to obligor and asset
+  * use chrono in Timer (Watchdog?)
+  * use constexpr when required
+  * isolate xml/binary parser code
+  * isolate aggregators code
 
 Future works
 -------------------
   * inverse nodes limited to datevalues dates!
   * create F() and Finv(t()) output
   * investigate how correlation depends on time
+  * portfolio optimization in ccruncher-gui
+  * risk uncertainty in ccruncher-gui
   * technical features
      - move to Qt5
      - input file in binary format

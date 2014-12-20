@@ -131,7 +131,10 @@ void ccruncher::Portfolio::epstartPortfolio(ExpatUserData &eu, const char **attr
   }
 
   // sort segmentations by enabled (first) / disabled (last)
-  stable_sort(eu.segmentations->begin(), eu.segmentations->end());
+  stable_sort(eu.segmentations->begin(), eu.segmentations->end(),
+              [](const Segmentation &a, const Segmentation &b) -> bool {
+                return a.isEnabled() && !b.isEnabled();
+              });
   mNumSegmentations = Segmentations::numEnabledSegmentations(*(eu.segmentations));
   obligorSegments.assign(mNumSegmentations, 0);
 }
@@ -386,12 +389,7 @@ void ccruncher::Portfolio::ependPortfolio(ExpatUserData &eu)
 vector<Segmentation> ccruncher::Portfolio::recodeSegments(const vector<Segmentation> &segmentations)
 {
   if (mObligors.empty()) return segmentations;
-
-  // TODO: sort segmentations reallocating obligors segments
-  if (!is_sorted(segmentations.begin(), segmentations.end())) {
-    throw Exception("segmentations are not sorted");
-  }
-  
+  //TODO: check that segmentations are sorted by enabled/disabled
   vector<vector<ushort>> table = getRecodeTable(segmentations);
   recodePortfolioSegments(table);
   vector<Segmentation> ret = getSegmentationsRecoded(segmentations, table);

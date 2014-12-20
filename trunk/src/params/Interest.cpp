@@ -270,6 +270,7 @@ void ccruncher::Interest::setSpline()
 
   for(size_t i=0; i<n; i++)
   {
+    assert(i>0?(mRates[i-1].d<mRates[i].d):true);
     x[i] = mRates[i].d;
     y[i] = mRates[i].r;
   }
@@ -363,7 +364,10 @@ void ccruncher::Interest::epend(ExpatUserData &, const char *tag)
     if (mRates.empty()) {
       throw Exception("interest has no rates");
     }
-    sort(mRates.begin(), mRates.end());
+    sort(mRates.begin(), mRates.end(),
+         [](const Rate &a, const Rate &b) -> bool {
+           return a.d < b.d;
+         });
     setSpline();
   }
 }

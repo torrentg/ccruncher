@@ -334,7 +334,10 @@ void ccruncher::MonteCarlo::setObligors(vector<Obligor> &portfolio)
 
   obligors.clear();
   obligors.swap(portfolio);
-  sort(obligors.begin(), obligors.end());
+  sort(obligors.begin(), obligors.end(),
+       [](const Obligor &a, const Obligor &b) -> bool {
+         return a.irating < b.irating;
+       });
 }
 
 /**************************************************************************//**
