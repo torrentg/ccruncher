@@ -163,10 +163,7 @@ void ccruncher::CDF::add(double x, double prob)
   }
 
   pair<double,double> point(x,prob);
-  auto it = lower_bound(mData.begin(), mData.end(), point,
-      [](const pair<double,double> &p1, const pair<double,double> &p2) {
-          return p1.first < p2.first;
-      });
+  auto it = lower_bound(mData.begin(), mData.end(), point);
 
   if (it != mData.end()) {
     if (it->first == x || it->second < prob) {

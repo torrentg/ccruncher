@@ -20,7 +20,6 @@
 //
 //===========================================================================
 
-#include <climits>
 #include <limits>
 #include <cassert>
 #include "params/Params.hpp"
@@ -273,9 +272,9 @@ ushort ccruncher::Params::getBlockSize() const
 {
   string value = getParamValue(BLOCKSIZE, DEFAULT_BLOCKSIZE);
   int aux = Parser::intValue(value);
-  if (aux <= 0 || USHRT_MAX < aux) {
+  if (aux <= 0 || numeric_limits<unsigned short>::max() < aux) {
     throw Exception("parameter '" BLOCKSIZE "' out of range [1," +
-                    Format::toString((int)USHRT_MAX) + "]");
+                    Format::toString((int)numeric_limits<unsigned short>::max()) + "]");
   }
   else {
     return (unsigned short) aux;

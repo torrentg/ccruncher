@@ -21,7 +21,6 @@
 //===========================================================================
 
 #include <cstring>
-#include <climits>
 #include <cassert>
 #include "params/Segmentation.hpp"
 #include "utils/File.hpp"

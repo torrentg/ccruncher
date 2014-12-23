@@ -20,7 +20,7 @@
 //
 //===========================================================================
 
-#include <climits>
+#include <limits>
 #include <cassert>
 #include "params/DefaultProbabilities.hpp"
 #include "params/Ratings.hpp"
@@ -118,7 +118,7 @@ bool ccruncher::DefaultProbabilities::isValid(const std::vector<CDF> &dprobs, bo
 {
   try
   {
-    if (dprobs.size() < 2 || dprobs.size() > UCHAR_MAX) {
+    if (dprobs.size() < 2 || dprobs.size() > numeric_limits<unsigned char>::max()) {
       throw Exception("invalid number of ratings");
     }
 
@@ -153,8 +153,8 @@ unsigned char ccruncher::DefaultProbabilities::getIndexDefault(const std::vector
   if (dprobs.size() < 2) {
     throw Exception("required a minimum of 2 ratings");
   }
-  if (dprobs.size() > UCHAR_MAX) {
-    throw Exception("number of ratings bigger than " + Format::toString(UCHAR_MAX));
+  if (dprobs.size() > numeric_limits<unsigned char>::max()) {
+    throw Exception("number of ratings bigger than " + Format::toString(numeric_limits<unsigned char>::max()));
   }
   for(size_t i=0; i<dprobs.size(); i++) {
     if (dprobs[i].evalue(0.0) > 1.0-EPSILON) {

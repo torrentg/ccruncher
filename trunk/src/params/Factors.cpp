@@ -20,7 +20,7 @@
 //
 //===========================================================================
 
-#include <climits>
+#include <limits>
 #include <cassert>
 #include "params/Factors.hpp"
 #include "utils/Format.hpp"
@@ -34,7 +34,7 @@ using namespace std;
 unsigned char ccruncher::Factors::indexOf(const char *name) const
 {
   assert(name != nullptr);
-  assert(this->size() <= UCHAR_MAX);
+  assert(this->size() <= numeric_limits<unsigned char>::max());
   for(size_t i=0; i<this->size(); i++) {
     if ((*this)[i].name.compare(name) == 0) {
       return (unsigned char) i;
@@ -105,8 +105,8 @@ bool ccruncher::Factors::isValid(const std::vector<Factor> &factors, bool throwE
     if (factors.empty()) {
       throw Exception("'factors' have no elements");
     }
-    if (factors.size() > UCHAR_MAX) {
-      throw Exception("number of factors bigger than " + Format::toString(UCHAR_MAX));
+    if (factors.size() > numeric_limits<unsigned char>::max()) {
+      throw Exception("number of factors bigger than " + Format::toString(numeric_limits<unsigned char>::max()));
     }
 
     // checking for duplicated elements
@@ -140,7 +140,7 @@ bool ccruncher::Factors::isValid(const std::vector<double> &loadings, bool throw
 {
   try
   {
-    if (loadings.empty() || loadings.size() > UCHAR_MAX) {
+    if (loadings.empty() || loadings.size() > numeric_limits<unsigned char>::max()) {
       throw Exception("loadings has invalid length");
     }
 
