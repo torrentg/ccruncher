@@ -25,7 +25,6 @@
 #include <cassert>
 #include "params/Interest.hpp"
 #include "utils/Utils.hpp"
-#include "utils/Format.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -232,8 +231,7 @@ void ccruncher::Interest::insertRate(const Rate &val)
   // checking interest rate value
   if (val.r < -0.5 || 1.0 < val.r)
   {
-    throw Exception("rate value '" + Format::toString(val.r) +
-                    "' out of range [-0.5, +1.0]");
+    throw Exception("rate value '" + to_string(val.r) + "' out of range [-0.5, +1.0]");
   }
 
   // inserting value

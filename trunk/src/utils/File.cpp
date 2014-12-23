@@ -30,7 +30,8 @@
 #include <fstream>
 #include <cerrno>
 #include <cstring>
-#include "utils/Format.hpp"
+#include <iomanip>
+#include <sstream>
 #include "utils/File.hpp"
 
 using namespace std;
@@ -223,7 +224,7 @@ void ccruncher::File::makeDir(const std::string &dirname)
   // checking creation
   if (aux != 0)
   {
-    string code = "[" + Format::toString(errno) + "]";
+    string code = "[" + to_string(errno) + "]";
     code = (errno==EACCES?"[EACCES]":code);
     code = (errno==EEXIST?"[EEXIST]":code);
     code = (errno==EMLINK?"[EMLINK]":code);
@@ -349,5 +350,29 @@ size_t ccruncher::File::filesize(const string &filename)
   std::ifstream::pos_type begin_pos = f.tellg();
   f.seekg(0, std::ios_base::end);
   return static_cast<size_t>(f.tellg() - begin_pos);
+}
+
+/**************************************************************************//**
+ * @details Returns bytes as string (B, KB, MB, GB)
+ * @param[in] val Input value.
+ * @return Value serialized to string.
+ */
+string ccruncher::File::bytesToString(const size_t val)
+{
+  std::ostringstream oss;
+
+  if (val < 1024) {
+    oss << val << " B";
+  }
+  else if (val < 1024*1024) {
+    double kbs = double(val)/double(1024);
+    oss << fixed << setprecision(2) << kbs << " KB";
+  }
+  else {
+    double mbs = double(val)/double(1024*1024);
+    oss << fixed << setprecision(2) << mbs << " MB";
+  }
+
+  return oss.str();
 }
 

@@ -34,8 +34,8 @@
 #include "gui/FindDefines.hpp"
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/IData.hpp"
-#include "utils/Format.hpp"
 #include "utils/Utils.hpp"
+#include "utils/File.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -375,7 +375,7 @@ void ccruncher_gui::SimulationWidget::draw()
     size_t mbytes = task.getIData()->getFileSize();
     size_t nbytes = task.getIData()->getReadedSize();
 
-    QString str = Format::bytes(nbytes).c_str();
+    QString str = File::bytesToString(nbytes).c_str();
     progress->ui->progress->setFormat(str);
 
     int val = (int)(100.0*(float)(nbytes)/(float)(mbytes) + 0.5);

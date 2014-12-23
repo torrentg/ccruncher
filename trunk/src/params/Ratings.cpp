@@ -23,7 +23,6 @@
 #include <limits>
 #include <cassert>
 #include "params/Ratings.hpp"
-#include "utils/Format.hpp"
 
 using namespace std;
 
@@ -104,7 +103,7 @@ bool ccruncher::Ratings::isValid(const std::vector<Rating> &ratings, bool throwE
       throw Exception("required a minimum of 2 ratings");
     }
     if (ratings.size() > numeric_limits<unsigned char>::max()) {
-      throw Exception("number of ratings bigger than " + Format::toString(numeric_limits<unsigned char>::max()));
+      throw Exception("number of ratings bigger than " + to_string((int)numeric_limits<unsigned char>::max()));
     }
 
     // checking for duplicated elements

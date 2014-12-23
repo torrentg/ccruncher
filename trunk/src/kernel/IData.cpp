@@ -24,7 +24,6 @@
 #include <cassert>
 #include "kernel/IData.hpp"
 #include "utils/File.hpp"
-#include "utils/Format.hpp"
 #include "utils/Timer.hpp"
 #include "utils/ExpatParser.hpp"
 
@@ -131,7 +130,7 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m)
     logger << "file name" << split << "["+filename+"]" << endl;
     if (filename != STDIN_FILENAME)
     {
-      logger << "file size" << split << Format::bytes(File::filesize(filename)) << endl;
+      logger << "file size" << split << File::bytesToString(File::filesize(filename)) << endl;
     }
 
     // trace defines
@@ -321,7 +320,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *tag, const 
 
       gzbuffer(file, BUFFER_SIZE);
       logger << "included file name" << split << "["+filepath+"]" << endl;
-      logger << "included file size" << split << Format::bytes(bytes) << endl;
+      logger << "included file size" << split << File::bytesToString(bytes) << endl;
 
       ExpatParser parser;
       parser.setDefines(eu.defines);

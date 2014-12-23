@@ -26,7 +26,6 @@
 #include <cerrno>
 #include <cassert>
 #include "utils/CsvFile.hpp"
-#include "utils/Format.hpp"
 
 using namespace std;
 
@@ -344,7 +343,7 @@ void ccruncher::CsvFile::getColumn(int col, vector<double> &ret, bool *stop)
   }
   catch(Exception &e)
   {
-    throw Exception(e.toString() + " at line " + Format::toString(numlines+1));
+    throw Exception(e.toString() + " at line " + to_string(numlines+1));
   }
 }
 
@@ -406,7 +405,7 @@ void ccruncher::CsvFile::getRowSums(vector<double> &ret, bool *stop)
   }
   catch(Exception &e)
   {
-    throw Exception(e.toString() + " at line " + Format::toString(numlines+1));
+    throw Exception(e.toString() + " at line " + to_string(numlines+1));
   }
 }
 
@@ -482,7 +481,7 @@ void ccruncher::CsvFile::getColumns(vector<vector<double>> &ret, bool *stop)
         }
       }
     }
-    throw Exception(e.toString() + " at line " + Format::toString(numlines+1));
+    throw Exception(e.toString() + " at line " + to_string(numlines+1));
   }
 }
 
