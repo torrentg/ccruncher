@@ -24,6 +24,8 @@
 #define _Format_
 
 #include <string>
+#include <sstream>
+#include <iostream>
 #include "utils/Date.hpp"
 
 namespace ccruncher {
@@ -37,21 +39,24 @@ class Format
   public:
 
     //! Converts int to string
-    static std::string toString(const int val);
-    //! Converts long to string
-    static std::string toString(const long val);
-    //! Converts double to string
-    static std::string toString(const double val, int n=-1);
-    //! Converts date to string
-    static std::string toString(const Date &val);
-    //! Converts boolean to string
-    static std::string toString(const bool val);
-    //! Converts size_t to string
-    static std::string toString(const size_t val);
+    template <typename T>
+    static std::string toString(const T &val);
     //! Returns bytes as string (B, KB, MB)
     static std::string bytes(const size_t val);
 
 };
+
+/**************************************************************************//**
+ * @param[in] val Input value.
+ * @return Value serialized to string.
+ */
+template <typename T>
+std::string ccruncher::Format::toString(const T &val)
+{
+  std::ostringstream oss;
+  oss << std::boolalpha << val;
+  return oss.str();
+}
 
 } // namespace
 
