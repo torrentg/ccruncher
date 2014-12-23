@@ -20,82 +20,10 @@
 //
 //===========================================================================
 
-#include <iostream>
 #include <iomanip>
-#include <sstream>
 #include "utils/Format.hpp"
 
 using namespace std;
-
-/**************************************************************************//**
- * @param[in] val Input value.
- * @return Value serialized to string.
- */
-string ccruncher::Format::toString(const int val)
-{
-  ostringstream oss;
-  oss << val;
-  return oss.str();
-}
-
-/**************************************************************************//**
- * @param[in] val Input value.
- * @return Value serialized to string.
- */
-string ccruncher::Format::toString(const long val)
-{
-  ostringstream oss;
-  oss << val;
-  return oss.str();
-}
-
-/**************************************************************************//**
- * @param[in] val Input value.
- * @param[in] n Decimal precision to be used to format floating-point.
- * @return Value serialized to string.
- */
-string ccruncher::Format::toString(const double val, int n)
-{
-  ostringstream oss;
-  if (n >= 0) {
-    oss << fixed << setprecision(n);
-  }
-  oss << val;
-  return oss.str();
-}
-
-/**************************************************************************//**
- * @param[in] val Input value.
- * @return Value serialized to string.
- */
-string ccruncher::Format::toString(const ccruncher::Date &val)
-{
-  ostringstream oss;
-  oss << val;
-  return oss.str();
-}
-
-/**************************************************************************//**
- * @param[in] val Input value.
- * @return Value serialized to string.
- */
-string ccruncher::Format::toString(const bool val)
-{
-  ostringstream oss;
-  oss << (val?"true":"false");
-  return oss.str();
-}
-
-/**************************************************************************//**
- * @param[in] val Input value.
- * @return Value serialized to string.
- */
-string ccruncher::Format::toString(const size_t val)
-{
-  ostringstream oss;
-  oss << (int)val;
-  return oss.str();
-}
 
 /**************************************************************************//**
  * @details Returns bytes as string (B, KB, MB, GB)
@@ -104,14 +32,20 @@ string ccruncher::Format::toString(const size_t val)
  */
 string ccruncher::Format::bytes(const size_t val)
 {
+  std::ostringstream oss;
+
   if (val < 1024) {
-    return toString(val) + " B";
+    oss << val << " B";
   }
   else if (val < 1024*1024) {
-    return toString(double(val)/double(1024), 2) + " KB";
+    double kbs = double(val)/double(1024);
+    oss << fixed << setprecision(2) << kbs << " KB";
   }
   else {
-    return toString(double(val)/double(1024*1024), 2) + " MB";
+    double mbs = double(val)/double(1024*1024);
+    oss << fixed << setprecision(2) << mbs << " MB";
   }
+
+  return oss.str();
 }
 
