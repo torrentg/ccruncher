@@ -21,7 +21,7 @@
 //===========================================================================
 
 #include <cmath>
-#include <climits>
+#include <limits>
 #include <algorithm>
 #include <utility>
 #include <cassert>
@@ -455,7 +455,7 @@ void ccruncher::Portfolio::recodeSegmentation(const vector<size_t> &hits, vector
   for(size_t i=0; i<hits.size(); i++)
   {
     if (hits[i] == 0) {
-      table.push_back(USHRT_MAX);
+      table.push_back(numeric_limits<unsigned short>::max());
     }
     else {
       table.push_back(numSegments);
@@ -470,7 +470,7 @@ void ccruncher::Portfolio::recodeSegmentation(const vector<size_t> &hits, vector
     table[0] = numSegments-1;
     for(size_t i=1; i<table.size(); i++) {
       assert(table[i] != 0);
-      if (table[i] != USHRT_MAX) table[i]--;
+      if (table[i] != numeric_limits<unsigned short>::max()) table[i]--;
     }
   }
 }
@@ -504,10 +504,10 @@ vector<Segmentation> ccruncher::Portfolio::getSegmentationsRecoded(const vector<
     {
       ret.push_back(Segmentation(segmentation.getName(), segmentation.getType(), true, false));
       Segmentation &current = ret.back();
-      bool hasUnassignedSegment = (table[isegmentation][0] != USHRT_MAX);
+      bool hasUnassignedSegment = (table[isegmentation][0] != numeric_limits<unsigned short>::max());
       for(size_t i=(hasUnassignedSegment?1:0); i<table[isegmentation].size(); i++)
       {
-        if (table[isegmentation][i] != USHRT_MAX)
+        if (table[isegmentation][i] != numeric_limits<unsigned short>::max())
         {
           // recode table preserves order (except unassigned)
           assert(current.size() == table[isegmentation][i]);

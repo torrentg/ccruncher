@@ -24,7 +24,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <cerrno>
-#include <climits>
+#include <limits>
 #include <iostream>
 #include <sstream>
 #include <cmath>
@@ -67,7 +67,7 @@ int ccruncher::Parser::intValue(const char *pnum)
   }
 
   // checking that is an integer
-  if (aux < INT_MIN || INT_MAX < aux)
+  if (aux < numeric_limits<int>::min() || numeric_limits<int>::max() < aux)
   {
     throw Exception("error parsing integer value '" + string(pnum) + "': value out of range");
   }

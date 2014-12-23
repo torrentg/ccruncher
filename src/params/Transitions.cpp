@@ -438,7 +438,7 @@ double ccruncher::Transitions::getRegularizationError() const
 /**************************************************************************//**
  * @param[in] M1 Left-hand matrix.
  * @param[in] M2 Right-hand matrix.
- * @param[out] M3 Result Product matrix (M1·M2).
+ * @param[out] M3 Result Product matrix (M1 x M2).
  */
 void ccruncher::Transitions::prod(const vector<vector<double>> &M1,
                 const vector<vector<double>> &M2, vector<vector<double>> &M3)

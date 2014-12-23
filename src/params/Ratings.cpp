@@ -20,7 +20,7 @@
 //
 //===========================================================================
 
-#include <climits>
+#include <limits>
 #include <cassert>
 #include "params/Ratings.hpp"
 #include "utils/Format.hpp"
@@ -34,7 +34,7 @@ using namespace std;
 unsigned char ccruncher::Ratings::indexOf(const char *name) const
 {
   assert(name != nullptr);
-  assert(this->size() <= UCHAR_MAX);
+  assert(this->size() <= numeric_limits<unsigned char>::max());
   for(size_t i=0; i<this->size(); i++) {
     if ((*this)[i].name.compare(name) == 0) {
       return (unsigned char) i;
@@ -103,8 +103,8 @@ bool ccruncher::Ratings::isValid(const std::vector<Rating> &ratings, bool throwE
     if (ratings.size() < 2) {
       throw Exception("required a minimum of 2 ratings");
     }
-    if (ratings.size() > UCHAR_MAX) {
-      throw Exception("number of ratings bigger than " + Format::toString(UCHAR_MAX));
+    if (ratings.size() > numeric_limits<unsigned char>::max()) {
+      throw Exception("number of ratings bigger than " + Format::toString(numeric_limits<unsigned char>::max()));
     }
 
     // checking for duplicated elements
