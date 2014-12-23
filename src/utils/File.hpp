@@ -69,6 +69,8 @@ class File
     static std::string filepath(const std::string &path, const std::string &name);
     //! Return file size in bytes
     static size_t filesize(const std::string &filename);
+    //! Returns bytes as string (B, KB, MB)
+    static std::string bytesToString(const size_t val);
 
 };
 

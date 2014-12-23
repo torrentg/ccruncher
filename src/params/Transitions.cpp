@@ -23,7 +23,6 @@
 #include <cmath>
 #include <cassert>
 #include "params/Transitions.hpp"
-#include "utils/Format.hpp"
 #include "utils/PowMatrix.hpp"
 
 using namespace std;
@@ -119,8 +118,7 @@ void ccruncher::Transitions::insertTransition(const std::string &rating1,
   // validating value
   if (value < -EPSILON || value > (1.0+EPSILON))
   {
-    string msg = "transition[" + rating1 + "," + rating2 + "] is out of range: " +
-                 Format::toString(value);
+    string msg = "transition[" + rating1 + "," + rating2 + "] is out of range: " + to_string(value);
     throw Exception(msg);
   }
 

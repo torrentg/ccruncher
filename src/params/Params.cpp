@@ -25,7 +25,6 @@
 #include "params/Params.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Parser.hpp"
-#include "utils/Format.hpp"
 
 #define TIME0 "time.0"
 #define TIMET "time.T"
@@ -274,7 +273,7 @@ ushort ccruncher::Params::getBlockSize() const
   int aux = Parser::intValue(value);
   if (aux <= 0 || numeric_limits<unsigned short>::max() < aux) {
     throw Exception("parameter '" BLOCKSIZE "' out of range [1," +
-                    Format::toString((int)numeric_limits<unsigned short>::max()) + "]");
+                    to_string(numeric_limits<unsigned short>::max()) + "]");
   }
   else {
     return (unsigned short) aux;

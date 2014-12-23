@@ -39,7 +39,6 @@
 #include "utils/File.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
-#include "utils/Format.hpp"
 #include "utils/Timer.hpp"
 #include "utils/config.h"
 
@@ -92,8 +91,8 @@ void gsl_handler(const char * reason, const char *file, int line, int gsl_errno)
 {
   string msg = reason;
   msg += " (file=" + string(file);
-  msg += ", line=" + Format::toString(line);
-  msg += ", errno=" + Format::toString(gsl_errno) + ")";
+  msg += ", line=" + to_string(line);
+  msg += ", errno=" + to_string(gsl_errno) + ")";
   Exception gsl_exception(msg);
   throw Exception(gsl_exception, "gsl exception");
 }
@@ -356,14 +355,14 @@ void setnice(int niceval) throw(Exception)
 #if !defined(_WIN32)
   if (niceval < PRIO_MIN || niceval > PRIO_MAX)
   {
-    throw Exception("nice value out of range [" + Format::toString(PRIO_MIN) +
-                    ".." + Format::toString(PRIO_MAX) + "]");
+    throw Exception("nice value out of range [" + to_string(PRIO_MIN) +
+                    ".." + to_string(PRIO_MAX) + "]");
   }
   else
   {
     if(setpriority(PRIO_PROCESS, 0, niceval) != 0)
     {
-      string msg = Format::toString(errno);
+      string msg = to_string(errno);
       msg = (errno==ESRCH?"ESRCH":msg);
       msg = (errno==EINVAL?"EINVAL":msg);
       msg = (errno==EPERM?"EPERM":msg);
@@ -400,7 +399,7 @@ void help()
   "      --nice=NICEVAL      set process priority to NICEVAL (see nice command)\n"
 #endif
   "      --threads=NTHREADS  number of threads to use (default=number of cores)\n"
-  "      --hash=HASHNUM      print '.' for each HASHNUM simulations (default=" + Format::toString(ihash) + ")\n"
+  "      --hash=HASHNUM      print '.' for each HASHNUM simulations (default=" + to_string(ihash) + ")\n"
   "      --info              show build parameters and exit\n"
   "  -h, --help              show this message and exit\n"
   "      --version           show version and exit\n"

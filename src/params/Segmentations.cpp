@@ -23,7 +23,6 @@
 #include <limits>
 #include <cassert>
 #include "params/Segmentations.hpp"
-#include "utils/Format.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -122,7 +121,7 @@ bool ccruncher::Segmentations::isValid(const std::vector<Segmentation> &segmenta
       throw Exception("segmentations not found");
     }
     if (segmentations.size() > numeric_limits<unsigned short>::max()) {
-      throw Exception("number of segmentations bigger than " + Format::toString(numeric_limits<unsigned short>::max()));
+      throw Exception("number of segmentations bigger than " + to_string(numeric_limits<unsigned short>::max()));
     }
 
     // check for duplicated elements

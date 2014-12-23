@@ -21,12 +21,12 @@
 //===========================================================================
 
 #include <cmath>
+#include <string>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_eigen.h>
 #include <gsl/gsl_errno.h>
 #include "utils/PowMatrix.hpp"
-#include "utils/Format.hpp"
 
 #define EPSILON 1E-14
 
@@ -66,7 +66,7 @@ double ccruncher::PowMatrix::fpow(double base, double exponent)
       else
       {
         throw Exception("unable to pow to this negative number: " +
-                        Format::toString(base) + "^" + Format::toString(exponent));
+                        to_string(base) + "^" + to_string(exponent));
       }
     }
   }

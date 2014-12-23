@@ -59,7 +59,6 @@ ccruncher_cmd_SOURCES = \
     ../src/utils/ExpatUserData.cpp \
     ../src/utils/ExpatHandlers.cpp \
     ../src/utils/Utils.cpp \
-    ../src/utils/Format.cpp \
     ../src/utils/Thread.cpp \
     \
     ../src/kernel/MonteCarlo.hpp \
@@ -97,7 +96,6 @@ ccruncher_cmd_SOURCES = \
     ../src/utils/ExpatUserData.hpp \
     ../src/utils/ExpatHandlers.hpp \
     ../src/utils/Utils.hpp \
-    ../src/utils/Format.hpp \
     ../src/utils/Thread.hpp \
     ../src/utils/config.h
 
@@ -117,7 +115,6 @@ ccruncher_tests_SOURCES = \
     ../src/utils/ParserTest.cpp \
     ../src/utils/ExceptionTest.cpp \
     ../src/utils/FileTest.cpp \
-    ../src/utils/FormatTest.cpp \
     ../src/utils/UtilsTest.cpp \
     ../src/utils/ExpatUserDataTest.cpp \
     ../src/utils/PowMatrixTest.cpp \
@@ -151,7 +148,6 @@ ccruncher_tests_SOURCES = \
     ../src/utils/ExpatUserData.cpp \
     ../src/utils/ExpatHandlers.cpp \
     ../src/utils/Utils.cpp \
-    ../src/utils/Format.cpp \
     ../src/utils/Thread.cpp \
     ../src/utils/PowMatrix.cpp \
     ../src/portfolio/Portfolio.cpp \
@@ -185,7 +181,6 @@ ccruncher_tests_SOURCES = \
     ../src/utils/ParserTest.hpp \
     ../src/utils/ExceptionTest.hpp \
     ../src/utils/FileTest.hpp \
-    ../src/utils/FormatTest.hpp \
     ../src/utils/UtilsTest.hpp \
     ../src/utils/ExpatUserDataTest.hpp \
     ../src/utils/PowMatrixTest.hpp \
@@ -219,7 +214,6 @@ ccruncher_tests_SOURCES = \
     ../src/utils/ExpatUserData.hpp \
     ../src/utils/ExpatHandlers.hpp \
     ../src/utils/Utils.hpp \
-    ../src/utils/Format.hpp \
     ../src/utils/Thread.hpp \
     ../src/utils/PowMatrix.hpp \
     ../src/portfolio/Asset.hpp \

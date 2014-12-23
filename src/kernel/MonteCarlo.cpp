@@ -37,7 +37,6 @@
 #include "params/Correlations.hpp"
 #include "params/Segmentations.hpp"
 #include "utils/Utils.hpp"
-#include "utils/Format.hpp"
 #include "utils/File.hpp"
 #include "utils/Exception.hpp"
 
@@ -451,7 +450,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   logger << "number of threads" << split << int(numthreads) << endl;
   logger << indent(-1);
   logger << "running Monte Carlo";
-  if (mHash != 0) logger << " [" << Format::toString(mHash) << " simulations per hash]";
+  if (mHash != 0) logger << " [" << to_string(mHash) << " simulations per hash]";
   logger << flood('-') << endl;
   logger << indent(+1);
 
