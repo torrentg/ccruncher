@@ -47,7 +47,6 @@ HEADERS += \
     src/portfolio/Asset.hpp \
     src/utils/PowMatrix.hpp \
     src/utils/Utils.hpp \
-    src/utils/Timer.hpp \
     src/utils/Thread.hpp \
     src/utils/Parser.hpp \
     src/utils/Logger.hpp \
@@ -101,7 +100,6 @@ SOURCES += \
     src/portfolio/Asset.cpp \
     src/utils/PowMatrix.cpp \
     src/utils/Utils.cpp \
-    src/utils/Timer.cpp \
     src/utils/Thread.cpp \
     src/utils/Parser.cpp \
     src/utils/Logger.cpp \

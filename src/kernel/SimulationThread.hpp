@@ -29,7 +29,6 @@
 #include "kernel/Inverse.hpp"
 #include "kernel/MonteCarlo.hpp"
 #include "utils/Date.hpp"
-#include "utils/Timer.hpp"
 #include "utils/Thread.hpp"
 #include "utils/Exception.hpp"
 

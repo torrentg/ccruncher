@@ -21,7 +21,6 @@
 //===========================================================================
 
 #include <iostream>
-#include <cmath>
 #include <ctime>
 #include "utils/Utils.hpp"
 #include "utils/UtilsTest.hpp"
@@ -123,5 +122,17 @@ void ccruncher_test::UtilsTest::test3()
   ASSERT_EQUALS("/etc/passwd", Utils::filepath("/etc/","passwd"));
 
 #endif
+}
+
+//===========================================================================
+// test4. test format function
+//===========================================================================
+void ccruncher_test::UtilsTest::test4()
+{
+  ASSERT(Utils::millisToString(510) == string("00:00:00.510"));
+  ASSERT(Utils::millisToString(50510) == string("00:00:50.510"));
+  ASSERT(Utils::millisToString(500510) == string("00:08:20.510"));
+  ASSERT(Utils::millisToString(5000510) == string("01:23:20.510"));
+  ASSERT(Utils::millisToString(1555000510) == string("431:56:40.510"));
 }
 

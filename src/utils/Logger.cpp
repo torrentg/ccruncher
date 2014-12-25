@@ -202,17 +202,6 @@ Logger& ccruncher::Logger::operator<<(const Date &date)
 }
 
 /**************************************************************************//**
- * @details Prints the given Timer using the Timer::format() format.
- * @see Timer#format
- * @param[in] timer Timer to print.
- */
-Logger& ccruncher::Logger::operator<<(Timer &timer)
-{
-  *this << Timer::format(timer.read()).c_str();
-  return *this;
-}
-
-/**************************************************************************//**
  * @details Prints an end-of-line in the given Logger.
  * @param[in,out] logger Logger.
  */

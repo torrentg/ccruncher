@@ -88,6 +88,8 @@ class Utils
     static size_t filesize(const std::string &filename);
     //! Returns bytes as string (B, KB, MB)
     static std::string bytesToString(const size_t val);
+    //! Format seconds in format hh:mm:ss.mmm
+    static std::string millisToString(long millis);
 
 };
 

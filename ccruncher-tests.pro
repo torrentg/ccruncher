@@ -48,7 +48,6 @@ HEADERS += \
     src/utils/PowMatrix.hpp \
     src/utils/PowMatrixTest.hpp \
     src/utils/Utils.hpp \
-    src/utils/Timer.hpp \
     src/utils/Thread.hpp \
     src/utils/Parser.hpp \
     src/utils/Logger.hpp \
@@ -60,7 +59,6 @@ HEADERS += \
     src/utils/Expr.hpp \
     src/utils/config.h \
     src/utils/UtilsTest.hpp \
-    src/utils/TimerTest.hpp \
     src/utils/ParserTest.hpp \
     src/utils/ExpatUserDataTest.hpp \
     src/utils/ExceptionTest.hpp \
@@ -114,7 +112,6 @@ SOURCES += \
     src/utils/PowMatrix.cpp \
     src/utils/PowMatrixTest.cpp \
     src/utils/Utils.cpp \
-    src/utils/Timer.cpp \
     src/utils/Thread.cpp \
     src/utils/Parser.cpp \
     src/utils/Logger.cpp \
@@ -125,7 +122,6 @@ SOURCES += \
     src/utils/Date.cpp \
     src/utils/Expr.cpp \
     src/utils/UtilsTest.cpp \
-    src/utils/TimerTest.cpp \
     src/utils/ParserTest.cpp \
     src/utils/ExpatUserDataTest.cpp \
     src/utils/ExceptionTest.cpp \

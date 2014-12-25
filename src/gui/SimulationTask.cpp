@@ -20,6 +20,7 @@
 //
 //===========================================================================
 
+#include <chrono>
 #include <clocale>
 #include <QFileInfo>
 #include <QMessageBox>
@@ -27,10 +28,10 @@
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/IData.hpp"
 #include "utils/Utils.hpp"
-#include "utils/Timer.hpp"
 #include "utils/CsvFile.hpp"
 
 using namespace std;
+using namespace std::chrono;
 using namespace ccruncher;
 using namespace ccruncher_gui;
 
@@ -76,7 +77,7 @@ void ccruncher_gui::SimulationTask::run()
 {
   try
   {
-    Timer timer(true);
+    auto t1 = steady_clock::now();
     stop_ = false;
 
     free();
@@ -99,7 +100,9 @@ void ccruncher_gui::SimulationTask::run()
     montecarlo->run(ithreads, 0, &stop_);
 
     // footer
-    logger << footer(timer) << endl;
+    auto t2 = steady_clock::now();
+    long millis = duration_cast<milliseconds>(t2-t1).count();
+    logger << footer(millis) << endl;
     setStatus(status::finished);
   }
   catch(std::exception &e)
