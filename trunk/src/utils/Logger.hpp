@@ -27,7 +27,6 @@
 #include <ostream>
 #include <streambuf>
 #include "utils/Utils.hpp"
-#include "utils/Timer.hpp"
 #include "utils/Date.hpp"
 
 namespace ccruncher {
@@ -85,7 +84,6 @@ class Logger : public std::ostream
     Logger& operator<<(char c);
     Logger& operator<<(const std::string &str);
     Logger& operator<<(const Date &date);
-    Logger& operator<<(Timer &timer);
 
     // manipulators calls
     Logger& operator<<(Logger& ( *pf )(Logger&)) { return pf(*this); }
@@ -136,14 +134,14 @@ struct indent
 //! Logger stream manipulator
 struct footer
 {
-  Timer &timer;
-  explicit footer(Timer &t) : timer(t) {}
+  long millis;
+  explicit footer(long m) : millis(m) {}
   inline friend Logger& operator<<(Logger& logger, const footer& manip)
   {
     logger << "general information" << flood('*') << endl;
     logger << indent(+1);
     logger << "end time (dd/MM/yyyy hh:mm:ss)" << split << Utils::timestamp() << endl;
-    logger << "total elapsed time" << split << manip.timer << endl;
+    logger << "total elapsed time" << split << Utils::millisToString(manip.millis) << endl;
     logger << indent(-1);
     logger << endl;
     return logger;

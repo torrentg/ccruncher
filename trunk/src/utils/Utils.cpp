@@ -572,3 +572,31 @@ string ccruncher::Utils::bytesToString(const size_t val)
   return oss.str();
 }
 
+/**************************************************************************//**
+ * @param[in] secs Numbers of elapsed milliseconds.
+ * @return Elapsed time formated like hh:mm:ss.mmm
+ */
+string ccruncher::Utils::millisToString(long millis)
+{
+  long ms = fabs(millis);
+
+  // computing hours
+  int hh = ms/(60*60*1000);
+  ms -= hh*(60*60*1000);
+
+  // computing minutes
+  int min = ms/(60*1000);
+  ms -= min*(60*1000);
+
+  // computing seconds
+  int sec = ms/1000;
+  ms -= sec*1000;
+
+  // formating elapsed time
+  char buf[20];
+  snprintf(buf, 20, "%02d:%02d:%02d.%03ld", hh, min, sec, ms);
+
+  // exit function
+  return string(buf);
+}
+

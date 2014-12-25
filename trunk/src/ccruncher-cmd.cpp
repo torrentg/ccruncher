@@ -25,6 +25,7 @@
 #endif
 
 #include <cerrno>
+#include <chrono>
 #include <iostream>
 #include <csignal>
 #include <map>
@@ -38,10 +39,10 @@
 #include "utils/Utils.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
-#include "utils/Timer.hpp"
 #include "utils/config.h"
 
 using namespace std;
+using namespace std::chrono;
 using namespace ccruncher;
 
 // functions declaration
@@ -308,7 +309,7 @@ int main(int argc, char *argv[])
  */
 void run() throw(Exception)
 {
-  Timer timer(true);
+  auto t1 = steady_clock::now();
 
   // setting interruptions handlers
   signal(SIGINT, catchsignal);
@@ -340,7 +341,9 @@ void run() throw(Exception)
   montecarlo.run(ithreads, ihash, &stop);
 
   // footer
-  log << footer(timer) << endl;
+  auto t2 = steady_clock::now();
+  long millis = duration_cast<milliseconds>(t2-t1).count();
+  log << footer(millis) << endl;
 }
 
 /**************************************************************************//**

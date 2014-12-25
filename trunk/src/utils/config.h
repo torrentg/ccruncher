@@ -2,10 +2,10 @@
 /* src/utils/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2014-12-23 16:14:35+01:00"
+#define BUILD_DATE "2014-12-25 11:22:42+01:00"
 
 /* build host name */
-#define BUILD_HOST "73-36-240.uoc.es"
+#define BUILD_HOST "fobos.generacio.com"
 
 /* build user */
 #define BUILD_USER "Gerard Torrent"

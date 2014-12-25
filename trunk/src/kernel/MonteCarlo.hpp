@@ -34,7 +34,6 @@
 #include "params/Transitions.hpp"
 #include "portfolio/Obligor.hpp"
 #include "utils/Date.hpp"
-#include "utils/Timer.hpp"
 #include "utils/Logger.hpp"
 
 namespace ccruncher {
@@ -98,8 +97,8 @@ class MonteCarlo
     ulong seed;
     //! Hash (0=non show hashes) (default=0)
     size_t mHash;
-    //! Simulation elapsed time
-    Timer timer;
+    //! Simulation starting time
+    std::chrono::steady_clock::time_point t1;
     //! Simulation threads
     std::vector<SimulationThread*> threads;
     //! Number of iterations done

@@ -21,13 +21,14 @@
 //===========================================================================
 
 #include <cstdio>
+#include <chrono>
 #include <cassert>
 #include "kernel/IData.hpp"
 #include "utils/Utils.hpp"
-#include "utils/Timer.hpp"
 #include "utils/ExpatParser.hpp"
 
 using namespace std;
+using namespace std::chrono;
 using namespace ccruncher;
 
 #define BUFFER_SIZE 128*1024
@@ -140,12 +141,16 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m)
     }
 
     // parsing
-    Timer timer(true);
+    auto t1 = steady_clock::now();
     ExpatParser parser;
     parser.setDefines(m);
     parser.parse(file, this, stop);
+    auto t2 = steady_clock::now();
+    long millis = duration_cast<milliseconds>(t2-t1).count();
+
+    // trace info
     logger << "file checksum (adler32)" << split << parser.getChecksum() << endl;
-    logger << "elapsed time parsing data" << split << timer << endl;
+    logger << "elapsed time parsing data" << split << Utils::millisToString(millis) << endl;
     logger << indent(-1);
   }
   catch(std::exception &e)

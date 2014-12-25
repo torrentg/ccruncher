@@ -9,7 +9,6 @@ Current works
   * add 'Window' menu (window list, tab vs sub-window)
   * in 'Help' menu add pdf + input file info
   * change 'About' dialog (look&feel similar to libreoffice)
-  * use chrono in Timer (Watchdog?)
   * isolate xml/binary parser code
   * isolate aggregators code
   * gui-bug: click in portfolio100.xml.gz

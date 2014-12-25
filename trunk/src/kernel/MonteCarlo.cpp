@@ -40,6 +40,7 @@
 #include "utils/Exception.hpp"
 
 using namespace std;
+using namespace std::chrono;
 using namespace ccruncher;
 
 /**************************************************************************//**
@@ -454,7 +455,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   logger << indent(+1);
 
   // creating and launching simulation threads
-  timer.start();
+  t1 = steady_clock::now();
   nfthreads = numthreads;
   numiterations = 0UL;
   threads.assign(numthreads, nullptr);
@@ -487,7 +488,9 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   // exit function
   if (nhash > 0) logger << endl;
   logger << "simulations realized" << split << numiterations << endl;
-  logger << "total simulation time" << split << timer << endl;
+  auto t2 = steady_clock::now();
+  long millis = duration_cast<milliseconds>(t2-t1).count();
+  logger << "total simulation time" << split << Utils::millisToString(millis) << endl;
   logger << indent(-2) << endl;
 }
 
@@ -544,8 +547,11 @@ bool ccruncher::MonteCarlo::append(const vector<vector<double>> &losses) noexcep
   }
 
   // checking time stop criterion
-  if (maxseconds > 0 && timer.read() >  maxseconds) {
-    more = false;
+  if (maxseconds > 0) {
+    long secs = duration_cast<seconds>(steady_clock::now()-t1).count();
+    if (secs >= (long)maxseconds) {
+      more = false;
+    }
   }
 
   // checking stop requested by user
