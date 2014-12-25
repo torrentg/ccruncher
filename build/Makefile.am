@@ -51,7 +51,6 @@ ccruncher_cmd_SOURCES = \
     ../src/utils/Exception.cpp \
     ../src/utils/Logger.cpp \
     ../src/utils/Parser.cpp \
-    ../src/utils/File.cpp \
     ../src/utils/Date.cpp \
     ../src/utils/Expr.cpp \
     ../src/utils/Timer.cpp \
@@ -88,7 +87,6 @@ ccruncher_cmd_SOURCES = \
     ../src/utils/Exception.hpp \
     ../src/utils/Logger.hpp \
     ../src/utils/Parser.hpp \
-    ../src/utils/File.hpp \
     ../src/utils/Date.hpp \
     ../src/utils/Expr.hpp \
     ../src/utils/Timer.hpp \
@@ -114,7 +112,6 @@ ccruncher_tests_SOURCES = \
     ../src/utils/ExprTest.cpp \
     ../src/utils/ParserTest.cpp \
     ../src/utils/ExceptionTest.cpp \
-    ../src/utils/FileTest.cpp \
     ../src/utils/UtilsTest.cpp \
     ../src/utils/ExpatUserDataTest.cpp \
     ../src/utils/PowMatrixTest.cpp \
@@ -143,7 +140,6 @@ ccruncher_tests_SOURCES = \
     ../src/utils/Date.cpp \
     ../src/utils/Expr.cpp \
     ../src/utils/Exception.cpp \
-    ../src/utils/File.cpp \
     ../src/utils/ExpatParser.cpp \
     ../src/utils/ExpatUserData.cpp \
     ../src/utils/ExpatHandlers.cpp \
@@ -180,7 +176,6 @@ ccruncher_tests_SOURCES = \
     ../src/utils/ExprTest.hpp \
     ../src/utils/ParserTest.hpp \
     ../src/utils/ExceptionTest.hpp \
-    ../src/utils/FileTest.hpp \
     ../src/utils/UtilsTest.hpp \
     ../src/utils/ExpatUserDataTest.hpp \
     ../src/utils/PowMatrixTest.hpp \
@@ -209,7 +204,6 @@ ccruncher_tests_SOURCES = \
     ../src/utils/Date.hpp \
     ../src/utils/Expr.hpp \
     ../src/utils/Exception.hpp \
-    ../src/utils/File.hpp \
     ../src/utils/ExpatParser.hpp \
     ../src/utils/ExpatUserData.hpp \
     ../src/utils/ExpatHandlers.hpp \

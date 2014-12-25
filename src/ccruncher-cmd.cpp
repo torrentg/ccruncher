@@ -36,7 +36,6 @@
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/IData.hpp"
 #include "utils/Utils.hpp"
-#include "utils/File.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
 #include "utils/Timer.hpp"
@@ -258,7 +257,7 @@ int main(int argc, char *argv[])
     try
     {
       sfilename = string(argv[argc-1]);
-      File::checkFile(sfilename, "r");
+      Utils::checkFile(sfilename, "r");
     }
     catch(Exception &) 
     {
@@ -320,7 +319,7 @@ void run() throw(Exception)
   gsl_set_error_handler(gsl_handler);
 
   // checking output directory
-  if (!File::existDir(spath)) {
+  if (!Utils::existDir(spath)) {
     throw Exception("output '" + spath + "' not exist");
   }
 

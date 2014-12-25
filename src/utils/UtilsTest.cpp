@@ -73,3 +73,55 @@ void ccruncher_test::UtilsTest::test2()
   ASSERT("" == Utils::trim(" "));
 }
 
+//===========================================================================
+// test3
+//===========================================================================
+void ccruncher_test::UtilsTest::test3()
+{
+  // testing normalizePath function
+  string str1;
+  ASSERT_NO_THROW(str1= Utils::normalizePath("./dir1/dir2"));
+  ASSERT(str1.substr(0,1) != ".");
+  ASSERT(str1.substr(str1.length()-1,1) == Utils::pathSeparator);
+
+  // testing getWorkDir function
+  string str2;
+  ASSERT_NO_THROW(str2 = Utils::getWorkDir());
+  ASSERT(str2.substr(0,1) != ".");
+  ASSERT(str2.substr(str2.length()-1,1) == Utils::pathSeparator);
+
+  // testing existDir function
+  ASSERT(Utils::existDir("."));
+  ASSERT(!Utils::existDir("nonexistentdir"));
+
+  // makeDir function not tested
+
+#ifndef _WIN32
+
+  // test checkFile function (run as non-root user)
+  ASSERT_NO_THROW(Utils::checkFile("/etc/passwd", "r"));
+  ASSERT_THROW(Utils::checkFile("/etc/passwd", "w"));
+  ASSERT_THROW(Utils::checkFile("/etc/passwd", "rw"));
+  ASSERT_THROW(Utils::checkFile("/etc/passwd", "falsemode"));
+
+  ASSERT_EQUALS("/etc", Utils::dirname("/etc/passwd"));
+  ASSERT_EQUALS("/", Utils::dirname("/etc/"));
+  ASSERT_EQUALS(".", Utils::dirname("readme.txt"));
+  ASSERT_EQUALS("..", Utils::dirname("../readme.txt"));
+
+  ASSERT_EQUALS("passwd", Utils::filename("/etc/passwd"));
+  ASSERT_EQUALS("etc", Utils::filename("/etc/"));
+  ASSERT_EQUALS("readme.txt", Utils::filename("readme.txt"));
+  ASSERT_EQUALS("readme.txt", Utils::filename("../readme.txt"));
+
+  ASSERT_EQUALS("readme.txt", Utils::filepath("","readme.txt"));
+  ASSERT_EQUALS("readme.txt", Utils::filepath(".","readme.txt"));
+  ASSERT_EQUALS("readme.txt", Utils::filepath("./","readme.txt"));
+  ASSERT_EQUALS("../readme.txt", Utils::filepath("..","readme.txt"));
+  ASSERT_EQUALS("../readme.txt", Utils::filepath("../","readme.txt"));
+  ASSERT_EQUALS("/etc/passwd", Utils::filepath("/etc","passwd"));
+  ASSERT_EQUALS("/etc/passwd", Utils::filepath("/etc/","passwd"));
+
+#endif
+}
+

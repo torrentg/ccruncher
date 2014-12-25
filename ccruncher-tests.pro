@@ -52,7 +52,6 @@ HEADERS += \
     src/utils/Thread.hpp \
     src/utils/Parser.hpp \
     src/utils/Logger.hpp \
-    src/utils/File.hpp \
     src/utils/ExpatUserData.hpp \
     src/utils/ExpatParser.hpp \
     src/utils/ExpatHandlers.hpp \
@@ -63,7 +62,6 @@ HEADERS += \
     src/utils/UtilsTest.hpp \
     src/utils/TimerTest.hpp \
     src/utils/ParserTest.hpp \
-    src/utils/FileTest.hpp \
     src/utils/ExpatUserDataTest.hpp \
     src/utils/ExceptionTest.hpp \
     src/utils/DateTest.hpp \
@@ -120,7 +118,6 @@ SOURCES += \
     src/utils/Thread.cpp \
     src/utils/Parser.cpp \
     src/utils/Logger.cpp \
-    src/utils/File.cpp \
     src/utils/ExpatUserData.cpp \
     src/utils/ExpatParser.cpp \
     src/utils/ExpatHandlers.cpp \
@@ -130,7 +127,6 @@ SOURCES += \
     src/utils/UtilsTest.cpp \
     src/utils/TimerTest.cpp \
     src/utils/ParserTest.cpp \
-    src/utils/FileTest.cpp \
     src/utils/ExpatUserDataTest.cpp \
     src/utils/ExceptionTest.cpp \
     src/utils/DateTest.cpp \
