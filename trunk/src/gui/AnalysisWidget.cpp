@@ -42,7 +42,7 @@
 #include "gui/QwtPlotCanvasExt.hpp"
 #include "gui/QwtPieChart.hpp"
 #include "gui/AnalysisWidget.hpp"
-#include "utils/File.hpp"
+#include "utils/Utils.hpp"
 
 #if QWT_VERSION < 0x060100
   #define setMajorPen setMajPen
@@ -282,7 +282,7 @@ void ccruncher_gui::AnalysisWidget::draw()
     size_t totalbytes = task.getCsvFile().getFileSize();
     size_t readedbytes = task.getCsvFile().getReadedSize();
     float pct = 100.0 * (float)(readedbytes)/(float)(totalbytes);
-    QString str = File::bytesToString(readedbytes).c_str();
+    QString str = Utils::bytesToString(readedbytes).c_str();
     progress->ui->progress->setFormat(str);
     progress->ui->progress->setValue(pct+0.5);
   }
@@ -636,7 +636,7 @@ void ccruncher_gui::AnalysisWidget::setStatus(AnalysisTask::status val)
     case AnalysisTask::status::running: {
       emit newStatusMsg("analyzing ...");
       size_t readedbytes = task.getCsvFile().getReadedSize();
-      QString str = File::bytesToString(readedbytes).c_str();
+      QString str = Utils::bytesToString(readedbytes).c_str();
       progress->ui->progress->setFormat(str);
       progress->ui->progress->setValue(100);
       progress->fadeout();

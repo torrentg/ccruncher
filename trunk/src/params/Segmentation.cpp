@@ -23,7 +23,8 @@
 #include <cstring>
 #include <cassert>
 #include "params/Segmentation.hpp"
-#include "utils/File.hpp"
+#include "utils/Exception.hpp"
+#include "utils/Utils.hpp"
 
 #define UNASSIGNED "unassigned"
 
@@ -183,6 +184,6 @@ const std::string& ccruncher::Segmentation::getSegment(ushort i) const
  */
 string ccruncher::Segmentation::getFilename(const string &path) const
 {
-  return File::normalizePath(path) + mName + ".csv";
+  return Utils::normalizePath(path) + mName + ".csv";
 }
 

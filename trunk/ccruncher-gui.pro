@@ -51,7 +51,6 @@ HEADERS += \
     src/utils/Thread.hpp \
     src/utils/Parser.hpp \
     src/utils/Logger.hpp \
-    src/utils/File.hpp \
     src/utils/ExpatUserData.hpp \
     src/utils/ExpatParser.hpp \
     src/utils/ExpatHandlers.hpp \
@@ -106,7 +105,6 @@ SOURCES += \
     src/utils/Thread.cpp \
     src/utils/Parser.cpp \
     src/utils/Logger.cpp \
-    src/utils/File.cpp \
     src/utils/ExpatUserData.cpp \
     src/utils/ExpatParser.cpp \
     src/utils/ExpatHandlers.cpp \

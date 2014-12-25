@@ -23,7 +23,7 @@
 #include <cstdio>
 #include <cassert>
 #include "kernel/IData.hpp"
-#include "utils/File.hpp"
+#include "utils/Utils.hpp"
 #include "utils/Timer.hpp"
 #include "utils/ExpatParser.hpp"
 
@@ -80,7 +80,7 @@ void ccruncher::IData::init(const std::string &f,
     else {
       // gzFile reads both gziped and not-gziped files
       file = gzopen(filename.c_str(), "rb");
-      bytes = File::filesize(filename);
+      bytes = Utils::filesize(filename);
     }
 
     if (file == nullptr) {
@@ -130,7 +130,7 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m)
     logger << "file name" << split << "["+filename+"]" << endl;
     if (filename != STDIN_FILENAME)
     {
-      logger << "file size" << split << File::bytesToString(File::filesize(filename)) << endl;
+      logger << "file size" << split << Utils::bytesToString(Utils::filesize(filename)) << endl;
     }
 
     // trace defines
@@ -304,15 +304,15 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *tag, const 
     try
     {
       string path;
-      if (filename==STDIN_FILENAME) path = File::getWorkDir();
-      else path = File::dirname(filename);
-      string filepath = File::filepath(path, ref);
+      if (filename==STDIN_FILENAME) path = Utils::getWorkDir();
+      else path = Utils::dirname(filename);
+      string filepath = Utils::filepath(path, ref);
       file = gzopen(filepath.c_str(), "rb");
       if (file == nullptr) {
         throw Exception("can't open file '" + filepath + "'");
       }
 
-      size_t bytes = File::filesize(filepath);
+      size_t bytes = Utils::filesize(filepath);
       mMutex.lock();
       curfile = file;
       cursize = bytes;
@@ -320,7 +320,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *tag, const 
 
       gzbuffer(file, BUFFER_SIZE);
       logger << "included file name" << split << "["+filepath+"]" << endl;
-      logger << "included file size" << split << File::bytesToString(bytes) << endl;
+      logger << "included file size" << split << Utils::bytesToString(bytes) << endl;
 
       ExpatParser parser;
       parser.setDefines(eu.defines);

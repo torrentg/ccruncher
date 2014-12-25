@@ -37,7 +37,6 @@
 #include "params/Correlations.hpp"
 #include "params/Segmentations.hpp"
 #include "utils/Utils.hpp"
-#include "utils/File.hpp"
 #include "utils/Exception.hpp"
 
 using namespace std;
