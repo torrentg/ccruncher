@@ -23,7 +23,6 @@
 #ifndef _Inverse_
 #define _Inverse_
 
-#include <cmath>
 #include <vector>
 #include <cassert>
 #include <gsl/gsl_spline.h>

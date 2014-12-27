@@ -5,17 +5,13 @@ CCRUNCHER TODO
 Current works
 -------------------
   * stock/asset/index case
-  * review class Interest
-  * add 'Window' menu (window list, tab vs sub-window)
+  * inverse nodes limited to datevalues dates!
   * in 'Help' menu add pdf + input file info
-  * change 'About' dialog (look&feel similar to libreoffice)
   * isolate xml/binary parser code
   * isolate aggregators code
-  * gui-bug: click in portfolio100.xml.gz
 
 Future works
 -------------------
-  * inverse nodes limited to datevalues dates!
   * create F() and Finv(t()) output
   * investigate how correlation depends on time
   * portfolio optimization in ccruncher-gui
