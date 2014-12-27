@@ -292,10 +292,7 @@ void ccruncher_gui::MainWindow::openFile(const QUrl &url)
     }
     catch(XmlEditWidget::NonEditableException &)
     {
-      QUrl url1 = QUrl::fromLocalFile(filename);
-      url1.setPath(url1.toLocalFile());
-      url1.setScheme("exec");
-      return openFile(url1);
+      return;
     }
     catch(std::exception &e)
     {

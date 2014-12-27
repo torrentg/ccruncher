@@ -339,7 +339,7 @@ void ccruncher_gui::SimulationWidget::log(const QString &str)
   if (str.length() == 0) return;
 
   if (fout.is_open()) {
-    fout << str.toStdString();
+    fout << str.toStdString() << flush;
   }
 
   int pos0 = 0;

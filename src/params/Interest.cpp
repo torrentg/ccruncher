@@ -24,7 +24,6 @@
 #include <algorithm>
 #include <cassert>
 #include "params/Interest.hpp"
-#include "utils/Utils.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -300,8 +299,7 @@ void ccruncher::Interest::epstart(ExpatUserData &, const char *tag, const char *
     }
     else if (getNumAttributes(attributes) <= 2)
     {
-      string str = Utils::trim(getStringAttribute(attributes, "type"));
-      str = Utils::lowercase(str);
+      string str = getStringAttribute(attributes, "type");
       if (str == "simple") {
         mType = Type::Simple;
       }
