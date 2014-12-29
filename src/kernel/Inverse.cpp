@@ -60,7 +60,7 @@ ccruncher::Inverse::Inverse(double ndf, double maxt, const CDF &cdf)
 /**************************************************************************//**
  * @param[in] o Object to copy.
  */
-ccruncher::Inverse::Inverse(const Inverse &o)
+ccruncher::Inverse::Inverse(const Inverse &o) : mSpline(nullptr)
 {
   *this = o;
 }
@@ -81,7 +81,11 @@ Inverse & ccruncher::Inverse::operator=(const Inverse &o)
 {
   mMaxT = o.mMaxT;
   mNdf = o.mNdf;
-  mSpline = nullptr;
+
+  if (mSpline != nullptr) {
+    gsl_spline_free(mSpline);
+    mSpline = nullptr;
+  }
 
   if (o.mSpline != nullptr) {
     mSpline = gsl_spline_alloc(o.mSpline->interp->type, o.mSpline->size);
