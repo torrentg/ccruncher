@@ -114,6 +114,8 @@ class MonteCarlo
   
     //! Deallocate memory
     void freeMemory();
+    //! Returns the sorted list of dates where assets events takes place
+    std::vector<Date> getNodes() const;
     //! Averaged exposures by segment
     std::vector<double> getSegmentationExposures(ushort isegmentation, ushort numSegments) const;
     //! Append simulation result

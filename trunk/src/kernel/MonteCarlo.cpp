@@ -20,6 +20,7 @@
 //
 //===========================================================================
 
+#include <set>
 #include <cmath>
 #include <cfloat>
 #include <cstdlib>
@@ -336,6 +337,7 @@ void ccruncher::MonteCarlo::setObligors(vector<Obligor> &portfolio)
        [](const Obligor &a, const Obligor &b) -> bool {
          return a.irating < b.irating;
        });
+
 }
 
 /**************************************************************************//**
@@ -415,6 +417,28 @@ vector<double> ccruncher::MonteCarlo::getSegmentationExposures(ushort isegmentat
   }
 
   return ret;
+}
+
+/**************************************************************************//**
+ * @return Sorted list of dates where assets values ocurres.
+ */
+vector<Date> ccruncher::MonteCarlo::getNodes() const
+{
+  // obtaining date nodes
+  set<Date> aux;
+  for(const Obligor &obligor : obligors) {
+    for(const Asset &asset : obligor.assets) {
+      for(const DateValues &value: asset.values) {
+        assert(time0 <= value.date && value.date <= timeT);
+        aux.insert(value.date);
+      }
+    }
+  }
+
+  // sorting nodes
+  vector<Date> nodes(aux.begin(), aux.end());
+  sort(nodes.begin(), nodes.end());
+  return nodes;
 }
 
 /**************************************************************************//**
