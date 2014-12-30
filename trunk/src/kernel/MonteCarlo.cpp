@@ -118,7 +118,7 @@ void ccruncher::MonteCarlo::setData(IData &data, const string &path, char mode)
     logger << endl;
     logger << "initialization procedure" << flood('*') << endl;
     logger << indent(+1);
-    logger << "setting parameters" << flood('-') << endl;
+    logger << "parameters" << flood('-') << endl;
     logger << indent(+1);
 
     double rerror = NAN;
@@ -131,11 +131,6 @@ void ccruncher::MonteCarlo::setData(IData &data, const string &path, char mode)
     }
     setFactorLoadings(Factors::getLoadings(data.getFactors()));
     setCorrelations(data.getCorrelations());
-
-    string strsplines;
-    for(Inverse &inverse : inverses) {
-      strsplines += inverse.getInterpolationType()[0];
-    }
 
     logger << "initial date" << split << time0 << endl;
     logger << "end date" << split << timeT << endl;
@@ -152,13 +147,13 @@ void ccruncher::MonteCarlo::setData(IData &data, const string &path, char mode)
       logger << "default probability functions" << split << "computed" << endl;
     }
 
-    logger << "default probability splines (linear, cubic, none)" << split << strsplines << endl;
     logger << indent(-1);
 
-    logger << "setting portfolio" << flood('-') << endl;
+    logger << "portfolio" << flood('-') << endl;
     logger << indent(+1);
 
     setObligors(data.getPortfolio().getObligors());
+    setInverses();
 
     size_t numAssets = 0UL;
     size_t numValues = 0UL;
@@ -174,7 +169,7 @@ void ccruncher::MonteCarlo::setData(IData &data, const string &path, char mode)
     logger << "number of values" << split << numValues << endl;
     logger << indent(-1);
 
-    logger << "initializing aggregators" << flood('-') << endl;
+    logger << "aggregators" << flood('-') << endl;
     logger << indent(+1);
 
     setSegmentations(data.getSegmentations(), path, mode);
@@ -228,16 +223,10 @@ void ccruncher::MonteCarlo::setParams(const map<string,string> &parameters)
  * @param[in] dprobs List of PDs.
  * @throw Exception Invalid PDs list.
  */
-void ccruncher::MonteCarlo::setDefaultProbabilities(const vector<CDF> &dprobs)
+void ccruncher::MonteCarlo::setDefaultProbabilities(const vector<CDF> &dprobs_)
 {
-  // check PDs
-  DefaultProbabilities::isValid(dprobs, true);
-
-  // create PDinv(t(x)) splines
-  inverses.resize(dprobs.size());
-  for(size_t i=0; i<dprobs.size(); i++) {
-    inverses[i].init(ndf, timeT-time0, dprobs[i]);
-  }
+  DefaultProbabilities::isValid(dprobs_, true);
+  dprobs = dprobs_;
 }
 
 /**************************************************************************//**
@@ -254,10 +243,9 @@ double ccruncher::MonteCarlo::setDefaultProbabilities(const Transitions &transit
 
   // computing default probability functions using transition matrix
   int months = (int) ceil(diff(time0, timeT, 'M'));
-  vector<CDF> dprobs = tone.getCDFs(time0, months+1);
+  dprobs = tone.getCDFs(time0, months+1);
 
-  // setting inverses
-  setDefaultProbabilities(dprobs);
+  assert(DefaultProbabilities::isValid(dprobs));
   return rerror;
 }
 
@@ -319,7 +307,7 @@ void ccruncher::MonteCarlo::setObligors(vector<Obligor> &portfolio)
 {
   assert(chol != nullptr);
   size_t numFactors = chol->size1;
-  size_t numRatings = inverses.size();
+  size_t numRatings = dprobs.size();
 
   for(const Obligor &obligor : portfolio) {
     if (obligor.ifactor >= numFactors || obligor.irating >= numRatings) {
@@ -420,9 +408,10 @@ vector<double> ccruncher::MonteCarlo::getSegmentationExposures(ushort isegmentat
 }
 
 /**************************************************************************//**
- * @return Sorted list of dates where assets values ocurres.
+ * @details Create Finv(t(x)) spline functions. This is a strictly increasing
+ *          function. We only need accuracy in the asset event dates.
  */
-vector<Date> ccruncher::MonteCarlo::getNodes() const
+void ccruncher::MonteCarlo::setInverses()
 {
   // obtaining date nodes
   set<Date> aux;
@@ -435,10 +424,19 @@ vector<Date> ccruncher::MonteCarlo::getNodes() const
     }
   }
 
-  // sorting nodes
-  vector<Date> nodes(aux.begin(), aux.end());
+  // converting date nodes to day nodes
+  vector<int> nodes;
+  nodes.reserve(aux.size());
+  for(auto it=aux.begin(); it!=aux.end(); ++it) {
+    nodes.push_back(*it-time0);
+  }
   sort(nodes.begin(), nodes.end());
-  return nodes;
+
+  // create PDinv(t(x)) splines
+  inverses.resize(dprobs.size());
+  for(size_t i=0; i<dprobs.size(); i++) {
+    inverses[i].init(ndf, timeT-time0, dprobs[i], nodes);
+  }
 }
 
 /**************************************************************************//**

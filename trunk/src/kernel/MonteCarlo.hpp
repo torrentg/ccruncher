@@ -81,6 +81,8 @@ class MonteCarlo
     Date timeT;
     //! Degrees of freedom
     double ndf;
+    //! Probability of default functions
+    std::vector<CDF> dprobs;
     //! Inverse functions
     std::vector<Inverse> inverses;
     //! Cholesky matrix (factor correlations)
@@ -114,8 +116,8 @@ class MonteCarlo
   
     //! Deallocate memory
     void freeMemory();
-    //! Returns the sorted list of dates where assets events takes place
-    std::vector<Date> getNodes() const;
+    //! Create Finv(t(x)) spline functions
+    void setInverses();
     //! Averaged exposures by segment
     std::vector<double> getSegmentationExposures(ushort isegmentation, ushort numSegments) const;
     //! Append simulation result

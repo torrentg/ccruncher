@@ -23,6 +23,7 @@
 #ifndef _Inverse_
 #define _Inverse_
 
+#include <map>
 #include <vector>
 #include <cassert>
 #include <gsl/gsl_spline.h>
@@ -65,18 +66,20 @@ class Inverse
     //! Return minimum day
     int getMinDay(const CDF &cdf) const;
     //! Set splines
-    void setSpline(const CDF &cdf);
+    void setSpline(const CDF &cdf, const std::vector<int> &nodes);
     //! Set spline
-    void setSpline(std::vector<int> &days, std::vector<double> &cache, bool forceLinear);
+    void setSpline(const std::vector<int> &days, const std::map<int, double> &cache);
     //! Return the worst unaccurate day
-    int getWorstDay(std::vector<double> &cache);
+    int getWorstDay(const std::vector<int> &nodes, const std::map<int, double> &cache) const;
+    //! Check if spline is an monotonically increasing function
+    static bool isIncreasing(const gsl_spline *spline);
 
   public:
 
     //! Default constructor
     Inverse();
     //! Constructor
-    Inverse(double ndf, double maxt, const CDF &cdf);
+    Inverse(double ndf, double maxt, const CDF &cdf, const std::vector<int> &nodes);
     //! Copy constructor
     Inverse(const Inverse &);
     //! Destructor
@@ -84,11 +87,13 @@ class Inverse
     //! Assignment operator
     Inverse & operator=(const Inverse &);
     //! Initialize
-    void init(double ndf, double maxt, const CDF &cdf);
+    void init(double ndf, double maxt, const CDF &cdf, const std::vector<int> &nodes);
     //! Evalue (return days from t0)
     double evalue(double val) const;
     //! Returns interpolation type (l=linear, c=cubic, n=none)
     std::string getInterpolationType() const;
+    //! Number of interpolation nodes
+    size_t size() const;
 
 };
 

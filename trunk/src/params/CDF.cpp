@@ -215,7 +215,16 @@ void ccruncher::CDF::setSpline() const
     y.push_back(1.0);
   }
 
-  // removing repeated starting values
+  // removing consecutive equal y values
+  for(size_t i=1; i<y.size()-1; i++) {
+    if (fabs(y[i-1]-y[i]) < EPSILON && fabs(y[i+1]-y[i]) < EPSILON) {
+      x.erase(x.begin()+i);
+      y.erase(y.begin()+i);
+      i--;
+    }
+  }
+
+  // removing repeated starting x values
   size_t pos1 = 0;
   for(size_t i=1; i<x.size(); i++) {
     if (fabs(x[i]-x[0]) < EPSILON) pos1 = i;
@@ -225,7 +234,7 @@ void ccruncher::CDF::setSpline() const
     x.erase(x.begin(), x.begin()+pos1);
   }
 
-  // removing repeated ending values
+  // removing repeated ending x values
   size_t pos2 = x.size()-1;
   for(int i=pos2-1; i>=0; i--) {
     if (fabs(x[i]-x.back()) < EPSILON) pos2 = i;

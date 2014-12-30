@@ -42,6 +42,7 @@ class TransitionsTest : public TestFixture<TransitionsTest>
     void test5();
     void test6();
     void test7();
+    void test8();
 
 
   public:
@@ -55,6 +56,7 @@ class TransitionsTest : public TestFixture<TransitionsTest>
       TEST_CASE(test5);
       TEST_CASE(test6);
       TEST_CASE(test7);
+      TEST_CASE(test8);
     }
 
 };

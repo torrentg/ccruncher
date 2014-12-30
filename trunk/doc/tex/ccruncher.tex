@@ -1983,27 +1983,22 @@ When PDs are defined explicitly at some fixed times, then intermediate
 values are interpolated using cubic splines; however, if the resulting 
 function is not strictly increasing, then CCruncher uses linear splines.
 
-\textbf{Function composition}. To speed up the evaluation of the function 
-$t=F_r^{-1}(t_{\nu}(x))$ involved in the simulation of obligors' default 
-times, we interpolate the function using linear splines on a selected set 
-of points $\mathbb{S} = \left\{(x_1,d_1),\dots,(x_k,d_k)\right\}$. 
-Let $\{t_1,\dots,t_m\}$ represent the days in which PDs have known values 
-(not interpolated), and let $t=P(x)$ represent the function 
-$t=F_r^{-1}(t_{\nu}(x))$ linearly interpolated using the current points 
-of $\mathbb{S}$. CCruncher determines the set $\mathbb{S}$ using the 
-following procedure:
+\textbf{Function composition}. To speed up the evaluation of the functions 
+$t=F_r^{-1}(t_{\nu}(x))$, involved in the simulation of obligors' default 
+times, we interpolate these functions using splines. We only consider the 
+dates where exist some asset event $\left\{t_1,\dots,t_k\right\}$ and its 
+values $x_k=t_{\nu}^{-1}(F_r(t_k))$. For each rating $r$, CCruncher try to 
+minimize the number of interpolation points applying the following procedure:
 \begin{itemize}
-	\item Add the first day of the simulation time range to $\mathbb{S}$, $d_1$.
-	\item Add the last day of the simulation time range to $\mathbb{S}$, $d_T$.
-	\item Repeat until $\displaystyle \max_{d_1 \le d \le d_T}\left|d - P(t_{\nu}^{-1}(F_r(d)))\right| < 1$ hour
+	\item The initial linear spline $S_r()$ is defined at $(x_1,t_1)$ and $(x_k,t_k)$.
+	\item Repeat until $\displaystyle \max\left|t_i - S_r(x_i)\right| < 1$ hour for all $i=1,\dots,k$
 	\begin{itemize}
-		\item Let $d$ be the day on which maximum error is achieved
-		\item Let $t_i \le d \le t_{i+1}$ be the nearest days on which PDs are user defined
-		\item If $t_i$ is not contained in $\mathbb{S}$, add $t_i$ to $\mathbb{S}$
-		\item Else if $t_{i+1}$ is not contained in $\mathbb{S}$, add $t_{i+1}$ to $\mathbb{S}$
-		\item Else add $d$ to $\mathbb{S}$
+		\item Let $t_i$ be the date on which maximum error is achieved
+		\item Add the interpolation point $(x_i,t_i)$ to the cubic spline function $S_r()$.
 	\end{itemize}
 \end{itemize}
+Spline function $S_r()$ use cubic splines; however, if the resulting function 
+is not strictly increasing, then CCruncher uses linear splines.
 
 \textbf{Interest rate}. CCruncher allows considering the Net Present Value 
 of the simulated losses. This is computed using an interest rate curve 

@@ -87,7 +87,6 @@ class CDF
     double evalue(double x) const;
     //! Returns interpolation type (l=linear, c=cubic, n=none)
     std::string getInterpolationType() const;
-    //TODO: add method setAbsErr
 
 };
 

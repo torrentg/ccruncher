@@ -5,10 +5,11 @@ CCRUNCHER TODO
 Current works
 -------------------
   * stock/asset/index case
-  * inverse nodes limited to datevalues dates!
   * in 'Help' menu add pdf + input file info
   * isolate xml/binary parser code
   * isolate aggregators code
+  * VaR and ES are asymptotically normal
+  * change pdf doc title?
 
 Future works
 -------------------
