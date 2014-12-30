@@ -30,7 +30,7 @@
 using namespace std;
 using namespace ccruncher;
 
-#define EPSILON 1e-12
+#define EPSILON 1e-10
 // maximum error = 1 hour
 #define MAX_ERROR 1.0/24.0
 
@@ -49,12 +49,12 @@ ccruncher::Inverse::Inverse()
  * @param[in] cdf Default probability cdf.
  * @throw Exception Error creating inverse function.
  */
-ccruncher::Inverse::Inverse(double ndf, double maxt, const CDF &cdf)
+ccruncher::Inverse::Inverse(double ndf, double maxt, const CDF &cdf, const vector<int> &nodes)
 {
   mNdf = NAN;
   mMaxT = NAN;
   mSpline = nullptr;
-  init(ndf, maxt, cdf);
+  init(ndf, maxt, cdf, nodes);
 }
 
 /**************************************************************************//**
@@ -96,13 +96,22 @@ Inverse & ccruncher::Inverse::operator=(const Inverse &o)
 }
 
 /**************************************************************************//**
+ * @details We added this method for debug purposes.
+ * @return Number of nodes used by spline.
+ */
+size_t ccruncher::Inverse::size() const
+{
+  return (mSpline==nullptr?0:mSpline->size);
+}
+
+/**************************************************************************//**
  * @param[in] ndf Degrees of freedom of the t-student distribution. If
  *            ndf <= 0 then gaussian, t-student otherwise.
  * @param[in] maxt Maximum time (in days from starting date).
  * @param[in] cdf Default probability cdf.
  * @throw Exception Error creating inverse function.
  */
-void ccruncher::Inverse::init(double ndf, double maxt, const CDF &cdf)
+void ccruncher::Inverse::init(double ndf, double maxt, const CDF &cdf, const vector<int> &nodes)
 {
   if (maxt < 1.0) {
     throw Exception("maxt out of range");
@@ -111,7 +120,7 @@ void ccruncher::Inverse::init(double ndf, double maxt, const CDF &cdf)
   mNdf = ndf;
   mMaxT = maxt;
 
-  setSpline(cdf);
+  setSpline(cdf, nodes);
 }
 
 /**************************************************************************//**
@@ -123,7 +132,7 @@ int ccruncher::Inverse::getMinDay(const CDF &cdf) const
 {
   for(int day=1; day<mMaxT; day++)
   {
-    if (1e-8 < cdf.evalue((double)day))
+    if (EPSILON < cdf.evalue((double)day))
     {
       return day;
     }
@@ -148,16 +157,12 @@ double ccruncher::Inverse::tinv(double u) const
  *            - x is a value in range [-inf,+inf],
  *            - tcdf() is the t-Student cdf
  *            - icdf() is the inverse if the default probability cdf.
- *
- *          With an error less than 1 hour, then use
- *          these values to create spline functions using (x, t) -observe that
- *          are reversed-.
- *          Determines the spline with the minimum number of nodes. Nodes
- *          coming from dprobs have precedence over interpolated values.
+ *          Determines the spline with the minimum number of nodes.
  * @param[in] cdf Default probability cdf.
+ * @param[in] nodes Days where assets events are defined.
  * @throw Exception Error creating spline functions.
  */
-void ccruncher::Inverse::setSpline(const CDF &cdf)
+void ccruncher::Inverse::setSpline(const CDF &cdf, const vector<int> &nodes_)
 {
   if (mSpline != nullptr) {
     gsl_spline_free(mSpline);
@@ -184,68 +189,46 @@ void ccruncher::Inverse::setSpline(const CDF &cdf)
     return;
   }
 
-  vector<int> nodes(cdf.getPoints().size());
-  for(size_t i=0; i<cdf.getPoints().size(); i++) nodes[i] = cdf.getPoints()[i].first;
-
+  vector<int> nodes(nodes_.begin(), nodes_.end());
+  sort(nodes.begin(), nodes.end());
   while(!nodes.empty() && nodes[0] < minday) nodes.erase(nodes.begin());
   if (nodes.empty() || nodes[0] != minday) nodes.insert(nodes.begin(), minday);
   while(!nodes.empty() && nodes.back() > maxday) nodes.erase(nodes.end()-1);
   if (nodes.empty() || nodes.back() != maxday) nodes.insert(nodes.end(), maxday);
   assert(nodes.size() >= 2);
 
+  // we create a temporary cache because icdf is very expensive
+  map<int,double> cache;
+  for(size_t i=0; i<nodes.size(); i++) {
+    int day = nodes[i];
+    cache[day] = tinv(cdf.evalue(day));
+  }
+
   vector<int> days(1, minday);
   int dayko = maxday;
 
-  // we create a temporary cache because icdf is very expensive
-  vector<double> cache(maxday+1, NAN);
-  for(int i=minday; i<=maxday; i++) {
-    cache[i] = tinv(cdf.evalue((double)i));
+  while(dayko > 0)
+  {
+    auto pos = lower_bound(days.begin(), days.end(), dayko);
+    assert(days.begin() < pos);
+    assert(*pos != dayko);
+    days.insert(pos, dayko);
+    setSpline(days, cache);
+    dayko = getWorstDay(nodes, cache);
   }
 
-  do
-  {
-    auto pos1 = lower_bound(days.begin(), days.end(), dayko);
-    assert(days.begin() < pos1);
-    auto pos2 = lower_bound(nodes.begin(), nodes.end(), dayko);
-    assert(nodes.begin() < pos2 && pos2 < nodes.end());
-    if (dayko == *pos2) {
-      // dayko is a remaining node
-      days.insert(pos1, dayko);
-    }
-    else { // dayko is not a node
-      vector<int> alternatives;
-      if (*(pos1-1) < *(pos2-1)) alternatives.push_back(*(pos2-1)); // left-node
-      if (*pos2 < *pos1) alternatives.push_back(*pos2); // right-node
-      if (alternatives.empty()) {
-        // left and right nodes already set
-        days.insert(pos1, dayko);
-      }
-      else if (alternatives.size() == 1) {
-        // inserting remaining node
-        days.insert(pos1, alternatives[0]);
-      }
-      else if (dayko-alternatives[0] <= alternatives[1]-dayko) {
-        // inserting nearest node (left case)
-        days.insert(pos1, alternatives[0]);
-      }
-      else {
-        // inserting nearest node (right case)
-        days.insert(pos1, alternatives[1]);
-      }
-    }
-    bool forceLinear = (cdf.getInterpolationType() == "linear");
-    setSpline(days, cache, forceLinear);
-    dayko = getWorstDay(cache);
-  }
-  while(dayko > 0 && (int)days.size() < mMaxT);
+  //for(size_t i=0; i<days.size(); i++) {
+  //  cout << "day[" << i+1 << "] = " << days[i] << std::endl;
+  //}
+
 }
 
 /**************************************************************************//**
- * @param[in] days List of days ().
- * @param[in] cache tinv(dp(t)) values evaluated at days.
- * @param[in] itype Preferred interpolation type: cspline, linear
+ * @param[in] days List of days.
+ * @param[in] cache tinv(cdf(t)) values evaluated at days.
+ * @param[in] forceLinear Force linear interpolation.
  */
-void ccruncher::Inverse::setSpline(vector<int> &days, vector<double> &cache, bool forceLinear)
+void ccruncher::Inverse::setSpline(const vector<int> &days, const map<int,double> &cache)
 {
   assert(days.size() >= 2);
 
@@ -260,49 +243,49 @@ void ccruncher::Inverse::setSpline(vector<int> &days, vector<double> &cache, boo
   for(size_t i=0; i<days.size(); i++)
   {
     y[i] = days[i];
-    x[i] = cache[days[i]]; //tinv(dprobs.evalue(irating, y[i]));
+    x[i] = cache.at(days[i]); //tinv(dprobs.evalue(irating, y[i]));
     //TODO: manage +inf, -inf cases
   }
 
-  if (gsl_interp_type_min_size(gsl_interp_cspline) <= x.size() && !forceLinear) {
+  if (gsl_interp_type_min_size(gsl_interp_cspline) <= x.size()) {
     mSpline = gsl_spline_alloc(gsl_interp_cspline, x.size());
+    gsl_spline_init(mSpline, &(x[0]), &(y[0]), x.size());
+    if (!isIncreasing(mSpline)) {
+      gsl_spline_free(mSpline);
+      mSpline = nullptr;
+    }
   }
-  else {
+
+  if (mSpline == nullptr) {
     mSpline = gsl_spline_alloc(gsl_interp_linear, x.size());
+    gsl_spline_init(mSpline, &(x[0]), &(y[0]), x.size());
   }
-  gsl_spline_init(mSpline, &(x[0]), &(y[0]), x.size());
+
 }
 
 /**************************************************************************//**
  * @details Evaluate current spline at returns worst accurate day.
- * @param[in] cache tinv(dp(t)) values evaluated at days.
- * @return Worst day, if all days are accurate, returns 0.
+ * @param[in] nodes Days where assets events are defined.
+ * @param[in] cache tinv(cdf(t)) values evaluated at nodes.
+ * @return Worst day. If all days are accurate, returns 0.
  */
-int ccruncher::Inverse::getWorstDay(vector<double> &cache)
+int ccruncher::Inverse::getWorstDay(const vector<int> &nodes, const map<int,double> &cache) const
 {
-  int ret=0;
-  double val=0.0;
+  int worstDay=0;
+  double maxErr=0.0;
 
-  int n = mSpline->size - 1;
-  assert(mSpline->y[0] >= 0);
-  // rounded to nearest integer (positive values)
-  int d1 = (int)(mSpline->y[0] + 0.5);
-  assert(mSpline->y[n] >= 0);
-  // rounded to nearest integer (positive values)
-  int d2 = (int)(mSpline->y[n] + 0.5);
-
-  for(int i=d1+1; i<d2; i++)
+  for(size_t i=0; i<nodes.size(); i++)
   {
-    double x = cache[i];
-    double days = evalue(x);
-    double err = fabs(days-i);
-    if (err > MAX_ERROR && err > val) {
-      val = err;
-      ret = i;
+    double x = cache.at(nodes[i]);
+    double t = evalue(x);
+    double err = fabs(t-nodes[i]);
+    if (err > MAX_ERROR && err > maxErr) {
+      maxErr = err;
+      worstDay = nodes[i];
     }
   }
 
-  return ret;
+  return worstDay;
 }
 
 /**************************************************************************//**
@@ -318,5 +301,25 @@ string ccruncher::Inverse::getInterpolationType() const
     return "none";
   }
   return gsl_interp_name(mSpline->interp);
+}
+
+/**************************************************************************//**
+ * @details Check if the spline function is monotonically increasing
+ *          checking its derivatives at nodes.
+ * @return true = is increasing, false = otherwise.
+ */
+bool ccruncher::Inverse::isIncreasing(const gsl_spline *spline)
+{
+  assert(spline != nullptr);
+  if (spline == nullptr) return false;
+
+  for(size_t i=0; i<spline->size; i++)
+  {
+    double deriv = gsl_spline_eval_deriv(spline, spline->x[i], nullptr);
+    if (deriv < 0.0) {
+      return false;
+    }
+  }
+  return true;
 }
 

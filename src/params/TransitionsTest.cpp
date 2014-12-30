@@ -461,3 +461,24 @@ void ccruncher_test::TransitionsTest::test7()
   Transitions transitions(ratings);
   ASSERT_THROW(xmlparser.parse(xmlcontent2, &transitions));
 }
+
+//===========================================================================
+// test8
+//===========================================================================
+void ccruncher_test::TransitionsTest::test8()
+{
+  Ratings ratings;
+  ratings.push_back(Rating("A", "alive"));
+  ratings.push_back(Rating("B", "dead"));
+
+  vector<vector<double>> M = {{0.9, 0.1}, {0.0, 1.0}};
+
+  Transitions transitions(ratings, M, 12);
+  Transitions tone = transitions.scale(1);
+
+  vector<CDF> dprobs = tone.getCDFs(Date("01/01/2015"), 12+1);
+  ASSERT(dprobs.size() == 2);
+  ASSERT(dprobs[0].getInterpolationType() == "cspline");
+  ASSERT(dprobs[1].getInterpolationType() == "linear");
+}
+

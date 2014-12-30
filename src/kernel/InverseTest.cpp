@@ -37,7 +37,13 @@ void ccruncher_test::InverseTest::test1()
 {
   CDF cdf(0.0, +INFINITY);
   cdf.add(365.0, 0.1);
-  Inverse inverse(0.0, 365.0, cdf);
+
+  vector<int> nodes(366);
+  for(size_t i=0; i<nodes.size(); i++) nodes[i] = i;
+
+  Inverse inverse(0.0, 365.0, cdf, nodes);
+  ASSERT(inverse.size() == 11);
+  ASSERT(inverse.getInterpolationType() == "cspline");
 
   double minval = gsl_cdf_ugaussian_Pinv(cdf.evalue(1.0));
   double maxval = gsl_cdf_ugaussian_Pinv(cdf.evalue(365.0));
@@ -61,7 +67,13 @@ void ccruncher_test::InverseTest::test2()
   double ndf = 3.0;
   CDF cdf(0.0, +INFINITY);
   cdf.add(365.0, 0.1);
-  Inverse inverse(ndf, 365.0, cdf);
+
+  vector<int> nodes(366);
+  for(size_t i=0; i<nodes.size(); i++) nodes[i] = i;
+
+  Inverse inverse(ndf, 365.0, cdf, nodes);
+  ASSERT(inverse.size() == 18);
+  ASSERT(inverse.getInterpolationType() == "cspline");
 
   double minval = gsl_cdf_tdist_Pinv(cdf.evalue(1.0), ndf);
   double maxval = gsl_cdf_tdist_Pinv(cdf.evalue(365.0), ndf);
@@ -85,8 +97,12 @@ void ccruncher_test::InverseTest::test3()
   double ndf = 3.0;
   CDF cdf(0.0, +INFINITY);
   cdf.add(365.0, 0.1);
+
+  vector<int> nodes(366);
+  for(size_t i=0; i<nodes.size(); i++) nodes[i] = i;
+
   Inverse inverse;
-  ASSERT_THROW(inverse.init(ndf, -365.0, cdf));
+  ASSERT_THROW(inverse.init(ndf, -365.0, cdf, nodes));
 }
 
 //===========================================================================
@@ -103,7 +119,12 @@ void ccruncher_test::InverseTest::test4()
   cdf.add(5*365.0, 0.17);
   ASSERT_EQUALS(cdf.getInterpolationType(), "cspline");
 
-  Inverse inverse(5.0, 5*365.0, cdf);
+  vector<int> nodes(5*365+1);
+  for(size_t i=0; i<nodes.size(); i++) nodes[i] = i;
+
+  Inverse inverse(5.0, 5*365.0, cdf, nodes);
+  ASSERT(inverse.size() == 36);
+  ASSERT(inverse.getInterpolationType() == "cspline");
 
   double xvalues[] = { -10.0, -9.0, -8.0, -7.0, -6.0, -5.0, -4.0, -3.0,
                        -2.0, -1.0, 0.0 };
@@ -128,7 +149,47 @@ void ccruncher_test::InverseTest::test5()
   cdf.add(2*365.0, 0.2);
   ASSERT_EQUALS(cdf.getInterpolationType(), "linear");
 
-  Inverse inverse(5.0, 2*365.0, cdf);
+  vector<int> nodes(2*365+1);
+  for(size_t i=0; i<nodes.size(); i++) nodes[i] = i;
+
+  Inverse inverse(5.0, 2*365.0, cdf, nodes);
+  ASSERT(inverse.size() == 199);
+  ASSERT(inverse.getInterpolationType() == "linear");
+}
+
+//===========================================================================
+// test6
+// reduced number of nodes
+//===========================================================================
+void ccruncher_test::InverseTest::test6()
+{
+  CDF cdf(0.0, +INFINITY);
+  cdf.add(365.0, 0.05);
+  ASSERT_EQUALS(cdf.getInterpolationType(), "linear");
+
+  vector<int> nodes = {365};
+
+  Inverse inverse(5.0, 1*365.0, cdf, nodes);
+  ASSERT(inverse.size() == 2);
+  ASSERT(inverse.getInterpolationType() == "linear");
+}
+
+//===========================================================================
+// test7
+//===========================================================================
+void ccruncher_test::InverseTest::test7()
+{
+  CDF cdf(0.0, +INFINITY);
+  cdf.add(90.0, 0.01);
+  cdf.add(180.0, 0.02);
+  cdf.add(270.0, 0.03);
+  cdf.add(365.0, 0.04);
+  ASSERT_EQUALS(cdf.getInterpolationType(), "cspline");
+
+  vector<int> nodes = {365};
+
+  Inverse inverse(5.0, 365.0, cdf, nodes);
+  ASSERT(inverse.size() == 2);
   ASSERT(inverse.getInterpolationType() == "linear");
 }
 
