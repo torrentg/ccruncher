@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004-2014 Gerard Torrent
+// Copyright (C) 2004-2015 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -132,24 +132,24 @@ inline double ccruncher::SimulationThread::getValue(const vector<double> &x, siz
 
 /**************************************************************************//**
  * @details Fill the vector s with random chi-square values.
- * @param[out] ret Vector to fill.
+ * @param[out] s Vector to fill.
  */
-void ccruncher::SimulationThread::rchisq(vector<double> &ret)
+void ccruncher::SimulationThread::rchisq(vector<double> &s)
 {
   if (ndf > 0.0) {
-    for(size_t n=0; n<ret.size(); n++) {
+    for(size_t n=0; n<s.size(); n++) {
       double chisq = gsl_ran_chisq(rng, ndf);
       if (chisq < 1e-14) chisq = 1e-14; //avoid division by 0
-      ret[n] = sqrt(ndf/chisq);
+      s[n] = sqrt(ndf/chisq);
     }
   }
 }
 
 /**************************************************************************//**
  * @details Fill the matrix z with random multivariate Gaussian values.
- * @param[out] ret Vector to fill.
+ * @param[out] z Vector to fill.
  */
-void ccruncher::SimulationThread::rmvnorm(vector<vector<double>> &ret)
+void ccruncher::SimulationThread::rmvnorm(vector<vector<double>> &z)
 {
   gsl_vector aux;
   aux.size = numfactors;
@@ -158,8 +158,8 @@ void ccruncher::SimulationThread::rmvnorm(vector<vector<double>> &ret)
   aux.block = nullptr;
   aux.owner = 0;
 
-  for(size_t n=0; n<ret.size(); n++) {
-    aux.data = ret[n].data();
+  for(size_t n=0; n<z.size(); n++) {
+    aux.data = z[n].data();
     for(size_t i=0; i<numfactors; i++) {
       aux.data[i] = gsl_ran_gaussian_ziggurat(rng, 1.0);
     }

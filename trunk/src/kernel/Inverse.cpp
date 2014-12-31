@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004-2014 Gerard Torrent
+// Copyright (C) 2004-2015 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -47,6 +47,7 @@ ccruncher::Inverse::Inverse()
  *            ndf <= 0 then gaussian, t-student otherwise.
  * @param[in] maxt Maximum time (in days from starting date).
  * @param[in] cdf Default probability cdf.
+ * @param[in] nodes Days from starting date where asset events ocurres.
  * @throw Exception Error creating inverse function.
  */
 ccruncher::Inverse::Inverse(double ndf, double maxt, const CDF &cdf, const vector<int> &nodes)
@@ -109,6 +110,7 @@ size_t ccruncher::Inverse::size() const
  *            ndf <= 0 then gaussian, t-student otherwise.
  * @param[in] maxt Maximum time (in days from starting date).
  * @param[in] cdf Default probability cdf.
+ * @param[in] nodes Days from starting date where asset events ocurres.
  * @throw Exception Error creating inverse function.
  */
 void ccruncher::Inverse::init(double ndf, double maxt, const CDF &cdf, const vector<int> &nodes)
@@ -226,7 +228,6 @@ void ccruncher::Inverse::setSpline(const CDF &cdf, const vector<int> &nodes_)
 /**************************************************************************//**
  * @param[in] days List of days.
  * @param[in] cache tinv(cdf(t)) values evaluated at days.
- * @param[in] forceLinear Force linear interpolation.
  */
 void ccruncher::Inverse::setSpline(const vector<int> &days, const map<int,double> &cache)
 {
