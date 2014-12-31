@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004-2014 Gerard Torrent
+// Copyright (C) 2004-2015 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ class Asset
     //! Prepare data
     void prepare(const Date &d1, const Date &d2, const Interest &interest);
     //! Indicates if this asset has info in date1-date2
-    bool isActive(const Date &, const Date &) const;
+    bool isActive(const Date &from, const Date &to) const;
     //! Indicates if this asset use obligor lgd
     bool requiresObligorLGD(const Date &d1, const Date &d2) const;
 

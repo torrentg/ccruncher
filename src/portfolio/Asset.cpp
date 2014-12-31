@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004-2014 Gerard Torrent
+// Copyright (C) 2004-2015 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ using namespace ccruncher;
  * @return True if this asset has credit risk in the given time range,
  *         false otherwise.
  */
-bool ccruncher::Asset::isActive(const Date &from, const Date &) const
+bool ccruncher::Asset::isActive(const Date &from, const Date &/*to*/) const
 {
   if (values.empty()) {
     return false;

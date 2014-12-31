@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004-2014 Gerard Torrent
+// Copyright (C) 2004-2015 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -573,7 +573,7 @@ string ccruncher::Utils::bytesToString(const size_t val)
 }
 
 /**************************************************************************//**
- * @param[in] secs Numbers of elapsed milliseconds.
+ * @param[in] millis Numbers of elapsed milliseconds.
  * @return Elapsed time formated like hh:mm:ss.mmm
  */
 string ccruncher::Utils::millisToString(long millis)

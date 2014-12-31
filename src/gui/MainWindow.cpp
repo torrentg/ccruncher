@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004-2014 Gerard Torrent
+// Copyright (C) 2004-2015 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -413,7 +413,7 @@ void ccruncher_gui::MainWindow::viewStatusBar(bool visible)
 }
 
 /**************************************************************************//**
- * @param[in] visible Statusbar visibility flag.
+ * @param[in] enable Tabbed window enabled mode.
  */
 void ccruncher_gui::MainWindow::viewTabbedWindows(bool enable)
 {
