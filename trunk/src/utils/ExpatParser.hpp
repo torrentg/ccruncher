@@ -53,7 +53,7 @@ class ExpatParser
     //! Expat user data
     ExpatUserData mUserData;
     //! File checksum value
-    ulong mChecksum;
+    unsigned long mChecksum;
 
   private:
 
@@ -84,7 +84,7 @@ class ExpatParser
     //! Set defines
     void setDefines(const std::map<std::string,std::string>&);
     //! returns checksum value
-    ulong getChecksum() const;
+    unsigned long getChecksum() const;
     //! returns user data
     ExpatUserData& getUserData() { return mUserData; }
 

@@ -46,7 +46,7 @@ class PowMatrix
     //! Improved std::pow() function
     static double fpow(double base, double exponent);
     //! Matrix pow function
-    static void pow(double **a, double x, int n, double **ret);
+    static void pow(double **a, double x, size_t n, double **ret);
     //! Matrix pow function
     static void pow(const std::vector<std::vector<double>> &a, double x, std::vector<std::vector<double>> &ret);
 

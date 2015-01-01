@@ -51,7 +51,7 @@ void ccruncher_test::CDFTest::test1()
   cdf.add(0.3, 0.2);
   ASSERT_THROW(cdf.add(0.4, 0.1));
   cdf.add(0.15, 0.15);
-  ASSERT_EQUALS(5ul, cdf.getPoints().size());
+  ASSERT_EQUALS((size_t)5, cdf.getPoints().size());
   ASSERT_EQUALS(0.15, cdf.getPoints()[2].first);
   cdf.add(0.4, 0.4);
   ASSERT_EQUALS(0.4, cdf.getPoints().back().first);

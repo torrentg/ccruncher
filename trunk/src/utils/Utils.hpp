@@ -54,7 +54,7 @@ class Utils
     //! Returns a human-readable string with the compilation options
     static std::string getCompilationOptions();
     //! Returns a numeric value based on current time
-    static ulong trand();
+    static unsigned long trand();
     //! Returns the number of available processors
     static int getNumCores();
     //! Tokenize a string

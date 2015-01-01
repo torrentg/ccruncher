@@ -61,7 +61,7 @@ class SimulationThread : public Thread
     //! List of simulated obligors
     const std::vector<Obligor> &obligors;
     //! Number of segments for each segmentation
-    const std::vector<ushort> &numSegmentsBySegmentation;
+    const std::vector<unsigned short> &numSegmentsBySegmentation;
     //! Cholesky matrix (see MonteCarlo::initModel())
     const gsl_matrix *chol;
     //! Factor loadings [w_i]
@@ -83,7 +83,7 @@ class SimulationThread : public Thread
     //! Total number of segments
     const size_t &numsegments;
     //! Block size
-    const ushort &blocksize;
+    const unsigned short &blocksize;
 
     //! Random number generator
     gsl_rng *rng;
@@ -106,7 +106,7 @@ class SimulationThread : public Thread
   public:
 
     //! Constructor
-    SimulationThread(MonteCarlo &, ulong seed);
+    SimulationThread(MonteCarlo &, unsigned long seed);
     //! Destructor
     virtual ~SimulationThread() override;
     //! Thread main function

@@ -48,12 +48,12 @@ class Asset
     //! Asset datevalues
     std::vector<DateValues> values;
     //! Segmentation-segment relations
-    std::vector<ushort> segments;
+    std::vector<unsigned short> segments;
 
   public:
 
     //! Constructor
-    Asset(ushort nsegmentations=0) : segments(nsegmentations, 0) {}
+    Asset(unsigned short nsegmentations=0) : segments(nsegmentations, 0) {}
     //! Prepare data
     void prepare(const Date &d1, const Date &d2, const Interest &interest);
     //! Indicates if this asset has info in date1-date2

@@ -18,6 +18,7 @@
 
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
+#include <QTextEdit>
 #include <QRegExp>
 
 class XmlHighlighter : public QSyntaxHighlighter

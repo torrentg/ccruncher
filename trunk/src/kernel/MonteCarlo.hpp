@@ -66,7 +66,7 @@ class MonteCarlo
     //! List of simulated obligors
     std::vector<Obligor> obligors;
     //! Number of segments for each segmentation
-    std::vector<ushort> numSegmentsBySegmentation;
+    std::vector<unsigned short> numSegmentsBySegmentation;
     //! Total number of segments (included in all segmentations)
     size_t numsegments;
     //! List of aggregators
@@ -94,9 +94,9 @@ class MonteCarlo
     //! Antithetic method flag
     bool antithetic;
     //! Block size
-    ushort blocksize;
+    unsigned short blocksize;
     //! RNG seed
-    ulong seed;
+    unsigned long seed;
     //! Hash (0=non show hashes) (default=0)
     size_t mHash;
     //! Simulation starting time
@@ -119,7 +119,7 @@ class MonteCarlo
     //! Create Finv(t(x)) spline functions
     void setInverses();
     //! Averaged exposures by segment
-    std::vector<double> getSegmentationExposures(ushort isegmentation, ushort numSegments) const;
+    std::vector<double> getSegmentationExposures(unsigned short isegmentation, unsigned short numSegments) const;
     //! Append simulation result
     bool append(const std::vector<std::vector<double>> &losses) noexcept;
     //! Non-copyable class

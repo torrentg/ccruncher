@@ -34,6 +34,9 @@
 #include <cassert>
 #include <getopt.h>
 #include <gsl/gsl_errno.h>
+#include <gsl/gsl_version.h>
+#include <expat.h>
+#include <zlib.h>
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/IData.hpp"
 #include "utils/Utils.hpp"
@@ -354,6 +357,7 @@ void run() throw(Exception)
  */
 void setnice(int niceval) throw(Exception)
 {
+  (void) niceval;
 #if !defined(_WIN32)
   if (niceval < PRIO_MIN || niceval > PRIO_MAX)
   {
@@ -449,6 +453,11 @@ void info()
   cout << "build date: " << BUILD_DATE << endl;
   cout << "build author: " << BUILD_USER << endl;
   cout << "build options: " << Utils::getCompilationOptions() << endl;
+  cout << "libraries: "
+       << "gsl-" << gsl_version << ", "
+       << "zlib-" << zlibVersion() << ", "
+       << "expat-" << XML_ExpatVersionInfo().major << "." << XML_ExpatVersionInfo().minor << "." << XML_ExpatVersionInfo().micro
+       << endl;
 #if !defined(_WIN32)
   cout << "nice value: default=" << getpriority(PRIO_PROCESS,0) << 
           ", min=" << PRIO_MIN << ", max=" << PRIO_MAX << endl;

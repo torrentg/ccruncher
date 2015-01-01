@@ -359,7 +359,7 @@ void ccruncher::MonteCarlo::setSegmentations(const vector<Segmentation> &segment
   numSegmentsBySegmentation.assign(segmentations.size(), 0);
   aggregators.assign(segmentations.size(), nullptr);
   
-  for(ushort isegmentation=0; isegmentation<(ushort)(segmentations.size()); isegmentation++) 
+  for(unsigned short isegmentation=0; isegmentation<(unsigned short)(segmentations.size()); isegmentation++) 
   {
     const Segmentation &segmentation = segmentations[isegmentation];
     
@@ -383,7 +383,7 @@ void ccruncher::MonteCarlo::setSegmentations(const vector<Segmentation> &segment
  * @param[in] numSegments Number of segments in the segmentation.
  * @return Segments' exposures.
  */
-vector<double> ccruncher::MonteCarlo::getSegmentationExposures(ushort isegmentation, ushort numSegments) const
+vector<double> ccruncher::MonteCarlo::getSegmentationExposures(unsigned short isegmentation, unsigned short numSegments) const
 {
   vector<double> ret(numSegments, 0.0);
   double numdays = timeT - time0;
@@ -391,7 +391,7 @@ vector<double> ccruncher::MonteCarlo::getSegmentationExposures(ushort isegmentat
 
   for(const Obligor &obligor : obligors) {
     for(const Asset &asset : obligor.assets) {
-      ushort isegment = asset.segments[isegmentation];
+      unsigned short isegment = asset.segments[isegmentation];
       if (isegment >= numSegments) {
         throw Exception("obligor with invalid segment index");
       }

@@ -132,27 +132,29 @@ Notes for Windows developers (QT+MINGW)
 
 2. install MSYS+MINGW in C:\mingw\
    http://www.mingw.org/
-   
-3. open the mingw console and type
-   > mingw-get install pthreads
    > mingw-get install libz
-   > mingw-get source expat
-   > cd expat-*
-   > ./configure CFLAGS="-fexceptions"
-   > make
-   > make install
-
-4. download gsl source in C:\MinGW\msys\1.0\home\user
-   http://www.gnu.org/software/gsl/
    
-5. open the mingw console and type
-   > tar -xvzf gsl-x.y.tar.gz
-   > cd gsl-x.y
+3. install and compile expat lib
+   # download expat source in C:\MinGW\msys\1.0\home\user
+   > tar xvzf expat-x.y.tar.gz
+   # open the mingw console and type
+   > cd expat-*
+   > mount c:/Qt/Tools/mingw491_32 /mingw
    > ./configure CFLAGS="-fexceptions"
    > make
    > make install
 
-6. install qwt
+4. install and compile gsl lib
+   # download gsl source in C:\MinGW\msys\1.0\home\user
+   > tar -xvzf gsl-x.y.tar.gz
+   # open the mingw console and type
+   > cd gsl-x.y
+   > mount c:/Qt/Tools/mingw491_32 /mingw
+   > ./configure CFLAGS="-fexceptions"
+   > make
+   > make install
+
+5. install qwt
    - download it from http://qwt.sourceforge.net
    - unpack zip file
    - open a qt-mingw console and type
@@ -175,7 +177,7 @@ Notes for Windows developers (QT+MINGW)
      > cp C:\Qwt-6.1.0\plugins\designer\* C:\QtSDK\Desktop\Qt\4.7.4\mingw\plugins\designer
      > use standalone qtdesigner C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin\designer.exe
 
-7. launch qtcreator
+6. launch qtcreator
    > open project ccruncher-gui.pro
    > review ccruncher-gui.pro libs
    > compile

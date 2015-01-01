@@ -210,14 +210,14 @@ void ccruncher::Portfolio::epstartAsset(ExpatUserData &, const char **attributes
 void ccruncher::Portfolio::epstartBelongsto(ExpatUserData &eu, const char **attributes)
 {
   const char *ssegmentation = getAttributeValue(attributes, "segmentation");
-  ushort isegmentation = eu.segmentations->indexOf(ssegmentation);
+  unsigned short isegmentation = eu.segmentations->indexOf(ssegmentation);
 
   const Segmentation &segmentation = eu.segmentations->at(isegmentation);
 
   const char *ssegment = getAttributeValue(attributes, "segment");
   size_t isegment = segmentation.indexOf(ssegment);
 
-  vector<ushort> *segments = nullptr;
+  vector<unsigned short> *segments = nullptr;
 
   if (mStage == 2) // obligor
   {
@@ -312,7 +312,7 @@ void ccruncher::Portfolio::ependObligor(ExpatUserData &eu)
   }
 
   // assign obligor-segmentations to his assets
-  for(ushort isegmentation=0; isegmentation<obligorSegments.size(); isegmentation++) {
+  for(unsigned short isegmentation=0; isegmentation<obligorSegments.size(); isegmentation++) {
     if (obligorSegments[isegmentation] > 0) {
       for(Asset &asset : obligor.assets) {
         asset.segments[isegmentation] = obligorSegments[isegmentation];
@@ -391,7 +391,7 @@ vector<Segmentation> ccruncher::Portfolio::recodeSegments(const vector<Segmentat
 {
   if (mObligors.empty()) return segmentations;
   //TODO: check that segmentations are sorted by enabled/disabled
-  vector<vector<ushort>> table = getRecodeTable(segmentations);
+  vector<vector<unsigned short>> table = getRecodeTable(segmentations);
   recodePortfolioSegments(table);
   vector<Segmentation> ret = getSegmentationsRecoded(segmentations, table);
   return ret;
@@ -403,10 +403,10 @@ vector<Segmentation> ccruncher::Portfolio::recodeSegments(const vector<Segmentat
  *         segments order is preserved. USHRT_MAX means that this index is
  *         unused.
  */
-vector<vector<ushort>> ccruncher::Portfolio::getRecodeTable(const vector<Segmentation> &segmentations)
+vector<vector<unsigned short>> ccruncher::Portfolio::getRecodeTable(const vector<Segmentation> &segmentations)
 {
   vector<vector<size_t>> hits = getHitsPerSegment(segmentations);
-  vector<vector<ushort>> table(hits.size());
+  vector<vector<unsigned short>> table(hits.size());
 
   for(size_t isegmentation=0; isegmentation<hits.size(); isegmentation++) {
     recodeSegmentation(hits[isegmentation], table[isegmentation]);
@@ -431,7 +431,7 @@ vector<vector<size_t>> ccruncher::Portfolio::getHitsPerSegment(const vector<Segm
   for(Obligor &obligor : mObligors) {
     for(Asset &asset : obligor.assets) {
       for(size_t isegmentation=0; isegmentation<asset.segments.size(); isegmentation++) {
-        ushort isegment = asset.segments[isegmentation];
+        unsigned short isegment = asset.segments[isegmentation];
         if (isegmentation >= hits.size() || isegment >= hits[isegmentation].size()) {
           throw Exception("portfolio contains an obligor with unrecognized segmentation/segment");
         }
@@ -447,9 +447,9 @@ vector<vector<size_t>> ccruncher::Portfolio::getHitsPerSegment(const vector<Segm
  * @param[in] hits Number of counts per segment.
  * @param[in] table Recode table to fill.
  */
-void ccruncher::Portfolio::recodeSegmentation(const vector<size_t> &hits, vector<ushort> &table)
+void ccruncher::Portfolio::recodeSegmentation(const vector<size_t> &hits, vector<unsigned short> &table)
 {
-  ushort numSegments = 0;
+  unsigned short numSegments = 0;
   
   // recoding segment indexes
   for(size_t i=0; i<hits.size(); i++)
@@ -478,14 +478,14 @@ void ccruncher::Portfolio::recodeSegmentation(const vector<size_t> &hits, vector
 /**************************************************************************//**
  * @param[in] table Transformation map.
  */
-void ccruncher::Portfolio::recodePortfolioSegments(const vector<vector<ushort>> &table)
+void ccruncher::Portfolio::recodePortfolioSegments(const vector<vector<unsigned short>> &table)
 {
   for(Obligor &obligor : mObligors) {
     for(Asset &asset : obligor.assets) {
-      vector<ushort> &segments = asset.segments;
+      vector<unsigned short> &segments = asset.segments;
       for(size_t isegmentation=0; isegmentation<segments.size(); isegmentation++) {
-        ushort oldSegment = segments[isegmentation];
-        ushort newSegment = table[isegmentation][oldSegment];
+        unsigned short oldSegment = segments[isegmentation];
+        unsigned short newSegment = table[isegmentation][oldSegment];
         segments[isegmentation] = newSegment;
       }
     }
@@ -493,7 +493,7 @@ void ccruncher::Portfolio::recodePortfolioSegments(const vector<vector<ushort>> 
 }
 
 /**************************************************************************/
-vector<Segmentation> ccruncher::Portfolio::getSegmentationsRecoded(const vector<Segmentation> &segmentations, const vector<vector<ushort>> &table)
+vector<Segmentation> ccruncher::Portfolio::getSegmentationsRecoded(const vector<Segmentation> &segmentations, const vector<vector<unsigned short>> &table)
 {
   vector<Segmentation> ret;
   

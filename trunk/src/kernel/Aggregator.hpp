@@ -51,7 +51,7 @@ class Aggregator
     //! Output file stream
     std::ofstream mFile;
     //! Number of segments
-    ushort mNumSegments;
+    unsigned short mNumSegments;
     //! Open file mode
     unsigned char mMode;
 
@@ -65,7 +65,7 @@ class Aggregator
   public:
 
     //! Constructor
-    Aggregator(const std::string &mFilename, char mode, ushort numSegments);
+    Aggregator(const std::string &mFilename, char mode, unsigned short numSegments);
     //! Destructor
     ~Aggregator();
     //! Set header info

@@ -78,7 +78,7 @@ void ccruncher_test::DefaultProbabilitiesTest::test1()
   ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &pd));
 
   // checking methods
-  ASSERT_EQUALS(pd.size(), 2ul);
+  ASSERT_EQUALS(pd.size(), (size_t)2);
   ASSERT_EQUALS(DefaultProbabilities::getIndexDefault(pd), (unsigned char)1);
   ASSERT_EQUALS(pd[0].getInterpolationType(), "cspline");
   ASSERT_EQUALS(pd[1].getInterpolationType(), "linear");

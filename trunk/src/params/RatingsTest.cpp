@@ -146,7 +146,7 @@ void ccruncher_test::RatingsTest::test5()
   ratings.push_back(Rating("C", "bad"));
   ratings.push_back(Rating("D", "very bad"));
   ratings.push_back(Rating("E", "defaulted"));
-  ASSERT_EQUALS(5ul, ratings.size());
+  ASSERT_EQUALS((size_t)5, ratings.size());
   ASSERT_EQUALS((unsigned char)0, ratings.indexOf("A"));
   ASSERT_EQUALS((unsigned char)1, ratings.indexOf("B"));
   ASSERT_EQUALS((unsigned char)2, ratings.indexOf("C"));
