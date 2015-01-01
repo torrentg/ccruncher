@@ -83,7 +83,7 @@ double ccruncher::PowMatrix::fpow(double base, double exponent)
  * @param[out] ret Allocated space to put A^x.
  * @throw Exception Singular matrix or complex eigenvalues.
  */
-void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret)
+void ccruncher::PowMatrix::pow(double **a, double x, size_t n, double **ret)
 {
   int rc=0;
 
@@ -94,8 +94,8 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret)
   gsl_matrix_complex *VEPS = gsl_matrix_complex_alloc(n, n);
 
   // preparing matrix
-  for(int i=0; i<n; i++) {
-    for(int j=0; j<n; j++) {
+  for(size_t i=0; i<n; i++) {
+    for(size_t j=0; j<n; j++) {
       gsl_matrix_set(M, i, j, a[i][j]);
     }
   }
@@ -115,7 +115,7 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret)
 
   // raising eigenvalues (vaps) to the x-th power (VAPS)
   gsl_matrix_complex_set_zero(VAPS);
-  for(int i=0; i<n; i++) {
+  for(size_t i=0; i<n; i++) {
     // checks that eigenvalues are non-imaginary
     gsl_complex z = gsl_vector_complex_get(vaps, i);
     if (fabs(GSL_IMAG(z)) >= EPSILON) {
@@ -171,8 +171,8 @@ void ccruncher::PowMatrix::pow(double **a, double x, int n, double **ret)
   gsl_matrix_complex_free(LU);
 
   // preparing result
-  for(int i=0; i<n; i++) {
-    for(int j=0; j<n; j++) {
+  for(size_t i=0; i<n; i++) {
+    for(size_t j=0; j<n; j++) {
       ret[i][j] = GSL_REAL(gsl_matrix_complex_get(VAPS, i, j));
     }
   }
@@ -195,10 +195,10 @@ void ccruncher::PowMatrix::pow(const std::vector<std::vector<double>> &a, double
   vector<double*> C(n, nullptr);
 
   for(size_t i=0; i<n; i++) {
-    A[i] = (double *) &(a[i][0]);
-    C[i] = &(ret[i][0]);
+    A[i] = const_cast<double*>(a[i].data());
+    C[i] = ret[i].data();
   }
 
-  PowMatrix::pow(&(A[0]), x, n, &(C[0]));
+  PowMatrix::pow(A.data(), x, n, C.data());
 }
 

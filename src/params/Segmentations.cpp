@@ -32,7 +32,7 @@ using namespace ccruncher;
  * @return Index of the segmentation.
  * @throw Exception Segmentation not found.
  */
-ushort ccruncher::Segmentations::indexOf(const std::string &sname) const
+unsigned short ccruncher::Segmentations::indexOf(const std::string &sname) const
 {
   return indexOf(sname.c_str());
 }
@@ -42,11 +42,11 @@ ushort ccruncher::Segmentations::indexOf(const std::string &sname) const
  * @return Index of the segmentation.
  * @throw Exception Segmentation not found.
  */
-ushort ccruncher::Segmentations::indexOf(const char *sname) const
+unsigned short ccruncher::Segmentations::indexOf(const char *sname) const
 {
   for(size_t i=0; i<this->size(); i++) {
     if ((*this)[i].getName().compare(sname) == 0) {
-      return (ushort)i;
+      return (unsigned short)i;
     }
   }
   throw Exception("segmentation '" + string(sname) + "' not found");
@@ -161,9 +161,9 @@ bool ccruncher::Segmentations::isValid(const std::vector<Segmentation> &segmenta
  * @param[in] segmentations List of segmentations.
  */
 //! Returns the number of enabled segmentations
-ushort ccruncher::Segmentations::numEnabledSegmentations(const std::vector<Segmentation> &segmentations)
+unsigned short ccruncher::Segmentations::numEnabledSegmentations(const std::vector<Segmentation> &segmentations)
 {
-  ushort ret = 0;
+  unsigned short ret = 0;
   for(const Segmentation &segmentation : segmentations) {
     if (segmentation.isEnabled()) {
       ret ++;

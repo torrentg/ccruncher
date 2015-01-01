@@ -21,6 +21,7 @@
 //===========================================================================
 
 #include <iostream>
+#include <QMimeData>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QMdiSubWindow>

@@ -25,7 +25,6 @@
 #include <QFile>
 #include <QDir>
 #include <QMessageBox>
-#include <QCleanlooksStyle>
 #include <QMetaType>
 #include "ui_SimulationWidget.h"
 #include "gui/SimulationWidget.hpp"
@@ -51,7 +50,7 @@ ccruncher_gui::SimulationWidget::SimulationWidget(const QString &filename, QWidg
     toolbar(nullptr)
 {
   ui->setupUi(this);
-  ui->progress->setStyle(new QCleanlooksStyle()); //QCleanlooksStyle, QMacStyle, QPlastiqueStyle, QWindowsXPStyle
+  //ui->progress->setStyle(new QCleanlooksStyle()); //QCleanlooksStyle, QMacStyle, QPlastiqueStyle, QWindowsXPStyle
   progress = new ProgressWidget(ui->frame);
   progress->setWindowFlags(Qt::WindowStaysOnTopHint);
   ui->frame->addLayer(progress);

@@ -51,16 +51,16 @@ class Segmentations : public std::vector<Segmentation>, public ExpatHandlers
     //! Inherits std::vector constructors
     using std::vector<Segmentation>::vector;
     //! Return the index of the given segmentation
-    ushort indexOf(const std::string &sname) const;
+    unsigned short indexOf(const std::string &sname) const;
     //! Return the index of the given segmentation
-    ushort indexOf(const char *sname) const;
+    unsigned short indexOf(const char *sname) const;
 
   public:
 
     //! Validate a list of segmentations
     static bool isValid(const std::vector<Segmentation> &segmentations, bool throwException=false);
     //! Returns the number of enabled segmentations
-    static ushort numEnabledSegmentations(const std::vector<Segmentation> &segmentations);
+    static unsigned short numEnabledSegmentations(const std::vector<Segmentation> &segmentations);
 
 };
 

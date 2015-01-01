@@ -140,7 +140,7 @@ void ccruncher_test::FactorsTest::test5()
   ASSERT(Factors::isValid(factors));
   vector<double> loadings = Factors::getLoadings(factors);
   ASSERT(Factors::isValid(loadings));
-  ASSERT_EQUALS(2ul, factors.size());
+  ASSERT_EQUALS((size_t)2, factors.size());
   ASSERT_EQUALS((unsigned char)0, factors.indexOf("S1"));
   ASSERT_EQUALS((unsigned char)1, factors.indexOf("S2"));
   ASSERT_THROW(factors.indexOf("Sx"));

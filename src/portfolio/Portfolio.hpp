@@ -59,9 +59,9 @@ class Portfolio : public ExpatHandlers
     //! xml parser stage (0=none, 1=portfolio, 2=obligor, 3=asset, 4=data)
     int mStage = 0;
     //! number of segmentations
-    ushort mNumSegmentations = 0;
+    unsigned short mNumSegmentations = 0;
     //! Current obligor segments
-    std::vector<ushort> obligorSegments;
+    std::vector<unsigned short> obligorSegments;
     //! current asset lgd
     LGD assetLGD;
 
@@ -70,15 +70,15 @@ class Portfolio : public ExpatHandlers
     //! Remove unused segmentation-segments
     std::vector<Segmentation> recodeSegments(const std::vector<Segmentation> &segmentations);
     //! Create a table that maps old segment indexes to new segment indexes
-    std::vector<std::vector<ushort>> getRecodeTable(const std::vector<Segmentation> &segmentations);
+    std::vector<std::vector<unsigned short>> getRecodeTable(const std::vector<Segmentation> &segmentations);
     //! Count the number of obligor in each segmentation-segment
     std::vector<std::vector<size_t>> getHitsPerSegment(const std::vector<Segmentation> &segmentations);
     //! Create the segmentation recode map using segmentation hits info
-    void recodeSegmentation(const std::vector<size_t> &hits, std::vector<ushort> &table);
+    void recodeSegmentation(const std::vector<size_t> &hits, std::vector<unsigned short> &table);
     //! Recode each portfolio-obligor-asset segment applying table assignation
-    void recodePortfolioSegments(const std::vector<std::vector<ushort>> &table);
+    void recodePortfolioSegments(const std::vector<std::vector<unsigned short>> &table);
     //! Create a new segmentations list applying recode rules
-    std::vector<Segmentation> getSegmentationsRecoded(const std::vector<Segmentation> &segmentations, const std::vector<std::vector<ushort>> &table);
+    std::vector<Segmentation> getSegmentationsRecoded(const std::vector<Segmentation> &segmentations, const std::vector<std::vector<unsigned short>> &table);
     
   protected:
   

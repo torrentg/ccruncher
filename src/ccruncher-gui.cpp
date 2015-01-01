@@ -31,6 +31,11 @@
 #include <clocale>
 #include <exception>
 #include <gsl/gsl_errno.h>
+#include <gsl/gsl_version.h>
+#include <expat.h>
+#include <zlib.h>
+#include <qwt.h>
+#include <QtGlobal>
 #include <QApplication>
 #include <QTextCodec>
 #include <QVariant>
@@ -178,7 +183,7 @@ int main(int argc, char *argv[])
 
 
   setlocale(LC_ALL, "C"); // sets decimal point to sprintf and strtod
-  QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+  //QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
   QLocale::setDefault(QLocale::c());
   gsl_set_error_handler(gsl_handler);
 
@@ -231,6 +236,7 @@ int main(int argc, char *argv[])
  */
 void setnice(int niceval) throw(Exception)
 {
+  (void) niceval;
 #if !defined(_WIN32)
   if (niceval < PRIO_MIN || niceval > PRIO_MAX)
   {
@@ -319,6 +325,13 @@ void info()
   cout << "build date: " << BUILD_DATE << endl;
   cout << "build author: " << BUILD_USER << endl;
   cout << "build options: " << Utils::getCompilationOptions() << endl;
+  cout << "libraries: "
+       << "gsl-" << gsl_version << ", "
+       << "zlib-" << zlibVersion() << ", "
+       << "expat-" << XML_ExpatVersionInfo().major << "." << XML_ExpatVersionInfo().minor << "." << XML_ExpatVersionInfo().micro << ", "
+       << "qt-" << qVersion() << ", "
+       << "qwt-" << QWT_VERSION_STR
+       << endl;
 #if !defined(_WIN32)
   cout << "nice value: default=" << getpriority(PRIO_PROCESS,0) << 
           ", min=" << PRIO_MIN << ", max=" << PRIO_MAX << endl;

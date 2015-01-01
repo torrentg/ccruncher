@@ -95,7 +95,7 @@ void ccruncher_test::ParserTest::test_double()
   // expression parsing
   ASSERT_EQUALS_EPSILON(6.0, Parser::doubleValue(" 6 "), EPSILON);
   ASSERT_EQUALS_EPSILON(2.0, Parser::doubleValue("1+1"), EPSILON);
-  ASSERT_EQUALS_EPSILON(M_PI+1.0, Parser::doubleValue("Pi+1"), EPSILON);
+  ASSERT_EQUALS_EPSILON(4.1415926535897932384626, Parser::doubleValue("Pi+1"), EPSILON);
   ASSERT_EQUALS_EPSILON(6.0, Parser::doubleValue("1+5*(3+2)/5"), EPSILON);
 }
 

@@ -93,8 +93,7 @@ unix {
 
 win32 {
   INCLUDEPATH += \
-    C:/MinGW/msys/1.0/local/include \
-    C:/MinGW/include
+    C:/MinGW/msys/1.0/local/include
   LIBS += \
     C:/MinGW/lib/libz.a \
     C:/MinGW/msys/1.0/local/lib/libexpat.a \

@@ -85,15 +85,15 @@ class Segmentation
     //! Sets the enabled flag
     void setEnabled(bool b);
     //! Number of segments
-    ushort size() const { return (ushort) mSegments.size(); }
+    unsigned short size() const { return (unsigned short) mSegments.size(); }
     //! Returns i-th segment name
-    const std::string& getSegment(ushort i) const;
+    const std::string& getSegment(unsigned short i) const;
     //! Adds a segment to this segmentation
     void addSegment(const std::string &segment);
     //! Return the index of the given segment
-    ushort indexOf(const std::string &segment) const;
+    unsigned short indexOf(const std::string &segment) const;
     //! Return the index of the given segment
-    ushort indexOf(const char *segment) const;
+    unsigned short indexOf(const char *segment) const;
     //! Return filename
     std::string getFilename(const std::string &path) const;
 

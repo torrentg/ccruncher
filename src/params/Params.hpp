@@ -69,11 +69,11 @@ class Params : public std::map<std::string,std::string>, public ExpatHandlers
     //! Returns the t-student copula degrees of freedom
     double getNdf() const;
     //! Returns RNG seed
-    ulong getRngSeed() const;
+    unsigned long getRngSeed() const;
     //! Returns antithetic flag
     bool getAntithetic() const;
     //! Returns simulation block size
-    ushort getBlockSize() const;
+    unsigned short getBlockSize() const;
     //! Validate object content
     bool isValid(bool throwException=false) const;
 

@@ -44,7 +44,7 @@ ccruncher::Segmentation::Segmentation(const string &name, Type type, bool enable
  * @return The index of the given segment.
  * @throw Exception Segment name not found.
  */
-ushort ccruncher::Segmentation::indexOf(const std::string &sname) const
+unsigned short ccruncher::Segmentation::indexOf(const std::string &sname) const
 {
   return indexOf(sname.c_str());
 }
@@ -54,12 +54,12 @@ ushort ccruncher::Segmentation::indexOf(const std::string &sname) const
  * @return The index of the given segment.
  * @throw Exception Segment name not found.
  */
-ushort ccruncher::Segmentation::indexOf(const char *sname) const
+unsigned short ccruncher::Segmentation::indexOf(const char *sname) const
 {
   assert(sname != nullptr);
   for(size_t i=0; i<mSegments.size(); i++) {
     if (mSegments[i].compare(sname) == 0) {
-      return (ushort) i;
+      return (unsigned short) i;
     }
   }
   throw Exception("segment '" + string(sname) + "' not found");
@@ -166,7 +166,7 @@ void ccruncher::Segmentation::addSegment(const std::string &sname)
  * @param[in] i Segment index.
  * @return Segment name.
  */
-const std::string& ccruncher::Segmentation::getSegment(ushort i) const
+const std::string& ccruncher::Segmentation::getSegment(unsigned short i) const
 {
   assert(i < mSegments.size());
   if (mSegments.size() == 1) {

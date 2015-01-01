@@ -115,7 +115,7 @@ const Expr::function ccruncher::Expr::functions[] =
 
 const Expr::constant ccruncher::Expr::constants[] =
 {
-  { "Pi", M_PI },
+  { "Pi", 3.14159265358979323846264338327 },
   { "E", 2.71828182845904523536 }
 };
 

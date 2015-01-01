@@ -244,12 +244,12 @@ double ccruncher::Params::getNdf() const
  * @return Rng seed.
  * @throw Exception Invalid parameter value.
  */
-ulong ccruncher::Params::getRngSeed() const
+unsigned long ccruncher::Params::getRngSeed() const
 {
-  ulong seed = 0UL;
+  unsigned long seed = 0UL;
   string value = getParamValue(RNGSEED, DEFAULT_RNGSEED);
   long aux = Parser::longValue(value);
-  seed = *(reinterpret_cast<ulong *>(&aux));
+  seed = *(reinterpret_cast<unsigned long *>(&aux));
   return seed;
 }
 
@@ -267,7 +267,7 @@ bool ccruncher::Params::getAntithetic() const
  * @return Number of simultaneous simulations does by thread.
  * @throw Exception Invalid parameter value.
  */
-ushort ccruncher::Params::getBlockSize() const
+unsigned short ccruncher::Params::getBlockSize() const
 {
   string value = getParamValue(BLOCKSIZE, DEFAULT_BLOCKSIZE);
   int aux = Parser::intValue(value);

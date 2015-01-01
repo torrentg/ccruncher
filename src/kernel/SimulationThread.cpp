@@ -36,7 +36,7 @@ using namespace ccruncher;
  * @param[in] mc MonteCarlo manager.
  * @param[in] seed RNG seed.
  */
-ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, ulong seed) :
+ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, unsigned long seed) :
   Thread(), montecarlo(mc), obligors(mc.obligors), numSegmentsBySegmentation(mc.numSegmentsBySegmentation), 
   chol(mc.chol), floadings1(mc.floadings1), floadings2(mc.floadings2), inverses(mc.inverses),
   numfactors(mc.chol->size1), ndf(mc.ndf), time0(mc.time0), timeT(mc.timeT),
@@ -205,7 +205,7 @@ void ccruncher::SimulationThread::simuleObligorLoss(const Obligor &obligor, Date
       double *plosses = losses.data();
       for(size_t iSegmentation=0; iSegmentation<numSegmentsBySegmentation.size(); iSegmentation++)
       {
-        ushort isegment = asset.segments[iSegmentation];
+        unsigned short isegment = asset.segments[iSegmentation];
         assert(isegment < numSegmentsBySegmentation[iSegmentation]);
         plosses[isegment] += loss;
         plosses += numSegmentsBySegmentation[iSegmentation];

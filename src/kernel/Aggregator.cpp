@@ -41,7 +41,7 @@ using namespace std;
  * @param[in] numSegments Number of segments.
  * @throw Exception Error creating file.
  */
-ccruncher::Aggregator::Aggregator(const std::string &filename, char mode, ushort numSegments)
+ccruncher::Aggregator::Aggregator(const std::string &filename, char mode, unsigned short numSegments)
 {
   if (numSegments == 0) {
     throw Exception("trying to aggregate 0 segments");
@@ -94,7 +94,7 @@ void ccruncher::Aggregator::printHeader(const Segmentation &segmentation, const 
     }
     mFile << endl;
     mFile << "#==========================================================" << endl;
-    for(ushort i=0; i<segmentation.size(); i++) {
+    for(unsigned short i=0; i<segmentation.size(); i++) {
       mFile << "\"" << segmentation.getSegment(i) << "\"" << (i<segmentation.size()-1?", ":"");
     }
     mFile << endl;
