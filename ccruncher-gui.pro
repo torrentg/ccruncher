@@ -123,7 +123,8 @@ INCLUDEPATH += \
     $$PWD/src
 
 LIBS += \
-    -lm
+    -lm \
+    -pthread
 
 unix {
   INCLUDEPATH += \
@@ -153,7 +154,7 @@ CONFIG(release, debug|release) {
   DEFINES += NDEBUG
 }
 
-QMAKE_CXXFLAGS += -std=c++11 -Wall -Wextra -Wpedantic
+QMAKE_CXXFLAGS += -pthread -std=c++11 -Wall -Wextra -Wpedantic
 QMAKE_CXXFLAGS_RELEASE -= -g
 
 UI_DIR = $$PWD/build

@@ -18,7 +18,6 @@ Future works
   * portfolio optimization in ccruncher-gui
   * risk uncertainty in ccruncher-gui
   * technical features
-     - move to Qt5
      - input file in binary format
      - force equal number of sims by thread
      - PD functions can mix transition matrix and dprobs

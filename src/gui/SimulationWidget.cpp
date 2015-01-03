@@ -186,6 +186,11 @@ void ccruncher_gui::SimulationWidget::clearLog()
 {
   actionAnal->setEnabled(false);
   ui->log->clear();
+  QFont myfont = ui->log->currentFont();
+  //myfont ("Monospace");
+  //myfont.setStyleHint(QFont::Monospace);
+  myfont.setPixelSize(12);
+  ui->log->setFont(myfont);
   task.getLogger() << copyright << endl;
   logcursor = ui->log->textCursor();
   logcursor.movePosition(QTextCursor::End);

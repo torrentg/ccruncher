@@ -10,7 +10,7 @@ dnl -------------------------------------------------------------
 AC_INIT(ccruncher, 2.5.0, gtorrent@ccruncher.net, ccruncher, http://www.ccruncher.net)
 AC_CONFIG_SRCDIR([src/kernel/MonteCarlo.hpp])
 AC_CONFIG_HEADER([src/utils/config.h],,[src/utils/config.h.in])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
 
 dnl -------------------------------------------------------------
 dnl check for tools
@@ -114,7 +114,7 @@ fi
 dnl -------------------------------------------------------------
 dnl setting compiler options
 dnl -------------------------------------------------------------
-CXXFLAGS="$CXXFLAGS -std=c++11 -Wall -Wextra -Wshadow -Wpedantic"
+CXXFLAGS="$CXXFLAGS -pthread -std=c++11 -Wall -Wextra -Wshadow -Wpedantic"
 AC_SUBST(CXXFLAGS)
 
 dnl -------------------------------------------------------------
