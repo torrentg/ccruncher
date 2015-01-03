@@ -30,6 +30,12 @@
 #include <QToolTip>
 #include <QMimeData>
 #include <QMetaType>
+
+// required by qt5 + qwt-6.1.1 (fixed in qwt-6.1.2)
+#ifndef QT_STATIC_CONST
+#define QT_STATIC_CONST static const
+#endif
+
 #include <qwt_plot_grid.h>
 #include <qwt_plot_histogram.h>
 #include <qwt_plot_curve.h>

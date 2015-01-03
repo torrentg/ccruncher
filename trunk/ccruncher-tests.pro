@@ -133,7 +133,8 @@ INCLUDEPATH += \
     $$PWD/src
 
 LIBS += \
-    -lm
+    -lm \
+    -pthread
 
 unix {
   LIBS += \
@@ -157,7 +158,7 @@ CONFIG(release, debug|release) {
   DEFINES += NDEBUG
 }
 
-QMAKE_CXXFLAGS += -std=c++11 -Wall -Wextra -Wshadow -Wpedantic
+QMAKE_CXXFLAGS += -pthread -std=c++11 -Wall -Wextra -Wshadow -Wpedantic
 
 OBJECTS_DIR = $$PWD/build
 DESTDIR = $$PWD/build
