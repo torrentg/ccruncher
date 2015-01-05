@@ -10,6 +10,7 @@ Current works
   * isolate aggregators code
   * VaR and ES are asymptotically normal
   * change pdf doc title?
+  * set --output an optional parameter
 
 Future works
 -------------------

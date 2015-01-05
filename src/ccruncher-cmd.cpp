@@ -324,7 +324,7 @@ void run() throw(Exception)
 
   // checking output directory
   if (!Utils::existDir(spath)) {
-    throw Exception("output '" + spath + "' not exist");
+    throw Exception("output directory '" + spath + "' does not exist");
   }
 
   // header

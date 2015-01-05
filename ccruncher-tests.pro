@@ -2,6 +2,7 @@ QT -= core gui
 TARGET = ccruncher-tests
 CONFIG -= qt
 CONFIG += c++11 console
+VERSION = 2.5.0
 
 HEADERS += \
     src/params/Correlations.hpp \
