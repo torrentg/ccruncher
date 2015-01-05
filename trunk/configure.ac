@@ -143,6 +143,6 @@ AH_BOTTOM([
 dnl -------------------------------------------------------------
 dnl makefile's to be built
 dnl -------------------------------------------------------------
-AC_CONFIG_FILES([Makefile build/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 
