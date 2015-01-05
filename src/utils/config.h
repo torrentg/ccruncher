@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2015-01-05 11:22:43+01:00"
+#define BUILD_DATE "2015-01-05 21:36:48+01:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -12,6 +12,9 @@
 
 /* Define to 1 if you have the `alarm' function. */
 #define HAVE_ALARM 1
+
+/* define if the compiler supports basic C++11 syntax */
+/* #undef HAVE_CXX11 */
 
 /* Define to 1 if you have the <expat.h> header file. */
 #define HAVE_EXPAT_H 1
@@ -45,9 +48,6 @@
 
 /* Define to 1 if you have the `m' library (-lm). */
 #define HAVE_LIBM 1
-
-/* Define to 1 if you have the `pthread' library (-lpthread). */
-/* #undef HAVE_LIBPTHREAD */
 
 /* Define to 1 if you have the `z' library (-lz). */
 #define HAVE_LIBZ 1
