@@ -136,7 +136,7 @@ dnl -------------------------------------------------------------
 AH_BOTTOM([
 
 /* subversion identifier */
-#define SVN_VERSION "R1296"
+#define SVN_VERSION "R1300"
 
 ])
 

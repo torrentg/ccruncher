@@ -203,6 +203,15 @@ makeBinDist() {
   qmake-qt4 ccruncher-gui.pro;
   make -j4 > /dev/null;
   
+  # creating man pages
+  export LANG=en_GB.utf8
+  help2man --no-info \
+      -n "simule the loss distribution of a credit portfolio using the Monte Carlo method" \
+      -o doc/ccruncher-cmd.1 ./build/ccruncher-cmd
+  help2man --no-info \
+      -n "simule the loss distribution of a credit portfolio using the Monte Carlo method" \
+      -o doc/ccruncher-gui.1 ./build/ccruncher-gui
+  
   # dropping unused files
   bin/src2bin.sh -y;
 
@@ -291,13 +300,14 @@ remDevFiles $workpath/base;
 cp -rf $workpath/base $workpath/win;
 makeWinDist $workpath/win;
 
-# create src package
-cp -rf $workpath/base $workpath/src;
-makeSrcDist $workpath/src;
-
 # create bin package
 cp -rf $workpath/base $workpath/bin;
 makeBinDist $workpath/bin;
+cp -f $workpath/bin/doc/*.1 $workpath/base/doc/
+
+# create src package
+cp -rf $workpath/base $workpath/src;
+makeSrcDist $workpath/src;
 
 # remove build files
 chmod -R +w $workpath > /dev/null 2> /dev/null;

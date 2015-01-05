@@ -151,8 +151,11 @@ if [ "$cver" = "true" ]; then
   sed -i -e "s/Last modified: .*/Last modified: $curdate/g" $CCRUNCHERPATH/doc/html/*.html $CCRUNCHERPATH/doc/html/.repo.xsl
   sed -i -e "s/version\:.*/version\: $gloversion/g" $CCRUNCHERPATH/doc/html/version
   sed -i -e "s/date\:.*/date\: $curdate/g" $CCRUNCHERPATH/doc/html/version
-  echo "you need to run autoconf to take effect some changes";
-  echo "check technical document (version log)";
+  sed -i -e "s/^\(VERSION[ ]*=[ ]*\)\(.*\)/\\1$gloversion/g " $CCRUNCHERPATH/ccruncher-cmd.pro
+  sed -i -e "s/^\(VERSION[ ]*=[ ]*\)\(.*\)/\\1$gloversion/g " $CCRUNCHERPATH/ccruncher-gui.pro
+  sed -i -e "s/^\(VERSION[ ]*=[ ]*\)\(.*\)/\\1$gloversion/g " $CCRUNCHERPATH/ccruncher-tests.pro
+  #echo "you need to run autoconf to take effect some changes";
+  #echo "check technical document (version log)";
 fi
 
 exit $retcode;

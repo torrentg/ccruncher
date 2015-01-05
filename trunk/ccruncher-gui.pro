@@ -2,6 +2,7 @@ QT += core gui network widgets
 TARGET = ccruncher-gui
 TEMPLATE = app
 CONFIG += c++11 qwt
+VERSION = 2.5.0
 
 HEADERS += \
     src/gui/Application.hpp \

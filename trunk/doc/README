@@ -260,6 +260,7 @@ Developers tips & tricks
     
 12. other minor tasks
       > # man pages creation
+      > export LANG=en_GB.utf8
       > help2man --no-info -n "simule the loss distribution of a credit portfolio using the \
         Monte Carlo method" ./build/ccruncher-cmd > ccruncher-cmd.1
       > man -l ccruncher-cmd.1
