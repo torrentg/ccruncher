@@ -21,6 +21,7 @@ progname=rollversion.sh
 gloversion=X.Y.Z
 gloversion_short=X.Y
 retcode=0
+cman=false
 cver=false
 csvn=false
 
@@ -36,6 +37,7 @@ usage() {
     $progname is a shell script to roll version numbers in
     CCruncher project. This script is only used by developers.
   options
+    -m       update manual pages
     -s       update svnversion tag
     -g num   update svnversion and global version identifier tags
     -h       show this message and exit
@@ -63,9 +65,10 @@ readconf() {
 
   OPTIND=0
 
-  while getopts 'sg:h' opt
+  while getopts 'msg:h' opt
   do
     case $opt in
+      m) cman=true;;
       s) csvn=true;;
       g) cver=true;
          gloversion=$OPTARG;
@@ -156,6 +159,29 @@ if [ "$cver" = "true" ]; then
   sed -i -e "s/^\(VERSION[ ]*=[ ]*\)\(.*\)/\\1$gloversion/g " $CCRUNCHERPATH/ccruncher-tests.pro
   #echo "you need to run autoconf to take effect some changes";
   #echo "check technical document (version log)";
+fi
+
+# update manual pages
+if [ "$cman" = "true" ]; then
+  
+  if [ ! -f build/ccruncher-cmd ]; then 
+    echo "error: file build/ccruncher-cmd not found" 
+    exit 1;
+  fi
+
+  if [ ! -f build/ccruncher-gui ]; then 
+    echo "error: file build/ccruncher-gui not found" 
+    exit 1;
+  fi
+
+  help2man --no-info \
+    -n "simule the loss distribution of a credit portfolio using the Monte Carlo method" \
+    -o doc/ccruncher-cmd.1 build/ccruncher-cmd
+
+  help2man --no-info \
+    -n "simule the loss distribution of a credit portfolio using the Monte Carlo method" \
+    -o doc/ccruncher-gui.1 build/ccruncher-gui
+
 fi
 
 exit $retcode;

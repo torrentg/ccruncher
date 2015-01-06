@@ -19,7 +19,6 @@ AC_PROG_CXX
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
-AC_CHECK_PROGS([HELP2MAN], [help2man])
 
 dnl -------------------------------------------------------------
 dnl macros
@@ -64,7 +63,6 @@ AC_CHECK_FUNCS([strtol])
 AC_CHECK_FUNCS([floor])
 AC_CHECK_FUNCS([strchr])
 AC_CHECK_FUNCS([gettimeofday])
-AC_CHECK_FUNCS([memset])
 AC_FUNC_STRTOD
 AC_FUNC_MKTIME
 
@@ -73,7 +71,6 @@ dnl other checks (consts, structs, types)
 dnl -------------------------------------------------------------
 AC_C_INLINE
 AC_TYPE_SIZE_T
-AC_TYPE_UINT32_T
 
 dnl -------------------------------------------------------------
 dnl setting debug/optimization options

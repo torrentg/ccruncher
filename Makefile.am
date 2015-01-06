@@ -19,25 +19,11 @@ check_PROGRAMS = ccruncher-tests
 
 TESTS = ccruncher-tests
 
-dist_man_MANS = ccruncher-cmd.1
-
 # -------------------------------------------------------------
 # removes subversion stuff
 # -------------------------------------------------------------
 dist-hook:
 	rm -rf `find $(distdir) -name \.svn`
-
-# -------------------------------------------------------------
-# ccruncher-cmd man page
-# -------------------------------------------------------------
-ccruncher-cmd.1: src/ccruncher-cmd.cpp $(top_srcdir)/configure.ac | ccruncher-cmd$(EXEEXT)
-	$(MAKE) $(AM_MAKEFLAGS) ccruncher-cmd$(EXEEXT)
-	export LANG=en_GB.utf8
-	$(HELP2MAN) --no-info \
-	    -n "simule the loss distribution of a credit portfolio using the Monte Carlo method" \
-	    -o ccruncher-cmd.1 ./ccruncher-cmd$(EXEEXT)
-
-CLEANFILES = ccruncher-cmd.1
 
 # -------------------------------------------------------------
 # ccruncher-cmd
