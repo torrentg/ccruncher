@@ -19,6 +19,8 @@ check_PROGRAMS = ccruncher-tests
 
 TESTS = ccruncher-tests
 
+man1_MANS = doc/ccruncher-cmd.1
+
 # -------------------------------------------------------------
 # removes subversion stuff
 # -------------------------------------------------------------
