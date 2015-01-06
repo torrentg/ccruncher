@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2015-01-05 21:36:48+01:00"
+#define BUILD_DATE "2015-01-06 11:44:25+01:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -54,9 +54,6 @@
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
-
-/* Define to 1 if you have the `memset' function. */
-#define HAVE_MEMSET 1
 
 /* Define to 1 if you have the `mkdir' function. */
 #define HAVE_MKDIR 1
@@ -139,11 +136,6 @@
 /* Version number of package */
 #define VERSION "2.5.0"
 
-/* Define for Solaris 2.5.1 so the uint32_t typedef from <sys/synch.h>,
-   <pthread.h>, or <semaphore.h> is not used. If the typedef were allowed, the
-   #define below would cause a syntax error. */
-/* #undef _UINT32_T */
-
 /* Define to `__inline__' or `__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
 #ifndef __cplusplus
@@ -152,10 +144,6 @@
 
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 /* #undef size_t */
-
-/* Define to the type of an unsigned integer type of width exactly 32 bits if
-   such a type exists and the standard includes do not define it. */
-/* #undef uint32_t */
 
 
 
