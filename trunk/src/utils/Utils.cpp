@@ -332,7 +332,6 @@ string ccruncher::Utils::getWorkDir()
  *          example: input=./dir1/dir2 -> output=/workdir/dir1/dir2/
  * @param[in] path Path to a directory.
  * @return Dir path normalized.
- * @throw Exception Non valid file path.
  */
 string ccruncher::Utils::normalizePath(const string &path)
 {
@@ -340,7 +339,7 @@ string ccruncher::Utils::normalizePath(const string &path)
 
   if (path.length() == 0)
   {
-    throw Exception("error normalizing path: non valid path (length=0)");
+    ret = "." + pathSeparator;
   }
 
   if (ret.substr(0,1) != "." && !isAbsolutePath(ret))
