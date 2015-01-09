@@ -51,6 +51,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cctype>
+#include <algorithm>
 #include <cassert>
 #include "utils/Date.hpp"
 #include "utils/Parser.hpp"

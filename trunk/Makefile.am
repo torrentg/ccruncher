@@ -13,11 +13,11 @@ EXTRA_DIST = \
     ccruncher-tests.pro \
     Doxyfile
 
-bin_PROGRAMS = ccruncher-cmd
+bin_PROGRAMS = build/ccruncher-cmd
 
-check_PROGRAMS = ccruncher-tests
+check_PROGRAMS = build/ccruncher-tests
 
-TESTS = ccruncher-tests
+TESTS = build/ccruncher-tests
 
 man1_MANS = doc/ccruncher-cmd.1
 
@@ -30,7 +30,7 @@ dist-hook:
 # -------------------------------------------------------------
 # ccruncher-cmd
 # -------------------------------------------------------------
-ccruncher_cmd_SOURCES = \
+build_ccruncher_cmd_SOURCES = \
     src/ccruncher-cmd.cpp \
     src/kernel/MonteCarlo.cpp \
     src/kernel/IData.cpp \
@@ -103,14 +103,14 @@ ccruncher_cmd_SOURCES = \
     src/utils/Thread.hpp \
     src/utils/config.h
 
-ccruncher_cmd_CXXFLAGS =
-ccruncher_cmd_LDADD =
-ccruncher_cmd_LDFLAGS =
+build_ccruncher_cmd_CXXFLAGS =
+build_ccruncher_cmd_LDADD =
+build_ccruncher_cmd_LDFLAGS =
 
 # -------------------------------------------------------------
 # ccruncher-tests
 # -------------------------------------------------------------
-ccruncher_tests_SOURCES = \
+build_ccruncher_tests_SOURCES = \
     src/ccruncher-tests.cpp \
     src/utils/MiniCppUnit.cxx\
     src/utils/DateTest.cpp \
@@ -237,7 +237,7 @@ ccruncher_tests_SOURCES = \
     src/kernel/SimulationThread.hpp \
     src/utils/config.h
 
-ccruncher_tests_CXXFLAGS =
-ccruncher_tests_LDADD =
-ccruncher_tests_LDFLAGS =
+build_ccruncher_tests_CXXFLAGS =
+build_ccruncher_tests_LDADD =
+build_ccruncher_tests_LDFLAGS =
 
