@@ -182,6 +182,10 @@ int main(int argc, char *argv[])
 
       case 'o': // -o dir, --output=dir (set output files path)
           spath = string(optarg);
+          if (!Utils::existDir(spath)) {
+            cerr << "error: directory '" << spath << "' does not exist" << endl;
+            return 1;
+          }
           break;
 
       case 301: // --version (show version and exit)
@@ -252,7 +256,7 @@ int main(int argc, char *argv[])
   }
   else if (argc - optind > 1)
   {
-    cerr << "error: last argument will be the xml input file" << endl;
+    cerr << "error: there is more than one input file" << endl;
     cerr << "use --help option for more information" << endl;
     return 1;
   }
@@ -268,18 +272,6 @@ int main(int argc, char *argv[])
       cerr << "error: can't open file '" << sfilename << "'" << endl;
       return 1;
     }
-  }
-
-  // checking arguments consistency
-  if (spath == "")
-  {
-    cerr << "error: --output is a required argument" << endl;
-    cerr << "use --help option for more information" << endl;
-    return 1;
-  }
-  if (ithreads == 0)
-  {
-    ithreads = Utils::getNumCores();
   }
 
   try
@@ -321,11 +313,6 @@ void run() throw(Exception)
 
   // setting gsl error handler
   gsl_set_error_handler(gsl_handler);
-
-  // checking output directory
-  if (!Utils::existDir(spath)) {
-    throw Exception("output directory '" + spath + "' does not exist");
-  }
 
   // header
   Logger log(cout.rdbuf());
@@ -388,7 +375,7 @@ void setnice(int niceval) throw(Exception)
 void help()
 {
   cout <<
-  "Usage: ccruncher-cmd [OPTION]... -o DIRECTORY [FILE]\n"
+  "Usage: ccruncher-cmd [OPTION] [FILE]\n"
   "\n"
   "Simule the loss distribution of the credit portfolio described in the xml\n"
   "input FILE using the Monte Carlo method. FILE can be gziped. If no one is\n"
@@ -400,7 +387,7 @@ void help()
   "  -D, --define=KEY=VAL    replace '$KEY' strings by 'VAL' in input file\n"
   "  -a, --append            output data is appended to existing files\n"
   "  -w, --overwrite         existing output files are overwritten\n"
-  "  -o, --output=DIRECTORY  directory where output files will be placed\n"
+  "  -o, --output=DIRECTORY  place output files in DIRECTORY (default=current dir)\n"
 #if !defined(_WIN32)
   "      --nice=NICEVAL      set process priority to NICEVAL (see nice command)\n"
 #endif

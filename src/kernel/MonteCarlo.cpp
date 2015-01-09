@@ -418,7 +418,6 @@ void ccruncher::MonteCarlo::setInverses()
   for(const Obligor &obligor : obligors) {
     for(const Asset &asset : obligor.assets) {
       for(const DateValues &value: asset.values) {
-        assert(time0 <= value.date && value.date <= timeT);
         aux.insert(value.date);
       }
     }
@@ -443,7 +442,7 @@ void ccruncher::MonteCarlo::setInverses()
  * @details Starts the simulation procedure. If there is only 1 thread,
  *          then uses the current thread (simplifies debug), otherwise
  *          creates one simulation per thread.
- * @param[in] numthreads Number of threads to use.
+ * @param[in] numthreads Number of threads to use (0 = num cores).
  * @param[in] nhash Number of simulation per hash (0 = no hash trace).
  * @param[in] stop Variable to stop simulation from outside (can be null).
  */
@@ -452,6 +451,11 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   if (stop != nullptr && *stop) return;
   mStop = stop;
   mHash = nhash;
+
+  // setting number of threads (if not set)
+  if (numthreads == 0) {
+    numthreads = Utils::getNumCores();
+  }
 
   // check that number of threads is lower than number of iterations
   if (maxiterations > 0 && numthreads > maxiterations) {
