@@ -284,7 +284,17 @@ Developers tips & tricks
       > $CCRUNCHER/bin/makedist.sh -b
       > $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
 
-15. create a tag in subversion repository
+15. making the rpm package
+      # https://fedoraproject.org/wiki/How_to_create_an_RPM_package
+      > rpmdev-setuptree
+      > cp build/ccruncher.spec ~/rpmbuild/SPECS
+      > cp ccruncher-X.Y.Zsrc.tgz ~/rpmbuild/SOURCES
+      > cd ~/rpmbuild/
+      > rpmbuild -ba SPECS/ccruncher.spec
+      > rpmlint SPECS/ccruncher.spec SRPMS/ccruncher-*.rpm RPMS/x86_64/ccruncher-*.rpm
+      > mock --verbose SRPMS/ccruncher-*.rpm
+      
+16. create a tag in subversion repository
       > svn cp http://www.ccruncher.net/svn/trunk/ \
              http://www.ccruncher.net/svn/tags/ccruncher-x.y/ \
              -m "created tag ccruncher-x.y"

@@ -21,6 +21,22 @@ TESTS = build/ccruncher-tests
 
 man1_MANS = doc/ccruncher-cmd.1
 
+dist_doc_DATA = \
+    doc/AUTHORS \
+    doc/ChangeLog \
+    doc/COPYING \
+    doc/README \
+    doc/TODO \
+    doc/ccruncher.pdf \
+    doc/index.html
+
+# -------------------------------------------------------------
+# install directories in docdir
+# -------------------------------------------------------------
+install-data-hook:
+	cp -rvf doc/html $(DESTDIR)$(docdir)
+	cp -rvf samples $(DESTDIR)$(docdir)
+
 # -------------------------------------------------------------
 # removes subversion stuff
 # -------------------------------------------------------------
