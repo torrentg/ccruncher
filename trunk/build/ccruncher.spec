@@ -1,7 +1,7 @@
 Name:           ccruncher
 Version:        2.5.0
 Release:        1%{?dist}
-Summary:        The CCruncher project for credit risk modeling
+Summary:        A portfolio credit risk modeling program
 
 License:        GPLv2
 URL:            http://www.ccruncher.net/
@@ -57,7 +57,7 @@ install -m 644 doc/ccruncher-gui.1 $RPM_BUILD_ROOT%{_mandir}/man1/ccruncher-gui.
 %{_bindir}/ccruncher-gui
 
 %changelog
-* Sun Jan  4 2015 Gerard Torrent <gtorrent@ccruncher.net> - 2.5.0-1
+* Sun Jan  9 2015 Gerard Torrent <gtorrent@ccruncher.net> - 2.5.0-1
 - Initial RPM release
 
 
