@@ -311,7 +311,7 @@ string ccruncher::Utils::getWorkDir()
       string aux = string(ret);
 
       // appending '/' at last position
-      if (aux.substr(aux.length()-1, 1) != pathSeparator) {
+      if (aux.length() == 0 || aux.substr(aux.length()-1, 1) != pathSeparator) {
         aux = aux + pathSeparator;
       }
 

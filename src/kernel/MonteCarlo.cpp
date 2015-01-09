@@ -169,14 +169,15 @@ void ccruncher::MonteCarlo::setData(IData &data, const string &path, char mode)
     logger << "number of values" << split << numValues << endl;
     logger << indent(-1);
 
-    logger << "aggregators" << flood('-') << endl;
+    logger << "segmentations" << flood('-') << endl;
     logger << indent(+1);
 
     setSegmentations(data.getSegmentations(), path, mode);
+    assert(data.getSegmentations().size() == aggregators.size());
         
-    logger << "output data directory" << split << "["+path+"]" << endl;
-    for(Aggregator *aggregator : aggregators) {
-      logger << "segmentation" << split << "["+aggregator->getFilename()+"]" << endl;
+    for(size_t i=0; i<aggregators.size(); i++) {
+      logger << data.getSegmentations()[i].getName() << split
+             << "["+aggregators[i]->getFilename()+"]" << endl;
     }
     logger << indent(-1);
 
