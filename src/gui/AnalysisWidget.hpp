@@ -145,7 +145,7 @@ class AnalysisWidget: public MdiChildWidget
     //! Copy data to clipboard
     void copyToClipboard();
     //! Show piechart info
-    void showPiechartTooltip(QPoint point);
+    void showPiechartInfo(QPoint point);
 
   signals:
 
