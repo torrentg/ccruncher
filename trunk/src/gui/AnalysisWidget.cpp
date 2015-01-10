@@ -83,7 +83,7 @@ ccruncher_gui::AnalysisWidget::AnalysisWidget(const QString &filename, QWidget *
   QwtPlotCanvas *canvas = new QwtPlotCanvasExt(ui->plot);
   canvas->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
   canvas->setMouseTracking(false);
-  connect(canvas, SIGNAL(mouseMoved(QPoint)), this, SLOT(showPiechartTooltip(QPoint)));
+  connect(canvas, SIGNAL(mouseMoved(QPoint)), this, SLOT(showPiechartInfo(QPoint)));
 
   ui->plot->setContextMenuPolicy(Qt::ActionsContextMenu);
   ui->plot->setCanvas(canvas);
@@ -698,7 +698,7 @@ void ccruncher_gui::AnalysisWidget::copyToClipboard()
  * @details Show info just under the given point.
  * @param[in] point Point in the pie chart.
  */
-void ccruncher_gui::AnalysisWidget::showPiechartTooltip(QPoint point)
+void ccruncher_gui::AnalysisWidget::showPiechartInfo(QPoint point)
 {
   mutex.lock();
 
@@ -715,14 +715,21 @@ void ccruncher_gui::AnalysisWidget::showPiechartTooltip(QPoint point)
   double val, pct;
   bool valid = piechart->getInfo(point, name, val, pct);
   if (valid) {
-    QString msg = QString(name.c_str()) + "\n";
-    msg += QString::number(val, 'f', 2) + "\n";
-    msg += QString::number(pct*100, 'f', 2) + (status?"%":"% ");
-    QToolTip::showText(QCursor::pos(), msg, ui->plot->canvas(), ui->plot->canvas()->rect());
+    QString msg1 = QString(name.c_str()) + "\n";
+    msg1 += QString::number(val, 'f', 2) + "\n";
+    msg1 += QString::number(pct*100, 'f', 2) + (status?"%":"% ");
+    QToolTip::showText(QCursor::pos(), msg1, ui->plot->canvas(), ui->plot->canvas()->rect());
+
+    QString msg2 = "Segment = " + QString(name.c_str());
+    msg2 += ", " + ui->view->currentText() + " = " + QString::number(val, 'f', 2);
+    msg2 += " (" + QString::number(pct*100, 'f', 2) + "%)";
+    emit newStatusMsg(msg2);
+
     status = !status;
   }
   else {
     QToolTip::hideText();
+    emit newStatusMsg("");
   }
   mutex.unlock();
 }

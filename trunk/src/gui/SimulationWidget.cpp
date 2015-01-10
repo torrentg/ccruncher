@@ -89,15 +89,19 @@ ccruncher_gui::SimulationWidget::SimulationWidget(const QString &filename, QWidg
   toolbar->addAction(actionRun);
   toolbar->addAction(actionStop);
 
-  MainWindow *main = dynamic_cast<MainWindow*>(parent);
-  if (main != nullptr) properties = main->getProperties();
-
   task.setStreamBuf(&qstream);
   connect(&timer, SIGNAL(timeout()), this, SLOT(draw()));
   qRegisterMetaType<ccruncher_gui::SimulationTask::status>();
   connect(&task, SIGNAL(statusChanged(ccruncher_gui::SimulationTask::status)), this, SLOT(setStatus(ccruncher_gui::SimulationTask::status)), Qt::QueuedConnection);
   connect(&qstream, SIGNAL(print(const QString &)), this, SLOT(log(const QString &)), Qt::QueuedConnection);
   connect(ui->log, SIGNAL(anchorClicked(const QUrl &)), this, SIGNAL(anchorClicked(const QUrl &)));
+
+  MainWindow *main = dynamic_cast<MainWindow*>(parent);
+  if (main != nullptr) {
+    properties = main->getProperties();
+    connect(ui->log, SIGNAL(highlighted (const QString &)), main, SLOT(setStatusMsg(const QString &)));
+  }
+
   ui->ifile->setText(filename);
   //TODO: check exceptions
   setFile();
