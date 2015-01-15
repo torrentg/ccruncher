@@ -1083,3 +1083,29 @@ grid()
 
 dev.off()
 
+# ================================================
+# probabilities of default graphic (CDF)
+# ================================================
+t = seq(0,50,0.01)
+x = dexp(t, 0.1)
+x = x + 10*dexp(7,0.1)*dnorm(t, 7, 1)
+x = x + 10*dexp(14,0.1)*dnorm(t, 14, 1)
+x = x + 10*dexp(21,0.1)*dnorm(t, 21, 1)
+x = x + 10*dexp(28,0.1)*dnorm(t, 28, 1)
+x = x + 10*dexp(35,0.1)*dnorm(t, 35, 1)
+x = x + 10*dexp(42,0.1)*dnorm(t, 42, 1)
+x = x + 10*dexp(49,0.1)*dnorm(t, 49, 1)
+x = x/sum(x)
+
+pdf(file="dprob1.pdf", width=7, height=4)
+par(mar=c(4,4,0.5,0.1))
+plot(t, x, yaxt='n', xlab='Default time (in years)', ylab='Density', type='l')
+axis(side = 2, at = seq(0,0.0012,0.0002), labels = FALSE, tck = -0.01)
+grid()
+dev.off()
+
+pdf(file="dprob2.pdf", width=7, height=4)
+par(mar=c(4,4,0.5,0.1))
+plot(t, cumsum(x), xlab='Default time (in years)', ylab='PD', type='l')
+grid()
+dev.off()

@@ -454,12 +454,12 @@ the content and require a detailed discussion have been relegated to appendices.
 
 Financial institutions have statistical models that assigns a probability of 
 default to each obligor as well as statistical models for the exposure and 
-recovery of each operation. These models allow us to estimate the expected 
-loss of the portfolio, but are insufficient to estimate the measures related 
+recovery of each operation. These models allow us to estimate the Expected 
+Loss of the portfolio, but are insufficient to estimate the measures related 
 to economic capital such as VaR or ES. This is because these measures strongly 
 depend on the dependence between obligors, and models mentioned above do not 
-refer to this concept. This chapter develops the multivariate model exploiting 
-the existing models for PD, exposure and recovery.
+refer to this concept. This chapter develops the multivariate model using the 
+existing PD, exposure and recovery models.
 
 %------------------------------------------------------------------------------
 % THE COPULA MODEL
@@ -485,10 +485,12 @@ theorem, we obtain
 	C\left(F_1(t_1), \dots, F_n(t_n)\right)
 \end{displaymath}
 in which marginal $F_i(t) = \Pr\{T_i \le t\}$ is the time-until-default 
-distribution of the i-th obligor (see appendix~\ref{ap:pd} to obtain
-this distribution from existing PD models) and $C$ is a copula. CCruncher 
-considers that $C$ is a t-Student copula for the following \ul{practical} 
-reasons:
+distribution of the i-th obligor and $C$ is a copula. CCruncher considers that 
+each obligor has its own time-until-default distribution depending on its 
+rating; therefore, all obligors with identical ratings have identical 
+distributions (see appendix~\ref{ap:pd} to obtain these distributions from 
+existing PD models). Regarding the copula, CCruncher considers that $C$ 
+is a t-Student copula for the following \ul{practical} reasons:
 
 \begin{itemize}
 	\item it is determined by the correlation matrix (elliptical property). 
@@ -1217,7 +1219,7 @@ of this algorithm adapted to our case.
 	uncertainty to the assessment of portfolio risk.
 \end{example}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\centering
 	\subcaptionbox{Simulated defaults}{
 		%\small
@@ -1255,7 +1257,7 @@ of this algorithm adapted to our case.
 	\label{fig:calib1}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\centering
 	\subcaptionbox{Simulated defaults}{
 		%\small
@@ -1597,7 +1599,7 @@ appropriate statistics.
 	bin/ccruncher-cmd -w -o data/test04-100 samples/test04-100.xml
 \end{comment}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\centering
 	\subcaptionbox{1000 obligors}{
 		\includegraphics[width=7cm]{test04-1}
@@ -1819,7 +1821,7 @@ estimated value is good enough.
 	because each defaulted obligor is computed as a 1\euro\ loss.
 \end{example}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\centering
 	\subcaptionbox{Risk measures}{
 		%\small
@@ -1921,7 +1923,7 @@ consumed by this sub-portfolio.
 	respect this segmentation.
 \end{example}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\centering
 	\subcaptionbox{EL disaggregation}{
 		\includegraphics[width=7cm]{disaggregation1}
@@ -2098,12 +2100,12 @@ of the Gaussian copula matches the correlation of Brownian Motion.
 		\ln(S_i^0) + \left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)
 		\qquad i=1,\dots,n
 	\end{displaymath}
-	where $F_i(t)$ are cumulative distribution functions (cdf) with support
-	$[0,\infty)$, $S_i^0$ are the asset prices at time $0$, and $\Phi^{-1}$ is 
-	the inverse of the univariate Gaussian distribution,
-	
 	then the multivariate default times has marginals $F_i(t)$
 	and a Gaussian copula with correlation matrix $R$.
+	
+	In the previous statement, $F_i(t)$ are cumulative distribution functions 
+	(cdf) with support $[0,\infty)$, $S_i^0$ are the asset prices at time $0$, 
+	and $\Phi^{-1}$ is the inverse of the univariate Gaussian distribution.
 \end{proposition}
 
 \begin{proof}
@@ -2398,7 +2400,7 @@ same RNG seed in each evaluation.
 	the values of factor loadings and $\nu$ are interlaced. 
 \end{example}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 	\centering
 	\subcaptionbox{Parameter $w_1$}{
 		\includegraphics[width=7cm]{sensi-w1}
@@ -2973,15 +2975,11 @@ used to ensure the restrictions compliance.
 \section{The Probabilities of Default}
 \label{ap:pd}
 
-In this section, we construct the univariate time-until-default obligor 
-distributions using available information such as the 1-year PDs or the ratings
-transition matrix. The objective is to determine the cumulative density 
-functions $F_i(t) = \Pr\{T_i \le t\}$ for each of the ratings.
-
 \begin{definition}[Probability of Default (PD)]
 	$T_i$ is the random variable that represents the default time 
 	(aka time-until-default, aka survival time, aka time-to-default) of the 
-	i-th obligor. Let $F_i(t)$ denote the distribution function of $T_i$:
+	i-th obligor. We denote as $F_i(t)$ the cumulative distribution function 
+	of $T_i$:
 	\begin{displaymath}
 		F_i(t) = \Pr\{T_i \le t\} = 
 		\Pr\{\text{ i-th obligor defaults before $t$ years }\}
@@ -2995,13 +2993,51 @@ functions $F_i(t) = \Pr\{T_i \le t\}$ for each of the ratings.
 	\end{displaymath}
 \end{definition}
 
-Each obligor has its own time-until-default distribution depending on its 
-rating; therefore, all obligors with identical ratings have identical
-distributions. Below, we indicate three different manners of inferring $F_i$ 
-depending upon the amount of information available. All three manners produce 
+Note that the economic cycle is written on the default times distribution shape.
+Figure~\ref{fig:dprob} depicts the default time density of an obligor with 
+current rating $B$, where bumps represent the lean years, and its corresponding 
+cdf (aka PD function).
+
+\begin{figure}[!ht]
+	\centering
+	\subcaptionbox{Default time density}{
+		\includegraphics[width=7cm]{dprob1}
+	}
+	\subcaptionbox{Default time cdf}{
+		\includegraphics[width=7cm]{dprob2}
+	}
+	\caption{Probability of Default function}
+	\label{fig:dprob}
+\end{figure}
+
+CCruncher allows you to specify the PDs functions declaring the PDs' values 
+at user-defined time points. These values must fulfill the following conditions:
+~\\
+~\\
+\storestyleof{itemize}
+\begin{listliketab} 
+	\begin{tabular}{Lll}
+		\textbullet & $F_i(0) = 0$                 & $i=1,\dots,r \quad i \ne \text{default}$ \\
+		\textbullet & $F_i(t)$ strictly increasing & $i=1,\dots,r \quad i \ne \text{default}$ \\
+		\textbullet & $F_i(\infty) = 1$            & $i=1,\dots,r$ \\
+		\textbullet & $F_{\text{default}}(t) = 1$  & $\forall\ t \ge 0$ \\
+	\end{tabular} 
+\end{listliketab}
+~\\
+~\\
+The functions specified in this manner are interpolated using cubic splines
+when the above conditions are preserved and are interpolated using linear 
+splines when they are not.
+
+In general, what we know of the PD functions is limited. In some cases we have 
+the rating transition matrix, in others we only have the 1-year PD; if obligors 
+are listed at the stock market then we can use the Merton model to estimate the 
+PD functions. Below, these cases are analyzed. All three manners produce 
 similar results in the short term (e.g., 1 year) but differ in the middle and
-long term. Before detailing the different approaches, we define the transition 
-matrix because it is used in all three cases.
+long term.
+
+\subsection{Obtaining PDs from the transition matrix}
+\label{pdftm}
 
 \begin{definition}[Transition matrix]
 	\label{def:tm}
@@ -3053,14 +3089,12 @@ matrix because it is used in all three cases.
 	\end{center}
 \end{table}
 
-\subsection{Obtaining PDs from the transition matrix}
-\label{pdftm}
-
-This alternative implies that transition probabilities remain constant
-over time, undermining the economic cycle effect. In practice, this constancy
-is equivalent to considering an averaged economic cycle. 
-See document~\cite[sec. 3.2.1]{bindseil:2007} to obtain additional information
-related with this section and the CreditMetrics\texttrademark{} approach.
+Deriving PD functions from the transition matrix implies that transition 
+probabilities remain constant over time, undermining the economic cycle 
+effect. In practice, this constancy is equivalent to considering an averaged 
+economic cycle. See document~\cite[sec. 3.2.1]{bindseil:2007} to obtain 
+additional information related with this section and the 
+CreditMetrics\texttrademark{} approach.
 
 \begin{proposition}[Scaled transition matrix]
 	The transition matrix can be scaled in time using the following rules:
@@ -3174,7 +3208,7 @@ from~\cite{kreinin:2001}.
 
 In some circumstances, the transition matrix is not available, and we only 
 have the probability of default at 1-year for each rating, 
-$p_1,\dots,p_{r-1},p_r$ in which the r-th rating is the \emph{defaulted} 
+$p_1,\dots,p_r$ in which the r-th rating is the \emph{defaulted} 
 status. In the absence of more information, we can consider a diagonal 
 transition matrix such as the following:
 \begin{displaymath}
@@ -3310,7 +3344,8 @@ framework~\cite{kmv:2003} is
 where $\Phi$ is the univariate Gaussian cdf, $A_i$ is the firm's asset value, 
 $D_i$ is the book value of the debt, $\mu_i$ is the firm's asset value drift, 
 $\sigma_i$ is the firm's asset value volatility, and $r$ is the risk free rate. 
-We verify that this is a valid distribution function.
+We determine the conditions under which the function $F_i$ is a valid cumulative 
+distribution function.
 \begin{displaymath}
 	\begin{array}{l}
 		F_i(0) = 0 
@@ -3376,49 +3411,6 @@ that the expected annual return should be close to the risk-free rate.
 	\caption{PDs derived from Merton's model}
 	\label{fig:pdfmm}
 \end{figure}
-
-\subsection{Obtaining PDs from advanced models}
-
-There are financial institutions that may have models to forecast the 
-transition matrix using some economic indicators such as GDP or inflation. We 
-note as $M_T(t)$ the T-period transition matrix at time $t$. In these cases, 
-the time-until-default distributions can be obtained successively composing
-the transition matrices for each T-period.
-\begin{displaymath}
-	F_i(t) = \Pr\{T_. \le t\} = \left(
-		\left( \prod_{j=1}^{[t/T]} M_T(j) \right) \cdot 
-		M_{t-T\cdot[t/T]}\left([t/T]+1\right) 
-		\right)_{id}
-\end{displaymath}
-in which $[x]$ is the integer part of $x$, $T_.$ is the time-until-default
-of an obligor with the i-th rating, $d$ is the index of the \emph{defaulted} 
-rating, $M_t(j)$ is the T-period transition matrix evaluated at time $j$ 
-and scaled to time $t$, and $(M)_{ij}$ is the matrix element located in the 
-i-th row and the j-th column.
-
-The time-until-default distributions derived from an advanced model may show 
-various steps according to the different stages of the economic cycle. This 
-approach is the most appropriate for risk estimates in the medium and long 
-term.
-
-CCruncher allows description of the PDs derived from advanced models specifying 
-the PDs' values at given time points. These must fulfill the cdf conditions:
-~\\
-~\\
-\storestyleof{itemize}
-\begin{listliketab} 
-	\begin{tabular}{Lll}
-		\textbullet & $F_i(0) = 0$                 & $i=1,\dots,r \quad i \ne \text{default}$ \\
-		\textbullet & $F_i(t)$ strictly increasing & $i=1,\dots,r \quad i \ne \text{default}$ \\
-		\textbullet & $F_i(\infty) = 1$            & $i=1,\dots,r$ \\
-		\textbullet & $F_{\text{default}}(t) = 1$  & $\forall\ t \ge 0$ \\
-	\end{tabular} 
-\end{listliketab}
-~\\
-~\\
-The functions specified in this manner are interpolated using cubic splines
-when the above conditions are preserved and are interpolated using linear 
-splines when they are not.
 
 %------------------------------------------------------------------------------
 % COPULA BASICS
