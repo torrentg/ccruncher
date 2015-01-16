@@ -66,7 +66,7 @@ void exception_handler()
   cerr << endl <<
       "unexpected error. please report this bug sending input file, \n"
       "ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
-  exit(1);
+  exit(EXIT_FAILURE);
 }
 
 /**************************************************************************//**
@@ -125,15 +125,15 @@ int main(int argc, char *argv[])
       case '?': // invalid option
           cerr << "error parsing arguments" << endl;
           cerr << "use --help option for more information" << endl;
-          return 1;
+          return EXIT_FAILURE;
 
       case 'h': // -h or --help (show help and exit)
           help();
-          return 0;
+          return EXIT_SUCCESS;
 
       case 301: // --version (show version and exit)
           version();
-          return 0;
+          return EXIT_SUCCESS;
 
       case 302: // --nice=val (set nice value)
           try
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
           catch(Exception &)
           {
             cerr << "error: invalid nice value" << endl;
-            return 1;
+            return EXIT_FAILURE;
           }
           break;
 
@@ -163,19 +163,19 @@ int main(int argc, char *argv[])
           catch(Exception &)
           {
             cerr << "error: invalid threads value" << endl;
-            return 1;
+            return EXIT_FAILURE;
           }
           break;
 
       case 305: // --info (show info and exit)
           info();
-          return 0;
+          return EXIT_SUCCESS;
 
       default: // unexpected error
           cerr <<
             "unexpected error parsing arguments. Please report this bug sending input\n"
             "file, ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
-          return 1;
+          return EXIT_FAILURE;
     }
   }
 
@@ -219,12 +219,12 @@ int main(int argc, char *argv[])
   catch (std::exception &e)
   {
     cerr << "error: " << e.what() << endl;
-    return 1;
+    return EXIT_FAILURE;
   }
   catch(...)
   {
     exception_handler();
-    return 1;
+    return EXIT_FAILURE;
   }
 }
 

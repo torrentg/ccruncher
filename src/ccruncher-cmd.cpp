@@ -82,7 +82,7 @@ void exception_handler()
   cerr << endl <<
       "unexpected error. please report this bug sending input file, \n"
       "ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
-  exit(1);
+  exit(EXIT_FAILURE);
 }
 
 /**************************************************************************//**
@@ -143,11 +143,11 @@ int main(int argc, char *argv[])
       case '?': // invalid option
           cerr << "error parsing arguments" << endl;
           cerr << "use --help option for more information" << endl;
-          return 1;
+          return EXIT_FAILURE;
 
       case 'h': // -h or --help (show help and exit)
           help();
-          return 0;
+          return EXIT_SUCCESS;
 
       case 'D': // -D key=val (define)
           {
@@ -156,14 +156,14 @@ int main(int argc, char *argv[])
             if (pos == string::npos || pos == 0 || pos == str.length()-1 ) {
               cerr << "error parsing arguments (define with invalid format)" << endl;
               cerr << "use --help option for more information" << endl;
-              return 1;
+              return EXIT_FAILURE;
             }
             string key = Utils::trim(str.substr(0, pos));
             string value = Utils::trim(str.substr(pos+1));
             if (key.length() == 0 || value.length() == 0) {
               cerr << "error parsing arguments (define with invalid format)" << endl;
               cerr << "use --help option for more information" << endl;
-              return 1;
+              return EXIT_FAILURE;
             }
             else {
               defines[key]= value;
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
       case 'w': // -w --overwrite
           if (cmode != 'c') {
             cerr << "error: found more than one output files mode" << endl;
-            return 1;
+            return EXIT_FAILURE;
           }
           cmode = curropt;
           break;
@@ -184,13 +184,13 @@ int main(int argc, char *argv[])
           spath = string(optarg);
           if (!Utils::existDir(spath)) {
             cerr << "error: directory '" << spath << "' does not exist" << endl;
-            return 1;
+            return EXIT_FAILURE;
           }
           break;
 
       case 301: // --version (show version and exit)
           version();
-          return 0;
+          return EXIT_SUCCESS;
 
       case 302: // --nice=val (set nice value)
           try
@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
           catch(Exception &)
           {
             cerr << "error: invalid nice value" << endl;
-            return 1;
+            return EXIT_FAILURE;
           }
           break;
 
@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
           catch(Exception &)
           {
             cerr << "error: invalid hash value" << endl;
-            return 1;
+            return EXIT_FAILURE;
           }
           break;
 
@@ -233,19 +233,19 @@ int main(int argc, char *argv[])
           catch(Exception &)
           {
             cerr << "error: invalid threads value" << endl;
-            return 1;
+            return EXIT_FAILURE;
           }
           break;
 
       case 305: // --info (show info and exit)
           info();
-          return 0;
+          return EXIT_SUCCESS;
 
       default: // unexpected error
           cerr << 
             "unexpected error parsing arguments. Please report this bug sending input\n"
             "file, ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
-          return 1;
+          return EXIT_FAILURE;
     }
   }
 
@@ -258,7 +258,7 @@ int main(int argc, char *argv[])
   {
     cerr << "error: there is more than one input file" << endl;
     cerr << "use --help option for more information" << endl;
-    return 1;
+    return EXIT_FAILURE;
   }
   else
   {
@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
     catch(Exception &) 
     {
       cerr << "error: can't open file '" << sfilename << "'" << endl;
-      return 1;
+      return EXIT_FAILURE;
     }
   }
 
@@ -284,17 +284,17 @@ int main(int argc, char *argv[])
     // running simulation
     run();
 
-    return 0;
+    return EXIT_SUCCESS;
   }
   catch(std::exception &e)
   {
     cerr << endl << e.what() << endl;
-    return 1;
+    return EXIT_FAILURE;
   }
   catch(...)
   {
     exception_handler();
-    return 1;
+    return EXIT_FAILURE;
   }
 }
 

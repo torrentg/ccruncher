@@ -170,14 +170,12 @@
 24.00, 57.00, 76.00, 14.00, 23.00, 40.00
     </pre>
     <p>
-      These files contain the simulated losses of the indicated segmentation
-      disaggregated by its segments (aka. sub-portfolios). There are so many 
-      files of this type as segmentations defined in the input file.
-      The segmentation name lead to the corresponding file name (e.g., 
-      portfolio.csv and sector-ratings.csv <code>samples/test05.xml</code>), 
-      and the segment names leads to the corresponding column names. 
-      Each row is a simulation performed by CCruncher, and each value is the
-      loss of the corresponding segment.
+      These files contain the simulated losses of the segmentations disaggregated 
+      by its segments (aka. sub-portfolios). There are so many files of this type 
+      as segmentations defined in the input file, being the file name identical 
+      to the segmentation name (e.g., portfolio.csv and sector-ratings.csv). In a
+      file, each column corresponds to a segment, and each row is a simulation 
+      performed by CCruncher.
     </p>
     <p>
       When there is more than one segment, the sum of row losses can 
@@ -268,8 +266,8 @@ general information ************************************************************
       designed with the Unix philosophy in mind (<i>Write programs that do one thing 
       and do it well. Write programs to work together. Write programs to handle text 
       streams, because that is a universal interface.</i>). If you want to preserve 
-      the trace, you can redirect the program output using the 
-      <a href="http://ss64.com/bash/tee.html">tee</a> utility.
+      the trace, you can redirect stdout to a file or use the 
+      <a href="http://ss64.com/bash/tee.html">tee</a> command.
     </p>
     </div>
 
@@ -278,7 +276,7 @@ general information ************************************************************
           Copyright &copy; 2004-2015 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </span>
         <span id="modified">
-          Last modified: 05-Jan-2015
+          Last modified: 15-Jan-2015
         </span>
       </div>
 
