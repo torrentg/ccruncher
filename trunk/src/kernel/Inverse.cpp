@@ -213,7 +213,7 @@ void ccruncher::Inverse::setSpline(const CDF &cdf, const vector<int> &nodes_)
   {
     auto pos = lower_bound(days.begin(), days.end(), dayko);
     assert(days.begin() < pos);
-    assert(*pos != dayko);
+    assert(find(days.begin(), days.end(), dayko) == days.end());
     days.insert(pos, dayko);
     setSpline(days, cache);
     dayko = getWorstDay(nodes, cache);
@@ -272,8 +272,8 @@ void ccruncher::Inverse::setSpline(const vector<int> &days, const map<int,double
  */
 int ccruncher::Inverse::getWorstDay(const vector<int> &nodes, const map<int,double> &cache) const
 {
-  int worstDay=0;
-  double maxErr=0.0;
+  int worstDay = 0;
+  double maxErr = 0.0;
 
   for(size_t i=0; i<nodes.size(); i++)
   {
