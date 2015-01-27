@@ -786,25 +786,32 @@ test the parameters estimation procedures.
 	\label{alg:snod}
 	Let a multivariate default times distribution with annual probabilities 
 	of default $p_1,\dots,p_r$ and a t-Student multi-factor copula 
-	$C_{\nu,\vec{w},R}^{\text{t}}$. Then we can simulate a sample of size $T$ 
+	$C_{\nu,\vec{w},R}^{\text{t}}$. Then we can simulate a sample of size $M$ 
 	of the annual number of defaults by factor and rating doing the following:
 	\begin{itemize}
-		\item Compute the Cholesky decomposition of $R = L \cdot L^\intercal$
-		\item For $t=1,\dots,T$ repeat the following steps:
+		\item Compute the Cholesky decomposition of $R$ \\
+		$R = L \cdot L^\intercal$
+		\item For $m=1,\dots,M$ repeat the following steps:
 		\begin{enumerate}
-			\item Simulate $s$ independent $N(0,1)$, $\vec{y}$
-			\item Simulate correlated factors doing $\vec{z} = L \cdot \vec{y}$
-			\item Simulate $\upsilon \sim \chi_{\nu}^2$
+			\item Initialize the simulated number of defaults \\ 
+			$k_{ij}^m=0 \quad i=1,\dots,s \quad j=1,\dots,r$
+			\item Simulate the correlated factors \\
+			$\vec{z} = L \cdot \vec{y}$ ~where~ $\vec{y} \sim N(0,\text{Id})$
+			\item Simulate the chi-square factor \\
+			$\upsilon \sim \chi_{\nu}^2$
 			\item For each factor $i=1,\dots,s$ repeat the following steps:
 			\begin{itemize}
 				\item For each rating $j=1,\dots,r$ repeat the following steps:
 				\begin{itemize}
-					\item Simulate $n_{ij}^t$ independent $N(0,1)$, $\vec{\epsilon}$
-					\item Compute $\vec{x} = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \vec{\epsilon} \right)$
-					\item $k_{ij}^t = \left\{ \text{number of components of $\vec{x}$ less than $t_{\nu}^{-1}(p_j)$} \right\} $
+					\item Simulate $n_{ij}$ independent $N(0,1)$, $\vec{\epsilon}$
+					\item Simulate the t-Student components \\
+					$\vec{x} = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \vec{\epsilon} \right)$
+					\item Obtain the number of defaults \\
+					$k_{ij}^m = \left\{ \text{number of components of $\vec{x}$ less than $t_{\nu}^{-1}(p_j)$} \right\} $
 				\end{itemize}
 			\end{itemize}
-			\item Print the t-th simulated number of defaults: $k_{11}^t,\dots,k_{sr}^t$
+			\item Print the m-th annual number of defaults \\
+			$k_{11}^m,\dots,k_{sr}^m$
 		\end{enumerate}
 	\end{itemize}
 \end{algorithm}
@@ -2244,7 +2251,7 @@ Third, we need to determine the factor loadings. To do this, we assume that
 each factor/sector is composed by $n_i$ identical firms. Then, we use the 
 Gaussian multi-factor model to express the multivariate Gaussian distribution
 involved in the Geometric Brownian Motion. That is
-\begin{displaymath}
+\begin{equation}
 	S_i^j(t+\Delta t) = S_i^j(t) \cdot \exp\left(
 	\left(\mu_i - \frac{\sigma_i^2}{2}\right) \Delta t +
 	\left(\sigma_i \sqrt{\Delta t}\right) X_i^j
@@ -2255,9 +2262,9 @@ involved in the Geometric Brownian Motion. That is
 		\\
 		i=1,\dots,n 
 	\end{array}
-\end{displaymath}
-where $X$ is a Gaussian multi-factor distribution (a multivariate 
-Gaussian -see appendix~\ref{ap:mfgm}-)
+\end{equation}
+where $X$ is a Gaussian multi-factor distribution (a multivariate Gaussian 
+-see appendix~\ref{ap:mfgm}-)
 \begin{displaymath}
 	X_i^j = w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j
 	\quad \text{ where } \left\{
@@ -2271,13 +2278,87 @@ Gaussian -see appendix~\ref{ap:mfgm}-)
 	\end{array}
 	\right.
 \end{displaymath}
-Now, the meaning of factor loadings appears pristine. According to 
-proposition\ref{prop:gmfigs} (see proof)
+One might object that is necessary for all companies of the same factor should 
+have the same $\mu_i$ and $\sigma_i$ values. Here we see that the default event
+don't depend on $\mu_i$ and $\sigma_i$ but on $F_i(t)$ (wich in turn can depend
+on $\mu_i$ and $\sigma_i$ as in the Merton's case). Default ocurre when
+{\small
+\begin{displaymath}
+	\begin{array}{ll}
+		S_i^j(t) \le h_i^j(t) 
+		\\
+		S_i^j(0) \cdot \exp\left(
+			\left(\mu_i^j - \frac{\sigma_i^{j2}}{2}\right) t +
+			\left(\sigma_i^j \sqrt{t}\right) X_i^j
+			\right) 
+		\le 
+		\exp\left(\sigma_i^j\sqrt{t}\cdot\Phi^{-1}(F_i^j(t)) + 
+			\ln(S_i^j(0)) + \left(\mu_i^j-\frac{\sigma_i^{j2}}{2}\right)\cdot t\right)
+		\\
+		\ln(S_i^j(0)) + \left(\mu_i^j - \frac{\sigma_i^{j2}}{2}\right) t +
+			\left(\sigma_i^j \sqrt{t}\right) X_i^j 
+		\le 
+		\sigma_i^j\sqrt{t}\cdot\Phi^{-1}(F_i^j(t)) + 
+			\ln(S_i^j(0)) + \left(\mu_i^j-\frac{\sigma_i^{j2}}{2}\right)\cdot t
+		\\
+		X_i^j \le \Phi^{-1}(F_i^j(t))
+		\\
+		w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j \le \Phi^{-1}(F_i^j(t))
+	\end{array}
+\end{displaymath}}
+Note that default depends on $w_i$, $R$ and $F_i^j(t)$, but not on $\mu_i^j$ and 
+$\sigma_i^j$. That is, a factor may contain companies with different characteristics 
+having the same dependence structure.
+
+In proposition~\ref{prop:mmgc} we see that the Gaussian correlation matrix is 
+identical in both models. According to proposition~\ref{prop:gmfigs} (see proof)
+the Gaussian multi-factor models satisfy
 \begin{displaymath}
 	\text{Cor}(X_{i_1}^{j_1},X_{i_2}^{j_2}) = w_{i_1} \cdot w_{i_2} \cdot R_{i_1i_2}
 \end{displaymath}
-When there is only one firm per sector, then $w_i=1$ and $R$ is the usual 
-Brownian Motion correlation matrix.
+That is, the value of factor loadings $w_i$ is exactly the same in the 
+multivariate default times model and in the multivariate Geometric Brownian 
+Motion asset value model. Note that when there is only one firm per sector, 
+then $w_i=1$ and $R$ is the usual Brownian Motion correlation matrix.
+
+Here we present an algorithm to simulate the annual number of defaults from an 
+GBM asset value model. Later we use this algorithm to numerically verify the 
+results presented so far by an example.
+
+\begin{algorithm}[Annual number of defaults simulation using a stock prices model]
+	\label{alg:sdumm}
+	Let a portfolio composed of $s$ factors where each factor has $n_i$ identical 
+	firms. The correlation between factors is $R$, the factor loadings are $w_i$, 
+	the annual expected returns are $\mu_i$, the annual volatilities are $\sigma_i$,
+	and the default thresholds are $h_i(t)$.
+	Then we can simulate a sample of size $M$ of the annual number of defaults 
+	by factor doing the following:
+	\begin{itemize}
+		\item Compute the Cholesky decomposition of $R$ \\
+		$R = L \cdot L^\intercal$
+		\item For $m=1,\dots,M$ repeat the following steps:
+		\begin{enumerate}
+			\item Initialize the simulated number of defaults \\ 
+			$k_i^m=0 \quad i=1,\dots,s$
+			\item Simulate the correlated factors \\
+			$\vec{z} = L \cdot \vec{y}$ ~where~ $\vec{y} \sim N(0,\text{Id})$
+			\item For each factor $i=1,\dots,s$ repeat the following steps:
+			\begin{itemize}
+				\item For each replica $j=1,\dots,n_i$ repeat the following steps:
+				\begin{itemize}
+					\item Simulate the correlated Gaussian value \\
+					$x = w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \epsilon$ ~where~ $\epsilon \sim N(0,1)$
+					\item Simulate the asset price 1-year ahead (in \%)\\
+					$y = \exp\left(\left(\mu_i - \frac{\sigma_i^2}{2}\right) + \sigma_i \cdot x\right)$
+					\item Check for the default event \\
+					If $y < h_i(1)$ then $k_i^m = k_i^m + 1$
+				\end{itemize}
+			\end{itemize}
+			\item Print the m-th annual number of defaults \\
+			$k_1^m,\dots,k_s^m$
+		\end{enumerate}
+	\end{itemize}
+\end{algorithm}
 
 % :::::::::::::::::::::::::::::::
 
@@ -2331,40 +2412,6 @@ Finally, for practical reasons we use relative asset prices (current asset price
 equals to $1$) instead of absolute values. Now we are able to present the algorithm
 to simulate the annual number of defaults using the multivariate Geometric Brownian 
 Motion model for stock prices and the Gaussian multi-factor distribution.
-
-\begin{algorithm}[Annual number of defaults simulation using a stock prices model]
-	\label{alg:sdumm}
-	Let a portfolio composed of $s$ factors whose annual expected returns and 
-	annual volatilities are $\mu_i$ and $\sigma_i$. For each factor we simulate 
-	$n_i$ replicas using a factor loading $w_i$. The correlation between factors 
-	is $R$. The default thresholds are $T_i$.
-	We simulate the number of defaults using the standard Geometric Brownian 
-	Motion model by performing the following:
-	\begin{itemize}
-		\item Compute the Cholesky decomposition of $R = L \cdot L^\intercal$
-		\item For $m=1,\dots,M$ repeat the following steps:
-		\begin{enumerate}
-			\item Initialize the simulated number of defaults \\ 
-			$k_i^m=0 \quad i=1,\dots,s$
-			\item Simulate correlated factors \\
-			$\vec{z}^t = L \cdot \vec{y}$ ~where~ $\vec{y} \sim N(0,\text{Id})$
-			\item For each factor $i=1,\dots,s$ repeat the following steps:
-			\begin{itemize}
-				\item For each replica $j=1,\dots,n_i$ repeat the following steps:
-				\begin{itemize}
-					\item Simulate the correlated Gaussian value \\
-					$x = w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \epsilon$ ~where~ $\epsilon \sim N(0,1)$
-					\item Simulate the asset price 1-year ahead (in \%)\\
-					$y = \exp\left(\left(\mu_i - \frac{\sigma_i^2}{2}\right) + \sigma_i \cdot x\right)$
-					\item Check for the default event \\
-					If $y < h_i(1)$ then $k_i^m = k_i^m + 1$
-				\end{itemize}
-			\end{itemize}
-			\item Print the m-th simulated number of defaults \\
-			$k_1^m,\dots,k_s^m$
-		\end{enumerate}
-	\end{itemize}
-\end{algorithm}
 
 We note that this algoritm used to simulate the annual number of defaults using 
 the Geometric Brownian Motion model (GBM) is similar to algorithm~\ref{alg:snod} 
