@@ -29,6 +29,7 @@
 #include <iostream>
 #include <csignal>
 #include <map>
+#include <cstdio>
 #include <cstdlib>
 #include <exception>
 #include <cassert>
@@ -72,6 +73,9 @@ bool stop = false;
 void catchsignal(int)
 {
   stop = true;
+  if (sfilename == STDIN_FILENAME) {
+    fclose(stdin);
+  }
 }
 
 /**************************************************************************//**
@@ -322,6 +326,7 @@ void run() throw(Exception)
   // parsing input file
   IData idata(cout.rdbuf());
   idata.init(sfilename, defines, &stop);
+  if (stop) return;
 
   // creating simulation object
   MonteCarlo montecarlo(cout.rdbuf());
