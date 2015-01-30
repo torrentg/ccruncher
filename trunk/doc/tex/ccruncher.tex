@@ -97,7 +97,7 @@
 % \SetWatermarkScale{0.75}
 
 \def\numversion{2.5}
-\def\svnversion{R1300}
+\def\svnversion{R1320}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -784,30 +784,38 @@ test the parameters estimation procedures.
 
 \begin{algorithm}[Annual number of defaults simulation]
 	\label{alg:snod}
-	Let a multivariate default times distribution with annual probabilities 
-	of default $p_1,\dots,p_r$ and a t-Student multi-factor copula 
-	$C_{\nu,\vec{w},R}^{\text{t}}$. Then we can simulate a sample of size $M$ 
-	of the annual number of defaults by factor and rating doing the following:
+	We have a credit portfolio with $n$ obligors. We identified $s$ distinct 
+	sectors and categorized the individual risk profiles in $r$ ratings. The 
+	number of obligors in each sector-rating bucket is $n_{ij}$. 
+	Obligor default times are modeled according a multivariate default times 
+	distribution with annual probabilities of default $p_1,\dots,p_r$ and a 
+	t-Student multi-factor copula $C_{\nu,\vec{w},R}^{\text{t}}$, where $R$ 
+	is the $s\times s$ factor correlation matrix. Then we can simulate a sample 
+	of size $M$ of the annual number of defaults by sector-rating doing the 
+	following:
 	\begin{itemize}
 		\item Compute the Cholesky decomposition of $R$ \\
 		$R = L \cdot L^\intercal$
 		\item For $m=1,\dots,M$ repeat the following steps:
 		\begin{enumerate}
-			\item Initialize the simulated number of defaults \\ 
+			\item Initialize the simulated annual number of defaults \\ 
 			$k_{ij}^m=0 \quad i=1,\dots,s \quad j=1,\dots,r$
 			\item Simulate the correlated factors \\
 			$\vec{z} = L \cdot \vec{y}$ ~where~ $\vec{y} \sim N(0,\text{Id})$
 			\item Simulate the chi-square factor \\
 			$\upsilon \sim \chi_{\nu}^2$
-			\item For each factor $i=1,\dots,s$ repeat the following steps:
+			\item For each sector $i=1,\dots,s$ repeat the following steps:
 			\begin{itemize}
 				\item For each rating $j=1,\dots,r$ repeat the following steps:
 				\begin{itemize}
-					\item Simulate $n_{ij}$ independent $N(0,1)$, $\vec{\epsilon}$
-					\item Simulate the t-Student components \\
-					$\vec{x} = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \vec{\epsilon} \right)$
-					\item Obtain the number of defaults \\
-					$k_{ij}^m = \left\{ \text{number of components of $\vec{x}$ less than $t_{\nu}^{-1}(p_j)$} \right\} $
+					\item For each one of the $n_{ij}$ obligors repeat the following steps:
+					\begin{itemize}
+						\item Simulate the t-Student component \\
+						$x = \sqrt{\frac{\nu}{\upsilon}} \cdot \left( w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \epsilon \right)$
+						~where~ $\epsilon \sim N(0,1)$
+						\item Check for the default event \\
+						If $x < t_{\nu}^{-1}(p_j)$ then $k_{ij}^m = k_{ij}^m + 1$
+					\end{itemize}
 				\end{itemize}
 			\end{itemize}
 			\item Print the m-th annual number of defaults \\
@@ -2248,9 +2256,9 @@ Brownian Motion are the same.
 \end{proof}
 
 Third, we need to determine the factor loadings. To do this, we assume that 
-each factor/sector is composed by $n_i$ identical firms. Then, we use the 
-Gaussian multi-factor model to express the multivariate Gaussian distribution
-involved in the Geometric Brownian Motion. That is
+there are $s$ factors and each factor is composed by $n_i$ firms. Then, we use 
+the Gaussian multi-factor model to express the multivariate Gaussian 
+distribution involved in the Geometric Brownian Motion. That is
 \begin{equation}
 	S_i^j(t+\Delta t) = S_i^j(t) \cdot \exp\left(
 	\left(\mu_i - \frac{\sigma_i^2}{2}\right) \Delta t +
@@ -2260,11 +2268,11 @@ involved in the Geometric Brownian Motion. That is
 	\begin{array}{l}
 		j=1,\dots,n_i
 		\\
-		i=1,\dots,n 
+		i=1,\dots,s 
 	\end{array}
 \end{equation}
 where $X$ is a Gaussian multi-factor distribution (a multivariate Gaussian 
--see appendix~\ref{ap:mfgm}-)
+--see appendix~\ref{ap:mfgm}--)
 \begin{displaymath}
 	X_i^j = w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j
 	\quad \text{ where } \left\{
@@ -2278,10 +2286,11 @@ where $X$ is a Gaussian multi-factor distribution (a multivariate Gaussian
 	\end{array}
 	\right.
 \end{displaymath}
-One might object that is necessary for all companies of the same factor should 
-have the same $\mu_i$ and $\sigma_i$ values. Here we see that the default event
-don't depend on $\mu_i$ and $\sigma_i$ but on $F_i(t)$ (wich in turn can depend
-on $\mu_i$ and $\sigma_i$ as in the Merton's case). Default ocurre when
+One might object that is necessary to have the same $\mu_i$ and $\sigma_i$ 
+values for all companies on the same factor. Here we see that the default event 
+don't depend on individual $\mu_i^j$ and $\sigma_i^j$ values but on $F_i^j(t)$ 
+(wich in turn can depend on $\mu_i^j$ and $\sigma_i^j$ as in the Merton's case). 
+Default ocurrs when
 {\small
 \begin{displaymath}
 	\begin{array}{ll}
@@ -2308,124 +2317,35 @@ on $\mu_i$ and $\sigma_i$ as in the Merton's case). Default ocurre when
 \end{displaymath}}
 Note that default depends on $w_i$, $R$ and $F_i^j(t)$, but not on $\mu_i^j$ and 
 $\sigma_i^j$. That is, a factor may contain companies with different characteristics 
-having the same dependence structure.
-
-In proposition~\ref{prop:mmgc} we see that the Gaussian correlation matrix is 
-identical in both models. According to proposition~\ref{prop:gmfigs} (see proof)
-the Gaussian multi-factor models satisfy
-\begin{displaymath}
-	\text{Cor}(X_{i_1}^{j_1},X_{i_2}^{j_2}) = w_{i_1} \cdot w_{i_2} \cdot R_{i_1i_2}
-\end{displaymath}
-That is, the value of factor loadings $w_i$ is exactly the same in the 
-multivariate default times model and in the multivariate Geometric Brownian 
-Motion asset value model. Note that when there is only one firm per sector, 
-then $w_i=1$ and $R$ is the usual Brownian Motion correlation matrix.
-
-Here we present an algorithm to simulate the annual number of defaults from an 
-GBM asset value model. Later we use this algorithm to numerically verify the 
-results presented so far by an example.
-
-\begin{algorithm}[Annual number of defaults simulation using a stock prices model]
-	\label{alg:sdumm}
-	Let a portfolio composed of $s$ factors where each factor has $n_i$ identical 
-	firms. The correlation between factors is $R$, the factor loadings are $w_i$, 
-	the annual expected returns are $\mu_i$, the annual volatilities are $\sigma_i$,
-	and the default thresholds are $h_i(t)$.
-	Then we can simulate a sample of size $M$ of the annual number of defaults 
-	by factor doing the following:
-	\begin{itemize}
-		\item Compute the Cholesky decomposition of $R$ \\
-		$R = L \cdot L^\intercal$
-		\item For $m=1,\dots,M$ repeat the following steps:
-		\begin{enumerate}
-			\item Initialize the simulated number of defaults \\ 
-			$k_i^m=0 \quad i=1,\dots,s$
-			\item Simulate the correlated factors \\
-			$\vec{z} = L \cdot \vec{y}$ ~where~ $\vec{y} \sim N(0,\text{Id})$
-			\item For each factor $i=1,\dots,s$ repeat the following steps:
-			\begin{itemize}
-				\item For each replica $j=1,\dots,n_i$ repeat the following steps:
-				\begin{itemize}
-					\item Simulate the correlated Gaussian value \\
-					$x = w_i \cdot z_i + \sqrt{1-w_i^2} \cdot \epsilon$ ~where~ $\epsilon \sim N(0,1)$
-					\item Simulate the asset price 1-year ahead (in \%)\\
-					$y = \exp\left(\left(\mu_i - \frac{\sigma_i^2}{2}\right) + \sigma_i \cdot x\right)$
-					\item Check for the default event \\
-					If $y < h_i(1)$ then $k_i^m = k_i^m + 1$
-				\end{itemize}
-			\end{itemize}
-			\item Print the m-th annual number of defaults \\
-			$k_1^m,\dots,k_s^m$
-		\end{enumerate}
-	\end{itemize}
-\end{algorithm}
-
-% :::::::::::::::::::::::::::::::
-
-This result establishes the link between the multivariate stock price model 
-(standard Geometric Brownian Motion) and the portfolio credit risk model exposed 
-in chapter~\ref{chap:mdt} (t-Student multi-factor copula). Next, we specify how 
-to determine the parameters of the default times model ($F_i$ and 
-$C_{\nu,\vec{w},R}^{\text{t}}$).
-
-Marginals $F_i(t)$ can be inferred using the Merton's model (see appendix~\ref{pdfmm}).
-Optionally, these can be derived using the information provided by credit rating 
-agencies like the 1-year PDs (see appendix~\ref{pdfsv}) or the transition matrix 
-(see appendix~\ref{pdftm}).
-
-Copula $C_{\nu,\vec{w},R}^{\text{t}}$ has $\nu=\infty$ (Gaussian case), and $R$ 
-exactly equal to the correlation matrix of the Brownian Motion. If there is only 
-one company per factor, then the factor loadings are $w_i=1$. Otherwise factor 
-loadings depends on the correlations between companies on the same factor (see 
-example XXX below).
+having the same dependence structure. Moreover, if we consider that
+$\Phi^{-1}(F_i^j(1)) = \Phi^{-1}(p_i)$, then the algorithm for the simulation of 
+the annual number of failures is exactly the same as algorithm~\ref{alg:snod} 
+taking $\nu=\infty$.
 
 \begin{example}[Modeling a portfolio of bonds issued by listed companies]
-	SET EXAMPLE HERE.
+	In proposition~\ref{prop:mmgc} we see that the Gaussian correlation matrix is 
+	identical in both models. According to proposition~\ref{prop:gmfigs} (see proof)
+	the Gaussian multi-factor models satisfy
+	\begin{displaymath}
+		\text{Cor}(X_{i_1}^{j_1},X_{i_2}^{j_2}) = w_{i_1} \cdot w_{i_2} \cdot R_{i_1i_2}
+	\end{displaymath}
+	That is, the value of factor loadings $w_i$ is exactly the same in the 
+	multivariate default times model and in the multivariate Geometric Brownian 
+	Motion asset value model. Note that when there is only one firm per sector, 
+	then $w_i=1$ and $R$ is the usual Brownian Motion correlation matrix.
+
+	Marginals $F_i(t)$ can be inferred using the Merton's model (see appendix~\ref{pdfmm}).
+	Optionally, these can be derived using the information provided by credit rating 
+	agencies like the 1-year PDs (see appendix~\ref{pdfsv}) or the transition matrix 
+	(see appendix~\ref{pdftm}).
+
+	Copula $C_{\nu,\vec{w},R}^{\text{t}}$ has $\nu=\infty$ (Gaussian case), and $R$ 
+	exactly equal to the correlation matrix of the Brownian Motion. If there is only 
+	one company per factor, then the factor loadings are $w_i=1$. Otherwise factor 
+	loadings depends on the correlations between companies on the same factor (see 
+	example XXX below).
+
 \end{example}
-
-The direct application of the proposed method has the following drawbacks
-that prevent the estimation of the parameters:
-\begin{inparaenum}[1)]
-	\item usually there are few companies resulting in a large number of 
-	simulations containing no defaults,
-	\item usually the thresholds are very low, causing a very low ratio of 
-	defaults.
-\end{inparaenum}
-
-The first drawback can be avoided considering $n$ replicas for each considered
-firm. With this instruction, the correlation matrix takes the form of a 
-correlation block matrix allowing the usage of the Gaussian multi-factor 
-distribution (see definition \ref{def:gmfm}) to generate random samples from 
-a multivariate Gaussian with a correlation block matrix.
-
-The second drawback can be avoided increasing the thresholds levels\footnote{ 
-We have checked numerically that correlations doesn't depend on thresholds. 
-This statement is not true if we consider that default ocurres at first cross 
-instead of the value at the end of the period (european vs. american style 
-option).} instead of using the values induced by the 1-year PDs. We 
-adjust the threshold values such that the defaulted ratios are close to $0.5$ 
-dwells in order to minimize the error in the calibration procedure. In the 
-following lines we derive the link between $p_i$ (1-year probability of default) 
-and $f_i(t)$ (the threshold depending on $t$).
-
-Finally, for practical reasons we use relative asset prices (current asset price 
-equals to $1$) instead of absolute values. Now we are able to present the algorithm
-to simulate the annual number of defaults using the multivariate Geometric Brownian 
-Motion model for stock prices and the Gaussian multi-factor distribution.
-
-We note that this algoritm used to simulate the annual number of defaults using 
-the Geometric Brownian Motion model (GBM) is similar to algorithm~\ref{alg:snod} 
-used to simulate the annual number of defaults using the multivariate default 
-times model (MDT). The main differences between them are that MDT use the 
-t-Student distribution instead of the Gaussian distribution, and that GBM 
-assumes that each factor has its own rating instead of being shared by all 
-factors. These differences vanish if we consider a MDF with $\nu=\infty$ and 
-as many ratings as factors where each factor use its own rating. With these
-assumptions the dependence structure of both models is exactly the 
-same\footnote{ This is not intended as a formal proof.}. The following example 
-justifies this assertion numerically.
-
-%TODO: cal tenir en compte la volatilitat
 
 \textbf{Conclusion}. BLABLABLA asset prices model and default times model
 have exactly the same dependence structure. BLABLABLA.
