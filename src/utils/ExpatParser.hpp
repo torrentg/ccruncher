@@ -68,6 +68,8 @@ class ExpatParser
     void parse(gzFile file, char *buf, size_t buffer_size, bool *stop);
     //! Reset internal variables
     void reset();
+    //! Returns the line and column where error ocurred
+    std::string getErrorLocation() const;
 
   public:
 

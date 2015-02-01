@@ -515,7 +515,9 @@ void ccruncher_gui::SimulationWidget::setStatus(SimulationTask::status val)
       ui->log->setTextCursor(logcursor);
       ui->runButton->setText(tr("Run"));
       ui->progress->setFormat("");
-      ui->progress->setValue(100);
+      if (val != SimulationTask::status::failed) {
+        ui->progress->setValue(100);
+      }
       updateControls();
       //cout << "HTML" << endl << ui->log->toHtml().toStdString() << endl;
       break;

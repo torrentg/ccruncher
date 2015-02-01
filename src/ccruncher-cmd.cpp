@@ -326,7 +326,7 @@ void run() throw(Exception)
   // parsing input file
   IData idata(cout.rdbuf());
   idata.init(sfilename, defines, &stop);
-  if (stop) return;
+  if (stop) throw Exception("parser stopped");
 
   // creating simulation object
   MonteCarlo montecarlo(cout.rdbuf());

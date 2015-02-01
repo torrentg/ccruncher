@@ -4,25 +4,30 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * stock/asset/index case
-  * in 'Help' menu add pdf + input file info
-  * isolate xml/binary parser code
-  * isolate aggregators code
-  * VaR and ES are asymptotically normal
+  * market model equivalence
   * change pdf doc title?
+  * open ccbinf code to public
+  * VaR and ES are asymptotically normal
 
 Future works
 -------------------
-  * create F() and Finv(t()) output
-  * investigate how correlation depends on time
-  * portfolio optimization in ccruncher-gui
-  * risk uncertainty in ccruncher-gui
   * technical features
-     - input file in binary format
+     - src subdirs: engine, readers, writers, utils
+     - create ccbinf-gui version
+     - add risk uncertainty in ccruncher-gui
+     - add portfolio optimization in ccruncher-gui
+     - isolate xml/binary parser code
+     - isolate aggregators code
+     - create F() and Finv(t()) output
+     - support for input file in binary format
      - force equal number of sims by thread
-     - PD functions can mix transition matrix and dprobs
-  * improve model
+     - simultaneous transition matrix and dprobs in input file
+  * underlying model
+     - investigate how correlation depends on time
+     - compute stderr using resampling techniques
      - add grouped t-copula support
-     - consider that an obligor could belong to a weighted sum of factors
-  * improve functional tests
+     - an obligor could belong to a weighted sum of factors
+     - multi-level factors (eg. countries-sectors)
+  * others
+     - test ccruncher-cmd in xeon-phi architecture
      - examples based on real data

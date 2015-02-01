@@ -2082,7 +2082,16 @@ process described by the stochastic differential equation
 $dS_t = \vec{\mu} S_t\ dt + \vec{\sigma} S_t\ dW_t$
 where $S_t$ are the asset prices at time $t$, $\vec{\mu}$ are the expected 
 annual returns, $\vec{\sigma}$ are the annualized volatilities, and $W_t$ is a 
-multivariate Brownian Motion.
+multivariate Brownian Motion with correlation matrix $R$. This stochastic 
+differential equation has the following solution
+\begin{equation}
+	\label{eq:mgbm}
+	S_i(t+\Delta t) = S_i(t) \cdot \exp\left(
+	\left(\mu_i - \frac{\sigma_i^2}{2}\right) \Delta t +
+	\left(\sigma_i \sqrt{\Delta t}\right) \epsilon_i
+	\right)
+\end{equation}
+where $i$ is the asset index, and $\epsilon_i$ is the i-th component of $N(0,R)$.
 
 We consider that a company defaults when the asset value is below a preset 
 threshold at the end of the period (usually 1-year). Figure~\ref{fig:market1} 
@@ -2174,22 +2183,10 @@ Brownian Motion are the same.
 \end{proposition}
 
 \begin{proof}
-	The asset values have the following form
-	\begin{displaymath}
-		S_i(t+\Delta t) = S_i(t) \cdot \exp\left(
-		\left(\mu_i - \frac{\sigma_i^2}{2}\right) \Delta t +
-		\left(\sigma_i \sqrt{\Delta t}\right) \epsilon_i
-		\right) \qquad i=1,\dots,n
-	\end{displaymath}
-	where $n$ is the number of assets, $S_i(t)$ is the i-th asset price at 
-	time $t$, $\Delta t$ is a time increment, $\mu_i$ is the expected annual 
-	return, $\sigma_i$ is the annualized volatility, and $\epsilon \sim N(0,R)$ 
-	being $R$ the correlation matrix.
-
 	Without loss of generality, we consider that there are only 2 companies
 	($n=2$), and $t_1 < t_2$. 
-	
-	We derive the multivariate default times distribution
+	We derive the multivariate default times distribution using the stock 
+	price stated by equation~\ref{eq:mgbm}.
 	\arraycolsep=1.4pt\def\arraystretch{1.8}
 	{\small
 	\begin{displaymath}
@@ -2261,8 +2258,8 @@ the Gaussian multi-factor model to express the multivariate Gaussian
 distribution involved in the Geometric Brownian Motion. That is
 \begin{equation}
 	S_i^j(t+\Delta t) = S_i^j(t) \cdot \exp\left(
-	\left(\mu_i - \frac{\sigma_i^2}{2}\right) \Delta t +
-	\left(\sigma_i \sqrt{\Delta t}\right) X_i^j
+	\left(\mu_i^j - \frac{\sigma_i^{j2}}{2}\right) \Delta t +
+	\left(\sigma_i^j \sqrt{\Delta t}\right) X_i^j
 	\right)
 	\qquad
 	\begin{array}{l}
@@ -2286,7 +2283,7 @@ where $X$ is a Gaussian multi-factor distribution (a multivariate Gaussian
 	\end{array}
 	\right.
 \end{displaymath}
-One might object that is necessary to have the same $\mu_i$ and $\sigma_i$ 
+One might object that is necessary to have the same $\mu_i^j$ and $\sigma_i^j$ 
 values for all companies on the same factor. Here we see that the default event 
 don't depend on individual $\mu_i^j$ and $\sigma_i^j$ values but on $F_i^j(t)$ 
 (wich in turn can depend on $\mu_i^j$ and $\sigma_i^j$ as in the Merton's case). 
@@ -2323,6 +2320,13 @@ the annual number of failures is exactly the same as algorithm~\ref{alg:snod}
 taking $\nu=\infty$.
 
 \begin{example}[Modeling a portfolio of bonds issued by listed companies]
+	We have three zero-coupon bonds with a face value of $1000$ \euro\ issued by 
+	companies in sectors of energy, banking and finance respectively. We want 
+	to assess the credit risk of this portfolio using the Gaussian model 
+	exposed above. We know that the correlation matrix between these companies 
+	is a $3 \times 3$ matrix $R$.
+	
+	from three lited companies 
 	In proposition~\ref{prop:mmgc} we see that the Gaussian correlation matrix is 
 	identical in both models. According to proposition~\ref{prop:gmfigs} (see proof)
 	the Gaussian multi-factor models satisfy
