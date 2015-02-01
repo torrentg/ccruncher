@@ -145,13 +145,15 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m)
     ExpatParser parser;
     parser.setDefines(m);
     parser.parse(file, this, stop);
-    auto t2 = steady_clock::now();
-    long millis = duration_cast<milliseconds>(t2-t1).count();
 
     // trace info
-    logger << "file checksum (adler32)" << split << parser.getChecksum() << endl;
-    logger << "elapsed time parsing data" << split << Utils::millisToString(millis) << endl;
-    logger << indent(-1);
+    if (stop == nullptr || !stop) {
+      auto t2 = steady_clock::now();
+      long millis = duration_cast<milliseconds>(t2-t1).count();
+      logger << "file checksum (adler32)" << split << parser.getChecksum() << endl;
+      logger << "elapsed time parsing data" << split << Utils::millisToString(millis) << endl;
+      logger << indent(-1);
+    }
   }
   catch(std::exception &e)
   {
@@ -337,7 +339,9 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *tag, const 
       parser.getUserData().segmentations = eu.segmentations;
       parser.parse(file, &portfolio, stop);
 
-      logger << "included file checksum (adler32)" << split << parser.getChecksum() << endl;
+      if (stop == nullptr || !stop) {
+        logger << "included file checksum (adler32)" << split << parser.getChecksum() << endl;
+      }
 
       mMutex.lock();
       curfile = prevfile;

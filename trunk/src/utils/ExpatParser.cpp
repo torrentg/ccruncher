@@ -211,7 +211,7 @@ void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, b
     do
     {
       if (stop != nullptr && *stop == true) {
-        throw Exception("parser stopped");
+        throw int(999);
       }
 
       if (file != nullptr) {
@@ -227,14 +227,8 @@ void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, b
       {
         mChecksum = adler32(mChecksum, (Bytef*)(buf), len);
 
-        if (XML_Parse(mXmlParser, buf, len, done) == XML_STATUS_ERROR)
-        {
-          char aux[512];
-          snprintf(aux, 512, "%s at line %d column %d",
-                     XML_ErrorString(XML_GetErrorCode(mXmlParser)),
-                     (int) XML_GetCurrentLineNumber(mXmlParser),
-                     (int) XML_GetCurrentColumnNumber(mXmlParser));
-          throw Exception(string(aux));
+        if (XML_Parse(mXmlParser, buf, len, done) == XML_STATUS_ERROR) {
+          throw Exception(string(XML_ErrorString(XML_GetErrorCode(mXmlParser))));
         }
       }
     } while(!done);
@@ -247,29 +241,26 @@ void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, b
     }
     // unknow exception
     else {
-      char aux[512];
-      snprintf(aux, 512, "error at line %d column %d",
-                 (int) XML_GetCurrentLineNumber(mXmlParser),
-                 (int) XML_GetCurrentColumnNumber(mXmlParser));
-      throw Exception(string(aux));
+      throw Exception(getErrorLocation());
     }
   }
   catch(std::exception &e)
   {
-    char aux[512];
-    snprintf(aux, 512, "error at line %d column %d",
-                 (int) XML_GetCurrentLineNumber(mXmlParser),
-                 (int) XML_GetCurrentColumnNumber(mXmlParser));
-    throw Exception(e, string(aux));
+    throw Exception(e, getErrorLocation());
   }
   catch(...)
   {
-    char aux[512];
-    snprintf(aux, 512, "error at line %d column %d",
-                 (int) XML_GetCurrentLineNumber(mXmlParser),
-                 (int) XML_GetCurrentColumnNumber(mXmlParser));
-    throw Exception(string(aux));
+    throw Exception(getErrorLocation());
   }
+}
+
+/**************************************************************************//**
+ * @return The map of defines (name-value).
+ */
+string ccruncher::ExpatParser::getErrorLocation() const
+{
+  return "error at line " + to_string((int) XML_GetCurrentLineNumber(mXmlParser)) +
+         " column " + to_string((int) XML_GetCurrentColumnNumber(mXmlParser));
 }
 
 /**************************************************************************//**

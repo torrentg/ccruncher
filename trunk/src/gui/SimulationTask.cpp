@@ -90,6 +90,11 @@ void ccruncher_gui::SimulationTask::run()
     setStatus(status::reading);
     idata = new IData(logger.rdbuf());
     idata->init(ifile, defines, &stop_);
+    if (stop_) {
+      logger << endl << "parser stopped" << endl;
+      setStatus(status::failed);
+      return;
+    }
 
     // creating simulation object
     montecarlo = new MonteCarlo(logger.rdbuf());
