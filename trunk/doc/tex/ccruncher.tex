@@ -92,12 +92,12 @@
 \makeglossaries
 
 % draft info
-% \usepackage[firstpage]{draftwatermark}
-% \SetWatermarkText{DRAFT COPY}
-% \SetWatermarkScale{0.75}
+\usepackage[firstpage]{draftwatermark}
+\SetWatermarkText{DRAFT COPY}
+\SetWatermarkScale{0.75}
 
 \def\numversion{2.5}
-\def\svnversion{R1320}
+\def\svnversion{R1322}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -2319,6 +2319,7 @@ $\Phi^{-1}(F_i^j(1)) = \Phi^{-1}(p_i)$, then the algorithm for the simulation of
 the annual number of failures is exactly the same as algorithm~\ref{alg:snod} 
 taking $\nu=\infty$.
 
+\begin{comment}
 \begin{example}[Modeling a portfolio of bonds issued by listed companies]
 	We have three zero-coupon bonds with a face value of $1000$ \euro\ issued by 
 	companies in sectors of energy, banking and finance respectively. We want 
@@ -2353,6 +2354,7 @@ taking $\nu=\infty$.
 
 \textbf{Conclusion}. BLABLABLA asset prices model and default times model
 have exactly the same dependence structure. BLABLABLA.
+\end{comment}
 
 %------------------------------------------------------------------------------
 % RISK SENSITIVITY
@@ -3372,7 +3374,7 @@ distribution function.
 		\implies
 		A_i > D_i
 		\\
-		F_i(\infty) = \infty
+		F_i(\infty) = 1
 		\implies 
 		\displaystyle\lim_{t \to \infty} -\frac{\ln\left(\frac{A_i}{D_i \cdot e^{rt}} \right) + 
 		\left(\mu_i-\frac{\sigma_{i}^2}{2}\right)\cdot t}{\sigma_{i}\sqrt{t}} = \infty
