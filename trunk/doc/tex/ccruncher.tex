@@ -2073,17 +2073,18 @@ file (e.g., 2000*\$EUR2USD).
 \section{Market Model Equivalence}
 
 In some cases, historical data of portfolio defaults is not available, but 
-current debtors are listed on a stock exchange. In this section we calibrate 
-the multivariate default times model discussed in chapter~\ref{chap:mdt} using 
-the obligors' quotes instead of the historical records of defaults.
+current debtors are listed on stock markets and they issue debt which is traded
+on fixed income markets. In this section we calibrate the multivariate default 
+times model discussed in chapter~\ref{chap:mdt} using the obligors' quotes 
+instead of the historical records of defaults.
 
-We consider that the underlying assets follow a Geometric Brownian Motion 
-process described by the stochastic differential equation 
-$dS_t = \vec{\mu} S_t\ dt + \vec{\sigma} S_t\ dW_t$
-where $S_t$ are the asset prices at time $t$, $\vec{\mu}$ are the expected 
-annual returns, $\vec{\sigma}$ are the annualized volatilities, and $W_t$ is a 
-multivariate Brownian Motion with correlation matrix $R$. This stochastic 
-differential equation has the following solution
+We consider that both underlying asset values and stock prices follow a 
+Geometric Brownian Motion process described by the stochastic differential 
+equation $dS_t = \vec{\mu} S_t\ dt + \vec{\sigma} S_t\ dW_t$
+where $S_t$ are the asset values (or stock prices) at time $t$, $\vec{\mu}$ are 
+the expected annual returns, $\vec{\sigma}$ are the annualized volatilities, 
+and $W_t$ is a multivariate Brownian Motion with correlation matrix $R$. This 
+stochastic differential equation has the following solution
 \begin{equation}
 	\label{eq:mgbm}
 	S_i(t+\Delta t) = S_i(t) \cdot \exp\left(
@@ -2091,11 +2092,13 @@ differential equation has the following solution
 	\left(\sigma_i \sqrt{\Delta t}\right) \epsilon_i
 	\right)
 \end{equation}
-where $i$ is the asset index, and $\epsilon_i$ is the i-th component of $N(0,R)$.
+where $i$ is the asset index, $\epsilon_i$ is the i-th component of $N(0,R)$,
+and $\Delta t$ is a time increment.
 
-We consider that a company defaults when the asset value is below a preset 
-threshold at the end of the period (usually 1-year). Figure~\ref{fig:market1} 
-displays the asset prices of three companies over a year (250 working days). 
+We consider the Merton's scenario. That is, a company defaults when the asset 
+value is below a preset threshold at the end of the period (usually 1-year). 
+Figure~\ref{fig:market1} displays the asset prices of three companies over a 
+year (250 working days). 
 Note that the \emph{red} company ends below the threshold $80\%$ causing a 
 default event; the \emph{blue} company cross the threshold but finally ends 
 with a value just above the threshold avoiding the default event; finally the 
@@ -2190,41 +2193,53 @@ Brownian Motion are the same.
 	price stated by equation~\ref{eq:mgbm}.
 	{\small
 	\begin{displaymath}
-		\def\arraystretch{2.0}
+		\def\arraystretch{4.0}
 		\begin{array}{l}
-			F(t_1,\ t_2) = 
-			\Pr\{ T_1 \le t_1,\ T_2 \le t_2 \} = 
-			\Pr\left\{ S_1(t_1) \le h_1(t_1),\ S_2(t_2) \le h_2(t_2) \right\} = 
+			\def\arraystretch{2.0}
+			\begin{array}{ll}
+				F(t_1,\ t_2) & =
+				\Pr\{ T_1 \le t_1,\ T_2 \le t_2 \} = 
+				\Pr\left\{ S_1(t_1) \le h_1(t_1),\ S_2(t_2) \le h_2(t_2) \right\} = 
+				\\
+				& = \Pr\left\{ \ln(S_1(t_1)) \le \ln(h_1(t_1)),\ \ln(S_2(t_2)) \le \ln(h_2(t_2)) \right\} = 
+			\end{array}
 			\\
-			\Pr\left\{ \ln(S_1(t_1)) \le \ln(h_1(t_1)),\ \ln(S_2(t_2)) \le \ln(h_2(t_2)) \right\} = 
-			\\
-			\Pr\left\{ \ln(S_1(t_1)) \le \ln(h_1(t_1)), \right.
-			\\
-			\quad\ \ \left.
-				\ln\left(S_2(t_1)\cdot\exp\left(\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2''\right)\right) \le \ln(h_2(t_2)) 
+			\Pr\left\{
+			\def\arraystretch{1.0}
+			\begin{array}{ll}
+				\ln(S_1(t_1)) & \le \ln(h_1(t_1))
+				\\
+				\ln\left(S_2(t_1)\cdot\exp\left(\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2''\right)\right) & \le \ln(h_2(t_2)) 
+			\end{array}
 			\right\} =
 			\\
 			\Pr\left\{ 
-				\ln(S_1(0)) + \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 \le \ln(h_1(t_1)),\right.
-			\\
-			\quad\ \ \left.
-				\ln(S_2(t_1)) + \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2'' \le \ln(h_2(t_2)) 
+			\def\arraystretch{1.0}
+			\begin{array}{ll}
+				\ln(S_1(0)) + \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 & \le \ln(h_1(t_1))
+				\\
+				\ln(S_2(t_1)) + \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2'' & \le \ln(h_2(t_2)) 
+			\end{array}
 			\right\} =
 			\\
 			\Pr\left\{ 
-				\ln(S_1(0)) + \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 \le \ln(h_1(t_1)),\right.
-			\\
-			\quad\ \ \left.
+			\def\arraystretch{1.0}
+			\begin{array}{ll}
+				\ln(S_1(0)) + \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 & \le \ln(h_1(t_1))
+				\\
 				\ln(S_2(0)) +
 				\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_1 + \sigma_2 \sqrt{t_1} \cdot \epsilon_2' +
-				\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2'' \le \ln(h_2(t_2)) 
+				\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2'' & \le \ln(h_2(t_2)) 
+			\end{array}
 			\right\} =
 			\\
 			\Pr\left\{ 
-				\ln(S_1(0)) + \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 \le \ln(h_1(t_1)),\right.
-			\\
-			\quad\ \ \left.
-				\ln(S_2(0)) + \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2 + \sigma_2 \sqrt{t_2} \cdot \epsilon_2 \le \ln(h_2(t_2)) 
+			\def\arraystretch{1.0}
+			\begin{array}{ll}
+				\ln(S_1(0)) + \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 & \le \ln(h_1(t_1))
+				\\
+				\ln(S_2(0)) + \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2 + \sigma_2 \sqrt{t_2} \cdot \epsilon_2 & \le \ln(h_2(t_2)) 
+			\end{array}
 			\right\} =
 			\\
 			\Pr\left\{ 
@@ -3364,6 +3379,7 @@ $\sigma_i$ is the firm's asset value volatility, and $r$ is the risk free rate.
 We determine the conditions under which the function $F_i$ is a valid cumulative 
 distribution function.
 \begin{displaymath}
+	\def\arraystretch{3.0}
 	\begin{array}{l}
 		F_i(0) = 0 
 		\implies 
@@ -3380,8 +3396,19 @@ distribution function.
 		\left(\mu_i-\frac{\sigma_{i}^2}{2}\right)\cdot t}{\sigma_{i}\sqrt{t}} = \infty
 		\implies
 		-r + \mu < \frac{\sigma_i^2}{2}
+		\\
+		F_i'(t) > 0 
+		\implies 
+		-2 \mu + 2 r + \sigma^2 > 0 
+		\implies 
+		\displaystyle-r + \mu < \frac{\sigma_i^2}{2}
 	\end{array}
 \end{displaymath}
+\begin{comment}
+	G[t_] := -(Log[a/(d*E^(r*t))]+(mu-sigma^2/2)*t)/(sigma*Sqrt[t])
+	F[t_] := CDF[NormalDistribution[0,1],G[t]]
+	F'[t]
+\end{comment}
 
 Both conditions are reasonable. The first one indicates that the current market 
 value of the company must exceed the value of its debt. The second one tells us 
