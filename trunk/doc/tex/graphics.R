@@ -953,7 +953,7 @@ for(t in 1:tsteps)
 
 pdf(file="market1.pdf", width=7, height=3)
 par(mar=c(4,4,0.5,0.1), cex.axis=0.75, cex.lab=0.75, cex.main=1, cex.sub=1)
-plot(S[,1],type='l',col=2, xlab="Time (in days)", ylab="Asset price (in %)", yaxt="n", ylim=c(min(S),max(S)))
+plot(S[,1],type='l',col=2, xlab="Time (in days)", ylab="Asset value (in %)", yaxt="n", ylim=c(min(S),max(S)))
 axis(2, at=pretty(c(S[,1],S[,2],S[,3])), paste0(pretty(c(S[,1],S[,2],S[,3]))*100, " %"), las=TRUE)
 lines(S[,2],type='l',col=3)
 lines(S[,3],type='l',col=4)
