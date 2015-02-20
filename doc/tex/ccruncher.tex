@@ -2201,14 +2201,9 @@ Brownian Motion are the same.
 	companies, and that $t_1 < t_2$.
 	\begin{displaymath}
 		\hspace*{-1cm}
-		\def\arraystretch{1.5}
-		\begin{array}{ll}
-			F(t_1,\ t_2) & =
-			\Pr\{ T_1 \le t_1,\ T_2 \le t_2 \} = 
-			\Pr\left\{ S_1(t_1) \le h_1(t_1),\ S_2(t_2) \le h_2(t_2) \right\} = 
-			\\
-			& = \Pr\left\{ \ln(S_1(t_1)) \le \ln(h_1(t_1)),\ \ln(S_2(t_2)) \le \ln(h_2(t_2)) \right\} =
-		\end{array}
+		F(t_1,\ t_2) =
+		\Pr\{ T_1 \le t_1,\ T_2 \le t_2 \} = 
+		\Pr\left\{ S_1(t_1) \le h_1(t_1),\ S_2(t_2) \le h_2(t_2) \right\} = 
 	\end{displaymath}
 	
 	We put $S(t_2)$ in terms of $S(t_1)$ using equation~\ref{eq:mgbm}. We name 
@@ -2217,33 +2212,19 @@ Brownian Motion are the same.
 		\hspace*{-1cm}
 		\Pr\left\{
 		\begin{array}{ll}
-			\ln(S_1(t_1)) & \le \ln(h_1(t_1))
+			S_1(t_1) & \le h_1(t_1)
 			\\
-			\ln\left(S_2(t_1)\cdot\exp\left(\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2''\right)\right) & \le \ln(h_2(t_2)) 
+			S_2(t_1)\cdot\exp\left(\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2''\right) & \le h_2(t_2)
 		\end{array}
 		\right\} =
 	\end{displaymath}
 
-	We expand the logarithms in order to simplify the expressions
+	We take logarithms in order to simplify the expressions
 	\begin{displaymath}
 		\hspace*{-1cm}
 		\Pr\left\{ 
 		\begin{array}{ll}
 			\ln(S_1(t_1)) & \le \ln(h_1(t_1))
-			\\
-			\ln(S_2(t_1)) + \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2'' & \le \ln(h_2(t_2)) 
-		\end{array}
-		\right\} =
-	\end{displaymath}
-
-	We modify the aspect of the first component. We name 
-	$\Omega = \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot (t_2-t_1) + \sigma_1 \sqrt{t_2-t_1} \cdot \epsilon_1''$
-	the quantity added in both sides of the inequality.
-	\begin{displaymath}
-		\hspace*{-1cm}
-		\Pr\left\{ 
-		\begin{array}{ll}
-			\ln(S_1(t_1)) + \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot (t_2-t_1) + \sigma_1 \sqrt{t_2-t_1} \cdot \epsilon_1'' & \le \ln(h_1(t_1)) + \Omega
 			\\
 			\ln(S_2(t_1)) + \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2'' & \le \ln(h_2(t_2)) 
 		\end{array}
@@ -2257,9 +2238,8 @@ Brownian Motion are the same.
 		\Pr\left\{ 
 		\begin{array}{ll}
 			\ln(S_1(0)) + 
-			\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1' +
-			\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot (t_2-t_1) + \sigma_1 \sqrt{t_2-t_1} \cdot \epsilon_1''
-			& \le \ln(h_1(t_1)) + \Omega
+			\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1' 
+			& \le \ln(h_1(t_1))
 			\\
 			\ln(S_2(0)) +
 			\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_1 + \sigma_2 \sqrt{t_1} \cdot \epsilon_2' +
@@ -2269,31 +2249,130 @@ Brownian Motion are the same.
 		\right\} =
 	\end{displaymath}\par}
 	
-	We know that the addittion of two independent bivariate Gaussian distributions
-	fullfills $N(\mu_a,R_a) + N(\mu_b,R_b) = N(\mu_a+\mu_b,R_a+R_b)$. We apply this 
-	result to the current expression because $\epsilon'$ and $\epsilon''$ are
-	independents. We name $\epsilon = \epsilon' + \epsilon''$.
+	We rearrange the terms moving the non-stochastic terms to the right	hand 
+	side of the expression.
 	\begin{displaymath}
 		\hspace*{-1cm}
 		\Pr\left\{ 
 		\begin{array}{ll}
-			\ln(S_1(0)) + \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_2 + \sigma_1 \sqrt{t_2} \cdot \epsilon_1 & \le \ln(h_1(t_1)) + \Omega
+			\sqrt{t_2} \cdot \epsilon_1' & 
+			\le \left(\ln(h_1(t_1)) - \ln(S_1(0)) - \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1\right)/\sigma_1
 			\\
-			\ln(S_2(0)) + \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2 + \sigma_2 \sqrt{t_2} \cdot \epsilon_2 & \le \ln(h_2(t_2)) 
+			\sqrt{t_1} \cdot \epsilon_2' + \sqrt{t_2-t_1} \cdot \epsilon_2'' & 
+			\le \left(\ln(h_2(t_2)) - \ln(S_2(0)) - \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2\right)/\sigma_2
 		\end{array}
 		\right\} =
 	\end{displaymath}
-	
-	We expand $\Omega$ taking into account that $\epsilon_1''=\epsilon_1-\epsilon_1'$. 
+
+	We express the threshold functions $h_i(t)$ in terms of the default times 
+	distribution as stated in proposition~\ref{prop:mmdtf}
 	\begin{displaymath}
 		\hspace*{-1cm}
 		\Pr\left\{ 
 		\begin{array}{ll}
-			\ln(S_1(0)) + \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1 + \underline{\sigma_1 \sqrt{t_2-t_1} \cdot \epsilon_1'} & \le \ln(h_1(t_1))
+			\sqrt{t_1} \cdot \epsilon_1' & 
+			\le \sqrt{t_1} \cdot \Phi^{-1}(F_1(t_1))
 			\\
-			\ln(S_2(0)) + \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2 + \sigma_2 \sqrt{t_2} \cdot \epsilon_2 & \le \ln(h_2(t_2)) 
+			\sqrt{t_1} \cdot \epsilon_2' + \sqrt{t_2-t_1} \cdot \epsilon_2'' & 
+			\le \sqrt{t_2} \cdot \Phi^{-1}(F_2(t_2))
 		\end{array}
-		\right\} =
+		\right\} = 
+	\end{displaymath}
+
+	If $X \sim N(\mu_X,\Sigma_X)$ and $Y \sim N(\mu_Y,\Sigma_Y)$ are independents, then 
+	\begin{displaymath}
+		A \cdot X + B \cdot Y + C \sim N(A \mu_X+ B \mu_Y + C,\ A \Sigma_X A^\intercal + B \Sigma_Y B^\intercal)
+	\end{displaymath}
+	In our case
+	\begin{displaymath}
+		\epsilon = 
+		\left(
+			\begin{array}{cc}
+				\sqrt{t_1} & 0 \\ 
+				0 & \sqrt{t_1}
+			\end{array}
+		\right) 
+		\cdot \epsilon' + 
+		\left(
+			\begin{array}{cc}
+				0 & 0 \\ 
+				0 & \sqrt{t_2-t_1}
+			\end{array}
+		\right)
+		\cdot \epsilon''
+		\sim
+		N\left(0,\left(
+			\begin{array}{cc}
+				t_1   & r \cdot t_1 \\ 
+				r \cdot t_1 & t_2
+			\end{array}
+		\right)\right)
+	\end{displaymath}
+
+	We formulate our expression in terms of $\epsilon$ instead of $\epsilon'$ 
+	and $\epsilon''$.
+	%M = {{t1, t1*r}, {t1*r, t2}}
+	%CholeskyDecomposition[M]
+	%A1 = {{Sqrt[t1], 0}, {r*Sqrt[t1], Sqrt[t2 - r^2*t1]}}
+	%Inverse[A1]
+	\begin{displaymath}
+		\hspace*{-1cm}
+		\Pr\left\{ 
+		\left(
+			\begin{array}{cc}
+				\sqrt{t_1} & 0 \\ 
+				r \sqrt{t_1} & \sqrt{t_2-r^2 \cdot t_1}
+			\end{array}
+		\right)
+		\cdot \epsilon
+		\le \left(
+		\begin{array}{l}
+			\sqrt{t_1} \cdot \Phi^{-1}(F_1(t_1))
+			\\
+			\sqrt{t_2} \cdot \Phi^{-1}(F_2(t_2))
+		\end{array}
+		\right)
+		\right\} = 
+	\end{displaymath}
+
+	We multiply both sides by the inverse of the matrix
+	\begin{displaymath}
+		\hspace*{-1cm}
+		\Pr\left\{ 
+		\epsilon
+		\le 
+		\left(
+			\begin{array}{cc}
+				\frac{1}{\sqrt{t_1}} & 0 \\ 
+				\frac{-r}{\sqrt{t_2-r^2 \cdot t_1}} & \frac{1}{\sqrt{t_2-r^2 \cdot t_1}}
+			\end{array}
+		\right)
+		\cdot
+		\left(
+		\begin{array}{l}
+			\sqrt{t_1} \cdot \Phi^{-1}(F_1(t_1))
+			\\
+			\sqrt{t_2} \cdot \Phi^{-1}(F_2(t_2))
+		\end{array}
+		\right)
+		\right\} = 
+	\end{displaymath}
+	
+	We perform the product
+	\begin{displaymath}
+		\hspace*{-1cm}
+		\Pr\left\{ 
+		\epsilon
+		\le 
+		\left(
+		\begin{array}{c}
+			\Phi^{-1}(F_1(t_1))
+			\\
+			\frac{\sqrt{t_2} \cdot \Phi^{-1}(F_2(t_2)) - r \cdot \sqrt{t_1} \cdot \Phi^{-1}(F_1(t_1))}{\sqrt{t_2-r^2 \cdot t_1}}
+			
+		\end{array}
+		\right)
+		\right\} = 
 	\end{displaymath}
 	
 	We isolate the random variables on the left side.
@@ -2362,11 +2441,7 @@ simu <- function(n, t1, t2) {
 t1 = 1
 t2 = 2
 M = simu(25000, t1, t2)
-h1 = h(1, t1)
-h2 = h(2, t2)
-
-(nrow(M[M[,1]<h1 & M[,4]<h2,]))/nrow(M)
-
+(nrow(M[M[,1]<h(1,t1) & M[,4]<h(2,t2),]))/nrow(M)
 pmvnorm(upper=c(qnorm(f(1,t1)), qnorm(f(2,t2))), sigma=R)[1]
 
 \end{comment}
