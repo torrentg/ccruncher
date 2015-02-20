@@ -2183,7 +2183,7 @@ copula of the multivariate default times model is a Gaussian copula. Moreover,
 the correlation matrix of the Gaussian copula and the correlation matrix of the 
 Brownian Motion are the same.
 
-\begin{proposition}[Multivariate default times has a Gaussian copula]
+\begin{proposition}[Multivariate default times has a Merton's copula]
 	\label{prop:mmgc}
 	Assume $n$ firms whose asset values follow a multivariate GBM model with 
 	expected returns $\vec{\mu}$, annualized volatilities $\vec{\sigma}$, and 
@@ -2255,7 +2255,7 @@ Brownian Motion are the same.
 		\hspace*{-1cm}
 		\Pr\left\{ 
 		\begin{array}{ll}
-			\sqrt{t_2} \cdot \epsilon_1' & 
+			\sqrt{t_1} \cdot \epsilon_1' & 
 			\le \left(\ln(h_1(t_1)) - \ln(S_1(0)) - \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1\right)/\sigma_1
 			\\
 			\sqrt{t_1} \cdot \epsilon_2' + \sqrt{t_2-t_1} \cdot \epsilon_2'' & 
@@ -2278,6 +2278,18 @@ Brownian Motion are the same.
 		\end{array}
 		\right\} = 
 	\end{displaymath}
+	\begin{displaymath}
+		\hspace*{-1cm}
+		\Pr\left\{ 
+		\begin{array}{rll}
+			\epsilon_1' & &
+			\le \Phi^{-1}(F_1(t_1))
+			\\
+			\sqrt{\frac{t_1}{t_2}} \cdot \epsilon_2' & + \sqrt{1-\frac{t_1}{t_2}} \cdot \epsilon_2'' & 
+			\le \Phi^{-1}(F_2(t_2))
+		\end{array}
+		\right\} = 
+	\end{displaymath}
 
 	If $X \sim N(\mu_X,\Sigma_X)$ and $Y \sim N(\mu_Y,\Sigma_Y)$ are independents, then 
 	\begin{displaymath}
@@ -2288,112 +2300,60 @@ Brownian Motion are the same.
 		\epsilon = 
 		\left(
 			\begin{array}{cc}
-				\sqrt{t_1} & 0 \\ 
-				0 & \sqrt{t_1}
+				1 & 0 \\ 
+				0 & \sqrt{K}
 			\end{array}
 		\right) 
 		\cdot \epsilon' + 
 		\left(
 			\begin{array}{cc}
 				0 & 0 \\ 
-				0 & \sqrt{t_2-t_1}
+				0 & \sqrt{1-K}
 			\end{array}
 		\right)
 		\cdot \epsilon''
 		\sim
 		N\left(0,\left(
 			\begin{array}{cc}
-				t_1   & r \cdot t_1 \\ 
-				r \cdot t_1 & t_2
+				1   & r \sqrt{K} \\ 
+				r \sqrt{K} & 1
 			\end{array}
 		\right)\right)
+		\text{ where }
+		K = \frac{t_1}{t_2}
 	\end{displaymath}
+	\begin{comment}
+		R = {{1,r},{r,1}}
+		A = {{1,0},{0,Sqrt[k]}}
+		B = {{0,0},{0,Sqrt[1-k]}}
+		M = Simplify[A.R.Transpose[A] + B.R.Transpose[B], Reals]
+		Q = CholeskyDecomposition[M]
+		Q = MatrixPower[M, 1/2]
+	\end{comment}
 
 	We formulate our expression in terms of $\epsilon$ instead of $\epsilon'$ 
 	and $\epsilon''$.
-	%M = {{t1, t1*r}, {t1*r, t2}}
-	%CholeskyDecomposition[M]
-	%A1 = {{Sqrt[t1], 0}, {r*Sqrt[t1], Sqrt[t2 - r^2*t1]}}
-	%Inverse[A1]
 	\begin{displaymath}
 		\hspace*{-1cm}
 		\Pr\left\{ 
-		\left(
-			\begin{array}{cc}
-				\sqrt{t_1} & 0 \\ 
-				r \sqrt{t_1} & \sqrt{t_2-r^2 \cdot t_1}
-			\end{array}
-		\right)
-		\cdot \epsilon
+		\epsilon
 		\le \left(
 		\begin{array}{l}
-			\sqrt{t_1} \cdot \Phi^{-1}(F_1(t_1))
-			\\
-			\sqrt{t_2} \cdot \Phi^{-1}(F_2(t_2))
-		\end{array}
-		\right)
-		\right\} = 
-	\end{displaymath}
-
-	We multiply both sides by the inverse of the matrix
-	\begin{displaymath}
-		\hspace*{-1cm}
-		\Pr\left\{ 
-		\epsilon
-		\le 
-		\left(
-			\begin{array}{cc}
-				\frac{1}{\sqrt{t_1}} & 0 \\ 
-				\frac{-r}{\sqrt{t_2-r^2 \cdot t_1}} & \frac{1}{\sqrt{t_2-r^2 \cdot t_1}}
-			\end{array}
-		\right)
-		\cdot
-		\left(
-		\begin{array}{l}
-			\sqrt{t_1} \cdot \Phi^{-1}(F_1(t_1))
-			\\
-			\sqrt{t_2} \cdot \Phi^{-1}(F_2(t_2))
-		\end{array}
-		\right)
-		\right\} = 
-	\end{displaymath}
-	
-	We perform the product
-	\begin{displaymath}
-		\hspace*{-1cm}
-		\Pr\left\{ 
-		\epsilon
-		\le 
-		\left(
-		\begin{array}{c}
 			\Phi^{-1}(F_1(t_1))
 			\\
-			\frac{\sqrt{t_2} \cdot \Phi^{-1}(F_2(t_2)) - r \cdot \sqrt{t_1} \cdot \Phi^{-1}(F_1(t_1))}{\sqrt{t_2-r^2 \cdot t_1}}
-			
+			\Phi^{-1}(F_2(t_2))
 		\end{array}
 		\right)
 		\right\} = 
-	\end{displaymath}
-	
-	We isolate the random variables on the left side.
-	{\small
-	\begin{displaymath}
-		\hspace*{-1cm}
-		\Pr\left\{ 
-			\epsilon_1 \le \frac{\ln(h_1(t_1)) - \ln(S_1(0)) - \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1}{\sigma_1 \sqrt{t_1}},
-			\ \epsilon_2 \le \frac{\ln(h_2(t_2)) - \ln(S_2(0)) - \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2}{\sigma_2 \sqrt{t_2}}
-		\right\} =
-	\end{displaymath}\par}
-	
-	Finally, we express the threshold functions $h_i(t)$ in terms of the default 
-	times distribution as stated in proposition~\ref{prop:mmdtf}
-	\begin{displaymath}
-		\hspace*{-1cm}
 		\Pr\left\{ 
 			\epsilon_1 \le \Phi^{-1}(F_1(t_1)),
 			\ \epsilon_2 \le \Phi^{-1}(F_2(t_2))
 		\right\}
 	\end{displaymath}
+	
+	% This is not a Gaussian Copula.
+	% Is it the Henriksson–Merton copula?
+	% Is it a new copula named Torrent-Merton ?
 	
 	That means that
 	\begin{displaymath}
@@ -2484,16 +2444,9 @@ don't depend on individual $\mu_i^j$ and $\sigma_i^j$ values but on $F_i^j(t)$
 Default ocurrs when
 {\small
 \begin{displaymath}
+	\def\arraystretch{2.0}
 	\begin{array}{ll}
 		S_i^j(t) \le h_i^j(t) 
-		\\
-		S_i^j(0) \cdot \exp\left(
-			\left(\mu_i^j - \frac{\sigma_i^{j2}}{2}\right) t +
-			\left(\sigma_i^j \sqrt{t}\right) X_i^j
-			\right) 
-		\le 
-		\exp\left(\sigma_i^j\sqrt{t}\cdot\Phi^{-1}(F_i^j(t)) + 
-			\ln(S_i^j(0)) + \left(\mu_i^j-\frac{\sigma_i^{j2}}{2}\right)\cdot t\right)
 		\\
 		\ln(S_i^j(0)) + \left(\mu_i^j - \frac{\sigma_i^{j2}}{2}\right) t +
 			\left(\sigma_i^j \sqrt{t}\right) X_i^j 
