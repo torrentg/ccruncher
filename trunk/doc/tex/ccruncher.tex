@@ -84,6 +84,7 @@
 \usepackage{datetime}
 \usepackage[group-separator={,}]{siunitx}
 \usepackage{listliketab}
+\usepackage[normalem]{ulem}
 
 \input{structure}
 
@@ -97,7 +98,7 @@
 \SetWatermarkScale{0.75}
 
 \def\numversion{2.5}
-\def\svnversion{R1325}
+\def\svnversion{R1329}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -2153,16 +2154,16 @@ default time distributions.
 	We determine the probability that the asset value is below the threshold at 
 	fixed time $t$.
 	\begin{displaymath}
-		\def\arraystretch{3.0}
+		\def\arraystretch{2.0}
 		\begin{array}{l}
 			F_i(t) = \Pr\{S_i(t) < h_i(t)\} = 
 			\Pr\left\{S_i(0)\cdot\exp\left(\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t + \sigma_i\sqrt{t}\cdot\epsilon_i\right) < h_i(t)\right\} =
 			\\
 			=\Pr\left\{\ln(S_i(0))+\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t + \sigma_i\sqrt{t}\cdot\epsilon_i < \ln(h_i(t))\right\} =
 			\\
-			=\Pr\left\{\epsilon_i < \frac{\ln(h_i(t))-\ln(S_i(0))-\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t}{\sigma_i\sqrt{t}}\right\} = 
+			=\Pr\left\{\epsilon_i < \left(\ln(h_i(t))-\ln(S_i(0))-\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)/\sigma_i\sqrt{t}\right\} = 
 			\\
-			=\Phi\left(\frac{\ln(h_i(t))-\ln(S_i(0))-\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t}{\sigma_i\sqrt{t}}\right)
+			=\Phi\left(\left(\ln(h_i(t))-\ln(S_i(0))-\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)/\sigma_i\sqrt{t}\right)
 		\end{array}
 	\end{displaymath}
 	We isolate $h_i(t)$ on the left side of the equation.
@@ -2254,30 +2255,18 @@ Brownian Motion are the same.
 	\begin{displaymath}
 		\hspace*{-1cm}
 		\Pr\left\{ 
-		\begin{array}{ll}
-			\sqrt{t_1} \cdot \epsilon_1' & 
-			\le \left(\ln(h_1(t_1)) - \ln(S_1(0)) - \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1\right)/\sigma_1
+		\begin{array}{rll}
+			\epsilon_1' & &
+			\le \left(\ln(h_1(t_1)) - \ln(S_1(0)) - \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1\right)/\left(\sigma_1\cdot\sqrt{t_1}\right)
 			\\
-			\sqrt{t_1} \cdot \epsilon_2' + \sqrt{t_2-t_1} \cdot \epsilon_2'' & 
-			\le \left(\ln(h_2(t_2)) - \ln(S_2(0)) - \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2\right)/\sigma_2
+			\sqrt{\frac{t_1}{t_2}} \cdot \epsilon_2' & + \sqrt{1-\frac{t_1}{t_2}} \cdot \epsilon_2'' & 
+			\le \left(\ln(h_2(t_2)) - \ln(S_2(0)) - \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2\right)/\left(\sigma_2\cdot\sqrt{t_2}\right)
 		\end{array}
 		\right\} =
 	\end{displaymath}
 
 	We express the threshold functions $h_i(t)$ in terms of the default times 
 	distribution as stated in proposition~\ref{prop:mmdtf}
-	\begin{displaymath}
-		\hspace*{-1cm}
-		\Pr\left\{ 
-		\begin{array}{ll}
-			\sqrt{t_1} \cdot \epsilon_1' & 
-			\le \sqrt{t_1} \cdot \Phi^{-1}(F_1(t_1))
-			\\
-			\sqrt{t_1} \cdot \epsilon_2' + \sqrt{t_2-t_1} \cdot \epsilon_2'' & 
-			\le \sqrt{t_2} \cdot \Phi^{-1}(F_2(t_2))
-		\end{array}
-		\right\} = 
-	\end{displaymath}
 	\begin{displaymath}
 		\hspace*{-1cm}
 		\Pr\left\{ 
@@ -2293,7 +2282,7 @@ Brownian Motion are the same.
 
 	If $X \sim N(\mu_X,\Sigma_X)$ and $Y \sim N(\mu_Y,\Sigma_Y)$ are independents, then 
 	\begin{displaymath}
-		A \cdot X + B \cdot Y + C \sim N(A \mu_X+ B \mu_Y + C,\ A \Sigma_X A^\intercal + B \Sigma_Y B^\intercal)
+		A \cdot X + B \cdot Y + C \sim N\left(A \mu_X+ B \mu_Y + C,\ A \Sigma_X A^\intercal + B \Sigma_Y B^\intercal\right)
 	\end{displaymath}
 	In our case
 	\begin{displaymath}
@@ -2328,7 +2317,9 @@ Brownian Motion are the same.
 		B = {{0,0},{0,Sqrt[1-k]}}
 		M = Simplify[A.R.Transpose[A] + B.R.Transpose[B], Reals]
 		Q = CholeskyDecomposition[M]
-		Q = MatrixPower[M, 1/2]
+		S= Inverse[Q]
+		
+		Q = MatrixPower[M, 1/2]?
 	\end{comment}
 
 	We formulate our expression in terms of $\epsilon$ instead of $\epsilon'$ 
@@ -2359,11 +2350,13 @@ Brownian Motion are the same.
 	\begin{displaymath}
 		F(t_1,\ t_2) = H\left( \Phi^{-1}(F_1(t_1)),\ \Phi^{-1}(F_2(t_2)) \right)
 	\end{displaymath}
-	where $H$ is the cdf of the multivariate Gaussian with correlation matrix $R$,
+	where $H$ is the cdf of the multivariate Gaussian \sout{with correlation matrix $R$},
 	and $\Phi^{-1}$ is the inverse of the univariate Gaussian distribution.
-	According to proposition~\ref{prop:dtd}, this multivariate default times 
+	\sout{According to proposition~\ref{prop:dtd}, this multivariate default times 
 	distribution has marginals $F_i(t)$ and a Gaussian copula with correlation 
-	matrix $R$.
+	matrix $R$}.
+	
+	WARNING: $H$ DEPENDS ON $t_1,t_2$, BUT SHOULD ONLY DEPEND ON $F_1, F_2$ !!!
 	
 \end{proof}
 
