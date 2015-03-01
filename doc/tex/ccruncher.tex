@@ -1417,24 +1417,28 @@ freedom, factor loadings $\vec{w}$, and factor correlation matrix $R$.
 	\setlength{\unitlength}{0.14in}
 	\centering
 %\fcolorbox{red}{yellow}{
-	\begin{picture}(33,7)
+	\begin{picture}(33,9)
 		\put(0,2){\framebox(6,3){\small Portfolio}}
 		\put(9,2){\framebox(6,3){\small Obligor}}
+		\put(14,6){\framebox(6,3){\small PD(t)}}
 		\put(18,2){\framebox(6,3){\small Asset}}
 		\put(27,0){\framebox(6,3){\small LGD(t)}}
 		\put(27,4){\framebox(6,3){\small EAD(t)}}
-    
+		
 		\put(6,3.5){\vector(1,0){3}}
+		\put(12,5){\line(0,1){2.5}}
+		\put(12,7.5){\vector(1,0){2}}
 		\put(15,3.5){\vector(1,0){3}}
 		\put(24,3){\line(1,0){1}}
 		\put(25,3){\line(0,-1){1.5}}
 		\put(25,5.5){\vector(1,0){2}}
-
+		
 		\put(24,4){\line(1,0){1}}
 		\put(25,4){\line(0,1){1.5}}
 		\put(25,1.5){\vector(1,0){2}}
-    
+		
 		\put(6.5,4){\small 1:n}
+		\put(10.5,6){\small 1:1}
 		\put(15.5,4){\small 1:n}
 		\put(25,6){\small 1:1}
 		\put(25,0.5){\small 1:1}
@@ -2184,7 +2188,7 @@ copula of the multivariate default times model is a Gaussian copula. Moreover,
 the correlation matrix of the Gaussian copula and the correlation matrix of the 
 Brownian Motion are the same.
 
-\begin{proposition}[Multivariate default times has a Merton's copula]
+\begin{proposition}[Multivariate default times has a \sout{Merton's copula}]
 	\label{prop:mmgc}
 	Assume $n$ firms whose asset values follow a multivariate GBM model with 
 	expected returns $\vec{\mu}$, annualized volatilities $\vec{\sigma}$, and 
