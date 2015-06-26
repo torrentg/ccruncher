@@ -95,8 +95,8 @@ void ccruncher::SimulationThread::run()
       for(size_t j=0; j<blocksize; j++)
       {
         double val = getValue(x, j);
-        unsigned char r = obligors[iobligor].irating;
-        double days = inverses[r].evalue(val);
+        unsigned char irating = obligors[iobligor].irating;
+        double days = inverses[irating].evalue(val);
         Date timeDefault = time0 + (long)ceil(days);
 
         if (timeDefault <= timeT) {
