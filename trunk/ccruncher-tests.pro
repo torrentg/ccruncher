@@ -34,6 +34,7 @@ HEADERS += \
     src/kernel/IDataTest.hpp \
     src/kernel/Inverse.hpp \
     src/kernel/InverseTest.hpp \
+    src/kernel/Input.hpp \
     src/portfolio/LGD.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \

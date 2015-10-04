@@ -46,6 +46,7 @@ ccruncher::IData::IData(streambuf *s) : logger(s), curfile(nullptr)
   stop = nullptr;
   cursize = 0;
   parse_portfolio = true;
+  rerror = 0;
 }
 
 /**************************************************************************/
@@ -129,8 +130,7 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m)
 
     // trace file info
     logger << "file name" << split << "["+filename+"]" << endl;
-    if (filename != STDIN_FILENAME)
-    {
+    if (filename != STDIN_FILENAME) {
       logger << "file size" << split << Utils::bytesToString(Utils::filesize(filename)) << endl;
     }
 
@@ -146,13 +146,17 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m)
     parser.setDefines(m);
     parser.parse(file, this, stop);
 
-    // trace info
-    if (stop == nullptr || !stop) {
+    if (stop == nullptr || !(*stop))
+    {
+      // trace info
       auto t2 = steady_clock::now();
       long millis = duration_cast<milliseconds>(t2-t1).count();
       logger << "file checksum (adler32)" << split << parser.getChecksum() << endl;
       logger << "elapsed time parsing data" << split << Utils::millisToString(millis) << endl;
       logger << indent(-1);
+
+      prepare();
+      summary();
     }
   }
   catch(std::exception &e)
@@ -339,7 +343,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *tag, const 
       parser.getUserData().segmentations = eu.segmentations;
       parser.parse(file, &portfolio, stop);
 
-      if (stop == nullptr || !stop) {
+      if (stop == nullptr || !(*stop)) {
         logger << "included file checksum (adler32)" << split << parser.getChecksum() << endl;
       }
 
@@ -390,15 +394,72 @@ void ccruncher::IData::validate()
 }
 
 /**************************************************************************//**
- * @details User can define Default probabilities functions explicitly OR
- *          transition matrix. This method indicates wich one has been
- *          entered by user.
- * @return true = exist dprobs defined, false = exist transition matrix.
+ * @throw Exception Error pre-processing input data.
  */
-bool ccruncher::IData::hasDefaultProbabilities() const
+void ccruncher::IData::prepare()
 {
-  if (dprobs.size() > 0) return true;
-  else return false;
+  // set the default time functions
+  if (!dprobs.empty()) {
+    cdfs = dprobs;
+  }
+  else {
+    // obtain the 1-month transitions matrix
+    Transitions tone = transitions.scale(1);
+    rerror = tone.getRegularizationError();
+
+    // computing default probability functions using transition matrix
+    Date time0 = params.getTime0();
+    Date timeT = params.getTimeT();
+    int months = (int) ceil(diff(time0, timeT, 'M'));
+    cdfs = tone.getCDFs(time0, months+1);
+    assert(DefaultProbabilities::isValid(cdfs));
+  }
+
+  // setting factor loadings
+  floadings = Factors::getLoadings(factors);
+}
+
+/**************************************************************************//**
+ * @throw Exception Error printing input data.
+ */
+void ccruncher::IData::summary()
+{
+  logger << endl;
+  logger << "input file summary" << flood('*') << endl;
+  logger << indent(+1);
+
+  logger << "initial date" << split << params.getTime0() << endl;
+  logger << "end date" << split << params.getTimeT() << endl;
+  logger << "number of ratings" << split << ratings.size() << endl;
+  logger << "number of factors" << split << factors.size() << endl;
+  logger << "copula type" << split << params.getCopula() << endl;
+
+  if (!dprobs.empty()) {
+    logger << "default probability functions" << split << "user defined" << endl;
+  }
+  else {
+    logger << "default probability functions" << split << "computed" << endl;
+    logger << "transition matrix period (months)" << split << transitions.getPeriod() << endl;
+    logger << "transition matrix regularization error (1M)" << split << rerror << endl;
+  }
+
+  size_t numObligors = 0UL;
+  size_t numAssets = 0UL;
+  size_t numValues = 0UL;
+  for(Obligor &obligor : portfolio.getObligors()) {
+    numObligors++;
+    for(Asset &asset : obligor.assets) {
+      numAssets++;
+      numValues += asset.values.size();
+    }
+  }
+
+  logger << "number of obligors" << split << numObligors << endl;
+  logger << "number of assets" << split << numAssets << endl;
+  logger << "number of values" << split << numValues << endl;
+  logger << "number of segmentations" << split << Segmentations::numEnabledSegmentations(segmentations) << endl;
+
+  logger << indent(-1);
 }
 
 /**************************************************************************//**

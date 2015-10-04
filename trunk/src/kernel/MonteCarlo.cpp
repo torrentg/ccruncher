@@ -47,7 +47,8 @@ using namespace ccruncher;
 /**************************************************************************//**
  * @param[in] s Streambuf where the trace will be written.
  */
-ccruncher::MonteCarlo::MonteCarlo(std::streambuf *s) : logger(s), chol(nullptr), mStop(nullptr)
+ccruncher::MonteCarlo::MonteCarlo(std::streambuf *s) :
+    logger(s), chol(nullptr), mStop(nullptr), mStatus(status::fresh)
 {
   maxseconds = 0UL;
   numiterations = 0UL;
@@ -74,27 +75,21 @@ void ccruncher::MonteCarlo::freeMemory()
 {
   // removing threads
   for(auto &thread : threads) {
-    if (thread != nullptr) {
-      delete thread;
-      thread = nullptr;
-    }
+    delete thread;
+    thread = nullptr;
   }
   threads.clear();
 
   // dropping aggregators
   for(auto &aggregator : aggregators) {
-    if (aggregator != nullptr) {
-      delete aggregator;
-      aggregator = nullptr;
-    }
+    delete aggregator;
+    aggregator = nullptr;
   }
   aggregators.clear();
 
   // deallocating cholesky matrix
-  if (chol != nullptr) {
-    gsl_matrix_free(chol);
-    chol = nullptr;
-  }
+  gsl_matrix_free(chol);
+  chol = nullptr;
 
   // flushing remaining objects
   numSegmentsBySegmentation.clear();
@@ -111,81 +106,23 @@ void ccruncher::MonteCarlo::freeMemory()
  * @param[in] mode Output file open mode.
  * @throw Exception Error initializing object.
  */
-void ccruncher::MonteCarlo::setData(IData &data, const string &path, char mode)
+void ccruncher::MonteCarlo::init(Input &data, const string &path, char mode)
 {
   try
   {
-    logger << endl;
-    logger << "initialization procedure" << flood('*') << endl;
-    logger << indent(+1);
-    logger << "parameters" << flood('-') << endl;
-    logger << indent(+1);
-
-    double rerror = NAN;
     setParams(data.getParams());
-    if (data.hasDefaultProbabilities()) {
-      setDefaultProbabilities(data.getDefaultProbabilities());
-    }
-    else {
-      rerror = setDefaultProbabilities(data.getTransitions());
-    }
-    setFactorLoadings(Factors::getLoadings(data.getFactors()));
+    setDefaultProbabilities(data.getCDFs());
+    setFactorLoadings(data.getFactorLoadings());
     setCorrelations(data.getCorrelations());
-
-    logger << "initial date" << split << time0 << endl;
-    logger << "end date" << split << timeT << endl;
-    logger << "number of ratings" << split << data.getRatings().size() << endl;
-    logger << "number of factors" << split << data.getFactors().size() << endl;
-    logger << "copula type" << split << data.getParams().getCopula() << endl;
-
-    if (data.hasDefaultProbabilities()) {
-      logger << "default probability functions" << split << "user defined" << endl;
-    }
-    else {
-      logger << "transition matrix period (months)" << split << data.getTransitions().getPeriod() << endl;
-      logger << "transition matrix regularization error (1M)" << split << rerror << endl;
-      logger << "default probability functions" << split << "computed" << endl;
-    }
-
-    logger << indent(-1);
-
-    logger << "portfolio" << flood('-') << endl;
-    logger << indent(+1);
-
-    setObligors(data.getPortfolio().getObligors());
+    setObligors(data.getPortfolio());
     setInverses();
-
-    size_t numAssets = 0UL;
-    size_t numValues = 0UL;
-    for(Obligor &obligor : obligors) {
-      for(Asset &asset : obligor.assets) {
-        numAssets++;
-        numValues += asset.values.size();
-      }
-    }
-    
-    logger << "number of obligors" << split << obligors.size() << endl;
-    logger << "number of assets" << split << numAssets << endl;
-    logger << "number of values" << split << numValues << endl;
-    logger << indent(-1);
-
-    logger << "segmentations" << flood('-') << endl;
-    logger << indent(+1);
-
     setSegmentations(data.getSegmentations(), path, mode);
-    assert(data.getSegmentations().size() == aggregators.size());
-        
-    for(size_t i=0; i<aggregators.size(); i++) {
-      logger << data.getSegmentations()[i].getName() << split
-             << "["+aggregators[i]->getFilename()+"]" << endl;
-    }
-    logger << indent(-1);
-
-    logger << indent(-1);
+    mStatus = status::initialized;
   }
   catch(std::exception &e)
   {
     freeMemory();
+    mStatus = status::error;
     throw Exception(e, "error initializing Monte Carlo");
   }
 }
@@ -224,30 +161,10 @@ void ccruncher::MonteCarlo::setParams(const map<string,string> &parameters)
  * @param[in] dprobs List of PDs.
  * @throw Exception Invalid PDs list.
  */
-void ccruncher::MonteCarlo::setDefaultProbabilities(const vector<CDF> &dprobs_)
+void ccruncher::MonteCarlo::setDefaultProbabilities(const vector<CDF> &cdfs)
 {
-  DefaultProbabilities::isValid(dprobs_, true);
-  dprobs = dprobs_;
-}
-
-/**************************************************************************//**
- * @see http://www.ccruncher.net/ifileref.html#transitions
- * @see DefaultProbabilities.hpp
- * @param[in] transitions Transition matrix.
- * @throw Exception Invalid PDs list.
- */
-double ccruncher::MonteCarlo::setDefaultProbabilities(const Transitions &transitions)
-{
-  // obtain the 1-month transitions matrix
-  Transitions tone = transitions.scale(1);
-  double rerror = tone.getRegularizationError();
-
-  // computing default probability functions using transition matrix
-  int months = (int) ceil(diff(time0, timeT, 'M'));
-  dprobs = tone.getCDFs(time0, months+1);
-
-  assert(DefaultProbabilities::isValid(dprobs));
-  return rerror;
+  DefaultProbabilities::isValid(cdfs, true);
+  dprobs = cdfs;
 }
 
 /**************************************************************************//**
@@ -284,10 +201,8 @@ void ccruncher::MonteCarlo::setCorrelations(const vector<vector<double>> &correl
   }
 
   // obtain cholesky decomposition
-  if (chol != nullptr) {
-    gsl_matrix_free(chol);
-    chol = nullptr;
-  }
+  gsl_matrix_free(chol);
+  chol = nullptr;
   chol = Correlations::getCholesky(correlations);
 
   // performance tip: chol contains w·chol
@@ -342,20 +257,30 @@ void ccruncher::MonteCarlo::setSegmentations(const vector<Segmentation> &segment
   // checking segmentations
   Segmentations::isValid(segmentations, true);
 
-  // checking that asset segments are valid
+  // checking obligor's data related to segmentation-segments
   for(Obligor &obligor : obligors) {
     for(Asset &asset : obligor.assets) {
+      // check that the number of segmentations is correct
       if (asset.segments.size() != segmentations.size()) {
         throw Exception("obligor with invalid number of segmentations");
+      }
+      // check that segmentation-segment identifiers are valid
+      for(unsigned short isegmentation=0; isegmentation<segmentations.size(); isegmentation++) {
+        if (asset.segments[isegmentation] >= segmentations[isegmentation].size()) {
+          throw Exception("obligor with invalid segment");
+        }
       }
     }
   }
 
-  // checking that asset segmentation-segment are valid
-  // see method getSegmentationExposures()
+  // removing previous aggregators
+  for(auto &aggregator : aggregators) {
+    delete aggregator;
+    aggregator = nullptr;
+  }
+  aggregators.clear();
 
   // allocating and initializing aggregators
-  // TODO: remove existing aggregators
   numsegments = 0UL;
   numSegmentsBySegmentation.assign(segmentations.size(), 0);
   aggregators.assign(segmentations.size(), nullptr);
@@ -370,42 +295,22 @@ void ccruncher::MonteCarlo::setSegmentations(const vector<Segmentation> &segment
     string ofile = segmentation.getFilename(path);
     Aggregator *aggregator = new Aggregator(ofile, mode, segmentation.size());
     
-    vector<double> exposures = getSegmentationExposures(isegmentation, segmentation.size());
+    vector<double> exposures = Segmentation::getExposures(isegmentation, obligors, time0, timeT);
+    assert(exposures.size() == segmentation.size());
     aggregator->printHeader(segmentation, exposures);
     
     aggregators[isegmentation] = aggregator;
   }
-}
 
-/**************************************************************************//**
- * @details Computes expected portfolio exposure for the given segmentation
- *          weighting each exposure by its duration in the period T0-T1.
- * @param[in] isegmentation Segmentation index.
- * @param[in] numSegments Number of segments in the segmentation.
- * @return Segments' exposures.
- */
-vector<double> ccruncher::MonteCarlo::getSegmentationExposures(unsigned short isegmentation, unsigned short numSegments) const
-{
-  vector<double> ret(numSegments, 0.0);
-  double numdays = timeT - time0;
-  assert(numdays > 0.0);
-
-  for(const Obligor &obligor : obligors) {
-    for(const Asset &asset : obligor.assets) {
-      unsigned short isegment = asset.segments[isegmentation];
-      if (isegment >= numSegments) {
-        throw Exception("obligor with invalid segment index");
-      }
-      Date prevt = time0;
-      for(auto it=asset.values.begin(); it != asset.values.end(); ++it) {
-        double weight = (min(it->date,timeT) - prevt)/numdays;
-        ret[isegment] += weight * it->ead.getExpected();
-        prevt = it->date;
-      }
-    }
+  // tracing log info
+  logger << endl;
+  logger << "output files" << flood('*') << endl;
+  logger << indent(+1);
+  for(size_t i=0; i<aggregators.size(); i++) {
+    logger << "segmentation" << split << "[" + aggregators[i]->getFilename() + "]" << endl;
   }
+  logger << indent(-1);
 
-  return ret;
 }
 
 /**************************************************************************//**
@@ -444,12 +349,18 @@ void ccruncher::MonteCarlo::setInverses()
  *          then uses the current thread (simplifies debug), otherwise
  *          creates one simulation per thread.
  * @param[in] numthreads Number of threads to use (0 = num cores).
- * @param[in] nhash Number of simulation per hash (0 = no hash trace).
- * @param[in] stop Variable to stop simulation from outside (can be null).
+ * @param[in] callback Function called every blocksize simulations.
+ * @return Exception Error running Monte Carlo.
  */
 void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *stop)
 {
+  if (mStatus != status::initialized) {
+    throw Exception("Monte Carlo not initialized");
+  }
+
   if (stop != nullptr && *stop) return;
+
+  mStatus = status::running;
   mStop = stop;
   mHash = nhash;
 
@@ -459,11 +370,11 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   }
 
   // check that number of threads is lower than number of iterations
-  if (maxiterations > 0 && numthreads > maxiterations) {
-    numthreads = maxiterations;
+  if (maxiterations > 0 && numthreads*blocksize > maxiterations) {
+    numthreads = ceil(maxiterations/blocksize);
   }
 
-  // setting logger header
+  // tracing log info
   logger << endl;
   logger << "Monte Carlo" << flood('*') << endl;
   logger << indent(+1);
@@ -519,6 +430,13 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   long millis = duration_cast<milliseconds>(t2-t1).count();
   logger << "total simulation time" << split << Utils::millisToString(millis) << endl;
   logger << indent(-2) << endl;
+
+  if (mStatus == status::error) {
+    throw Exception("error running Monte Carlo");
+  }
+  else if (mStatus == status::running) {
+    mStatus = status::finished;
+  }
 }
 
 /**************************************************************************//**
@@ -532,13 +450,18 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
  */
 bool ccruncher::MonteCarlo::append(const vector<vector<double>> &losses) noexcept
 {
+  assert(losses.size() == blocksize);
   assert(!aggregators.empty());
   assert(aggregators.size() == numSegmentsBySegmentation.size());
   assert(nfthreads > 0);
-  assert(losses.size() == blocksize);
 
   bool more = true;
   mMutex.lock();
+
+  // if another thread has crashed
+  if (mStatus == status::error) {
+    goto mcExecErr;
+  }
 
   try
   {
@@ -569,12 +492,12 @@ bool ccruncher::MonteCarlo::append(const vector<vector<double>> &losses) noexcep
   }
   catch(Exception &e)
   {
-    cerr << "error: " << e << std::endl;
-    more = false;
+    logger << "error: " << e << endl;
+    mStatus = status::error;
   }
 
   // checking time stop criterion
-  if (maxseconds > 0) {
+  if (more && maxseconds > 0) {
     long secs = duration_cast<seconds>(steady_clock::now()-t1).count();
     if (secs >= (long)maxseconds) {
       more = false;
@@ -583,6 +506,12 @@ bool ccruncher::MonteCarlo::append(const vector<vector<double>> &losses) noexcep
 
   // checking stop requested by user
   if (mStop != nullptr && *mStop) {
+    more = false;
+  }
+
+mcExecErr:
+  // if error or previous error
+  if (mStatus == status::error) {
     more = false;
   }
 

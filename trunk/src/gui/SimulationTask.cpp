@@ -98,7 +98,7 @@ void ccruncher_gui::SimulationTask::run()
 
     // creating simulation object
     montecarlo = new MonteCarlo(logger.rdbuf());
-    montecarlo->setData(*idata, odir, fmode);
+    montecarlo->init(*idata, odir, fmode);
 
     // simulating
     setStatus(status::simulating);
@@ -213,11 +213,11 @@ Logger& ccruncher_gui::SimulationTask::getLogger()
  */
 void ccruncher_gui::SimulationTask::free(int obj)
 {
-  if (obj != 2 && idata != nullptr) {
+  if (obj != 2) {
     delete idata;
     idata = nullptr;
   }
-  if (obj != 1 && montecarlo != nullptr) {
+  if (obj != 1) {
     delete montecarlo;
     montecarlo = nullptr;
   }

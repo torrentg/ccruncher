@@ -170,7 +170,7 @@ ccruncher_gui::AnalysisWidget::~AnalysisWidget()
   blockSignals(true);
   task.stop();
   task.wait(250);
-  if (toolbar != nullptr) delete toolbar;
+  delete toolbar;
   delete ui;
 }
 

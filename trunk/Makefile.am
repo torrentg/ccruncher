@@ -53,6 +53,7 @@ build_ccruncher_cmd_SOURCES = \
     src/kernel/Aggregator.cpp \
     src/kernel/Inverse.cpp \
     src/kernel/SimulationThread.cpp \
+    src/kernel/Input.hpp \
     src/params/Params.cpp \
     src/params/Interest.cpp \
     src/params/Rating.cpp \

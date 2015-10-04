@@ -59,7 +59,7 @@ class Utils
     static int getNumCores();
     //! Tokenize a string
     static void tokenize(const std::string &str, std::vector<std::string> &tokens,
-                         const std::string &delimiters=" ");
+                         const std::string &delimiters=" ", bool trim=false);
     //! Trims a string
     static std::string trim(const std::string &str);
     //! Converts a string to upper case

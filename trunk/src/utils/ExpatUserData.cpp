@@ -54,7 +54,7 @@ ccruncher::ExpatUserData::ExpatUserData(const ExpatUserData &o) :
 /**************************************************************************/
 ccruncher::ExpatUserData::~ExpatUserData()
 {
-  if (mBuffer != nullptr) delete [] mBuffer;
+  delete [] mBuffer;
 }
 
 /**************************************************************************//**
@@ -69,7 +69,7 @@ ExpatUserData & ccruncher::ExpatUserData::operator= (const ExpatUserData &o)
     mCurrentTag = o.mCurrentTag;
     defines = o.defines;
 
-    if (mBuffer != nullptr) delete [] mBuffer;
+    delete [] mBuffer;
     mBufferSize = o.mBufferSize;
     mBuffer = new char[mBufferSize];
     mBufferPos1 = mBuffer + mBufferSize + 1;

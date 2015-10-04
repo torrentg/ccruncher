@@ -69,9 +69,7 @@ ccruncher::Inverse::Inverse(const Inverse &o) : mSpline(nullptr)
 /**************************************************************************/
 ccruncher::Inverse::~Inverse()
 {
-  if (mSpline != nullptr) {
-    gsl_spline_free(mSpline);
-  }
+  gsl_spline_free(mSpline);
 }
 
 /**************************************************************************//**
@@ -83,10 +81,8 @@ Inverse & ccruncher::Inverse::operator=(const Inverse &o)
   mMaxT = o.mMaxT;
   mNdf = o.mNdf;
 
-  if (mSpline != nullptr) {
-    gsl_spline_free(mSpline);
-    mSpline = nullptr;
-  }
+  gsl_spline_free(mSpline);
+  mSpline = nullptr;
 
   if (o.mSpline != nullptr) {
     mSpline = gsl_spline_alloc(o.mSpline->interp->type, o.mSpline->size);
@@ -166,10 +162,8 @@ double ccruncher::Inverse::tinv(double u) const
  */
 void ccruncher::Inverse::setSpline(const CDF &cdf, const vector<int> &nodes_)
 {
-  if (mSpline != nullptr) {
-    gsl_spline_free(mSpline);
-    mSpline = nullptr;
-  }
+  gsl_spline_free(mSpline);
+  mSpline = nullptr;
 
   if (cdf.evalue(0.0) > 1.0-EPSILON) {
     return; // default rating
@@ -233,10 +227,8 @@ void ccruncher::Inverse::setSpline(const vector<int> &days, const map<int,double
 {
   assert(days.size() >= 2);
 
-  if (mSpline != nullptr) {
-    gsl_spline_free(mSpline);
-    mSpline = nullptr;
-  }
+  gsl_spline_free(mSpline);
+  mSpline = nullptr;
 
   vector<double> x(days.size(), 0.0);
   vector<double> y(days.size(), 0.0);

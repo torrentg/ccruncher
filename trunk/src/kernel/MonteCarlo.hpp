@@ -27,11 +27,11 @@
 #include <string>
 #include <vector>
 #include <streambuf>
-#include "kernel/IData.hpp"
+#include <gsl/gsl_matrix.h>
+#include "kernel/Input.hpp"
 #include "kernel/Inverse.hpp"
 #include "params/CDF.hpp"
 #include "params/Segmentation.hpp"
-#include "params/Transitions.hpp"
 #include "portfolio/Obligor.hpp"
 #include "utils/Date.hpp"
 #include "utils/Logger.hpp"
@@ -58,6 +58,18 @@ class Aggregator;
  */
 class MonteCarlo
 {
+
+  private:
+
+    //! Status types
+    enum class status {
+      fresh=0,       //!< Object not initialized
+      initialized=1, //!< Object initializated
+      running=2,     //!< Running simulation
+      error=3,       //!< Error found
+      stopped=4,     //!< Simulation stopped
+      finished=5     //!< Simulation finished
+    };
 
   private:
 
@@ -111,15 +123,27 @@ class MonteCarlo
     std::mutex mMutex;
     //! Stop flag
     bool *mStop;
+    //! Object status
+    status mStatus;
 
   private:
   
     //! Deallocate memory
     void freeMemory();
+    //! Set simulation parameters
+    void setParams(const std::map<std::string,std::string> &parameters);
+    //! Set default probabilities (using default probabilities)
+    void setDefaultProbabilities(const std::vector<CDF> &dprobs);
+    //! Set factor loadings
+    void setFactorLoadings(const std::vector<double> &loadings);
+    //! Set correlation matrix
+    void setCorrelations(const std::vector<std::vector<double>> &correlations);
+    //! Set obligors' portfolio
+    void setObligors(std::vector<Obligor> &obligors);
+    //! Set segmentations
+    void setSegmentations(const std::vector<Segmentation> &segmentations, const std::string &path, char mode);
     //! Create Finv(t(x)) spline functions
     void setInverses();
-    //! Averaged exposures by segment
-    std::vector<double> getSegmentationExposures(unsigned short isegmentation, unsigned short numSegments) const;
     //! Append simulation result
     bool append(const std::vector<std::vector<double>> &losses) noexcept;
     //! Non-copyable class
@@ -134,23 +158,8 @@ class MonteCarlo
     //! Destructor
     ~MonteCarlo();
 
-    //! Set simulation parameters
-    void setParams(const std::map<std::string,std::string> &parameters);
-    //! Set default probabilities (using default probabilities)
-    void setDefaultProbabilities(const std::vector<CDF> &dprobs);
-    //! Set default probabilities (using transition matrix)
-    double setDefaultProbabilities(const Transitions &transitions);
-    //! Set factor loadings
-    void setFactorLoadings(const std::vector<double> &loadings);
-    //! Set correlation matrix
-    void setCorrelations(const std::vector<std::vector<double>> &correlations);
-    //! Set obligors' portfolio
-    void setObligors(std::vector<Obligor> &obligors);
-    //! Set segmentations
-    void setSegmentations(const std::vector<Segmentation> &segmentations, const std::string &path, char mode);
-
     //! Initiliaze this class
-    void setData(IData &data, const std::string &path, char mode);
+    void init(Input &input, const std::string &path, char mode);
     //! Execute Monte Carlo
     void run(unsigned char numthreads, size_t nhash=0, bool *stop=nullptr);
 

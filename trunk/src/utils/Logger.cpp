@@ -118,7 +118,6 @@ void ccruncher::Logger::center(const std::string &str)
   Utils::tokenize(str, lines, "\n");
   for(string &line : lines)
   {
-
     line = Utils::trim(line);
     if (line.empty()) {
       *this << endl;

@@ -2403,6 +2403,30 @@ pmvnorm(upper=c(qnorm(f(1,t1)), qnorm(f(2,t2))), sigma=R)[1]
 
 \end{comment}
 
+In the following lines we show that the Gaussian copula is a good-enough
+approximation of the Merton's copula.We use the following basic statements
+to derive the probability density functions.
+
+We want to obtaing the pdf of the default times distribution considering 
+a Gaussian copula. We know that the cdf satisfies:
+\begin{displaymath}
+	F(t_1,t_2) = H\left( \Phi^{-1}(F_1(t_1)),\ \Phi^{-1}(F_2(t_2)) \right)
+\end{displaymath}
+where $H$ is the cdf of the multivariate Gaussian,  $\Phi^{-1}$ is the inverse 
+of the univariate Gaussian distribution, anf $F_i$ are marginal default time
+distributions. We derive this expression applying the differentiation under
+the integral sign, the derivative of the inverse function, and the chain rule.
+\begin{displaymath}
+	F'(t_1,t_2) = \phi_{R}\left(
+	\Phi^{-1}(F_1(t_1)),\ \Phi^{-1}(F_2(t_2))
+	\right) 
+	\cdot
+	\frac{F'_1(t_1)}{\phi(\Phi^{-1}(F_1(t_1)))}
+	\cdot
+	\frac{F'_2(t_2)}{\phi(\Phi^{-1}(F_2(t_2)))}
+\end{displaymath}
+where $\phi_{R}$ is the pdf of $N(\vec{0},R)$
+
 Third, we need to determine the factor loadings. To do this, we assume that 
 there are $s$ factors and each factor is composed by $n_i$ firms. Then, we use 
 the Gaussian multi-factor model to express the multivariate Gaussian 

@@ -24,11 +24,14 @@
 #define _IData_
 
 #include <map>
+#include <vector>
 #include <string>
 #include <streambuf>
 #include <zlib.h>
 #include <mutex>
+#include "kernel/Input.hpp"
 #include "portfolio/Portfolio.hpp"
+#include "params/CDF.hpp"
 #include "params/Params.hpp"
 #include "params/Interest.hpp"
 #include "params/Ratings.hpp"
@@ -58,7 +61,7 @@ namespace ccruncher {
  *
  * @see http://ccruncher.net/ifileref.html
  */
-class IData : public ExpatHandlers
+class IData : public Input, public ExpatHandlers
 {
 
   private:
@@ -103,17 +106,27 @@ class IData : public ExpatHandlers
     size_t cursize;
     //! Parse portfolio flag
     bool parse_portfolio;
+    //! Factor loadings
+    std::vector<double> floadings;
+    //! Default probabilities functions
+    std::vector<CDF> cdfs;
+    //! Regularization error
+    double rerror;
 
   private:
   
-    //! Validate simulation data
-    void validate();
-    //! Parse main input file
-    void parse(gzFile file, const std::map<std::string,std::string> &m);
-    //! Parse portfolio
-    void parsePortfolio(ExpatUserData &, const char *, const char **);
     //! Check define
     void checkDefine(const std::string &key, const std::string &value) const;
+    //! Parse portfolio
+    void parsePortfolio(ExpatUserData &, const char *, const char **);
+    //! Parse main input file
+    void parse(gzFile file, const std::map<std::string,std::string> &m);
+    //! Validate simulation data
+    void validate();
+    //! Prepare data to be used
+    void prepare();
+    //! Print a summary
+    void summary();
 
   protected:
 
@@ -133,32 +146,34 @@ class IData : public ExpatHandlers
     //! Initialize content
     void init(const std::string &f, const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *stop_=nullptr, bool parse_portfolio_=true);
 
+    //! Returns simulation params
+    virtual const Params & getParams() const override { return params; }
+    //! Returns default probabilities functions
+    virtual const std::vector<CDF> & getCDFs() const override { return cdfs; }
+    //! Returns correlation matrix
+    virtual const std::vector<std::vector<double>> & getCorrelations() const override { return correlations; }
+    //! Returns factor loadings (dim = nfactors)
+    virtual const std::vector<double> & getFactorLoadings() const override { return floadings; }
+    //! Returns segmentations
+    virtual const Segmentations & getSegmentations() const override { return segmentations; }
+    //! Returns portfolio
+    virtual std::vector<Obligor> & getPortfolio() override { return portfolio.getObligors(); }
+
     //! Returns simulation title
     const std::string & getTitle() const { return title; }
     //! Returns simulation description
     const std::string & getDescription() const { return description; }
-    //! Returns simulation params
-    const Params & getParams() const { return params; }
-    //! Returns simulation yield curve
+    //! Returns yield curve
     const Interest & getInterest() const { return interest; }
-    //! Returns simulation ratings
+    //! Returns ratings
     const Ratings & getRatings() const { return ratings; }
-    //! Returns simulation transition matrix
+    //! Returns transition matrix
     const Transitions & getTransitions() const { return transitions; }
-    //! Returns default probabilities functions
+    //! Returns default probabilities
     const DefaultProbabilities & getDefaultProbabilities() const { return dprobs; }
-    //! Returns simulation factors
+    //! Returns factors
     const Factors & getFactors() const { return factors; }
-    //! Returns simulation correlation matrix
-    const Correlations & getCorrelations() const { return correlations; }
-    //! Returns simulation correlations
-    const Segmentations & getSegmentations() const { return segmentations; }
-    //! Returns simulation portfolio
-    const Portfolio & getPortfolio() const { return portfolio; }
-    Portfolio & getPortfolio() { return portfolio; }
-    
-    //! Indicates if dprobs tag is defined
-    bool hasDefaultProbabilities() const;
+
     //! Return input file name
     const std::string & getFilename() const { return filename; }
     //! Returns input file size (in bytes)

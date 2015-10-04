@@ -112,7 +112,7 @@ ccruncher_gui::SimulationWidget::~SimulationWidget()
 {
   task.stop();
   task.wait();
-  if (toolbar != nullptr) delete toolbar;
+  delete toolbar;
   delete ui;
 }
 
@@ -356,6 +356,7 @@ void ccruncher_gui::SimulationWidget::log(const QString &str)
   {
     logline += str.mid(pos0, pos1-pos0);
     linkify(logline);
+    logline += "&#8203;"; // zero-width space to avoid qt right-trim
 
     QTextBlockFormat blockFormat = logcursor.blockFormat();
     blockFormat.setAlignment(Qt::AlignCenter);

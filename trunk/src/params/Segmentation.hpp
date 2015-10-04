@@ -25,6 +25,8 @@
 
 #include <string>
 #include <vector>
+#include "portfolio/Obligor.hpp"
+#include "utils/Date.hpp"
 
 namespace ccruncher {
 
@@ -43,9 +45,7 @@ class Segmentation
   public:
 
     //! Type of segmentation's components
-    enum class Type
-    {
-      undefined=0, //!< Not defined
+    enum class Type {
       obligor=1,   //!< Segmentation of obligors
       asset=2      //!< Segmentation of assets
     };
@@ -96,6 +96,9 @@ class Segmentation
     unsigned short indexOf(const char *segment) const;
     //! Return filename
     std::string getFilename(const std::string &path) const;
+
+    //! Averaged exposures by segment
+    static std::vector<double> getExposures(unsigned short isegmentation, const std::vector<Obligor> &obligors, const Date time0, const Date timeT);
 
 };
 

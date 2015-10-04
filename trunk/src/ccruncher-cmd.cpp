@@ -330,7 +330,7 @@ void run() throw(Exception)
 
   // creating simulation object
   MonteCarlo montecarlo(cout.rdbuf());
-  montecarlo.setData(idata, spath, cmode);
+  montecarlo.init(idata, spath, cmode);
 
   // running simulation
   montecarlo.run(ithreads, ihash, &stop);

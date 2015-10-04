@@ -128,14 +128,11 @@ CDF& ccruncher::CDF::operator=(const CDF &o)
 /**************************************************************************/
 void ccruncher::CDF::freeSpline()
 {
-  if (mSpline != nullptr) {
-    gsl_spline_free(mSpline);
-    mSpline = nullptr;
-  }
-  if (mAccel != nullptr) {
-    gsl_interp_accel_free(mAccel);
-    mAccel = nullptr;
-  }
+  gsl_spline_free(mSpline);
+  mSpline = nullptr;
+
+  gsl_interp_accel_free(mAccel);
+  mAccel = nullptr;
 }
 
 /**************************************************************************//**
