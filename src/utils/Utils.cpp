@@ -158,22 +158,23 @@ int ccruncher::Utils::getNumCores()
  * @param[in] str String to tokenize.
  * @param[out] tokens List of tokens found.
  * @param[in] delimiters Set of characters used as delimiters (eg. ',;').
+ * @param[in] trim Trim and remove consecutive delimiters
  */
-void ccruncher::Utils::tokenize(const string& str, vector<string>& tokens, const string& delimiters)
+void ccruncher::Utils::tokenize(const string& str, vector<string>& tokens, const string& delimiters, const bool trim)
 {
-  // Skip delimiters at beginning.
-  string::size_type lastPos = str.find_first_not_of(delimiters, 0);
-  // Find first "non-delimiter".
+  string::size_type lastPos = (trim?str.find_first_not_of(delimiters, 0):0);
   string::size_type pos = str.find_first_of(delimiters, lastPos);
 
-  while (string::npos != pos || string::npos != lastPos)
+  while (lastPos < str.length())
   {
-    // Found a token, add it to the vector.
+    assert(lastPos <= pos);
+    if (pos > str.length()) pos = str.length();
     tokens.push_back(str.substr(lastPos, pos - lastPos));
-    // Skip delimiters.  Note the "not_of"
-    lastPos = str.find_first_not_of(delimiters, pos);
-    // Find next "non-delimiter"
+    lastPos = (trim?str.find_first_not_of(delimiters, pos):pos+1);
     pos = str.find_first_of(delimiters, lastPos);
+  }
+  if (!trim && !str.empty() && delimiters.find_first_of(str.back()) != string::npos) {
+    tokens.push_back("");
   }
 }
 
@@ -221,9 +222,7 @@ string ccruncher::Utils::trim(const string &str)
 string ccruncher::Utils::uppercase(const string &str)
 {
   string res = str;
-
   transform(res.begin(), res.end(), res.begin(), (int(*)(int)) toupper);
-
   return res;
 }
 
@@ -234,9 +233,7 @@ string ccruncher::Utils::uppercase(const string &str)
 string ccruncher::Utils::lowercase(const string &str)
 {
   string res = str;
-
   transform(res.begin(), res.end(), res.begin(), (int(*)(int)) tolower);
-
   return res;
 }
 
@@ -302,12 +299,10 @@ string ccruncher::Utils::getWorkDir()
   {
     char *ret = getcwd(tempname, 1024);
 
-    if (ret != tempname)
-    {
+    if (ret != tempname) {
       throw Exception("unable to retrieve current working directory");
     }
-    else
-    {
+    else {
       string aux = string(ret);
 
       // appending '/' at last position
@@ -335,36 +330,46 @@ string ccruncher::Utils::getWorkDir()
  */
 string ccruncher::Utils::normalizePath(const string &path)
 {
-  string ret = normalize(path);
+  string ret = trim(path);
 
-  if (path.length() == 0)
-  {
-    ret = "." + pathSeparator;
-  }
-
-  if (ret.substr(0,1) != "." && !isAbsolutePath(ret))
-  {
-    ret = "." + pathSeparator + ret;
-  }
-
-  if (ret == ".")
-  {
+  if (ret.length() == 0 || ret == ".") {
     ret = getWorkDir();
   }
 
-  if (ret.substr(0,2) == ("." + pathSeparator))
-  {
-    ret = getWorkDir() + ret.substr(2);
+  ret = normalize(ret);
+
+  if (ret.substr(0,1) != "." && !isAbsolutePath(ret)) {
+    ret = "." + pathSeparator + ret;
   }
 
-  if (ret.substr(0,3) == (".." + pathSeparator))
-  {
+  if (ret.substr(0,1) == ".") {
     ret = getWorkDir() + ret;
   }
 
-  if (ret.substr(ret.length()-1, 1) != pathSeparator)
+  if (ret.length() > 1 && ret.back() == pathSeparator[0]) {
+    ret = ret.substr(0, ret.length()-1);
+  }
+
+  // resolves dot and dot-dot cases
+  vector<string> tokens;
+  tokenize(ret, tokens, pathSeparator);
+  for(size_t i=0; i<tokens.size(); i++)
   {
-    ret = ret + pathSeparator;
+    if (tokens[i] == ".") {
+      tokens.erase(tokens.begin()+i);
+      i--;
+    }
+    else if (tokens[i] == "..") {
+      assert(i > 0);
+      tokens.erase(tokens.begin()+i);
+      i--;
+      tokens.erase(tokens.begin()+i);
+      i--;
+    }
+  }
+  ret = "";
+  for(size_t i=0; i<tokens.size(); i++) {
+    ret += tokens[i] + pathSeparator;
   }
 
   return ret;
@@ -382,12 +387,10 @@ bool ccruncher::Utils::existDir(const std::string &dirname)
 
   if (tmp == nullptr)
   {
-    if (errno == EACCES)
-    {
+    if (errno == EACCES) {
       return true;
     }
-    else
-    {
+    else {
       return false;
     }
   }

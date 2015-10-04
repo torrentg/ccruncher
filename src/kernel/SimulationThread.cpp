@@ -55,7 +55,7 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, unsigned long seed
 /**************************************************************************/
 ccruncher::SimulationThread::~SimulationThread()
 {
-  if (rng != nullptr) gsl_rng_free(rng);
+  gsl_rng_free(rng);
 }
 
 /**************************************************************************//**

@@ -46,7 +46,7 @@ ccruncher_gui::AnalysisTask::AnalysisTask() : QThread(), hist(nullptr)
 /**************************************************************************/
 ccruncher_gui::AnalysisTask::~AnalysisTask()
 {
-  if (hist != nullptr) gsl_histogram_free(hist);
+  gsl_histogram_free(hist);
 }
 
 /**************************************************************************//**
@@ -271,10 +271,8 @@ void ccruncher_gui::AnalysisTask::runHistogram(const std::vector<double> &values
 {
   setStatus(status::running);
 
-  if (hist != nullptr) {
-    gsl_histogram_free(hist);
-    hist = nullptr;
-  }
+  gsl_histogram_free(hist);
+  hist = nullptr;
 
   if (values.empty()) return;
 

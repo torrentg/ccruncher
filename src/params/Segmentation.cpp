@@ -187,3 +187,36 @@ string ccruncher::Segmentation::getFilename(const string &path) const
   return Utils::normalizePath(path) + mName + ".csv";
 }
 
+/**************************************************************************//**
+ * @details Computes expected portfolio exposure for the given segmentation
+ *          weighting each exposure by its duration in the period T0-T1.
+ * @param[in] isegmentation Segmentation index.
+ * @param[in] obligors Potfolio of obligors.
+ * @param[in] time0 Initial date.
+ * @param[in] timeT ending date.
+ * @return Segments' exposures.
+ */
+vector<double> ccruncher::Segmentation::getExposures(unsigned short isegmentation, const std::vector<Obligor> &obligors, const Date time0, const Date timeT)
+{
+  assert(time0 < timeT);
+  vector<double> ret(1, 0.0);
+  double numdays = timeT - time0;
+
+  for(const Obligor &obligor : obligors) {
+    for(const Asset &asset : obligor.assets) {
+      unsigned short isegment = asset.segments[isegmentation];
+      if (isegment >= ret.size()) {
+        ret.resize(isegment+1, 0.0);
+      }
+      Date prevt = time0;
+      for(auto it=asset.values.begin(); it != asset.values.end(); ++it) {
+        double weight = (min(it->date,timeT) - prevt)/numdays;
+        ret[isegment] += weight * it->ead.getExpected();
+        prevt = it->date;
+      }
+    }
+  }
+
+  return ret;
+}
+

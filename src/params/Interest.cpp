@@ -52,13 +52,8 @@ ccruncher::Interest::Interest(const Interest &o)
 /**************************************************************************/
 ccruncher::Interest::~Interest()
 {
-  if (mSpline != nullptr) {
-    gsl_spline_free(mSpline);
-  }
-
-  if (mAccel != nullptr) {
-    gsl_interp_accel_free(mAccel);
-  }
+  gsl_spline_free(mSpline);
+  gsl_interp_accel_free(mAccel);
 }
 
 /**************************************************************************//**
@@ -72,28 +67,20 @@ Interest & ccruncher::Interest::operator=(const Interest &o)
   mRates = o.mRates;
   mCubicSpline = o.mCubicSpline;
 
-  if (mSpline != nullptr) {
-    gsl_spline_free(mSpline);
-  }
+  gsl_spline_free(mSpline);
+  mSpline = nullptr;
 
-  if (mAccel != nullptr) {
-    gsl_interp_accel_free(mAccel);
-  }
+  gsl_interp_accel_free(mAccel);
+  mAccel = nullptr;
 
   if (o.mSpline != nullptr) {
     mSpline = gsl_spline_alloc(o.mSpline->interp->type, o.mSpline->size);
     gsl_spline_init(mSpline, o.mSpline->x, o.mSpline->y, o.mSpline->size);
   }
-  else {
-    mSpline = nullptr;
-  }
 
   if (o.mAccel != nullptr) {
     mAccel = gsl_interp_accel_alloc();
     gsl_interp_accel_reset(mAccel);
-  }
-  else {
-    mAccel = nullptr;
   }
 
   return *this;

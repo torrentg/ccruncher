@@ -56,15 +56,19 @@ void ccruncher_test::UtilsTest::test2()
 
   Utils::tokenize(str1, tokens, " ");
 
-  ASSERT(7 == tokens.size());
+  ASSERT_EQUALS(11UL, tokens.size());
 
-  ASSERT(tokens[0] == "I");
-  ASSERT(tokens[1] == "Am");
-  ASSERT(tokens[2] == "A");
-  ASSERT(tokens[3] == "String");
-  ASSERT(tokens[4] == "Ready");
-  ASSERT(tokens[5] == "For");
-  ASSERT(tokens[6] == "Sacrifice");
+  ASSERT(tokens[0] == "");
+  ASSERT(tokens[1] == "");
+  ASSERT(tokens[2] == "I");
+  ASSERT(tokens[3] == "Am");
+  ASSERT(tokens[4] == "A");
+  ASSERT(tokens[5] == "String");
+  ASSERT(tokens[6] == "Ready");
+  ASSERT(tokens[7] == "For");
+  ASSERT(tokens[8] == "Sacrifice");
+  ASSERT(tokens[9] == "");
+  ASSERT(tokens[10] == "");
 
   ASSERT("I Am A String Ready For Sacrifice" == Utils::trim(str1));
   ASSERT("  I AM A STRING READY FOR SACRIFICE  " == Utils::uppercase(str1));
@@ -82,6 +86,7 @@ void ccruncher_test::UtilsTest::test3()
   ASSERT_NO_THROW(str1= Utils::normalizePath("./dir1/dir2"));
   ASSERT(str1.substr(0,1) != ".");
   ASSERT(str1.substr(str1.length()-1,1) == Utils::pathSeparator);
+  ASSERT_EQUALS("/dir2/", Utils::normalizePath("/dir1/./.././dir2"));
 
   // testing getWorkDir function
   string str2;

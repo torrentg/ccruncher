@@ -40,6 +40,7 @@ HEADERS += \
     src/kernel/MonteCarlo.hpp \
     src/kernel/SimulationThread.hpp \
     src/kernel/Inverse.hpp \
+    src/kernel/Input.hpp \
     src/portfolio/LGD.hpp \
     src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
@@ -129,7 +130,7 @@ LIBS += \
 
 unix {
   INCLUDEPATH += \
-    /usr/include/qwt
+    /usr/include/qt5/qwt
   LIBS += \
     -lz \
     -lgsl \

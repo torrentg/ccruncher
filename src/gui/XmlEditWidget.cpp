@@ -80,8 +80,8 @@ ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
     load(f);
   }
   catch(...) {
-    if (toolbar != nullptr) delete toolbar;
-    if (highlighter != nullptr) delete highlighter;
+    delete toolbar;
+    delete highlighter;
     throw;
   }
 }
@@ -89,8 +89,8 @@ ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
 /**************************************************************************/
 ccruncher_gui::XmlEditWidget::~XmlEditWidget()
 {
-  if (toolbar != nullptr) delete toolbar;
-  if (highlighter != nullptr) delete highlighter;
+  delete toolbar;
+  delete highlighter;
   delete ui;
 }
 
