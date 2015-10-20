@@ -106,7 +106,8 @@ html,body {
 	float: left;
 }
 
-#navbar ul a:link, #navbar ul a:visited {
+#navbar ul a:link, 
+#navbar ul a:visited {
 	display: block;
 	font-weight: bold;
 	color: #FFFFFF;
@@ -115,22 +116,24 @@ html,body {
 	padding: 4px;
 	width: 150px;
 	text-decoration: none;
-	/*text-transform: uppercase;*/
 }
 
-#navbar ul a:hover, #navbar ul a:active, #navbar ul a.active {
+#navbar ul a:hover, 
+#navbar ul a:active {
 	background-color: #3366aa;
-}
-
-#navbar ul ul {
-	display: none;
 }
 
 #navbar ul li:hover > ul {
 	display: block;
 }
 
+#navbar ul li a {
+	background-color: #005080;
+	color: #FFFFFF;
+}
+
 #navbar ul ul {
+	display: none;
 	background: #5f6975; 
 	border-radius: 0px 0px 5px 5px;
 	padding: 0;
@@ -147,7 +150,8 @@ html,body {
 
 #navbar ul ul li a {
 	padding: 15px 40px;
-	color: #fff;
+	background-color: #005080;
+	color: #FFFFFF;
 }
 
 h1 {
@@ -180,12 +184,14 @@ div.gray-box {
 	padding-left: 5px;
 }
 
-tr.even, tr.a {
+tr.even, 
+tr.a {
 	color: black;
 	background-color: #ddd;
 }
 
-tr.odd, tr.b {
+tr.odd, 
+tr.b {
 	color: black;
 	background-color: #eee;
 }
