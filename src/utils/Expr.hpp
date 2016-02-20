@@ -179,8 +179,6 @@ class Expr
     static bool isValue(TokenType type);
     //! Returns function name by ptr value
     static const char *getFunctionName(const ffunc0 ptr);
-    //! Constructor (public constructor not allowed)
-    Expr() { }
 
   public:
 

@@ -378,18 +378,17 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   logger << endl;
   logger << "Monte Carlo" << flood('*') << endl;
   logger << indent(+1);
-  logger << "configuration" << flood('-') << endl;
-  logger << indent(+1);
   logger << "seed used to initialize randomizer" << split << seed << endl;
   logger << "maximum execution time (seconds)" << split << maxseconds << endl;
   logger << "maximum number of iterations" << split << maxiterations << endl;
   logger << "antithetic mode" << split << antithetic << endl;
   logger << "block size" << split << blocksize << endl;
   logger << "number of threads" << split << int(numthreads) << endl;
-  logger << indent(-1);
-  logger << "running Monte Carlo";
-  if (mHash != 0) logger << " [" << to_string(mHash) << " simulations per hash]";
-  logger << flood('-') << endl;
+  if (mHash != 0)  {
+    logger << "running Monte Carlo";
+    logger << " [" << to_string(mHash) << " simulations per hash]";
+    logger << flood('-') << endl;
+  }
   logger << indent(+1);
 
   // creating and launching simulation threads
@@ -424,12 +423,13 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   aggregators.clear();
 
   // exit function
+  logger << indent(-1);
   if (nhash > 0) logger << endl;
   logger << "simulations realized" << split << numiterations << endl;
   auto t2 = steady_clock::now();
   long millis = duration_cast<milliseconds>(t2-t1).count();
   logger << "total simulation time" << split << Utils::millisToString(millis) << endl;
-  logger << indent(-2) << endl;
+  logger << indent(-1) << endl;
 
   if (mStatus == status::error) {
     throw Exception("error running Monte Carlo");
@@ -455,8 +455,8 @@ bool ccruncher::MonteCarlo::append(const vector<vector<double>> &losses) noexcep
   assert(aggregators.size() == numSegmentsBySegmentation.size());
   assert(nfthreads > 0);
 
+  lock_guard<mutex> lock(mMutex);
   bool more = true;
-  mMutex.lock();
 
   // if another thread has crashed
   if (mStatus == status::error) {
@@ -517,7 +517,6 @@ mcExecErr:
 
   // exit function
   if (!more) nfthreads--;
-  mMutex.unlock();
   return(more);
 }
 
