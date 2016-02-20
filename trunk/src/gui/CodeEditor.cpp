@@ -1,8 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
-** All rights reserved.
-** Contact: Nokia Corporation (qt-info@nokia.com)
+** Copyright (C) 2015 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
 **
 ** This file is part of the examples of the Qt Toolkit.
 **
@@ -18,10 +17,10 @@
 **     notice, this list of conditions and the following disclaimer in
 **     the documentation and/or other materials provided with the
 **     distribution.
-**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
-**     the names of its contributors may be used to endorse or promote
-**     products derived from this software without specific prior written
-**     permission.
+**   * Neither the name of The Qt Company Ltd nor the names of its
+**     contributors may be used to endorse or promote products derived
+**     from this software without specific prior written permission.
+**
 **
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,11 +33,12 @@
 ** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 ** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+**
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
 
-#include <QtGui>
+#include <QtWidgets>
 #include "gui/CodeEditor.hpp"
 
 
@@ -52,9 +52,6 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent)
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
-
-    // setting tab size to 4 spaces (added by gtg)
-    setTabStopWidth(4 * fontMetrics().width(' '));
 }
 
 
@@ -142,7 +139,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
             QString number = QString::number(blockNumber + 1);
             painter.setPen(Qt::black);
             painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(),
-                             Qt::AlignRight, number);
+                             Qt::AlignRight|Qt::AlignBottom, number); //Qt::AlignVCenter
         }
 
         block = block.next();
@@ -151,4 +148,3 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
         ++blockNumber;
     }
 }
-

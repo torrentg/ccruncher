@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004-2015 Gerard Torrent
+// Copyright (C) 2004-2016 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -156,8 +156,8 @@ bool ccruncher_gui::XmlEditWidget::load(const QString &str)
     throw OpenErrorException();
   }
 
-  // reject file if bigger than 1 MB
-  if (file.size() > 1*1024*1024)
+  // reject file if bigger than 10 MB
+  if (file.size() > 10*1024*1024)
   {
     QMessageBox::warning(this, tr("CCruncher"),
         tr("File '%1' too big to be edited.\nTry to open it using an external editor.")

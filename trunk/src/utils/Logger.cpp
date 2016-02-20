@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004-2015 Gerard Torrent
+// Copyright (C) 2004-2016 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -259,7 +259,7 @@ Logger& ccruncher::header(Logger &logger)
 Logger& ccruncher::copyright(Logger &logger)
 {
   string str =
-    "ccruncher is Copyright (C) 2004-2015 Gerard Torrent and licensed\n"
+    "ccruncher is Copyright (C) 2004-2016 Gerard Torrent and licensed\n"
     "under the GNU General Public License, version 2. More info at\n"
     "http://www.ccruncher.net\n";
   logger.center(str);

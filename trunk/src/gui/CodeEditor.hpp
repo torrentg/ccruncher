@@ -1,8 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
-** All rights reserved.
-** Contact: Nokia Corporation (qt-info@nokia.com)
+** Copyright (C) 2015 The Qt Company Ltd.
+** Contact: http://www.qt.io/licensing/
 **
 ** This file is part of the examples of the Qt Toolkit.
 **
@@ -18,10 +17,10 @@
 **     notice, this list of conditions and the following disclaimer in
 **     the documentation and/or other materials provided with the
 **     distribution.
-**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
-**     the names of its contributors may be used to endorse or promote
-**     products derived from this software without specific prior written
-**     permission.
+**   * Neither the name of The Qt Company Ltd nor the names of its
+**     contributors may be used to endorse or promote products derived
+**     from this software without specific prior written permission.
+**
 **
 ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -34,6 +33,7 @@
 ** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 ** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+**
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
@@ -42,6 +42,7 @@
 #define CODEEDITOR_H
 
 #include <QPlainTextEdit>
+#include <QObject>
 
 class QPaintEvent;
 class QResizeEvent;
@@ -62,7 +63,7 @@ public:
     int lineNumberAreaWidth();
 
 protected:
-    virtual void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
@@ -81,12 +82,12 @@ public:
         codeEditor = editor;
     }
 
-    virtual QSize sizeHint() const {
+    QSize sizeHint() const Q_DECL_OVERRIDE {
         return QSize(codeEditor->lineNumberAreaWidth(), 0);
     }
 
 protected:
-    virtual void paintEvent(QPaintEvent *event) {
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE {
         codeEditor->lineNumberAreaPaintEvent(event);
     }
 
