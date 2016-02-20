@@ -55,17 +55,14 @@ class Aggregator
     //! Open file mode
     unsigned char mMode;
 
-  private:
-
-    //! Non-copyable class
-    Aggregator(const Aggregator &);
-    //! Non-copyable class
-    Aggregator & operator=(const Aggregator &);
-
   public:
 
     //! Constructor
     Aggregator(const std::string &mFilename, char mode, unsigned short numSegments);
+    //! Non-copyable class
+    Aggregator(const Aggregator &) = delete;
+    //! Non-copyable class
+    Aggregator & operator=(const Aggregator &) = delete;
     //! Destructor
     ~Aggregator();
     //! Set header info

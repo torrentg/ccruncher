@@ -98,15 +98,15 @@ class SimulationThread : public Thread
     void rchisq(std::vector<double> &s);
     //! Factors random generation
     void rmvnorm(std::vector<std::vector<double>> &z);
-    //! Non-copyable class
-    SimulationThread(const SimulationThread &);
-    //! Non-copyable class
-    SimulationThread & operator=(const SimulationThread &);
 
   public:
 
     //! Constructor
     SimulationThread(MonteCarlo &, unsigned long seed);
+    //! Non-copyable class
+    SimulationThread(const SimulationThread &) = delete;
+    //! Non-copyable class
+    SimulationThread & operator=(const SimulationThread &) = delete;
     //! Destructor
     virtual ~SimulationThread() override;
     //! Thread main function

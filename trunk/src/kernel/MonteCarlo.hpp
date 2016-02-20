@@ -146,15 +146,15 @@ class MonteCarlo
     void setInverses();
     //! Append simulation result
     bool append(const std::vector<std::vector<double>> &losses) noexcept;
-    //! Non-copyable class
-    MonteCarlo(const MonteCarlo &);
-    //! Non-copyable class
-    MonteCarlo & operator=(const MonteCarlo &);
 
   public:
 
     //! Constructor
     MonteCarlo(std::streambuf *s=nullptr);
+    //! Non-copyable class
+    MonteCarlo(const MonteCarlo &) = delete;
+    //! Non-copyable class
+    MonteCarlo & operator=(const MonteCarlo &) = delete;
     //! Destructor
     ~MonteCarlo();
 
