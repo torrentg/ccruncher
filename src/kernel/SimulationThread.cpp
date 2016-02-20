@@ -2,7 +2,7 @@
 //===========================================================================
 //
 // CCruncher - A portfolio credit risk valorator
-// Copyright (C) 2004-2015 Gerard Torrent
+// Copyright (C) 2004-2016 Gerard Torrent
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -178,10 +178,8 @@ void ccruncher::SimulationThread::simuleObligorLoss(const Obligor &obligor, Date
 {
   double obligor_lgd = NAN;
 
-  for(size_t i=0; i<obligor.assets.size(); i++)
+  for(const Asset &asset : obligor.assets)
   {
-    const Asset &asset = obligor.assets[i];
-    
     // evalue asset loss
     if (dtime <= asset.values.back().date)
     {
