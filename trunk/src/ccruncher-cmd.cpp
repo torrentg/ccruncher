@@ -73,7 +73,7 @@ bool stop = false;
 void catchsignal(int)
 {
   stop = true;
-  if (sfilename == STDIN_FILENAME) {
+  if (sfilename == STDIN_FILENAME && stdin != nullptr) {
     fclose(stdin);
   }
 }
@@ -327,6 +327,7 @@ void run() throw(Exception)
   IData idata(cout.rdbuf());
   idata.init(sfilename, defines, &stop);
   if (stop) throw Exception("parser stopped");
+  stdin = nullptr;
 
   // creating simulation object
   MonteCarlo montecarlo(cout.rdbuf());
