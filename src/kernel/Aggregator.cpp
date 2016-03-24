@@ -73,6 +73,19 @@ ccruncher::Aggregator::Aggregator(const std::string &filename, char mode, unsign
   }
 }
 
+/**************************************************************************/
+ccruncher::Aggregator::~Aggregator()
+{
+  try
+  {
+    mFile.close();
+  }
+  catch(std::exception &)
+  {
+    // destructor can't throw exceptions
+  }
+}
+
 /**************************************************************************//**
  * @param[in] segmentation Segmentation of this aggregator.
  * @param[in] exposures Segment exposures.
@@ -101,19 +114,6 @@ void ccruncher::Aggregator::printHeader(const Segmentation &segmentation, const 
   }
 }
 
-/**************************************************************************/
-ccruncher::Aggregator::~Aggregator()
-{
-  try
-  {
-    mFile.close();
-  }
-  catch(std::exception &)
-  {
-    // destructor can't throw exceptions
-  }
-}
-
 /**************************************************************************//**
  * @details Append a row to file.
  * @param[in] losses List of losses (length=mNumSegments).
@@ -130,7 +130,7 @@ void ccruncher::Aggregator::append(const double *losses)
     {
       mFile << losses[i] << ", ";
     }
-    // endl not used because force to flush in disk
+    // endl not used because flush
     mFile << losses[mNumSegments-1] << "\n";
   }
   catch(std::exception &e)
