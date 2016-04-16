@@ -68,6 +68,12 @@ ExpatUserData & ccruncher::ExpatUserData::operator= (const ExpatUserData &o)
 
     mCurrentTag = o.mCurrentTag;
     defines = o.defines;
+    date1 = o.date1;
+    date2 = o.date2;
+    interest = o.interest;
+    ratings = o.ratings;
+    factors = o.factors;
+    segmentations = o.segmentations;
 
     delete [] mBuffer;
     mBufferSize = o.mBufferSize;
