@@ -259,9 +259,9 @@ Logger& ccruncher::header(Logger &logger)
 Logger& ccruncher::copyright(Logger &logger)
 {
   string str =
-    "ccruncher is Copyright (C) 2004-2016 Gerard Torrent and licensed\n"
+    "\nccruncher is Copyright (C) 2004-2016 Gerard Torrent and licensed\n"
     "under the GNU General Public License, version 2. More info at\n"
-    "http://www.ccruncher.net\n";
+    "http://www.ccruncher.net";
   logger.center(str);
   return logger;
 }

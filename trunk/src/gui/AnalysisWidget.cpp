@@ -709,7 +709,7 @@ void ccruncher_gui::AnalysisWidget::showPiechartInfo(QPoint point)
   }
 
   static bool status=false;
-  QwtPieChart *piechart = (QwtPieChart *) ui->plot->itemList().at(0);
+  QwtPieChart *piechart = static_cast<QwtPieChart *>(ui->plot->itemList().at(0));
 
   string name;
   double val, pct;

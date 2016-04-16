@@ -67,7 +67,7 @@ class ExpatUserData
       //! Element handlers
       ExpatHandlers *handlers;
       //! Constructor
-      ExpatUserDataToken(const char *n=nullptr, ExpatHandlers *h=nullptr) : handlers(h) {
+      ExpatUserDataToken(const char *n, ExpatHandlers *h) : handlers(h) {
         assert(h != nullptr && n!=nullptr && strlen(n)<20);
         strncpy(name, n, 20);
       }
