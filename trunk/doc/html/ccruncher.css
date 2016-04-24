@@ -119,7 +119,7 @@ html,body {
 }
 
 #navbar ul a:hover, 
-#navbar ul a:active {
+#navbar ul a.active {
 	background-color: #3366aa;
 }
 

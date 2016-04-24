@@ -7,17 +7,17 @@ License:        GPLv2
 URL:            http://www.ccruncher.net/
 Source0:        http://sourceforge.net/projects/ccruncher/files/ccruncher/2.5/ccruncher-2.5.0.tgz
 
-BuildRequires:  gsl-devel >= 1.15
+BuildRequires:  gsl-devel >= 1.16
 BuildRequires:  expat-devel >= 2.1.0
 BuildRequires:  zlib-devel >= 1.2.8
 BuildRequires:  qt-devel >= 4
-BuildRequires:  qwt-devel >= 6.1
+BuildRequires:  qwt-qt5-devel >= 6.1
 
-Requires:  gsl >= 1.15
+Requires:  gsl >= 1.16
 Requires:  expat >= 2.1.0
 Requires:  zlib >= 1.2.8
 Requires:  qt >= 4
-Requires:  qwt >= 6.1 
+Requires:  qwt-qt5 >= 6.1 
 
 %description
 CCruncher is a project for quantifying portfolio credit risk using the copula 
@@ -32,9 +32,9 @@ default times of obligors and simulating the EADs and LGDs of their assets.
 %setup -q
 
 %build
-qmake-qt4 ccruncher-cmd.pro
+qmake-qt5 ccruncher-cmd.pro
 make %{?_smp_mflags}
-qmake-qt4 ccruncher-gui.pro
+qmake-qt5 ccruncher-gui.pro
 make %{?_smp_mflags}
 
 %install

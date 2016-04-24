@@ -11,15 +11,20 @@ EXTRA_DIST = \
     ccruncher-cmd.pro \
     ccruncher-gui.pro \
     ccruncher-tests.pro \
+    ccruncher-inf.pro \
     Doxyfile
 
-bin_PROGRAMS = build/ccruncher-cmd
+bin_PROGRAMS = \
+    build/ccruncher-cmd \
+    build/ccruncher-inf
 
 check_PROGRAMS = build/ccruncher-tests
 
 TESTS = build/ccruncher-tests
 
-man1_MANS = doc/ccruncher-cmd.1
+man1_MANS = \
+    doc/ccruncher-cmd.1 \
+    doc/ccruncher-inf.1
 
 dist_doc_DATA = \
     doc/AUTHORS \
@@ -258,3 +263,22 @@ build_ccruncher_tests_CXXFLAGS =
 build_ccruncher_tests_LDADD =
 build_ccruncher_tests_LDFLAGS =
 
+# -------------------------------------------------------------
+# ccruncher-inf
+# -------------------------------------------------------------
+build_ccruncher_inf_SOURCES = \
+    src/ccruncher-inf.cpp \
+    src/utils/Exception.cpp \
+    src/inference/Configuration.cpp \
+    src/inference/Component.cpp \
+    src/inference/Metropolis.cpp \
+    \
+    src/utils/Exception.hpp \
+    src/inference/Configuration.hpp \
+    src/inference/Component.hpp \
+    src/inference/Metropolis.hpp \
+    src/utils/config.h
+
+build_ccruncher_inf_CXXFLAGS = -fopenmp
+build_ccruncher_inf_LDADD =
+build_ccruncher_inf_LDFLAGS = -fopenmp

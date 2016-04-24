@@ -4,14 +4,14 @@ CCRUNCHER TODO
 
 Current works
 -------------------
-  * market model equivalence
-  * change pdf doc title?
+  * market model copula
   * open ccbinf code to public
   * VaR and ES are asymptotically normal
 
 Future works
 -------------------
   * technical features
+     - create ccruncher docker image
      - src subdirs: engine, readers, writers, utils
      - create ccbinf-gui version
      - add risk uncertainty in ccruncher-gui
@@ -22,7 +22,7 @@ Future works
      - support for input file in binary format
      - force equal number of sims by thread
      - simultaneous transition matrix and dprobs in input file
-     - add support for json and yaml input files
+     - add support for json and yaml input files (rapidjson?)
   * underlying model
      - investigate how correlation depends on time
      - compute stderr using resampling techniques
