@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2016-04-16 20:56:39+02:00"
+#define BUILD_DATE "2016-04-24 11:12:50+02:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -14,7 +14,7 @@
 #define HAVE_ALARM 1
 
 /* define if the compiler supports basic C++11 syntax */
-/* #undef HAVE_CXX11 */
+#define HAVE_CXX11 1
 
 /* Define to 1 if you have the <expat.h> header file. */
 #define HAVE_EXPAT_H 1

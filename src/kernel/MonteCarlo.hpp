@@ -159,7 +159,7 @@ class MonteCarlo
     ~MonteCarlo();
 
     //! Initiliaze this class
-    void init(Input &input, const std::string &path, char mode);
+    void init(Input &data, const std::string &path, char mode);
     //! Execute Monte Carlo
     void run(unsigned char numthreads, size_t nhash=0, bool *stop=nullptr);
 

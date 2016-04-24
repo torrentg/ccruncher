@@ -161,7 +161,7 @@ portfolio credit risk is provided.
 % ~\vfill
 % \section*{Contributors}
 % The following people have contributed with corrections and suggestions to
-% improve this document. Naturally, these contributions don't mean that they 
+% improve this document. These contributions don't mean that they 
 % endorse content, and any remaining mistakes are only mine. 
 % I sincerely thank all of them.
 
@@ -171,7 +171,6 @@ The BibTeX entry of this document is
 @manual\{ccruncher,
     title = \{\{Quantifying Portfolio Credit Risk Using CCruncher\}\},
     author = \{Torrent-Gironella, Gerard\},
-    organization = \{Tatine\},
     address = \{Barcelona, Catalonia\},
     year = \{\the\year\}, 
     month = \shortmonthname,
@@ -325,13 +324,13 @@ please cite it when using it for credit risk analysis.
 \chapter{Introduction}
 
 CCruncher is a project for quantifying portfolio credit risk. 
-It was developed and is maintained by \href{http://www.tatine.es}{Tatine}, a 
-consulting firm located in Barcelona (Catalonia). The latest version 
+It was developed and is maintained by Gerard Torrent, an enthusiast  
+who lives in Barcelona (Catalonia). The latest version 
 of the project can be downloaded from the CCruncher's site, 
 \url{http://www.ccruncher.net}.
 
 The CCruncher framework comprises this document and a piece of software. 
-Both elements are released under open-source type licenses. 
+These elements are released under open-source type licenses. 
 CCruncher is a mature and active project in which users may participate by 
 sending suggestions and contributions to \href{mailto:gtorrent@ccruncher.net}
 {gtorrent@ccruncher.net}. Because CCruncher is an evolving project, the version
@@ -441,8 +440,9 @@ The content is organized into three chapters. The first chapter details the
 distribution used to simulate the obligors' default times, and provides methods 
 to estimate the copula parameters. The second chapter describes how to obtain 
 the portfolio loss distribution and quantify the portfolio credit risk.
-Finally, the third chapter covers four important topics: model calibration using
-market data, risk sensitivity, parameters uncertainty, and portfolio optimization. 
+Finally, the third chapter covers four important topics: risk sensitivity, 
+parameters uncertainty, and portfolio optimization, \st{and model calibration 
+using market data}.
 In order to facilitate reading, those issues that are important to understanding 
 the content and require a detailed discussion have been relegated to appendices.
 
@@ -2073,458 +2073,6 @@ file (e.g., 2000*\$EUR2USD).
 \chapter{Additional Topics}
 
 %------------------------------------------------------------------------------
-% MARKET MODEL EQUIVALENCE
-%------------------------------------------------------------------------------
-\section{Market Model Equivalence}
-
-In some cases, historical data of portfolio defaults is not available, but 
-current debtors are listed on stock markets and/or they issue debt which is 
-traded on fixed income markets. In this section we derive the multivariate 
-default times model discussed in chapter~\ref{chap:mdt} from the obligors' 
-quotes.
-
-We consider that both underlying asset values and stock prices follow a 
-Geometric Brownian Motion (GBM) process described by the stochastic 
-differential equation $dS_t = \vec{\mu} S_t\ dt + \vec{\sigma} S_t\ dW_t$
-where $S_t$ are the asset values (stock prices respectively) at time $t$, 
-$\vec{\mu}$ are the expected annual returns, $\vec{\sigma}$ are the annualized 
-volatilities, and $W_t$ is a multivariate Brownian Motion with correlation 
-matrix $R$. This stochastic differential equation has the following solution
-\begin{equation}
-	\label{eq:mgbm}
-	S_i(t+\Delta t) = S_i(t) \cdot \exp\left(
-	\left(\mu_i - \frac{\sigma_i^2}{2}\right) \Delta t +
-	\left(\sigma_i \sqrt{\Delta t}\right) \epsilon_i
-	\right) 
-	\quad 
-	i = 1,\dots,n
-\end{equation}
-where $n$ is the number of firms, $i$ is the firm index, $\epsilon_i$ is the 
-i-th component of $N(0,R)$, and $\Delta t$ is a time increment. Note that we 
-modified slightly the usual notation to highlight the multivariate nature.
-
-We consider the \ul{Merton's scenario}. That is, a company defaults when the 
-asset value is below a preset threshold at the end of the period (usually 1-year). 
-Figure~\ref{fig:market1} displays the asset values of three companies over a 
-year (250 working days). 
-Note that the \emph{red} company ends below the threshold $90\%$ causing a 
-default event; the \emph{blue} company cross the threshold but finally ends 
-with a value just above the threshold avoiding the default event; finally the 
-\emph{green} company ends the year without any remarkable incident.
-
-\begin{figure}[!ht]
-	\centering
-	\includegraphics[width=0.98\textwidth]{market1}
-	\caption{Simulating defaults using a market model}
-	\label{fig:market1}
-\end{figure}
-
-Below we see that this scenario leads to a multivariate default times model of 
-type copula model as set forth in chapter~\ref{chap:mdt}. Specifically, leads 
-to the Gaussian multi-factor copula model.
-
-First, we need to determine the marginal distributions. The following basic result 
-establishes the relationship between the threshold functions and the corresponding 
-default time distributions. 
-
-\begin{proposition}[Default time distributions]
-	\label{prop:mmdtf}
-	Assume a firm $i$ whose asset value follows a GBM model with expected return 
-	$\mu_i$ and annualized volatility $\sigma_i$. We consider that this company 
-	defaults in the time range $[0,t]$ when the asset value at time $t$ is below 
-	the threshold $h_i(t)$.
-	
-	Under these assumptions, the threshold function $h_i(t)$ is as follows:
-	\begin{displaymath}
-		h_i(t) = \exp\left(\sigma_i\sqrt{t}\cdot\Phi^{-1}(F_i(t)) + 
-		\ln(S_i(0)) + \left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)
-	\end{displaymath}
-	where $F_i(t)$ is a cumulative distribution function (cdf) with support 
-	$[0,\infty)$, $S_i(0)$ is the asset value at time $0$, and $\Phi^{-1}$ is 
-	the inverse of the univariate Gaussian distribution.
-\end{proposition}
-
-\begin{proof}
-	According to equation~\ref{eq:mgbm}, the asset value has the following form
-	\begin{displaymath}
-		S_i(t+\Delta t) = S_i(t) \cdot \exp\left(
-		\left(\mu_i - \frac{\sigma_i^2}{2}\right) \Delta t +
-		\left(\sigma_i \sqrt{\Delta t}\right) \epsilon_i
-		\right)
-	\end{displaymath}
-	where $S_i(t)$ is the asset value at time $t$, $\Delta t$ is a time increment, 
-	and $\epsilon_i \sim N(0,1)$.
-
-	We determine the probability that the asset value is below the threshold at 
-	fixed time $t$.
-	\begin{displaymath}
-		\def\arraystretch{2.0}
-		\begin{array}{l}
-			F_i(t) = \Pr\{S_i(t) < h_i(t)\} = 
-			\Pr\left\{S_i(0)\cdot\exp\left(\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t + \sigma_i\sqrt{t}\cdot\epsilon_i\right) < h_i(t)\right\} =
-			\\
-			=\Pr\left\{\ln(S_i(0))+\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t + \sigma_i\sqrt{t}\cdot\epsilon_i < \ln(h_i(t))\right\} =
-			\\
-			=\Pr\left\{\epsilon_i < \left(\ln(h_i(t))-\ln(S_i(0))-\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)/\sigma_i\sqrt{t}\right\} = 
-			\\
-			=\Phi\left(\left(\ln(h_i(t))-\ln(S_i(0))-\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)/\sigma_i\sqrt{t}\right)
-		\end{array}
-	\end{displaymath}
-	We isolate $h_i(t)$ on the left side of the equation.
-	\begin{displaymath}
-		h_i(t) = \exp\left(\sigma_i\sqrt{t}\cdot\Phi^{-1}(F_i(t)) + \ln(S_i(0)) + \left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)
-	\end{displaymath}
-	
-\end{proof}
-
-Note that this result does not say anything about the form of the default times 
-distributions. In section~\ref{pdfmm} we use the Merton's model to define the 
-Merton's default time distribution using the same assumptions we do. This 
-distribution is harmonious with the current framework, but this framework is not 
-limited to such type of distributions.
-
-Second, we need to determine the copula. In the following result we see that the
-copula of the multivariate default times model is a Gaussian copula. Moreover, 
-the correlation matrix of the Gaussian copula and the correlation matrix of the 
-Brownian Motion are the same.
-
-\begin{proposition}[Multivariate default times has a \sout{Merton's copula}]
-	\label{prop:mmgc}
-	Assume $n$ firms whose asset values follow a multivariate GBM model with 
-	expected returns $\vec{\mu}$, annualized volatilities $\vec{\sigma}$, and 
-	a correlation matrix $R$. We consider that the i-th company defaults in 
-	the time range $[0,t]$ when the asset value at time $t$ is below the 
-	threshold $h_i(t)$.
-	
-	Under these assumptions, the multivariate default times has a Gaussian 
-	copula with correlation matrix $R$.
-\end{proposition}
-
-\begin{proof}
-	We formulate the multivariate default times distribution from the definition 
-	of default.	Without loss of generality,  we consider that there are only 2 
-	companies, and that $t_1 < t_2$.
-	\begin{displaymath}
-		\hspace*{-1cm}
-		F(t_1,\ t_2) =
-		\Pr\{ T_1 \le t_1,\ T_2 \le t_2 \} = 
-		\Pr\left\{ S_1(t_1) \le h_1(t_1),\ S_2(t_2) \le h_2(t_2) \right\} = 
-	\end{displaymath}
-	
-	We put $S(t_2)$ in terms of $S(t_1)$ using equation~\ref{eq:mgbm}. We name 
-	$\epsilon'' \sim N(0,R)$ the Brownian motion in the time range $[t_1,t_2]$.
-	\begin{displaymath}
-		\hspace*{-1cm}
-		\Pr\left\{
-		\begin{array}{ll}
-			S_1(t_1) & \le h_1(t_1)
-			\\
-			S_2(t_1)\cdot\exp\left(\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2''\right) & \le h_2(t_2)
-		\end{array}
-		\right\} =
-	\end{displaymath}
-
-	We take logarithms in order to simplify the expressions
-	\begin{displaymath}
-		\hspace*{-1cm}
-		\Pr\left\{ 
-		\begin{array}{ll}
-			\ln(S_1(t_1)) & \le \ln(h_1(t_1))
-			\\
-			\ln(S_2(t_1)) + \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2'' & \le \ln(h_2(t_2)) 
-		\end{array}
-		\right\} =
-	\end{displaymath}
-
-	We put $S(t_1)$ in terms of $S(0)$ using equation~\ref{eq:mgbm}. We name 
-	$\epsilon' \sim N(0,R)$ the Brownian motion in the time range $[0,t_1]$.
-	{\small
-	\begin{displaymath}
-		\Pr\left\{ 
-		\begin{array}{ll}
-			\ln(S_1(0)) + 
-			\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1' 
-			& \le \ln(h_1(t_1))
-			\\
-			\ln(S_2(0)) +
-			\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_1 + \sigma_2 \sqrt{t_1} \cdot \epsilon_2' +
-			\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2'' 
-			& \le \ln(h_2(t_2)) 
-		\end{array}
-		\right\} =
-	\end{displaymath}\par}
-	
-	We rearrange the terms moving the non-stochastic terms to the right	hand 
-	side of the expression.
-	\begin{displaymath}
-		\hspace*{-1cm}
-		\Pr\left\{ 
-		\begin{array}{rll}
-			\epsilon_1' & &
-			\le \left(\ln(h_1(t_1)) - \ln(S_1(0)) - \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1\right)/\left(\sigma_1\cdot\sqrt{t_1}\right)
-			\\
-			\sqrt{\frac{t_1}{t_2}} \cdot \epsilon_2' & + \sqrt{1-\frac{t_1}{t_2}} \cdot \epsilon_2'' & 
-			\le \left(\ln(h_2(t_2)) - \ln(S_2(0)) - \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2\right)/\left(\sigma_2\cdot\sqrt{t_2}\right)
-		\end{array}
-		\right\} =
-	\end{displaymath}
-
-	We express the threshold functions $h_i(t)$ in terms of the default times 
-	distribution as stated in proposition~\ref{prop:mmdtf}
-	\begin{displaymath}
-		\hspace*{-1cm}
-		\Pr\left\{ 
-		\begin{array}{rll}
-			\epsilon_1' & &
-			\le \Phi^{-1}(F_1(t_1))
-			\\
-			\sqrt{\frac{t_1}{t_2}} \cdot \epsilon_2' & + \sqrt{1-\frac{t_1}{t_2}} \cdot \epsilon_2'' & 
-			\le \Phi^{-1}(F_2(t_2))
-		\end{array}
-		\right\} = 
-	\end{displaymath}
-
-	If $X \sim N(\mu_X,\Sigma_X)$ and $Y \sim N(\mu_Y,\Sigma_Y)$ are independents, then 
-	\begin{displaymath}
-		A \cdot X + B \cdot Y + C \sim N\left(A \mu_X+ B \mu_Y + C,\ A \Sigma_X A^\intercal + B \Sigma_Y B^\intercal\right)
-	\end{displaymath}
-	In our case
-	\begin{displaymath}
-		\epsilon = 
-		\left(
-			\begin{array}{cc}
-				1 & 0 \\ 
-				0 & \sqrt{K}
-			\end{array}
-		\right) 
-		\cdot \epsilon' + 
-		\left(
-			\begin{array}{cc}
-				0 & 0 \\ 
-				0 & \sqrt{1-K}
-			\end{array}
-		\right)
-		\cdot \epsilon''
-		\sim
-		N\left(0,\left(
-			\begin{array}{cc}
-				1   & r \sqrt{K} \\ 
-				r \sqrt{K} & 1
-			\end{array}
-		\right)\right)
-		\text{ where }
-		K = \frac{t_1}{t_2}
-	\end{displaymath}
-	\begin{comment}
-		R = {{1,r},{r,1}}
-		A = {{1,0},{0,Sqrt[k]}}
-		B = {{0,0},{0,Sqrt[1-k]}}
-		M = Simplify[A.R.Transpose[A] + B.R.Transpose[B], Reals]
-		Q = CholeskyDecomposition[M]
-		S= Inverse[Q]
-		
-		Q = MatrixPower[M, 1/2]?
-	\end{comment}
-
-	We formulate our expression in terms of $\epsilon$ instead of $\epsilon'$ 
-	and $\epsilon''$.
-	\begin{displaymath}
-		\hspace*{-1cm}
-		\Pr\left\{ 
-		\epsilon
-		\le \left(
-		\begin{array}{l}
-			\Phi^{-1}(F_1(t_1))
-			\\
-			\Phi^{-1}(F_2(t_2))
-		\end{array}
-		\right)
-		\right\} = 
-		\Pr\left\{ 
-			\epsilon_1 \le \Phi^{-1}(F_1(t_1)),
-			\ \epsilon_2 \le \Phi^{-1}(F_2(t_2))
-		\right\}
-	\end{displaymath}
-	
-	% This is not a Gaussian Copula.
-	% Is it the Henriksson–Merton copula?
-	% Is it a new copula named Torrent-Merton ?
-	
-	That means that
-	\begin{displaymath}
-		F(t_1,\ t_2) = H\left( \Phi^{-1}(F_1(t_1)),\ \Phi^{-1}(F_2(t_2)) \right)
-	\end{displaymath}
-	where $H$ is the cdf of the multivariate Gaussian \sout{with correlation matrix $R$},
-	and $\Phi^{-1}$ is the inverse of the univariate Gaussian distribution.
-	\sout{According to proposition~\ref{prop:dtd}, this multivariate default times 
-	distribution has marginals $F_i(t)$ and a Gaussian copula with correlation 
-	matrix $R$}.
-	
-	WARNING: $H$ DEPENDS ON $t_1,t_2$, BUT SHOULD ONLY DEPEND ON $F_1, F_2$ !!!
-	
-\end{proof}
-
-\begin{comment}
-library(mvtnorm)
-
-sigma = c(0.3, 0.4)
-mu = c(0, 0)
-R = matrix(nrow=2, ncol=2, data=c(1,0.4,0.4,1))
-s0 = c(1, 1)
-lambda = c(1.5, 1.2)
-
-f <- function(i, t) {
-  pexp(t, rate=lambda[i])
-}
-
-h <- function(i, t) {
-  exp(sigma[i]*sqrt(t)*qnorm(f(i,t)) + log(s0[i]) + (mu[i]-sigma[i]^2/2)*t)
-}
-
-S <- function(s, t) {
-  s * exp((mu - sigma^2/2)*t + sigma * sqrt(t) * rmvnorm(1, sigma=R))
-}
-
-simu <- function(n, t1, t2) {
-  ret = matrix(nrow=n, ncol=4, 0)
-  for (i in 1:n) {
-    s1 = S(s0, t1)
-    s2 = S(s1, t2-t1)
-    ret[i,] = c(s1, s2)
-  }
-  return(ret)
-}
-
-t1 = 1
-t2 = 2
-M = simu(25000, t1, t2)
-(nrow(M[M[,1]<h(1,t1) & M[,4]<h(2,t2),]))/nrow(M)
-pmvnorm(upper=c(qnorm(f(1,t1)), qnorm(f(2,t2))), sigma=R)[1]
-
-\end{comment}
-
-In the following lines we show that the Gaussian copula is a good-enough
-approximation of the Merton's copula.We use the following basic statements
-to derive the probability density functions.
-
-We want to obtaing the pdf of the default times distribution considering 
-a Gaussian copula. We know that the cdf satisfies:
-\begin{displaymath}
-	F(t_1,t_2) = H\left( \Phi^{-1}(F_1(t_1)),\ \Phi^{-1}(F_2(t_2)) \right)
-\end{displaymath}
-where $H$ is the cdf of the multivariate Gaussian,  $\Phi^{-1}$ is the inverse 
-of the univariate Gaussian distribution, anf $F_i$ are marginal default time
-distributions. We derive this expression applying the differentiation under
-the integral sign, the derivative of the inverse function, and the chain rule.
-\begin{displaymath}
-	F'(t_1,t_2) = \phi_{R}\left(
-	\Phi^{-1}(F_1(t_1)),\ \Phi^{-1}(F_2(t_2))
-	\right) 
-	\cdot
-	\frac{F'_1(t_1)}{\phi(\Phi^{-1}(F_1(t_1)))}
-	\cdot
-	\frac{F'_2(t_2)}{\phi(\Phi^{-1}(F_2(t_2)))}
-\end{displaymath}
-where $\phi_{R}$ is the pdf of $N(\vec{0},R)$
-
-Third, we need to determine the factor loadings. To do this, we assume that 
-there are $s$ factors and each factor is composed by $n_i$ firms. Then, we use 
-the Gaussian multi-factor model to express the multivariate Gaussian 
-distribution involved in the Geometric Brownian Motion. That is
-\begin{equation}
-	S_i^j(t+\Delta t) = S_i^j(t) \cdot \exp\left(
-	\left(\mu_i^j - \frac{\sigma_i^{j2}}{2}\right) \Delta t +
-	\left(\sigma_i^j \sqrt{\Delta t}\right) X_i^j
-	\right)
-	\qquad
-	\begin{array}{l}
-		j=1,\dots,n_i
-		\\
-		i=1,\dots,s 
-	\end{array}
-\end{equation}
-where $X$ is a Gaussian multi-factor distribution (a multivariate Gaussian 
---see appendix~\ref{ap:mfgm}--)
-\begin{displaymath}
-	X_i^j = w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j
-	\quad \text{ where } \left\{
-	\begin{array}{ll}
-		i = 1, \dots, s & \text{$s$ is the number of factors} \\
-		j = 1, \dots, n_i & \text{$n_i$ is i-th factor size} \\
-		Z \sim N(\vec{0},R) & \text{$R$ is a $s {\times} s$ correlation matrix} \\
-		w_i \in (0,1) & \text{the factor loadings } \\
-		\epsilon_i^j \sim N(0,1) \text { iid } & \forall\ i,j \\
-		Z, \epsilon_i^j \text{ independents } & \forall\ i,j \\
-	\end{array}
-	\right.
-\end{displaymath}
-One might object that is necessary to have the same $\mu_i^j$ and $\sigma_i^j$ 
-values for all companies on the same factor. Here we see that the default event 
-don't depend on individual $\mu_i^j$ and $\sigma_i^j$ values but on $F_i^j(t)$ 
-(wich in turn can depend on $\mu_i^j$ and $\sigma_i^j$ as in the Merton's case). 
-Default ocurrs when
-{\small
-\begin{displaymath}
-	\def\arraystretch{2.0}
-	\begin{array}{ll}
-		S_i^j(t) \le h_i^j(t) 
-		\\
-		\ln(S_i^j(0)) + \left(\mu_i^j - \frac{\sigma_i^{j2}}{2}\right) t +
-			\left(\sigma_i^j \sqrt{t}\right) X_i^j 
-		\le 
-		\sigma_i^j\sqrt{t}\cdot\Phi^{-1}(F_i^j(t)) + 
-			\ln(S_i^j(0)) + \left(\mu_i^j-\frac{\sigma_i^{j2}}{2}\right)\cdot t
-		\\
-		X_i^j \le \Phi^{-1}(F_i^j(t))
-		\\
-		w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j \le \Phi^{-1}(F_i^j(t))
-	\end{array}
-\end{displaymath}}
-Note that default depends on $w_i$, $R$ and $F_i^j(t)$, but not on $\mu_i^j$ and 
-$\sigma_i^j$. That is, a factor may contain companies with different characteristics 
-having the same dependence structure. Moreover, if we consider that
-$\Phi^{-1}(F_i^j(1)) = \Phi^{-1}(p_i)$, then the algorithm for the simulation of 
-the annual number of failures is exactly the same as algorithm~\ref{alg:snod} 
-taking $\nu=\infty$.
-
-\begin{comment}
-\begin{example}[Modeling a portfolio of bonds issued by listed companies]
-	We have three zero-coupon bonds with a face value of $1000$ \euro\ issued by 
-	companies in sectors of energy, banking and finance respectively. We want 
-	to assess the credit risk of this portfolio using the Gaussian model 
-	exposed above. We know that the correlation matrix between these companies 
-	is a $3 \times 3$ matrix $R$.
-	
-	from three lited companies 
-	In proposition~\ref{prop:mmgc} we see that the Gaussian correlation matrix is 
-	identical in both models. According to proposition~\ref{prop:gmfigs} (see proof)
-	the Gaussian multi-factor models satisfy
-	\begin{displaymath}
-		\text{Cor}(X_{i_1}^{j_1},X_{i_2}^{j_2}) = w_{i_1} \cdot w_{i_2} \cdot R_{i_1i_2}
-	\end{displaymath}
-	That is, the value of factor loadings $w_i$ is exactly the same in the 
-	multivariate default times model and in the multivariate Geometric Brownian 
-	Motion asset value model. Note that when there is only one firm per sector, 
-	then $w_i=1$ and $R$ is the usual Brownian Motion correlation matrix.
-
-	Marginals $F_i(t)$ can be inferred using the Merton's model (see appendix~\ref{pdfmm}).
-	Optionally, these can be derived using the information provided by credit rating 
-	agencies like the 1-year PDs (see appendix~\ref{pdfsv}) or the transition matrix 
-	(see appendix~\ref{pdftm}).
-
-	Copula $C_{\nu,\vec{w},R}^{\text{t}}$ has $\nu=\infty$ (Gaussian case), and $R$ 
-	exactly equal to the correlation matrix of the Brownian Motion. If there is only 
-	one company per factor, then the factor loadings are $w_i=1$. Otherwise factor 
-	loadings depends on the correlations between companies on the same factor (see 
-	example XXX below).
-
-\end{example}
-
-\textbf{Conclusion}. BLABLABLA asset prices model and default times model
-have exactly the same dependence structure. BLABLABLA.
-\end{comment}
-
-%------------------------------------------------------------------------------
 % RISK SENSITIVITY
 %------------------------------------------------------------------------------
 \section{Risk Sensitivity}
@@ -3146,6 +2694,458 @@ used to ensure the restrictions compliance.
 	\caption{\texttt{test05.xml} optimization}
 	\label{tab:optim1}
 \end{table}
+
+%------------------------------------------------------------------------------
+% MARKET MODEL
+%------------------------------------------------------------------------------
+\section{Market Model}
+
+In some cases, historical data of portfolio defaults is not available, but 
+current debtors are listed on stock markets and/or they issue debt which is 
+traded on fixed income markets. In this section we derive the multivariate 
+default times model discussed in chapter~\ref{chap:mdt} from the obligors' 
+quotes.
+
+We consider that both underlying asset values and stock prices follow a 
+Geometric Brownian Motion (GBM) process described by the stochastic 
+differential equation $dS_t = \vec{\mu} S_t\ dt + \vec{\sigma} S_t\ dW_t$
+where $S_t$ are the asset values (stock prices respectively) at time $t$, 
+$\vec{\mu}$ are the expected annual returns, $\vec{\sigma}$ are the annualized 
+volatilities, and $W_t$ is a multivariate Brownian Motion with correlation 
+matrix $R$. This stochastic differential equation has the following solution
+\begin{equation}
+	\label{eq:mgbm}
+	S_i(t+\Delta t) = S_i(t) \cdot \exp\left(
+	\left(\mu_i - \frac{\sigma_i^2}{2}\right) \Delta t +
+	\left(\sigma_i \sqrt{\Delta t}\right) \epsilon_i
+	\right) 
+	\quad 
+	i = 1,\dots,n
+\end{equation}
+where $n$ is the number of firms, $i$ is the firm index, $\epsilon_i$ is the 
+i-th component of $N(0,R)$, and $\Delta t$ is a time increment. Note that we 
+modified slightly the usual notation to highlight the multivariate nature.
+
+We consider the \ul{Merton's scenario}. That is, a company defaults when the 
+asset value is below a preset threshold at the end of the period (usually 1-year). 
+Figure~\ref{fig:market1} displays the asset values of three companies over a 
+year (250 working days). 
+Note that the \emph{red} company ends below the threshold $90\%$ causing a 
+default event; the \emph{blue} company cross the threshold but finally ends 
+with a value just above the threshold avoiding the default event; finally the 
+\emph{green} company ends the year without any remarkable incident.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.98\textwidth]{market1}
+	\caption{Simulating defaults using a market model}
+	\label{fig:market1}
+\end{figure}
+
+Below we see that this scenario leads to a multivariate default times model of 
+type copula model as set forth in chapter~\ref{chap:mdt}. Specifically, leads 
+to the Gaussian multi-factor copula model.
+
+First, we need to determine the marginal distributions. The following basic result 
+establishes the relationship between the threshold functions and the corresponding 
+default time distributions. 
+
+\begin{proposition}[Default time distributions]
+	\label{prop:mmdtf}
+	Assume a firm $i$ whose asset value follows a GBM model with expected return 
+	$\mu_i$ and annualized volatility $\sigma_i$. We consider that this company 
+	defaults in the time range $[0,t]$ when the asset value at time $t$ is below 
+	the threshold $h_i(t)$.
+	
+	Under these assumptions, the threshold function $h_i(t)$ is as follows:
+	\begin{displaymath}
+		h_i(t) = \exp\left(\sigma_i\sqrt{t}\cdot\Phi^{-1}(F_i(t)) + 
+		\ln(S_i(0)) + \left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)
+	\end{displaymath}
+	where $F_i(t)$ is a cumulative distribution function (cdf) with support 
+	$[0,\infty)$, $S_i(0)$ is the asset value at time $0$, and $\Phi^{-1}$ is 
+	the inverse of the univariate Gaussian distribution.
+\end{proposition}
+
+\begin{proof}
+	According to equation~\ref{eq:mgbm}, the asset value has the following form
+	\begin{displaymath}
+		S_i(t+\Delta t) = S_i(t) \cdot \exp\left(
+		\left(\mu_i - \frac{\sigma_i^2}{2}\right) \Delta t +
+		\left(\sigma_i \sqrt{\Delta t}\right) \epsilon_i
+		\right)
+	\end{displaymath}
+	where $S_i(t)$ is the asset value at time $t$, $\Delta t$ is a time increment, 
+	and $\epsilon_i \sim N(0,1)$.
+
+	We determine the probability that the asset value is below the threshold at 
+	fixed time $t$.
+	\begin{displaymath}
+		\def\arraystretch{2.0}
+		\begin{array}{l}
+			F_i(t) = \Pr\{S_i(t) < h_i(t)\} = 
+			\Pr\left\{S_i(0)\cdot\exp\left(\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t + \sigma_i\sqrt{t}\cdot\epsilon_i\right) < h_i(t)\right\} =
+			\\
+			=\Pr\left\{\ln(S_i(0))+\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t + \sigma_i\sqrt{t}\cdot\epsilon_i < \ln(h_i(t))\right\} =
+			\\
+			=\Pr\left\{\epsilon_i < \left(\ln(h_i(t))-\ln(S_i(0))-\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)/\sigma_i\sqrt{t}\right\} = 
+			\\
+			=\Phi\left(\left(\ln(h_i(t))-\ln(S_i(0))-\left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)/\sigma_i\sqrt{t}\right)
+		\end{array}
+	\end{displaymath}
+	We isolate $h_i(t)$ on the left side of the equation.
+	\begin{displaymath}
+		h_i(t) = \exp\left(\sigma_i\sqrt{t}\cdot\Phi^{-1}(F_i(t)) + \ln(S_i(0)) + \left(\mu_i-\frac{\sigma_i^2}{2}\right)\cdot t\right)
+	\end{displaymath}
+	
+\end{proof}
+
+Note that this result does not say anything about the form of the default times 
+distributions. In section~\ref{pdfmm} we use the Merton's model to define the 
+Merton's default time distribution using the same assumptions we do. This 
+distribution is harmonious with the current framework, but this framework is not 
+limited to such type of distributions.
+
+Second, we need to determine the copula. In the following result we see that the
+copula of the multivariate default times model is a Gaussian copula. Moreover, 
+the correlation matrix of the Gaussian copula and the correlation matrix of the 
+Brownian Motion are the same.
+
+\begin{proposition}[Multivariate default times has a \sout{Merton's copula}]
+	\label{prop:mmgc}
+	Assume $n$ firms whose asset values follow a multivariate GBM model with 
+	expected returns $\vec{\mu}$, annualized volatilities $\vec{\sigma}$, and 
+	a correlation matrix $R$. We consider that the i-th company defaults in 
+	the time range $[0,t]$ when the asset value at time $t$ is below the 
+	threshold $h_i(t)$.
+	
+	Under these assumptions, the multivariate default times has a Gaussian 
+	copula with correlation matrix $R$.
+\end{proposition}
+
+\begin{proof}
+	We formulate the multivariate default times distribution from the definition 
+	of default.	Without loss of generality,  we consider that there are only 2 
+	companies, and that $t_1 < t_2$.
+	\begin{displaymath}
+		\hspace*{-1cm}
+		F(t_1,\ t_2) =
+		\Pr\{ T_1 \le t_1,\ T_2 \le t_2 \} = 
+		\Pr\left\{ S_1(t_1) \le h_1(t_1),\ S_2(t_2) \le h_2(t_2) \right\} = 
+	\end{displaymath}
+	
+	We put $S(t_2)$ in terms of $S(t_1)$ using equation~\ref{eq:mgbm}. We name 
+	$\epsilon'' \sim N(0,R)$ the Brownian motion in the time range $[t_1,t_2]$.
+	\begin{displaymath}
+		\hspace*{-1cm}
+		\Pr\left\{
+		\begin{array}{ll}
+			S_1(t_1) & \le h_1(t_1)
+			\\
+			S_2(t_1)\cdot\exp\left(\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2''\right) & \le h_2(t_2)
+		\end{array}
+		\right\} =
+	\end{displaymath}
+
+	We take logarithms in order to simplify the expressions
+	\begin{displaymath}
+		\hspace*{-1cm}
+		\Pr\left\{ 
+		\begin{array}{ll}
+			\ln(S_1(t_1)) & \le \ln(h_1(t_1))
+			\\
+			\ln(S_2(t_1)) + \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2'' & \le \ln(h_2(t_2)) 
+		\end{array}
+		\right\} =
+	\end{displaymath}
+
+	We put $S(t_1)$ in terms of $S(0)$ using equation~\ref{eq:mgbm}. We name 
+	$\epsilon' \sim N(0,R)$ the Brownian motion in the time range $[0,t_1]$.
+	{\small
+	\begin{displaymath}
+		\Pr\left\{ 
+		\begin{array}{ll}
+			\ln(S_1(0)) + 
+			\left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1 + \sigma_1 \sqrt{t_1} \cdot \epsilon_1' 
+			& \le \ln(h_1(t_1))
+			\\
+			\ln(S_2(0)) +
+			\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_1 + \sigma_2 \sqrt{t_1} \cdot \epsilon_2' +
+			\left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot (t_2-t_1) + \sigma_2 \sqrt{t_2-t_1} \cdot \epsilon_2'' 
+			& \le \ln(h_2(t_2)) 
+		\end{array}
+		\right\} =
+	\end{displaymath}\par}
+	
+	We rearrange the terms moving the non-stochastic terms to the right	hand 
+	side of the expression.
+	\begin{displaymath}
+		\hspace*{-1cm}
+		\Pr\left\{ 
+		\begin{array}{rll}
+			\epsilon_1' & &
+			\le \left(\ln(h_1(t_1)) - \ln(S_1(0)) - \left(\mu_1 - \frac{\sigma_1^2}{2}\right) \cdot t_1\right)/\left(\sigma_1\cdot\sqrt{t_1}\right)
+			\\
+			\sqrt{\frac{t_1}{t_2}} \cdot \epsilon_2' & + \sqrt{1-\frac{t_1}{t_2}} \cdot \epsilon_2'' & 
+			\le \left(\ln(h_2(t_2)) - \ln(S_2(0)) - \left(\mu_2 - \frac{\sigma_2^2}{2}\right) \cdot t_2\right)/\left(\sigma_2\cdot\sqrt{t_2}\right)
+		\end{array}
+		\right\} =
+	\end{displaymath}
+
+	We express the threshold functions $h_i(t)$ in terms of the default times 
+	distribution as stated in proposition~\ref{prop:mmdtf}
+	\begin{displaymath}
+		\hspace*{-1cm}
+		\Pr\left\{ 
+		\begin{array}{rll}
+			\epsilon_1' & &
+			\le \Phi^{-1}(F_1(t_1))
+			\\
+			\sqrt{\frac{t_1}{t_2}} \cdot \epsilon_2' & + \sqrt{1-\frac{t_1}{t_2}} \cdot \epsilon_2'' & 
+			\le \Phi^{-1}(F_2(t_2))
+		\end{array}
+		\right\} = 
+	\end{displaymath}
+
+	If $X \sim N(\mu_X,\Sigma_X)$ and $Y \sim N(\mu_Y,\Sigma_Y)$ are independents, then 
+	\begin{displaymath}
+		A \cdot X + B \cdot Y + C \sim N\left(A \mu_X+ B \mu_Y + C,\ A \Sigma_X A^\intercal + B \Sigma_Y B^\intercal\right)
+	\end{displaymath}
+	In our case
+	\begin{displaymath}
+		\epsilon = 
+		\left(
+			\begin{array}{cc}
+				1 & 0 \\ 
+				0 & \sqrt{K}
+			\end{array}
+		\right) 
+		\cdot \epsilon' + 
+		\left(
+			\begin{array}{cc}
+				0 & 0 \\ 
+				0 & \sqrt{1-K}
+			\end{array}
+		\right)
+		\cdot \epsilon''
+		\sim
+		N\left(0,\left(
+			\begin{array}{cc}
+				1   & r \sqrt{K} \\ 
+				r \sqrt{K} & 1
+			\end{array}
+		\right)\right)
+		\text{ where }
+		K = \frac{t_1}{t_2}
+	\end{displaymath}
+	\begin{comment}
+		R = {{1,r},{r,1}}
+		A = {{1,0},{0,Sqrt[k]}}
+		B = {{0,0},{0,Sqrt[1-k]}}
+		M = Simplify[A.R.Transpose[A] + B.R.Transpose[B], Reals]
+		Q = CholeskyDecomposition[M]
+		S= Inverse[Q]
+		
+		Q = MatrixPower[M, 1/2]?
+	\end{comment}
+
+	We formulate our expression in terms of $\epsilon$ instead of $\epsilon'$ 
+	and $\epsilon''$.
+	\begin{displaymath}
+		\hspace*{-1cm}
+		\Pr\left\{ 
+		\epsilon
+		\le \left(
+		\begin{array}{l}
+			\Phi^{-1}(F_1(t_1))
+			\\
+			\Phi^{-1}(F_2(t_2))
+		\end{array}
+		\right)
+		\right\} = 
+		\Pr\left\{ 
+			\epsilon_1 \le \Phi^{-1}(F_1(t_1)),
+			\ \epsilon_2 \le \Phi^{-1}(F_2(t_2))
+		\right\}
+	\end{displaymath}
+	
+	% This is not a Gaussian Copula.
+	% Is it the Henriksson–Merton copula?
+	% Is it a new copula named Torrent-Merton ?
+	
+	That means that
+	\begin{displaymath}
+		F(t_1,\ t_2) = H\left( \Phi^{-1}(F_1(t_1)),\ \Phi^{-1}(F_2(t_2)) \right)
+	\end{displaymath}
+	where $H$ is the cdf of the multivariate Gaussian \sout{with correlation matrix $R$},
+	and $\Phi^{-1}$ is the inverse of the univariate Gaussian distribution.
+	\sout{According to proposition~\ref{prop:dtd}, this multivariate default times 
+	distribution has marginals $F_i(t)$ and a Gaussian copula with correlation 
+	matrix $R$}.
+	
+	WARNING: $H$ DEPENDS ON $t_1,t_2$, BUT SHOULD ONLY DEPEND ON $F_1, F_2$ !!!
+	
+\end{proof}
+
+\begin{comment}
+library(mvtnorm)
+
+sigma = c(0.3, 0.4)
+mu = c(0, 0)
+R = matrix(nrow=2, ncol=2, data=c(1,0.4,0.4,1))
+s0 = c(1, 1)
+lambda = c(1.5, 1.2)
+
+f <- function(i, t) {
+  pexp(t, rate=lambda[i])
+}
+
+h <- function(i, t) {
+  exp(sigma[i]*sqrt(t)*qnorm(f(i,t)) + log(s0[i]) + (mu[i]-sigma[i]^2/2)*t)
+}
+
+S <- function(s, t) {
+  s * exp((mu - sigma^2/2)*t + sigma * sqrt(t) * rmvnorm(1, sigma=R))
+}
+
+simu <- function(n, t1, t2) {
+  ret = matrix(nrow=n, ncol=4, 0)
+  for (i in 1:n) {
+    s1 = S(s0, t1)
+    s2 = S(s1, t2-t1)
+    ret[i,] = c(s1, s2)
+  }
+  return(ret)
+}
+
+t1 = 1
+t2 = 2
+M = simu(25000, t1, t2)
+(nrow(M[M[,1]<h(1,t1) & M[,4]<h(2,t2),]))/nrow(M)
+pmvnorm(upper=c(qnorm(f(1,t1)), qnorm(f(2,t2))), sigma=R)[1]
+
+\end{comment}
+
+In the following lines we show that the Gaussian copula is a good-enough
+approximation of the Merton's copula.We use the following basic statements
+to derive the probability density functions.
+
+We want to obtaing the pdf of the default times distribution considering 
+a Gaussian copula. We know that the cdf satisfies:
+\begin{displaymath}
+	F(t_1,t_2) = H\left( \Phi^{-1}(F_1(t_1)),\ \Phi^{-1}(F_2(t_2)) \right)
+\end{displaymath}
+where $H$ is the cdf of the multivariate Gaussian,  $\Phi^{-1}$ is the inverse 
+of the univariate Gaussian distribution, anf $F_i$ are marginal default time
+distributions. We derive this expression applying the differentiation under
+the integral sign, the derivative of the inverse function, and the chain rule.
+\begin{displaymath}
+	F'(t_1,t_2) = \phi_{R}\left(
+	\Phi^{-1}(F_1(t_1)),\ \Phi^{-1}(F_2(t_2))
+	\right) 
+	\cdot
+	\frac{F'_1(t_1)}{\phi(\Phi^{-1}(F_1(t_1)))}
+	\cdot
+	\frac{F'_2(t_2)}{\phi(\Phi^{-1}(F_2(t_2)))}
+\end{displaymath}
+where $\phi_{R}$ is the pdf of $N(\vec{0},R)$
+
+Third, we need to determine the factor loadings. To do this, we assume that 
+there are $s$ factors and each factor is composed by $n_i$ firms. Then, we use 
+the Gaussian multi-factor model to express the multivariate Gaussian 
+distribution involved in the Geometric Brownian Motion. That is
+\begin{equation}
+	S_i^j(t+\Delta t) = S_i^j(t) \cdot \exp\left(
+	\left(\mu_i^j - \frac{\sigma_i^{j2}}{2}\right) \Delta t +
+	\left(\sigma_i^j \sqrt{\Delta t}\right) X_i^j
+	\right)
+	\qquad
+	\begin{array}{l}
+		j=1,\dots,n_i
+		\\
+		i=1,\dots,s 
+	\end{array}
+\end{equation}
+where $X$ is a Gaussian multi-factor distribution (a multivariate Gaussian 
+--see appendix~\ref{ap:mfgm}--)
+\begin{displaymath}
+	X_i^j = w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j
+	\quad \text{ where } \left\{
+	\begin{array}{ll}
+		i = 1, \dots, s & \text{$s$ is the number of factors} \\
+		j = 1, \dots, n_i & \text{$n_i$ is i-th factor size} \\
+		Z \sim N(\vec{0},R) & \text{$R$ is a $s {\times} s$ correlation matrix} \\
+		w_i \in (0,1) & \text{the factor loadings } \\
+		\epsilon_i^j \sim N(0,1) \text { iid } & \forall\ i,j \\
+		Z, \epsilon_i^j \text{ independents } & \forall\ i,j \\
+	\end{array}
+	\right.
+\end{displaymath}
+One might object that is necessary to have the same $\mu_i^j$ and $\sigma_i^j$ 
+values for all companies on the same factor. Here we see that the default event 
+don't depend on individual $\mu_i^j$ and $\sigma_i^j$ values but on $F_i^j(t)$ 
+(wich in turn can depend on $\mu_i^j$ and $\sigma_i^j$ as in the Merton's case). 
+Default ocurrs when
+{\small
+\begin{displaymath}
+	\def\arraystretch{2.0}
+	\begin{array}{ll}
+		S_i^j(t) \le h_i^j(t) 
+		\\
+		\ln(S_i^j(0)) + \left(\mu_i^j - \frac{\sigma_i^{j2}}{2}\right) t +
+			\left(\sigma_i^j \sqrt{t}\right) X_i^j 
+		\le 
+		\sigma_i^j\sqrt{t}\cdot\Phi^{-1}(F_i^j(t)) + 
+			\ln(S_i^j(0)) + \left(\mu_i^j-\frac{\sigma_i^{j2}}{2}\right)\cdot t
+		\\
+		X_i^j \le \Phi^{-1}(F_i^j(t))
+		\\
+		w_i \cdot Z_i + \sqrt{1-w_i^2} \cdot \epsilon_i^j \le \Phi^{-1}(F_i^j(t))
+	\end{array}
+\end{displaymath}}
+Note that default depends on $w_i$, $R$ and $F_i^j(t)$, but not on $\mu_i^j$ and 
+$\sigma_i^j$. That is, a factor may contain companies with different characteristics 
+having the same dependence structure. Moreover, if we consider that
+$\Phi^{-1}(F_i^j(1)) = \Phi^{-1}(p_i)$, then the algorithm for the simulation of 
+the annual number of failures is exactly the same as algorithm~\ref{alg:snod} 
+taking $\nu=\infty$.
+
+\begin{comment}
+\begin{example}[Modeling a portfolio of bonds issued by listed companies]
+	We have three zero-coupon bonds with a face value of $1000$ \euro\ issued by 
+	companies in sectors of energy, banking and finance respectively. We want 
+	to assess the credit risk of this portfolio using the Gaussian model 
+	exposed above. We know that the correlation matrix between these companies 
+	is a $3 \times 3$ matrix $R$.
+	
+	from three lited companies 
+	In proposition~\ref{prop:mmgc} we see that the Gaussian correlation matrix is 
+	identical in both models. According to proposition~\ref{prop:gmfigs} (see proof)
+	the Gaussian multi-factor models satisfy
+	\begin{displaymath}
+		\text{Cor}(X_{i_1}^{j_1},X_{i_2}^{j_2}) = w_{i_1} \cdot w_{i_2} \cdot R_{i_1i_2}
+	\end{displaymath}
+	That is, the value of factor loadings $w_i$ is exactly the same in the 
+	multivariate default times model and in the multivariate Geometric Brownian 
+	Motion asset value model. Note that when there is only one firm per sector, 
+	then $w_i=1$ and $R$ is the usual Brownian Motion correlation matrix.
+
+	Marginals $F_i(t)$ can be inferred using the Merton's model (see appendix~\ref{pdfmm}).
+	Optionally, these can be derived using the information provided by credit rating 
+	agencies like the 1-year PDs (see appendix~\ref{pdfsv}) or the transition matrix 
+	(see appendix~\ref{pdftm}).
+
+	Copula $C_{\nu,\vec{w},R}^{\text{t}}$ has $\nu=\infty$ (Gaussian case), and $R$ 
+	exactly equal to the correlation matrix of the Brownian Motion. If there is only 
+	one company per factor, then the factor loadings are $w_i=1$. Otherwise factor 
+	loadings depends on the correlations between companies on the same factor (see 
+	example XXX below).
+
+\end{example}
+
+\textbf{Conclusion}. BLABLABLA asset prices model and default times model
+have exactly the same dependence structure. BLABLABLA.
+\end{comment}
 
 
 %==============================================================================

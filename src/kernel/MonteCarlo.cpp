@@ -349,7 +349,8 @@ void ccruncher::MonteCarlo::setInverses()
  *          then uses the current thread (simplifies debug), otherwise
  *          creates one simulation per thread.
  * @param[in] numthreads Number of threads to use (0 = num cores).
- * @param[in] callback Function called every blocksize simulations.
+ * @param[in] nhash Number of simulations per hash (0 = no hashes).
+ * @param[in] stop Variable to stop process from outside.
  * @return Exception Error running Monte Carlo.
  */
 void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *stop)
