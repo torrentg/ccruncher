@@ -26,6 +26,7 @@
 #include <ctime>
 #include <cctype>
 #include <cstdio>
+#include <cstdlib>
 #include <algorithm>
 #include <unistd.h>
 #include <dirent.h>
@@ -580,7 +581,7 @@ string ccruncher::Utils::bytesToString(const size_t val)
  */
 string ccruncher::Utils::millisToString(long millis)
 {
-  long ms = fabs(millis);
+  long ms = abs(millis);
 
   // computing hours
   int hh = ms/(60*60*1000);

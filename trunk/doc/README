@@ -275,7 +275,7 @@ Developers tips & tricks
 13. using clang compiler (http://clang.llvm.org/)
       > #using autotools
       > ./configure CXX=clang++
-      > make
+      > make CXX=clang++
       > # using qmake
       > qmake -spec unsupported/linux-clang 
       > # source code static analysis
