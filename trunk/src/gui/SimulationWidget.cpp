@@ -302,6 +302,9 @@ void ccruncher_gui::SimulationWidget::linkify(QString &line)
     QString token = regexp1.cap(1).trimmed();
     if (QFile(token).exists()) // && !QDir(token).exists())
     {
+      if (token.endsWith("/") || token.endsWith("\\")) {
+        token = token.left(token.length()-1);
+      }
       QString filename = QFileInfo(token).fileName();
       size_t ncols = task.getLogger().getNumCols();
       int len = regexp1.matchedLength();
@@ -319,8 +322,7 @@ void ccruncher_gui::SimulationWidget::linkify(QString &line)
   // linkifying http refs
   QRegExp regexp2("http://([^ \t\n]*)");
   pos = regexp2.indexIn(line, 0);
-  if (pos != -1)
-  {
+  if (pos != -1) {
     int len = regexp2.matchedLength();
     QString token = QString("<a href='%1'>%1</a>").arg(regexp2.cap());
     line.replace(pos, len, token);
