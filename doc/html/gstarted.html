@@ -223,7 +223,7 @@
 
 <b>> bin/ccruncher-cmd -h</b>
 
-Usage: ccruncher-cmd [OPTION]... -o DIRECTORY [FILE]
+Usage: ccruncher-cmd [OPTION] [FILE]
 
 Simule the loss distribution of the credit portfolio described in the xml
 input FILE using the Monte Carlo method. FILE can be gziped. If no one is
@@ -235,7 +235,7 @@ Mandatory arguments to long options are mandatory for short options too.
   -D, --define=KEY=VAL    replace '$KEY' strings by 'VAL' in input file
   -a, --append            output data is appended to existing files
   -w, --overwrite         existing output files are overwritten
-  -o, --output=DIRECTORY  directory where output files will be placed
+  -o, --output=DIRECTORY  place output files in DIRECTORY (default=current dir)
       --nice=NICEVAL      set process priority to NICEVAL (see nice command)
       --threads=NTHREADS  number of threads to use (default=number of cores)
       --hash=HASHNUM      print '.' for each HASHNUM simulations (default=1000)
