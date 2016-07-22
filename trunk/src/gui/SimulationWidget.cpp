@@ -194,6 +194,7 @@ void ccruncher_gui::SimulationWidget::clearLog()
   //myfont ("Monospace");
   //myfont.setStyleHint(QFont::Monospace);
   myfont.setPixelSize(12);
+  myfont.setUnderline(false);
   ui->log->setFont(myfont);
   task.getLogger() << copyright << endl;
   logcursor = ui->log->textCursor();
