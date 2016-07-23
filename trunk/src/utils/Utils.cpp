@@ -268,7 +268,7 @@ bool ccruncher::Utils::isAbsolutePath(const std::string &path)
   }
 
 #ifdef _WIN32
-  string str = normalize(path);
+  string str = toNativeSeparators(path);
   if (str.substr(0,1) == pathSeparator) { // \users, \\net-pc1\users
     return true;
   }
@@ -331,8 +331,8 @@ string ccruncher::Utils::getWorkDir()
 string ccruncher::Utils::realpath(const string &path)
 {
 #ifdef _WIN32
-  TCHAR full_path[MAX_PATH];
-  GetFullPathName(_T(path.c_str()), MAX_PATH, full_path, NULL);
+  char full_path[MAX_PATH];
+  GetFullPathNameA(path.c_str(), MAX_PATH, full_path, NULL);
   return string(full_path);
 #else
   char full_path[PATH_MAX];
