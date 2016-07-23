@@ -289,7 +289,7 @@ bool ccruncher::Utils::isAbsolutePath(const std::string &path)
 }
 
 /**************************************************************************//**
- * @return Working directory ending with pathSeparator (eg. '/').
+ * @return Working directory without ending with pathSeparator.
  * @throw Exception Error retrieving working directory.
  */
 string ccruncher::Utils::getWorkDir()
@@ -304,14 +304,7 @@ string ccruncher::Utils::getWorkDir()
       throw Exception("unable to retrieve current working directory");
     }
     else {
-      string aux = string(ret);
-
-      // appending '/' at last position
-      if (aux.length() == 0 || aux.substr(aux.length()-1, 1) != pathSeparator) {
-        aux = aux + pathSeparator;
-      }
-
-      return aux;
+      return string(ret);
     }
   }
   catch(...)
@@ -463,7 +456,7 @@ string ccruncher::Utils::dirname(const string &pathname)
  * @param[in] pathname Path to file.
  * @result File name (with extension).
  */
-string ccruncher::Utils::basename(const string &pathname)
+string ccruncher::Utils::filename(const string &pathname)
 {
 #ifdef _WIN32
   char buf[_MAX_PATH];
