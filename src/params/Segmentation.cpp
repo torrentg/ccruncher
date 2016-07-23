@@ -184,7 +184,7 @@ const std::string& ccruncher::Segmentation::getSegment(unsigned short i) const
  */
 string ccruncher::Segmentation::getFilename(const string &path) const
 {
-  return Utils::normalizePath(path) + mName + ".csv";
+  return Utils::realpath(path) + Utils::pathSeparator + mName + ".csv";
 }
 
 /**************************************************************************//**

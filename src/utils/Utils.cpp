@@ -243,7 +243,7 @@ string ccruncher::Utils::lowercase(const string &str)
  * @param[in] str File path to normalize.
  * @return String normalized.
  */
-string ccruncher::Utils::normalize(const std::string &str)
+string ccruncher::Utils::toNativeSeparators(const std::string &str)
 {
 #ifdef _WIN32
   string ret = str;
@@ -321,59 +321,29 @@ string ccruncher::Utils::getWorkDir()
 }
 
 /**************************************************************************//**
- * @details Normalize a directory path applying the following rules:
- *          - replaces incorrect path separator based on platform
- *          - relative path -> absolute path
- *          - appends ending path separator
- *          example: input=./dir1/dir2 -> output=/workdir/dir1/dir2/
- * @param[in] path Path to a directory.
- * @return Dir path normalized.
+ * @details Expands  all symbolic links and resolves references to /./
+ *          and /../ and extra '/' characters to produce a canonicalized
+ *          absolute pathname.
+ * @param[in] path Path to a file or directory.
+ * @return Canonicalized pathname (with non-ending slash).
+ * @throw Exception Error reading path (eg. path non-existent)
  */
-string ccruncher::Utils::normalizePath(const string &path)
+string ccruncher::Utils::realpath(const string &path)
 {
-  string ret = trim(path);
-
-  if (ret.length() == 0 || ret == ".") {
-    ret = getWorkDir();
+#ifdef _WIN32
+  TCHAR full_path[MAX_PATH];
+  GetFullPathName(_T(path.c_str()), MAX_PATH, full_path, NULL);
+  return string(full_path);
+#else
+  char full_path[PATH_MAX];
+  char *aux = ::realpath(path.c_str(), full_path);
+  if (aux == nullptr) {
+    throw Exception(strerror(errno));
   }
-
-  ret = normalize(ret);
-
-  if (ret.substr(0,1) != "." && !isAbsolutePath(ret)) {
-    ret = "." + pathSeparator + ret;
+  else {
+    return string(full_path);
   }
-
-  if (ret.substr(0,1) == ".") {
-    ret = getWorkDir() + ret;
-  }
-
-  if (ret.length() > 1 && ret.back() == pathSeparator[0]) {
-    ret = ret.substr(0, ret.length()-1);
-  }
-
-  // resolves dot and dot-dot cases
-  vector<string> tokens;
-  tokenize(ret, tokens, pathSeparator);
-  for(size_t i=0; i<tokens.size(); i++)
-  {
-    if (tokens[i] == ".") {
-      tokens.erase(tokens.begin()+i);
-      i--;
-    }
-    else if (tokens[i] == "..") {
-      assert(i > 0);
-      tokens.erase(tokens.begin()+i);
-      i--;
-      tokens.erase(tokens.begin()+i);
-      i--;
-    }
-  }
-  ret = "";
-  for(size_t i=0; i<tokens.size(); i++) {
-    ret += tokens[i] + pathSeparator;
-  }
-
-  return ret;
+#endif
 }
 
 /**************************************************************************//**
@@ -489,11 +459,11 @@ string ccruncher::Utils::dirname(const string &pathname)
 }
 
 /**************************************************************************//**
- * @details Strip directory from filepath.
+ * @details Strip directory from filenames.
  * @param[in] pathname Path to file.
  * @result File name (with extension).
  */
-string ccruncher::Utils::filename(const string &pathname)
+string ccruncher::Utils::basename(const string &pathname)
 {
 #ifdef _WIN32
   char buf[_MAX_PATH];
@@ -511,29 +481,6 @@ string ccruncher::Utils::filename(const string &pathname)
   delete[] aux;
   return ret;
 #endif
-}
-
-/**************************************************************************//**
- * @param[in] path Path to file.
- * @param[in] name File name.
- * @result Filepath.
- */
-string ccruncher::Utils::filepath(const string &path, const string &name)
-{
-  if (isAbsolutePath(name))
-  {
-    return normalize(name);
-  }
-  else
-  {
-    string str1 = normalize(path);
-    string ret = ((str1=="." || str1=="."+pathSeparator)?"":str1);
-    if (ret.length() > 0 && ret.substr(ret.length()-1,1) != pathSeparator) {
-      ret += pathSeparator;
-    }
-    ret += normalize(name);
-    return ret;
-  }
 }
 
 /**************************************************************************//**

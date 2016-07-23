@@ -136,6 +136,9 @@ Notes for Windows developers (QT+MINGW)
 2. install MSYS+MINGW in C:\mingw\
    http://www.mingw.org/
    > mingw-get install libz
+   or update your installation
+   > mingw-get update
+   > mingw-get upgrade
    
 3. install and compile expat lib
    # download expat source in C:\MinGW\msys\1.0\home\user

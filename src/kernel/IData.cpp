@@ -129,7 +129,7 @@ void ccruncher::IData::parse(gzFile file, const map<string,string> &m)
     logger << indent(+1);
 
     // trace file info
-    logger << "file name" << split << "["+filename+"]" << endl;
+    logger << "file name" << split << "[" + Utils::realpath(filename) + "]" << endl;
     if (filename != STDIN_FILENAME) {
       logger << "file size" << split << Utils::bytesToString(Utils::filesize(filename)) << endl;
     }
@@ -301,9 +301,9 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *tag, const 
   // we push interest to stack (is optional)
   eu.interest = &interest;
 
-  string ref = getStringAttribute(attributes, "include", "");
+  string include = getStringAttribute(attributes, "include", "");
 
-  if (ref == "")
+  if (include == "")
   {
     eppush(eu, &portfolio, tag, attributes);
   }
@@ -314,10 +314,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *tag, const 
 
     try
     {
-      string path;
-      if (filename==STDIN_FILENAME) path = Utils::getWorkDir();
-      else path = Utils::dirname(filename);
-      string filepath = Utils::filepath(path, ref);
+      string filepath = getIncludedFileName(include);
       file = gzopen(filepath.c_str(), "rb");
       if (file == nullptr) {
         throw Exception("can't open file '" + filepath + "'");
@@ -360,7 +357,7 @@ void ccruncher::IData::parsePortfolio(ExpatUserData &eu, const char *tag, const 
         mMutex.unlock();
         gzclose(file);
       }
-      throw Exception(e, "error parsing file '" + ref + "'");
+      throw Exception(e, "error parsing file '" + include + "'");
     }
   }
 }
@@ -505,5 +502,25 @@ size_t ccruncher::IData::getReadedSize() const
   else ret = gzoffset(curfile);
   mMutex.unlock();
   return ret;
+}
+
+/**************************************************************************//**
+ * @param[in] name File name.
+ * @result Included filepath.
+ */
+string ccruncher::IData::getIncludedFileName(const string &name)
+{
+  if (Utils::isAbsolutePath(name)) {
+    return Utils::realpath(name);
+  }
+
+  string path;
+  if (filename==STDIN_FILENAME) {
+    path = Utils::getWorkDir();
+  } else {
+    path = Utils::dirname(filename);
+  }
+  string filepath = path + Utils::pathSeparator + Utils::toNativeSeparators(name);
+  return Utils::realpath(filepath);
 }
 

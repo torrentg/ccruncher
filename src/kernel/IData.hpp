@@ -115,6 +115,8 @@ class IData : public Input, public ExpatHandlers
 
   private:
   
+    //! Returns the included file name
+    std::string getIncludedFileName(const std::string &name);
     //! Check define
     void checkDefine(const std::string &key, const std::string &value) const;
     //! Parse portfolio

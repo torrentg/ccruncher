@@ -39,9 +39,6 @@ class Utils
     //! Constructor. Non-instantiable class
     Utils() {}
 
-    //! Normalize a string
-    static std::string normalize(const std::string &);
-
   public:
 
     //! Path separator symbol
@@ -66,8 +63,10 @@ class Utils
     static std::string uppercase(const std::string &str);
     //! Converts a string to lower case
     static std::string lowercase(const std::string &str);
-    //! Normalize a directory path
-    static std::string normalizePath(const std::string &path);
+    //! Convert '/' separators to underlying OS separators
+    static std::string toNativeSeparators(const std::string &str);
+    //! Canonicalize absolute pathname
+    static std::string realpath(const std::string &path);
     //! Returns working directory
     static std::string getWorkDir();
     //! Indicates if exist a directory
@@ -81,9 +80,7 @@ class Utils
     //! Directory part of a filepath
     static std::string dirname(const std::string &pathname);
     //! File part of a filepath
-    static std::string filename(const std::string &pathname);
-    //! Create a file path using path and a file name
-    static std::string filepath(const std::string &path, const std::string &name);
+    static std::string basename(const std::string &pathname);
     //! Return file size in bytes
     static size_t filesize(const std::string &filename);
     //! Returns bytes as string (B, KB, MB)
