@@ -56,7 +56,7 @@ void ccruncher_test::UtilsTest::test2()
 
   Utils::tokenize(str1, tokens, " ");
 
-  ASSERT_EQUALS(11UL, tokens.size());
+  ASSERT(11UL == tokens.size());
 
   ASSERT(tokens[0] == "");
   ASSERT(tokens[1] == "");
