@@ -80,7 +80,7 @@ class Utils
     //! Directory part of a filepath
     static std::string dirname(const std::string &pathname);
     //! File part of a filepath
-    static std::string basename(const std::string &pathname);
+    static std::string filename(const std::string &pathname);
     //! Return file size in bytes
     static size_t filesize(const std::string &filename);
     //! Returns bytes as string (B, KB, MB)
