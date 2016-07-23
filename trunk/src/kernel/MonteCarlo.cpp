@@ -306,7 +306,7 @@ void ccruncher::MonteCarlo::setSegmentations(const vector<Segmentation> &segment
   logger << endl;
   logger << "output files" << flood('*') << endl;
   logger << indent(+1);
-  logger << "directory" << split << "[" + Utils::normalizePath(path) + "]" << endl;
+  logger << "directory" << split << "[" + Utils::realpath(path) + "]" << endl;
   for(size_t i=0; i<aggregators.size(); i++) {
     logger << "segmentation" << split << "[" + aggregators[i]->getFilename() + "]" << endl;
   }
