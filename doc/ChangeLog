@@ -2,7 +2,7 @@
 CCRUNCHER CHANGELOG
 ===================
 
-version 2.5.0 (???. 2015)
+version 2.5.0 (???. 2016)
 --------------------------
   * MCMC algorithm reviewed
   * code moved from C++98 to C++11

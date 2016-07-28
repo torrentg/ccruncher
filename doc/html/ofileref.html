@@ -190,18 +190,20 @@
     <a name="trace"></a>
     <h2>ccruncher.out</h2>
     <pre>
+    
+<b>> bin/ccruncher-cmd -w -o data -DNU=12.54 -DW1=0.29 -DW2=0.48 -DR12=0.21 samples/test05.xml</b>
 
-        ccruncher is Copyright (C) 2004-2015 Gerard Torrent and licensed        
+        ccruncher is Copyright (C) 2004-2016 Gerard Torrent and licensed        
          under the GNU General Public License, version 2. More info at          
                             http://www.ccruncher.net                            
 
 general information ************************************************************
-  ccruncher version                                                2.4.1 (R1212)
-  start time (dd/MM/yyyy hh:mm:ss)                           07/03/2014 07:15:08
+  ccruncher version                                                2.5.0 (R1338)
+  start time (dd/MM/yyyy hh:mm:ss)                           27/07/2016 19:18:45
 
 reading input file *************************************************************
-  file name                                                 [samples/test05.xml]
-  file size                                                            274.69 KB
+  file name                 [/home/gerard/projects/ccruncher/samples/test05.xml]
+  file size                                                            274.60 KB
   define (user defined)                                                 NU=12.54
   define (user defined)                                                 R12=0.21
   define (user defined)                                                  W1=0.29
@@ -210,53 +212,45 @@ reading input file *************************************************************
   define (input file)                                            copula=t(12.54)
   define (input file)                                            antithetic=true
   define (input file)                                                     seed=0
-  file checksum (adler32)                                             1900187585
-  elapsed time parsing data                                         00:00:00.028
+  file checksum (adler32)                                             2023977821
+  elapsed time parsing data                                         00:00:00.014
 
-initialization procedure *******************************************************
-  setting parameters -----------------------------------------------------------
-    initial date                                                      01/01/2013
-    end date                                                          01/01/2014
-    number of ratings                                                          4
-    number of factors                                                          2
-    copula type                                                         t(12.54)
-    transition matrix period (months)                                         12
-    transition matrix regularization error (1M)                                0
-    default probability functions                                       computed
-    default probability splines (linear, cubic, none)                       cccn
-  setting obligors to simulate -------------------------------------------------
-    number of obligors                                                      1000
-    number of simulated obligors                                            1000
-  setting assets to simulate ---------------------------------------------------
-    number of assets                                                        1000
-    number of simulated assets                                              1000
-    number of simulated data items                                          1000
-  initializing aggregators -----------------------------------------------------
-    output data directory                                                 [data]
-    segmentation            [/home/gerard/projects/ccruncher/data/portfolio.csv]
-    segmentation        [/home/gerard/projects/ccruncher/data/sector-rating.csv]
+input file summary *************************************************************
+  initial date                                                        01/01/2013
+  end date                                                            01/01/2014
+  number of ratings                                                            4
+  number of factors                                                            2
+  copula type                                                           t(12.54)
+  default probability functions                                         computed
+  transition matrix period (months)                                           12
+  transition matrix regularization error (1M)                                  0
+  number of obligors                                                        1000
+  number of assets                                                          1000
+  number of values                                                          1000
+  number of segmentations                                                      2
+
+output files *******************************************************************
+  directory                               [/home/gerard/projects/ccruncher/data]
+  segmentation              [/home/gerard/projects/ccruncher/data/portfolio.csv]
+  segmentation          [/home/gerard/projects/ccruncher/data/sector-rating.csv]
 
 Monte Carlo ********************************************************************
-  configuration ----------------------------------------------------------------
-    seed used to initialize randomizer                          1393049708265257
-    maximum execution time (seconds)                                       86400
-    maximum number of iterations                                          200000
-    antithetic mode                                                         true
-    block size                                                               128
-    number of threads                                                          4
+  seed used to initialize randomizer                            1469639925676812
+  maximum execution time (seconds)                                         86400
+  maximum number of iterations                                            200000
+  antithetic mode                                                           true
+  block size                                                                 128
+  number of threads                                                            4
   running Monte Carlo [1000 simulations per hash] ------------------------------
     ............................................................................
     ............................................................................
     ................................................
-    simulations realized                                                  200000
-    elapsed time creating random numbers                            00:00:01.045
-    elapsed time simulating losses                                  00:00:01.581
-    elapsed time writing data to disk                               00:00:00.273
-    total simulation time                                           00:00:02.930
+  simulations realized                                                    200000
+  total simulation time                                             00:00:02.060
 
 general information ************************************************************
-  end time (dd/MM/yyyy hh:mm:ss)                             22/02/2014 07:15:11
-  total elapsed time                                                00:00:03.020
+  end time (dd/MM/yyyy hh:mm:ss)                             27/07/2016 19:18:47
+  total elapsed time                                                00:00:02.079
     </pre>
     <p>
       ccruncher-gui program saves the execution trace in the ccruncher.out file.
@@ -276,7 +270,7 @@ general information ************************************************************
           Copyright &copy; 2004-2016 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </span>
         <span id="modified">
-          Last modified: 02-Apr-2016
+          Last modified: 27-Jul-2016
         </span>
       </div>
 
