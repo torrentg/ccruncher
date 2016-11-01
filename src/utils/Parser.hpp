@@ -43,26 +43,30 @@ class Parser
   public:
 
     //! Convert string to int
-    static int intValue(const std::string &);
-    //! Convert string to long
-    static long longValue(const std::string &);
-    //! Convert string to double
-    static double doubleValue(const std::string &);
-    //! Convert string to date
-    static Date dateValue(const std::string &);
-    //! Convert string to bool
-    static bool boolValue(const std::string &);
-    
-    //! Convert string to int
     static int intValue(const char *);
     //! Convert string to long
     static long longValue(const char *);
+    //! Convert string to unsigned long
+    static unsigned long ulongValue(const char *);
     //! Convert string to double
     static double doubleValue(const char *);
     //! Convert string to date
     static Date dateValue(const char *);
     //! Convert string to bool
     static bool boolValue(const char *);
+
+    //! Convert string to int
+    static int intValue(const std::string &str) { return intValue(str.c_str()); }
+    //! Convert string to long
+    static long longValue(const std::string &str) { return longValue(str.c_str()); }
+    //! Convert string to unsigned long
+    static unsigned long ulongValue(const std::string &str) { return ulongValue(str.c_str()); }
+    //! Convert string to double
+    static double doubleValue(const std::string &str) { return doubleValue(str.c_str()); }
+    //! Convert string to date
+    static Date dateValue(const std::string &str) { return dateValue(str.c_str()); }
+    //! Convert string to bool
+    static bool boolValue(const std::string &str) { return boolValue(str.c_str()); }
 
 };
 

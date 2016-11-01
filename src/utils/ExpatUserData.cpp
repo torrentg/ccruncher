@@ -30,9 +30,7 @@ using namespace ccruncher;
 /**************************************************************************/
 ccruncher::ExpatUserData::ExpatUserData(size_t buffersize) :
   mStack(), mCurrentTag(nullptr), mBuffer(nullptr),
-  mBufferSize(buffersize), mBufferPos1(nullptr), mBufferPos2(nullptr),
-  date1(NAD), date2(NAD), interest(nullptr), ratings(nullptr),
-  factors(nullptr), segmentations(nullptr)
+  mBufferSize(buffersize), mBufferPos1(nullptr), mBufferPos2(nullptr)
 {
   if (mBufferSize == 0) mBufferSize = 1;
   mBuffer = new char[mBufferSize];
@@ -65,16 +63,8 @@ ExpatUserData & ccruncher::ExpatUserData::operator= (const ExpatUserData &o)
   if (this != &o)
   {
     mStack = o.mStack;
-
     mCurrentTag = o.mCurrentTag;
     defines = o.defines;
-    date1 = o.date1;
-    date2 = o.date2;
-    interest = o.interest;
-    ratings = o.ratings;
-    factors = o.factors;
-    segmentations = o.segmentations;
-
     delete [] mBuffer;
     mBufferSize = o.mBufferSize;
     mBuffer = new char[mBufferSize];

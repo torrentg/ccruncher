@@ -555,7 +555,7 @@
     <correlation factor1="S1" factor2="S2" value="10.94%"/>
   </correlations>
   <segmentations>
-    <segmentation name='portfolio' components='asset'/>
+    <segmentation name='portfolio'/>
   </segmentations>
   <portfolio include="portfolio100.xml.gz"/>
 </ccruncher>

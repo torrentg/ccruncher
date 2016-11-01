@@ -33,29 +33,18 @@ namespace ccruncher {
 /**************************************************************************//**
  * @brief Portfolio segmentation.
  *
- * @details This class provides methods to recode segment names to indexes
- *          and to recode segment indexes removing unused segment in order
- *          to minimize the memory allocation/access in the simulation.
+ * @details A segmentation is a list of segments. The segment 'unassigned'
+ *          is created by default.
  *
  * @see http://ccruncher.net/ifileref.html#segmentations
  */
 class Segmentation
 {
 
-  public:
-
-    //! Type of segmentation's components
-    enum class Type {
-      obligor=1,   //!< Segmentation of obligors
-      asset=2      //!< Segmentation of assets
-    };
-
   private:
 
     //! Segmentation name
     std::string mName;
-    //! Type of components (obligors/assets)
-    Type mType;
     //! Enabled flag (true by default)
     bool mEnabled;
     //! List of segmentation segments
@@ -69,17 +58,11 @@ class Segmentation
   public:
   
     //! Constructor
-    Segmentation(const std::string &name="", Type type=Type::asset, bool enabled=true, bool hasUnassigned=true);
+    Segmentation(const std::string &name="", bool enabled=true, bool hasUnassigned=true);
     //! Returns segmentation name
     const std::string& getName() const { return mName; }
     //! Sets segmentation name
     void setName(const std::string &);
-    //! Returns type of components
-    Type getType() const { return mType; }
-    //! Sets the type of components
-    void setType(const Type &);
-    //! Sets the type of components
-    void setType(const std::string &);
     //! Returns enabled flag
     bool isEnabled() const { return mEnabled; }
     //! Sets the enabled flag
@@ -91,14 +74,11 @@ class Segmentation
     //! Adds a segment to this segmentation
     void addSegment(const std::string &segment);
     //! Return the index of the given segment
-    unsigned short indexOf(const std::string &segment) const;
+    unsigned short indexOfSegment(const std::string &segment) const;
     //! Return the index of the given segment
-    unsigned short indexOf(const char *segment) const;
-    //! Return filename
+    unsigned short indexOfSegment(const char *segment) const;
+    //! Return the filename where segmentation simulation values are placed
     std::string getFilename(const std::string &path) const;
-
-    //! Averaged exposures by segment
-    static std::vector<double> getExposures(unsigned short isegmentation, const std::vector<Obligor> &obligors, const Date time0, const Date timeT);
 
 };
 

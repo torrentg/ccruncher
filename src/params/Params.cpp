@@ -35,61 +35,47 @@
 #define ANTITHETIC "antithetic"
 #define BLOCKSIZE "blocksize"
 
-#define DEFAULT_RNGSEED "0"
-#define DEFAULT_ANTITHETIC "false"
-#define DEFAULT_BLOCKSIZE "128"
-
 using namespace std;
 using namespace ccruncher;
 
 /**************************************************************************//**
- * @see ExpatHandlers::epstart
- * @param[in] tag Element name.
- * @param[in] atrs Element attributes.
- * @throw Exception Error processing xml data.
+ * @param[in] name Parameter name.
+ * @param[in] value Parameter value.
+ * @exception Exception Invalid parameter.
  */
-void ccruncher::Params::epstart(ExpatUserData &, const char *tag, const char **atrs)
+void ccruncher::Params::setParamValue(const string &name, const string &value)
 {
-  if (isEqual(tag,"parameters")) {
-    if (getNumAttributes(atrs) > 0) {
-      throw Exception("unexpected attributes in tag parameters");
-    }
+  if (name == TIME0) {
+    setTime0(Parser::dateValue(value));
   }
-  else if (isEqual(tag,"parameter"))
-  {
-    if (getNumAttributes(atrs) > 2) {
-      throw Exception("unexpected attribute in tag parameter");
+  else if (name == TIMET) {
+    setTimeT(Parser::dateValue(value));
+  }
+  else if (name == MAXITERATIONS) {
+    setMaxIterations(Parser::ulongValue(value));
+  }
+  else if (name == MAXSECONDS) {
+    setMaxSeconds(Parser::ulongValue(value));
+  }
+  else if (name == RNGSEED) {
+    setRngSeed(Parser::ulongValue(value));
+  }
+  else if (name == BLOCKSIZE) {
+    int num = Parser::intValue(value);
+    int max = numeric_limits<unsigned short>::max();
+    if (num <= 0 || max < num) {
+      throw Exception("parameter '" BLOCKSIZE "' out of range [1," + to_string(max) + "]");
     }
-
-    string name = getStringAttribute(atrs, "name");
-    if (name != TIME0 && name != TIMET && name != MAXITERATIONS &&
-        name != MAXSECONDS && name != COPULA && name != RNGSEED &&
-        name != ANTITHETIC && name != BLOCKSIZE) {
-      throw Exception("unexpected parameter '" + name + "'");
-    }
-
-    string value = getStringAttribute(atrs, "value");
-    if (this->find(name) != this->end()) {
-      throw Exception("parameter '" + name + "' already defined");
-    }
-    else {
-      (*this)[name] = value;
-    }
+    setBlockSize(static_cast<unsigned short>(num));
+  }
+  else if (name == COPULA) {
+    setCopula(value);
+  }
+  else if (name == ANTITHETIC) {
+    setAntithetic(Parser::boolValue(value));
   }
   else {
-    throw Exception("unexpected tag '" + string(tag) + "'");
-  }
-}
-
-/**************************************************************************//**
- * @see ExpatHandlers::epend
- * @param[in] tag Element name.
- * @exception Exception Parameters validations failed.
- */
-void ccruncher::Params::epend(ExpatUserData &, const char *tag)
-{
-  if (isEqual(tag,"parameters")) {
-    isValid(true);
+    throw Exception("unexpected parameter '" + name + "'");
   }
 }
 
@@ -101,16 +87,23 @@ bool ccruncher::Params::isValid(bool throwException) const
 {
   try
   {
-    if (getTime0() >= getTimeT()) {
+    if (time0 == NAD) {
+      throw Exception(TIME0 " not set");
+    }
+
+    if (timeT == NAD) {
+      throw Exception(TIMET " not set");
+    }
+
+    if (time0 >= timeT) {
       throw Exception(TIME0 " >= " TIMET);
     }
 
-    if (getTimeT().getYear()-getTime0().getYear() > 101) {
+    if (timeT.getYear()-time0.getYear() > 101) {
       throw Exception("more than 100 years between " TIME0 " and " TIMET);
     }
 
     getNdf();
-    getRngSeed();
 
     if (getAntithetic() && getBlockSize()%2 != 0) {
       throw Exception(BLOCKSIZE " must be multiple of 2 when " ANTITHETIC " is enabled");
@@ -126,90 +119,14 @@ bool ccruncher::Params::isValid(bool throwException) const
 }
 
 /**************************************************************************//**
- * @param[in] key Parameter key.
- * @param[in] defaultValue Value to return if key not found.
- * @return Parameter value.
+ * @details Allowed copulas are: 'gaussian' and 't(ndf)' where ndf is a number >=2.
+ * @param[in] str Copula type.
+ * @throw Exception Invalid copula type.
  */
-string ccruncher::Params::getParamValue(const std::string &key, const std::string &defaultValue) const
+void ccruncher::Params::setCopula(const string &str)
 {
-  auto it = this->find(key);
-  if (it == this->end()) {
-    return defaultValue;
-  }
-  else {
-    return it->second;
-  }
-}
-
-/**************************************************************************//**
- * @param[in] key Parameter key.
- * @return Parameter value.
- * @exception Exception Parameter not found.
- */
-string ccruncher::Params::getParamValue(const std::string &key) const
-{
-  auto it = this->find(key);
-  if (it == this->end()) {
-    throw Exception("parameter '" + key + "' not found");
-  }
-  return it->second;
-}
-
-/**************************************************************************//**
- * @return Starting date.
- * @exception Exception Invalid parameter value.
- */
-Date ccruncher::Params::getTime0() const
-{
-  string value = getParamValue(TIME0);
-  return Parser::dateValue(value);
-}
-
-/**************************************************************************//**
- * @return Ending date.
- * @exception Exception Invalid parameter value.
- */
-Date ccruncher::Params::getTimeT() const
-{
-  string value = getParamValue(TIMET);
-  return Parser::dateValue(value);
-}
-
-/**************************************************************************//**
- * @return Number of Monte Carlo iterations.
- * @exception Exception Invalid parameter value.
- */
-size_t ccruncher::Params::getMaxIterations() const
-{
-  string value = getParamValue(MAXITERATIONS);
-  long num = Parser::longValue(value);
-  if (num < 0) {
-    throw Exception("parameter '" MAXITERATIONS "' < 0");
-  }
-  return (size_t) num;
-}
-
-/**************************************************************************//**
- * @return Maximum execution time (in seconds).
- * @exception Exception Invalid parameter value.
- */
-size_t ccruncher::Params::getMaxSeconds() const
-{
-  string value = getParamValue(MAXSECONDS);
-  long num = Parser::longValue(value);
-  if (num < 0) {
-    throw Exception("parameter '" MAXSECONDS "' < 0");
-  }
-  return (size_t) num;
-}
-
-/**************************************************************************//**
- * @return Copula, gaussian ot t(ndf).
- * @throw Exception Invalid parameter value.
- */
-std::string ccruncher::Params::getCopula() const
-{
-  return getParamValue(COPULA);
+  copula = str;
+  getNdf();
 }
 
 /**************************************************************************//**
@@ -219,8 +136,8 @@ std::string ccruncher::Params::getCopula() const
  */
 double ccruncher::Params::getNdf() const
 {
-  string copula = getCopula();
   if (copula == "gaussian") {
+    //TODO: return INF
     return -1.0;
   }
   else if (copula.length() >= 3 &&
@@ -235,48 +152,6 @@ double ccruncher::Params::getNdf() const
   }
   else {
     throw Exception("invalid copula type: '" + copula + "'");
-  }
-}
-
-/**************************************************************************//**
- * @details If seed not defined by user or equals to 0, then returns a
- *          value based on clock.
- * @return Rng seed.
- * @throw Exception Invalid parameter value.
- */
-unsigned long ccruncher::Params::getRngSeed() const
-{
-  unsigned long seed = 0UL;
-  string value = getParamValue(RNGSEED, DEFAULT_RNGSEED);
-  long aux = Parser::longValue(value);
-  seed = *(reinterpret_cast<unsigned long *>(&aux));
-  return seed;
-}
-
-/**************************************************************************//**
- * @return Use antithetic method in Monte Carlo.
- * @throw Exception Invalid parameter value.
- */
-bool ccruncher::Params::getAntithetic() const
-{
-  string value = getParamValue(ANTITHETIC, DEFAULT_ANTITHETIC);
-  return Parser::boolValue(value);
-}
-
-/**************************************************************************//**
- * @return Number of simultaneous simulations does by thread.
- * @throw Exception Invalid parameter value.
- */
-unsigned short ccruncher::Params::getBlockSize() const
-{
-  string value = getParamValue(BLOCKSIZE, DEFAULT_BLOCKSIZE);
-  int aux = Parser::intValue(value);
-  if (aux <= 0 || numeric_limits<unsigned short>::max() < aux) {
-    throw Exception("parameter '" BLOCKSIZE "' out of range [1," +
-                    to_string(numeric_limits<unsigned short>::max()) + "]");
-  }
-  else {
-    return (unsigned short) aux;
   }
 }
 

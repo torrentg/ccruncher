@@ -68,12 +68,12 @@
   <!--                       SEGMENTATIONS                            -->
   <!-- ============================================================== -->
   <segmentations>
-    <segmentation name="portfolio" components="asset"/>
-    <segmentation name="obligors" components="obligor">
+    <segmentation name="portfolio"/>
+    <segmentation name="obligors">
       <segment name="1"/>
       <segment name="2"/>
     </segmentation>
-    <segmentation name="assets" components="asset">
+    <segmentation name="assets">
       <segment name="1"/>
       <segment name="2"/>
       <segment name="3"/>

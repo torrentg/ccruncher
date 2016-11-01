@@ -25,9 +25,8 @@
 
 #include <string>
 #include <vector>
-#include "params/Ratings.hpp"
+#include "utils/Date.hpp"
 #include "params/CDF.hpp"
-#include "utils/ExpatHandlers.hpp"
 #include "utils/Exception.hpp"
 
 namespace ccruncher {
@@ -35,13 +34,12 @@ namespace ccruncher {
 /**************************************************************************//**
  * @brief Matrix of transitions between ratings.
  *
- * @details This class provides methods to read the transition matrix
- *          from the xml input file. Also offers a method to scale this
+ * @details This class provides methods to define and scale this
  *          matrix to another time period.
  *
  * @see http://ccruncher.net/ifileref.html#transitions
  */
-class Transitions : public ExpatHandlers
+class Transitions
 {
 
   private:
@@ -50,12 +48,10 @@ class Transitions : public ExpatHandlers
     int mPeriod;
     //! Matrix values
     std::vector<std::vector<double>> mMatrix;
-    //! List of ratings
-    Ratings mRatings;
     //! Index of default rating
-    int mIndexDefault;
-    //! Regularization error
-    double mRegularizationError;
+    mutable int mIndexDefault;
+    //! Need to recompute spline flag
+    mutable bool isDirty;
 
   private:
 
@@ -64,46 +60,36 @@ class Transitions : public ExpatHandlers
                      const std::vector<std::vector<double>> &M2,
                      std::vector<std::vector<double>> &M3);
 
-    //! Insert a transition value into the matrix
-    void insertTransition(const std::string &r1, const std::string &r2, double val);
-    //! Validate object content
-    void validate();
     //! Computes Cumulated Default Forward Rate
     void cdfr(size_t numrows, std::vector<std::vector<double>> &ret) const;
-
-  protected:
-
-    //! Directives to process an xml start tag element
-    virtual void epstart(ExpatUserData &, const char *, const char **) override;
-    //! Directives to process an xml end tag element
-    virtual void epend(ExpatUserData &, const char *) override;
+    //! Regularize the transition matrix
+    double regularize();
 
   public:
 
     //! Default constructor
-    Transitions();
+    Transitions(unsigned char size=1, int period=12);
     //! Constructor
-    Transitions(const Ratings &);
-    //! Constructor
-    Transitions(const Ratings &, const std::vector<std::vector<double>> &, int);
-    //! Set ratings
-    void setRatings(const Ratings &);
+    Transitions(const std::vector<std::vector<double>> &matrix, int period);
+
     //! Matrix dimension (=number of ratings)
-    size_t size() const;
+    unsigned char size() const;
     //! Returns period (in months) that covers this matrix
     int getPeriod() const;
+    //! Set transition matrix values
+    void setValues(const std::vector<std::vector<double>> &matrix);
+    //! Insert a transition value into the matrix
+    void setValue(unsigned char row, unsigned char col, double val);
     //! Returns default rating index
-    int getIndexDefault() const;
-    //! Regularize the transition matrix
-    void regularize();
+    unsigned char getIndexDefault() const;
     //! Returns equivalent transition matrix that covers t months
     Transitions scale(int t) const;
     //! Computes default probabilities functions related to this transition matrix
     std::vector<CDF> getCDFs(const Date &date, int numrows) const;
-    //! Regularization error (|non_regularized| - |regularized|)
-    double getRegularizationError() const;
     //! Matrix element access
-    const std::vector<double>& operator[] (int row) const;
+    const std::vector<double>& operator[] (unsigned char row) const;
+    //! Validate transition matrix
+    void validate() const;
 
 };
 

@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <algorithm>
+#include <gsl/gsl_linalg.h>
 #include <cassert>
 #include "kernel/MonteCarlo.hpp"
 #include "kernel/Aggregator.hpp"
@@ -33,10 +34,6 @@
 #include "portfolio/Asset.hpp"
 #include "portfolio/DateValues.hpp"
 #include "params/Params.hpp"
-#include "params/DefaultProbabilities.hpp"
-#include "params/Factors.hpp"
-#include "params/Correlations.hpp"
-#include "params/Segmentations.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Exception.hpp"
 
@@ -81,7 +78,7 @@ void ccruncher::MonteCarlo::freeMemory()
   threads.clear();
 
   // dropping aggregators
-  for(auto &aggregator : aggregators) {
+  for(Aggregator *aggregator : aggregators) {
     delete aggregator;
     aggregator = nullptr;
   }
@@ -100,7 +97,7 @@ void ccruncher::MonteCarlo::freeMemory()
 }
 
 /**************************************************************************//**
- * @details Calls MonteCarlo::setXXX() methods using IData content.
+ * @details Calls MonteCarlo::setXXX() methods using Input content.
  * @param[in] data CCruncher input file.
  * @param[in] path Directory path where output files will be put.
  * @param[in] mode Output file open mode.
@@ -108,13 +105,18 @@ void ccruncher::MonteCarlo::freeMemory()
  */
 void ccruncher::MonteCarlo::init(Input &data, const string &path, char mode)
 {
+  if (mStatus != status::fresh) {
+    throw Exception("trying to re-initialize a MonteCarlo object");
+  }
+
   try
   {
+    mStatus = status::running;
     setParams(data.getParams());
     setDefaultProbabilities(data.getCDFs());
     setFactorLoadings(data.getFactorLoadings());
     setCorrelations(data.getCorrelations());
-    setObligors(data.getPortfolio());
+    setObligors(data.getPortfolio(), data.getSegmentations());
     setInverses();
     setSegmentations(data.getSegmentations(), path, mode);
     mStatus = status::initialized;
@@ -130,13 +132,12 @@ void ccruncher::MonteCarlo::init(Input &data, const string &path, char mode)
 /**************************************************************************//**
  * @see http://www.ccruncher.net/ifileref.html#parameters
  * @see Params.hpp
- * @param[in] parameters List of parameters.
+ * @param[in] params List of parameters.
  * @throw Exception Invalid parameters.
  */
-void ccruncher::MonteCarlo::setParams(const map<string,string> &parameters)
+void ccruncher::MonteCarlo::setParams(const Params &params)
 {
   // check parameters
-  Params params(parameters.begin(), parameters.end());
   params.isValid(true);
 
   // assign parameters
@@ -157,13 +158,12 @@ void ccruncher::MonteCarlo::setParams(const map<string,string> &parameters)
 
 /**************************************************************************//**
  * @see http://www.ccruncher.net/ifileref.html#dprobs
- * @see DefaultProbabilities.hpp
- * @param[in] dprobs List of PDs.
- * @throw Exception Invalid PDs list.
+ * @param[in] cdfs List of CDFs.
+ * @throw Exception Invalid CDFs list.
  */
 void ccruncher::MonteCarlo::setDefaultProbabilities(const vector<CDF> &cdfs)
 {
-  DefaultProbabilities::isValid(cdfs, true);
+  Input::validateCDFs(cdfs, true);
   dprobs = cdfs;
 }
 
@@ -174,8 +174,8 @@ void ccruncher::MonteCarlo::setDefaultProbabilities(const vector<CDF> &cdfs)
  */
 void ccruncher::MonteCarlo::setFactorLoadings(const vector<double> &loadings)
 {
-  // check factors
-  Factors::isValid(loadings, true);
+  // check factor loadings
+  Input::validateFactorLoadings(loadings, true);
 
   // set factor loadings
   floadings1 = loadings;
@@ -195,7 +195,7 @@ void ccruncher::MonteCarlo::setFactorLoadings(const vector<double> &loadings)
 void ccruncher::MonteCarlo::setCorrelations(const vector<vector<double>> &correlations)
 {
   // check correlations
-  Correlations::isValid(correlations, true);
+  Input::validateCorrelations(correlations, true);
   if (correlations.size() != floadings1.size()) {
     throw Exception("invalid correlation matrix dim");
   }
@@ -203,7 +203,7 @@ void ccruncher::MonteCarlo::setCorrelations(const vector<vector<double>> &correl
   // obtain cholesky decomposition
   gsl_matrix_free(chol);
   chol = nullptr;
-  chol = Correlations::getCholesky(correlations);
+  chol = cholesky(correlations);
 
   // performance tip: chol contains w·chol
   for(size_t i=0; i<chol->size1; i++) {
@@ -215,26 +215,50 @@ void ccruncher::MonteCarlo::setCorrelations(const vector<vector<double>> &correl
 }
 
 /**************************************************************************//**
+ * @details Computes the Cholesky decomposition, L,  of the correlation
+ *          matrix M. That is, M = L·L', where L is a lower triangular
+ *          matrix.
+ * @return Cholesky matrix.
+ * @throw Exception Correlation matrix is not definite-posivite.
+ */
+gsl_matrix * ccruncher::MonteCarlo::cholesky(const std::vector<std::vector<double>> &M)
+{
+  assert(M.size() > 0);
+
+  size_t n = M.size();
+  gsl_matrix *L = gsl_matrix_alloc(n, n);
+
+  for(size_t i=0; i<n; i++) {
+    assert(M[i].size() == n);
+    gsl_matrix_set(L, i, i, 1.0);
+    for(size_t j=i+1; j<n; j++) {
+      gsl_matrix_set(L, i, j, M[i][j]);
+      gsl_matrix_set(L, j, i, M[i][j]);
+    }
+  }
+
+  gsl_error_handler_t *eh = gsl_set_error_handler_off();
+  int rc = gsl_linalg_cholesky_decomp(L);
+  gsl_set_error_handler(eh);
+  if (rc != GSL_SUCCESS) {
+    gsl_matrix_free(L);
+    throw Exception("correlation matrix non definite-positive");
+  }
+
+  return L;
+}
+
+/**************************************************************************//**
  * @details Imports portfolio obligors (portfolio returns empty)
  * @param[in] obligors List of obligors.
  * @throw Exception Empty list or exists an invalid obligor.
  */
-void ccruncher::MonteCarlo::setObligors(vector<Obligor> &portfolio)
+void ccruncher::MonteCarlo::setObligors(vector<Obligor> &portfolio, const std::vector<Segmentation> &segmentations)
 {
   assert(chol != nullptr);
   size_t numFactors = chol->size1;
   size_t numRatings = dprobs.size();
-
-  for(const Obligor &obligor : portfolio) {
-    if (obligor.ifactor >= numFactors || obligor.irating >= numRatings) {
-      throw Exception("invalid obligor");
-    }
-  }
-
-  if (portfolio.empty()) {
-    throw Exception("0 obligors to simulate");
-  }
-
+  Input::validatePortfolio(portfolio, numFactors, numRatings, segmentations, time0, timeT, true);
   obligors.clear();
   obligors.swap(portfolio);
   sort(obligors.begin(), obligors.end(),
@@ -254,52 +278,24 @@ void ccruncher::MonteCarlo::setObligors(vector<Obligor> &portfolio)
  */
 void ccruncher::MonteCarlo::setSegmentations(const vector<Segmentation> &segmentations, const string &path, char mode)
 {
-  // checking segmentations
-  Segmentations::isValid(segmentations, true);
+  Input::validateSegmentations(segmentations, true);
 
-  // checking obligor's data related to segmentation-segments
-  for(Obligor &obligor : obligors) {
-    for(Asset &asset : obligor.assets) {
-      // check that the number of segmentations is correct
-      if (asset.segments.size() != segmentations.size()) {
-        throw Exception("obligor with invalid number of segmentations");
-      }
-      // check that segmentation-segment identifiers are valid
-      for(unsigned short isegmentation=0; isegmentation<segmentations.size(); isegmentation++) {
-        if (asset.segments[isegmentation] >= segmentations[isegmentation].size()) {
-          throw Exception("obligor with invalid segment");
-        }
-      }
-    }
-  }
-
-  // removing previous aggregators
-  for(auto &aggregator : aggregators) {
-    delete aggregator;
-    aggregator = nullptr;
-  }
-  aggregators.clear();
-
-  // allocating and initializing aggregators
   numsegments = 0UL;
   numSegmentsBySegmentation.assign(segmentations.size(), 0);
+
+  for(size_t i=0; i<segmentations.size(); i++) {
+    const Segmentation &segmentation = segmentations[i];
+    numSegmentsBySegmentation[i] = segmentation.size();
+    numsegments += numSegmentsBySegmentation[i];
+  }
+
+  // allocating and initializing aggregators
   aggregators.assign(segmentations.size(), nullptr);
-  
-  for(unsigned short isegmentation=0; isegmentation<(unsigned short)(segmentations.size()); isegmentation++) 
-  {
-    const Segmentation &segmentation = segmentations[isegmentation];
-    
-    numSegmentsBySegmentation[isegmentation] = segmentation.size();
-    numsegments += numSegmentsBySegmentation[isegmentation];
-    
+  for(size_t i=0; i<segmentations.size(); i++) {
+    const Segmentation &segmentation = segmentations[i];
     string ofile = segmentation.getFilename(path);
-    Aggregator *aggregator = new Aggregator(ofile, mode, segmentation.size());
-    
-    vector<double> exposures = Segmentation::getExposures(isegmentation, obligors, time0, timeT);
-    assert(exposures.size() == segmentation.size());
-    aggregator->printHeader(segmentation, exposures);
-    
-    aggregators[isegmentation] = aggregator;
+    aggregators[i] = new Aggregator(ofile, mode, segmentation.size());
+    aggregators[i]->printHeader(segmentation, getExposures(i));
   }
 
   // tracing log info
@@ -536,5 +532,35 @@ size_t ccruncher::MonteCarlo::getNumIterations() const
 size_t ccruncher::MonteCarlo::getMaxIterations() const
 {
   return maxiterations;
+}
+
+/**************************************************************************//**
+ * @details Computes expected portfolio exposure for the given segmentation
+ *          weighting each exposure by its duration in the period T0-T1.
+ * @param[in] isegmentation Segmentation index.
+ * @return Segments' exposures.
+ */
+vector<double> ccruncher::MonteCarlo::getExposures(unsigned short isegmentation)
+{
+  assert(time0 < timeT);
+  vector<double> ret(1, 0.0);
+  double numdays = timeT - time0;
+
+  for(const Obligor &obligor : obligors) {
+    for(const Asset &asset : obligor.assets) {
+      unsigned short isegment = asset.segments[isegmentation];
+      if (isegment >= ret.size()) {
+        ret.resize(isegment+1, 0.0);
+      }
+      Date prevt = time0;
+      for(auto it=asset.values.begin(); it != asset.values.end(); ++it) {
+        double weight = (min(it->date,timeT) - prevt)/numdays;
+        ret[isegment] += weight * it->ead.getExpected();
+        prevt = it->date;
+      }
+    }
+  }
+
+  return ret;
 }
 

@@ -47,8 +47,6 @@ class Factor
 
   public:
 
-    //! Constructor (to use in initializer list constructors)
-    Factor(const char *nam) : name(nam), description(""), loading(NAN) {}
     //! Constructor
     Factor(const std::string &nam="", double load=NAN, const std::string &desc="")
       : name(nam), description(desc), loading(load) {}

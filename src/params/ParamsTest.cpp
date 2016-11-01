@@ -22,108 +22,95 @@
 
 #include "params/Params.hpp"
 #include "params/ParamsTest.hpp"
-#include "utils/ExpatParser.hpp"
 
 using namespace std;
 using namespace ccruncher;
 
+#define EPSILON 1e-14
+
 //===========================================================================
-// test1
+// test1 (default values)
 //===========================================================================
 void ccruncher_test::ParamsTest::test1()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <parameters>\n\
-      <parameter name='time.0' value='18/02/2003'/>\n\
-      <parameter name='time.T' value='18/02/2008'/>\n\
-      <parameter name='maxiterations' value='3000'/>\n\
-      <parameter name='maxseconds' value='30000000'/>\n\
-      <parameter name='copula' value='gaussian'/>\n\
-      <parameter name='rng.seed' value='38765874'/>\n\
-      <parameter name='antithetic' value='true'/>\n\
-      <parameter name='blocksize' value='256'/>\n\
-    </parameters>";
-
-  ExpatParser xmlparser;
   Params params;
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &params));
 
-  ASSERT(Date("18/02/2003") == params.getTime0());
-  ASSERT(Date("18/02/2008") == params.getTimeT());
-  ASSERT(3000 == params.getMaxIterations());
-  ASSERT(30000000 == params.getMaxSeconds());
-  ASSERT("gaussian" == params.getCopula());
-  ASSERT(38765874L == params.getRngSeed());
-  ASSERT(true == params.getAntithetic());
-  ASSERT(256 == params.getBlockSize());
+  params.setTime0(Date("01/01/2016"));
+  params.setTimeT(Date("01/01/2017"));
+
+  ASSERT(params.isValid());
+  ASSERT_NO_THROW(params.isValid(true));
+
+  ASSERT(Date("01/01/2016") == params.getTime0());
+  ASSERT(Date("01/01/2017") == params.getTimeT());
+  ASSERT(params.getAntithetic());
+  ASSERT_EQUALS((unsigned short)128, params.getBlockSize());
+  ASSERT_EQUALS("gaussian", params.getCopula());
+  ASSERT(params.getNdf() < 0.0);
+  ASSERT_EQUALS(1000000UL, params.getMaxIterations());
+  ASSERT_EQUALS(0UL, params.getMaxSeconds());
+  ASSERT_EQUALS(0UL, params.getRngSeed());
 }
 
 //===========================================================================
 // test2
-// error: time.T < time.0
 //===========================================================================
 void ccruncher_test::ParamsTest::test2()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <parameters>\n\
-      <parameter name='time.0' value='18/02/2003'/>\n\
-      <parameter name='time.T' value='21/03/2001'/>\n\
-      <parameter name='maxiterations' value='3000'/>\n\
-      <parameter name='maxseconds' value='30000000'/>\n\
-      <parameter name='copula' value='gaussian'/>\n\
-      <parameter name='rng.seed' value='38765874'/>\n\
-      <parameter name='antithetic' value='true'/>\n\
-    </parameters>";
-
-  ExpatParser xmlparser;
   Params params;
-  ASSERT_THROW(xmlparser.parse(xmlcontent, &params));
+
+  params.setTime0(Date("01/01/2016"));
+  params.setTimeT(Date("01/01/2017"));
+  params.setAntithetic(false);
+  params.setBlockSize(15);
+  params.setCopula("t(13)");
+  params.setMaxIterations(20000);
+  params.setMaxSeconds(3600);
+  params.setRngSeed(1234567);
+
+  ASSERT(params.isValid());
+  ASSERT_NO_THROW(params.isValid(true));
+
+  ASSERT(Date("01/01/2016") == params.getTime0());
+  ASSERT(Date("01/01/2017") == params.getTimeT());
+  ASSERT(!params.getAntithetic());
+  ASSERT_EQUALS((unsigned short)15, params.getBlockSize());
+  ASSERT_EQUALS("t(13)", params.getCopula());
+  ASSERT_EQUALS_EPSILON(13.0, params.getNdf(), EPSILON);
+  ASSERT_EQUALS(20000UL, params.getMaxIterations());
+  ASSERT_EQUALS(3600UL, params.getMaxSeconds());
+  ASSERT_EQUALS(1234567UL, params.getRngSeed());
 }
 
 //===========================================================================
-// test3
-// test copula param (case t-student)
+// test3 (non valid cases)
 //===========================================================================
 void ccruncher_test::ParamsTest::test3()
 {
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <parameters>\n\
-      <parameter name='time.0' value='18/02/2003'/>\n\
-      <parameter name='time.T' value='12/08/2010'/>\n\
-      <parameter name='maxiterations' value='3000'/>\n\
-      <parameter name='maxseconds' value='30000000'/>\n\
-      <parameter name='copula' value='t(3)'/>\n\
-      <parameter name='rng.seed' value='38765874'/>\n\
-      <parameter name='antithetic' value='true'/>\n\
-    </parameters>";
+  Params params1;
+  ASSERT(!params1.isValid());
+  ASSERT_THROW(params1.isValid(true));
 
-  ExpatParser xmlparser;
-  Params params;
-  ASSERT_NO_THROW(xmlparser.parse(xmlcontent, &params));
+  Params params2;
+  params2.setTime0(Date("01/01/2017"));
+  params2.setTimeT(Date("01/01/2016"));
+  ASSERT(!params2.isValid());
 
-  ASSERT(params.getNdf() == 3.0);
-}
+  Params params3;
+  params3.setTime0(Date("01/01/1800"));
+  params3.setTimeT(Date("01/01/2016"));
+  ASSERT(!params3.isValid());
 
-//===========================================================================
-// test4
-// antithetic + blocksize even = exception
-//===========================================================================
-void ccruncher_test::ParamsTest::test4()
-{
-  string xmlcontent = "<?xml version='1.0' encoding='UTF-8'?>\n\
-    <parameters>\n\
-      <parameter name='time.0' value='18/02/2003'/>\n\
-      <parameter name='time.T' value='18/02/2008'/>\n\
-      <parameter name='maxiterations' value='3000'/>\n\
-      <parameter name='maxseconds' value='30000000'/>\n\
-      <parameter name='copula' value='gaussian'/>\n\
-      <parameter name='rng.seed' value='38765874'/>\n\
-      <parameter name='antithetic' value='true'/>\n\
-      <parameter name='blocksize' value='257'/>\n\
-    </parameters>";
+  Params params4;
+  params4.setTime0(Date("01/01/2015"));
+  params4.setTimeT(Date("01/01/2016"));
+  ASSERT_THROW(params4.setCopula("XXX"));
 
-  ExpatParser xmlparser;
-  Params params;
-  ASSERT_THROW(xmlparser.parse(xmlcontent, &params));
+  Params params5;
+  params5.setTime0(Date("01/01/2015"));
+  params5.setTimeT(Date("01/01/2016"));
+  params5.setAntithetic(true);
+  params5.setBlockSize(127);
+  ASSERT(!params5.isValid());
 }
 

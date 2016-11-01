@@ -7,6 +7,9 @@ Current works
   * market model copula
   * open ccbinf code to public
   * VaR and ES are asymptotically normal
+  * remove references to Tatine (pdf)
+  * return ndf=INF if Gaussian
+  * check if inverse of default exist
 
 Future works
 -------------------
@@ -16,7 +19,6 @@ Future works
      - create ccbinf-gui version
      - add risk uncertainty in ccruncher-gui
      - add portfolio optimization in ccruncher-gui
-     - isolate xml/binary parser code
      - isolate aggregators code
      - create F() and Finv(t()) output
      - support for input file in binary format

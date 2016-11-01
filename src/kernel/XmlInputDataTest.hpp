@@ -20,44 +20,31 @@
 //
 //===========================================================================
 
-#ifndef _CorrelationsTest_
-#define _CorrelationsTest_
+#ifndef _XmlInputDataTest_
+#define _XmlInputDataTest_
 
 #include "utils/MiniCppUnit.hxx"
-#include "params/Factors.hpp"
 
 namespace ccruncher_test {
 
-class CorrelationsTest : public TestFixture<CorrelationsTest>
+class XmlInputDataTest : public TestFixture<XmlInputDataTest>
 {
 
   private:
 
-    ccruncher::Factors getFactors();
-
     void test1();
-    void test2();
-    void test3();
-    void test4();
-    void test5();
-    void test6();
 
 
   public:
 
-    TEST_FIXTURE(CorrelationsTest)
+    TEST_FIXTURE(XmlInputDataTest)
     {
       TEST_CASE(test1);
-      TEST_CASE(test2);
-      TEST_CASE(test3);
-      TEST_CASE(test4);
-      TEST_CASE(test5);
-      TEST_CASE(test6);
     }
 
 };
 
-REGISTER_FIXTURE(CorrelationsTest)
+REGISTER_FIXTURE(XmlInputDataTest)
 
 } // namespace
 

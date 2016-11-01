@@ -160,8 +160,8 @@ S.level = [0.44]
   <!--                       SEGMENTATIONS                            -->
   <!-- ============================================================== -->
   <segmentations>
-    <segmentation name="portfolio" components="obligor"/>
-    <segmentation name="sector-rating" components="obligor">
+    <segmentation name="portfolio"/>
+    <segmentation name="sector-rating">
       <segment name="S1-A"/>
       <segment name="S1-B"/>
       <segment name="S1-C"/>

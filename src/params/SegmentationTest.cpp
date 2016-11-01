@@ -41,7 +41,7 @@ void ccruncher_test::SegmentationTest::test1()
       <segment name='0004'/>
     </segmentation>
   */
-  Segmentation segmentation("office", Segmentation::Type::asset, true);
+  Segmentation segmentation("office", true);
   segmentation.addSegment("0001");
   segmentation.addSegment("0002");
   segmentation.addSegment("0003");
@@ -49,15 +49,14 @@ void ccruncher_test::SegmentationTest::test1()
 
   ASSERT(segmentation.isEnabled());
   ASSERT("office" == segmentation.getName());
-  ASSERT(Segmentation::Type::asset == segmentation.getType());
 
   ASSERT(5 == segmentation.size());
 
-  ASSERT(0 == segmentation.indexOf("unassigned"));
-  ASSERT(1 == segmentation.indexOf("0001"));
-  ASSERT(2 == segmentation.indexOf("0002"));
-  ASSERT(3 == segmentation.indexOf("0003"));
-  ASSERT(4 == segmentation.indexOf("0004"));
+  ASSERT(0 == segmentation.indexOfSegment("unassigned"));
+  ASSERT(1 == segmentation.indexOfSegment("0001"));
+  ASSERT(2 == segmentation.indexOfSegment("0002"));
+  ASSERT(3 == segmentation.indexOfSegment("0003"));
+  ASSERT(4 == segmentation.indexOfSegment("0004"));
 }
 
 //===========================================================================
@@ -69,13 +68,10 @@ void ccruncher_test::SegmentationTest::test2()
     <segmentation name='portfolio' components='obligor'/>
   */
   Segmentation segmentation("portfolio");
-  ASSERT_THROW(segmentation.setType("obligors")); // 'obligors' instead of 'obligor'
-  segmentation.setType("obligor");
-  ASSERT(segmentation.getType() == Segmentation::Type::obligor);
   segmentation.setEnabled(true);
 
   ASSERT(segmentation.getName() == "portfolio");
-  ASSERT_THROW(segmentation.indexOf("XXX"));
+  ASSERT_THROW(segmentation.indexOfSegment("XXX"));
   ASSERT(segmentation.isEnabled());
 }
 

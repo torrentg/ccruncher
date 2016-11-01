@@ -124,8 +124,8 @@ How to check results?
   <!--                       SEGMENTATIONS                            -->
   <!-- ============================================================== -->
   <segmentations>
-    <segmentation name="portfolio" components="asset"/>
-    <segmentation name="sectors" components="obligor">
+    <segmentation name="portfolio"/>
+    <segmentation name="sectors">
       <segment name="S1"/>
     </segmentation>
   </segmentations>

@@ -48,6 +48,25 @@ const ccruncher::EAD::Distr ccruncher::EAD::distrs[] = {
 #define NUMDISTRS (sizeof(distrs)/sizeof(Distr))
 
 /**************************************************************************//**
+ * @details Create a EAD of type fixed.
+ */
+ccruncher::EAD::EAD(double x)
+{
+  init(Type::Fixed, x, NAN);
+}
+
+/**************************************************************************//**
+ * @param[in] t Type of exposure.
+ * @param[in] a Distribution parameter.
+ * @param[in] b Distribution parameter.
+ * @throw Exception Invalid exposure.
+ */
+ccruncher::EAD::EAD(Type t, double a, double b)
+{
+  init(t, a, b);
+}
+
+/**************************************************************************//**
  * @param[in] cstr String with exposure value/distribution.
  * @throw Exception Invalid exposure.
  */
@@ -102,26 +121,6 @@ ccruncher::EAD::EAD(const char *cstr) : EAD()
   // fixed value case
   mValue1 = Parser::doubleValue(cstr);
   init(Type::Fixed, mValue1, NAN);
-}
-
-/**************************************************************************//**
- * @param[in] str String with exposure value/distribution.
- * @throw Exception Invalid exposure.
- */
-ccruncher::EAD::EAD(const std::string &str) : EAD(str.c_str())
-{
-  // nothing to do
-}
-
-/**************************************************************************//**
- * @param[in] t Type of exposure.
- * @param[in] a Distribution parameter.
- * @param[in] b Distribution parameter.
- * @throw Exception Invalid exposure.
- */
-ccruncher::EAD::EAD(Type t, double a, double b)
-{
-  init(t, a, b);
 }
 
 /**************************************************************************//**
@@ -193,47 +192,13 @@ bool ccruncher::EAD::valid(Type t, double a, double b)
  */
 void ccruncher::EAD::init(Type t, double a, double b)
 {
-  if (t != Type::Fixed || !std::isnan(a))
-  {
+  if (t != Type::Fixed || !std::isnan(a)) {
     if (!valid(t, a, b)) throw Exception("invalid ead");
   }
 
   mType = t;
   mValue1 = a;
   mValue2 = b;
-}
-
-/**************************************************************************//**
- * @return Exposure type.
- */
-ccruncher::EAD::Type ccruncher::EAD::getType() const
-{
-  return mType;
-}
-
-/**************************************************************************//**
- * @return Distribution parameter.
- */
-double ccruncher::EAD::getValue1() const
-{
-  return mValue1;
-}
-
-/**************************************************************************//**
- * @return Distribution parameter.
- */
-double ccruncher::EAD::getValue2() const
-{
-  return mValue2;
-}
-
-/**************************************************************************//**
- * @param[in] x EAD to check.
- * @return true=valid, false=invalid.
- */
-bool ccruncher::EAD::isValid(const EAD &x)
-{
-  return valid(x.mType, x.mValue1, x.mValue2);
 }
 
 /**************************************************************************//**

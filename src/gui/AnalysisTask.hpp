@@ -58,7 +58,7 @@ struct contrib
   //! Value
   double value;
   //! Constructor
-  contrib(std::string n="", double v=0.0) : name(n), value(v) {}
+  contrib(const std::string &n="", double v=0.0) : name(n), value(v) {}
 };
 
 /**************************************************************************//**

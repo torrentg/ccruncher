@@ -20,31 +20,51 @@
 //
 //===========================================================================
 
-#ifndef _SegmentationsTest_
-#define _SegmentationsTest_
+#ifndef _InputTest_
+#define _InputTest_
 
+#include <vector>
 #include "utils/MiniCppUnit.hxx"
+#include "params/Segmentation.hpp"
+#include "params/Factor.hpp"
+#include "params/Rating.hpp"
+#include "params/CDF.hpp"
 
 namespace ccruncher_test {
 
-class SegmentationsTest : public TestFixture<SegmentationsTest>
+class InputTest : public TestFixture<InputTest>
 {
 
   private:
 
-    void test1();
+    std::vector<ccruncher::Rating> getRatings();
+    std::vector<ccruncher::Factor> getFactors();
+    std::vector<ccruncher::Segmentation> getSegmentations();
+    std::vector<ccruncher::CDF> getCDFs();
+
+    void validateRatings();
+    void validateFactors();
+    void validateFactorLoadings();
+    void validateCorrelations();
+    void validateSegmentations();
+    void validateCDFs();
 
 
   public:
 
-    TEST_FIXTURE(SegmentationsTest)
+    TEST_FIXTURE(InputTest)
     {
-      TEST_CASE(test1);
+      TEST_CASE(validateRatings);
+      TEST_CASE(validateFactors);
+      TEST_CASE(validateFactorLoadings);
+      TEST_CASE(validateCorrelations);
+      TEST_CASE(validateSegmentations);
+      TEST_CASE(validateCDFs);
     }
 
 };
 
-REGISTER_FIXTURE(SegmentationsTest)
+REGISTER_FIXTURE(InputTest)
 
 } // namespace
 

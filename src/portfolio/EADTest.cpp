@@ -44,9 +44,9 @@ void ccruncher_test::EADTest::test1()
 
     EAD r1;
     ASSERT(r1.getType() == EAD::Type::Fixed);
-    ASSERT(std::isnan(r1.getValue1()));
+    ASSERT_EQUALS_EPSILON(0.0, r1.getValue1(), EPSILON);
     ASSERT(std::isnan(r1.getValue2()));
-    ASSERT(std::isnan(r1.getExpected()));
+    ASSERT_EQUALS_EPSILON(0.0, r1.getExpected(), EPSILON);
 
     EAD r2(EAD::Type::Fixed,1.0);
     ASSERT(r2.getType() == EAD::Type::Fixed);

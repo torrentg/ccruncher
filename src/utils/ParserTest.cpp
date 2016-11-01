@@ -58,6 +58,24 @@ void ccruncher_test::ParserTest::test_long()
   ASSERT_THROW(Parser::longValue(" -7 "));
   ASSERT_THROW(Parser::longValue(" - 8 "));
   ASSERT_THROW(Parser::longValue("- 9"));
+  ASSERT_THROW(Parser::longValue("+ 9"));
+}
+#include <iostream>
+//===========================================================================
+// test_ulong
+//===========================================================================
+void ccruncher_test::ParserTest::test_ulong()
+{
+  ASSERT_EQUALS(1UL, Parser::ulongValue("1"));
+  ASSERT_EQUALS(2UL, Parser::ulongValue("+2"));
+  ASSERT_THROW(Parser::ulongValue("-2"));
+  ASSERT_THROW(Parser::ulongValue("4.5"));
+  ASSERT_EQUALS(2147483647UL, Parser::ulongValue("2147483647"));
+  ASSERT_THROW(Parser::ulongValue(" 6 "));
+  ASSERT_THROW(Parser::ulongValue(" -7 "));
+  ASSERT_THROW(Parser::ulongValue(" - 8 "));
+  ASSERT_THROW(Parser::ulongValue("- 9"));
+  ASSERT_THROW(Parser::ulongValue("+ 9"));
 }
 
 //===========================================================================

@@ -44,8 +44,6 @@ class Rating
 
   public:
 
-    //! Constructor (to use in initializer list constructors)
-    Rating(const char *nam) : name(nam), description("") {}
     //! Constructor
     Rating(const std::string &nam="", const std::string &desc="") : name(nam), description(desc) {}
 

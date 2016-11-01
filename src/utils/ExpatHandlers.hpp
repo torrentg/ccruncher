@@ -120,14 +120,13 @@ class ExpatHandlers
  * @see http://www.cplusplus.com/reference/cstring/strcmp/
  * @return true=both strings are equal, false=otherwise.
  */
+ //TODO: check if 'inline' impacts performance
 inline bool ccruncher::ExpatHandlers::isEqual(const char *pchr, const char *str) const
 {
-  if (pchr != nullptr && str != nullptr)
-  {
+  if (pchr != nullptr && str != nullptr) {
     return (std::strcmp(str, pchr) == 0);
   }
-  else
-  {
+  else {
     return false;
   }
 }

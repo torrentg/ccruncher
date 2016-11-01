@@ -54,12 +54,12 @@ class Asset
 
     //! Constructor
     Asset(unsigned short nsegmentations=0) : segments(nsegmentations, 0) {}
+    //! Constructor
+    Asset(const std::vector<unsigned short> &segments_) : segments(segments_) {}
     //! Prepare data
     void prepare(const Date &d1, const Date &d2, const Interest &interest);
     //! Indicates if this asset has info in date1-date2
     bool isActive(const Date &from, const Date &to) const;
-    //! Indicates if this asset use obligor lgd
-    bool requiresObligorLGD(const Date &d1, const Date &d2) const;
 
 };
 

@@ -26,7 +26,6 @@
 #include <string>
 #include <vector>
 #include <gsl/gsl_spline.h>
-#include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 
 namespace ccruncher {
@@ -39,91 +38,99 @@ namespace ccruncher {
  *
  * @see http://ccruncher.net/ifileref.html#interest
  */
-class Interest : public ExpatHandlers
+class Interest
 {
 
   public:
 
     //! Type of interest
-    enum class Type
+    enum class InterestType
     {
       Simple,    //!< Simple interest
       Compound,  //!< Compounded (yearly) interest
       Continuous //!< Continuous interest
     };
 
-  private:
+    //! Type of interpolation
+    enum class SplineType
+    {
+      Linear, //!< Linear splines
+      Cubic   //!< Cubic splines
+    };
 
-    //! Internal class
+    //! Data-rate pair
     class Rate
     {
       public:
 
-        //! Time (in days from interest curve date)
-        int d;
-        //! Time (in years from interest curve date)
-        double y;
+        //! Rate date
+        Date date;
         //! Yearly rate value (0.025 -> 2.5% per year)
-        double r;
+        double value;
 
       public:
 
         //! Constructor
-        Rate(int d_, double y_=0.0, double r_=0.0) : d(d_), y(y_), r(r_) {}
+        Rate(Date d, double r) : date(d), value(r) {}
+        //! Less-than operator
+        bool operator<(const Rate &o) const { return date < o.date; }
     };
 
   private:
 
     //! Interest type
-    Type mType;
+    InterestType mInterestType;
+    //! Spline type
+    SplineType mSplineType;
     //! Interest curve date
     Date mDate;
     //! Rate values
     std::vector<Rate> mRates;
-    //! Spline type
-    bool mCubicSpline;
     //! Spline curve
-    gsl_spline *mSpline;
+    mutable gsl_spline *mSpline;
     //! Spline accelerator
-    gsl_interp_accel *mAccel;
+    mutable gsl_interp_accel *mAccel;
+    //! Need to recompute spline flag
+    mutable bool isDirty;
 
   private:
 
-    //! Insert a rate to list
-    void insertRate(const Rate &);
-    //! Given a time, returns the rate (interpolated)
-    void getValues(int, double *, double *) const;
     //! Create spline curve
-    void setSpline();
-
-  protected:
-  
-    //! Directives to process an xml start tag element
-    virtual void epstart(ExpatUserData &, const char *, const char **) override;
-    //! Directives to process an xml end tag element
-    virtual void epend(ExpatUserData &, const char *) override;
+    void setSpline() const;
 
   public:
 
     //! Constructor
-    Interest(const Date &date=NAD, Type type=Type::Compound);
+    Interest(const Date &date=NAD, InterestType interestType=InterestType::Compound, SplineType splineType=SplineType::Linear);
     //! Copy constructor
     Interest(const Interest &);
     //! Destructor
-    virtual ~Interest() override;
+    virtual ~Interest();
     //! Assignment operator
     Interest & operator=(const Interest &);
-    //! Return interest type
-    Type getType() const;
-    //! Numbers of user-defined rates
-    int size() const;
-    //! Set initial date
-    void setDate(const Date &date);
-    //! Returns rate at date
-    double getValue(const Date &date) const;
-    //! Returns factor to apply Net Present Value at time date1
+    //! Set the curve date
+    void setDate(const Date &date) { mDate = date; isDirty = true; }
+    //! Return the curve date
+    const Date & getDate() const { return mDate; }
+    //! Set the interest type
+    void setInterestType(InterestType interestType) { mInterestType = interestType; }
+    //! Set the spline type
+    void setSplineType(SplineType splineType) { mSplineType = splineType; isDirty = true; }
+    //! Insert user-defined rate at given date
+    void insertRate(Date t, double r);
+    //! Insert a user-defined rate
+    void insertRate(const Rate &);
+    //! Insert a list of rates
+    void insertRates(const std::vector<Rate> &);
+    //! Returns interpolated rate at date
+    double getRate(const Date &date) const;
+    //! Returns factor to apply the Net Present Value at the given date
     double getFactor(const Date &date) const;
 
+    //! Parse a interest type
+    static InterestType getInterestType(const std::string &str);
+    //! Parse a spline type
+    static SplineType getSplineType(const std::string &str);
 };
 
 } // namespace

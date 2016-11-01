@@ -47,12 +47,8 @@ class Aggregator;
  *
  * @details This object manages the Monte Carlo simulation. Efective
  *          simulation steps are done in the SimulationThread objects.
- *          IData object used to initialize this class can be removed just
+ *          Input object used to initialize this class can be removed just
  *          after this class initialization.
- *          Caution: assets is the list of simulated asset. The size of these
- *          objects depends on the number of segmentations and its size is
- *          fixed at execution time. We do it this way for performance
- *          reasons (to avoid a dereference).
  *
  * @see SimulationThread
  */
@@ -131,7 +127,7 @@ class MonteCarlo
     //! Deallocate memory
     void freeMemory();
     //! Set simulation parameters
-    void setParams(const std::map<std::string,std::string> &parameters);
+    void setParams(const Params &parameters);
     //! Set default probabilities (using default probabilities)
     void setDefaultProbabilities(const std::vector<CDF> &dprobs);
     //! Set factor loadings
@@ -139,13 +135,17 @@ class MonteCarlo
     //! Set correlation matrix
     void setCorrelations(const std::vector<std::vector<double>> &correlations);
     //! Set obligors' portfolio
-    void setObligors(std::vector<Obligor> &obligors);
+    void setObligors(std::vector<Obligor> &obligors, const std::vector<Segmentation> &segmentations);
     //! Set segmentations
     void setSegmentations(const std::vector<Segmentation> &segmentations, const std::string &path, char mode);
     //! Create Finv(t(x)) spline functions
     void setInverses();
     //! Append simulation result
     bool append(const std::vector<std::vector<double>> &losses) noexcept;
+    //! Computes the Cholesky matrix
+    gsl_matrix* cholesky(const std::vector<std::vector<double>> &M);
+    //! Averaged exposures by segment
+    std::vector<double> getExposures(unsigned short isegmentation);
 
   public:
 

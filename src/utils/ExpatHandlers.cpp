@@ -74,7 +74,7 @@ void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud,
 /**************************************************************************//**
  * @details Process data into an element. Override this method to catch
  *          element's data info. Default action only allows spaces.
- * @see     IData#epdata as example.
+ * @see     XmlInputData#epdata as example.
  * @param[in] eud Parser data shared by handlers.
  * @param[in] tag Element's name.
  * @param[in] cdata Fragment of data.
@@ -85,7 +85,7 @@ void ccruncher::ExpatHandlers::epdata(ExpatUserData &/*eud*/, const char */*tag*
 {
   // default simple rule: character data is not allowed
   if (!all_of(cdata, cdata+len, static_cast<int(*)(int)>(isspace))) {
-    throw Exception("unexpected text parsing xml: '" + string(cdata, len) + "'");
+    throw Exception("unexpected data parsing xml: '" + string(cdata, len) + "'");
   }
 }
 

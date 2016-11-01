@@ -161,7 +161,7 @@
 <!--                         segmentations                          -->
 <!-- .............................................................. -->
 <!ELEMENT segmentations (
-    segmentation*
+    segmentation+
 )>
 
 <!ELEMENT segmentation (
@@ -169,7 +169,6 @@
 )>
 <!ATTLIST segmentation
     name CDATA #REQUIRED
-    components (asset|obligor) #REQUIRED
     enabled (true|false) "true"
 >
 
@@ -191,7 +190,7 @@
 >
 
 <!ELEMENT obligor (
-    (belongs-to*, asset*)
+    (belongs-to*, asset+)
 )>
 <!ATTLIST obligor
     id CDATA #REQUIRED

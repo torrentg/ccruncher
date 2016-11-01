@@ -144,20 +144,20 @@
   </correlations>
 
   <segmentations>
-    <segmentation name="portfolio" components="asset"/>
-    <segmentation name="sectors" components="obligor">
+    <segmentation name="portfolio"/>
+    <segmentation name="sectors">
       <segment name="S1"/>
       <segment name="S2"/>
       <segment name="S3"/>
       <segment name="S4"/>
       <segment name="S5"/>
     </segmentation>
-    <segmentation name="size" components="obligor">
+    <segmentation name="size">
       <segment name="large"/>
       <segment name="medium"/>
       <segment name="small"/>
     </segmentation>
-    <segmentation name="products" components="asset">
+    <segmentation name="products">
       <segment name="bond"/>
       <segment name="loan"/>
       <segment name="lease"/>
@@ -165,7 +165,7 @@
       <segment name="line of credit"/>
       <segment name="bank guarantee"/>
     </segmentation>
-    <segmentation name="offices" components="asset">
+    <segmentation name="offices">
       <segment name="0001"/>
       <segment name="0002"/>
       <segment name="0003"/>

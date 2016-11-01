@@ -61,7 +61,7 @@ class LGD
       const char *str;
       //! Name length
       int len;
-      //! Exposure type
+      //! LGD type
       LGD::Type type;
       //TODO: add gsl_ran_* function ref?
     };
@@ -90,23 +90,23 @@ class LGD
     //! Default constructor
     LGD();
     //! Constructor
+    LGD(double);
+    //! Constructor
     LGD(const char *);
     //! Constructor
-    LGD(const std::string &);
+    LGD(const std::string &str) : LGD(str.c_str()) {}
     //! Constructor
     LGD(Type, double a, double b=NAN);
-    //! Constructor
-    LGD(double);
     //! Comparison operator
     bool operator==(const LGD &o) const;
     //! Comparison operator
     bool operator!=(const LGD &o) const;
     //! Returns type
-    Type getType() const;
+    Type getType() const { return mType; }
     //! Returns distribution parameter
-    double getValue1() const;
+    double getValue1() const { return mValue1; }
     //! Returns distribution parameter
-    double getValue2() const;
+    double getValue2() const {return mValue2; }
     //! Returns lgd
     double getValue(const gsl_rng *rng=nullptr) const;
 
@@ -121,14 +121,6 @@ class LGD
  * @details Create a LGD with invalid values.
  */
 inline ccruncher::LGD::LGD() : mType(Type::Fixed), mValue1(NAN), mValue2(NAN)
-{
-  // nothing to do
-}
-
-/**************************************************************************//**
- * @details Create a LGD of type fixed.
- */
-inline ccruncher::LGD::LGD(double x) : mType(Type::Fixed), mValue1(x), mValue2(NAN)
 {
   // nothing to do
 }

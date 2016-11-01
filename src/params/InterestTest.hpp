@@ -23,6 +23,8 @@
 #ifndef _InterestTest_
 #define _InterestTest_
 
+#include <vector>
+#include "params/Interest.hpp"
 #include "utils/MiniCppUnit.hxx"
 
 namespace ccruncher_test {
@@ -32,10 +34,13 @@ class InterestTest : public TestFixture<InterestTest>
 
   private:
 
+    std::vector<ccruncher::Interest::Rate> getRates() const;
     void test1();
     void test2();
     void test3();
     void test4();
+    void test5();
+    void test6();
 
 
   public:
@@ -46,6 +51,8 @@ class InterestTest : public TestFixture<InterestTest>
       TEST_CASE(test2);
       TEST_CASE(test3);
       TEST_CASE(test4);
+      TEST_CASE(test5);
+      TEST_CASE(test6);
     }
 
 };
