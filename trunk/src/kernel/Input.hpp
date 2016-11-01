@@ -73,7 +73,7 @@ class Input
     //! Validate a list of segmentations
     static bool validateSegmentations(const std::vector<Segmentation> &segmentations, bool throwException=false);
     //! Validate a list of obligors
-    static bool validatePortfolio(const std::vector<Obligor> &portfolio, unsigned char numFactors,
+    static bool validatePortfolio(const std::vector<Obligor> &obligors, unsigned char numFactors,
          unsigned char numRatings, const std::vector<Segmentation> &segmentations,
          const Date &date1, const Date &date2, bool throwException=false);
     //! Validate an obligor

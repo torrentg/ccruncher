@@ -296,16 +296,16 @@ bool ccruncher::Input::validateSegmentations(const vector<Segmentation> &segment
  * @param[in] throwException Throw an exception if validation fails.
  * @throw Exception Validation error.
  */
-bool ccruncher::Input::validatePortfolio(const vector<Obligor> &portfolio, unsigned char numFactors,
+bool ccruncher::Input::validatePortfolio(const vector<Obligor> &obligors, unsigned char numFactors,
   unsigned char numRatings, const vector<Segmentation> &segmentations, const Date &date1,
   const Date &date2, bool throwException)
 {
   try
   {
-    if (portfolio.empty()) {
+    if (obligors.empty()) {
       throw Exception("empty portfolio");
     }
-    for(auto &obligor : portfolio) {
+    for(auto &obligor : obligors) {
       validateObligor(obligor, numFactors, numRatings, segmentations, date1, date2, true);
     }
     return true;
@@ -426,6 +426,7 @@ bool ccruncher::Input::validateAsset(const Asset &asset, const vector<Segmentati
 }
 
 /**************************************************************************//**
+ * @param[in] factors Factors list.
  * @param[in] name Factor name.
  * @return Index (0-based) of the given factor.
  * @throw Exception Factor not found.
@@ -443,6 +444,7 @@ unsigned char ccruncher::Input::indexOfFactor(const vector<Factor> &factors, con
 }
 
 /**************************************************************************//**
+ * @param[in] ratings Ratings list.
  * @param[in] name Rating name.
  * @return Index (0-based) of the given rating.
  * @throw Exception Rating not found.
@@ -460,7 +462,8 @@ unsigned char ccruncher::Input::indexOfRating(const vector<Rating> &ratings, con
 }
 
 /**************************************************************************//**
- * @param[in] sname Segmentation name.
+ * @param[in] segmentations Segmentations list.
+ * @param[in] name Segmentation name.
  * @return Index (0-based) of the segmentation.
  * @throw Exception Segmentation not found.
  */

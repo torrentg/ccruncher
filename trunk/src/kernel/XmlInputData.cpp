@@ -57,7 +57,7 @@ ccruncher::XmlInputData::~XmlInputData()
 }
 
 /**************************************************************************//**
- * @param[in] fd File descriptor.
+ * @param[in] f File File object.
  * @param[in] m List of defines defined by user (eg. using cmd or gui).
  * @throw Exception Error parsing input file.
  */
@@ -106,8 +106,7 @@ void ccruncher::XmlInputData::read(FILE *f, const std::map<std::string,std::stri
  * @param[in] p Parse whole input file (true), or exclude portfolio (false)
  * @throw Exception Error parsing input file.
  */
-void ccruncher::XmlInputData::readFile(const std::string &f,
-    const std::map<std::string,std::string> &m, bool *s, bool p)
+void ccruncher::XmlInputData::readFile(const std::string &f, const std::map<std::string,std::string> &m, bool *s, bool p)
 {
   filename = f;
   stop = s;
@@ -137,8 +136,10 @@ void ccruncher::XmlInputData::readStdin(const std::map<std::string,std::string> 
 
 /**************************************************************************//**
  * @details Use only for debug or tests.
- * @param[in] buf String containing the xml.
+ * @param[in] str String containing the xml.
  * @param[in] m List of defines defined by user (eg. using cmd or gui).
+ * @param[in] s Variable to stop parser (can be null).
+ * @param[in] p Parse whole input file (true), or exclude portfolio (false)
  * @throw Exception Error parsing input file.
  */
 void ccruncher::XmlInputData::readString(const string &str, const std::map<std::string,std::string> &m, bool *s, bool p)
@@ -489,8 +490,6 @@ void ccruncher::XmlInputData::epdata(ExpatUserData &eu, const char *tag, const c
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
- * @param[in,out] eu Xml parsing data.
- * @param[in] tag Element name.
  */
 void ccruncher::XmlInputData::epend(ExpatUserData &, const char *)
 {
@@ -559,6 +558,7 @@ void ccruncher::XmlInputData::epend(ExpatUserData &, const char *)
 
 /**************************************************************************//**
  * @param[in] include File name containing xml portfolio.
+ * @param[in] defines Already defined macros.
  * @throw Exception Error parsing input file.
  */
 void ccruncher::XmlInputData::parseIncludedPortfolio(const string &include, map<string,string> &defines)
@@ -748,7 +748,7 @@ bool ccruncher::XmlInputData::hasTag(XmlTag tag)
 }
 
 /**************************************************************************//**
- * @param[in] segmentations List of segmentations.
+ * @result Number of enabled segmentations.
  */
 unsigned short ccruncher::XmlInputData::getNumEnabledSegmentations() const
 {
@@ -819,7 +819,7 @@ void ccruncher::XmlInputData::processTagInterest(const string &type, const strin
 
 /**************************************************************************//**
  * @param[in] str Date (format DD/MM/YYYY) or interval (eg. +5M).
- * @param[in] rate Interest rate.
+ * @param[in] r Interest rate.
  * @throw Invalid values.
  */
 void ccruncher::XmlInputData::processTagRate(const char *str, double r)
@@ -847,7 +847,7 @@ void ccruncher::XmlInputData::processTagTransition(const string &from, const str
 
 /**************************************************************************//**
  * @param[in] srating Rating identifier.
- * @param[in] st Date (format DD/MM/YYYY) or time increment (eg. +5M).
+ * @param[in] str Date (format DD/MM/YYYY) or time increment (eg. +5M).
  * @param[in] value Default probability of rating at given date.
  * @throw Invalid rating, time or value.
  */
@@ -936,7 +936,7 @@ void ccruncher::XmlInputData::processTagObligor(const string &id, const char *sf
 
 /**************************************************************************//**
  * @param[in] parent Parent tag.
- * @param[in] segmentation Segmentation name.
+ * @param[in] ssegmentation Segmentation name.
  * @param[in] ssegment Segment name.
  * @throw Unrecognized segmentation or segment.
  */

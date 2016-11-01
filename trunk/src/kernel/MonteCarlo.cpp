@@ -251,6 +251,7 @@ gsl_matrix * ccruncher::MonteCarlo::cholesky(const std::vector<std::vector<doubl
 /**************************************************************************//**
  * @details Imports portfolio obligors (portfolio returns empty)
  * @param[in] obligors List of obligors.
+ * @param[in] segmentations List of segmentations.
  * @throw Exception Empty list or exists an invalid obligor.
  */
 void ccruncher::MonteCarlo::setObligors(vector<Obligor> &portfolio, const std::vector<Segmentation> &segmentations)

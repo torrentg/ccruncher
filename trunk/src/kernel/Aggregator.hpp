@@ -66,7 +66,7 @@ class Aggregator
     //! Destructor
     ~Aggregator();
     //! Set header info
-    void printHeader(const Segmentation &, const std::vector<double> &exposures);
+    void printHeader(const Segmentation &segmentation, const std::vector<double> &exposures);
     //! Append data to aggregator
     void append(const double *);
     //! Force flush data to disk

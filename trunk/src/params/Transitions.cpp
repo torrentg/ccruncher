@@ -140,10 +140,9 @@ void ccruncher::Transitions::setValues(const std::vector<std::vector<double>> &m
 
 /**************************************************************************//**
  * @details Create a transition matrix providing matrix values as a whole.
- * @param[in] rating1 Starting rating identifier.
- * @param[in] rating2 Ending rating identifier.
- * @param[in] value Probability to migrate from rating1 to rating2 in period
- *                  months. Value in range [0,1].
+ * @param[in] row Row index.
+ * @param[in] col Column index.
+ * @param[in] value Probability to migrate from rating1 to rating2.
  * @throw Exception Error validating value.
  */
 void ccruncher::Transitions::setValue(unsigned char row, unsigned char col, double value)

@@ -127,9 +127,9 @@ class MonteCarlo
     //! Deallocate memory
     void freeMemory();
     //! Set simulation parameters
-    void setParams(const Params &parameters);
+    void setParams(const Params &params);
     //! Set default probabilities (using default probabilities)
-    void setDefaultProbabilities(const std::vector<CDF> &dprobs);
+    void setDefaultProbabilities(const std::vector<CDF> &cdfs);
     //! Set factor loadings
     void setFactorLoadings(const std::vector<double> &loadings);
     //! Set correlation matrix

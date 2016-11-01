@@ -103,7 +103,7 @@ class Interest
     //! Constructor
     Interest(const Date &date=NAD, InterestType interestType=InterestType::Compound, SplineType splineType=SplineType::Linear);
     //! Copy constructor
-    Interest(const Interest &);
+    Interest(const Interest &o);
     //! Destructor
     virtual ~Interest();
     //! Assignment operator
@@ -119,9 +119,9 @@ class Interest
     //! Insert user-defined rate at given date
     void insertRate(Date t, double r);
     //! Insert a user-defined rate
-    void insertRate(const Rate &);
+    void insertRate(const Rate &rate);
     //! Insert a list of rates
-    void insertRates(const std::vector<Rate> &);
+    void insertRates(const std::vector<Rate> &rates);
     //! Returns interpolated rate at date
     double getRate(const Date &date) const;
     //! Returns factor to apply the Net Present Value at the given date

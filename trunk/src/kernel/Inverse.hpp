@@ -66,7 +66,7 @@ class Inverse
     //! Return minimum day
     int getMinDay(const CDF &cdf) const;
     //! Set splines
-    void setSpline(const CDF &cdf, const std::vector<int> &nodes);
+    void setSpline(const CDF &cdf, const std::vector<int> &nodes_);
     //! Set spline
     void setSpline(const std::vector<int> &days, const std::map<int, double> &cache);
     //! Return the worst unaccurate day
