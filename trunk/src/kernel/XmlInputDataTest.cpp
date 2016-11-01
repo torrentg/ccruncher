@@ -170,8 +170,8 @@ void ccruncher_test::XmlInputDataTest::test1()
   ASSERT_NO_THROW(input.readString(xmlcontent.c_str(), defines));
 
   ASSERT_EQUALS(10UL, input.getParams().getRngSeed());
-  ASSERT_EQUALS(3600UL, input.getParams().getMaxSeconds());
-  ASSERT_EQUALS(30000UL, input.getParams().getMaxIterations());
+  ASSERT_EQUALS((size_t)3600, input.getParams().getMaxSeconds());
+  ASSERT_EQUALS((size_t)30000, input.getParams().getMaxIterations());
   ASSERT_EQUALS_EPSILON(5.0, input.getParams().getNdf(), EPSILON);
   ASSERT_EQUALS("sample ccruncher input file", input.getTitle());
   ASSERT_EQUALS("set your additional information here", input.getDescription());
@@ -249,7 +249,7 @@ void ccruncher_test::XmlInputDataTest::test1()
 
   // note: segmentations pruned by InputData::removeUnusedSegments()
   vector<Segmentation> segmentations = input.getSegmentations();
-  ASSERT_EQUALS(4UL, segmentations.size());
+  ASSERT_EQUALS((size_t)4, segmentations.size());
 
   ASSERT_EQUALS("portfolio", segmentations[0].getName());
   ASSERT(segmentations[0].isEnabled());
@@ -279,33 +279,33 @@ void ccruncher_test::XmlInputDataTest::test1()
   ASSERT_EQUALS("0003", segmentations[3].getSegment(2));
 
   vector<Obligor> &obligors = input.getPortfolio();
-  ASSERT_EQUALS(2UL, obligors.size());
+  ASSERT_EQUALS((size_t)2, obligors.size());
 
   ASSERT_EQUALS((unsigned char)2, obligors[0].irating);
   ASSERT_EQUALS((unsigned char)1, obligors[0].ifactor);
-  ASSERT_EQUALS(2UL, obligors[0].assets.size());
+  ASSERT_EQUALS((size_t)2, obligors[0].assets.size());
   ASSERT(obligors[0].lgd == LGD(0.8));
 
-  ASSERT_EQUALS(4UL, obligors[0].assets[0].segments.size());
+  ASSERT_EQUALS((size_t)4, obligors[0].assets[0].segments.size());
   ASSERT_EQUALS((unsigned short)0, obligors[0].assets[0].segments[0]);
   ASSERT_EQUALS((unsigned short)0, obligors[0].assets[0].segments[1]);
   ASSERT_EQUALS((unsigned short)1, obligors[0].assets[0].segments[2]);
   ASSERT_EQUALS((unsigned short)2, obligors[0].assets[0].segments[3]);
 
-  ASSERT_EQUALS(5UL, obligors[0].assets[0].values.size());
+  ASSERT_EQUALS((size_t)5, obligors[0].assets[0].values.size());
   ASSERT(DateValues(Date("01/01/2014"), 0.0, 0.0) == obligors[0].assets[0].values[0]);
   ASSERT(DateValues(Date("01/07/2014"), 550.0*interest.getFactor(Date("01/07/2014")), 0.2) == obligors[0].assets[0].values[1]);
   ASSERT(DateValues(Date("01/01/2015"), 540.0*interest.getFactor(Date("01/01/2015")), 0.8) == obligors[0].assets[0].values[2]);
   ASSERT(DateValues(Date("01/07/2015"), 530.0*interest.getFactor(Date("01/07/2015")), 0.2) == obligors[0].assets[0].values[3]);
   ASSERT(DateValues(Date("01/01/2016"), 520.0*interest.getFactor(Date("01/01/2016")), 0.2) == obligors[0].assets[0].values[4]);
 
-  ASSERT_EQUALS(4UL, obligors[0].assets[1].segments.size());
+  ASSERT_EQUALS((size_t)4, obligors[0].assets[1].segments.size());
   ASSERT_EQUALS((unsigned short)0, obligors[0].assets[1].segments[0]);
   ASSERT_EQUALS((unsigned short)0, obligors[0].assets[1].segments[1]);
   ASSERT_EQUALS((unsigned short)1, obligors[0].assets[1].segments[2]);
   ASSERT_EQUALS((unsigned short)0, obligors[0].assets[1].segments[3]);
 
-  ASSERT_EQUALS(5UL, obligors[0].assets[1].values.size());
+  ASSERT_EQUALS((size_t)5, obligors[0].assets[1].values.size());
   ASSERT(DateValues(Date("01/01/2013"), 0.0, 0.0) == obligors[0].assets[1].values[0]);
   ASSERT(DateValues(Date("01/01/2014"), 590.0*interest.getFactor(Date("01/01/2014")), 0.3) == obligors[0].assets[1].values[1]);
   ASSERT(DateValues(Date("01/07/2014"), 575.0*interest.getFactor(Date("01/07/2014")), 0.3) == obligors[0].assets[1].values[2]);
@@ -314,16 +314,16 @@ void ccruncher_test::XmlInputDataTest::test1()
 
   ASSERT_EQUALS((unsigned char)1, obligors[1].irating);
   ASSERT_EQUALS((unsigned char)0, obligors[1].ifactor);
-  ASSERT_EQUALS(1UL, obligors[1].assets.size());
+  ASSERT_EQUALS((size_t)1, obligors[1].assets.size());
   ASSERT(obligors[1].lgd == LGD(1.0));
 
-  ASSERT_EQUALS(4UL, obligors[1].assets[0].segments.size());
+  ASSERT_EQUALS((size_t)4, obligors[1].assets[0].segments.size());
   ASSERT_EQUALS((unsigned short)0, obligors[1].assets[0].segments[0]);
   ASSERT_EQUALS((unsigned short)1, obligors[1].assets[0].segments[1]);
   ASSERT_EQUALS((unsigned short)0, obligors[1].assets[0].segments[2]);
   ASSERT_EQUALS((unsigned short)1, obligors[1].assets[0].segments[3]);
 
-  ASSERT_EQUALS(3UL, obligors[1].assets[0].values.size());
+  ASSERT_EQUALS((size_t)3, obligors[1].assets[0].values.size());
   ASSERT(DateValues(Date("01/07/2012"), 0.0, 0.0) == obligors[1].assets[0].values[0]);
   ASSERT(DateValues(Date("01/01/2013"), 560.0*interest.getFactor(Date("01/01/2013")), 0.25) == obligors[1].assets[0].values[1]);
   ASSERT(DateValues(Date("01/01/2014"), 560.0*interest.getFactor(Date("01/01/2014")), 1.0) == obligors[1].assets[0].values[2]);

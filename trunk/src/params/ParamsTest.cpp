@@ -47,8 +47,8 @@ void ccruncher_test::ParamsTest::test1()
   ASSERT_EQUALS((unsigned short)128, params.getBlockSize());
   ASSERT_EQUALS("gaussian", params.getCopula());
   ASSERT(params.getNdf() < 0.0);
-  ASSERT_EQUALS(1000000UL, params.getMaxIterations());
-  ASSERT_EQUALS(0UL, params.getMaxSeconds());
+  ASSERT_EQUALS((size_t)1000000, params.getMaxIterations());
+  ASSERT_EQUALS((size_t)0, params.getMaxSeconds());
   ASSERT_EQUALS(0UL, params.getRngSeed());
 }
 
@@ -77,8 +77,8 @@ void ccruncher_test::ParamsTest::test2()
   ASSERT_EQUALS((unsigned short)15, params.getBlockSize());
   ASSERT_EQUALS("t(13)", params.getCopula());
   ASSERT_EQUALS_EPSILON(13.0, params.getNdf(), EPSILON);
-  ASSERT_EQUALS(20000UL, params.getMaxIterations());
-  ASSERT_EQUALS(3600UL, params.getMaxSeconds());
+  ASSERT_EQUALS((size_t)20000, params.getMaxIterations());
+  ASSERT_EQUALS((size_t)3600, params.getMaxSeconds());
   ASSERT_EQUALS(1234567UL, params.getRngSeed());
 }
 
