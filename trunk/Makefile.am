@@ -54,24 +54,19 @@ dist-hook:
 build_ccruncher_cmd_SOURCES = \
     src/ccruncher-cmd.cpp \
     src/kernel/MonteCarlo.cpp \
-    src/kernel/IData.cpp \
+    src/kernel/Input.cpp \
+    src/kernel/InputData.cpp \
+    src/kernel/XmlInputData.cpp \
     src/kernel/Aggregator.cpp \
     src/kernel/Inverse.cpp \
     src/kernel/SimulationThread.cpp \
-    src/kernel/Input.hpp \
     src/params/Params.cpp \
     src/params/Interest.cpp \
     src/params/Rating.cpp \
-    src/params/Ratings.cpp \
     src/params/Transitions.cpp \
     src/params/Factor.cpp \
-    src/params/Factors.cpp \
-    src/params/Correlations.cpp \
-    src/params/Segmentations.cpp \
     src/params/Segmentation.cpp \
     src/params/CDF.cpp \
-    src/params/DefaultProbabilities.cpp \
-    src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \
     src/portfolio/Asset.cpp \
     src/portfolio/DateValues.cpp \
@@ -90,23 +85,19 @@ build_ccruncher_cmd_SOURCES = \
     src/utils/Thread.cpp \
     \
     src/kernel/MonteCarlo.hpp \
-    src/kernel/IData.hpp \
+    src/kernel/Input.hpp \
+    src/kernel/InputData.hpp \
+    src/kernel/XmlInputData.hpp \
     src/kernel/Aggregator.hpp \
     src/kernel/Inverse.hpp \
     src/kernel/SimulationThread.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \
     src/params/Rating.hpp \
-    src/params/Ratings.hpp \
     src/params/Transitions.hpp \
     src/params/Factor.hpp \
-    src/params/Factors.hpp \
-    src/params/Correlations.hpp \
-    src/params/Segmentations.hpp \
     src/params/Segmentation.hpp \
     src/params/CDF.hpp \
-    src/params/DefaultProbabilities.hpp \
-    src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
     src/portfolio/Asset.hpp \
     src/portfolio/DateValues.hpp \
@@ -147,18 +138,13 @@ build_ccruncher_tests_SOURCES = \
     src/portfolio/LGDTest.cpp \
     src/portfolio/EADTest.cpp \
     src/portfolio/ObligorTest.cpp \
-    src/portfolio/PortfolioTest.cpp \
     src/params/InterestTest.cpp \
     src/params/SegmentationTest.cpp \
-    src/params/SegmentationsTest.cpp \
     src/params/ParamsTest.cpp \
-    src/params/CorrelationsTest.cpp \
-    src/params/RatingsTest.cpp \
-    src/params/FactorsTest.cpp \
     src/params/TransitionsTest.cpp \
     src/params/CDFTest.cpp \
-    src/params/DefaultProbabilitiesTest.cpp \
-    src/kernel/IDataTest.cpp \
+    src/kernel/InputTest.cpp \
+    src/kernel/XmlInputDataTest.cpp \
     src/kernel/InverseTest.cpp \
     \
     src/utils/Parser.cpp \
@@ -172,26 +158,22 @@ build_ccruncher_tests_SOURCES = \
     src/utils/Utils.cpp \
     src/utils/Thread.cpp \
     src/utils/PowMatrix.cpp \
-    src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \
     src/portfolio/Asset.cpp \
     src/portfolio/DateValues.cpp \
     src/portfolio/LGD.cpp \
     src/portfolio/EAD.cpp \
     src/params/Factor.cpp \
-    src/params/Factors.cpp \
     src/params/Rating.cpp \
-    src/params/Ratings.cpp \
     src/params/Params.cpp \
     src/params/Transitions.cpp \
-    src/params/Correlations.cpp \
     src/params/Interest.cpp \
-    src/params/Segmentations.cpp \
     src/params/Segmentation.cpp \
     src/params/CDF.cpp \
-    src/params/DefaultProbabilities.cpp \
     src/kernel/MonteCarlo.cpp \
-    src/kernel/IData.cpp \
+    src/kernel/Input.cpp \
+    src/kernel/InputData.cpp \
+    src/kernel/XmlInputData.cpp \
     src/kernel/Aggregator.cpp \
     src/kernel/Inverse.cpp \
     src/kernel/SimulationThread.cpp \
@@ -209,18 +191,13 @@ build_ccruncher_tests_SOURCES = \
     src/portfolio/LGDTest.hpp \
     src/portfolio/EADTest.hpp \
     src/portfolio/ObligorTest.hpp \
-    src/portfolio/PortfolioTest.hpp \
-    src/params/CorrelationsTest.hpp \
     src/params/InterestTest.hpp \
     src/params/SegmentationTest.hpp \
-    src/params/SegmentationsTest.hpp \
     src/params/ParamsTest.hpp \
-    src/params/RatingsTest.hpp \
-    src/params/FactorsTest.hpp \
     src/params/TransitionsTest.hpp \
     src/params/CDFTest.hpp \
-    src/params/DefaultProbabilitiesTest.hpp \
-    src/kernel/IDataTest.hpp \
+    src/kernel/InputTest.hpp \
+    src/kernel/XmlInputDataTest.hpp \
     src/kernel/InverseTest.hpp \
     \
     src/utils/Parser.hpp \
@@ -238,22 +215,18 @@ build_ccruncher_tests_SOURCES = \
     src/portfolio/DateValues.hpp \
     src/portfolio/LGD.hpp \
     src/portfolio/EAD.hpp \
-    src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
     src/params/Factor.hpp \
-    src/params/Factors.hpp \
     src/params/Rating.hpp \
-    src/params/Ratings.hpp \
     src/params/Params.hpp \
     src/params/Transitions.hpp \
-    src/params/Correlations.hpp \
     src/params/Interest.hpp \
-    src/params/Segmentations.hpp \
     src/params/Segmentation.hpp \
     src/params/CDF.hpp \
-    src/params/DefaultProbabilities.hpp \
     src/kernel/MonteCarlo.hpp \
-    src/kernel/IData.hpp \
+    src/kernel/Input.hpp \
+    src/kernel/InputData.hpp \
+    src/kernel/XmlInputData.hpp \
     src/kernel/Aggregator.hpp \
     src/kernel/Inverse.hpp \
     src/kernel/SimulationThread.hpp \

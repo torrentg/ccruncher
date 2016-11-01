@@ -24,7 +24,6 @@
 #include <algorithm>
 #include <cassert>
 #include "portfolio/Asset.hpp"
-#include "params/Segmentations.hpp"
 
 using namespace std;
 using namespace ccruncher;
@@ -61,15 +60,14 @@ bool ccruncher::Asset::isActive(const Date &from, const Date &/*to*/) const
 void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &interest)
 {
   assert(d1 <= d2);
+  if (d1 >= d2) return;
+  if (values.empty()) return;
 
   // sort values by date
-  if (!is_sorted(values.begin(), values.end())) {
-    sort(values.begin(), values.end());
-  }
-
-  int pos1=-1, pos2=-1;
+  sort(values.begin(), values.end());
 
   // search range to preserve
+  int pos1=-1, pos2=-1;
   for(int i=0; i<(int)values.size(); i++)
   {
     if (d1 < values[i].date) {
@@ -89,6 +87,7 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
     vector<DateValues>(0).swap(values);
   }
   else {
+    assert(values.begin()+pos2 != values.end());
     vector<DateValues>(values.begin()+pos1, values.begin()+pos2+1).swap(values);
   }
   
@@ -96,24 +95,5 @@ void ccruncher::Asset::prepare(const Date &d1, const Date &d2, const Interest &i
   for(DateValues &dv : values) {
     dv.ead.mult(interest.getFactor(dv.date));
   }
-}
-
-/**************************************************************************//**
- * @details Check if all asset's DateValues have defined the LGD. If exist
- *          a DateValue without LGD this means that obligor's LGD will be
- *          used.
- * @return true = exist a DateValue that requires obligor LGD, false otherwise.
- */
-bool ccruncher::Asset::requiresObligorLGD(const Date &d1, const Date &d2) const
-{
-  for(size_t i=0; i<values.size(); i++) {
-    if ((d1 < values[i].date && values[i].date <= d2) ||
-        (i > 0 && d1 < values[i-1].date && values[i-1].date < d2)) {
-      if (!LGD::isValid(values[i].lgd)) {
-        return true;
-      }
-    }
-  }
-  return false;
 }
 

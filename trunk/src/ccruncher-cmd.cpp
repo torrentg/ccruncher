@@ -39,7 +39,7 @@
 #include <expat.h>
 #include <zlib.h>
 #include "kernel/MonteCarlo.hpp"
-#include "kernel/IData.hpp"
+#include "kernel/XmlInputData.hpp"
 #include "utils/Utils.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Parser.hpp"
@@ -73,7 +73,7 @@ bool stop = false;
 void catchsignal(int)
 {
   stop = true;
-  if (sfilename == STDIN_FILENAME && stdin != nullptr) {
+  if (sfilename == "" && stdin != nullptr) {
     fclose(stdin);
   }
 }
@@ -256,7 +256,8 @@ int main(int argc, char *argv[])
   // retrieving input filename
   if (argc == optind)
   {
-    sfilename = STDIN_FILENAME;
+    // reading data from stdin
+    sfilename = "";
   }
   else if (argc - optind > 1)
   {
@@ -324,8 +325,13 @@ void run() throw(Exception)
   log << header << endl;
 
   // parsing input file
-  IData idata(cout.rdbuf());
-  idata.init(sfilename, defines, &stop);
+  XmlInputData idata(cout.rdbuf());
+  if (sfilename == "") {
+    idata.readStdin(defines, &stop);
+  }
+  else {
+    idata.readFile(sfilename, defines, &stop);
+  }
   if (stop) throw Exception("parser stopped");
   stdin = nullptr;
 

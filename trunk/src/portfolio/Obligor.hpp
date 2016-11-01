@@ -30,9 +30,7 @@
 namespace ccruncher {
 
 /**************************************************************************//**
- * @brief  Obligor with a rating and a list of assets.
- *
- * @details Obligors assigns its belongs-to segments to his assets.
+ * @brief  Obligor belonging to a factor, with a rating and a list of assets.
  *
  * @see http://ccruncher.net/ifileref.html#portfolio
  */
@@ -53,7 +51,7 @@ class Obligor
   public:
 
     //! Constructor
-    Obligor() : ifactor(0), irating(0) {}
+    Obligor(unsigned char factor=0, unsigned char rating=0) : ifactor(factor), irating(rating), lgd(1.0) {}
     //! Indicates if this obligor has values in date1-date2
     bool isActive(const Date &, const Date &) const;
 

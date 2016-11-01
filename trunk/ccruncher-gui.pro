@@ -23,26 +23,22 @@ HEADERS += \
     src/gui/CodeEditor.hpp \
     src/gui/QwtPlotCanvasExt.hpp \
     src/gui/QwtPieChart.hpp \
-    src/params/Correlations.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \
     src/params/Rating.hpp \
-    src/params/Ratings.hpp \
     src/params/Factor.hpp \
-    src/params/Factors.hpp \
-    src/params/Segmentations.hpp \
     src/params/Segmentation.hpp \
     src/params/Transitions.hpp \
     src/params/CDF.hpp \
-    src/params/DefaultProbabilities.hpp \
-    src/kernel/IData.hpp \
+    src/kernel/Input.cpp \
+    src/kernel/InputData.cpp \
+    src/kernel/XmlInputData.cpp \
     src/kernel/Aggregator.hpp \
     src/kernel/MonteCarlo.hpp \
     src/kernel/SimulationThread.hpp \
     src/kernel/Inverse.hpp \
     src/kernel/Input.hpp \
     src/portfolio/LGD.hpp \
-    src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
     src/portfolio/EAD.hpp \
     src/portfolio/DateValues.hpp \
@@ -77,25 +73,21 @@ SOURCES += \
     src/gui/xmlhighlighter.cpp \
     src/gui/CodeEditor.cpp \
     src/gui/QwtPieChart.cpp \
-    src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \
     src/params/Rating.cpp \
-    src/params/Ratings.cpp \
     src/params/Factor.cpp \
-    src/params/Factors.cpp \
-    src/params/Segmentations.cpp \
     src/params/Segmentation.cpp \
     src/params/Transitions.cpp \
     src/params/CDF.cpp \
-    src/params/DefaultProbabilities.cpp \
-    src/kernel/IData.cpp \
+    src/kernel/Input.cpp \
+    src/kernel/InputData.cpp \
+    src/kernel/XmlInputData.cpp \
     src/kernel/Aggregator.cpp \
     src/kernel/MonteCarlo.cpp \
     src/kernel/SimulationThread.cpp \
     src/kernel/Inverse.cpp \
     src/portfolio/LGD.cpp \
-    src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \
     src/portfolio/EAD.cpp \
     src/portfolio/DateValues.cpp \

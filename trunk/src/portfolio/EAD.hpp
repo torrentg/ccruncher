@@ -92,26 +92,24 @@ class EAD
 
   public:
   
-    //! Default constructor
-    EAD();
-    //! Constructor
-    EAD(const char *);
-    //! Constructor
-    EAD(const std::string &);
+    //! Constructor (fixed ead)
+    EAD(double x=0.0);
     //! Constructor
     EAD(Type, double a, double b=NAN);
     //! Constructor
-    EAD(double);
+    EAD(const char *);
+    //! Constructor
+    EAD(const std::string &str) : EAD(str.c_str()) {}
     //! Comparison operator
     bool operator==(const EAD &o) const;
     //! Comparison operator
     bool operator!=(const EAD &o) const;
     //! Exposure type
-    Type getType() const;
+    Type getType() const { return mType; }
     //! Returns distribution parameter
-    double getValue1() const;
+    double getValue1() const { return mValue1; }
     //! Returns distribution parameter
-    double getValue2() const;
+    double getValue2() const { return mValue2; }
     //! Returns exposure
     double getValue(const gsl_rng *rng=nullptr) const;
     //! Returns the mean of the exposure
@@ -119,28 +117,7 @@ class EAD
     //! Apply current net value factor
     void mult(double);
 
-  public:
-
-    //! Check if it is a Non-A-EAD value
-    static bool isValid(const EAD &);
-
 };
-
-/**************************************************************************//**
- * @details Create a EAD with invalid values.
- */
-inline ccruncher::EAD::EAD() : mType(Type::Fixed), mValue1(NAN), mValue2(NAN)
-{
-  // nothing to do
-}
-
-/**************************************************************************//**
- * @details Create a EAD of type fixed.
- */
-inline ccruncher::EAD::EAD(double x) : mType(Type::Fixed), mValue1(x), mValue2(NAN)
-{
-  // nothing to do
-}
 
 /**************************************************************************//**
  * @param[in] rng Random number generator.

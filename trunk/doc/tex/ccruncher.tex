@@ -1531,6 +1531,14 @@ the portfolio loss distribution at time horizon $t$ is
 	\right)
 \end{displaymath}
 
+CCruncher assumes that the multivariate default times distribution has
+marginals $F_i$ and a t-Student multi-factor copula with degrees 
+of freedom $\nu$, factor loadings $\vec{w}$, and factor correlation matrix 
+$R$. CCruncher generates samples of the portfolio loss distribution simulating 
+the obligors' default times. Portfolio loss distribution is approximated by the 
+empirical distribution of the sample, and credit risk is measured using the 
+appropriate statistics.
+
 The portfolio loss distribution $L_t$ does not have a closed form except 
 in a few cases. One of those cases is the Large Homogeneous Pool (LHP).
 Vasicek~\cite{vasicek:1987} developed an analytical formula in the Gaussian 
@@ -1545,14 +1553,6 @@ t-Student case. The assumptions of these approximations are
 \end{inparaenum}
 These simplified models must be managed with care because they can cause 
 problems~\cite{long:2012} when the assumptions are not realized.
-
-CCruncher assumes that the multivariate default times distribution has
-marginals $F_i$ and a t-Student multi-factor copula with degrees 
-of freedom $\nu$, factor loadings $\vec{w}$, and factor correlation matrix 
-$R$. CCruncher generates samples of the portfolio loss distribution simulating 
-the obligors' default times. Portfolio loss distribution is approximated by the 
-empirical distribution of the sample, and credit risk is measured using the 
-appropriate statistics.
 
 \begin{algorithm}[Portfolio losses sampling]
 	\label{alg:pldmc}

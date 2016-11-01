@@ -119,8 +119,8 @@ How to check results?
   <!--                       SEGMENTATIONS                            -->
   <!-- ============================================================== -->
   <segmentations>
-    <segmentation name="portfolio" components="asset"/>
-    <segmentation name="offices" components="obligor" enabled="false">
+    <segmentation name="portfolio"/>
+    <segmentation name="offices" enabled="false">
       <segment name="O1" />
       <segment name="O2" />
       <segment name="O3" />

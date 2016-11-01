@@ -34,6 +34,7 @@ class ParserTest : public TestFixture<ParserTest>
 
     void test_int();
     void test_long();
+    void test_ulong();
     void test_double();
     void test_date();
     void test_bool();
@@ -45,6 +46,7 @@ class ParserTest : public TestFixture<ParserTest>
     {
       TEST_CASE(test_int);
       TEST_CASE(test_long);
+      TEST_CASE(test_ulong);
       TEST_CASE(test_double);
       TEST_CASE(test_date);
       TEST_CASE(test_bool);

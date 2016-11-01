@@ -32,7 +32,7 @@
 // forward declaration
 namespace ccruncher {
   class MonteCarlo;
-  class IData;
+  class XmlInputData;
 }
 
 namespace ccruncher_gui {
@@ -75,7 +75,7 @@ class SimulationTask : public QThread
     //! Number of threads
     unsigned char ithreads;
     //! Input data
-    ccruncher::IData *idata;
+    ccruncher::XmlInputData *idata;
     //! Simulator
     ccruncher::MonteCarlo *montecarlo;
     //! Status
@@ -107,7 +107,7 @@ class SimulationTask : public QThread
     //! Return status
     status getStatus() const;
     //! Return idata
-    ccruncher::IData* getIData();
+    ccruncher::XmlInputData* getIData();
     //! Return MonteCarlo
     ccruncher::MonteCarlo* getMonteCarlo();
     //! Free memory (1=idata, 2=montecarlo, other=all)

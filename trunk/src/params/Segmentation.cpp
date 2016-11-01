@@ -21,6 +21,7 @@
 //===========================================================================
 
 #include <cstring>
+#include <limits>
 #include <cassert>
 #include "params/Segmentation.hpp"
 #include "utils/Exception.hpp"
@@ -30,12 +31,16 @@
 
 using namespace std;
 
-/**************************************************************************/
-ccruncher::Segmentation::Segmentation(const string &name, Type type, bool enabled, bool hasUnassigned) :
-  mName(name), mType(type), mEnabled(enabled)
+/**************************************************************************//**
+ * @param[in] name Segmentation name.
+ * @param[in] enabled Segmentation enabled flag.
+ * @throw Exception Invalid segmentations name.
+ */
+ ccruncher::Segmentation::Segmentation(const string &name, bool enabled, bool hasUnassigned) : mEnabled(enabled)
 {
+  setName(name);
   if (hasUnassigned) {
-    addSegment(UNASSIGNED); // adding catcher segment
+    addSegment(UNASSIGNED);
   }
 }
 
@@ -44,9 +49,9 @@ ccruncher::Segmentation::Segmentation(const string &name, Type type, bool enable
  * @return The index of the given segment.
  * @throw Exception Segment name not found.
  */
-unsigned short ccruncher::Segmentation::indexOf(const std::string &sname) const
+unsigned short ccruncher::Segmentation::indexOfSegment(const std::string &sname) const
 {
-  return indexOf(sname.c_str());
+  return indexOfSegment(sname.c_str());
 }
 
 /**************************************************************************//**
@@ -54,7 +59,7 @@ unsigned short ccruncher::Segmentation::indexOf(const std::string &sname) const
  * @return The index of the given segment.
  * @throw Exception Segment name not found.
  */
-unsigned short ccruncher::Segmentation::indexOf(const char *sname) const
+unsigned short ccruncher::Segmentation::indexOfSegment(const char *sname) const
 {
   assert(sname != nullptr);
   for(size_t i=0; i<mSegments.size(); i++) {
@@ -99,31 +104,6 @@ void ccruncher::Segmentation::setName(const std::string &name)
 }
 
 /**************************************************************************//**
- * @param[in] type Segmentation type.
- */
-void ccruncher::Segmentation::setType(const Type &type)
-{
-  mType = type;
-}
-
-/**************************************************************************//**
- * @param[in] type Segmentation type ('asset' or 'obligor').
- * @throw Exception Type not recognized.
- */
-void ccruncher::Segmentation::setType(const std::string &type)
-{
-  if (type == "asset") {
-    mType = Type::asset;
-  }
-  else if (type == "obligor") {
-    mType = Type::obligor;
-  }
-  else {
-    throw Exception("unrecognized components: '" + type + "'");
-  }
-}
-
-/**************************************************************************//**
  * @param[in] b Indicates if this segmentation is enabled.
  */
 void ccruncher::Segmentation::setEnabled(bool b)
@@ -148,15 +128,13 @@ void ccruncher::Segmentation::addSegment(const std::string &sname)
     }
   }
 
+  // cheking the number of segments
+  if (mSegments.size() >= numeric_limits<unsigned short>::max()) {
+    throw Exception("number of segments bigger than " + to_string(numeric_limits<unsigned short>::max()));
+  }
+
   // inserting value
-  try
-  {
-    mSegments.push_back(sname);
-  }
-  catch(std::exception &e)
-  {
-    throw Exception(e);
-  }
+  mSegments.push_back(sname);
 }
 
 /**************************************************************************//**
@@ -185,38 +163,5 @@ const std::string& ccruncher::Segmentation::getSegment(unsigned short i) const
 string ccruncher::Segmentation::getFilename(const string &path) const
 {
   return Utils::realpath(path) + Utils::pathSeparator + mName + ".csv";
-}
-
-/**************************************************************************//**
- * @details Computes expected portfolio exposure for the given segmentation
- *          weighting each exposure by its duration in the period T0-T1.
- * @param[in] isegmentation Segmentation index.
- * @param[in] obligors Potfolio of obligors.
- * @param[in] time0 Initial date.
- * @param[in] timeT ending date.
- * @return Segments' exposures.
- */
-vector<double> ccruncher::Segmentation::getExposures(unsigned short isegmentation, const std::vector<Obligor> &obligors, const Date time0, const Date timeT)
-{
-  assert(time0 < timeT);
-  vector<double> ret(1, 0.0);
-  double numdays = timeT - time0;
-
-  for(const Obligor &obligor : obligors) {
-    for(const Asset &asset : obligor.assets) {
-      unsigned short isegment = asset.segments[isegmentation];
-      if (isegment >= ret.size()) {
-        ret.resize(isegment+1, 0.0);
-      }
-      Date prevt = time0;
-      for(auto it=asset.values.begin(); it != asset.values.end(); ++it) {
-        double weight = (min(it->date,timeT) - prevt)/numdays;
-        ret[isegment] += weight * it->ead.getExpected();
-        prevt = it->date;
-      }
-    }
-  }
-
-  return ret;
 }
 

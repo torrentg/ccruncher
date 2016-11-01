@@ -5,44 +5,34 @@ CONFIG += c++11 console
 VERSION = 2.5.0
 
 HEADERS += \
-    src/params/Correlations.hpp \
     src/params/Params.hpp \
     src/params/Interest.hpp \
     src/params/Rating.hpp \
-    src/params/Ratings.hpp \
     src/params/Factor.hpp \
-    src/params/Factors.hpp \
-    src/params/Segmentations.hpp \
     src/params/Segmentation.hpp \
     src/params/Transitions.hpp \
     src/params/CDF.hpp \
-    src/params/DefaultProbabilities.hpp \
     src/params/TransitionsTest.hpp \
     src/params/SegmentationTest.hpp \
-    src/params/SegmentationsTest.hpp \
-    src/params/FactorsTest.hpp \
-    src/params/RatingsTest.hpp \
     src/params/ParamsTest.hpp \
     src/params/InterestTest.hpp \
-    src/params/CorrelationsTest.hpp \
     src/params/CDFTest.hpp \
-    src/params/DefaultProbabilitiesTest.hpp \
-    src/kernel/IData.hpp \
     src/kernel/Aggregator.hpp \
     src/kernel/MonteCarlo.hpp \
     src/kernel/SimulationThread.hpp \
-    src/kernel/IDataTest.hpp \
     src/kernel/Inverse.hpp \
     src/kernel/InverseTest.hpp \
     src/kernel/Input.hpp \
+    src/kernel/InputTest.hpp \
+    src/kernel/InputData.hpp \
+    src/kernel/XmlInputData.hpp \
+    src/kernel/XmlInputDataTest.hpp \
     src/portfolio/LGD.hpp \
-    src/portfolio/Portfolio.hpp \
     src/portfolio/Obligor.hpp \
     src/portfolio/EAD.hpp \
     src/portfolio/DateValues.hpp \
     src/portfolio/Asset.hpp \
     src/portfolio/LGDTest.hpp \
-    src/portfolio/PortfolioTest.hpp \
     src/portfolio/ObligorTest.hpp \
     src/portfolio/EADTest.hpp \
     src/portfolio/DateValuesTest.hpp \
@@ -70,43 +60,34 @@ HEADERS += \
 
 SOURCES += \
     src/ccruncher-tests.cpp \
-    src/params/Correlations.cpp \
     src/params/Interest.cpp \
     src/params/Params.cpp \
     src/params/Rating.cpp \
-    src/params/Ratings.cpp \
     src/params/Factor.cpp \
-    src/params/Factors.cpp \
-    src/params/Segmentations.cpp \
     src/params/Segmentation.cpp \
     src/params/Transitions.cpp \
     src/params/CDF.cpp \
-    src/params/DefaultProbabilities.cpp \
     src/params/TransitionsTest.cpp \
     src/params/SegmentationTest.cpp \
-    src/params/SegmentationsTest.cpp \
-    src/params/FactorsTest.cpp \
-    src/params/RatingsTest.cpp \
     src/params/ParamsTest.cpp \
     src/params/InterestTest.cpp \
-    src/params/CorrelationsTest.cpp \
     src/params/CDFTest.cpp \
-    src/params/DefaultProbabilitiesTest.cpp \
-    src/kernel/IData.cpp \
     src/kernel/Aggregator.cpp \
     src/kernel/MonteCarlo.cpp \
     src/kernel/SimulationThread.cpp \
-    src/kernel/IDataTest.cpp \
     src/kernel/Inverse.cpp \
     src/kernel/InverseTest.cpp \
+    src/kernel/Input.cpp \
+    src/kernel/InputTest.cpp \
+    src/kernel/InputData.cpp \
+    src/kernel/XmlInputData.cpp \
+    src/kernel/XmlInputDataTest.cpp \
     src/portfolio/LGD.cpp \
-    src/portfolio/Portfolio.cpp \
     src/portfolio/Obligor.cpp \
     src/portfolio/EAD.cpp \
     src/portfolio/DateValues.cpp \
     src/portfolio/Asset.cpp \
     src/portfolio/LGDTest.cpp \
-    src/portfolio/PortfolioTest.cpp \
     src/portfolio/ObligorTest.cpp \
     src/portfolio/EADTest.cpp \
     src/portfolio/DateValuesTest.cpp \

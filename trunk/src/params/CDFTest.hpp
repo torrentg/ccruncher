@@ -24,7 +24,6 @@
 #define _CDFTest_
 
 #include "utils/MiniCppUnit.hxx"
-#include "params/Ratings.hpp"
 
 namespace ccruncher_test {
 

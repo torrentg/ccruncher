@@ -14,19 +14,20 @@
         td.c1 {
             text-align: center;
             padding: 8px;
-            width: 80px;
+            width: 10%;
         }
         td.c2 {
             text-align: justify;
             padding: 8px;
+            width: 50%;
         }
-        td.c3 {
+        td.c3, td.c4, td.c5, td.c6 {
             text-align: center;
             padding: 8px;
-            width: 60px;
+            width: 10%;
         }
         @media print {
-            td.c1, td.c2, td.c3 {
+            td.c1, td.c2, td.c3, td.c4, td.c5, td.c6 {
                 border: 1px solid gray;
             }
         }
@@ -164,7 +165,10 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">name</td>
@@ -173,7 +177,10 @@
           (eg. $numsims) in the configuration file will be replaced by its value (eg. 30000). 
           The define name can only consist of letters, numbers and the character '_'.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">see desc.</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
         <td class="c1">value</td>
@@ -181,7 +188,10 @@
           Value used to replace the define identifier. <br/>
           You can put any value that does not contain XML special characters (&lt; &amp; &gt; &quot; &apos;).
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">see desc</td>
+        <td class="c6">-</td>
       </tr>
     </table>
 
@@ -218,42 +228,56 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">time.0</td>
         <td class="c2">
           Starting date of the simulation. Interest curve, debtors' rating, 
           transition matrix and default probabilities functions are relative to 
-          this date. The format of this attribute is: DD/MM/YYYY.
+          this date.
         </td>
-        <td class="c3">date</td>
+        <td class="c3">yes</td>
+        <td class="c4">date</td>
+        <td class="c5"><small>DD/MM/YYYY</small></td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
         <td class="c1">time.T</td>
         <td class="c2">
           Ending date of the simulation. Portfolio credit risk is computed at this date. 
-          The format of this attribute is: DD/MM/YYYY.
         </td>
-        <td class="c3">date</td>
+        <td class="c3">yes</td>
+        <td class="c4">date</td>
+        <td class="c5"><small>DD/MM/YYYY</small></td>
+        <td class="c6">-</td>
       </tr>
       <tr class="b">
         <td class="c1">maxiterations</td>
         <td class="c2">
           Maximum number of iterations performed by the Monte Carlo algorithm.
           If it has value 0, this stop criterion is not considered. CCruncher stops when 
-          a stop criterion is achieved.
+          the maxiterations or maxseconds criterion is achieved.
         </td>
-        <td class="c3">int</td>
+        <td class="c3">no</td>
+        <td class="c4">int</td>
+        <td class="c5"> &ge; 0</td>
+        <td class="c6">1000000</td>
       </tr>
       <tr class="a">
         <td class="c1">maxseconds</td>
         <td class="c2">
           Maximum number of seconds that the current execution can last.
-          If it has value 0, this stop criterion is not considered. CCruncher stops when
-          a stop criterion is achieved.
+          If it has value 0, this stop criterion is not considered. CCruncher stops when 
+          the maxiterations or maxseconds criterion is achieved. 
         </td>
-        <td class="c3">int</td>
+        <td class="c3">no</td>
+        <td class="c4">int</td>
+        <td class="c5"> &ge; 0</td>
+        <td class="c6">0</td>
       </tr>
       <tr class="b">
         <td class="c1">copula</td>
@@ -270,7 +294,10 @@
             </li>
           </ul>
         </td>
-        <td class="c3">string</td>
+        <td class="c3">no</td>
+        <td class="c4">string</td>
+        <td class="c5">gaussian<br/>t(ndf)</td>
+        <td class="c6">gaussian</td>
       </tr>
       <tr class="a">
         <td class="c1">rng.seed</td>
@@ -282,10 +309,11 @@
           It requires being non-consecutive because each thread has its how RNG 
           seeded with the seed value plus the thread index (zero-based 
           indexing).
-          <br/>
-          This parameter is optional. Default value is 0.
         </td>
-        <td class="c3">long</td>
+        <td class="c3">no</td>
+        <td class="c4">int</td>
+        <td class="c5"> &ge; 0</td>
+        <td class="c6">0</td>
       </tr>
       <tr class="b">
         <td class="c1">antithetic</td>
@@ -293,24 +321,24 @@
           Specifies whether to use the 'antithetic' variance reduction technique.
           If you have doubts about setting this parameter then set it to 'false', 
           otherwise set it to 'true'.
-          <br/>
-          This parameter is optional. Default value is 'false'. 
         </td>
-        <td class="c3">boolean</td>
+        <td class="c3">no</td>
+        <td class="c4">boolean</td>
+        <td class="c5">true<br/>false</td>
+        <td class="c6">false</td>
       </tr>
       <tr class="a">
         <td class="c1">blocksize</td>
         <td class="c2">
           Number of simultaneous simulations realized for each thread. 
-          If you observe a lack of performance when your problem 
-          dimensions are high then try to reduce this parameter value.
           If you enable antithetic mode then <code>blocksize</code> needs to be 
           a multiple of 2. It is desirable that the number of simulations be a 
           multiple of <code>blocksize&times;numthreads</code>.
-          <br/>
-          This parameter is optional. Default value is 128. 
         </td>
-        <td class="c3">integer</td>
+        <td class="c3">no</td>
+        <td class="c4">int</td>
+        <td class="c5">&gt; 0</td>
+        <td class="c6">128</td>
       </tr>
     </table>
 
@@ -351,23 +379,30 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">type</td>
         <td class="c2">
-          Determine how to apply interest curve. Allowed values are: 'simple', 'compound' 
-          and 'continuous'. This attribute is optional. Default value is 'compound'.
+          Determine how to apply interest curve.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">no</td>
+        <td class="c4">string</td>
+        <td class="c5">simple<br/>compound<br/>continuous</td>
+        <td class="c6">compound</td>
       </tr>
       <tr class="a">
         <td class="c1">spline</td>
         <td class="c2">
-          Indicates how curve is interpolated. Allowed values are: 'linear' and 'cubic'.
-          This attribute is optional. Default value is 'linear'.
+          Indicates how curve is interpolated.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">no</td>
+        <td class="c4">string</td>
+        <td class="c5">linear<br/>cubic</td>
+        <td class="c6">linear</td>
       </tr>
     </table>
 
@@ -377,25 +412,33 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">t</td>
         <td class="c2">
-          Time. Can be a date (in format 'DD/MM/YYYY') or an 
-          increment from the initial date <i>time.0</i>. Use suffix 'D'
-          to indicate days (eg. 3D), suffix 'M' to indicate months (eg. 6M) and  
+          Time. Can be a date or an increment from the initial date <i>time.0</i>. Use 
+          suffix 'D' to indicate days (eg. 3D), suffix 'M' to indicate months (eg. 6M) and  
           suffix 'Y' to indicate years (eg. 15Y). If a value between two given dates is 
           needed, the value will be interpolated.
         </td>
-        <td class="c3">date <br/>int[DMY]</td>
+        <td class="c3">yes</td>
+        <td class="c4">date</td>
+        <td class="c5"><small>DD/MM/YYYY</small><br/>int[DMY]</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
         <td class="c1">r</td>
         <td class="c2">
-          Interest rate at time t. It is a value between -0.5 and 1.0.
+          Interest rate at time t.
         </td>
-        <td class="c3">double</td>
+        <td class="c3">yes</td>
+        <td class="c4">double</td>
+        <td class="c5">[-0.5, 1.0]</td>
+        <td class="c6">-</td>
       </tr>
     </table>
 
@@ -433,22 +476,31 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">name</td>
         <td class="c2">
-          Credit rating identifier. All references to a credit rating, eg. obligor rating, 
+          Credit rating identifier. All references to a credit rating (eg. obligor rating) 
           are made using this value. Include default rating in this list.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">-</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
         <td class="c1">description</td>
         <td class="c2">
-          Credit rating description. This attribute is optional.
+          Credit rating description.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">no</td>
+        <td class="c4">string</td>
+        <td class="c5">-</td>
+        <td class="c6"></td>
       </tr>
     </table>
 
@@ -553,7 +605,10 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">period</td>
@@ -561,7 +616,10 @@
           Number of months covered by the transition matrix. Usually the
           transition matrix covers 1 year, and in such case, set the value to 12. 
         </td>
-        <td class="c3">int</td>
+        <td class="c3">yes</td>
+        <td class="c4">int</td>
+        <td class="c5">&gt; 0</td>
+        <td class="c6">-</td>
       </tr>
     </table>
 
@@ -571,7 +629,10 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">from</td>
@@ -579,7 +640,10 @@
           Initial credit rating. This value must be a credit rating identifier, see 
           'name' attribute in the credit rating tag.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">identifier</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
         <td class="c1">to</td>
@@ -587,14 +651,20 @@
           Final credit rating. This value must be a credit rating identifier, see 
           'name' attribute in the credit rating tag.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">identifier</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="b">
         <td class="c1">value</td>
         <td class="c2">
           Probability for credit rating migration and must have a value between 0 and 1.
         </td>
-        <td class="c3">double</td>
+        <td class="c3">yes</td>
+        <td class="c4">double</td>
+        <td class="c5">[0, 1]</td>
+        <td class="c6">-</td>
       </tr>
     </table>
 
@@ -628,30 +698,41 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">name</td>
         <td class="c2">
-          Factor identifier. All references to a factor, eg. obligor 
-          factor, are made using this value.
+          Factor identifier. All references to a factor (eg. obligor 
+          factor) are made using this value.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">-</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
         <td class="c1">loading</td>
         <td class="c2">
-          Factor loading value (<i>w<sub>i</sub></i> in the multi-factor model). 
-          A value in the range [0%,100%].
+          Factor loading value (<i>w<sub>i</sub></i> in the multi-factor model).
         </td>
-        <td class="c3">double</td>
+        <td class="c3">yes</td>
+        <td class="c4">double</td>
+        <td class="c5">[0, 1]</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="b">
         <td class="c1">description</td>
         <td class="c2">
-          Factor description. This attribute is optional.
+          Factor description.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">no</td>
+        <td class="c4">string</td>
+        <td class="c5">-</td>
+        <td class="c6"></td>
       </tr>
     </table>
 
@@ -696,7 +777,10 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">factor1</td>
@@ -704,7 +788,10 @@
           First factor.
           This value must be a factor identifier, see 'name' attribute in factor tag.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">identifier</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
         <td class="c1">factor2</td>
@@ -712,14 +799,20 @@
           Second factor.
           This value must be a factor identifier, see 'name' attribute in factor tag.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">identifier</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="b">
         <td class="c1">value</td>
         <td class="c2">
-          Correlation between factor1 and factor2. A value in the range [-100%,+100%]. 
+          Correlation between factor1 and factor2.
         </td>
-        <td class="c3">double</td>
+        <td class="c3">yes</td>
+        <td class="c4">double</td>
+        <td class="c5">[0, 1]</td>
+        <td class="c6">-</td>
       </tr>
     </table>
 
@@ -733,21 +826,17 @@
       This section shows how to define portfolio segmentations. Segmentations
       allow you to disaggregate your portfolio's risk according to a hierarchical organization
       or another type of classification. Segmentation is composed of segments.
-      There are two types of segmentations depending on the segments components:
     </p>
-    <ul>
-      <li>those composed of obligors (eg. sector, obligor size, initial credit rating, etc.)</li>
-      <li>and those composed of assets (eg. products, branch where the contract is made, etc.)</li>
-    </ul> 
     <p>
-      All segmentations must be complete, so that an element belongs to only one segment and 
+      All segmentations must be complete, so that an asset belongs to only one segment and 
       the union of all segments constitutes the whole portfolio. Each segmentation has a
-      segment named 'unassigned' that is implicitly declared. If an obligor (or an asset)
-      does not belong to any segment, then it is considered part of the 'unassigned' segment.
+      segment named 'unassigned' that is implicitly declared. If an asset does not belong to 
+      any segment, then it is considered part of the 'unassigned' segment.
       Usually we set the segmentation name 'portfolio' to indicate the whole portfolio but you 
-      can set any other name. In the whole portfolio case is irrelevant the type of components 
-      (obligor or asset) because both gives the same result.
-      The maximum number of segments in segmentation is 65535.
+      can set any other name.
+    </p>
+    <p>
+      The maximum number of segments in a segmentation is 65535.
     </p>
 
     <h3>Example</h3>
@@ -755,20 +844,20 @@
     <pre>
 
 &lt;segmentations&gt;
-  &lt;segmentation name="portfolio" components="asset"/&gt;
-  &lt;segmentation name="sectors" components="obligor"&gt;
+  &lt;segmentation name="portfolio"/&gt;
+  &lt;segmentation name="sectors"&gt;
     &lt;segment name="S1"/&gt;
     &lt;segment name="S2"/&gt;
     &lt;segment name="S3"/&gt;
     &lt;segment name="S4"/&gt;
     &lt;segment name="S5"/&gt;
   &lt;/segmentation&gt;
-  &lt;segmentation name="size" components="obligor"&gt;
+  &lt;segmentation name="size"&gt;
     &lt;segment name="large"/&gt;
     &lt;segment name="medium"/&gt;
     &lt;segment name="small"/&gt;
   &lt;/segmentation&gt;
-  &lt;segmentation name="products" components="asset"&gt;
+  &lt;segmentation name="products"&gt;
     &lt;segment name="bond"/&gt;
     &lt;segment name="loan"/&gt;
     &lt;segment name="lease"/&gt;
@@ -776,7 +865,7 @@
     &lt;segment name="line of credit"/&gt;
     &lt;segment name="bank guarantee"/&gt;
   &lt;/segmentation&gt;
-  &lt;segmentation name="offices" components="asset"&gt;
+  &lt;segmentation name="offices"&gt;
     &lt;segment name="0001"/&gt;
     &lt;segment name="0002"/&gt;
     &lt;segment name="0003"/&gt;
@@ -791,32 +880,32 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">name</td>
         <td class="c2">
-          Segmentation identifier. All references to a segmentation, eg. belongs-to tag,
+          Segmentation identifier. All references to a segmentation (eg. belongs-to tag)
           are made using this value.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">-</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
-        <td class="c1">components</td>
-        <td class="c2">
-          Type of segments. Accepted values are 'obligor' 
-          and 'asset'.
-        </td>
-        <td class="c3">string</td>
-      </tr>
-      <tr class="b">
         <td class="c1">enabled</td>
         <td class="c2">
           Indicates if this segmentation is enabled (ie. losses will be computed for 
-          this segmentation). This attribute is optional. Default value is 
-          <code>true</code>.
+          this segmentation).
         </td>
-        <td class="c3">boolean</td>
+        <td class="c3">no</td>
+        <td class="c4">boolean</td>
+        <td class="c5">-</td>
+        <td class="c6">true</td>
       </tr>
     </table>
 
@@ -826,7 +915,10 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">name</td>
@@ -837,7 +929,10 @@
           If a segmentation doesn't have any segments, all the elements belong to
           the 'unassigned' segment.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">-</td>
+        <td class="c6">-</td>
       </tr>
     </table>
 
@@ -853,6 +948,13 @@
       (with a maximum of 65535 assets per obligor).
       The description of each asset is done by listing the expected Exposures 
       At Default (EAD) and Loss Given Default rates (LGD). 
+    </p>
+    <p>
+      For every segmentation, each asset is tied to a segment. The dependence 
+      relationships can be defined at the asset level or the obligor level 
+      (in this case all assets are included in the same segmentation-segment).
+      If segmentation-segment asset relationship is not given, then the asset 
+      is assigned to the segment 'unassigned'.
     </p>
     <p>
       LGD can be defined at three different levels: obligor, asset and data value. 
@@ -946,18 +1048,24 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">include</td>
         <td class="c2">
           Indicates the filepath to portfolio file relative to the main input file location. 
           The format of the portfolio file is exactly the same of the section 
-          portfolio where the root tag of this file is <code>portfolio</code>. This attribute is optional. 
+          portfolio where the root tag of this file is <code>portfolio</code>. 
           If your portfolio is large and you plan to simulate it multiple times using distinct 
           parameters use this feature, otherwise this attribute can be omitted.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">no</td>
+        <td class="c4">string</td>
+        <td class="c5">-</td>
+        <td class="c6"></td>
       </tr>
     </table>
 
@@ -967,14 +1075,20 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">id</td>
         <td class="c2">
           Unique obligor identifier.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">-</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
         <td class="c1">rating</td>
@@ -983,7 +1097,10 @@
           <a href="#parameters">parameters</a> section. This value must be a credit rating 
           identifier, see 'name' attribute in <a href="#ratings">rating</a> tag.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">identifier</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="b">
         <td class="c1">factor</td>
@@ -991,7 +1108,10 @@
           Factor where this obligor is included.
           This value must be a factor identifier, see 'name' attribute in factor tag.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">identifier</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
         <td class="c1">lgd</td>
@@ -1001,9 +1121,11 @@
           In the second case, you can model LGD using the following distributions:<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
-          This attribute is optional.
         </td>
-        <td class="c3">double<br/>string</td>
+        <td class="c3">no</td>
+        <td class="c4">double<br/>string<br/><br/></td>
+        <td class="c5">[0,1]<br/>beta(&alpha;,&beta;)<br/>uniform(a,b)</td>
+        <td class="c6">100%</td>
       </tr>
     </table>
 
@@ -1013,7 +1135,10 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">segmentation</td>
@@ -1021,7 +1146,10 @@
           Segmentation identifier.
           This value must be a segmentation identifier, see 'name' attribute in segmentation tag.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">identifier</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
         <td class="c1">segment</td>
@@ -1029,7 +1157,10 @@
           Segment identifier.
           This value must be a segment identifier, see 'name' attribute in segment tag.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">identifier</td>
+        <td class="c6">-</td>
       </tr>
     </table>
 
@@ -1039,22 +1170,31 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">id</td>
         <td class="c2">
           Unique asset identifier.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">identifier</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
         <td class="c1">date</td>
         <td class="c2">
-          Date (in format 'DD/MM/YYYY') from which there is credit risk, eg. bond
+          Date from which there is credit risk, eg. bond
           buy date or loan signature.
         </td>
-        <td class="c3">date</td>
+        <td class="c3">yes</td>
+        <td class="c4">date</td>
+        <td class="c5"><small>DD/MM/YYYY</small></td>
+        <td class="c6">-</td>
       </tr>
       <tr class="b">
         <td class="c1">lgd</td>
@@ -1064,9 +1204,11 @@
           In the second case, you can model LGD using the following distributions:<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
-          This attribute is optional.
         </td>
-        <td class="c3">double<br/>string</td>
+        <td class="c3">no</td>
+        <td class="c4">double<br/>string<br/><br/></td>
+        <td class="c5">[0,1]<br/>beta(&alpha;,&beta;)<br/>uniform(a,b)</td>
+        <td class="c6"></td>
       </tr>
     </table>
 
@@ -1076,7 +1218,10 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">t</td>
@@ -1086,12 +1231,15 @@
           from asset date. Use suffix 'D' to indicate days (eg. 3D), suffix 'M' to indicate months 
           (eg. 6M) and suffix 'Y' to indicate years (eg. 15Y). 
         </td>
-        <td class="c3">date<br/>int[DMY]</td>
+        <td class="c3">yes</td>
+        <td class="c4">date</td>
+        <td class="c5"><small>DD/MM/YYYY</small><br/>int[DMY]</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
         <td class="c1">ead</td>
         <td class="c2">
-          EAD at date "t". Amount that lender can lose in case of obligor's default 
+<!--           EAD at date "t". Amount that lender can lose in case of obligor's default  -->
           on the indicated date. EAD can be a fixed value or a probability distribution. 
           In the first case, set the numeric value that represents the EAD (eg. 50000). 
           In the second case, you can model EAD using the following distributions:<br/>
@@ -1101,7 +1249,10 @@
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Gamma_distribution">gamma(k,&theta;)</a>, where k &gt; 0 and &theta; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Normal_distribution">normal(&mu;,&sigma;)</a>, where &mu; &gt; 0 and &sigma; &gt; 0. Values less than 0 are truncated to 0.<br/>
         </td>
-        <td class="c3">double<br/>string</td>
+        <td class="c3">yes</td>
+        <td class="c4">double<br/>string<br/><br/><br/><br/><br/></td>
+        <td class="c5">&ge; 0<br/>lognormal(&mu;,&sigma;)<br/>exponential(&beta;)<br/>uniform(a,b)<br/>gamma(k,&theta;)<br/>normal(&mu;,&sigma;)</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="b">
         <td class="c1">lgd</td>
@@ -1114,7 +1265,10 @@
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Beta_distribution">beta(&alpha;,&beta;)</a>, where &alpha; &gt; 0 and &beta; &gt; 0<br/>
           &nbsp;&nbsp;&bull; <a href="http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29">uniform(a,b)</a>, where 0 &le; a &lt; b &le; 1<br/>
         </td>
-        <td class="c3">double<br/>string</td>
+        <td class="c3">no</td>
+        <td class="c4">double<br/>string<br/><br/></td>
+        <td class="c5">[0,1]<br/>beta(&alpha;,&beta;)<br/>uniform(a,b)</td>
+        <td class="c6"></td>
       </tr>
     </table>
 
@@ -1185,7 +1339,10 @@
       <tr class="a">
         <th>Name</th>
         <th>Description</th>
+        <th>Required</th>
         <th>Type</th>
+        <th>Format</th>
+        <th>Default</th>
       </tr>
       <tr class="b">
         <td class="c1">rating</td>
@@ -1193,26 +1350,34 @@
          This value must be a credit rating identifier, see 'name' attribute in the 
          rating tag.
         </td>
-        <td class="c3">string</td>
+        <td class="c3">yes</td>
+        <td class="c4">string</td>
+        <td class="c5">identifier</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="a">
         <td class="c1">t</td>
         <td class="c2">
-          Time. Can be a date (in format 'DD/MM/YYYY') bigger or equal than <i>time.0</i> 
+          Time. Can be a date bigger or equal than <i>time.0</i> 
           or an interval from starting date <i>time.0</i>. Use suffix 'D'
           to indicate days (eg. 3D), suffix 'M' to indicate months (eg. 6M) and  
           suffix 'Y' to indicate years (eg. 15Y).
         </td>
-        <td class="c3">date<br/>int[DMY]</td>
+        <td class="c3">yes</td>
+        <td class="c4">date</td>
+        <td class="c5"><small>DD/MM/YYYY</small><br/>int[DMY]</td>
+        <td class="c6">-</td>
       </tr>
       <tr class="b">
         <td class="c1">value</td>
         <td class="c2">
           Probability that an obligor with initial rating <i>rating</i> 
-          defaults in the time range <i>[0,t]</i>. It must have a value 
-          between 0 and 1.
+          defaults in the time range <i>[0,t]</i>.
         </td>
-        <td class="c3">double</td>
+        <td class="c3">yes</td>
+        <td class="c4">double</td>
+        <td class="c5">[0,1]</td>
+        <td class="c6">-</td>
       </tr>
     </table>
     </div>
@@ -1222,7 +1387,7 @@
           Copyright &copy; 2004-2016 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
         </span>
         <span id="modified">
-          Last modified: 02-Apr-2016
+          Last modified: 28-Oct-2016
         </span>
       </div>
 

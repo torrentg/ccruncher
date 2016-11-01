@@ -32,7 +32,7 @@
 #include "gui/DefinesDialog.hpp"
 #include "gui/FindDefines.hpp"
 #include "kernel/MonteCarlo.hpp"
-#include "kernel/IData.hpp"
+#include "kernel/XmlInputData.hpp"
 #include "utils/Utils.hpp"
 
 using namespace std;

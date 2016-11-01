@@ -123,7 +123,7 @@ How to check results?
   <!--                       SEGMENTATIONS                            -->
   <!-- ============================================================== -->
   <segmentations>
-    <segmentation name="portfolio" components="asset"/>
+    <segmentation name="portfolio"/>
   </segmentations>
 
   <!-- ============================================================== -->

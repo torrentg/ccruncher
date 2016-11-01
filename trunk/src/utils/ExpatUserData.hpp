@@ -30,16 +30,11 @@
 #include <expat.h>
 #include <cassert>
 #include "utils/ExpatHandlers.hpp"
-#include "utils/Date.hpp"
 
 namespace ccruncher {
 
 // forward declarations
 class ExpatHandlers;
-class Interest;
-class Ratings;
-class Factors;
-class Segmentations;
 
 /**************************************************************************//**
  * @brief   Data relative to an XML parsing.
@@ -99,18 +94,6 @@ class ExpatUserData
 
     //! List of defines
     std::map<std::string,std::string> defines;
-    //! Initial date
-    ccruncher::Date date1;
-    //! Ending date
-    ccruncher::Date date2;
-    //! Yield curve
-    ccruncher::Interest *interest;
-    //! List of ratings
-    ccruncher::Ratings *ratings;
-    //! List of factors
-    ccruncher::Factors *factors;
-    //! List of segmentations
-    ccruncher::Segmentations *segmentations;
 
   public:
 

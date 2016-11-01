@@ -665,13 +665,13 @@ bool ccruncher::isInterval(const char *str)
 {
   if (!str) return false;
   size_t l = strlen(str);
-  if (( str[l-1]!='D') && ( str[l-1]!='M') && ( str[l-1]!='Y'))
+  if (l < 2) return false;
+  if ((str[l-1]!='D') && (str[l-1]!='M') && (str[l-1]!='Y'))
     return false;
-  if ((str[0]!='+') && ( str[0]!='-') && ( (str[0]<'0') || ( str[0]>'9')))
+  if ((str[0]!='+') && (str[0]!='-') && ((str[0]<'0') || (str[0]>'9')))
     return false;
-  for(size_t i=1; i<l-1; i++)
-  {
-    if (( str[i]<'0') || ( str[i]>'9'))
+  for(size_t i=1; i<l-1; i++) {
+    if ((str[i]<'0') || (str[i]>'9'))
     return false;
   }
   return true;

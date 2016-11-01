@@ -45,8 +45,27 @@ const ccruncher::LGD::Distr ccruncher::LGD::distrs[] = {
 #define NUMDISTRS (sizeof(distrs)/sizeof(Distr))
 
 /**************************************************************************//**
+ * @details Create a LGD of type fixed.
+ */
+ccruncher::LGD::LGD(double x)
+{
+  init(Type::Fixed, x, NAN);
+}
+
+/**************************************************************************//**
+ * @param[in] t Type of lgd.
+ * @param[in] a Distribution parameter.
+ * @param[in] b Distribution parameter.
+ * @throw Exception Invalid lgd.
+ */
+ccruncher::LGD::LGD(Type t, double a, double b)
+{
+  init(t, a, b);
+}
+
+/**************************************************************************//**
  * @param[in] cstr String with lgd value/distribution.
- * @throw Exception Invalid exposure.
+ * @throw Exception Invalid LGD.
  */
 ccruncher::LGD::LGD(const char *cstr)
 {
@@ -92,26 +111,6 @@ ccruncher::LGD::LGD(const char *cstr)
   // fixed value case
   mValue1 = Parser::doubleValue(cstr);
   init(Type::Fixed, mValue1, NAN);
-}
-
-/**************************************************************************//**
- * @param[in] str String with lgd value/distribution.
- * @throw Exception Invalid exposure.
- */
-ccruncher::LGD::LGD(const std::string &str)
-{
-  *this = LGD(str.c_str());
-}
-
-/**************************************************************************//**
- * @param[in] t Type of lgd.
- * @param[in] a Distribution parameter.
- * @param[in] b Distribution parameter.
- * @throw Exception Invalid lgd.
- */
-ccruncher::LGD::LGD(Type t, double a, double b)
-{
-  init(t, a, b);
 }
 
 /**************************************************************************//**
@@ -171,8 +170,7 @@ bool ccruncher::LGD::valid(Type t, double a, double b)
  */
 void ccruncher::LGD::init(Type t, double a, double b)
 {
-  if (t != Type::Fixed || !std::isnan(a))
-  {
+  if (t != Type::Fixed || !std::isnan(a)) {
     if (!valid(t, a, b)) throw Exception("invalid lgd");
   }
   
@@ -182,31 +180,7 @@ void ccruncher::LGD::init(Type t, double a, double b)
 }
 
 /**************************************************************************//**
- * @return Exposure type.
- */
-ccruncher::LGD::Type ccruncher::LGD::getType() const
-{
-  return mType;
-}
-
-/**************************************************************************//**
- * @return Distribution parameter.
- */
-double ccruncher::LGD::getValue1() const
-{
-  return mValue1;
-}
-
-/**************************************************************************//**
- * @return Distribution parameter.
- */
-double ccruncher::LGD::getValue2() const
-{
-  return mValue2;
-}
-
-/**************************************************************************//**
- * @param[in] x EADLGD check.
+ * @param[in] x LGD check.
  * @return true=valid, false=invalid.
  */
 bool ccruncher::LGD::isValid(const LGD &x)

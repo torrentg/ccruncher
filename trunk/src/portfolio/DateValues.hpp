@@ -52,7 +52,7 @@ class DateValues
   public:
 
     //! Constructor
-    explicit DateValues(Date d=Date(), const EAD &e=EAD(), const LGD &l=LGD());
+    explicit DateValues(const Date &d=Date(), const EAD &e=EAD(), const LGD &l=LGD());
     //! Less-than operator
     bool operator<(const DateValues &) const;
     //! Less-than operator
@@ -70,7 +70,7 @@ class DateValues
  * @param[in] e DateValue exposure.
  * @param[in] l DateValue loss given default.
  */
-inline ccruncher::DateValues::DateValues(Date d, const EAD &e, const LGD &l) :
+inline ccruncher::DateValues::DateValues(const Date &d, const EAD &e, const LGD &l) :
     date(d), ead(e), lgd(l)
 {
   // nothing to do

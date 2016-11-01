@@ -24,8 +24,6 @@
 #define _Params_
 
 #include <string>
-#include <map>
-#include "utils/ExpatHandlers.hpp"
 #include "utils/Date.hpp"
 
 namespace ccruncher {
@@ -35,45 +33,67 @@ namespace ccruncher {
  *
  * @see http://ccruncher.net/ifileref.html#parameters
  */
-class Params : public std::map<std::string,std::string>, public ExpatHandlers
+class Params
 {
 
-  protected:
-
-    //! Directives to process an xml start tag element
-    virtual void epstart(ExpatUserData &, const char *, const char **) override;
-    //! Directives to process an xml end tag element
-    virtual void epend(ExpatUserData &, const char *) override;
-  
   private:
 
-    //! Returns parameter value
-    std::string getParamValue(const std::string &key) const;
-    //! Returns parameter value
-    std::string getParamValue(const std::string &key, const std::string &defaultValue) const;
+    //! Simulation starting time
+    Date time0;
+    //! Simulation ending time
+    Date timeT;
+    //! Number of Monte Carlo iterations (0 = no limit)
+    size_t maxIterations = 1000000;
+    //! Maximum Monte Carlo execution time in seconds (0 = no limit)
+    size_t maxSeconds = 0;
+    //! Simulation copula type
+    std::string copula = "gaussian";
+    //! RNG seed
+    unsigned long rngSeed = 0UL;
+    //! Monte Carlo antithetic usage
+    bool antithetic = true;
+    //! Simulation block size
+    unsigned short blockSize = 128;
 
   public:
-  
-    //! Inherits std::map constructors
-    using std::map<std::string,std::string>::map;
+
     //! Returns starting time
-    Date getTime0() const;
+    Date getTime0() const { return time0; }
+    //! Set starting time
+    void setTime0(Date date) { time0 = date; }
     //! Returns ending time
-    Date getTimeT() const;
+    Date getTimeT() const { return timeT; }
+    //! Set ending time
+    void setTimeT(Date date) { timeT = date; }
     //! Returns the number of MonteCarlo iterations
-    size_t getMaxIterations() const;
+    size_t getMaxIterations() const { return maxIterations; }
+    //! set the number of MonteCarlo iterations
+    void setMaxIterations(size_t num) { maxIterations = num; }
     //! Returns the maximum execution time
-    size_t getMaxSeconds() const;
-    //! Returns copula
-    std::string getCopula() const;
+    size_t getMaxSeconds() const { return maxSeconds; }
+    //! Set the maximum execution time
+    void setMaxSeconds(size_t num) { maxSeconds = num; }
+    //! Returns copula type
+    std::string getCopula() const { return copula; }
+    //! Set copula type
+    void setCopula(const std::string &str);
     //! Returns the t-student copula degrees of freedom
     double getNdf() const;
     //! Returns RNG seed
-    unsigned long getRngSeed() const;
+    unsigned long getRngSeed() const { return rngSeed; }
+    //! Set RNG seed
+    void setRngSeed(unsigned long num) { rngSeed = num; }
     //! Returns antithetic flag
-    bool getAntithetic() const;
+    bool getAntithetic() const { return antithetic; }
+    //! Set antithetic flag
+    void setAntithetic(bool val) { antithetic = val; }
     //! Returns simulation block size
-    unsigned short getBlockSize() const;
+    unsigned short getBlockSize() const { return blockSize; }
+    //! Set simulation block size
+    void setBlockSize(unsigned short num) { blockSize = num; }
+
+    //! Set a parameter
+    void setParamValue(const std::string &name, const std::string &value);
     //! Validate object content
     bool isValid(bool throwException=false) const;
 

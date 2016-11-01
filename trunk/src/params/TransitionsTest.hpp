@@ -24,7 +24,6 @@
 #define _TransitionsTest_
 
 #include "utils/MiniCppUnit.hxx"
-#include "params/Ratings.hpp"
 
 namespace ccruncher_test {
 
@@ -32,8 +31,6 @@ class TransitionsTest : public TestFixture<TransitionsTest>
 {
 
   private:
-
-    ccruncher::Ratings getRatings();
 
     void test1();
     void test2();

@@ -26,7 +26,7 @@
 #include <QMessageBox>
 #include "gui/SimulationTask.hpp"
 #include "kernel/MonteCarlo.hpp"
-#include "kernel/IData.hpp"
+#include "kernel/XmlInputData.hpp"
 #include "utils/Utils.hpp"
 #include "utils/CsvFile.hpp"
 
@@ -88,8 +88,8 @@ void ccruncher_gui::SimulationTask::run()
 
     // parsing input file
     setStatus(status::reading);
-    idata = new IData(logger.rdbuf());
-    idata->init(ifile, defines, &stop_);
+    idata = new XmlInputData(logger.rdbuf());
+    idata->readFile(ifile, defines, &stop_);
     if (stop_) {
       logger << endl << "parser stopped" << endl;
       setStatus(status::failed);
@@ -186,7 +186,7 @@ SimulationTask::status ccruncher_gui::SimulationTask::getStatus() const
 /**************************************************************************//**
  * @return CCruncher's input data object.
  */
-IData* ccruncher_gui::SimulationTask::getIData()
+XmlInputData* ccruncher_gui::SimulationTask::getIData()
 {
   return idata;
 }
@@ -239,10 +239,10 @@ size_t ccruncher_gui::SimulationTask::getNumRunningSims()
 bool ccruncher_gui::SimulationTask::checkConflicts()
 {
   fmode = 'w';
-  IData data;
+  XmlInputData data;
 
   try {
-    data.init(ifile, defines, nullptr, false);
+    data.readFile(ifile, defines, nullptr, false);
   }
   catch(...) {
     // error in input file

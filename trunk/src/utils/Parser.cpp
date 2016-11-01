@@ -36,16 +36,6 @@ using namespace std;
 using namespace ccruncher;
 
 /**************************************************************************//**
- * @param[in] str String to parse.
- * @return Value parsed.
- * @throw Exception Invalid format.
- */
-int ccruncher::Parser::intValue(const std::string &str)
-{
-  return intValue(str.c_str());
-}
-
-/**************************************************************************//**
  * @param[in] pnum String to parse.
  * @return Value parsed.
  * @throw Exception Invalid format.
@@ -53,38 +43,23 @@ int ccruncher::Parser::intValue(const std::string &str)
 int ccruncher::Parser::intValue(const char *pnum)
 {
   assert(pnum != nullptr);
-  
   long aux = 0L;
 
   // parsing number
-  try
-  {
+  try {
     aux = Parser::longValue(pnum);
   }
-  catch(Exception)
-  {
-    throw Exception("error parsing integer value '" + string(pnum) + "': not a number");
+  catch(Exception) {
+    throw Exception("error parsing integer value '" + string(pnum) + "'");
   }
 
   // checking that is an integer
-  if (aux < numeric_limits<int>::min() || numeric_limits<int>::max() < aux)
-  {
+  if (aux < numeric_limits<int>::min() || numeric_limits<int>::max() < aux) {
     throw Exception("error parsing integer value '" + string(pnum) + "': value out of range");
   }
-  else
-  {
+  else {
     return int(aux);
   }
-}
-
-/**************************************************************************//**
- * @param[in] str String to parse.
- * @return Value parsed.
- * @throw Exception Invalid format.
- */
-long ccruncher::Parser::longValue(const std::string &str)
-{
-  return longValue(str.c_str());
 }
 
 /**************************************************************************//**
@@ -95,34 +70,51 @@ long ccruncher::Parser::longValue(const std::string &str)
 long ccruncher::Parser::longValue(const char *pnum)
 {
   assert(pnum != nullptr);
-  
   char *pstr = nullptr;
 
   // initializing numerical error status
   errno = 0;
 
   // parsing number
-  long ret = strtol(pnum, &pstr, 10); //atol(str.c_str());
+  long ret = strtol(pnum, &pstr, 10);
 
   // checking that is a long
-  if (errno != 0 || pstr == pnum || pstr != pnum+strlen(pnum))
-  {
-    throw Exception("error parsing long value '" + string(pnum) + "': not a number");
+  if (errno != 0 || pstr == pnum || pstr != pnum+strlen(pnum)) {
+    throw Exception("error parsing long value '" + string(pnum) + "'");
   }
-  else
-  {
+  else {
     return ret;
   }
 }
 
 /**************************************************************************//**
- * @param[in] str String to parse.
+ * @param[in] pnum String to parse.
  * @return Value parsed.
  * @throw Exception Invalid format.
  */
-double ccruncher::Parser::doubleValue(const std::string &str)
+unsigned long ccruncher::Parser::ulongValue(const char *pnum)
 {
-  return doubleValue(str.c_str());
+  assert(pnum != nullptr);
+  char *pstr = nullptr;
+
+  // see strtoul() documentation
+  if (*pnum == '-') {
+    throw Exception("error parsing positive number '" + string(pnum) + "'");
+  }
+
+  // initializing numerical error status
+  errno = 0;
+
+  // parsing number
+  unsigned long ret = strtoul(pnum, &pstr, 10);
+
+  // checking that is a long
+  if (errno != 0 || pstr == pnum || pstr != pnum+strlen(pnum)) {
+    throw Exception("error parsing unsigned long value '" + string(pnum) + "'");
+  }
+  else {
+    return ret;
+  }
 }
 
 /**************************************************************************//**
@@ -139,23 +131,19 @@ double ccruncher::Parser::doubleValue(const char *pnum)
   errno = 0;
 
   // parsing number
-  double ret = strtod(pnum, &pstr); //atof(str.c_str());
+  double ret = strtod(pnum, &pstr);
 
   // checking that is a double
-  if (errno != 0 || pstr == pnum)
-  {
+  if (errno != 0 || pstr == pnum) {
     return eval(pnum);
   }
-  else if (*pstr == 0)
-  {
+  else if (*pstr == 0) {
     return ret;
   }
-  else if (*pstr == '%' && *(pstr+1) == 0)
-  {
+  else if (*pstr == '%' && *(pstr+1) == 0) {
     return ret/100.0;
   }
-  else
-  {
+  else {
     return eval(pnum);
   }
 }
@@ -178,18 +166,8 @@ double ccruncher::Parser::eval(const char *pnum)
   }
   catch(Exception &e)
   {
-    throw Exception(e, "error parsing double value '" + string(pnum) + "': not a number");
+    throw Exception(e, "error parsing double value '" + string(pnum) + "'");
   }
-}
-
-/**************************************************************************//**
- * @param[in] str String to parse.
- * @return Value parsed.
- * @throw Exception Invalid format.
- */
-Date ccruncher::Parser::dateValue(const std::string &str)
-{
-  return Date(str);
 }
 
 /**************************************************************************//**
@@ -204,27 +182,6 @@ Date ccruncher::Parser::dateValue(const char *cstr)
 }
 
 /**************************************************************************//**
- * @param[in] str String to parse.
- * @return Value parsed.
- * @throw Exception Invalid format.
- */
-bool ccruncher::Parser::boolValue(const std::string &str)
-{
-  if (str == "true")
-  {
-    return true;
-  }
-  else if (str == "false")
-  {
-    return false;
-  }
-  else
-  {
-    throw Exception("error parsing boolean value '" + str + "': distinct than 'true' or 'false'");
-  }
-}
-
-/**************************************************************************//**
  * @param[in] cstr String to parse.
  * @return Value parsed.
  * @throw Exception Invalid format.
@@ -233,16 +190,13 @@ bool ccruncher::Parser::boolValue(const char *cstr)
 {
   assert(cstr != nullptr);
 
-  if (strcmp(cstr,"true") == 0)
-  {
+  if (strcmp(cstr,"true") == 0) {
     return true;
   }
-  else if (strcmp(cstr,"false") == 0)
-  {
+  else if (strcmp(cstr,"false") == 0) {
     return false;
   }
-  else
-  {
+  else {
     throw Exception("error parsing boolean value '" + string(cstr) + "': distinct than 'true' or 'false'");
   }
 }

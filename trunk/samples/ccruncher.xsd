@@ -45,7 +45,7 @@
 			<xsd:element name="parameters" minOccurs="1" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="parameter" minOccurs="5" maxOccurs="8">
+						<xsd:element name="parameter" minOccurs="2" maxOccurs="8">
 							<xsd:complexType>
 								<xsd:attribute name="name" type="propertyType" use="required"/>
 								<xsd:attribute name="value" type="xsd:string" use="required"/>
@@ -115,8 +115,8 @@
 						<xsd:element name="factor" minOccurs="1" maxOccurs="unbounded">
 							<xsd:complexType>
 								<xsd:attribute name="name" type="xsd:string" use="required"/>
-								<xsd:attribute name="description" type="xsd:string" use="optional"/>
 								<xsd:attribute name="loading" type="double" use="required"/>
+								<xsd:attribute name="description" type="xsd:string" use="optional"/>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
@@ -148,7 +148,6 @@
 									</xsd:element>
 								</xsd:sequence>
 								<xsd:attribute name="name" type="xsd:string" use="required"/>
-								<xsd:attribute name="components" type="componentsType" use="required"/>
 								<xsd:attribute name="enabled" type="xsd:boolean" use="optional" default="true"/>
 							</xsd:complexType>
 						</xsd:element>
@@ -167,7 +166,7 @@
 											<xsd:attribute name="segment" type="xsd:string" use="required"/>
 										</xsd:complexType>
 									</xsd:element>
-									<xsd:element name="asset" minOccurs="0" maxOccurs="unbounded">
+									<xsd:element name="asset" minOccurs="1" maxOccurs="unbounded">
 										<xsd:complexType>
 											<xsd:sequence>
 												<xsd:element name="belongs-to" minOccurs="0" maxOccurs="unbounded">
@@ -252,18 +251,6 @@
 		</xsd:restriction>
 	</xsd:simpleType>
 
-	<xsd:simpleType name="componentsType">
-		<xsd:annotation>
-			<xsd:documentation>
-				list of component types.
-			</xsd:documentation>
-		</xsd:annotation>
-		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="asset"/>
-			<xsd:enumeration value="obligor"/>
-		</xsd:restriction>
-	</xsd:simpleType>
-	
 	<xsd:simpleType name="date">
 		<xsd:annotation>
 			<xsd:documentation>
