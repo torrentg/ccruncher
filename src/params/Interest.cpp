@@ -30,7 +30,8 @@ using namespace ccruncher;
 
 /**************************************************************************//**
  * @param[in] date Date on which the curve is defined.
- * @param[in] type Type of interest to apply.
+ * @param[in] interestType Type of interest to apply.
+ * @param[in] splineType Type of spline to use in interpolation.
  */
 ccruncher::Interest::Interest(const Date &date, InterestType interestType, SplineType splineType) :
     mSpline(nullptr), mAccel(nullptr)
@@ -102,7 +103,7 @@ void ccruncher::Interest::insertRates(const vector<Rate> &rates)
 
 /**************************************************************************//**
  * @details Checks that it is a valid rate, non-repeated time, etc.
- * @param[in] val User-defined rate to insert.
+ * @param[in] rate Rate to insert.
  * @throw Exception Error inserting rate.
  */
 void ccruncher::Interest::insertRate(const Rate &rate)

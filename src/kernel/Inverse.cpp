@@ -157,7 +157,7 @@ double ccruncher::Inverse::tinv(double u) const
  *            - icdf() is the inverse if the default probability cdf.
  *          Determines the spline with the minimum number of nodes.
  * @param[in] cdf Default probability cdf.
- * @param[in] nodes Days where assets events are defined.
+ * @param[in] nodes_ Days where assets events are defined.
  * @throw Exception Error creating spline functions.
  */
 void ccruncher::Inverse::setSpline(const CDF &cdf, const vector<int> &nodes_)

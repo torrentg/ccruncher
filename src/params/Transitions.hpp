@@ -79,7 +79,7 @@ class Transitions
     //! Set transition matrix values
     void setValues(const std::vector<std::vector<double>> &matrix);
     //! Insert a transition value into the matrix
-    void setValue(unsigned char row, unsigned char col, double val);
+    void setValue(unsigned char row, unsigned char col, double value);
     //! Returns default rating index
     unsigned char getIndexDefault() const;
     //! Returns equivalent transition matrix that covers t months

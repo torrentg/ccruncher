@@ -179,11 +179,11 @@ class XmlInputData : public InputData, public ExpatHandlers
     //! Destructor
     virtual ~XmlInputData() override;
     //! Read content from file
-    void readFile(const std::string &f, const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *stop_=nullptr, bool parse_portfolio_=true);
+    void readFile(const std::string &f, const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *s=nullptr, bool p=true);
     //! Read content from stdin
-    void readStdin(const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *stop_=nullptr, bool parse_portfolio_=true);
+    void readStdin(const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *s=nullptr, bool p=true);
     //! Read content from string
-    void readString(const std::string &str, const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *stop_=nullptr, bool parse_portfolio_=true);
+    void readString(const std::string &str, const std::map<std::string,std::string> &m=(std::map<std::string,std::string>()), bool *s=nullptr, bool p=true);
 
     //! Return input file name
     const std::string & getFilename() const { return filename; }

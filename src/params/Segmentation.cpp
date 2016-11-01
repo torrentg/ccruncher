@@ -34,6 +34,7 @@ using namespace std;
 /**************************************************************************//**
  * @param[in] name Segmentation name.
  * @param[in] enabled Segmentation enabled flag.
+ * @param[in] hasUnassigned Create implicit unassigned segment flag.
  * @throw Exception Invalid segmentations name.
  */
  ccruncher::Segmentation::Segmentation(const string &name, bool enabled, bool hasUnassigned) : mEnabled(enabled)
