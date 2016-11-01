@@ -33,13 +33,13 @@ using namespace ccruncher;
 
 /**************************************************************************//**
  * @details Create a transition matrix = 0 (invalid values).
- * @param[in] size Matrix size.
+ * @param[in] numRatings Number of ratings (dim = numRatings x numRatings).
  * @param[in] period Period (in months) covered by this matrix.
  * @throw Exception Invalid size or period.
  */
-ccruncher::Transitions::Transitions(unsigned char size, int period)
+ccruncher::Transitions::Transitions(unsigned char numRatings, int period)
 {
-  if (size == 0 || size > numeric_limits<unsigned char>::max()) {
+  if (numRatings == 0) {
     throw Exception("invalid matrix size");
   }
 
@@ -49,7 +49,7 @@ ccruncher::Transitions::Transitions(unsigned char size, int period)
 
   mPeriod = period;
   mIndexDefault = -1;
-  mMatrix.assign(size, vector<double>(size, 0.0));
+  mMatrix.assign(numRatings, vector<double>(numRatings, 0.0));
   isDirty = true;
 }
 

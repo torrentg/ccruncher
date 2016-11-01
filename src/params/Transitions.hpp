@@ -68,7 +68,7 @@ class Transitions
   public:
 
     //! Default constructor
-    Transitions(unsigned char size=1, int period=12);
+    Transitions(unsigned char numRatings=1, int period=12);
     //! Constructor
     Transitions(const std::vector<std::vector<double>> &matrix, int period);
 
