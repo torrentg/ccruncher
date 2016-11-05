@@ -20,6 +20,7 @@
 //
 //===========================================================================
 
+#include <limits>
 #include <gsl/gsl_cdf.h>
 #include "kernel/InverseTest.hpp"
 #include "kernel/Inverse.hpp"
@@ -41,7 +42,7 @@ void ccruncher_test::InverseTest::test1()
   vector<int> nodes(366);
   for(size_t i=0; i<nodes.size(); i++) nodes[i] = i;
 
-  Inverse inverse(0.0, 365.0, cdf, nodes);
+  Inverse inverse(+INFINITY, 365.0, cdf, nodes);
   ASSERT(inverse.size() == 11);
   ASSERT(inverse.getInterpolationType() == "cspline");
 

@@ -435,8 +435,9 @@ string ccruncher::Utils::dirname(const string &pathname)
   snprintf(buf, _MAX_PATH, "%s%s", drive, dir);
   return string(buf);
 #else
-  char *aux = new char[pathname.length()+1];
-  std::strcpy (aux, pathname.c_str());
+  size_t len = pathname.length()+1;
+  char *aux = new char[len];
+  std::strncpy (aux, pathname.c_str(), len);
   string ret(::dirname(aux));
   delete[] aux;
   return ret;
@@ -460,8 +461,9 @@ string ccruncher::Utils::filename(const string &pathname)
   snprintf(buf, _MAX_PATH, "%s%s", fname, ext);
   return string(buf);
 #else
-  char *aux = new char[pathname.length()+1];
-  std::strcpy (aux, pathname.c_str());
+  size_t len = pathname.length()+1;
+  char *aux = new char[len];
+  std::strncpy (aux, pathname.c_str(), len);
   string ret(::basename(aux));
   delete[] aux;
   return ret;

@@ -102,8 +102,7 @@ size_t ccruncher::Inverse::size() const
 }
 
 /**************************************************************************//**
- * @param[in] ndf Degrees of freedom of the t-student distribution. If
- *            ndf <= 0 then gaussian, t-student otherwise.
+ * @param[in] ndf Degrees of freedom of the t-student distribution (ndf=+INF means gaussian).
  * @param[in] maxt Maximum time (in days from starting date).
  * @param[in] cdf Default probability cdf.
  * @param[in] nodes Days from starting date where asset events ocurres.
@@ -111,6 +110,9 @@ size_t ccruncher::Inverse::size() const
  */
 void ccruncher::Inverse::init(double ndf, double maxt, const CDF &cdf, const vector<int> &nodes)
 {
+  if (isnan(ndf) || ndf < 2.0) {
+    throw Exception("degrees of freedom out of range (ndf < 2)");
+  }
   if (maxt < 1.0) {
     throw Exception("maxt out of range");
   }
@@ -128,10 +130,8 @@ void ccruncher::Inverse::init(double ndf, double maxt, const CDF &cdf, const vec
  */
 int ccruncher::Inverse::getMinDay(const CDF &cdf) const
 {
-  for(int day=1; day<mMaxT; day++)
-  {
-    if (EPSILON < cdf.evalue((double)day))
-    {
+  for(int day=1; day<mMaxT; day++) {
+    if (EPSILON < cdf.evalue((double)day)) {
       return day;
     }
   }
@@ -145,7 +145,7 @@ int ccruncher::Inverse::getMinDay(const CDF &cdf) const
 double ccruncher::Inverse::tinv(double u) const
 {
   assert(0.0 <= u && u <= 1.0);
-  if (mNdf <= 0.0) return gsl_cdf_ugaussian_Pinv(u);
+  if (isinf(mNdf)) return gsl_cdf_ugaussian_Pinv(u);
   else return gsl_cdf_tdist_Pinv(u, mNdf);
 }
 
@@ -203,8 +203,7 @@ void ccruncher::Inverse::setSpline(const CDF &cdf, const vector<int> &nodes_)
   vector<int> days(1, minday);
   int dayko = maxday;
 
-  while(dayko > 0)
-  {
+  while(dayko > 0) {
     auto pos = lower_bound(days.begin(), days.end(), dayko);
     assert(days.begin() < pos);
     assert(find(days.begin(), days.end(), dayko) == days.end());
@@ -233,8 +232,7 @@ void ccruncher::Inverse::setSpline(const vector<int> &days, const map<int,double
   vector<double> x(days.size(), 0.0);
   vector<double> y(days.size(), 0.0);
 
-  for(size_t i=0; i<days.size(); i++)
-  {
+  for(size_t i=0; i<days.size(); i++) {
     y[i] = days[i];
     x[i] = cache.at(days[i]); //tinv(dprobs.evalue(irating, y[i]));
     //TODO: manage +inf, -inf cases
@@ -306,8 +304,7 @@ bool ccruncher::Inverse::isIncreasing(const gsl_spline *spline)
   assert(spline != nullptr);
   if (spline == nullptr) return false;
 
-  for(size_t i=0; i<spline->size; i++)
-  {
+  for(size_t i=0; i<spline->size; i++) {
     double deriv = gsl_spline_eval_deriv(spline, spline->x[i], nullptr);
     if (deriv < 0.0) {
       return false;

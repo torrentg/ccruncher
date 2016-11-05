@@ -8,8 +8,7 @@ Current works
   * open ccbinf code to public
   * VaR and ES are asymptotically normal
   * remove references to Tatine (pdf)
-  * return ndf=INF if Gaussian
-  * check if inverse of default exist
+  * run PVS-Studio static code analyzer
 
 Future works
 -------------------
