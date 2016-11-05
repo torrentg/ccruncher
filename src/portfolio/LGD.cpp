@@ -29,7 +29,7 @@
 #include "utils/Parser.hpp"
 #include "utils/Exception.hpp"
 
-#define EPSILON 1e-14
+#define EPSILON 1e-13
 
 using namespace std;
 using namespace ccruncher;
