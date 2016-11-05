@@ -36,11 +36,15 @@ dist_doc_DATA = \
     doc/index.html
 
 # -------------------------------------------------------------
-# install directories in docdir
+# install/unistall samples and html directories in docdir
 # -------------------------------------------------------------
 install-data-hook:
-	cp -rvf doc/html $(DESTDIR)$(docdir)
-	cp -rvf samples $(DESTDIR)$(docdir)
+	cp -rvf $(srcdir)/doc/html $(DESTDIR)$(docdir);
+	cp -rvf $(srcdir)/samples $(DESTDIR)$(docdir);
+
+uninstall-hook:
+	chmod +w $(DESTDIR)$(docdir)/html && rm -rvf $(DESTDIR)$(docdir)/html;
+	chmod +w $(DESTDIR)$(docdir)/samples && rm -rvf $(DESTDIR)$(docdir)/samples;
 
 # -------------------------------------------------------------
 # removes subversion stuff

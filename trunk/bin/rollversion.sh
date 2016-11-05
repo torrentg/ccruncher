@@ -111,7 +111,7 @@ getPath() {
 getSvnVersion() {
 
   #svnversion=R$(svnversion $CCRUNCHERPATH | sed "s/^\([0-9]\+\)[MSP]*\(:.*\)\?/\1/g");
-  svnversion=R$(svn info http://www.ccruncher.net/svn/ | awk '/Revision:/ { print $2 }');
+  svnversion=R$(svn info https://www.ccruncher.net/svn/ | awk '/Revision:/ { print $2 }');
  
   if [ $? != 0 ]; then
     echo "error: problems retrieving svnversion";
