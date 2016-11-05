@@ -130,15 +130,13 @@ void ccruncher::Params::setCopula(const string &str)
 }
 
 /**************************************************************************//**
- * @details If gaussian copula returns a non-valid ndf (<= 0).
- * @return Degrees of freedom of the t-copula (ndf>=2).
+ * @return Degrees of freedom of the t-copula (ndf>=2) or +INF if gaussian.
  * @throw Exception Invalid parameter value.
  */
 double ccruncher::Params::getNdf() const
 {
   if (copula == "gaussian") {
-    //TODO: return INF
-    return -1.0;
+    return std::numeric_limits<double>::infinity();
   }
   else if (copula.length() >= 3 &&
            copula.substr(0,2) == "t(" &&

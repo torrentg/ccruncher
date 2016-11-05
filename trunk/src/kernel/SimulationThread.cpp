@@ -136,7 +136,7 @@ inline double ccruncher::SimulationThread::getValue(const vector<double> &x, siz
  */
 void ccruncher::SimulationThread::rchisq(vector<double> &s)
 {
-  if (ndf > 0.0) {
+  if (isfinite(ndf)) {
     for(size_t n=0; n<s.size(); n++) {
       double chisq = gsl_ran_chisq(rng, ndf);
       if (chisq < 1e-14) chisq = 1e-14; //avoid division by 0

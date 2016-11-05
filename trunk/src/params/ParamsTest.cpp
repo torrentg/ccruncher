@@ -20,6 +20,7 @@
 //
 //===========================================================================
 
+#include <cmath>
 #include "params/Params.hpp"
 #include "params/ParamsTest.hpp"
 
@@ -46,7 +47,7 @@ void ccruncher_test::ParamsTest::test1()
   ASSERT(params.getAntithetic());
   ASSERT_EQUALS((unsigned short)128, params.getBlockSize());
   ASSERT_EQUALS("gaussian", params.getCopula());
-  ASSERT(params.getNdf() < 0.0);
+  ASSERT(isinf(params.getNdf()));
   ASSERT_EQUALS((size_t)1000000, params.getMaxIterations());
   ASSERT_EQUALS((size_t)0, params.getMaxSeconds());
   ASSERT_EQUALS(0UL, params.getRngSeed());
