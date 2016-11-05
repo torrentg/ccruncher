@@ -23,15 +23,23 @@ PACKAGE="ccruncher"
 winexes="xxx"
 winfiles="ccruncher-gui.exe
           ccruncher-cmd.exe
-          pthreadGC2.dll
-          mingwm10.dll
+          icudt53.dll
+          icuin53.dll
+          icuuc53.dll
+          libeay32.dll
           libgcc_s_dw2-1.dll
-          QtCore4.dll
-          QtGui4.dll
-          QtNetwork4.dll
-          QtOpenGL4.dll
-          QtSvg4.dll
-          qwt.dll"
+          libstdc++-6.dll
+          libwinpthread-1.dll
+          platforms/qwindows.dll
+          Qt5Core.dll
+          Qt5Gui.dll
+          Qt5Network.dll
+          Qt5OpenGL.dll
+          Qt5PrintSupport.dll
+          Qt5Svg.dll
+          Qt5Widgets.dll
+          qwt.dll
+          ssleay32.dll"
 
 #-------------------------------------------------------------
 # usage function
@@ -84,6 +92,8 @@ readconf() {
     echo "error: -w argument not set";
     echo "use -h for more information"; 
     exit 1;
+  else
+    winexes=$(readlink -f "$winexes");
   fi
 
   shift `expr $OPTIND - 1`
@@ -114,7 +124,7 @@ readconf() {
 # -------------------------------------------------------------
 checkout() {
 
-  svn export http://www.ccruncher.net/svn/trunk > /dev/null;
+  svn export https://www.ccruncher.net/svn/trunk > /dev/null;
   if [ $? -ne 0 ]; then
     echo "error retrieving project from svn";
     exit 1;
@@ -174,6 +184,7 @@ makeSrcDist() {
   # creating tarball
   aclocal;
   autoconf;
+  # automake don't add missing files if a parent dir content them
   automake -acf 2> /dev/null;
   ./configure -q --prefix=$PWD;
   make -j4 distcheck > /dev/null;
@@ -197,10 +208,11 @@ makeBinDist() {
   # creating binaries
   aclocal;
   autoconf;
+  # automake don't add missing files if a parent dir content them
   automake -acf 2> /dev/null;
   ./configure -q --prefix=$PWD;
   make -j4 > /dev/null;
-  qmake-qt4 ccruncher-gui.pro;
+  qmake-qt5 ccruncher-gui.pro;
   make -j4 > /dev/null;
   
   # dropping unused files
@@ -250,7 +262,6 @@ makeWinDist() {
   unix2dos -q samples/*.txt;
   unix2dos -q doc/html/*.html;
   unix2dos -q doc/html/*.css;
-  unix2dos -q doc/html/*.js;
   unix2dos -q doc/html/*.xml;
   unix2dos -q data/readme.txt;
 
@@ -270,13 +281,9 @@ makeWinDist() {
 readconf $@;
 
 currpath=$(pwd);
-# automake don't add missing files if a parent dir content them
-workpath=/tmp/$PACKAGE-${numversion}
+workpath=$(mktemp -d -p /tmp $PACKAGE-XXX);
 
 # obtaining a clean environement
-chmod -R +w $workpath > /dev/null 2> /dev/null;
-rm -rvf $workpath > /dev/null 2> /dev/null;
-mkdir $workpath;
 checkout $workpath/base;
 
 #create web package
