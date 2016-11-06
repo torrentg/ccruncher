@@ -21,8 +21,9 @@ progname=makedist.sh
 numversion="xxx"
 PACKAGE="ccruncher"
 winexes="xxx"
-winfiles="ccruncher-gui.exe
-          ccruncher-cmd.exe
+winfiles="ccruncher-cmd.exe
+          ccruncher-gui.exe
+          ccruncher-inf.exe
           icudt53.dll
           icuin53.dll
           icuuc53.dll

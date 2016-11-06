@@ -53,6 +53,7 @@ rm -f  $CCRUNCHER/missing;
 rm -rf $CCRUNCHER/test-driver;
 rm -rf $CCRUNCHER/autom4te.cache;
 rm -f  $CCRUNCHER/Makefile*;
+rm -f  $CCRUNCHER/*.log;
 rm -rf $CCRUNCHER/src;
 rm -rf $CCRUNCHER/build;
 rm -f  $CCRUNCHER/doc/INSTALL;

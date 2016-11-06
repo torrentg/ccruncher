@@ -384,7 +384,7 @@ void setnice(int niceval) throw(Exception)
 void help()
 {
   cout <<
-  "Usage: ccruncher-cmd [OPTION] [FILE]\n"
+  "Usage: ccruncher-cmd [OPTION]... [FILE]\n"
   "\n"
   "Simule the loss distribution of the credit portfolio described in the xml\n"
   "input FILE using the Monte Carlo method. FILE can be gziped. If no one is\n"
