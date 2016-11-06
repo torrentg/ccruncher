@@ -85,17 +85,16 @@
 \usepackage[group-separator={,}]{siunitx}
 \usepackage{listliketab}
 \usepackage[normalem]{ulem}
+\usepackage[nonumberlist,toc]{glossaries}
 
 \input{structure}
 
-% glossary
-\usepackage[nonumberlist,toc]{glossaries}
 \makeglossaries
 
 % draft info
-\usepackage[firstpage]{draftwatermark}
-\SetWatermarkText{DRAFT COPY}
-\SetWatermarkScale{0.75}
+%\usepackage[firstpage]{draftwatermark}
+%\SetWatermarkText{DRAFT COPY}
+%\SetWatermarkScale{0.75}
 
 \def\numversion{2.5}
 \def\svnversion{R1329}
@@ -118,6 +117,7 @@
      \glstarget{##2}{\strut}##4 & ##6\\}%
   \renewcommand*{\glsgroupskip}{}% replaced {& &\\} by {}
 }
+
 
 \begin{document}
 
@@ -204,8 +204,7 @@ please cite it when using it for credit risk analysis.
 \pagestyle{empty}
 \setcounter{tocdepth}{1}
 \tableofcontents
-\cleardoublepage
-\pagestyle{fancy}
+%\cleardoublepage
 
 
 %==============================================================================
@@ -316,6 +315,7 @@ please cite it when using it for credit risk analysis.
 	in order to simplify the exposition.
 \end{enumerate}
 \cleardoublepage
+\pagestyle{fancy}
 
 
 %==============================================================================
