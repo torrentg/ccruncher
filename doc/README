@@ -214,8 +214,8 @@ Developers tips & tricks
      > make check
 
 6. executing tests suites
-     > build/tests   # unitary tests
-     > bin/tests.sh  # functional tests
+     > build/ccruncher-tests   # unitary tests
+     > bin/tests.sh            # functional tests
 
 7. checking memory leaks
      don't enable profiler because can cause problems to valgrind

@@ -56,7 +56,7 @@
             hyperfootnotes=false,
             pdftex,
             pdfauthor={Gerard Torrent-Gironella},
-            pdftitle={Quantifying Portfolio Credit Risk Using CCruncher},
+            pdftitle={Quantifying Portfolio Credit Risk -- CCruncher Technical Document},
             pdfsubject={Portfolio credit risk modeling},
             pdfkeywords={PD, EAD, LGD, ratings, correlations, transition matrix,
                          copula, t-Student, Value at Risk, Expected Loss,
@@ -96,8 +96,8 @@
 %\SetWatermarkText{DRAFT COPY}
 %\SetWatermarkScale{0.75}
 
-\def\numversion{2.5}
-\def\svnversion{R1329}
+\def\numversion{2.5.0}
+\def\svnversion{R1354}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -133,8 +133,10 @@
 \vspace*{0.0cm}
 \par\normalfont\fontsize{35}{55}\sffamily\selectfont
 Quantifying\par 
-Portfolio Credit Risk\par
-Using CCruncher\par
+Portfolio Credit Risk
+\vspace*{1.0cm}
+\par\normalfont\fontsize{20}{35}\sffamily\selectfont
+-- CCruncher Technical Document --\par
 \vspace*{2.0cm}
 {\huge Gerard Torrent-Gironella}\par
 \vspace*{2.0cm}
@@ -169,7 +171,7 @@ portfolio credit risk is provided.
 The BibTeX entry of this document is
 \begin{alltt}
 @manual\{ccruncher,
-    title = \{\{Quantifying Portfolio Credit Risk Using CCruncher\}\},
+    title = \{\{Quantifying Portfolio Credit Risk. CCruncher Technical Document\}\},
     author = \{Torrent-Gironella, Gerard\},
     address = \{Barcelona, Catalonia\},
     year = \{\the\year\}, 
@@ -183,8 +185,8 @@ The BibTeX entry of this document is
 ~\vfill
 \thispagestyle{empty}
 \noindent Version \numversion\ [\svnversion] \monthname\ \the\year\\ 
-\noindent Version 2.4 [R1213] March 2014\\ 
-\noindent Version 2.3 [R1151] September 2013\\ 
+\noindent Version 2.4.0 [R1213] March 2014\\ 
+\noindent Version 2.3.0 [R1151] September 2013\\ 
 \\
 \noindent Copyright \copyright\ 2013--2016 Gerard Torrent-Gironella\\
 \\
@@ -441,8 +443,8 @@ distribution used to simulate the obligors' default times, and provides methods
 to estimate the copula parameters. The second chapter describes how to obtain 
 the portfolio loss distribution and quantify the portfolio credit risk.
 Finally, the third chapter covers four important topics: risk sensitivity, 
-parameters uncertainty, and portfolio optimization, \st{and model calibration 
-using market data}.
+parameters uncertainty, portfolio optimization, and an attempt to equate the 
+multivariate market model with the credit risk model using the Merton's framework.
 In order to facilitate reading, those issues that are important to understanding 
 the content and require a detailed discussion have been relegated to appendices.
 
@@ -575,10 +577,10 @@ reduced number $s$ of industrial sectors exists and that each obligor belongs
 to a single sector. In addition, we assume that obligors' time-until-default 
 dependence only relies on the involved industrials sectors. With these 
 restrictions and by sorting the obligors by sector, we see that the obligors' 
-time-until-default Spearman's rank correlation is an $n {\times} n$ correlation
-block matrix $\widetilde{R} = B_s(\vec{n},\vec{1},\widetilde{\Sigma})$.
+time-until-default correlation is an $n {\times} n$ correlation block matrix 
+$\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$.
 \begin{displaymath}
-	\widetilde{R} = B_s(\vec{n},\vec{1},\widetilde{\Sigma}) = 
+	\widehat{R} = B_s(\vec{n},\vec{1},\Sigma) = 
 	\left(
 	\begin{array}{ccccccc}
 		1           & \cdots & \sigma_{11} &        & \sigma_{1s} & \cdots & \sigma_{1s} \\
@@ -594,7 +596,7 @@ block matrix $\widetilde{R} = B_s(\vec{n},\vec{1},\widetilde{\Sigma})$.
 	\right)
 	\quad 
 	\begin{array}{l}
-		\widetilde{\Sigma} = 
+		\Sigma = 
 		\left(
 		\begin{array}{ccc}
 			\sigma_{11} & \cdots & \sigma_{1s} \\
@@ -608,35 +610,16 @@ block matrix $\widetilde{R} = B_s(\vec{n},\vec{1},\widetilde{\Sigma})$.
 		n = \displaystyle \sum_{i=1}^{s} n_i
 	\end{array}
 \end{displaymath}
-We use the Spearman's rank correlation because it is a measure of dependence 
-that does not depend on marginals ($F_i$ in our case), unlike the usual
-Pearson's correlation, which does depend on marginals. t-Student copulas 
-with Spearman's rank correlation block matrix are those that come from a 
-multivariate t-Student $t_n(\nu,\vec{0},\widehat{R})$ in which 
-$\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$~\footnote{ In the Gaussian case, 
-the relation between Spearman's and Pearson's correlations is 
-$\rho_S = \frac{6}{\pi}\cdot \arcsin(\frac{\rho}{2})$.}. Consequently, 
-the multivariate time-until-default distribution $F$ can be expressed by 
-its marginals $F_i$ and a t-Student copula $C_{\nu,\widehat{R}}^{\text{t}}$ 
-in which $\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$.
+
+Consequently, the multivariate time-until-default distribution $F$ can be 
+expressed by its marginals $F_i$ and a t-Student copula 
+$C_{\nu,\widehat{R}}^{\text{t}}$ in which $\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$.
 
 As we have observed, proposition~\ref{prop:dtd} establishes the link between 
 the t-Student copula and the multivariate t-Student distribution. Now, we are
 interested in formulating this multivariate t-Student distribution with 
 correlation matrix $\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$ as a t-Student 
 multi-factor distribution.
-
-The multivariate t-Student distribution relies on the multivariate Gaussian
-distribution (see proposition~\ref{prop:mtschar}). The multivariate Gaussian 
-with a correlation block matrix can be expressed as a multi-factor distribution
-in most cases (see proposition~\ref{prop:ibne}). The cases that aren't covered 
-are those that contain negative intra-sectorial correlations and those 
-containing inter-sectorial correlations that are too high. The number of these 
-cases tends toward $0$ when the number of obligors by sector tends to $\infty$ 
-(see proposition~\ref{prop:gmfamgb}). Because we are modeling sectors composed 
-of thousands of obligors (although our portfolio may contain only a few), we 
-can assume that for our purposes, the t-Student multi-factor distribution maps 
-the multivariate t-Student distribution.
 
 \begin{proposition}[t-Student distr.\ as a multi-factor distribution]
 	\label{prop:tmfm}
@@ -665,8 +648,8 @@ the multivariate t-Student distribution.
 	$\widehat{R} = B_s(\vec{n},\vec{1},\Sigma)$ is
 	\begin{displaymath}
 		\begin{array}{ll}
-			R_{ij} = \frac{\Sigma_{ij}}{\sqrt{\Sigma_{ii} \cdot \Sigma_{jj}}} & \forall\ i,j \\
-			w_i = \sqrt{\Sigma_{ii}} & i = 1,\dots,s \\
+			R_{ij} = \frac{\sigma_{ij}}{\sqrt{\sigma_{ii} \cdot \sigma_{jj}}} & \forall\ i,j \\
+			w_i = \sqrt{\sigma_{ii}} & i = 1,\dots,s \\
 		\end{array}
 	\end{displaymath}
 \end{proposition}
@@ -674,7 +657,10 @@ the multivariate t-Student distribution.
 We call t-Student multi-factor copula to the copula of the t-Student 
 multi-factor distribution. As we have observed, the t-Student multi-factor 
 copula ($C_{\nu,\vec{w},R}^{\text{t}}$) is merely a t-Student copula 
-($C_{\nu,\widehat{R}}^{\text{t}}$).
+($C_{\nu,\widehat{R}}^{\text{t}}$). The inverse is not true, there exist
+t-Student copulas with a correlation block matrix that cannot be expressed 
+as a t-Student multi-factor copula (see proposition~\ref{prop:mtschar}
+and appendix~\ref{ap:mfgm}).
 
 Note that we expressed the multi-factor distribution in terms of the factor 
 loadings and the factor correlation matrix instead of the more concise form 
@@ -961,16 +947,9 @@ parameter estimation.
 %------------------------------------------------------------------------------
 \section{Frequentist Inference}
 
-We have failed to obtain reasonable estimates of the covariances using the 
-nonparametric estimator described by Nagpal \& Bahar~\cite{nagpal:2001}, even 
-in the Gaussian case. Tests consisted on simulating a panel data of defaults 
-(see algorithm~\ref{alg:snod}) and trying to infer the covariance matrix using 
-the nonparametric estimator.
-
-The cohort approach provides a parametric estimator~\cite[sec. 3.1]
-{castro:2007} whose estimates are acceptable. As the nonparametric estimator, 
-this estimator is based on estimates $p_i$ (probability that an obligor 
-defaults) and $p_{ij}$ (probability that two obligors default simultaneously).
+The cohort approach provides a parametric estimator~\cite[sec. 3.1]{castro:2007} 
+based on estimates $p_i$ (probability that an obligor defaults) and 
+$p_{ij}$ (probability that two obligors default simultaneously).
 We have adapted to the general case (t-Student) assuming the $\nu$ parameter 
 is fixed and known.
 
@@ -1464,9 +1443,9 @@ the de-facto international financial risk regulation framework.
 		\end{array}
 		\right\}
 	\end{displaymath}
-	$\text{EAD}_i^j$ is a function when these amounts are fixed and known in 
-	advance (e.g., loan, bond) or can be a distribution defined over time 
-	(e.g., line of credit).
+	$\text{EAD}_i^j(t)$ is a function when these amounts are fixed and known 
+	in advance (e.g., loan, bond) or a distribution	when these values are 
+	stochastic (e.g., line of credit).
 \end{definition}
 
 \begin{definition}[Loss Given Default (LGD)]
@@ -1481,7 +1460,7 @@ the de-facto international financial risk regulation framework.
 		\end{array}
 		\right\}
 	\end{displaymath}
-	$\text{LGD}_i^j$ is a function or can be a distribution defined over time.
+	$\text{LGD}_i^j(t)$ can be a function or a distribution.
 \end{definition}
 
 \begin{example}[10-year Bond]
