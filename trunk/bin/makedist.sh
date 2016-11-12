@@ -5,7 +5,7 @@
 #   Create a CCruncher distribution package
 #
 # dependencies:
-#   shell, tar, gzip, zip, svn, auto-tools, unix2dos
+#   tar, gzip, zip, svn, auto-tools, unix2dos
 #   make, pdflatex, bibtex, iconv
 #
 # retcodes:
@@ -61,7 +61,7 @@ usage() {
     0        OK. finished without errors
     1        KO. finished with errors
   examples:
-    $progname -w /c:/temp/ccruncher/bin
+    $progname -w win32/
 
 _EOF_
 

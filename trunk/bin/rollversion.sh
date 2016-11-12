@@ -6,7 +6,7 @@
 #   Caution: this is a tool for developers
 #
 # dependences:
-#   shell, svnversion
+#   svnversion, awk, sed, help2man
 #
 # retcodes:
 #   0    : OK
@@ -71,8 +71,7 @@ readconf() {
       m) cman=true;;
       s) csvn=true;;
       g) cver=true;
-         gloversion=$OPTARG;
-         gloversion_short=$(echo $OPTARG | sed -r 's/([0-9]+\.[0-9]+).*/\1/g');;
+         gloversion=$OPTARG;;
       h) usage; 
          exit 0;;
      \?) echo "error: unknow option.";
@@ -149,7 +148,7 @@ fi
 if [ "$cver" = "true" ]; then
   sed -i -e "s/AC_INIT(ccruncher,\([^,]*\),\(.*\))/AC_INIT(ccruncher, $gloversion,\\2)/g" $CCRUNCHERPATH/configure.ac
   sed -i -e "s/\(PROJECT_NUMBER[ ]*=[ ]*\)\(.*\)/\\1$gloversion/g " $CCRUNCHERPATH/Doxyfile
-  sed -i -e "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$gloversion_short}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
+  sed -i -e "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$gloversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
   sed -i -e "s/<span class=\"version\">.*<\/span>/<span class=\"version\">$gloversion<\/span>/g" $CCRUNCHERPATH/doc/html/*.html
   sed -i -e "s/Last modified: .*/Last modified: $curdate/g" $CCRUNCHERPATH/doc/html/*.html $CCRUNCHERPATH/doc/html/.repo.xsl
   sed -i -e "s/version\:.*/version\: $gloversion/g" $CCRUNCHERPATH/doc/html/version
@@ -174,6 +173,11 @@ if [ "$cman" = "true" ]; then
     exit 1;
   fi
 
+  if [ ! -f build/ccruncher-inf ]; then 
+    echo "error: file build/ccruncher-inf not found" 
+    exit 1;
+  fi
+
   help2man --no-info \
     -n "simule the loss distribution of a credit portfolio using the Monte Carlo method" \
     -o doc/ccruncher-cmd.1 build/ccruncher-cmd
@@ -182,7 +186,10 @@ if [ "$cman" = "true" ]; then
     -n "simule the loss distribution of a credit portfolio using the Monte Carlo method" \
     -o doc/ccruncher-gui.1 build/ccruncher-gui
 
+  help2man --no-info \
+    -n "infer the dependency parameters of the multivariate default times using the Metropolis-Hastings method" \
+    -o doc/ccruncher-inf.1 build/ccruncher-inf
+
 fi
 
 exit $retcode;
-
