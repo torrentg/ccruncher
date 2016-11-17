@@ -18,8 +18,7 @@
 # variables declaration
 #-------------------------------------------------------------
 progname=rollversion.sh
-gloversion=X.Y.Z
-gloversion_short=X.Y
+version=X.Y.Z
 retcode=0
 cman=false
 cver=false
@@ -71,7 +70,7 @@ readconf() {
       m) cman=true;;
       s) csvn=true;;
       g) cver=true;
-         gloversion=$OPTARG;;
+         version=$OPTARG;;
       h) usage; 
          exit 0;;
      \?) echo "error: unknow option.";
@@ -146,16 +145,17 @@ fi
 
 # update global version tag
 if [ "$cver" = "true" ]; then
-  sed -i -e "s/AC_INIT(ccruncher,\([^,]*\),\(.*\))/AC_INIT(ccruncher, $gloversion,\\2)/g" $CCRUNCHERPATH/configure.ac
-  sed -i -e "s/\(PROJECT_NUMBER[ ]*=[ ]*\)\(.*\)/\\1$gloversion/g " $CCRUNCHERPATH/Doxyfile
-  sed -i -e "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$gloversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
-  sed -i -e "s/<span class=\"version\">.*<\/span>/<span class=\"version\">$gloversion<\/span>/g" $CCRUNCHERPATH/doc/html/*.html
+  sed -i -e "s/AC_INIT(ccruncher,\([^,]*\),\(.*\))/AC_INIT(ccruncher, $version,\\2)/g" $CCRUNCHERPATH/configure.ac
+  sed -i -e "s/\(PROJECT_NUMBER[ ]*=[ ]*\)\(.*\)/\\1$version/g " $CCRUNCHERPATH/Doxyfile
+  sed -i -e "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$version}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
+  sed -i -e "s/<span class=\"version\">.*<\/span>/<span class=\"version\">$version<\/span>/g" $CCRUNCHERPATH/doc/html/*.html
   sed -i -e "s/Last modified: .*/Last modified: $curdate/g" $CCRUNCHERPATH/doc/html/*.html $CCRUNCHERPATH/doc/html/.repo.xsl
-  sed -i -e "s/version\:.*/version\: $gloversion/g" $CCRUNCHERPATH/doc/html/version
+  sed -i -e "s/version\:.*/version\: $version/g" $CCRUNCHERPATH/doc/html/version
   sed -i -e "s/date\:.*/date\: $curdate/g" $CCRUNCHERPATH/doc/html/version
-  sed -i -e "s/^\(VERSION[ ]*=[ ]*\)\(.*\)/\\1$gloversion/g " $CCRUNCHERPATH/ccruncher-cmd.pro
-  sed -i -e "s/^\(VERSION[ ]*=[ ]*\)\(.*\)/\\1$gloversion/g " $CCRUNCHERPATH/ccruncher-gui.pro
-  sed -i -e "s/^\(VERSION[ ]*=[ ]*\)\(.*\)/\\1$gloversion/g " $CCRUNCHERPATH/ccruncher-tests.pro
+  sed -i -e "s/^\(VERSION[ ]*=[ ]*\)\(.*\)/\\1$version/g " $CCRUNCHERPATH/ccruncher-cmd.pro
+  sed -i -e "s/^\(VERSION[ ]*=[ ]*\)\(.*\)/\\1$version/g " $CCRUNCHERPATH/ccruncher-gui.pro
+  sed -i -e "s/^\(VERSION[ ]*=[ ]*\)\(.*\)/\\1$version/g " $CCRUNCHERPATH/ccruncher-tests.pro
+  sed -i -e "s/^Version:[ ]*\(.*\)/Version: $version/g" $CCRUNCHERPATH/build/ccruncher.spec
   #echo "you need to run autoconf to take effect some changes";
   #echo "check technical document (version log)";
 fi

@@ -114,13 +114,15 @@ Using CCruncher
    Use any file in samples directory as template.
 
 2. run CCruncher (gui version)
-     > # gui version
      > cd $CCRUNCHER
+     > # gui version
      > bin/ccruncher-gui &
      > # cmd version
-     > cd $CCRUNCHER
      > bin/ccruncher-cmd --help
      > bin/ccruncher-cmd -w --output=data samples/test01.xml
+     > # params inference
+     > bin/ccruncher-inf --help
+     > bin/ccruncher-inf -s 99 -n 50000 -b 10000 -r 1000 samples/inference05.inf
 
 3. compute risk indicators:
      > bin/ccruncher-gui &
@@ -301,7 +303,8 @@ Developers tips & tricks
       > rpmbuild -ba SPECS/ccruncher.spec
       > rpmlint SPECS/ccruncher.spec SRPMS/ccruncher-*.rpm RPMS/x86_64/ccruncher-*.rpm
       > mock --verbose SRPMS/ccruncher-*.rpm
-      
+      > rpmdev-wipetree
+
 16. create a tag in subversion repository
       > svn cp http://www.ccruncher.net/svn/trunk/ \
              http://www.ccruncher.net/svn/tags/ccruncher-x.y/ \
