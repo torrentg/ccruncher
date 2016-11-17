@@ -1737,6 +1737,11 @@ to ascertain due to convergence problems. Also, a large sample size causes
 the evaluation of the incomplete beta function multiple being this computation
 numerically costly.
 
+We note that the variance of the VaR is difficult to evaluate. Fortunately, 
+it is asymptotically normal distributed~\cite{brereton:2012}. This result 
+allows to estimate the VaR value using a numerically stable procedure. This 
+will be done in a future version of this document.
+
 \subsubsection{Expected Shortfall}
 
 VaR is not a coherent risk measure because it does not fulfill the 
@@ -1777,7 +1782,11 @@ inverse cumulative distribution function, and $\widehat{\mu}$ and
 $\widehat{\sigma}$ are the mean and standard deviation estimators.
 This estimator assumes that the estimated $\text{VaR}_{\beta}$ has the 
 exact value. Despite this, if the sample size is high enough, then the 
-estimated value is good enough.
+estimated value is good enough. 
+
+Like VaR, ES is asymptotically normal distributed~\cite{brereton:2012}.
+This result allows to estimate the value of the ES in a more rigurous way.
+This will be done in a future version of this document.
 
 \begin{example}[test05.xml]
 	\label{ex:test05}
@@ -1857,19 +1866,15 @@ allows defining and simulating sub-portfolio losses in order to respond
 this question.
 
 CCruncher simulates the entire portfolio loss at time $T$. It also allows 
-(in the same execution) the simulation of sub-portfolios losses. In CCruncher, 
+(in the same execution) to obtain the sub-portfolios losses. In CCruncher, 
 a sub-portfolio is called a \emph{segment}. The disjoint union of segments 
 covering the entire portfolio is called a \emph{segmentation}, i.e., a 
 segmentation is composed by non-overlapped segments that constitute the 
 entire portfolio. For example, we can define the segmentation of geographic
 areas where the bank operates composed by four segments \{N, S, E, W\}.
 When an obligor defaults, the loss of its assets is added into the 
-entire portfolio loss and into the segment loss where the obligor resides.
+entire portfolio loss and into the segments' loss where each asset resides.
 CCruncher allows defining and managing multiple segmentations simultaneously. 
-The segmentations can be composed of obligors or assets. In the first case, 
-the obligor loss is aggregated to segment loss when the obligor defaults. 
-In the second case, the asset losses are aggregated to segment losses when 
-the obligor defaults.
 
 \subsubsection{Expected Loss}
 Expected Loss is additive respect the portfolio composition, i.e., if 
@@ -2027,23 +2032,22 @@ simulation threads, each with its own Mersenne twister Random Number
 Generator seeded with consecutive values. When the number of obligors is 
 high, data do not fit in the cache memory L1 and L2. The memory transfer is 
 a time-consuming operation that must be minimized. To achieve this, each
-thread performs simultaneously \emph{blocksize} simulations. Each obligor is 
-simulated \emph{blocksize} times (each of them with the corresponding $\nu$ 
-and $\vec{z}$) before moving to the next obligor.
+thread simulates an obligor \emph{blocksize} times (using the corresponding 
+$\nu$ and $\vec{z}$) before moving to the next one.
 
 \textbf{Parameterization}. 
 The CCruncher input file contains the data required to simulate the portfolio
 losses (obligors, assets, EADs, LGDs, ratings, factor correlations, factor
 loadings, copula to use, interest rates, segmentations, etc.). This file can 
-be quite large (e.g., 1GB). When we evaluate the risk sensitivity or the effect 
-of parameters' uncertainty, we must slightly modify the input file and 
-reevaluate the portfolio loss distribution multiple times. To simplify this 
-task, CCruncher provides the macro mechanism, that allows using variables 
-that are replaced by the user-defined values anywhere they are located in 
-the input file, and the automatic evaluation of numerical expressions. 
-Combining these two features, macros and the evaluation of numerical 
-expressions, provides a flexible manner in which to parameterize one's input 
-file (e.g., 2000*\$EUR2USD). 
+be quite large due to portfolio description (e.g., 1GB). When we evaluate the 
+risk sensitivity or the effect of parameters' uncertainty, we must slightly 
+modify the input file and reevaluate the portfolio loss distribution multiple 
+times. To simplify this task, CCruncher provides the macro mechanism, that 
+allows using variables that are replaced by the user-defined values anywhere 
+they are located in the input file, and the automatic evaluation of numerical 
+expressions. Combining these two features, macros and the evaluation of 
+numerical expressions, provides a flexible manner in which to parameterize 
+one's input file (e.g., 2000*\$EUR2USD). 
 
 
 %==============================================================================
