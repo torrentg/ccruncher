@@ -6,7 +6,7 @@
 #
 # dependencies:
 #   tar, gzip, zip, svn, auto-tools, unix2dos
-#   make, pdflatex, bibtex, iconv
+#   make, pdflatex, bibtex, iconv, rpmbuild
 #
 # retcodes:
 #   0    : OK
@@ -72,7 +72,7 @@ _EOF_
 #-------------------------------------------------------------
 readconf() {
 
-  OPTIND=0
+  OPTIND=0;
 
   while getopts 'w:h' opt
   do
@@ -97,7 +97,7 @@ readconf() {
     winexes=$(readlink -f "$winexes");
   fi
 
-  shift `expr $OPTIND - 1`
+  shift `expr $OPTIND - 1`;
 
   # more arguments?
   if [ "$*" != "" ]; then
@@ -152,7 +152,7 @@ checkout() {
     echo "error creating pdf technical document";
     exit 1;
   fi
-  cp "$1/doc/tex/ccruncher.pdf" "$1/doc/"
+  cp "$1/doc/tex/ccruncher.pdf" "$1/doc/";
 
 }
 
@@ -162,7 +162,7 @@ checkout() {
 remDevFiles() {
 
   # redirect html document
-  sed -i -e 's/href="ccruncher\.pdf"/href="\.\.\/ccruncher\.pdf"/g' "$1/doc/html/*.html";
+  sed -i -e 's/href="ccruncher\.pdf"/href="\.\.\/ccruncher\.pdf"/g' "$1/doc/html/"*.html;
   
   # remove developers files
   rm "$1/bin/makedist.sh";
@@ -191,7 +191,7 @@ makeSrcDist() {
   autoconf;
   # automake don't add missing files if a parent dir content them
   automake -acf 2> /dev/null;
-  ./configure -q --prefix=$PWD;
+  ./configure -q --prefix="$PWD";
   make -j distcheck > /dev/null;
 
   # moving tarball
@@ -208,8 +208,8 @@ makeBinDist() {
   cd "$1";
 
   # removing specific flag
-  sed "s/-mtune=native//" configure.ac > configure.ac.new
-  mv configure.ac.new configure.ac
+  sed "s/-mtune=native//" configure.ac > configure.ac.new;
+  mv configure.ac.new configure.ac;
 
   # creating binaries
   aclocal;
@@ -226,9 +226,9 @@ makeBinDist() {
 
   # creating and moving tarball
   cd ..;
-  mv $1 $PACKAGE-${numversion};
+  mv "$1" $PACKAGE-${numversion};
   tar -czf $PACKAGE-${numversion}_bin.tgz $PACKAGE-${numversion};
-  mv $PACKAGE-${numversion}_bin.tgz $currpath;
+  mv $PACKAGE-${numversion}_bin.tgz "$currpath";
   mv $PACKAGE-${numversion} "$1";
 
 }
@@ -245,7 +245,7 @@ makeWinDist() {
   for file in $winfiles
   do
     if [ ! -f $winexes/$file ]; then 
-      echo "error: file $winexes/$file not found" 
+      echo "error: file $winexes/$file not found";
       exit 1;
     else
       cp "$winexes/$file" bin/
@@ -273,7 +273,7 @@ makeWinDist() {
 
   # creating tarball
   cd ..;
-  mv $1 $PACKAGE-${numversion};
+  mv "$1" $PACKAGE-${numversion};
   zip -q -r $PACKAGE-${numversion}_win.zip $PACKAGE-${numversion};
   mv $PACKAGE-${numversion}_win.zip $currpath;
   mv $PACKAGE-${numversion} "$1";
@@ -289,16 +289,16 @@ makeRpmDist() {
 
   # create RPM build tree within user's home directory 
   rpmdev-setuptree;
-  cd ~/rpmbuild/
+  cd ~/rpmbuild/;
   
   # create the rpms packages
-  cp $1/build/ccruncher.spec SPECS/
-  cp $currpath/$PACKAGE-${numversion}_src.tgz SOURCES/
-  rpmbuild -ba SPECS/ccruncher.spec
+  cp "$1/build/ccruncher.spec" SPECS/;
+  cp "$currpath/$PACKAGE-${numversion}_src.tgz" SOURCES/;
+  rpmbuild -ba SPECS/ccruncher.spec > /dev/null 2> /dev/null;
   
   # copy rpms to current directory
-  cp $(find RPMS/ -name $PACKAGE-${numversion}-\*.rpm) $currpath;
-  cp $(find SRPMS/ -name $PACKAGE-${numversion}-\*.rpm) $currpath;
+  cp $(find RPMS/ -name $PACKAGE-${numversion}-\*.rpm) "$currpath";
+  cp $(find SRPMS/ -name $PACKAGE-${numversion}-\*.rpm) "$currpath";
   
 }
 
