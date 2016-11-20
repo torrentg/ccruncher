@@ -207,10 +207,6 @@ makeBinDist() {
   echo "creating bin package";
   cd "$1";
 
-  # removing specific flag
-  sed "s/-mtune=native//" configure.ac > configure.ac.new;
-  mv configure.ac.new configure.ac;
-
   # creating binaries
   aclocal;
   autoconf;

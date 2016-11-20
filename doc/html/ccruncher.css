@@ -226,4 +226,7 @@ img {
 		display: block;
 		page-break-before: always; 
 	}
+	#navbar {
+	  display: none;
+  }
 }

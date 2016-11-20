@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2016-11-05 20:28:41+01:00"
+#define BUILD_DATE "2016-11-20 11:37:19+01:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -18,12 +18,6 @@
 
 /* Define to 1 if you have the <expat.h> header file. */
 #define HAVE_EXPAT_H 1
-
-/* Define to 1 if you have the <float.h> header file. */
-#define HAVE_FLOAT_H 1
-
-/* Define to 1 if you have the `floor' function. */
-#define HAVE_FLOOR 1
 
 /* Define to 1 if you have the `getcwd' function. */
 #define HAVE_GETCWD 1
@@ -61,6 +55,9 @@
 /* Define to 1 if you have the `pow' function. */
 #define HAVE_POW 1
 
+/* Define to 1 if you have the `realpath' function. */
+#define HAVE_REALPATH 1
+
 /* Define to 1 if you have the `sqrt' function. */
 #define HAVE_SQRT 1
 
@@ -76,6 +73,9 @@
 /* Define to 1 if you have the `strchr' function. */
 #define HAVE_STRCHR 1
 
+/* Define to 1 if you have the `strerror' function. */
+#define HAVE_STRERROR 1
+
 /* Define to 1 if you have the <strings.h> header file. */
 #define HAVE_STRINGS_H 1
 
@@ -84,6 +84,9 @@
 
 /* Define to 1 if you have the `strtol' function. */
 #define HAVE_STRTOL 1
+
+/* Define to 1 if you have the `strtoul' function. */
+#define HAVE_STRTOUL 1
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #define HAVE_SYS_STAT_H 1
