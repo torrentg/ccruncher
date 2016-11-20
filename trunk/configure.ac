@@ -19,6 +19,7 @@ AC_PROG_CXX
 AC_PROG_RANLIB
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
+AC_OPENMP
 
 dnl -------------------------------------------------------------
 dnl macros
@@ -49,20 +50,21 @@ dnl -------------------------------------------------------------
 dnl checks for header
 dnl -------------------------------------------------------------
 AC_HEADER_STDBOOL
-AC_CHECK_HEADERS([float.h])
 AC_CHECK_HEADERS([sys/time.h])
 
 dnl -------------------------------------------------------------
 dnl checks for functions
 dnl -------------------------------------------------------------
 AC_CHECK_FUNCS([getcwd])
+AC_CHECK_FUNCS([gettimeofday])
 AC_CHECK_FUNCS([mkdir])
 AC_CHECK_FUNCS([pow])
+AC_CHECK_FUNCS([realpath])
 AC_CHECK_FUNCS([sqrt])
-AC_CHECK_FUNCS([strtol])
-AC_CHECK_FUNCS([floor])
 AC_CHECK_FUNCS([strchr])
-AC_CHECK_FUNCS([gettimeofday])
+AC_CHECK_FUNCS([strerror])
+AC_CHECK_FUNCS([strtol])
+AC_CHECK_FUNCS([strtoul])
 AC_FUNC_STRTOD
 AC_FUNC_MKTIME
 
@@ -85,10 +87,10 @@ AC_ARG_ENABLE(debug,
   [debug=false])
 
 if test x$debug = xtrue ; then
-  CXXFLAGS="-g"
+  AM_CXXFLAGS="-g"
 else
-  # note: consider -flto
-  CXXFLAGS="-O2 -mtune=native -DNDEBUG"
+  # note: consider -mtune=native -flto
+  AM_CXXFLAGS="-O2 -DNDEBUG"
 fi
 
 dnl -------------------------------------------------------------
@@ -105,15 +107,15 @@ AC_ARG_ENABLE(profiler,
   [profiler=false])
 
 if test x$profiler = xtrue ; then
-  CXXFLAGS="$CXXFLAGS -pg"
+  AM_CXXFLAGS="$AM_CXXFLAGS -pg"
   AC_DEFINE([PROFILER], 1, [Profiler instructions are added when this is defined.])
 fi
 
 dnl -------------------------------------------------------------
 dnl setting compiler options
 dnl -------------------------------------------------------------
-CXXFLAGS="$CXXFLAGS -pthread -std=c++11 -Wall -Wextra -Wshadow -Wpedantic"
-AC_SUBST(CXXFLAGS)
+AM_CXXFLAGS="$AM_CXXFLAGS -std=c++11 -pthread -fopenmp -Wall -Wextra -Wshadow -Wpedantic"
+AC_SUBST(AM_CXXFLAGS)
 
 dnl -------------------------------------------------------------
 dnl setting preprocessor options

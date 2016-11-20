@@ -1378,6 +1378,7 @@ Criterion (DIC) values, etc.
 % MODELING PORTFOLIO LOSS
 %==============================================================================
 \chapter{Modeling Portfolio Loss}
+\label{chap:mpl}
 
 %------------------------------------------------------------------------------
 % PORTFOLIO LOSS DISTRIBUTION
@@ -2077,19 +2078,19 @@ are: $n, \vec{w}, R, \nu$.
 
 We sketch the function $\text{ES}_{99\%}(s)$ by calculating $\text{ES}_{99\%}$ 
 in various consecutive values of the analyzed parameter. Each of these values 
-is obtained by applying the simulation procedure described in Chapter 4. 
-In order to reduce variations caused by the simulation procedure, we use the 
-same RNG seed in each evaluation.
+is obtained by applying the simulation procedure described in 
+Chapter~\ref{chap:mpl}. In order to reduce variations caused by the simulation 
+procedure, we use the same RNG seed in each evaluation.
 
 \begin{example}[Sensitivity to portfolio size]
 	Common sense tells us that a large and homogeneous portfolio must have the 
 	same risk (as percentage of the total exposure) that a portfolio with the 
 	same characteristics but with twice obligors. Figure~\ref{fig:sensi1}
-	shows the $\text{ES}_{99\%}$ by varying the number of obligors that 
-	compose the portfolio described in \texttt{test05.xml}. Note that this
-	value is almost equal in range $[200,\infty)$. In the range $[50,200]$
-	we can appreciate the impact of the small number of individuals in the 
-	risk measure, not very exaggerated otherwise.
+	shows the $\text{ES}_{99\%}$ by varying the number of obligors that compose 
+	the portfolio described in \texttt{test05.xml}. Note that this value is 
+	almost equal in range $[200,\infty)$. In the range $[50,200]$ we can 
+	appreciate the impact of the small number of individuals in the risk 
+	measure, not very exaggerated otherwise.
 \end{example}
 
 \begin{figure}[!ht]
@@ -2098,6 +2099,13 @@ same RNG seed in each evaluation.
 	\caption{$\text{ES}_{99\%}$ vs. portfolio size}
 	\label{fig:sensi1}
 \end{figure}
+
+Two portfolios with distinct number of obligors but the same composition 
+(sector weights, exposures, recoveries) have the same credit risk as long as 
+the number of obligors is high enough. We can use this fact to assess the 
+credit risk of really massive portfolios (e.g. > 0.5 million oblgors). In 
+this cases we can prune the portfolio (preserving the composition) and compute 
+the credit risk of the reduced porfolio.
 
 \begin{example}[Sensitivity to copula parameters]
 	Figure~\ref{fig:sensi2} shows the portfolio risk value $\text{ES}_{99\%}$ 
@@ -2197,14 +2205,14 @@ remain hidden such as:
 	\label{alg:crmd}
 	Assume a portfolio (ratings, sectors, PDs, EADs, LGDs) and the number 
 	of defaults observed by sector-rating in the previous years. We can
-	determine the distribution of a credit risk measure 
-	(e.g., $\text{VaR}_{99\%}$) by performing the following:
+	sampling the distribution of a credit risk measure (e.g., 
+	$\text{VaR}_{99\%}$) by performing the following:
 	\begin{enumerate}
 		\item Obtain an ergodic sample of the parameters applying the
 		Metropolis-Hastings algorithm (see proposition~\ref{prop:pemh}).
 		\item Remove the first iterations (burn-in period), and determine
 		the minimum common length $B$ at which the ACFs are $0$.
-		\item Let $\{\nu^t, \vec{z}^t, R^t\}_{t=1,\dots,N}$ be the subsample
+		\item Let $\{\nu^t, \vec{w}^t, R^t\}_{t=1,\dots,N}$ be the subsample
 		of the parameters distribution composed by the indexes multiples 
 		of $B$.
 		\item For each simulated parameter, simulate the portfolio loss 
@@ -2217,13 +2225,11 @@ remain hidden such as:
 
 \begin{example}[Credit risk considering parameters uncertainty]
 	\label{ex:paramu}
-	We use the identical scenario as that described in example~\ref{ex:test05} 
-	and that corresponds to CCruncher input file \texttt{test05.xml}. We 
-	generate 20 observations of annual numbers of defaults using the 
-	algorithm~\ref{alg:snod} (in the real world, these observations are extracted
-	from the historical records). 
-	In the following lines, we apply algorithm~\ref{alg:crmd} to estimate 
-	the $\text{ES}_{99\%}$ distribution, considering the parameters' 
+	We use the scenario described in example~\ref{ex:test05}. We generate 20 
+	observations of annual numbers of defaults using the algorithm~\ref{alg:snod} 
+	(in the real world, these observations are extracted from the historical 
+	records). In the following lines, we apply algorithm~\ref{alg:crmd} to 
+	estimate the $\text{ES}_{99\%}$ distribution, considering the parameters' 
 	uncertainty. 
 
 	The first step includes the generation of a sample of the parameters' 

@@ -120,9 +120,9 @@ build_ccruncher_cmd_SOURCES = \
     src/utils/Thread.hpp \
     src/utils/config.h
 
-build_ccruncher_cmd_CXXFLAGS =
-build_ccruncher_cmd_LDADD =
-build_ccruncher_cmd_LDFLAGS =
+#build_ccruncher_cmd_CXXFLAGS =
+#build_ccruncher_cmd_LDADD =
+#build_ccruncher_cmd_LDFLAGS =
 
 # -------------------------------------------------------------
 # ccruncher-tests
@@ -236,9 +236,9 @@ build_ccruncher_tests_SOURCES = \
     src/kernel/SimulationThread.hpp \
     src/utils/config.h
 
-build_ccruncher_tests_CXXFLAGS =
-build_ccruncher_tests_LDADD =
-build_ccruncher_tests_LDFLAGS =
+#build_ccruncher_tests_CXXFLAGS =
+#build_ccruncher_tests_LDADD =
+#build_ccruncher_tests_LDFLAGS =
 
 # -------------------------------------------------------------
 # ccruncher-inf
@@ -256,6 +256,6 @@ build_ccruncher_inf_SOURCES = \
     src/inference/Metropolis.hpp \
     src/utils/config.h
 
-build_ccruncher_inf_CXXFLAGS = -fopenmp
-build_ccruncher_inf_LDADD =
-build_ccruncher_inf_LDFLAGS = -fopenmp
+#build_ccruncher_inf_CXXFLAGS = -fopenmp
+#build_ccruncher_inf_LDADD =
+#build_ccruncher_inf_LDFLAGS = -fopenmp
