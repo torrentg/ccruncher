@@ -47,11 +47,11 @@ class Configuration
     // parameters list
     std::vector<std::pair<std::string,std::vector<std::vector<std::string>>>> params;
     // auxiliar variable
-    bool openbrace;
+    bool openbrace = false;
     // auxiliar variable
-    bool mcomment;
+    bool mcomment = false;
     // auxiliar variable
-    bool haskey;
+    bool haskey = false;
 
   private:
 

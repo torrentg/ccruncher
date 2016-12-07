@@ -146,7 +146,11 @@ double Component<T>::getAccRate() const
 {
   if (accepted.size() > 0) {
     double ret = 0.0;
-    for(unsigned int i=0; i<accepted.size(); i++) ret += accepted[i];
+    for(unsigned int i=0; i<accepted.size(); i++) {
+      if (accepted[i]) {
+        ret += 1.0;
+      }
+    }
     return ret/accepted.size();
   }
   else {
