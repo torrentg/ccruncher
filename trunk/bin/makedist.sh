@@ -172,7 +172,7 @@ remDevFiles() {
   rm "$1/doc/html/version";
   rm "$1/doc/html/favicon.ico";
   rm "$1/doc/html/robots.txt";
-  rm "$1/doc/html/.repo.xsl";
+  rm "$1/doc/html/repo.xsl";
   rm -rf "$1/doc/tex";
   rm -rf $(find "$1/" -name \.svn\*);
 
