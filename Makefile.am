@@ -43,8 +43,8 @@ install-data-hook:
 	cp -rvf $(srcdir)/samples $(DESTDIR)$(docdir);
 
 uninstall-hook:
-	chmod +w $(DESTDIR)$(docdir)/html && rm -rvf $(DESTDIR)$(docdir)/html;
-	chmod +w $(DESTDIR)$(docdir)/samples && rm -rvf $(DESTDIR)$(docdir)/samples;
+	chmod -R +w $(DESTDIR)$(docdir)/html && rm -rvf $(DESTDIR)$(docdir)/html;
+	chmod -R +w $(DESTDIR)$(docdir)/samples && rm -rvf $(DESTDIR)$(docdir)/samples;
 
 # -------------------------------------------------------------
 # removes subversion stuff
