@@ -13,6 +13,11 @@ AC_CONFIG_HEADER([src/utils/config.h],,[src/utils/config.h.in])
 AM_INIT_AUTOMAKE([subdir-objects])
 
 dnl -------------------------------------------------------------
+dnl reset default CXXFLAGS value if not set by user
+dnl -------------------------------------------------------------
+: ${CXXFLAGS=""}
+
+dnl -------------------------------------------------------------
 dnl check for tools
 dnl -------------------------------------------------------------
 AC_PROG_CXX
