@@ -46,6 +46,7 @@ rm -f  $CCRUNCHER/ccruncher*.pro;
 rm -f  $CCRUNCHER/ccruncher*.pro.user;
 rm -f  $CCRUNCHER/Doxyfile;
 rm -f  $CCRUNCHER/aclocal.m4;
+rm -f  $CCRUNCHER/compile;
 rm -f  $CCRUNCHER/config*;
 rm -f  $CCRUNCHER/depcomp;
 rm -f  $CCRUNCHER/install-sh;
