@@ -67,6 +67,12 @@ using namespace ccruncher_inf;
 ccruncher_inf::Metropolis::Metropolis(unsigned long seed) throw(Exception)
     : rng(nullptr), M0(nullptr), M1(nullptr)
 {
+  fstop = false;
+  nfactors = 0;
+  nratings = 0;
+  nobs = 0;
+  det0 = 0.0;
+  det1 = 0.0;
   rng = gsl_rng_alloc(gsl_rng_mt19937);
   if (seed == 0) {
     seed = (unsigned long) time(nullptr);
@@ -239,7 +245,7 @@ void ccruncher_inf::Metropolis::readZ(const Configuration &config)
     if (config.isValue("Z.init")) {
       double val = config.read<double>("Z.init");
       for(size_t i=0; i<values.size(); i++) {
-        for(size_t j=0; i<values[i].size(); j++) {
+        for(size_t j=0; j<values[i].size(); j++) {
           values[i][j] = val;
         }
       }
