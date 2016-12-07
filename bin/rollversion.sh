@@ -148,8 +148,8 @@ if [ "$cver" = "true" ]; then
   sed -i -e "s/AC_INIT(ccruncher,\([^,]*\),\(.*\))/AC_INIT(ccruncher, $version,\\2)/g" $CCRUNCHERPATH/configure.ac
   sed -i -e "s/\(PROJECT_NUMBER[ ]*=[ ]*\)\(.*\)/\\1$version/g " $CCRUNCHERPATH/Doxyfile
   sed -i -e "s/\\\def\\\numversion{.*}/\\\def\\\numversion{$version}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
-  sed -i -e "s/<span class=\"version\">.*<\/span>/<span class=\"version\">$version<\/span>/g" $CCRUNCHERPATH/doc/html/*.html
-  sed -i -e "s/Last modified: .*/Last modified: $curdate/g" $CCRUNCHERPATH/doc/html/*.html $CCRUNCHERPATH/doc/html/.repo.xsl
+  sed -i -e "s/\(ccruncher\)-[0-9]\\+\\.[0-9]\\+\\.[0-9]\\+/\\1-$version/gI" $CCRUNCHERPATH/doc/html/*.html
+  sed -i -e "s/Last modified: .*/Last modified: $curdate/g" $CCRUNCHERPATH/doc/html/*.html $CCRUNCHERPATH/doc/html/repo.xsl
   sed -i -e "s/version\:.*/version\: $version/g" $CCRUNCHERPATH/doc/html/version
   sed -i -e "s/date\:.*/date\: $curdate/g" $CCRUNCHERPATH/doc/html/version
   sed -i -e "s/^\(VERSION[ ]*=[ ]*\)\(.*\)/\\1$version/g " $CCRUNCHERPATH/ccruncher-cmd.pro

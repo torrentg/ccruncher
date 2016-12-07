@@ -1,549 +1,543 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>CCruncher - Dependencies</title>
-    <link rel="stylesheet" href="ccruncher.css" type="text/css"/>
+    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/ccruncher.css" type="text/css" />
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/tether.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <style>
+      table {
+        border: 1px dashed gray;
+      }
+      .c2 {
+        text-align: justify;
+      }
+    </style>
   </head>
-
   <body>
-    <div id="container">
-      <div id="header">
-        <span class="cell">
-          <a href="index.html" class="title">&nbsp;CCRUNCHER</a>
-        </span>
-        <span class="cell subtitle">
-          Open-Source Project for<br/>Credit Risk Modeling
-        </span>
-        <span class="cell">
-          <img src="logo.png" alt="logo" height="80" style="padding-right: 1em;"/>
-        </span>
-      </div>
-      <div id="navbar">
-        <ul>
-          <li>
-            <a href="index.html">Home</a>
-          </li>
-          <li><a href="#">About</a>
-            <ul>
-              <li><a href="faq.html">F.A.Q.</a></li>
-              <li><a href="features.html">Features</a></li>
-              <li><a href="screenshots.html">Screenshots</a></li>
-            </ul>
-          </li>
-          <li><a href="#">Let's work!</a>
-            <ul>
-              <li><a href="download.html">Download</a></li>
-              <li><a href="gstarted.html">Getting Started</a></li>
-            </ul>
-          </li>
-          <li><a href="#">Documentation</a>
-            <ul>
-              <li><a href="ccruncher.pdf">Technical Doc.&nbsp;<img src="pdf.png" width="14" alt="" style="border:none;"/></a></li>
-              <li><a href="ifileref.html">Input File</a></li>
-              <li><a href="ofileref.html">Output Files</a></li>
-              <li><a href="dissemination.html">Dissemination</a></li>
-            </ul>
-          </li>
-          <li><a class="active" href="#">Development</a>
-            <ul>
-              <li><a href="dependencies.html">Dependencies</a></li>
-              <li><a href="http://www.ccruncher.net/svn/">Repository (svn)</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div id="content">
+    <div class="container-fluid">
+      <nav id="navbar" class="navbar navbar-dark">
+        <a class="navbar-brand" href="index.html">CCRUNCHER</a>
+        <button class="navbar-toggler hidden-sm-up float-xs-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
+        <div class="collapse navbar-toggleable-xs" id="navbarResponsive">
+          <ul class="nav navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                About
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdown1">
+                <a class="dropdown-item" href="faq.html">F.A.Q.</a>
+                <a class="dropdown-item" href="features.html">Features</a>
+                <a class="dropdown-item" href="screenshots.html">Screenshots</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Let's work!
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdown2">
+                <a class="dropdown-item" href="download.html">Download</a>
+                <a class="dropdown-item" href="gstarted.html">Getting Started</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Documentation
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdown3">
+                <a class="dropdown-item" href="ccruncher.pdf">Technical Doc.&nbsp;<i class="fa fa-file-pdf-o"></i></a>
+                <a class="dropdown-item" href="ifileref.html">Input File</a>
+                <a class="dropdown-item" href="ofileref.html">Output Files</a>
+                <a class="dropdown-item" href="dissemination.html">Dissemination</a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle active" href="#" id="dropdown4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Development
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdown4">
+                <a class="dropdown-item" href="dependencies.html">Dependencies</a>
+                <a class="dropdown-item" href="http://www.ccruncher.net/svn/">Repository (svn)</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <main>
+        <h1>Dependencies</h1>
+        <p>
+          CCruncher uses projects that already exist. The selection criteria
+          have been: well tested, simplicity, efficiency and open source.
+        </p>
+        <table class="table table-striped table-responsive">
+          <tr>
+            <th>Name</th>
+            <th>GSL</th>
+          </tr>
+          <tr>
+            <th>Version</th>
+            <td class="c2">2.1</td>
+          </tr>
+          <tr>
+            <th>URL</th>
+            <td class="c2">
+              <a href="http://www.gnu.org/software/gsl/">http://www.gnu.org/software/gsl/</a>
+            </td>
+          </tr>
+          <tr>
+            <th>License</th>
+            <td class="c2">GNU GPL</td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td class="c2">
+              The GNU Scientific Library (GSL) is a numerical library for C and C++ programmers. 
+              It is free software under the GNU General Public License. The library provides a 
+              wide range of mathematical routines such as random number generators, special 
+              functions and least-squares fitting. There are over 1000 functions in total with 
+              an extensive test suite.
+            </td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td class="c2">
+              Required
+            </td>
+          </tr>
+          <tr>
+            <th>Usage</th>
+            <td class="c2">
+              In CCruncher, the GSL library is used to generate random numbers, evaluate random
+              number distributions, spline interpolation, find eigenvalues, 
+              Cholesky decomposition, and solve linear systems.
+            </td>
+          </tr>
+        </table>
+        <table class="table table-striped table-responsive">
+          <tr>
+            <th>Name</th>
+            <th>expat</th>
+          </tr>
+          <tr>
+            <th>Version</th>
+            <td class="c2">2.1.1</td>
+          </tr>
+          <tr>
+            <th>URL</th>
+            <td class="c2">
+              <a href="http://expat.sourceforge.net/">http://expat.sourceforge.net/</a>
+            </td>
+          </tr>
+          <tr>
+            <th>License</th>
+            <td class="c2">MIT License</td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td class="c2">
+              Expat is an XML parser library written in C. It is a stream-oriented
+              parser in which an application registers handlers for things the
+              parser might find in the XML document, like start tags.
+            </td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td  class="c2">
+              Required
+            </td>
+          </tr>
+          <tr>
+            <th>Usage</th>
+            <td class="c2">
+              In CCruncher, the expat library is used to read XML files.
+            </td>
+          </tr>
+        </table>
+        <table class="table table-striped table-responsive">
+          <tr>
+            <th>Name</th>
+            <th>zlib</th>
+          </tr>
+          <tr>
+            <th>Version</th>
+            <td class="c2">1.2.8</td>
+          </tr>
+          <tr>
+            <th>URL</th>
+            <td class="c2">
+              <a href="http://www.zlib.net/">http://www.zlib.net/</a>
+            </td>
+          </tr>
+          <tr>
+            <th>License</th>
+            <td class="c2">Free license, see declaration at the home site</td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td class="c2">
+              zlib is designed to be a free, general-purpose, legally unencumbered
+              -- that is, not covered by any patents -- lossless data-compression
+              library for use on virtually any computer hardware and operating system.
+            </td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td class="c2">
+              Required
+            </td>
+          </tr>
+          <tr>
+            <th>Usage</th>
+            <td class="c2">
+              In CCruncher, the zlib library allows the usage of gzipped input files, 
+              such that the size of xml input files reduces drastically.
+            </td>
+          </tr>
+        </table>
+        <table class="table table-striped table-responsive">
+          <tr>
+            <th>Name</th>
+            <th>MiniCppUnit</th>
+          </tr>
+          <tr>
+            <th>Version</th>
+            <td class="c2">2.5</td>
+          </tr>
+          <tr>
+            <th>URL</th>
+            <td class="c2">
+              <a href="http://sourceforge.net/projects/minicppunit/">http://sourceforge.net/projects/minicppunit/</a>
+            </td>
+          </tr>
+          <tr>
+            <th>License</th>
+            <td class="c2">GNU GPL</td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td class="c2">
+              MiniCppUnit is a C++ unit testing framework.
+            </td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td class="c2">
+              Required
+            </td>
+          </tr>
+          <tr>
+            <th>Usage</th>
+            <td class="c2">
+              In CCruncher, MiniCppUnit is used to test all basic classes.
+              All classes matching the pattern <code>*Test.?pp</code> are unit tests.
+            </td>
+          </tr>
+          <tr>
+            <th>Notes</th>
+            <td class="c2">
+              Applied minor patch (reported to authors) related to encoding (from ISO-8859-1 
+              to UTF-8) and <code>assertTrue()</code>, <code>assertTrueMissatge()</code> 
+              methods. 
+            </td>
+          </tr>
+        </table>
+        <table class="table table-striped table-responsive">
+          <tr>
+            <th>Name</th>
+            <th>Qt</th>
+          </tr>
+          <tr>
+            <th>Version</th>
+            <td class="c2">5.6.1</td>
+          </tr>
+          <tr>
+            <th>URL</th>
+            <td class="c2">
+              <a href="http://www.qt.io/developers/">http://www.qt.io/developers/</a>
+            </td>
+          </tr>
+          <tr>
+            <th>License</th>
+            <td class="c2">LGPL v2.1</td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td class="c2">
+              Qt is a cross-platform application and UI framework for developers 
+              using C++ or QML, a CSS &amp; JavaScript like language. Qt Creator is the 
+              supporting Qt IDE.
+            </td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td class="c2">
+              Required (only gui version)
+            </td>
+          </tr>
+          <tr>
+            <th>Usage</th>
+            <td class="c2">
+              In CCruncher, the Qt framework is used to create the gui version.
+            </td>
+          </tr>
+        </table>
+        <table class="table table-striped table-responsive">
+          <tr>
+            <th>Name</th>
+            <th>Qwt</th>
+          </tr>
+          <tr>
+            <th>Version</th>
+            <td class="c2">6.1.2</td>
+          </tr>
+          <tr>
+            <th>URL</th>
+            <td class="c2">
+              <a href="http://qwt.sourceforge.net/">http://qwt.sourceforge.net/</a>
+            </td>
+          </tr>
+          <tr>
+            <th>License</th>
+            <td class="c2">Qwt License, Version 1.0 [LGPL with exceptions]</td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td class="c2">
+              The Qwt library contains GUI Components and utility classes which are 
+              primarily useful for programs with a technical background. Beside a 2D 
+              plot widget it provides scales, sliders, dials, compasses, thermometers, 
+              wheels and knobs to control or display values, arrays, or ranges of 
+              type double.
+            </td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td class="c2">
+              Required (only gui version)
+            </td>
+          </tr>
+          <tr>
+            <th>Usage</th>
+            <td class="c2">
+              In CCruncher, the Qwt library is used to draw histograms and plots.
+            </td>
+          </tr>
+          <tr>
+            <th>Notes</th>
+            <td class="c2">
+              Version 6.0.1 not supported.
+            </td>
+          </tr>
+        </table>
+        <table class="table table-striped table-responsive">
+          <tr>
+            <th>Name</th>
+            <th>C++ Todd's Date class</th>
+          </tr>
+          <tr>
+            <th>Version</th>
+            <td class="c2">2.0</td>
+          </tr>
+          <tr>
+            <th>URL</th>
+            <td class="c2">
+              <a href="http://technical.silverglass.org/code/date-class">
+                http://technical.silverglass.org/code/date-class
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <th>License</th>
+            <td class="c2">GNU GPL</td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td class="c2">
+              A relatively basic class designed to represent dates accurately over a 
+              very wide range, running from 4713BC to 9999AD, and handling the various 
+              calendar corrections, primarily the Julian/Gregorian changeover. It 
+              handles various kinds of date arithmetic efficiently, but conversions to 
+              and from more conventional month/day/year representations are more costly.
+            </td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td class="c2">
+              Required
+            </td>
+          </tr>
+          <tr>
+            <th>Usage</th>
+            <td class="c2">
+              CCruncher uses extensively this class.
+            </td>
+          </tr>
+          <tr>
+            <th>Notes</th>
+            <td class="c2">
+              This class has been slightly modified to meet the CCruncher's requeriments.
+            </td>
+          </tr>
+          <tr>
+            <th>Files</th>
+            <td class="c2">
+              <a href="http://www.ccruncher.net/svn/trunk/src/utils/Date.hpp">Date.hpp</a>, 
+              <a href="http://www.ccruncher.net/svn/trunk/src/utils/Date.cpp">Date.cpp</a>
+            </td>
+          </tr>
+        </table>
+        <table class="table table-striped table-responsive">
+          <tr>
+            <th>Name</th>
+            <th>C++ XmlHighlighter class</th>
+          </tr>
+          <tr>
+            <th>Version</th>
+            <td class="c2">1.0</td>
+          </tr>
+          <tr>
+            <th>URL</th>
+            <td class="c2">
+              http://www.qtcentre.org/wiki/index.php?title=XmlHighlighter (broken link)
+            </td>
+          </tr>
+          <tr>
+            <th>License</th>
+            <td class="c2">GNU GPL</td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td class="c2">
+              XmlHighlighter extends QSyntaxHighlighter implementing a basic XML highlight. 
+              The QSyntaxHighlighter class allows you to define syntax highlighting rules, and 
+              in addition you can use the class to query a document's current formatting or 
+              user data.
+            </td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td class="c2">
+              Required (only gui version) 
+            </td>
+          </tr>
+          <tr>
+            <th>Usage</th>
+            <td class="c2">
+              CCruncher uses this class to highlight the XML files in the text editor.
+            </td>
+          </tr>
+          <tr>
+            <th>Notes</th>
+            <td class="c2">
+              Solved some errors (eg. comments highlight) and changed some minors aspects
+              (regular expressions, code format).
+            </td>
+          </tr>
+          <tr>
+            <th>Files</th>
+            <td class="c2">
+              <a href="http://www.ccruncher.net/svn/trunk/src/gui/xmlhighlighter.hpp">xmlhighlighter.hpp</a>, 
+              <a href="http://www.ccruncher.net/svn/trunk/src/gui/xmlhighlighter.cpp">xmlhighlighter.cpp</a>
+            </td>
+          </tr>
+        </table>
+        <table class="table table-striped table-responsive">
+          <tr>
+            <th>Name</th>
+            <th>C++ CodeEditor class</th>
+          </tr>
+          <tr>
+            <th>Version</th>
+            <td class="c2">1.0</td>
+          </tr>
+          <tr>
+            <th>URL</th>
+            <td class="c2">
+              <a href="http://doc.qt.io/qt-5/qtwidgets-widgets-codeeditor-example.html">http://doc.qt.io/qt-5/qtwidgets-widgets-codeeditor-example.html</a>
+            </td>
+          </tr>
+          <tr>
+            <th>License</th>
+            <td class="c2">BSD license</td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td class="c2">
+              CodeEditor is a simple editor that has line numbers and that highlights the 
+              current line.
+            </td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td class="c2">
+              Required (only gui version) 
+            </td>
+          </tr>
+          <tr>
+            <th>Usage</th>
+            <td class="c2">
+              CCruncher uses this class to edit the XML files.
+            </td>
+          </tr>
+        </table>
 
-    <h1>Dependencies</h1>
-
-    <p style="text-align:justify;">
-      CCruncher uses projects that already exist. The selection criteria
-      have been: well tested, simplicity, efficiency and open source.
-    </p>
-
-    <table cellpadding="5" style="border:1px solid gray; width:100%">
-      <tr class="a">
-        <td style="width:75px;"><b>Name</b></td>
-        <td><b>GSL</b></td>
-      </tr>
-      <tr class="b">
-        <td><b>Version</b></td>
-        <td>2.1</td>
-      </tr>
-      <tr class="a">
-        <td><b>URL</b></td>
-        <td>
-          <a href="http://www.gnu.org/software/gsl/">http://www.gnu.org/software/gsl/</a>
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>License</b></td>
-        <td>GNU GPL</td>
-      </tr>
-      <tr class="a">
-        <td><b>Description</b></td>
-        <td style="text-align:justify;">
-          The GNU Scientific Library (GSL) is a numerical library for C and C++ programmers. 
-          It is free software under the GNU General Public License. The library provides a 
-          wide range of mathematical routines such as random number generators, special 
-          functions and least-squares fitting. There are over 1000 functions in total with 
-          an extensive test suite.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Type</b></td>
-        <td style="text-align:justify;">
-          Required
-        </td>
-      </tr>
-      <tr class="a">
-        <td><b>Usage</b></td>
-        <td style="text-align:justify;">
-          In CCruncher, the GSL library is used to generate random numbers, evaluate random
-          number distributions, spline interpolation, find eigenvalues, 
-          Cholesky decomposition, and solve linear systems.
-        </td>
-      </tr>
-    </table>
-
-    <br/>
-    <table cellpadding="5" style="border:1px solid gray; width:100%">
-      <tr class="a">
-        <td style="width:75px;"><b>Name</b></td>
-        <td><b>expat</b></td>
-      </tr>
-      <tr class="b">
-        <td><b>Version</b></td>
-        <td>2.1.1</td>
-      </tr>
-      <tr class="a">
-        <td><b>URL</b></td>
-        <td>
-          <a href="http://expat.sourceforge.net/">http://expat.sourceforge.net/</a>
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>License</b></td>
-        <td>MIT License</td>
-      </tr>
-      <tr class="a">
-        <td><b>Description</b></td>
-        <td style="text-align:justify;">
-          Expat is an XML parser library written in C. It is a stream-oriented
-          parser in which an application registers handlers for things the
-          parser might find in the XML document, like start tags.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Type</b></td>
-        <td style="text-align:justify;">
-          Required
-        </td>
-      </tr>
-      <tr class="a">
-        <td><b>Usage</b></td>
-        <td style="text-align:justify;">
-          In CCruncher, the expat library is used to read XML files.
-        </td>
-      </tr>
-    </table>
-
-    <br/>
-    <table cellpadding="5" style="border:1px solid gray; width:100%">
-      <tr class="a">
-        <td style="width:75px;"><b>Name</b></td>
-        <td><b>zlib</b></td>
-      </tr>
-      <tr class="b">
-        <td><b>Version</b></td>
-        <td>1.2.8</td>
-      </tr>
-      <tr class="a">
-        <td><b>URL</b></td>
-        <td>
-          <a href="http://www.zlib.net/">http://www.zlib.net/</a>
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>License</b></td>
-        <td>Free license, see declaration at the home site</td>
-      </tr>
-      <tr class="a">
-        <td><b>Description</b></td>
-        <td style="text-align:justify;">
-          zlib is designed to be a free, general-purpose, legally unencumbered
-          -- that is, not covered by any patents -- lossless data-compression
-          library for use on virtually any computer hardware and operating system.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Type</b></td>
-        <td style="text-align:justify;">
-          Required
-        </td>
-      </tr>
-      <tr class="a">
-        <td><b>Usage</b></td>
-        <td style="text-align:justify;">
-          In CCruncher, the zlib library allows the usage of gzipped input files, 
-          such that the size of xml input files reduces drastically.
-        </td>
-      </tr>
-    </table>
-
-    <br/>
-    <table cellpadding="5" style="border:1px solid gray; width:100%">
-      <tr class="a">
-        <td style="width:75px;"><b>Name</b></td>
-        <td><b>MiniCppUnit</b></td>
-      </tr>
-      <tr class="b">
-        <td><b>Version</b></td>
-        <td>2.5</td>
-      </tr>
-      <tr class="a">
-        <td><b>URL</b></td>
-        <td>
-          <a href="http://sourceforge.net/projects/minicppunit/">http://sourceforge.net/projects/minicppunit/</a>
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>License</b></td>
-        <td>GNU GPL</td>
-      </tr>
-      <tr class="a">
-        <td><b>Description</b></td>
-        <td style="text-align:justify;">
-          MiniCppUnit is a C++ unit testing framework.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Type</b></td>
-        <td style="text-align:justify;">
-          Required
-        </td>
-      </tr>
-      <tr class="a">
-        <td><b>Usage</b></td>
-        <td style="text-align:justify;">
-          In CCruncher, MiniCppUnit is used to test all basic classes.
-          All classes matching the pattern <code>*Test.?pp</code> are unit tests.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Notes</b></td>
-        <td style="text-align:justify;">
-          Applied minor patch (reported to authors) related to encoding (from ISO-8859-1 
-          to UTF-8) and <code>assertTrue()</code>, <code>assertTrueMissatge()</code> 
-          methods. 
-        </td>
-      </tr>
-    </table>
-
-    <br/>
-    <table cellpadding="5" style="border:1px solid gray; width:100%">
-      <tr class="a">
-        <td style="width:75px;"><b>Name</b></td>
-        <td><b>Qt</b></td>
-      </tr>
-      <tr class="b">
-        <td><b>Version</b></td>
-        <td>5.6.1</td>
-      </tr>
-      <tr class="a">
-        <td><b>URL</b></td>
-        <td>
-          <a href="http://www.qt.io/developers/">http://www.qt.io/developers/</a>
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>License</b></td>
-        <td>LGPL v2.1</td>
-      </tr>
-      <tr class="a">
-        <td><b>Description</b></td>
-        <td style="text-align:justify;">
-          Qt is a cross-platform application and UI framework for developers 
-          using C++ or QML, a CSS &amp; JavaScript like language. Qt Creator is the 
-          supporting Qt IDE.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Type</b></td>
-        <td style="text-align:justify;">
-          Required (only gui version)
-        </td>
-      </tr>
-      <tr class="a">
-        <td><b>Usage</b></td>
-        <td style="text-align:justify;">
-          In CCruncher, the Qt framework is used to create the gui version.
-        </td>
-      </tr>
-    </table>
-
-    <br/>
-    <table cellpadding="5" style="border:1px solid gray; width:100%">
-      <tr class="a">
-        <td style="width:75px;"><b>Name</b></td>
-        <td><b>Qwt</b></td>
-      </tr>
-      <tr class="b">
-        <td><b>Version</b></td>
-        <td>6.1.2</td>
-      </tr>
-      <tr class="a">
-        <td><b>URL</b></td>
-        <td>
-          <a href="http://qwt.sourceforge.net/">http://qwt.sourceforge.net/</a>
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>License</b></td>
-        <td>Qwt License, Version 1.0 [LGPL with exceptions]</td>
-      </tr>
-      <tr class="a">
-        <td><b>Description</b></td>
-        <td style="text-align:justify;">
-          The Qwt library contains GUI Components and utility classes which are 
-          primarily useful for programs with a technical background. Beside a 2D 
-          plot widget it provides scales, sliders, dials, compasses, thermometers, 
-          wheels and knobs to control or display values, arrays, or ranges of 
-          type double.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Type</b></td>
-        <td style="text-align:justify;">
-          Required (only gui version)
-        </td>
-      </tr>
-      <tr class="a">
-        <td><b>Usage</b></td>
-        <td style="text-align:justify;">
-          In CCruncher, the Qwt library is used to draw histograms and plots.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Notes</b></td>
-        <td style="text-align:justify;">
-          Version 6.0.1 not supported.
-        </td>
-      </tr>
-    </table>
-
-    <br/>
-    <table cellpadding="5" style="border:1px solid gray; width:100%">
-      <tr class="a">
-        <td style="width:75px;"><b>Name</b></td>
-        <td><b>C++ Todd's Date class</b></td>
-      </tr>
-      <tr class="b">
-        <td><b>Version</b></td>
-        <td>2.0</td>
-      </tr>
-      <tr class="a">
-        <td><b>URL</b></td>
-        <td>
-          <a href="http://technical.silverglass.org/code/date-class">
-            http://technical.silverglass.org/code/date-class
-          </a>
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>License</b></td>
-        <td>GNU GPL</td>
-      </tr>
-      <tr class="a">
-        <td><b>Description</b></td>
-        <td style="text-align:justify;">
-          A relatively basic class designed to represent dates accurately over a 
-          very wide range, running from 4713BC to 9999AD, and handling the various 
-          calendar corrections, primarily the Julian/Gregorian changeover. It 
-          handles various kinds of date arithmetic efficiently, but conversions to 
-          and from more conventional month/day/year representations are more costly.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Type</b></td>
-        <td style="text-align:justify;">
-          Required
-        </td>
-      </tr>
-      <tr class="a">
-        <td><b>Usage</b></td>
-        <td style="text-align:justify;">
-          CCruncher uses extensively this class.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Notes</b></td>
-        <td style="text-align:justify;">
-          This class has been slightly modified to meet the CCruncher's requeriments.
-        </td>
-      </tr>
-      <tr class="a">
-        <td><b>Files</b></td>
-        <td style="text-align:justify;">
-          <a href="http://www.ccruncher.net/svn/trunk/src/utils/Date.hpp">Date.hpp</a>, 
-          <a href="http://www.ccruncher.net/svn/trunk/src/utils/Date.cpp">Date.cpp</a>
-        </td>
-      </tr>
-    </table>
-
-    <br/>
-    <table cellpadding="5" style="border:1px solid gray; width:100%">
-      <tr class="a">
-        <td style="width:75px;"><b>Name</b></td>
-        <td><b>C++ XmlHighlighter class</b></td>
-      </tr>
-      <tr class="b">
-        <td><b>Version</b></td>
-        <td>1.0</td>
-      </tr>
-      <tr class="a">
-        <td><b>URL</b></td>
-        <td>
-          http://www.qtcentre.org/wiki/index.php?title=XmlHighlighter (broken link)
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>License</b></td>
-        <td>GNU GPL</td>
-      </tr>
-      <tr class="a">
-        <td><b>Description</b></td>
-        <td style="text-align:justify;">
-          XmlHighlighter extends QSyntaxHighlighter implementing a basic XML highlight. 
-          The QSyntaxHighlighter class allows you to define syntax highlighting rules, and 
-          in addition you can use the class to query a document's current formatting or 
-          user data.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Type</b></td>
-        <td style="text-align:justify;">
-          Required (only gui version) 
-        </td>
-      </tr>
-      <tr class="a">
-        <td><b>Usage</b></td>
-        <td style="text-align:justify;">
-          CCruncher uses this class to highlight the XML files in the text editor.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Notes</b></td>
-        <td style="text-align:justify;">
-          Solved some errors (eg. comments highlight) and changed some minors aspects
-          (regular expressions, code format).
-        </td>
-      </tr>
-      <tr class="a">
-        <td><b>Files</b></td>
-        <td style="text-align:justify;">
-          <a href="http://www.ccruncher.net/svn/trunk/src/gui/xmlhighlighter.hpp">xmlhighlighter.hpp</a>, 
-          <a href="http://www.ccruncher.net/svn/trunk/src/gui/xmlhighlighter.cpp">xmlhighlighter.cpp</a>
-        </td>
-      </tr>
-    </table>
-
-    <br/>
-    <table cellpadding="5" style="border:1px solid gray; width:100%">
-      <tr class="a">
-        <td style="width:75px;"><b>Name</b></td>
-        <td><b>C++ CodeEditor class</b></td>
-      </tr>
-      <tr class="b">
-        <td><b>Version</b></td>
-        <td>1.0</td>
-      </tr>
-      <tr class="a">
-        <td><b>URL</b></td>
-        <td>
-          <a href="http://doc.qt.io/qt-5/qtwidgets-widgets-codeeditor-example.html">http://doc.qt.io/qt-5/qtwidgets-widgets-codeeditor-example.html</a>
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>License</b></td>
-        <td>BSD license</td>
-      </tr>
-      <tr class="a">
-        <td><b>Description</b></td>
-        <td style="text-align:justify;">
-          CodeEditor is a simple editor that has line numbers and that highlights the 
-          current line.
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Type</b></td>
-        <td style="text-align:justify;">
-          Required (only gui version) 
-        </td>
-      </tr>
-      <tr class="a">
-        <td><b>Usage</b></td>
-        <td style="text-align:justify;">
-          CCruncher uses this class to edit the XML files.
-        </td>
-      </tr>
-    </table>
-
-    <br/>
-    <table cellpadding="5" style="border:1px solid gray; width:100%">
-      <tr class="a">
-        <td style="width:75px;"><b>Name</b></td>
-        <td><b>The Legrand Orange Book</b></td>
-      </tr>
-      <tr class="b">
-        <td><b>Version</b></td>
-        <td>1.0</td>
-      </tr>
-      <tr class="a">
-        <td><b>URL</b></td>
-        <td>
-          <a href="http://www.latextemplates.com/template/the-legrand-orange-book">http://www.latextemplates.com/template/the-legrand-orange-book</a>
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>License</b></td>
-        <td>CC BY-NC-SA 3.0</td>
-      </tr>
-      <tr class="a">
-        <td><b>Description</b></td>
-        <td style="text-align:justify;">
-          This latex book template features an elegant layout with a beautiful title 
-          page and chapter headings. The book itself is highly structured into chapters, 
-          sections and then subsections. 
-        </td>
-      </tr>
-      <tr class="b">
-        <td><b>Type</b></td>
-        <td style="text-align:justify;">
-          Required
-        </td>
-      </tr>
-      <tr class="a">
-        <td><b>Usage</b></td>
-        <td style="text-align:justify;">
-          CCruncher's technical document uses this latex template with some modifications.
-        </td>
-      </tr>
-    </table>
-    </div>
-
-      <div id="footer">
-        <span id="copyright" >
-          Copyright &copy; 2004-2016 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>
-        </span>
-        <span id="modified">
-          Last modified: 30-Oct-2016
-        </span>
-      </div>
-
+        <table class="table table-striped table-responsive">
+          <tr>
+            <th>Name</th>
+            <th>The Legrand Orange Book</th>
+          </tr>
+          <tr>
+            <th>Version</th>
+            <td class="c2">1.0</td>
+          </tr>
+          <tr>
+            <th>URL</th>
+            <td class="c2">
+              <a href="http://www.latextemplates.com/template/the-legrand-orange-book">http://www.latextemplates.com/template/the-legrand-orange-book</a>
+            </td>
+          </tr>
+          <tr>
+            <th>License</th>
+            <td class="c2">CC BY-NC-SA 3.0</td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td class="c2">
+              This latex book template features an elegant layout with a beautiful title 
+              page and chapter headings. The book itself is highly structured into chapters, 
+              sections and then subsections. 
+            </td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td class="c2">
+              Required
+            </td>
+          </tr>
+          <tr>
+            <th>Usage</th>
+            <td class="c2">
+              CCruncher's technical document uses this latex template with some modifications.
+            </td>
+          </tr>
+        </table>
+      </main>
+      <footer>
+        <div id="footer" class="card card-block">
+          <span id="copyright">
+            Copyright &copy; 2004-2016 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>&nbsp;&nbsp;
+          </span>
+          <span id="modified" class="float-sm-right">
+            Last modified: 04-Dec-2016
+          </span>
+        </div>
+      </footer>
     </div>
   </body>
 </html>
