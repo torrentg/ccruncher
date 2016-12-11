@@ -918,7 +918,8 @@ void ccruncher::XmlInputData::processTagObligor(const string &id, const char *sf
     throw Exception("obligor id '" + id + "' repeated");
   }
   else {
-    mIdObligors[id] = mIdObligors.size() + 1;
+    size_t numObligors = mIdObligors.size() + 1;
+    mIdObligors[id] = numObligors;
   }
 
   unsigned char ifactor = Input::indexOfFactor(factors, sfactor);
@@ -985,7 +986,8 @@ void ccruncher::XmlInputData::processTagAsset(const string &id, const Date &date
     throw Exception("asset id '" + id + "' repeated");
   }
   else {
-    mIdAssets[id] = mIdAssets.size() + 1;
+    size_t numAssets = mIdAssets.size() + 1;
+    mIdAssets[id] = numAssets;
   }
 
   if (lgd != nullptr) mAssetLGD = LGD(lgd);

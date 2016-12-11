@@ -413,8 +413,8 @@ void ccruncher_gui::AnalysisWidget::drawCurve()
   QVector<QPointF> values(numpoints);
   QVector<QwtIntervalSample> ranges(numpoints);
 
-  double confidence = ui->confidence->value()/100.0;
-  double quantile = fabs(gsl_cdf_ugaussian_Pinv((1.0-confidence)/2.0));
+  double confidencePct = ui->confidence->value()/100.0;
+  double quantile = fabs(gsl_cdf_ugaussian_Pinv((1.0-confidencePct)/2.0));
 
   for(int i=0; i<numpoints; i++)
   {

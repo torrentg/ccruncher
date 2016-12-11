@@ -167,7 +167,6 @@ Logger& ccruncher::Logger::operator<<(const char *s)
     static_cast<ostream&>(*this) << string(s, l);
     curcol += l;
     *this << '\n';
-    curcol = 0;
     s = ptr+1;
     ptr = strchr(s, '\n');
   }
