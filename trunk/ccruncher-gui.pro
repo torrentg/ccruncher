@@ -148,7 +148,7 @@ CONFIG(release, debug|release) {
   DEFINES += NDEBUG
 }
 
-QMAKE_CXXFLAGS += -pthread -std=c++11 -Wall -Wextra -Wpedantic
+QMAKE_CXXFLAGS += -pthread -std=c++11 -Wall -Wextra -Wshadow -Wpedantic
 QMAKE_CXXFLAGS_RELEASE -= -g
 
 UI_DIR = $$PWD/build
