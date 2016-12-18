@@ -20,16 +20,11 @@
 //
 //===========================================================================
 
-#include <cstring>
-#include <cstdio>
-#include <cctype>
-#include <sstream>
 #include <cassert>
 #include "utils/ExpatParser.hpp"
-#include "utils/ExpatUserData.hpp"
 #include "utils/Exception.hpp"
 
-#define BUFFER_SIZE 32*1024
+#define EXPAT_BUFFER_SIZE 16*1024
 
 // expat versions previous to 1.95.x don't have defined these macros
 #ifndef XML_STATUS_OK
@@ -40,9 +35,9 @@
 using namespace std;
 
 /**************************************************************************/
-ccruncher::ExpatParser::ExpatParser() : mUserData(4000), mChecksum(0UL)
+ccruncher::ExpatParser::ExpatParser() : mXmlParser(nullptr), mChecksum(0UL), handlers(nullptr)
 {
-  mXmlParser = nullptr;
+  // nothing to do
 }
 
 /**************************************************************************/
@@ -70,7 +65,7 @@ void ccruncher::ExpatParser::reset()
   assert(mXmlParser != nullptr);
 
   // setting userData
-  XML_SetUserData(mXmlParser, &mUserData);
+  XML_SetUserData(mXmlParser, this);
 
   // setting element handlers
   XML_SetElementHandler(mXmlParser, startElement, endElement);
@@ -83,31 +78,22 @@ void ccruncher::ExpatParser::reset()
 }
 
 /**************************************************************************//**
- * @details Apply defines to attributes values and calls the method
+ * @details Apply macros to attributes values and calls the method
  *          ExpatHandlers#epstart of the object that is in the top of the
  *          stack.
- * @param[in] eud ExpatUserData object.
+ * @param[in] eud ExpatParser pointer.
  * @param[in] tag Element's name.
  * @param[in] atts Element's attributes.
  */
 void ccruncher::ExpatParser::startElement(void *eud, const char *tag, const char **atts)
 {
-  // setting current tag
-  ExpatUserData *ud = static_cast<ExpatUserData *>(eud);
-  ud->setCurrentTag(tag);
-
-  // replacing defines
-  if (ud->defines.size() > 0)
-  {
-    for(int i=0; atts[i]; i+=2)
-    {
-      atts[i+1] = ud->applyDefines(atts[i+1]);
-    }
-  }
+  // retrieving current parser
+  assert(eud != nullptr);
+  ExpatParser *expatParser = static_cast<ExpatParser *>(eud);
 
   // calling current handler
-  ExpatHandlers *eh = ud->getCurrentHandlers();
-  eh->epstart(*ud, tag, atts);
+  assert(expatParser->handlers != nullptr);
+  expatParser->handlers->epstart(tag, atts);
 }
 
 /**************************************************************************//**
@@ -115,30 +101,18 @@ void ccruncher::ExpatParser::startElement(void *eud, const char *tag, const char
  *          the top of the stack. If the ending element match the current
  *          ExpatHandler element (top in stack), then removes this object
  *          from stack.
- * @param[in] eud ExpatUserData object.
+ * @param[in] eud ExpatParser pointer.
  * @param[in] tag Element's name.
  */
 void ccruncher::ExpatParser::endElement(void *eud, const char *tag)
 {
-  // retrieving current handler
-  ExpatUserData *ud = static_cast<ExpatUserData *>(eud);
-  ExpatHandlers *eh = ud->getCurrentHandlers();
-
-  // setting current tag
-  ud->setCurrentTag(nullptr);
+  // retrieving current parser
+  assert(eud != nullptr);
+  ExpatParser *expatParser = static_cast<ExpatParser *>(eud);
 
   // calling current handler
-  eh->epend(*ud, tag);
-
-  // if current handler = name then set new handler
-  if (strcmp(tag,ud->getCurrentName()) == 0)
-  {
-    // restore parent handlers
-    ud->removeCurrentHandlers();
-    eh = ud->getCurrentHandlers();
-    // notify that children finished
-    eh->epend(*ud, tag);
-  }
+  assert(expatParser->handlers != nullptr);
+  expatParser->handlers->epend(tag);
 }
 
 /**************************************************************************//**
@@ -150,9 +124,13 @@ void ccruncher::ExpatParser::endElement(void *eud, const char *tag)
  */
 void ccruncher::ExpatParser::characterData(void *eud, const char *cdata, int len)
 {
-  ExpatUserData *ud = static_cast<ExpatUserData *>(eud);
-  ExpatHandlers *eh = ud->getCurrentHandlers();
-  eh->epdata(*ud, ud->getCurrentTag(), cdata, len);
+  // retrieving current parser
+  assert(eud != nullptr);
+  ExpatParser *expatParser = static_cast<ExpatParser *>(eud);
+
+  // calling current handler
+  assert(expatParser->handlers != nullptr);
+  expatParser->handlers->epdata(cdata, len);
 }
 
 /**************************************************************************//**
@@ -166,8 +144,10 @@ void ccruncher::ExpatParser::characterData(void *eud, const char *cdata, int len
  */
 void ccruncher::ExpatParser::parse(const std::string &xmlcontent, ExpatHandlers *eh, bool *stop)
 {
-  reset();
-  mUserData.setCurrentHandlers("", eh);
+  if (eh == nullptr) {
+    throw Exception("invalid xml handlers");
+  }
+  handlers = eh;
   parse(nullptr, const_cast<char*>(xmlcontent.c_str()), xmlcontent.length(), stop);
 }
 
@@ -182,11 +162,12 @@ void ccruncher::ExpatParser::parse(const std::string &xmlcontent, ExpatHandlers 
  */
 void ccruncher::ExpatParser::parse(gzFile file, ExpatHandlers *eh, bool *stop)
 {
-  reset();
-  mUserData.setCurrentHandlers("", eh);
-  char buf[BUFFER_SIZE];
-  buf[0] = 0;
-  parse(file, buf, BUFFER_SIZE, stop);
+  if (eh == nullptr) {
+    throw Exception("invalid xml handlers");
+  }
+  handlers = eh;
+  char buf[EXPAT_BUFFER_SIZE] = {0};
+  parse(file, buf, EXPAT_BUFFER_SIZE, stop);
 }
 
 /**************************************************************************//**
@@ -206,7 +187,9 @@ void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, b
   try
   {
     int len=0;
-    int done;
+    int done=0;
+
+    reset();
 
     do
     {
@@ -255,7 +238,7 @@ void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, b
 }
 
 /**************************************************************************//**
- * @return The map of defines (name-value).
+ * @return String message containing the error location.
  */
 string ccruncher::ExpatParser::getErrorLocation() const
 {
@@ -264,24 +247,7 @@ string ccruncher::ExpatParser::getErrorLocation() const
 }
 
 /**************************************************************************//**
- * @return The map of defines (name-value).
- */
-const map<string,string>& ccruncher::ExpatParser::getDefines() const
-{
-  return mUserData.defines;
-}
-
-/**************************************************************************//**
- * @param[in] m Map of defines (name-value).
- */
-void ccruncher::ExpatParser::setDefines(const std::map<std::string,std::string> &m)
-{
-  mUserData.defines = m;
-}
-
-/**************************************************************************//**
- * @return The checksum (adler32) of the XML content (previous to defines
- *         replacement).
+ * @return The checksum (adler32) of the XML content.
  */
 unsigned long ccruncher::ExpatParser::getChecksum() const
 {

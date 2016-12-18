@@ -32,6 +32,7 @@
 #include <mutex>
 #include "kernel/InputData.hpp"
 #include "utils/ExpatHandlers.hpp"
+#include "utils/ExpatParser.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Logger.hpp"
 
@@ -101,7 +102,7 @@ class XmlInputData : public InputData, public ExpatHandlers
   private:
 
     //! Read content from a file
-    void read(FILE *f, const std::map<std::string,std::string> &m);
+    void read(FILE *f);
     //! Push a tag to stack
     void pushTag(XmlTag tag);
     //! Pop a tag from stack
@@ -110,12 +111,12 @@ class XmlInputData : public InputData, public ExpatHandlers
     bool hasTag(XmlTag tag);
     //! Returns the included file name
     std::string getIncludedFileName(const std::string &name);
-    //! Check define
-    void checkDefine(const std::string &key, const std::string &value) const;
+    //! Check macro
+    void checkMacro(const std::string &key, const std::string &value) const;
     //! Parse portfolio
-    void parseIncludedPortfolio(const std::string &include, std::map<std::string,std::string> &defines);
+    void parseIncludedPortfolio(const std::string &include);
     //! Parse main input file
-    void parse(gzFile file, const std::map<std::string,std::string> &m);
+    void parse(gzFile file);
     //! Validate simulation data
     void validate();
     //! Prepare data to be used
@@ -126,18 +127,18 @@ class XmlInputData : public InputData, public ExpatHandlers
     unsigned short getNumEnabledSegmentations() const;
 
     //! process tags of level 0
-    void epstart0(ExpatUserData &eu, const char *tag, const char **attributes);
+    void epstart0(const char *tag, const char **attributes);
     //! process tags of level 1
-    void epstart1(ExpatUserData &eu, const char *tag, const char **attributes);
+    void epstart1(const char *tag, const char **attributes);
     //! process tags of level 2
-    void epstart2(ExpatUserData &eu, const char *tag, const char **attributes);
+    void epstart2(const char *tag, const char **attributes);
     //! process tags of level 3
-    void epstart3(ExpatUserData &eu, const char *tag, const char **attributes);
+    void epstart3(const char *tag, const char **attributes);
     //! process tags of level 4 or bigger
-    void epstart4(ExpatUserData &eu, const char *tag, const char **attributes);
+    void epstart4(const char *tag, const char **attributes);
 
     //! Process tag define
-    void processTagDefine(std::map<std::string, std::string> &defines, const std::string &key, const std::string &value);
+    void processTagDefine(const std::string &key, const std::string &value);
     //! Process tag interest
     void processTagInterest(const std::string &type, const std::string &spline);
     //! Process tag interest
@@ -166,11 +167,11 @@ class XmlInputData : public InputData, public ExpatHandlers
   protected:
 
     //! Directives to process an xml start tag element
-    virtual void epstart(ExpatUserData &, const char *, const char **) override;
+    virtual void epstart(const char *, const char **) override;
     //! Directives to process an xml end tag element
-    virtual void epend(ExpatUserData &, const char *) override;
+    virtual void epend(const char *) override;
     //! Directives to process xml data element
-    virtual void epdata(ExpatUserData &, const char *, const char *, int) override;
+    virtual void epdata(const char *, int) override;
 
   public:
 

@@ -20,14 +20,14 @@
 //
 //===========================================================================
 
-#ifndef _ExpatUserDataTest_
-#define _ExpatUserDataTest_
+#ifndef _MacrosBufferTest_
+#define _MacrosBufferTest_
 
 #include "utils/MiniCppUnit.hxx"
 
 namespace ccruncher_test {
 
-class ExpatUserDataTest : public TestFixture<ExpatUserDataTest>
+class MacrosBufferTest : public TestFixture<MacrosBufferTest>
 {
 
   private:
@@ -37,14 +37,14 @@ class ExpatUserDataTest : public TestFixture<ExpatUserDataTest>
 
   public:
 
-    TEST_FIXTURE(ExpatUserDataTest)
+    TEST_FIXTURE(MacrosBufferTest)
     {
       TEST_CASE(test1);
     }
 
 };
 
-REGISTER_FIXTURE(ExpatUserDataTest)
+REGISTER_FIXTURE(MacrosBufferTest)
 
 } // namespace
 

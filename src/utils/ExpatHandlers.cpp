@@ -22,9 +22,9 @@
 
 #include <cstdio>
 #include <cctype>
-#include <cassert>
+#include <cstring>
 #include <algorithm>
-#include <expat.h>
+#include <cassert>
 #include "utils/ExpatHandlers.hpp"
 #include "utils/Parser.hpp"
 
@@ -32,74 +32,44 @@ using namespace std;
 using namespace ccruncher;
 
 /**************************************************************************//**
- * @details Removes current handlers from handlers' stack. Handlers previous
- *          to current handlers takes the XML parser control.
- *          Method name prefix 'ep' comes from Expat Parser.
- * @see ExpatUserData
- * @param[in] eud Parser data shared by handlers.
+ * @details Compares 2 strings taking into accounts NULL values.
+ *          This method is widely used to check parameter names.
+ * @see http://www.cplusplus.com/reference/cstring/strcmp/
+ * @return true=both strings are equal, false=otherwise.
  */
-void ccruncher::ExpatHandlers::epback(ExpatUserData &eud)
+bool ccruncher::ExpatHandlers::isEqual(const char *pchr, const char *str) const
 {
-  assert(eud.getCurrentHandlers() == this);
-
-  // removing this handlers from stack
-  eud.removeCurrentHandlers();
-}
-
-/**************************************************************************//**
- * @details Push new handlers to the handlers' stack. Current handlers are
- *          postponed until the task completion of the new handlers. This
- *          method is called when a new element appears and we have a class
- *          derived from ExpatHandlers than can parse this element. New
- *          handlers are automatically called to process the new element.
- *          Method name prefix 'ep' comes from Expat Parser.
- * @see ExpatUserData
- * @param[in] eud Parser data shared by handlers.
- * @param[in] eh Object inherited from ExpatHandlers.
- * @param[in] tag XML element name related to the new handlers.
- * @param[in] atts Attributes to pass to process the new element.
- */
-void ccruncher::ExpatHandlers::eppush(ExpatUserData &eud,
-    ExpatHandlers *eh, const char *tag, const char **atts)
-{
-  assert(eud.getCurrentHandlers() == this);
-
-  // adding new handlers to stack
-  eud.setCurrentHandlers(tag, eh);
-
-  // calling new handler
-  eh->epstart(eud, tag, atts);
+  if (pchr != nullptr && str != nullptr) {
+    return (std::strcmp(str, pchr) == 0);
+  }
+  else {
+    return false;
+  }
 }
 
 /**************************************************************************//**
  * @details Process data into an element. Override this method to catch
  *          element's data info. Default action only allows spaces.
  * @see     XmlInputData#epdata as example.
- * @param[in] eud Parser data shared by handlers.
- * @param[in] tag Element's name.
  * @param[in] cdata Fragment of data.
  * @param[in] len Length of the current data fragment.
  */
-void ccruncher::ExpatHandlers::epdata(ExpatUserData &/*eud*/, const char */*tag*/,
-    const char *cdata, int len)
+void ccruncher::ExpatHandlers::epdata(const char *cdata, int len)
 {
-  // default simple rule: character data is not allowed
+  // character data is not allowed
   if (!all_of(cdata, cdata+len, static_cast<int(*)(int)>(isspace))) {
     throw Exception("unexpected data parsing xml: '" + string(cdata, len) + "'");
   }
 }
 
 /**************************************************************************//**
- * @details This method has an unused param. It is required to maintains a
- *          common interface with the other ep* methods.
+ * @details Throws an exception that will be catched by ExpatParser::parse().
  *          Method name prefix 'ep' comes from Expat Parser.
  */
-void ccruncher::ExpatHandlers::epstop(ExpatUserData &)
+void ccruncher::ExpatHandlers::epstop()
 {
-  // throwing an exception that will be catched by ExpatParser::parse()
   throw int(999);
 }
-
 
 /**************************************************************************//**
  * @details Searches the attribute name in the attributes list and returns
@@ -110,14 +80,14 @@ void ccruncher::ExpatHandlers::epstop(ExpatUserData &)
  * @return Attribute value as char array.
  * @throw Exception If attribute is not found in attributes list.
  */
-const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const char *attname) const
+const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const char *attname)
 {
   assert(atts != nullptr);
   assert(attname != nullptr);
 
   for(int i=0; atts[i]; i+=2) {
-    if (strcmp(attname,atts[i]) == 0) {
-      return atts[i+1];
+    if (strcmp(attname, atts[i]) == 0) {
+      return macros.apply(atts[i+1]);
     }
   }
 
@@ -134,14 +104,14 @@ const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, cons
  * @return If attribute exist returns attribute value as char array, otherwise
  *         returns default value.
  */
-const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const char *attname, const char *defval) const
+const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, const char *attname, const char *defval)
 {
   assert(atts != nullptr);
   assert(attname != nullptr);
 
   for(int i=0; atts[i]; i+=2) {
-    if (strcmp(attname,atts[i]) == 0) {
-      return atts[i+1];
+    if (strcmp(attname, atts[i]) == 0) {
+      return macros.apply(atts[i+1]);
     }
   }
 
@@ -157,7 +127,7 @@ const char * ccruncher::ExpatHandlers::getAttributeValue(const char **atts, cons
  * @return Attribute value as string.
  * @throw Exception If attribute is not found in attributes list.
  */
-string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const char *attname) const
+string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const char *attname)
 {
   const char *val = getAttributeValue(atts, attname);
   return string(val);
@@ -173,7 +143,7 @@ string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const cha
  * @return If attribute exist returns attribute value as string, otherwise
  *         returns default value.
  */
-string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const char *attname, const std::string &defval) const
+string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const char *attname, const std::string &defval)
 {
   const char *val = getAttributeValue(atts, attname, nullptr);
 
@@ -195,7 +165,7 @@ string ccruncher::ExpatHandlers::getStringAttribute(const char **atts, const cha
  * @throw Exception If attribute is not found in attributes list.
  * @throw Exception If attribute value is not an int (see Parser#intValue).
  */
-int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const char *attname) const
+int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const char *attname)
 {
   const char *val = getAttributeValue(atts, attname);
   return Parser::intValue(val);
@@ -212,7 +182,7 @@ int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const char *att
  *         returns default value.
  * @throw Exception If attribute value is not an int (see Parser#intValue).
  */
-int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const char *attname, int defval) const
+int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const char *attname, int defval)
 {
   const char *val = getAttributeValue(atts, attname, nullptr);
 
@@ -234,7 +204,7 @@ int ccruncher::ExpatHandlers::getIntAttribute(const char **atts, const char *att
  * @throw Exception If attribute is not found in attributes list.
  * @throw Exception If attribute value is not a long (see Parser#longValue).
  */
-long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const char *attname) const
+long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const char *attname)
 {
   const char *val = getAttributeValue(atts, attname);
   return Parser::longValue(val);
@@ -251,7 +221,7 @@ long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const char *a
  *         returns default value.
  * @throw Exception If attribute value is not a long (see Parser#longValue).
  */
-long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const char *attname, long defval) const
+long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const char *attname, long defval)
 {
   const char *val = getAttributeValue(atts, attname, nullptr);
 
@@ -273,7 +243,7 @@ long ccruncher::ExpatHandlers::getLongAttribute(const char **atts, const char *a
  * @throw Exception If attribute is not found in attributes list.
  * @throw Exception If attribute value is not a double (see Parser#doubleValue).
  */
-double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const char *attname) const
+double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const char *attname)
 {
   const char *val = getAttributeValue(atts, attname);
   return Parser::doubleValue(val);
@@ -290,7 +260,7 @@ double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const cha
  *         returns default value.
  * @throw Exception If attribute value is not a double (see Parser#doubleValue).
  */
-double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const char *attname, double defval) const
+double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const char *attname, double defval)
 {
   const char *val = getAttributeValue(atts, attname, nullptr);
 
@@ -312,7 +282,7 @@ double ccruncher::ExpatHandlers::getDoubleAttribute(const char **atts, const cha
  * @throw Exception If attribute is not found in attributes list.
  * @throw Exception If attribute value is not a date (see Parser#dateValue).
  */
-Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const char *attname) const
+Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const char *attname)
 {
   const char *val = getAttributeValue(atts, attname);
   return Parser::dateValue(val);
@@ -329,7 +299,7 @@ Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const char *a
  *         returns default value.
  * @throw Exception If attribute value is not a date (see Parser#dateValue).
  */
-Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const char *attname, const Date &defval) const
+Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const char *attname, const Date &defval)
 {
   const char *val = getAttributeValue(atts, attname, nullptr);
 
@@ -351,7 +321,7 @@ Date ccruncher::ExpatHandlers::getDateAttribute(const char **atts, const char *a
  * @throw Exception If attribute is not found in attributes list.
  * @throw Exception If attribute value is not a boolean (see Parser#boolValue).
  */
-bool ccruncher::ExpatHandlers::getBooleanAttribute(const char **atts, const char *attname) const
+bool ccruncher::ExpatHandlers::getBooleanAttribute(const char **atts, const char *attname)
 {
   const char *val = getAttributeValue(atts, attname);
   return Parser::boolValue(val);
@@ -368,7 +338,7 @@ bool ccruncher::ExpatHandlers::getBooleanAttribute(const char **atts, const char
  *         returns default value.
  * @throw Exception If attribute value is not a boolean (see Parser#boolValue).
  */
-bool ccruncher::ExpatHandlers::getBooleanAttribute(const char **atts, const char *attname, bool defval) const
+bool ccruncher::ExpatHandlers::getBooleanAttribute(const char **atts, const char *attname, bool defval)
 {
   const char *val = getAttributeValue(atts, attname, nullptr);
 

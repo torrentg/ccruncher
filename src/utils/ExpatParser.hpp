@@ -23,6 +23,7 @@
 #ifndef _ExpatParser_
 #define _ExpatParser_
 
+#include <string>
 #include <expat.h>
 #include <zlib.h>
 #include "utils/ExpatHandlers.hpp"
@@ -35,10 +36,9 @@ namespace ccruncher {
  * @details This class parses an XML file using the Expat library providing
  *          the following features:
  *            - input file can be gziped
- *            - support defines
- *            - stack of handlers
+ *            - parse using handler
  *            - file checksum (adler32)
- *            - stop parser by a variable.
+ *            - stop parser on demand
  *
  * @see     http://expat.sourceforge.net/
  * @see     http://www.xml.com/pub/a/1999/09/expat/index.html
@@ -50,10 +50,10 @@ class ExpatParser
 
     //! Expat parser object
     XML_Parser mXmlParser;
-    //! Expat user data
-    ExpatUserData mUserData;
     //! File checksum value
     unsigned long mChecksum;
+    //! Element handlers
+    ExpatHandlers *handlers;
 
   private:
 
@@ -81,14 +81,8 @@ class ExpatParser
     void parse(const std::string &xmlcontent, ExpatHandlers *eh, bool *stop=nullptr);
     //! Parse an xml file
     void parse(gzFile file, ExpatHandlers *eh, bool *stop=nullptr);
-    //! Returns defines
-    const std::map<std::string,std::string>& getDefines() const;
-    //! Set defines
-    void setDefines(const std::map<std::string,std::string>&);
     //! returns checksum value
     unsigned long getChecksum() const;
-    //! returns user data
-    ExpatUserData& getUserData() { return mUserData; }
 
 };
 

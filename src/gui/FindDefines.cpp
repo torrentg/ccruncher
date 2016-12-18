@@ -48,12 +48,11 @@ ccruncher_gui::FindDefines::FindDefines(const std::string &filename)
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] eu Xml parsing data.
  * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher_gui::FindDefines::epstart(ExpatUserData &eu, const char *tag, const char **attributes)
+void ccruncher_gui::FindDefines::epstart(const char *tag, const char **attributes)
 {
   if (isEqual(tag,"ccruncher")) {
     // nothing to do
@@ -71,20 +70,20 @@ void ccruncher_gui::FindDefines::epstart(ExpatUserData &eu, const char *tag, con
     string key = getStringAttribute(attributes, "name", "");
     string value = getStringAttribute(attributes, "value", "");
     defines[key] = value;
-    if (eu.defines.find(key) == eu.defines.end()) {
-      eu.defines[key] = value;
+    if (macros.values.find(key) == macros.values.end()) {
+      macros.values[key] = value;
     }
   }
   else {
     // stopping parser
-    epstop(eu);
+    epstop();
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
  */
-void ccruncher_gui::FindDefines::epend(ExpatUserData &, const char *)
+void ccruncher_gui::FindDefines::epend(const char *)
 {
   // nothing to do
 }
@@ -92,7 +91,7 @@ void ccruncher_gui::FindDefines::epend(ExpatUserData &, const char *)
 /**************************************************************************//**
  * @see ExpatHandlers::epdata
  */
-void ccruncher_gui::FindDefines::epdata(ExpatUserData &, const char *, const char *, int)
+void ccruncher_gui::FindDefines::epdata(const char *, int)
 {
   // nothing to do
 }

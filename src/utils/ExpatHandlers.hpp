@@ -24,15 +24,11 @@
 #define _ExpatHandlers_
 
 #include <string>
-#include <cstring>
-#include "utils/ExpatUserData.hpp"
+#include "utils/MacrosBuffer.hpp"
 #include "utils/Exception.hpp"
 #include "utils/Date.hpp"
 
 namespace ccruncher {
-
-// forward declaration
-class ExpatUserData;
 
 /**************************************************************************//**
  * @brief   Base class providing methods to interact with the XML parser.
@@ -55,53 +51,54 @@ class ExpatHandlers
 
   protected:
 
-    //! Removes current handlers from stack
-    void epback(ExpatUserData &eud);
-    //! Push new handlers to stack
-    void eppush(ExpatUserData &eud, ExpatHandlers *eh, const char *name, const char **atts);
+    //! Macros buffer
+    MacrosBuffer macros;
+
+  protected:
+
     //! Stops the parser
-    void epstop(ExpatUserData &eud);
+    void epstop();
     //! String comparison
     bool isEqual(const char *, const char *) const;
     //! Returns the number of attributes
     int getNumAttributes(const char **atts) const;
     //! Returns the value of the given attribute
-    const char * getAttributeValue(const char **atts, const char *attname) const;
+    const char * getAttributeValue(const char **atts, const char *attname);
     //! Returns the value of the given attribute
-    const char * getAttributeValue(const char **atts, const char *attname, const char *defval) const;
+    const char * getAttributeValue(const char **atts, const char *attname, const char *defval);
     //! Returns attribute value as string
-    std::string getStringAttribute(const char **atts, const char *attname) const;
+    std::string getStringAttribute(const char **atts, const char *attname);
     //! Returns attribute value as string
-    std::string getStringAttribute(const char **atts, const char *attname, const std::string &defval) const;
+    std::string getStringAttribute(const char **atts, const char *attname, const std::string &defval);
     //! Returns attribute value as int
-    int getIntAttribute(const char **atts, const char *attname) const;
+    int getIntAttribute(const char **atts, const char *attname);
     //! Returns attribute value as int
-    int getIntAttribute(const char **atts, const char *attname, int defval) const;
+    int getIntAttribute(const char **atts, const char *attname, int defval);
     //! Returns attribute value as long
-    long getLongAttribute(const char **atts, const char *attname) const;
+    long getLongAttribute(const char **atts, const char *attname);
     //! Returns attribute value as long
-    long getLongAttribute(const char **atts, const char *attname, long defval) const;
+    long getLongAttribute(const char **atts, const char *attname, long defval);
     //! Returns attribute value as double
-    double getDoubleAttribute(const char **atts, const char *attname) const;
+    double getDoubleAttribute(const char **atts, const char *attname);
     //! Returns attribute value as double
-    double getDoubleAttribute(const char **atts, const char *attname, double defval) const;
+    double getDoubleAttribute(const char **atts, const char *attname, double defval);
     //! Returns attribute value as date
-    Date getDateAttribute(const char **atts, const char *attname) const;
+    Date getDateAttribute(const char **atts, const char *attname);
     //! Returns attribute value as date
-    Date getDateAttribute(const char **atts, const char *attname, const Date &defval) const;
+    Date getDateAttribute(const char **atts, const char *attname, const Date &defval);
     //! Returns attribute value as boolean
-    bool getBooleanAttribute(const char **atts, const char *attname) const;
+    bool getBooleanAttribute(const char **atts, const char *attname);
     //! Returns attribute value as boolean
-    bool getBooleanAttribute(const char **atts, const char *attname, bool defval) const;
+    bool getBooleanAttribute(const char **atts, const char *attname, bool defval);
 
   protected:
   
     //! Handler for open tag
-    virtual void epstart(ExpatUserData &eud, const char *tag, const char **atts) = 0;
+    virtual void epstart(const char *tag, const char **atts) = 0;
     //! Handler for closed tag
-    virtual void epend(ExpatUserData &/*eud*/, const char */*name*/) {}
+    virtual void epend(const char *) {}
     //! Handler for data
-    virtual void epdata(ExpatUserData &eud, const char *tag, const char *cdata, int len);
+    virtual void epdata(const char *cdata, int len);
     //! Constructor
     ExpatHandlers() {}
     //! Destructor
@@ -113,23 +110,6 @@ class ExpatHandlers
     friend class ExpatParser;
 
 };
-
-/**************************************************************************//**
- * @details Compares 2 strings taking into accounts NULL values.
- *          This method is widely used to check parameter names.
- * @see http://www.cplusplus.com/reference/cstring/strcmp/
- * @return true=both strings are equal, false=otherwise.
- */
- //TODO: check if 'inline' impacts performance
-inline bool ccruncher::ExpatHandlers::isEqual(const char *pchr, const char *str) const
-{
-  if (pchr != nullptr && str != nullptr) {
-    return (std::strcmp(str, pchr) == 0);
-  }
-  else {
-    return false;
-  }
-}
 
 } // namespace
 

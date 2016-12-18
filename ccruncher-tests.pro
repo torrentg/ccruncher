@@ -43,7 +43,7 @@ HEADERS += \
     src/utils/Thread.hpp \
     src/utils/Parser.hpp \
     src/utils/Logger.hpp \
-    src/utils/ExpatUserData.hpp \
+    src/utils/MacrosBuffer.hpp \
     src/utils/ExpatParser.hpp \
     src/utils/ExpatHandlers.hpp \
     src/utils/Exception.hpp \
@@ -52,7 +52,7 @@ HEADERS += \
     src/utils/config.h \
     src/utils/UtilsTest.hpp \
     src/utils/ParserTest.hpp \
-    src/utils/ExpatUserDataTest.hpp \
+    src/utils/MacrosBufferTest.hpp \
     src/utils/ExceptionTest.hpp \
     src/utils/DateTest.hpp \
     src/utils/ExprTest.hpp \
@@ -98,7 +98,7 @@ SOURCES += \
     src/utils/Thread.cpp \
     src/utils/Parser.cpp \
     src/utils/Logger.cpp \
-    src/utils/ExpatUserData.cpp \
+    src/utils/MacrosBuffer.cpp \
     src/utils/ExpatParser.cpp \
     src/utils/ExpatHandlers.cpp \
     src/utils/Exception.cpp \
@@ -106,7 +106,7 @@ SOURCES += \
     src/utils/Expr.cpp \
     src/utils/UtilsTest.cpp \
     src/utils/ParserTest.cpp \
-    src/utils/ExpatUserDataTest.cpp \
+    src/utils/MacrosBufferTest.cpp \
     src/utils/ExceptionTest.cpp \
     src/utils/DateTest.cpp \
     src/utils/ExprTest.cpp \
