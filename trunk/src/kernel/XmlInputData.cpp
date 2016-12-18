@@ -20,6 +20,7 @@
 //
 //===========================================================================
 
+#include <cstring>
 #include <cerrno>
 #include <cstdio>
 #include <chrono>
@@ -28,7 +29,6 @@
 #include <cassert>
 #include "kernel/XmlInputData.hpp"
 #include "utils/Utils.hpp"
-#include "utils/ExpatParser.hpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -58,10 +58,9 @@ ccruncher::XmlInputData::~XmlInputData()
 
 /**************************************************************************//**
  * @param[in] f File File object.
- * @param[in] m List of defines defined by user (eg. using cmd or gui).
  * @throw Exception Error parsing input file.
  */
-void ccruncher::XmlInputData::read(FILE *f, const std::map<std::string,std::string> &m)
+void ccruncher::XmlInputData::read(FILE *f)
 {
   assert(f != nullptr);
   gzFile gzfile = nullptr;
@@ -80,7 +79,7 @@ void ccruncher::XmlInputData::read(FILE *f, const std::map<std::string,std::stri
 
     // big buffer to increase the speed of decompression
     gzbuffer(gzfile, BUFFER_SIZE);
-    parse(gzfile, m);
+    parse(gzfile);
 
     mMutex.lock();
     curfile = nullptr;
@@ -101,7 +100,7 @@ void ccruncher::XmlInputData::read(FILE *f, const std::map<std::string,std::stri
 
 /**************************************************************************//**
  * @param[in] f File name (including path).
- * @param[in] m List of defines defined by user (eg. using cmd or gui).
+ * @param[in] m List of macros defined by user.
  * @param[in] s Variable to stop parser (can be null).
  * @param[in] p Parse whole input file (true), or exclude portfolio (false)
  * @throw Exception Error parsing input file.
@@ -116,11 +115,12 @@ void ccruncher::XmlInputData::readFile(const std::string &f, const std::map<std:
     throw Exception(strerror(errno));
   }
   cursize = Utils::filesize(filename);
-  read(file, m);
+  macros.values = m;
+  read(file);
 }
 
 /**************************************************************************//**
- * @param[in] m List of defines defined by user (eg. using cmd or gui).
+ * @param[in] m List of macros defined by user.
  * @param[in] s Variable to stop parser (can be null).
  * @param[in] p Parse whole input file (true), or exclude portfolio (false)
  * @throw Exception Error parsing input file.
@@ -131,13 +131,14 @@ void ccruncher::XmlInputData::readStdin(const std::map<std::string,std::string> 
   stop = s;
   parse_portfolio = p;
   cursize = 0;
-  read(stdin, m);
+  macros.values = m;
+  read(stdin);
 }
 
 /**************************************************************************//**
  * @details Use only for debug or tests.
  * @param[in] str String containing the xml.
- * @param[in] m List of defines defined by user (eg. using cmd or gui).
+ * @param[in] m List of macros defined by user.
  * @param[in] s Variable to stop parser (can be null).
  * @param[in] p Parse whole input file (true), or exclude portfolio (false)
  * @throw Exception Error parsing input file.
@@ -148,25 +149,22 @@ void ccruncher::XmlInputData::readString(const string &str, const std::map<std::
   stop = s;
   parse_portfolio = p;
   cursize = str.size();
+  macros.values = m;
 
-  try
-  {
+  try {
     ExpatParser parser;
-    parser.setDefines(m);
     parser.parse(str, this, s);
   }
-  catch(std::exception &e)
-  {
+  catch(std::exception &e) {
     throw Exception(e, "error parsing xml input");
   }
 }
 
 /**************************************************************************//**
  * @param[in] file File to parse.
- * @param[in] m List of defines defined by user (eg. using cmd or gui).
  * @throw Exception Error parsing input file.
  */
-void ccruncher::XmlInputData::parse(gzFile file, const map<string,string> &m)
+void ccruncher::XmlInputData::parse(gzFile file)
 {
   try
   {
@@ -185,20 +183,18 @@ void ccruncher::XmlInputData::parse(gzFile file, const map<string,string> &m)
       logger << "file size" << split << Utils::bytesToString(cursize) << endl;
     }
 
-    // trace defines
-    for(auto &it : m) {
-      checkDefine(it.first, it.second);
-      logger << "define (user defined)" << split << it.first+"="+it.second << endl;
+    // trace user-defined macros
+    for(auto &kv : macros.values) {
+      checkMacro(kv.first, kv.second);
+      logger << "macro (user defined)" << split << kv.first+"="+kv.second << endl;
     }
 
     // parsing
     auto t1 = steady_clock::now();
     ExpatParser parser;
-    parser.setDefines(m);
     parser.parse(file, this, stop);
 
-    if (stop == nullptr || !(*stop))
-    {
+    if (stop == nullptr || !(*stop)) {
       // trace info
       auto t2 = steady_clock::now();
       long millis = duration_cast<milliseconds>(t2-t1).count();
@@ -216,12 +212,11 @@ void ccruncher::XmlInputData::parse(gzFile file, const map<string,string> &m)
 
 /**************************************************************************//**
  * @see ExpatHandlers::epstart
- * @param[in] eu Xml parsing data.
  * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::XmlInputData::epstart(ExpatUserData &eu, const char *tag, const char **attributes)
+void ccruncher::XmlInputData::epstart(const char *tag, const char **attributes)
 {
   assert(tag != nullptr);
   assert(attributes != nullptr);
@@ -229,29 +224,28 @@ void ccruncher::XmlInputData::epstart(ExpatUserData &eu, const char *tag, const 
   switch(currentTags.size())
   {
     case 0:
-      epstart0(eu, tag, attributes);
+      epstart0(tag, attributes);
       break;
     case 1:
-      epstart1(eu, tag, attributes);
+      epstart1(tag, attributes);
       break;
     case 2:
-      epstart2(eu, tag, attributes);
+      epstart2(tag, attributes);
       break;
     case 3:
-      epstart3(eu, tag, attributes);
+      epstart3(tag, attributes);
       break;
     default:
-      epstart4(eu, tag, attributes);
+      epstart4(tag, attributes);
   }
 }
 
 /**************************************************************************//**
- * @param[in] eu Xml parsing data.
  * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::XmlInputData::epstart0(ExpatUserData &, const char *tag, const char **)
+void ccruncher::XmlInputData::epstart0(const char *tag, const char **)
 {
   if (isEqual(tag,"ccruncher")) {
     pushTag(XmlTag::CCRUNCHER);
@@ -262,12 +256,11 @@ void ccruncher::XmlInputData::epstart0(ExpatUserData &, const char *tag, const c
 }
 
 /**************************************************************************//**
- * @param[in] eu Xml parsing data.
  * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::XmlInputData::epstart1(ExpatUserData &eu, const char *tag, const char **attributes)
+void ccruncher::XmlInputData::epstart1(const char *tag, const char **attributes)
 {
   if (isEqual(tag,"title") && !hasTag(XmlTag::TITLE)) {
     pushTag(XmlTag::TITLE);
@@ -311,10 +304,10 @@ void ccruncher::XmlInputData::epstart1(ExpatUserData &eu, const char *tag, const
   }
   else if (isEqual(tag,"portfolio") && !hasTag(XmlTag::PORTFOLIO) && hasTag(XmlTag::PARAMETERS) &&
            hasTag(XmlTag::RATINGS) && hasTag(XmlTag::FACTOR) && hasTag(XmlTag::SEGMENTATIONS)) {
-    if (!parse_portfolio) epstop(eu);
+    if (!parse_portfolio) epstop();
     string include = getStringAttribute(attributes, "include", "");
     if (include != "") {
-      parseIncludedPortfolio(include, eu.defines);
+      parseIncludedPortfolio(include);
     }
     pushTag(XmlTag::PORTFOLIO);
   }
@@ -324,12 +317,11 @@ void ccruncher::XmlInputData::epstart1(ExpatUserData &eu, const char *tag, const
 }
 
 /**************************************************************************//**
- * @param[in] eu Xml parsing data.
  * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::XmlInputData::epstart2(ExpatUserData &eu, const char *tag, const char **attributes)
+void ccruncher::XmlInputData::epstart2(const char *tag, const char **attributes)
 {
   if (currentTags.back() == XmlTag::PORTFOLIO && isEqual(tag,"obligor")) {
     pushTag(XmlTag::OBLIGOR);
@@ -343,7 +335,7 @@ void ccruncher::XmlInputData::epstart2(ExpatUserData &eu, const char *tag, const
     pushTag(XmlTag::DEFINE);
     string key = getStringAttribute(attributes, "name");
     string value = getStringAttribute(attributes, "value");
-    processTagDefine(eu.defines, key, value);
+    processTagDefine(key, value);
   }
   else if (currentTags.back() == XmlTag::PARAMETERS && isEqual(tag,"parameter")) {
     pushTag(XmlTag::PARAMETER);
@@ -353,9 +345,9 @@ void ccruncher::XmlInputData::epstart2(ExpatUserData &eu, const char *tag, const
   }
   else if (currentTags.back() == XmlTag::INTEREST && isEqual(tag,"rate")) {
     pushTag(XmlTag::RATE);
-    const char *str = getAttributeValue(attributes, "t");
+    const char *t = getAttributeValue(attributes, "t");
     double r = getDoubleAttribute(attributes, "r");
-    processTagRate(str, r);
+    processTagRate(t, r);
   }
   else if (currentTags.back() == XmlTag::RATINGS && isEqual(tag,"rating")) {
     pushTag(XmlTag::RATING);
@@ -403,12 +395,11 @@ void ccruncher::XmlInputData::epstart2(ExpatUserData &eu, const char *tag, const
 }
 
 /**************************************************************************//**
- * @param[in] eu Xml parsing data.
  * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::XmlInputData::epstart3(ExpatUserData &, const char *tag, const char **attributes)
+void ccruncher::XmlInputData::epstart3(const char *tag, const char **attributes)
 {
   if (currentTags.back() == XmlTag::OBLIGOR && isEqual(tag,"asset")) {
     pushTag(XmlTag::ASSET);
@@ -434,12 +425,11 @@ void ccruncher::XmlInputData::epstart3(ExpatUserData &, const char *tag, const c
 }
 
 /**************************************************************************//**
- * @param[in] eu Xml parsing data.
  * @param[in] tag Element name.
  * @param[in] attributes Element attributes.
  * @throw Exception Error processing xml data.
  */
-void ccruncher::XmlInputData::epstart4(ExpatUserData &, const char *tag, const char **attributes)
+void ccruncher::XmlInputData::epstart4(const char *tag, const char **attributes)
 {
   if (currentTags.back() == XmlTag::DATA && isEqual(tag,"values")) {
     pushTag(XmlTag::VALUES);
@@ -465,33 +455,30 @@ void ccruncher::XmlInputData::epstart4(ExpatUserData &, const char *tag, const c
 /**************************************************************************//**
  * @see ExpatHandlers::epdata
  * @todo Catch cdata sections using XML_SetCdataSectionHandler.
- * @param[in,out] eu Xml parsing data.
  * @param[in] tag Element name.
  * @param[in] data Chunck of data.
  * @param[in] len Data length.
  */
-void ccruncher::XmlInputData::epdata(ExpatUserData &eu, const char *tag, const char *data, int len)
+void ccruncher::XmlInputData::epdata(const char *data, int len)
 {
   assert(data != nullptr);
   assert(len >= 0);
 
-  if (isEqual(tag,"title")) {
-    assert(currentTags.back() == XmlTag::TITLE);
+  if (currentTags.back() == XmlTag::TITLE) {
     title.append(data, len);
   }
-  else if (isEqual(tag,"description")) {
-    assert(currentTags.back() == XmlTag::DESCRIPTION);
+  else if (currentTags.back() == XmlTag::DESCRIPTION) {
     description.append(data, len);
   }
   else {
-    ExpatHandlers::epdata(eu, tag, data, len);
+    ExpatHandlers::epdata(data, len);
   }
 }
 
 /**************************************************************************//**
  * @see ExpatHandlers::epend
  */
-void ccruncher::XmlInputData::epend(ExpatUserData &, const char *)
+void ccruncher::XmlInputData::epend(const char *)
 {
   switch(currentTags.back())
   {
@@ -558,10 +545,9 @@ void ccruncher::XmlInputData::epend(ExpatUserData &, const char *)
 
 /**************************************************************************//**
  * @param[in] include File name containing xml portfolio.
- * @param[in] defines Already defined macros.
  * @throw Exception Error parsing input file.
  */
-void ccruncher::XmlInputData::parseIncludedPortfolio(const string &include, map<string,string> &defines)
+void ccruncher::XmlInputData::parseIncludedPortfolio(const string &include)
 {
   gzFile prevfile = curfile;
   gzFile file = nullptr;
@@ -585,7 +571,6 @@ void ccruncher::XmlInputData::parseIncludedPortfolio(const string &include, map<
     logger << "included file size" << split << Utils::bytesToString(bytes) << endl;
 
     ExpatParser parser;
-    parser.setDefines(defines);
     parser.parse(file, this, stop);
 
     if (stop == nullptr || !(*stop)) {
@@ -769,7 +754,7 @@ unsigned short ccruncher::XmlInputData::getNumEnabledSegmentations() const
  * @param[in] value Define value.
  * @throw Exception Invalid define.
  */
-void ccruncher::XmlInputData::checkDefine(const string &key, const string &value) const
+void ccruncher::XmlInputData::checkMacro(const string &key, const string &value) const
 {
   if (key.length() == 0) throw Exception("invalid macro name");
 
@@ -791,16 +776,15 @@ void ccruncher::XmlInputData::checkDefine(const string &key, const string &value
  * @param[in] value Macro value.
  * @throw Invalid values.
  */
-void ccruncher::XmlInputData::processTagDefine(std::map<std::string,std::string> &defines, const string &key, const string &value)
+void ccruncher::XmlInputData::processTagDefine(const string &key, const string &value)
 {
-  checkDefine(key, value);
+  checkMacro(key, value);
 
-  // Declare the define found in the xml input file EXCEPT if this define
+  // Declare the macro found in the xml input file EXCEPT if this macro
   // has not defined previously (via command line or via gui or previous define)
-  if (defines.find(key) == defines.end()) {
-    logger << "define (input file)" << split << key + "=" + value << endl;
-    defines[key] = value;
-  }
+  if (macros.values.find(key) == macros.values.end()) {
+    logger << "macro (input file)" << split << key + "=" + value << endl;
+    macros.values[key] = value;  }
 }
 
 /**************************************************************************//**

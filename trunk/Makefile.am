@@ -82,8 +82,8 @@ build_ccruncher_cmd_SOURCES = \
     src/utils/Parser.cpp \
     src/utils/Date.cpp \
     src/utils/Expr.cpp \
+    src/utils/MacrosBuffer.cpp \
     src/utils/ExpatParser.cpp \
-    src/utils/ExpatUserData.cpp \
     src/utils/ExpatHandlers.cpp \
     src/utils/Utils.cpp \
     src/utils/Thread.cpp \
@@ -113,8 +113,8 @@ build_ccruncher_cmd_SOURCES = \
     src/utils/Parser.hpp \
     src/utils/Date.hpp \
     src/utils/Expr.hpp \
+    src/utils/MacrosBuffer.hpp \
     src/utils/ExpatParser.hpp \
-    src/utils/ExpatUserData.hpp \
     src/utils/ExpatHandlers.hpp \
     src/utils/Utils.hpp \
     src/utils/Thread.hpp \
@@ -135,8 +135,8 @@ build_ccruncher_tests_SOURCES = \
     src/utils/ParserTest.cpp \
     src/utils/ExceptionTest.cpp \
     src/utils/UtilsTest.cpp \
-    src/utils/ExpatUserDataTest.cpp \
     src/utils/PowMatrixTest.cpp \
+    src/utils/MacrosBufferTest.cpp \
     src/portfolio/AssetTest.cpp \
     src/portfolio/DateValuesTest.cpp \
     src/portfolio/LGDTest.cpp \
@@ -156,8 +156,8 @@ build_ccruncher_tests_SOURCES = \
     src/utils/Date.cpp \
     src/utils/Expr.cpp \
     src/utils/Exception.cpp \
+    src/utils/MacrosBuffer.cpp \
     src/utils/ExpatParser.cpp \
-    src/utils/ExpatUserData.cpp \
     src/utils/ExpatHandlers.cpp \
     src/utils/Utils.cpp \
     src/utils/Thread.cpp \
@@ -188,8 +188,8 @@ build_ccruncher_tests_SOURCES = \
     src/utils/ParserTest.hpp \
     src/utils/ExceptionTest.hpp \
     src/utils/UtilsTest.hpp \
-    src/utils/ExpatUserDataTest.hpp \
     src/utils/PowMatrixTest.hpp \
+    src/utils/MacrosBufferTest.hpp \
     src/portfolio/AssetTest.hpp \
     src/portfolio/DateValuesTest.hpp \
     src/portfolio/LGDTest.hpp \
@@ -209,8 +209,8 @@ build_ccruncher_tests_SOURCES = \
     src/utils/Date.hpp \
     src/utils/Expr.hpp \
     src/utils/Exception.hpp \
+    src/utils/MacrosBuffer.hpp \
     src/utils/ExpatParser.hpp \
-    src/utils/ExpatUserData.hpp \
     src/utils/ExpatHandlers.hpp \
     src/utils/Utils.hpp \
     src/utils/Thread.hpp \
