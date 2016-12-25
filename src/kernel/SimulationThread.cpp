@@ -41,13 +41,17 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, unsigned long seed
   chol(mc.chol), floadings1(mc.floadings1), floadings2(mc.floadings2), inverses(mc.inverses),
   numfactors(mc.chol->size1), ndf(mc.ndf), time0(mc.time0), timeT(mc.timeT),
   antithetic(mc.antithetic), numsegments(mc.numsegments),
-  blocksize(mc.blocksize), rng(nullptr)
+  blocksize(mc.blocksize), rng(nullptr), vec(nullptr)
 {
-  assert(chol != nullptr);
   assert(blocksize > 0);
+  assert(numfactors > 0);
+  assert(chol != nullptr);
+  assert(chol->size1 == chol->size2);
+  assert(chol->size1 == numfactors);
   assert(numfactors == floadings1.size());
   assert(antithetic?(blocksize%2!=0?false:true):true);
 
+  vec = gsl_vector_alloc(numfactors);
   rng = gsl_rng_alloc(gsl_rng_mt19937);
   gsl_rng_set(rng, seed);
 }
@@ -56,6 +60,7 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, unsigned long seed
 ccruncher::SimulationThread::~SimulationThread()
 {
   gsl_rng_free(rng);
+  gsl_vector_free(vec);
 }
 
 /**************************************************************************//**
@@ -66,7 +71,7 @@ ccruncher::SimulationThread::~SimulationThread()
 void ccruncher::SimulationThread::run()
 {
   vector<vector<double>> losses(blocksize, vector<double>(numsegments, 0.0));
-  vector<vector<double>> z(blocksize/(antithetic?2:1), vector<double>(numfactors, 0.0));
+  vector<vector<double>> z(numfactors, vector<double>(blocksize/(antithetic?2:1), 0.0));
   vector<double> s(blocksize/(antithetic?2:1), 1.0);
   vector<double> x(blocksize/(antithetic?2:1), 0.0);
   bool more = true;
@@ -84,11 +89,16 @@ void ccruncher::SimulationThread::run()
 
     for(size_t iobligor=0; iobligor<obligors.size(); iobligor++)
     {
-      // simulating default times
+      // simulating multi-variate t-student
       unsigned char ifactor = obligors[iobligor].ifactor;
+
       for(size_t j=0; j<x.size(); j++) {
-        // z[i] values are already multiplied by w[i] (see chol matrix creation)
-        x[j] = s[j] * (z[j][ifactor] + floadings2[ifactor]*gsl_ran_gaussian_ziggurat(rng, 1.0));
+        x[j] = gsl_ran_gaussian_ziggurat(rng, 1.0);
+      }
+
+      for(size_t j=0; j<x.size(); j++) {
+        // z[ifactor] values are already multiplied by w[ifactor] (see chol matrix creation)
+        x[j] = s[j] * (z[ifactor][j] + floadings2[ifactor]*x[j]);
       }
 
       // simulating obligor loss
@@ -151,19 +161,16 @@ void ccruncher::SimulationThread::rchisq(vector<double> &s)
  */
 void ccruncher::SimulationThread::rmvnorm(vector<vector<double>> &z)
 {
-  gsl_vector aux;
-  aux.size = numfactors;
-  aux.stride = 1;
-  aux.data = nullptr;
-  aux.block = nullptr;
-  aux.owner = 0;
-
-  for(size_t n=0; n<z.size(); n++) {
-    aux.data = z[n].data();
+  size_t len = z[0].size();
+  for(size_t n=0; n<len; n++) {
+    //TODO: use gsl_ran_multivariate_gaussian() new in gsl-2.2
     for(size_t i=0; i<numfactors; i++) {
-      aux.data[i] = gsl_ran_gaussian_ziggurat(rng, 1.0);
+      gsl_vector_set(vec, i, gsl_ran_gaussian_ziggurat(rng, 1.0));
     }
-    gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, chol, &aux);
+    gsl_blas_dtrmv(CblasLower, CblasNoTrans, CblasNonUnit, chol, vec);
+    for(size_t i=0; i<numfactors; i++) {
+      z[i][n] = gsl_vector_get(vec, i);
+    }
   }
 }
 
