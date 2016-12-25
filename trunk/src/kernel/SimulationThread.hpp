@@ -24,6 +24,7 @@
 #define _SimulationThread_
 
 #include <vector>
+#include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_rng.h>
 #include "kernel/Inverse.hpp"
@@ -87,6 +88,8 @@ class SimulationThread : public Thread
 
     //! Random number generator
     gsl_rng *rng;
+    //! Auxiliar vector
+    gsl_vector *vec;
 
   private:
 
