@@ -88,10 +88,10 @@
       <footer>
         <div id="footer" class="card card-block">
           <span id="copyright">
-            Copyright &copy; 2004-2016 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>&nbsp;&nbsp;
+            Copyright &copy; 2004-2017 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>&nbsp;&nbsp;
           </span>
           <span id="modified" class="float-sm-right">
-            Last modified: 04-Dec-2016
+            Last modified: 01-Jan-2017
           </span>
         </div>
       </footer>
