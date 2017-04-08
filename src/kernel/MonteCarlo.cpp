@@ -377,7 +377,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   logger << endl;
   logger << "Monte Carlo" << flood('*') << endl;
   logger << indent(+1);
-  logger << "seed used to initialize randomizer" << split << seed << endl;
+  logger << "seed used to initialize RNG" << split << seed << endl;
   logger << "maximum execution time (seconds)" << split << maxseconds << endl;
   logger << "maximum number of iterations" << split << maxiterations << endl;
   logger << "antithetic mode" << split << antithetic << endl;
