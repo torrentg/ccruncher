@@ -56,14 +56,21 @@ Required libraries installation
    package from http://www.gnu.org/software/gsl/ and install it. 
    Also you can install from gsl and gsl-devel rpm packages.
 
-4. qt libraries (only gui version)
+4. libconfig library
+   check that you have libconfig.so in a lib directory and
+   check that you have libconfig.h in an include directory. If
+   you don't found some of these files you can download 
+   package from http://www.hyperrealm.com/libconfig/ and install it. 
+   Also you can install from libconfig and libconfig-devel rpm packages.
+
+5. qt libraries (only gui version)
    check that you have libQtCore.so in a lib directory and
    check that you have QtCore in an include directory. If
    you don't found some of these files you can download 
    package from http://qt-project.org/ and install it. 
    Also you can install from qt and qt-devel rpm packages.
    
-5. qwt libraries (only gui version)
+6. qwt libraries (only gui version)
    check that you have libqwt.so in a lib directory and
    check that you have qwt.h in an include directory. If
    you don't found some of these files you can download 
@@ -110,21 +117,24 @@ Installation from binary package
 Using CCruncher
 --------------------------------
 
-1. create your input file. Read documentation to perform this step.
-   Use any file in samples directory as template.
+1. run ccruncher-inf (parameters inference using MCMC)
+     # create your input file
+     # use sample/inference01.cfg as starting point
+     > bin/ccruncher-inf --help
+     > bin/ccruncher-inf -s 99 -n 50000 -b 10000 -r 1000 samples/inference05.inf
 
-2. run CCruncher (gui version)
+2. run ccruncher (default loss simulation using Monte carlo)
+     # create your input file
+     # read the technical document (pdf doc)
+     # use sample/sample05.xml as starting point
      > cd $CCRUNCHER
      > # gui version
      > bin/ccruncher-gui &
      > # cmd version
      > bin/ccruncher-cmd --help
      > bin/ccruncher-cmd -w --output=data samples/test01.xml
-     > # params inference
-     > bin/ccruncher-inf --help
-     > bin/ccruncher-inf -s 99 -n 50000 -b 10000 -r 1000 samples/inference05.inf
 
-3. compute risk indicators:
+3. compute risk indicators
      > bin/ccruncher-gui &
      # open output data file
 
@@ -162,7 +172,10 @@ Notes for Windows developers (QT+MINGW)
    > make
    > make install
 
-5. install qwt
+5. install and compile gsl libconfig
+   # TODO
+   
+6. install qwt
    - download it from http://qwt.sourceforge.net
    - unpack zip file
    - open a qt-mingw console and type
@@ -185,7 +198,7 @@ Notes for Windows developers (QT+MINGW)
      > cp C:\Qwt-6.1.0\plugins\designer\* C:\QtSDK\Desktop\Qt\4.7.4\mingw\plugins\designer
      > use standalone qtdesigner C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin\designer.exe
 
-6. launch qtcreator
+7. launch qtcreator
    > open project ccruncher-gui.pro
    > review ccruncher-gui.pro libs
    > compile

@@ -24,10 +24,10 @@
 #define _Metropolis_
 
 #include <vector>
+#include <libconfig.h++>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_matrix.h>
 #include "utils/Exception.hpp"
-#include "inference/Configuration.hpp"
 #include "inference/Component.hpp"
 
 namespace ccruncher_inf {
@@ -43,12 +43,16 @@ class Metropolis
   private:
 
     //! Current configuration
-    Configuration mConfig;
+    libconfig::Config mConfig;
     //! Random number generator
     gsl_rng *rng;
     //! Stop flag
     bool fstop;
 
+    //! List of factors
+    std::vector<std::string> factors;
+    //! List of ratings
+    std::vector<std::string> ratings;
     //! Number of factors
     size_t nfactors;
     //! Number of ratings
@@ -110,24 +114,50 @@ class Metropolis
     void updateS(size_t);
     //! Update degrees of freedom
     void updateNu();
-    //! Read nfactors from configuration file
-    void readNfactors(const Configuration &config);
-    //! Read dprobs from configuration file
-    void readDprob(const Configuration &config);
+
+    //! Check for duplicates
+    template<typename T>
+    bool hasDuplicates(const std::vector<T> &v);
+    //! Read array values from a configuration item
+    template<typename T>
+    std::vector<T> readArray(const libconfig::Setting &setting);
+    template<typename T>
+    std::vector<T> readArray(const libconfig::Setting &setting, size_t);
+    //! Read matrix values from a configuration item
+    template<typename T>
+    std::vector<std::vector<T>> readMatrix(const libconfig::Setting &setting);
+    template<typename T>
+    std::vector<std::vector<T>> readMatrix(const libconfig::Setting &setting, size_t, size_t);
+    //! Check if array constains the given value
+    template<typename T>
+    bool containsValue(const std::vector<T> &v, const T &value);
+    //! Create setting
+    libconfig::Setting& createSetting(const std::string &name, libconfig::Setting &parent, enum libconfig::Setting::Type type);
+    //! Write array to the configuration file
+    template<typename T>
+    libconfig::Setting& writeArray(const std::string &name, libconfig::Setting &parent, enum libconfig::Setting::Type type, const std::vector<T> &values);
+    template<typename T>
+    libconfig::Setting& writeMatrix(const std::string &name, libconfig::Setting &parent, enum libconfig::Setting::Type type, const std::vector<std::vector<T>> &values);
+
+    //! Read factors from configuration file
+    void readFactors(const libconfig::Config &config);
+    //! Read ratings + dprobs from configuration file
+    void readRatings(const libconfig::Config &config);
     //! Read nobligors from configuration file
-    void readNobligors(const Configuration &config);
+    void readNobligors(const libconfig::Config &config);
     //! Read ndefaults from configuration file
-    void readNdefaults(const Configuration &config);
+    void readNdefaults(const libconfig::Config &config);
     //! Read nu.XXX from configuration file
-    void readNu(const Configuration &config);
+    void readNu(const libconfig::Config &config);
     //! Read W.XXX from configuration file
-    void readW(const Configuration &config);
+    void readW(const libconfig::Config &config);
     //! Read R.XXX from configuration file
-    void readR(const Configuration &config);
+    void readR(const libconfig::Config &config);
     //! Read Z.XXX from configuration file
-    void readZ(const Configuration &config);
+    void readZ(const libconfig::Config &config);
     //! Read S.XXX from configuration file
-    void readS(const Configuration &config);
+    void readS(const libconfig::Config &config);
+
     //! Set component names as header
     void writeHeader(std::ostream &s, int k) const;
     //! Write values
@@ -144,11 +174,11 @@ class Metropolis
     //! Destructor
     ~Metropolis();
     //! Initializes object
-    void init(const Configuration &) throw(ccruncher::Exception);
+    void init(const libconfig::Config &) throw(ccruncher::Exception);
     //! Run simulation
     int run(std::ostream &output, std::ostream &info, size_t blocksize, size_t maxiters_, size_t burnin) throw(ccruncher::Exception);
     //! Returns current state
-    Configuration getState() const;
+    libconfig::Config& getState();
     //! Stops current run
     void stop() { fstop = true; }
 

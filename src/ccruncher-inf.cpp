@@ -20,18 +20,12 @@
 //
 //===========================================================================
 
-// g++ -fopenmp -O2 -mtune=native -Wall -DNDEBUG -lm -lgsl -lgslcblas -lpthread -o ccruncher-inf src/*.cpp
-// cpupower frequency-info
-// for f in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor ; do echo performance > $f ; done 
-// export OMP_NUM_THREADS=3
-// export GOMP_CPU_AFFINITY="0 1 2 3"
-// for f in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor ; do echo ondemand > $f ; done 
-
 #include <getopt.h>
 #include <iostream>
 #include <fstream>
 #include <ctime>
 #include <csignal>
+#include <libconfig.h++>
 #include <cassert>
 #include <gsl/gsl_errno.h>
 #include "utils/config.h"
@@ -40,8 +34,13 @@
 #include "inference/Metropolis.hpp"
 
 using namespace std;
+using namespace libconfig;
 using namespace ccruncher;
 using namespace ccruncher_inf;
+
+#define UNEXPECTED_ERROR_MSG \
+  "unexpected error. please report this bug sending input file, \n" \
+  "ccruncher version and arguments to gtorrent@ccruncher.net\n"
 
 Metropolis *mref = nullptr;
 
@@ -64,9 +63,7 @@ void catchsignal(int)
  */
 void exception_handler()
 {
-  cerr << endl <<
-      "unexpected error. please report this bug sending input file, \n"
-      "ccruncher version and arguments to gtorrent@ccruncher.net\n" << endl;
+  cerr << endl << UNEXPECTED_ERROR_MSG << endl;
   exit(EXIT_FAILURE);
 }
 
@@ -127,8 +124,8 @@ void help()
   "      --version        show version and exit\n"
   "\n"
   "Examples:\n"
-  "  basic example     ccruncher-inf file.txt\n"
-  "  using parameters  ccruncher-inf -s 99 -n 50000 -b 10000 -r 1000 file.txt\n"
+  "  basic example     ccruncher-inf samples/inference01.in\n"
+  "  using parameters  ccruncher-inf -s 99 -n 50000 -b 10000 -r 1000 inference05.in\n"
   "\n"
   "Report bugs to gtorrent@ccruncher.net.\n"
   << endl;
@@ -186,8 +183,7 @@ int main(int argc, char *argv[])
   {
     int curropt = getopt_long(argc, argv, options1, options2, nullptr);
 
-    if (curropt == -1)
-    {
+    if (curropt == -1) {
       // no more options. exit while
       break;
     }
@@ -249,17 +245,31 @@ int main(int argc, char *argv[])
   if (argc - optind != 1) {
     cerr << "error: config file not found" << endl;
     cerr << "use --help option for more information" << endl;
-    return 1;
+    return EXIT_FAILURE;
   }
   else {
     filename = string(argv[argc-1]);
   }
 
-  try
-  {
+  // reading configuration file
+  Config config;
+  try {
+    config.setOptions(Setting::OptionNone);
+    config.readFile(filename.c_str());
+  }
+  catch(const FileIOException &fioex) {
+    cerr << "error: reading file " << filename << " - " << fioex.what() << endl;
+    return EXIT_FAILURE;
+  }
+  catch(const ParseException &pex) {
+    cerr << "error: " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << endl;
+    return EXIT_FAILURE;
+  }
+
+  // running MCMC
+  Metropolis metropolis(seed);
+  try {
     time_t time0 = time(nullptr);
-    Configuration config(filename);
-    Metropolis metropolis(seed);
     metropolis.init(config);
     mref = &metropolis;
     signal(SIGINT, catchsignal);
@@ -269,22 +279,35 @@ int main(int argc, char *argv[])
     ofstream output;
     output.open(setext(filename,".out").c_str());
     int num = metropolis.run(output, cout, blocksize, numiters, burnin);
-    Configuration state = metropolis.getState();
-    state.save(setext(filename,".state"));
     time_t time1 = time(nullptr);
     cout << endl;
+    cout.unsetf(ios::showpos);
+    cout.precision(0);
     cout << "elapsed time = " << difftime(time1,time0) << " seconds" << endl;
     cout << "simulations = " << num << endl;
+    cout << "output file = " << setext(filename,".out") << endl;
   }
-  catch(std::exception &e)
-  {
+  catch(std::exception &e) {
     cerr << endl << "error: " << e.what() << endl;
     return EXIT_FAILURE;
   }
-  catch(...)
-  {
-    cerr << endl << "unexpected error" << endl;
+  catch(...) {
+    cerr << endl << UNEXPECTED_ERROR_MSG << endl;
     return EXIT_FAILURE;
+  }
+
+  // saving MCMC state
+  try {
+    Config &state = metropolis.getState();
+    state.writeFile(setext(filename,".state").c_str());
+  }
+  catch(const FileIOException &) {
+    cerr << "error writing file " << setext(filename,".state") << endl;
+    return(EXIT_FAILURE);
+  }
+  catch(const exception &e) {
+    cerr << "error: " << e.what() << endl;
+    return(EXIT_FAILURE);
   }
 
   // exit function

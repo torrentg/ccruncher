@@ -190,8 +190,8 @@
         <a id="parameters"></a>
         <h2>Section Parameters</h2>
         <p>
-          This section shows the parameters of the problem that needs to
-          be solved. The list can be delivered in any order.
+          This section contains the parameters of the problem that needs to
+          be solved. The parameters list can be delivered in any order.
         </p>
         <h3>Example</h3>
         <pre>
@@ -206,7 +206,7 @@
   &lt;parameter name="blocksize" value="128"/&gt;
 &lt;/parameters&gt;
         </pre>
-        <h3>Parameters List</h3>
+        <h3>Supported Parameters</h3>
         <table class="table table-striped table-bordered table-responsive">
           <tr>
             <th>Name</th>
@@ -482,8 +482,10 @@
           that the sum of elements of each row is 1.0, that exist only one defaulted
           rating, and that the transition matrix is an absorbing Markov chain (any 
           rating may end up as defaulted). 
-          Alternatively, you can define the default probability functions instead of 
-          a transition matrix using the <a href="#dprobs">dprobs</a> tag. 
+          CCruncher will take care to convert the given transition matrix in the 
+          corresponding default probability functions. Alternatively, you can define 
+          directly the default probability functions using the <a href="#dprobs">dprobs</a> 
+          tag instead of a transitions tag. 
         </p>
         <h3>Example</h3>
         <pre>
@@ -698,10 +700,11 @@
           factors, <i>R</i> in the multi-factor model. 
           The diagonal values are always <i>1</i> and don't need to be specified.
           The non-diagonal elements are the correlation matrix coefficients. 
-          You only need to set up the upper triangle elements. 
+          You only need to set up the non-zero upper triangle elements. 
           The number of elements to set up is <i>(numfactors-1) x numfactors / 2</i>.
-          If you only have <i>1</i> factor you can set <code>&lt;correlations/&gt;</code> and
-          jump to the following section.
+          If you have only have <i>1</i> factor or you desire the identity matrix then 
+          you can skip this section or just set <code>&lt;correlations/&gt;</code> 
+          and jump to the following section.
         </p>
         <h3>Example</h3>
         <pre>
@@ -776,8 +779,8 @@
           the union of all segments constitutes the whole portfolio. Each segmentation has a
           segment named 'unassigned' that is implicitly declared. If an asset does not belong to 
           any segment, then it is considered part of the 'unassigned' segment.
-          Usually we set the segmentation name 'portfolio' to indicate the whole portfolio but you 
-          can set any other name.
+          We recommend to create a segmentation with no segments in order to valuate the whole 
+          portfolio losses (all losses will accumulate in the 'unassigned' segment).
         </p>
         <h3>Example</h3>
         <pre>
@@ -1195,31 +1198,26 @@
         <a id="dprobs"></a>
         <h2>Section Default Probability Functions</h2>
         <p>
-          Default probabilities over time are difficult to obtain, for 
-          this reason is better to work with the transition matrix. 
-          CCruncher will take care to convert the transition matrix in the 
-          corresponding default probability functions. This implies that 
+          Working with a transition matrix implies that 
           the credit rating transitions follow a Markov model. Sometimes 
           this assumption is not acceptable because we desire that transition 
           probabilities change over the simulation period or we plan to do 
           stress tests over the default probabilities. In these cases you can 
-          define the default probability functions explicitly.
-        </p>
-        <p>
+          define the default probability functions explicitly. 
           You must define either a transition matrix or the default probability
-          functions, but not both. The <code>dprobs</code> section contains the 
-          default probability function for each rating. If this 
-          section is non provided, the default probability functions will be computed 
-          using the transition matrix. You don't need to fill all time values. 
-          For all credit ratings (distinct than the defaulted rating) the default 
-          probability function is monotonously increasing, with a value of 0 at time 0, 
-          and a value of 1 at time &infin;. The default probability function of 
-          the defaulted rating is always 1.
+          functions, but not both.
         </p>
         <p>
-          The default probability functions are approximated using cubic splines
-          when possible (minimum number of available points, monotone increasing) 
-          and linear splines when not.
+          The <code>dprobs</code> section contains the default probability function 
+          for each rating. For all credit ratings (distinct than the defaulted 
+          rating) the default probability function is monotonously increasing, 
+          with a value of 0 at time 0, and a value of 1 at time &infin;. The 
+          default probability function of the defaulted rating is always 1.
+        </p>
+        <p>
+          You don't need to fill all time values. The default probability functions 
+          are approximated using cubic splines when possible (minimum number of 
+          available points, monotone increasing) and linear splines when not.
         </p>
         <h3>Example</h3>
         <pre>
@@ -1268,10 +1266,10 @@
           <tr>
             <td class="c1">t</td>
             <td class="c2">
-              Time. Can be a date bigger or equal than <i>time.0</i> 
-              or an interval from starting date <i>time.0</i>. Use suffix 'D'
-              to indicate days (eg. 3D), suffix 'M' to indicate months (eg. 6M) and  
-              suffix 'Y' to indicate years (eg. 15Y).
+              Time. A date bigger or equal than <i>time.0</i> or an interval from 
+              starting date <i>time.0</i>. Use suffix 'D' to indicate days (eg. 3D), 
+              suffix 'M' to indicate months (eg. 6M) and suffix 'Y' to indicate 
+              years (eg. 15Y).
             </td>
             <td class="c3">yes</td>
             <td class="c4">date</td>
@@ -1282,7 +1280,7 @@
             <td class="c1">value</td>
             <td class="c2">
               Probability that an obligor with initial rating <i>rating</i> 
-              defaults in the time range <i>[0,t]</i>.
+              defaults in the time range <i>[time.0,t]</i>.
             </td>
             <td class="c3">yes</td>
             <td class="c4">double</td>
@@ -1297,7 +1295,7 @@
             Copyright &copy; 2004-2017 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>&nbsp;&nbsp;
           </span>
           <span id="modified" class="float-sm-right">
-            Last modified: 01-Jan-2017
+            Last modified: 12-Jul-2017
           </span>
         </div>
       </footer>

@@ -50,6 +50,8 @@ AC_CHECK_LIB([gslcblas],[cblas_dgemm],,
     [AC_MSG_ERROR([cannot find the gsl library]) ])
 AC_CHECK_LIB([gsl], [gsl_rng_alloc],,
     [AC_MSG_ERROR([cannot find the gsl library]) ])
+AC_CHECK_LIB([config++], [config_init],,
+    [AC_MSG_ERROR([cannot find the libconfig library]) ])
 
 dnl -------------------------------------------------------------
 dnl checks for header
