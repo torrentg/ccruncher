@@ -21,7 +21,8 @@ INCLUDEPATH += \
     $$PWD/src
 
 LIBS += \
-    -lm
+    -lm \
+    -lconfig++
 
 unix {
   LIBS += \

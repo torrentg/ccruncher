@@ -49,8 +49,6 @@ class Component
     std::vector<bool> accepted;
     //! Current position in the circular queue.
     int pos;
-    //! Desired acceptance rate (0 <= level < 1, =0 means no param update)
-    double level;
     //! counter used by adapter
     int counter;
 
@@ -65,6 +63,8 @@ class Component
     T value;
     //! Tunning parameter (param>=0, if param=0 -> value not updated)
     double sigma;
+    //! Desired acceptance rate (0 <= level < 1, =0 means no param update)
+    double level;
 
   public:
 
@@ -89,8 +89,8 @@ class Component
 // constructor
 //===========================================================================
 template <class T>
-Component<T>::Component() : name("?"), accepted(0,false), pos(-1), level(NAN),
-  counter(0), value(T()), sigma(NAN)
+Component<T>::Component() : name("?"), accepted(0,false), pos(-1), counter(0),
+value(T()), sigma(NAN), level(NAN)
 {
   // nothing to do
 }

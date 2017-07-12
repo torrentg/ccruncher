@@ -37,6 +37,7 @@
 #include "inference/Metropolis.hpp"
 
 using namespace std;
+using namespace libconfig;
 using namespace ccruncher;
 using namespace ccruncher_inf;
 
@@ -44,16 +45,9 @@ using namespace ccruncher_inf;
   DEFAULT_NU has a low value because NU bigger hasn't slope
   to decide the direction to move.
   Caution: too low value also present problems.
-  Solution: try diferents NU.init values reinitializing
+  Solution: try diferents NU.value values reinitializing
   using *.state file.
  */
-
-//
-// int omp_get_num_procs(void);
-// int omp_get_max_threads()
-// int omp_set_num_threads(int NumThreads)
-// int omp_get_thread_num(void);
-//
 
 #define LOG2 0.693147180559945309417232121
 #define DEFAULT_W 0.2
@@ -74,7 +68,7 @@ ccruncher_inf::Metropolis::Metropolis(unsigned long seed) throw(Exception)
   det0 = 0.0;
   det1 = 0.0;
   rng = gsl_rng_alloc(gsl_rng_mt19937);
-  if (seed == 0) {
+  if (seed == 0UL) {
     seed = (unsigned long) time(nullptr);
   }
   gsl_rng_set(rng, seed);
@@ -91,55 +85,199 @@ ccruncher_inf::Metropolis::~Metropolis()
 }
 
 //===========================================================================
-// read nfactors
+// read array values from a configuration item
 //===========================================================================
-void ccruncher_inf::Metropolis::readNfactors(const Configuration &config)
+template<typename T>
+vector<T> ccruncher_inf::Metropolis::readArray(const Setting &setting)
 {
-  nfactors = config.read<int>("nfactors");
-  if (nfactors <= 0) throw Exception("nfactors less than or equal than 0");
-}
-
-//===========================================================================
-// read dprobs
-//===========================================================================
-void ccruncher_inf::Metropolis::readDprob(const Configuration &config)
-{
-  if (!config.isArray("dprobs")) throw Exception("dprobs has invalid dim");
-  dprobs = config.readv<double>("dprobs");
-  if (dprobs.size() == 0) throw Exception("dprobs has length 0");
-  for(size_t i=0; i<dprobs.size(); i++) {
-    if(dprobs[i] <= 0.0 || 1.0 <= dprobs[i]) throw Exception("dprobs value out of range (0,1)");
+  if (!setting.isArray()) {
+    throw Exception(setting.getPath() + " is not an array");
   }
-  nratings = dprobs.size();
+
+  vector<T> ret;
+  for(int i=0; i<setting.getLength(); i++) {
+    T val = setting[i];
+    ret.push_back(val);
+  }
+
+  return ret;
 }
 
 //===========================================================================
-// read nobligors
+// read array values from a configuration item
 //===========================================================================
-void ccruncher_inf::Metropolis::readNobligors(const Configuration &config)
+template<typename T>
+vector<T> ccruncher_inf::Metropolis::readArray(const Setting &setting, size_t nvals)
 {
-  nobligors = config.readm<int>("nobligors");
-  if (nobligors.size() < 2) throw Exception("nobligors has insuficient rows (<2)");
+  vector<T> ret;
+
+  if (setting.isArray()) {
+    ret = readArray<T>(setting);
+  }
+  else {
+    double aux = setting;
+    ret = vector<T>(nvals, aux);
+  }
+
+  if (ret.size() != nvals) {
+      throw Exception(setting.getPath() + " has invalid dim");
+  }
+
+  return ret;
+}
+
+//===========================================================================
+// read matrix values from a configuration item
+//===========================================================================
+template<typename T>
+vector<vector<T>> ccruncher_inf::Metropolis::readMatrix(const Setting &setting)
+{
+  if (!setting.isList()) {
+    throw Exception(setting.getPath() + " is not a list of rows");
+  }
+
+  vector<vector<T>> ret;
+  for(int i=0; i<setting.getLength(); i++)
+  {
+    vector<T> row = readArray<T>(setting[i]);
+    ret.push_back(row);
+    if (row.size() != ret[0].size()) {
+      throw Exception(setting.getPath() + " with invalid row size");
+    }
+  }
+
+  return ret;
+}
+
+//===========================================================================
+// read matrix values from a configuration item
+//===========================================================================
+template<typename T>
+vector<vector<T>> ccruncher_inf::Metropolis::readMatrix(const Setting &setting, size_t nrows, size_t ncols)
+{
+  vector<vector<T>> ret;
+
+  if (setting.isList()) {
+    ret = readMatrix<T>(setting);
+  }
+  else {
+    vector<double> aux = readArray<T>(setting, ncols);
+    ret = vector<vector<T>>(nrows, aux);
+  }
+
+  if (ret.size() != nrows || ret[0].size() != ncols) {
+    throw Exception(setting.getPath() + " has invalid dim");
+  }
+
+  return ret;
+}
+
+//===========================================================================
+// check for duplicates
+//===========================================================================
+template<typename T>
+bool ccruncher_inf::Metropolis::hasDuplicates(const vector<T> &v)
+{
+  for(size_t i=0; i<v.size(); i++) {
+    for(size_t j=i+1; j<v.size(); j++) {
+      if (v[i] == v[j]) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+//===========================================================================
+// check if array constains the given value
+//===========================================================================
+template<typename T>
+bool ccruncher_inf::Metropolis::containsValue(const vector<T> &v, const T &value)
+{
+  for(size_t i=0; i<v.size(); i++) {
+    if (v[i] == value) {
+      return true;
+    }
+  }
+  return false;
+}
+
+//===========================================================================
+// read factors
+//===========================================================================
+void ccruncher_inf::Metropolis::readFactors(const Config &config)
+{
+  factors = readArray<string>(config.lookup("factors"));
+  if (factors.empty()) {
+    throw Exception("no factors founds");
+  }
+  if (hasDuplicates(factors)) {
+    throw Exception("found a duplicated factor");
+  }
+  nfactors = factors.size();
+}
+
+//===========================================================================
+// read ratings and dprobs
+//===========================================================================
+void ccruncher_inf::Metropolis::readRatings(const Config &config)
+{
+  ratings = readArray<string>(config.lookup("ratings"));
+  if (ratings.empty()) {
+    throw Exception("no ratings found");
+  }
+  if (hasDuplicates(ratings)) {
+    throw Exception("found a duplicated rating");
+  }
+  nratings = ratings.size();
+
+  dprobs = readArray<double>(config.lookup("dprobs"));
+  if (nratings != dprobs.size()) {
+    throw Exception("length(ratings) !=  length(dprobs)");
+  }
+  for(size_t i=0; i<dprobs.size(); i++) {
+    if(dprobs[i] <= 0.0 || 1.0 <= dprobs[i]) {
+      throw Exception("dprobs["+to_string(i+1)+"] value out of range (0,1)");
+    }
+  }
+}
+
+//===========================================================================
+// read the number of obligors
+//===========================================================================
+void ccruncher_inf::Metropolis::readNobligors(const Config &config)
+{
+  nobligors = readMatrix<int>(config.lookup("nobligors"));
+  if (nobligors.size() < 3) throw Exception("nobligors has less than 3 rows");
   for(size_t i=0; i<nobligors.size(); i++) {
-    if (nobligors[i].size() != nfactors*nratings) throw Exception("nobligors has invalid dim");
+    if (nobligors[i].size() != nfactors*nratings) {
+      throw Exception("nobligors["+to_string(i+1)+"] has invalid length");
+    }
     for(size_t j=0; j<nobligors[i].size(); j++) {
-      if(nobligors[i][j] < 0) throw Exception("nobligors value out of range [0,inf)");
+      if(nobligors[i][j] < 0) {
+        throw Exception("nobligors["+to_string(i+1)+","+to_string(j+1)+"] value out of range [0,inf)");
+      }
     }
   }
   nobs = nobligors.size();
 }
 
 //===========================================================================
-// read ndefaults
+// read the number of defaults
 //===========================================================================
-void ccruncher_inf::Metropolis::readNdefaults(const Configuration &config)
+void ccruncher_inf::Metropolis::readNdefaults(const Config &config)
 {
-  ndefaults = config.readm<int>("ndefaults");
+  ndefaults = readMatrix<int>(config.lookup("ndefaults"));
   if (ndefaults.size() != nobs) throw Exception("nobligors and ndefaults have distinct length");
   for(size_t i=0; i<ndefaults.size(); i++) {
-    if (ndefaults[i].size() != nobligors[i].size()) throw Exception("ndefaults with invalid row");
+    if (ndefaults[i].size() != nobligors[i].size()) {
+      throw Exception("ndefaults["+to_string(i+1)+"] has invalid length");
+    }
     for(size_t j=0; j<ndefaults[i].size(); j++) {
-      if(nobligors[i][j] < ndefaults[i][j]) throw Exception("ndefaults value bigger than nobligors");
+      if(nobligors[i][j] < ndefaults[i][j]) {
+        string str = "["+to_string(i+1)+","+to_string(j+1)+"]";
+        throw Exception("ndefaults"+str+" value bigger than nobligors"+str);
+      }
     }
   }
 }
@@ -147,70 +285,70 @@ void ccruncher_inf::Metropolis::readNdefaults(const Configuration &config)
 //===========================================================================
 // read nu component
 //===========================================================================
-void ccruncher_inf::Metropolis::readNu(const Configuration &config)
+void ccruncher_inf::Metropolis::readNu(const Config &config)
 {
+  double sigma = config.lookup("NU.sigma");
+  double level = config.lookup("NU.level");
   double value = DEFAULT_NU;
-  double param = config.read<double>("NU.sigma");
-  double level = config.read<double>("NU.level");
-  if (param == 0.0 || config.exists("NU.init")) {
-    value = config.read<double>("NU.init");
+  if (sigma == 0.0 || config.exists("NU.value")) {
+    value = config.lookup("NU.value");
   }
-  if (value < 2.0) throw Exception("NU.init out of range (>=2)");
+  if (value < 2.0) throw Exception("NU.value out of range [2,inf)");
 
-  nu.init("NU", value, param, level);
+  nu.init("NU", value, sigma, level);
 }
 
 //===========================================================================
 // read W component
 //===========================================================================
-void ccruncher_inf::Metropolis::readW(const Configuration &config)
+void ccruncher_inf::Metropolis::readW(const Config &config)
 {
-  vector<double> params = config.readv<double>("W.sigma");
-  if (params.size() != nfactors) throw Exception("W.sigma has lenght distinct than nfactors");
+  vector<double> sigmas = readArray<double>(config.lookup("W.sigma"));
+  if (sigmas.size() != nfactors) throw Exception("length(W.sigma) != length(factors)");
 
-  vector<double> levels = config.readv<double>("W.level");
-  if (levels.size() != nfactors) throw Exception("W.level has lenght distinct than nfactors");
-
-  bool haspeq0 = false;
-  for(size_t i=0; i<params.size(); i++) if (params[i] == 0.0) { haspeq0 = true; break; }
+  vector<double> levels = readArray<double>(config.lookup("W.level"));
+  if (levels.size() != nfactors) throw Exception("length(W.level) != length(nfactors)");
 
   vector<double> values(nfactors, DEFAULT_W);
-  if (haspeq0 || config.exists("W.init")) {
-    values = config.readv<double>("W.init");
-    if (values.size() != nfactors) throw Exception("W.init has lenght distinct than nfactors");
+  bool hasSigmaEq0 = containsValue(sigmas, 0.0);
+  if (hasSigmaEq0 || config.exists("W.value")) {
+    values = readArray<double>(config.lookup("W.value"));
+    if (values.size() != nfactors) throw Exception("length(W.value) != length(nfactors)");
     for(size_t i=0; i<values.size(); i++) {
-      if (values[i] <= 0.0 || 1.0 <= values[i]) throw Exception("W.init out of range (0,1)");
+      if (values[i] <= 0.0 || 1.0 <= values[i]) {
+        throw Exception("W.value["+to_string(i+1)+"] out of range (0,1)");
+      }
     }
   }
 
   W.resize(nfactors);
   for(size_t i=0; i<W.size(); i++) {
-    W[i].init("W", values[i], params[i], levels[i]);
+    W[i].init("W", values[i], sigmas[i], levels[i]);
   }
 }
 
 //===========================================================================
 // read R component
 //===========================================================================
-void ccruncher_inf::Metropolis::readR(const Configuration &config)
+void ccruncher_inf::Metropolis::readR(const Config &config)
 {
   size_t ncors = (nfactors*(nfactors-1))/2;
 
-  vector<double> params = config.readv<double>("R.sigma");
-  if (params.size() != ncors) throw Exception("R.sigma has lenght distinct than (nfactors*(nfactors-1))/2");
+  vector<double> sigmas = readArray<double>(config.lookup("R.sigma"));
+  if (sigmas.size() != ncors) throw Exception("length(R.sigma) != (nfactors*(nfactors-1))/2");
 
-  vector<double> levels = config.readv<double>("R.level");
-  if (levels.size() != ncors) throw Exception("R.level has lenght distinct than (nfactors*(nfactors-1))/2");
-
-  bool haspeq0 = false;
-  for(size_t i=0; i<params.size(); i++) if (params[i] == 0.0) { haspeq0 = true; break; }
+  vector<double> levels = readArray<double>(config.lookup("R.level"));
+  if (levels.size() != ncors) throw Exception("length(R.level) != (nfactors*(nfactors-1))/2");
 
   vector<double> values(nfactors, DEFAULT_R);
-  if (haspeq0 || config.exists("R.init")) {
-    values = config.readv<double>("R.init");
-    if (values.size() != ncors) throw Exception("R.init has lenght distinct than (nfactors*(nfactors-1))/2");
+  bool hasSigmaEq0 = containsValue(sigmas, 0.0);
+  if (hasSigmaEq0 || config.exists("R.value")) {
+    values = readArray<double>(config.lookup("R.value"));
+    if (values.size() != ncors) throw Exception("length(R.value) != (nfactors*(nfactors-1))/2");
     for(size_t i=0; i<values.size(); i++) {
-      if (values[i] <= -1.0 || 1.0 <= values[i]) throw Exception("R.init out of range (-1,+1)");
+      if (values[i] <= -1.0 || 1.0 <= values[i]) {
+        throw Exception("R.value["+to_string(i+1)+"] out of range (-1,+1)");
+      }
     }
   }
 
@@ -218,7 +356,7 @@ void ccruncher_inf::Metropolis::readR(const Configuration &config)
   for(size_t i=0,pos=0; i<R.size(); i++) {
     R[i][i].init("R", 1.0, 0.0, 0.0); // diagonal is 1
     for(size_t j=i+1; j<nfactors; j++) {
-      R[i][j].init("R", values[pos], params[pos], levels[pos]);
+      R[i][j].init("R", values[pos], sigmas[pos], levels[pos]);
       pos++;
     }
   }
@@ -227,98 +365,54 @@ void ccruncher_inf::Metropolis::readR(const Configuration &config)
 //===========================================================================
 // read Z component
 //===========================================================================
-void ccruncher_inf::Metropolis::readZ(const Configuration &config)
+void ccruncher_inf::Metropolis::readZ(const Config &config)
 {
-  vector<double> params = config.readv<double>("Z.sigma");
-  if (params.size() == 1) {
-    params.assign(nobs, params[0]);
-  }
-  if (params.size() != nobs) throw Exception("Z.sigma has lenght distinct than 1 or nobs");
+  vector<double> sigmas = readArray<double>(config.lookup("Z.sigma"), nobs);
+  vector<double> levels = readArray<double>(config.lookup("Z.level"), nobs);
 
-  double level = config.read<double>("Z.level");
-
-  bool haspeq0 = false;
-  for(size_t i=0; i<params.size(); i++) if (params[i] == 0.0) { haspeq0 = true; break; }
-
-  vector<vector<double>> values(nobs, vector<double>(nfactors,DEFAULT_Z));
-  if (haspeq0 || config.exists("Z.init")) {
-    if (config.isValue("Z.init")) {
-      double val = config.read<double>("Z.init");
-      for(size_t i=0; i<values.size(); i++) {
-        for(size_t j=0; j<values[i].size(); j++) {
-          values[i][j] = val;
-        }
-      }
-    }
-    else if (config.isArray("Z.init")) {
-      vector<double> val = config.readv<double>("Z.init");
-      if (val.size() != nfactors) throw Exception("Z.init has lenght distinct than nfactors");
-      for(size_t i=0; i<values.size(); i++) {
-        values[i] = val;
-      }
-    }
-    else {
-      values = config.readm<double>("Z.init");
-      if (values.size() != nobs) throw Exception("Z.init has number of rows distinct than nobs");
-      for(size_t i=0; i<values.size(); i++) {
-        if (values[i].size() != nfactors) throw Exception("Z.init row length distinct than nfactors");
-      }
-    }
+  vector<vector<double>> values(nobs, vector<double>(nfactors, DEFAULT_Z));
+  bool hasSigmaEq0 = containsValue(sigmas, 0.0);
+  if (hasSigmaEq0 || config.exists("Z.value")) {
+    values = readMatrix<double>(config.lookup("Z.value"), nobs, nfactors);
   }
 
   Z.resize(nobs);
   for(size_t i=0; i<Z.size(); i++) {
-    Z[i].init("Z", values[i], params[i], level);
+    Z[i].init("Z["+to_string(i+1)+"]", values[i], sigmas[i], levels[i]);
   }
 }
 
 //===========================================================================
-// read S component
+// read S component (chi-squared latent variables)
 //===========================================================================
-void ccruncher_inf::Metropolis::readS(const Configuration &config)
+void ccruncher_inf::Metropolis::readS(const Config &config)
 {
-  vector<double> params = config.readv<double>("S.sigma");
-  if (params.size() == 1) {
-    params.assign(nobs, params[0]);
-  }
-  if (params.size() != nobs) throw Exception("S.sigma has lenght distinct than 1 or nobs");
-
-  double level = config.read<double>("S.level");
-
-  bool haspeq0 = false;
-  for(size_t i=0; i<params.size(); i++) if (params[i] == 0.0) { haspeq0 = true; break; }
+  vector<double> sigmas = readArray<double>(config.lookup("S.sigma"), nobs);
+  //TODO: check range (0,inf)
+  vector<double> levels = readArray<double>(config.lookup("S.level"), nobs);
+  //TODO: check range (0,1)
 
   vector<double> values(nobs, nu.value);
-  if (haspeq0 || config.exists("S.init")) {
-    if (config.isValue("S.init")) {
-      double val = config.read<double>("S.init");
-      for(size_t i=0; i<values.size(); i++) {
-        values[i] = val;
-      }
-    }
-    else {
-      values = config.readv<double>("S.init");
-      if (values.size() != nobs) throw Exception("S.init has number of rows distinct than nobs");
-    }
+  bool hasSigmaEq0 = containsValue(sigmas, 0.0);
+  if (hasSigmaEq0 || config.exists("S.value")) {
+    values = readArray<double>(config.lookup("S.value"), nobs);
   }
 
   S.resize(nobs);
   for(size_t i=0; i<S.size(); i++) {
-    if (values[i] <= 0) throw Exception("S.init value out of range (>0)");
-    S[i].init("S", values[i], params[i], level);
+    if (values[i] <= 0) throw Exception("S.value value out of range (0,inf)");
+    S[i].init("S", values[i], sigmas[i], levels[i]);
   }
 }
 
 //===========================================================================
 // inits object
 //===========================================================================
-void ccruncher_inf::Metropolis::init(const Configuration &config) throw(Exception)
+void ccruncher_inf::Metropolis::init(const Config &config) throw(Exception)
 {
-  mConfig = config;
-
   // reading data
-  readNfactors(config);
-  readDprob(config);
+  readFactors(config);
+  readRatings(config);
   readNobligors(config);
   readNdefaults(config);
   readNu(config);
@@ -813,63 +907,117 @@ double ccruncher_inf::Metropolis::qprod(const vector<double> &v, const gsl_matri
 }
 
 //===========================================================================
+// create a setting
+//===========================================================================
+Setting& ccruncher_inf::Metropolis::createSetting(const string &name, Setting &parent, enum Setting::Type type)
+{
+  if(parent.exists(name)) {
+    parent.remove(name);
+  }
+  return parent.add(name, type);
+}
+
+template<typename T>
+Setting& ccruncher_inf::Metropolis::writeArray(const string &name, Setting &parent, enum Setting::Type type, const vector<T> &values)
+{
+  Setting &setting = createSetting(name, parent, Setting::TypeArray);
+  for(size_t i=0; i < values.size(); i++) {
+    setting.add(type) = values[i];
+  }
+  return setting;
+}
+
+template<typename T>
+Setting& ccruncher_inf::Metropolis::writeMatrix(const string &name, Setting &parent, enum Setting::Type type, const vector<vector<T>> &values)
+{
+  Setting &setting = createSetting(name, parent, Setting::TypeList);
+  for(size_t i=0; i < values.size(); i++) {
+    Setting &row = setting.add(Setting::TypeArray);
+    for(size_t j=0; j<values[i].size(); j++) {
+      row.add(type) = values[i][j];
+    }
+  }
+  return setting;
+}
+
+//===========================================================================
 // returns current state
 //===========================================================================
-Configuration ccruncher_inf::Metropolis::getState() const
+Config& ccruncher_inf::Metropolis::getState()
 {
-  Configuration ret = mConfig;
-  vector<double> v;
-  vector<vector<double> > m;
+  Setting &root = mConfig.getRoot();
+  vector<double> vValues, vSigmas, vLevels;
+  vector<vector<double>> mValues;
 
-  // init sections
-  ret.write("NU.init", nu.value);
+  mConfig.setOptions(Setting::OptionNone);
+  mConfig.setTabWidth(2); // 0 = tab
 
-  v.resize(W.size());
-  for(size_t i=0; i<W.size(); i++) v[i] = W[i].value;
-  ret.write("W.init", v);
+  writeArray<string>("factors", root, Setting::TypeString, factors);
+  writeArray<string>("ratings", root, Setting::TypeString, ratings);
+  writeArray<double>("dprobs", root, Setting::TypeFloat, dprobs);
+  writeMatrix<int>("nobligors", root, Setting::TypeInt, nobligors);
+  writeMatrix<int>("ndefaults", root, Setting::TypeInt, ndefaults);
 
-  v.resize((nfactors*(nfactors-1))/2);
-  for(size_t pos=0, i=0; i<nfactors; i++) {
-    for(size_t j=i+1; j<nfactors; j++) {
-      v[pos] = R[i][j].value;
-      pos++;
+  Setting &sNU = createSetting("NU", root, Setting::TypeGroup);
+  sNU.add("value", Setting::TypeFloat) = nu.value;
+  sNU.add("sigma", Setting::TypeFloat) = nu.sigma;
+  sNU.add("level", Setting::TypeFloat) = nu.level;
+
+  vValues.clear();
+  vSigmas.clear();
+  vLevels.clear();
+  for(size_t i=0; i<W.size(); i++) {
+    vValues.push_back(W[i].value);
+    vSigmas.push_back(W[i].sigma);
+    vLevels.push_back(W[i].level);
+  }
+  Setting &sW = createSetting("W", root, Setting::TypeGroup);
+  writeArray<double>("value", sW, Setting::TypeFloat, vValues);
+  writeArray<double>("sigma", sW, Setting::TypeFloat, vSigmas);
+  writeArray<double>("level", sW, Setting::TypeFloat, vLevels);
+
+  vValues.clear();
+  vSigmas.clear();
+  vLevels.clear();
+  for(size_t i=0; i<R.size(); i++) {
+    for(size_t j=i+1; j<R.size(); j++) {
+      vValues.push_back(R[i][j].value);
+      vSigmas.push_back(R[i][j].sigma);
+      vLevels.push_back(R[i][j].level);
     }
   }
-  ret.write("R.init", v);
+  Setting &sR = createSetting("R", root, Setting::TypeGroup);
+  writeArray<double>("value", sR, Setting::TypeFloat, vValues);
+  writeArray<double>("sigma", sR, Setting::TypeFloat, vSigmas);
+  writeArray<double>("level", sR, Setting::TypeFloat, vLevels);
 
-  m.resize(Z.size());
-  for(size_t i=0; i<Z.size(); i++) m[i] = Z[i].value;
-  ret.write("Z.init", m);
-
-  m.resize(S.size());
-  for(size_t i=0; i<S.size(); i++) m[i] = vector<double>(1,S[i].value);
-  ret.write("S.init", m);
-
-  // param sections
-  ret.write("NU.sigma", nu.sigma);
-
-  v.resize(W.size());
-  for(size_t i=0; i<W.size(); i++) v[i] = W[i].sigma;
-  ret.write("W.sigma", v);
-
-  v.resize((nfactors*(nfactors-1))/2);
-  for(size_t pos=0, i=0; i<nfactors; i++) {
-    for(size_t j=i+1; j<nfactors; j++) {
-      v[pos] = R[i][j].sigma;
-      pos++;
-    }
+  vValues.clear();
+  vSigmas.clear();
+  vLevels.clear();
+  for(size_t i=0; i<Z.size(); i++) {
+    mValues.push_back(Z[i].value);
+    vSigmas.push_back(Z[i].sigma);
+    vLevels.push_back(Z[i].level);
   }
-  ret.write("R.sigma", v);
+  Setting &sZ = createSetting("Z", root, Setting::TypeGroup);
+  writeMatrix<double>("value", sZ, Setting::TypeFloat, mValues);
+  writeArray<double>("sigma", sZ, Setting::TypeFloat, vSigmas);
+  writeArray<double>("level", sZ, Setting::TypeFloat, vLevels);
 
-  m.resize(Z.size());
-  for(size_t i=0; i<Z.size(); i++) m[i] = vector<double>(1,Z[i].sigma);
-  ret.write("Z.sigma", m);
+  vValues.clear();
+  vSigmas.clear();
+  vLevels.clear();
+  for(size_t i=0; i<S.size(); i++) {
+    vValues.push_back(S[i].value);
+    vSigmas.push_back(S[i].sigma);
+    vLevels.push_back(S[i].level);
+  }
+  Setting &sS = createSetting("S", root, Setting::TypeGroup);
+  writeArray<double>("value", sS, Setting::TypeFloat, vValues);
+  writeArray<double>("sigma", sS, Setting::TypeFloat, vSigmas);
+  writeArray<double>("level", sS, Setting::TypeFloat, vLevels);
 
-  m.resize(S.size());
-  for(size_t i=0; i<S.size(); i++) m[i] = vector<double>(1,S[i].sigma);
-  ret.write("S.sigma", m);
-
-  return ret;
+  return mConfig;
 }
 
 //===========================================================================

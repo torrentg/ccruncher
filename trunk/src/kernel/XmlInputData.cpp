@@ -612,7 +612,7 @@ void ccruncher::XmlInputData::validate()
     throw Exception("section 'factors' not defined");
   }
   else if (!hasTag(XmlTag::CORRELATIONS)) {
-    throw Exception("section 'correlations' not defined");
+    initCorrelations(factors.size());
   }
   else if (!hasTag(XmlTag::SEGMENTATIONS)) {
     throw Exception("section 'segmentations' not defined");

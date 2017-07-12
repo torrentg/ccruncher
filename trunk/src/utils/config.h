@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2017-01-01 08:16:42+01:00"
+#define BUILD_DATE "2017-05-28 10:09:49+02:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -30,6 +30,9 @@
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
+
+/* Define to 1 if you have the `config++' library (-lconfig++). */
+#define HAVE_LIBCONFIG__ 1
 
 /* Define to 1 if you have the `expat' library (-lexpat). */
 #define HAVE_LIBEXPAT 1
