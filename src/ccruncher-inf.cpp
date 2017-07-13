@@ -30,7 +30,6 @@
 #include <gsl/gsl_errno.h>
 #include "utils/config.h"
 #include "utils/Exception.hpp"
-#include "inference/Configuration.hpp"
 #include "inference/Metropolis.hpp"
 
 using namespace std;
@@ -61,6 +60,7 @@ void catchsignal(int)
 /**************************************************************************//**
  * @details Catch uncaught exceptions thrown by program.
  */
+[[noreturn]]
 void exception_handler()
 {
   cerr << endl << UNEXPECTED_ERROR_MSG << endl;
@@ -72,6 +72,7 @@ void exception_handler()
  * @details Throws a Exception.
  * @see http://www.gnu.org/software/gsl/
  */
+[[noreturn]]
 void gsl_handler(const char * reason, const char *file, int line, int gsl_errno)
 {
   string msg = reason;
@@ -164,8 +165,7 @@ int main(int argc, char *argv[])
   const char* const options1 = "hr:n:b:s:";
 
   // long options (name + has_arg + flag + val)
-  const struct option options2[] =
-  {
+  const struct option options2[] = {
     { "help",     0, nullptr, 'h' },
     { "refresh",  1, nullptr, 'r' },
     { "numiters", 1, nullptr, 'n' },

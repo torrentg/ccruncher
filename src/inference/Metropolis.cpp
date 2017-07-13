@@ -56,9 +56,9 @@ using namespace ccruncher_inf;
 #define DEFAULT_NU 15.0
 
 //===========================================================================
-// constructor
+// @param[in] seed RNG seed.
 //===========================================================================
-ccruncher_inf::Metropolis::Metropolis(unsigned long seed) throw(Exception)
+ccruncher_inf::Metropolis::Metropolis(unsigned long seed)
     : rng(nullptr), M0(nullptr), M1(nullptr)
 {
   fstop = false;
@@ -406,9 +406,10 @@ void ccruncher_inf::Metropolis::readS(const Config &config)
 }
 
 //===========================================================================
-// inits object
+// @param[in] config Configuration object.
+// @throw Exception Invalid configuration values.
 //===========================================================================
-void ccruncher_inf::Metropolis::init(const Config &config) throw(Exception)
+void ccruncher_inf::Metropolis::init(const Config &config)
 {
   // reading data
   readFactors(config);
@@ -468,9 +469,14 @@ void ccruncher_inf::Metropolis::init(const Config &config) throw(Exception)
 }
 
 //===========================================================================
-// run simulation
+// @param[in] output Stream to write simulated values.
+// @param[in] info Stream to write log info.
+// @param[in] blocksize Number of items used to compute the acceptance rate.
+// @param[in] maxiters Maximum number of iterations (=0 -> non-stop).
+// @param[in] burnin Number of initial simulations skiped.
+// @throw Exception Error running MCMC.
 //===========================================================================
-int ccruncher_inf::Metropolis::run(ostream &output, ostream &info, size_t blocksize, size_t maxiters, size_t burnin) throw(Exception)
+int ccruncher_inf::Metropolis::run(ostream &output, ostream &info, size_t blocksize, size_t maxiters, size_t burnin)
 {
   size_t numsims = 0;
   fstop = false;
@@ -650,8 +656,7 @@ void Metropolis::updateR(size_t s1, size_t s2)
       double loga = 0.0;
 
 #pragma omp parallel for reduction(+:loga) schedule(dynamic)
-      for(size_t n=0; n<nobs; n++)
-      {
+      for(size_t n=0; n<nobs; n++) {
         // multivariate normal part (I)
         mz1[n] = -0.5 * qprod(Z[n].value, M1);
         loga += mz1[n] - mz0[n];
@@ -665,8 +670,7 @@ void Metropolis::updateR(size_t s1, size_t s2)
       bool accepted = (u<loga);
       R[s1][s2].setAccepted(accepted);
 
-      if (accepted)
-      {
+      if (accepted) {
         R[s1][s2].value = r1;
         gsl_matrix *aux = M0;
         M0 = M1;
@@ -727,8 +731,7 @@ void ccruncher_inf::Metropolis::updateZ(size_t n)
   bool accepted = (log(u)<loga);
   Z[n].setAccepted(accepted);
 
-  if (accepted)
-  {
+  if (accepted) {
     Z[n].value = z1;
     mz0[n] = mz1[n];
     lb0[n] = lb1[n];
@@ -785,8 +788,7 @@ void Metropolis::updateS(size_t n)
     bool accepted = (log(u)<loga);
     S[n].setAccepted(accepted);
 
-    if (accepted)
-    {
+    if (accepted) {
       S[n].value = s1;
       cs0[n] = cs1[n];
       lb0[n] = lb1[n];
@@ -799,51 +801,52 @@ void Metropolis::updateS(size_t n)
 //===========================================================================
 void ccruncher_inf::Metropolis::updateNu()
 {
-  if (!nu.isFixed())
+  if (nu.isFixed()) {
+    return;
+  }
+
+  double nu0 = nu.value;
+  double nu1 = nu0 + gsl_ran_gaussian(rng, nu.sigma);
+
+  if (nu1 < 2.0 || 1000.0 < nu1)
   {
-    double nu0 = nu.value;
-    double nu1 = nu0 + gsl_ran_gaussian(rng, nu.sigma);
-
-    if (nu1 < 2.0 || 1000.0 < nu1)
-    {
-      nu.setAccepted(false);
+    nu.setAccepted(false);
+  }
+  else
+  {
+    for(size_t r=0; r<nratings; r++) {
+      ti1[r] = gsl_cdf_tdist_Pinv(dprobs[r], nu1);
     }
-    else
-    {
-      for(size_t r=0; r<nratings; r++) {
-        ti1[r] = gsl_cdf_tdist_Pinv(dprobs[r], nu1);
-      }
 
-      double loga = 0.0;
+    double loga = 0.0;
 #pragma omp parallel for reduction(+:loga) schedule(dynamic)
-      for(size_t n=0; n<nobs; n++) {
-        // chi-square part (I)
-        cs1[n] = (nu1/2.0-1.0)*log(S[n].value);
-        loga += cs1[n] - cs0[n];
-        // binomial part
-        for(size_t s=0; s<nfactors; s++) {
-          for(size_t r=0; r<nratings; r++) {
-            size_t k = s*nratings+r;
-            lb1[n][k] = lbinom(nobligors[n][k], ndefaults[n][k], ti1[r], nu1, W[s].value, Z[n].value[s], S[n].value);
-            loga += lb1[n][k] - lb0[n][k];
-          }
+    for(size_t n=0; n<nobs; n++) {
+      // chi-square part (I)
+      cs1[n] = (nu1/2.0-1.0)*log(S[n].value);
+      loga += cs1[n] - cs0[n];
+      // binomial part
+      for(size_t s=0; s<nfactors; s++) {
+        for(size_t r=0; r<nratings; r++) {
+          size_t k = s*nratings+r;
+          lb1[n][k] = lbinom(nobligors[n][k], ndefaults[n][k], ti1[r], nu1, W[s].value, Z[n].value[s], S[n].value);
+          loga += lb1[n][k] - lb0[n][k];
         }
       }
+    }
 
-      // chi-square part(II)
-      loga += -double(nobs)*(0.5*nu1*LOG2 + gsl_sf_lngamma(nu1/2.0));
-      loga -= -double(nobs)*(0.5*nu0*LOG2 + gsl_sf_lngamma(nu0/2.0));
+    // chi-square part(II)
+    loga += -double(nobs)*(0.5*nu1*LOG2 + gsl_sf_lngamma(nu1/2.0));
+    loga -= -double(nobs)*(0.5*nu0*LOG2 + gsl_sf_lngamma(nu0/2.0));
 
-      double u = log(gsl_rng_uniform_pos(rng));
-      bool accepted = (u<loga);
-      nu.setAccepted(accepted);
+    double u = log(gsl_rng_uniform_pos(rng));
+    bool accepted = (u<loga);
+    nu.setAccepted(accepted);
 
-      if (accepted) {
-        nu.value = nu1;
-        ti0 = ti1;
-        lb0 = lb1;
-        cs0 = cs1;
-      }
+    if (accepted) {
+      nu.value = nu1;
+      ti0 = ti1;
+      lb0 = lb1;
+      cs0 = cs1;
     }
   }
 }

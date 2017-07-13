@@ -246,12 +246,10 @@ build_ccruncher_tests_SOURCES = \
 build_ccruncher_inf_SOURCES = \
     src/ccruncher-inf.cpp \
     src/utils/Exception.cpp \
-    src/inference/Configuration.cpp \
     src/inference/Component.cpp \
     src/inference/Metropolis.cpp \
     \
     src/utils/Exception.hpp \
-    src/inference/Configuration.hpp \
     src/inference/Component.hpp \
     src/inference/Metropolis.hpp \
     src/utils/config.h

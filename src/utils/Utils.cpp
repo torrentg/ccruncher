@@ -341,8 +341,7 @@ bool ccruncher::Utils::existDir(const std::string &dirname)
   errno = 0;
   DIR *tmp = opendir(dirname.c_str());
 
-  if (tmp == nullptr)
-  {
+  if (tmp == nullptr) {
     if (errno == EACCES) {
       return true;
     }
@@ -350,8 +349,7 @@ bool ccruncher::Utils::existDir(const std::string &dirname)
       return false;
     }
   }
-  else
-  {
+  else {
     closedir(tmp);
     return true;
   }
@@ -376,8 +374,7 @@ void ccruncher::Utils::makeDir(const std::string &dirname)
 #endif
 
   // checking creation
-  if (aux != 0)
-  {
+  if (aux != 0) {
     string code = "[" + to_string(errno) + "]";
     code = (errno==EACCES?"[EACCES]":code);
     code = (errno==EEXIST?"[EEXIST]":code);
@@ -412,8 +409,7 @@ void ccruncher::Utils::checkFile(const string &pathname, const string &smode)
   aux = access(pathname.c_str(), mode);
 
   // checking return code
-  if (aux != 0)
-  {
+  if (aux != 0) {
     throw Exception("file " + pathname + " fails " + smode + " check");
   }
 }
@@ -531,7 +527,7 @@ string ccruncher::Utils::millisToString(long millis)
 
   // formating elapsed time
   char buf[20];
-  snprintf(buf, 20, "%02d:%02d:%02d.%03ld", hh, min, sec, ms);
+  snprintf(buf, 20, "%02d:%02d:%02d.%03d", hh, min, sec, int(ms));
 
   // exit function
   return string(buf);

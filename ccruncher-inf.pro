@@ -6,14 +6,12 @@ VERSION = 2.5.0
 
 HEADERS += \
     src/utils/Exception.hpp \
-    src/inference/Configuration.hpp \
     src/inference/Component.hpp \
     src/inference/Metropolis.hpp
 
 SOURCES += \
     src/ccruncher-inf.cpp \
     src/utils/Exception.cpp \
-    src/inference/Configuration.cpp \
     src/inference/Component.cpp \
     src/inference/Metropolis.cpp
 
