@@ -260,22 +260,22 @@ void ccruncher_test::EADTest::test2()
 //===========================================================================
 void ccruncher_test::EADTest::test3()
 {
-  ASSERT(EAD("1000") == EAD("1000"));
-  ASSERT(EAD("1001") != EAD("1000"));
+  ASSERT(EAD("1000") == EAD(1000));
+  ASSERT(EAD("1001") != EAD(1000));
 
-  ASSERT(EAD("lognormal(1,2)") == EAD("lognormal(1,2)"));
-  ASSERT(EAD("lognormal(2,2)") != EAD("lognormal(1,2)"));
+  ASSERT(EAD("lognormal(1,2)") == EAD(EAD::Type::Lognormal, 1.0, 2.0));
+  ASSERT(EAD("lognormal(2,2)") != EAD(EAD::Type::Lognormal, 1.0, 2.0));
 
-  ASSERT(EAD("exponential(0.2)") == EAD("exponential(0.2)"));
-  ASSERT(EAD("exponential(0.3)") != EAD("exponential(0.2)"));
+  ASSERT(EAD("exponential(0.2)") == EAD(EAD::Type::Exponential, 0.2));
+  ASSERT(EAD("exponential(0.3)") != EAD(EAD::Type::Exponential, 0.2));
 
-  ASSERT(EAD("gamma(0.2,0.3)") == EAD("gamma(0.2,0.3)"));
-  ASSERT(EAD("gamma(0.2,0.4)") != EAD("gamma(0.2,0.3)"));
+  ASSERT(EAD("gamma(0.2,0.3)") == EAD(EAD::Type::Gamma, 0.2, 0.3));
+  ASSERT(EAD("gamma(0.2,0.4)") != EAD(EAD::Type::Gamma, 0.2, 0.3));
 
-  ASSERT(EAD("uniform(0.2,0.3)") == EAD("uniform(0.2,0.3)"));
-  ASSERT(EAD("uniform(0.1,0.3)") != EAD("uniform(0.2,0.3)"));
+  ASSERT(EAD("uniform(0.2,0.3)") == EAD(EAD::Type::Uniform, 0.2, 0.3));
+  ASSERT(EAD("uniform(0.1,0.3)") != EAD(EAD::Type::Uniform, 0.2, 0.3));
 
-  ASSERT(EAD("normal(0.2,0.3)") == EAD("normal(0.2,0.3)"));
-  ASSERT(EAD("normal(0.1,0.3)") != EAD("normal(0.2,0.3)"));
+  ASSERT(EAD("normal(0.2,0.3)") == EAD(EAD::Type::Normal, 0.2, 0.3));
+  ASSERT(EAD("normal(0.1,0.3)") != EAD(EAD::Type::Normal, 0.2, 0.3));
 }
 

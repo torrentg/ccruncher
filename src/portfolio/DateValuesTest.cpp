@@ -33,12 +33,13 @@ void ccruncher_test::DateValuesTest::test1()
 {
   DateValues val1(Date(10,10,2001), EAD(EAD::Type::Fixed,+1.0), LGD(LGD::Type::Fixed,0.50));
   DateValues val2(Date(01,01,2006), EAD(EAD::Type::Fixed,+0.5), LGD(LGD::Type::Fixed,0.75));
+  DateValues val3 = val1;
 
   // checking that sorts by date
   ASSERT(val1 < val2);
 
   // checking comparators
-  ASSERT(val1 == val1);
+  ASSERT(val1 == val3);
   ASSERT(val1 != val2);
 }
 
