@@ -39,6 +39,10 @@ ccruncher_gui::AnalysisTask::AnalysisTask() : QThread(), hist(nullptr)
   mode_ = mode::none;
   progress = 0.0f;
   msgerr = "";
+  isegment = 0;
+  numbins = 1;
+  percentile = 0.1;
+  stop_ = false;
   setStatus(status::finished);
   setTerminationEnabled(false);
 }
