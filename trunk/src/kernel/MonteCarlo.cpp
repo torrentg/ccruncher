@@ -427,7 +427,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   logger << "simulations realized" << split << numiterations << endl;
   auto t2 = steady_clock::now();
   long millis = duration_cast<milliseconds>(t2-t1).count();
-  logger << "total simulation time" << split << Utils::millisToString(millis) << endl;
+  logger << "elapsed time" << split << Utils::millisToString(millis) << endl;
   logger << indent(-1) << endl;
 
   if (mStatus == status::error) {

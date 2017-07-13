@@ -49,21 +49,21 @@ class Component
     std::vector<bool> accepted;
     //! Current position in the circular queue.
     int pos;
-    //! counter used by adapter
+    //! Counter used by the Robbins-Monro process.
     int counter;
 
   private:
 
-    //! Adaptive scaling param.
+    //! Update the sigma level according to Robbins-Monro algorithm.
     void adapt(bool);
 
   public:
 
     //! Current state.
     T value;
-    //! Tunning parameter (param>=0, if param=0 -> value not updated)
+    //! Standard deviation of the proposal distribution (sigma>=0, if sigma=0 -> value not updated).
     double sigma;
-    //! Desired acceptance rate (0 <= level < 1, =0 means no param update)
+    //! Desired acceptance rate (0 <= level < 1, =0 means no param update).
     double level;
 
   public:
@@ -71,22 +71,20 @@ class Component
     //! Default constructor.
     Component();
     //! Initialize component.
-    void init(const std::string &, const T &v, double p, double l) throw(ccruncher::Exception);
+    void init(const std::string &, const T &v, double p, double l);
     //! Resize circular queue.
     void resize(size_t n);
-    //! check if this component is fixed.
+    //! Check if this component is fixed.
     bool isFixed() const { return (sigma == 0.0); }
     //! Adds an observation.
     void setAccepted(bool);
-    //! Returns acceptance rate.
+    //! Returns the acceptance rate.
     double getAccRate() const;
-    //! Reset adapter.
-    void reset();
 
 };
 
 //===========================================================================
-// constructor
+// @brief Creates a default component. Use init() and resize() to initialize.
 //===========================================================================
 template <class T>
 Component<T>::Component() : name("?"), accepted(0,false), pos(-1), counter(0),
@@ -96,18 +94,22 @@ value(T()), sigma(NAN), level(NAN)
 }
 
 //===========================================================================
-// init
+// @param[in] str Component name
+// @param[in] v Component value
+// @param[in] s Component sigma
+// @param[in] Component level
+// @throw Exception invalid parameter value
 //===========================================================================
 template <class T>
-void Component<T>::init(const std::string &str, const T &v, double s, double l) throw(ccruncher::Exception)
+void Component<T>::init(const std::string &str, const T &v, double s, double l)
 {
   name = str;
   value = v;
 
-  if (s < 0.0) throw ccruncher::Exception("param out of range");
+  if (s < 0.0) throw ccruncher::Exception("sigma out of range [0,inf)");
   else sigma = s;
 
-  if (l < 0.0 || 1.0 <= l) throw ccruncher::Exception("level out of range");
+  if (l < 0.0 || 1.0 <= l) throw ccruncher::Exception("level out of range [0,1)");
   else level = l;
 
   if (level <= 0.0) counter = 0;
@@ -115,7 +117,7 @@ void Component<T>::init(const std::string &str, const T &v, double s, double l) 
 }
 
 //===========================================================================
-// resize
+// @param[in] n Number of items used to compute the acceptance rate.
 //===========================================================================
 template <class T>
 void Component<T>::resize(size_t n)
@@ -125,7 +127,8 @@ void Component<T>::resize(size_t n)
 }
 
 //===========================================================================
-// setAccepted
+// @brief Update the component state using the Robins-Monro algorithm.
+// @param[in] b Flag indicating if the value was accepted.
 //===========================================================================
 template <class T>
 void Component<T>::setAccepted(bool b)
@@ -139,7 +142,8 @@ void Component<T>::setAccepted(bool b)
 }
 
 //===========================================================================
-// getAccRate
+// @brief getAccRate = #accepted / #size
+// @return The acceptance ratio (value in [0,1]).
 //===========================================================================
 template <class T>
 double Component<T>::getAccRate() const
@@ -159,8 +163,8 @@ double Component<T>::getAccRate() const
 }
 
 //===========================================================================
-// adaptive scaling param
-// see 'Adaptative Optimal Scaling of Metropolis-Hastings Algorithms Using the Robbins-Monro process'
+// @param[in] b Flag indicating if the value was accepted.
+// @see 'Adaptative Optimal Scaling of Metropolis-Hastings Algorithms Using the Robbins-Monro process'
 //===========================================================================
 template <class T>
 void Component<T>::adapt(bool b)
@@ -175,17 +179,6 @@ void Component<T>::adapt(bool b)
       sigma *= 1.0 - 1.0/((1.0-level)*counter);
     }
   }
-}
-
-//===========================================================================
-// reset adapter
-//===========================================================================
-template <class T>
-void Component<T>::reset()
-{
-  if (level <= 0.0) counter = 0;
-  else counter = (int)(5.0/(level*(1.0-level)));
-  if (sigma < 0.1) sigma = 0.1;
 }
 
 } // namespace

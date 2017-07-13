@@ -66,6 +66,7 @@ void ccruncher::ExpatHandlers::epdata(const char *cdata, int len)
  * @details Throws an exception that will be catched by ExpatParser::parse().
  *          Method name prefix 'ep' comes from Expat Parser.
  */
+[[noreturn]]
 void ccruncher::ExpatHandlers::epstop()
 {
   throw int(999);

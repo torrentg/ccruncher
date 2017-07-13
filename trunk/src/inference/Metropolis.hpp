@@ -170,13 +170,13 @@ class Metropolis
   public:
 
     //! Constructor
-    Metropolis(unsigned long seed) throw(ccruncher::Exception);
+    Metropolis(unsigned long seed);
     //! Destructor
     ~Metropolis();
     //! Initializes object
-    void init(const libconfig::Config &) throw(ccruncher::Exception);
+    void init(const libconfig::Config &);
     //! Run simulation
-    int run(std::ostream &output, std::ostream &info, size_t blocksize, size_t maxiters_, size_t burnin) throw(ccruncher::Exception);
+    int run(std::ostream &output, std::ostream &info, size_t blocksize, size_t maxiters_, size_t burnin);
     //! Returns current state
     libconfig::Config& getState();
     //! Stops current run

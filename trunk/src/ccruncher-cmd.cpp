@@ -53,8 +53,8 @@ using namespace ccruncher;
 void help();
 void info();
 void version();
-void setnice(int) throw(Exception);
-void run() throw(Exception);
+void setnice(int);
+void run();
 
 // shared variables
 string sfilename = "";
@@ -79,6 +79,7 @@ void catchsignal(int)
 /**************************************************************************//**
  * @details Catch uncaught exceptions thrown by program.
  */
+[[noreturn]]
 void exception_handler()
 {
   cerr << endl <<
@@ -92,6 +93,7 @@ void exception_handler()
  * @details Throws a ccruncher Exception.
  * @see http://www.gnu.org/software/gsl/
  */
+[[noreturn]]
 void gsl_handler(const char * reason, const char *file, int line, int gsl_errno)
 {
   string msg = reason;
@@ -111,8 +113,7 @@ int main(int argc, char *argv[])
   const char* const options1 = "hawD:o:" ;
 
   // long options (name + has_arg + flag + val)
-  const struct option options2[] =
-  {
+  const struct option options2[] = {
       { "help",         0,  nullptr,  'h' },
       { "append",       0,  nullptr,  'a' },
       { "overwrite",    0,  nullptr,  'w' },
@@ -134,8 +135,7 @@ int main(int argc, char *argv[])
   {
     int curropt = getopt_long(argc, argv, options1, options2, nullptr);
 
-    if (curropt == -1)
-    {
+    if (curropt == -1) {
       // no more options. exit while
       break;
     }
@@ -195,34 +195,29 @@ int main(int argc, char *argv[])
           return EXIT_SUCCESS;
 
       case 302: // --nice=val (set nice value)
-          try
-          {
+          try {
             string snice = string(optarg);
             inice = Parser::intValue(snice);
           }
-          catch(Exception &)
-          {
+          catch(Exception &) {
             cerr << "error: invalid nice value" << endl;
             return EXIT_FAILURE;
           }
           break;
 
       case 303: // --hash=val (set hash value)
-          try
-          {
+          try {
             string shash = string(optarg);
             ihash = Parser::intValue(shash);
           }
-          catch(Exception &)
-          {
+          catch(Exception &) {
             cerr << "error: invalid hash value" << endl;
             return EXIT_FAILURE;
           }
           break;
 
       case 304: // --threads=val (set number of threads)
-          try
-          {
+          try {
             string sthreads = string(optarg);
             int num = Parser::intValue(sthreads);
             if (num <= 0 || Utils::getNumCores() < num) {
@@ -232,8 +227,7 @@ int main(int argc, char *argv[])
               ithreads = (unsigned char)(num);
             }
           }
-          catch(Exception &)
-          {
+          catch(Exception &) {
             cerr << "error: invalid threads value" << endl;
             return EXIT_FAILURE;
           }
@@ -252,7 +246,7 @@ int main(int argc, char *argv[])
   }
 
   // retrieving input filename
-  if (argc == optind)
+  if (argc == optind) 
   {
     // reading data from stdin
     sfilename = "";
@@ -265,13 +259,11 @@ int main(int argc, char *argv[])
   }
   else
   {
-    try
-    {
+    try {
       sfilename = string(argv[argc-1]);
       Utils::checkFile(sfilename, "r");
     }
-    catch(Exception &) 
-    {
+    catch(Exception &) {
       cerr << "error: can't open file '" << sfilename << "'" << endl;
       return EXIT_FAILURE;
     }
@@ -289,13 +281,11 @@ int main(int argc, char *argv[])
 
     return EXIT_SUCCESS;
   }
-  catch(std::exception &e)
-  {
+  catch(std::exception &e) {
     cerr << endl << e.what() << endl;
     return EXIT_FAILURE;
   }
-  catch(...)
-  {
+  catch(...) {
     exception_handler();
     return EXIT_FAILURE;
   }
@@ -305,7 +295,7 @@ int main(int argc, char *argv[])
  * @brief Executes parsing and simulation.
  * @throw Exception Error parsing or simulating.
  */
-void run() throw(Exception)
+void run()
 {
   auto t1 = steady_clock::now();
 
@@ -351,19 +341,16 @@ void run() throw(Exception)
  * @param[in] niceval New priority.
  * @throw Exception Invalid nice value.
  */
-void setnice(int niceval) throw(Exception)
+void setnice(int niceval)
 {
   (void) niceval;
 #if !defined(_WIN32)
-  if (niceval < PRIO_MIN || niceval > PRIO_MAX)
-  {
+  if (niceval < PRIO_MIN || niceval > PRIO_MAX) {
     throw Exception("nice value out of range [" + to_string(PRIO_MIN) +
                     ".." + to_string(PRIO_MAX) + "]");
   }
-  else
-  {
-    if(setpriority(PRIO_PROCESS, 0, niceval) != 0)
-    {
+  else {
+    if(setpriority(PRIO_PROCESS, 0, niceval) != 0) {
       string msg = to_string(errno);
       msg = (errno==ESRCH?"ESRCH":msg);
       msg = (errno==EINVAL?"EINVAL":msg);

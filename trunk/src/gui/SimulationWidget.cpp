@@ -507,10 +507,12 @@ void ccruncher_gui::SimulationWidget::setStatus(SimulationTask::status val)
       QPalette pal = ui->progress->palette();
       pal.setColor(QPalette::Highlight, Qt::red);
       ui->progress->setPalette(pal);
+      [[gnu::fallthrough]];
     }
     case SimulationTask::status::stopped:
       // let progress bar unchanged (if maxsims>0), 100% otherwise
       progress->fadeout();
+      [[gnu::fallthrough]];
     case SimulationTask::status::finished:
       timer.stop();
       task.free();

@@ -56,11 +56,12 @@ using namespace ccruncher_gui;
 void help();
 void info();
 void version();
-void setnice(int niceval) throw(Exception);
+void setnice(int niceval);
 
 /**************************************************************************//**
  * @details Catch uncaught exceptions thrown by program.
  */
+[[noreturn]]
 void exception_handler()
 {
   cerr << endl <<
@@ -74,6 +75,7 @@ void exception_handler()
  * @details Throws a ccruncher Exception.
  * @see http://www.gnu.org/software/gsl/
  */
+[[noreturn]]
 void gsl_handler(const char * reason, const char *file, int line, int gsl_errno)
 {
   string msg = reason;
@@ -96,8 +98,7 @@ int main(int argc, char *argv[])
   const char* const options1 = "h" ;
 
   // long options (name + has_arg + flag + val)
-  const struct option options2[] =
-  {
+  const struct option options2[] = {
       { "help",         0,  nullptr,  'h' },
       { "version",      0,  nullptr,  301 },
       { "nice",         1,  nullptr,  302 },
@@ -114,8 +115,7 @@ int main(int argc, char *argv[])
   {
     int curropt = getopt_long(argc, argv, options1, options2, nullptr);
 
-    if (curropt == -1)
-    {
+    if (curropt == -1) {
       // no more options. exit while
       break;
     }
@@ -136,21 +136,18 @@ int main(int argc, char *argv[])
           return EXIT_SUCCESS;
 
       case 302: // --nice=val (set nice value)
-          try
-          {
+          try {
             string snice = string(optarg);
             inice = Parser::intValue(snice);
           }
-          catch(Exception &)
-          {
+          catch(Exception &) {
             cerr << "error: invalid nice value" << endl;
             return EXIT_FAILURE;
           }
           break;
 
       case 304: // --threads=val (set number of threads)
-          try
-          {
+          try {
             string sthreads = string(optarg);
             int ithreads = Parser::intValue(sthreads);
             if (ithreads <= 0 || Utils::getNumCores() < ithreads) {
@@ -160,8 +157,7 @@ int main(int argc, char *argv[])
               properties["ithreads"] = QVariant(ithreads);
             }
           }
-          catch(Exception &)
-          {
+          catch(Exception &) {
             cerr << "error: invalid threads value" << endl;
             return EXIT_FAILURE;
           }
@@ -179,12 +175,11 @@ int main(int argc, char *argv[])
     }
   }
 
-  //chdir("..");
-
-
-  setlocale(LC_ALL, "C"); // sets decimal point to sprintf and strtod
-  //QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+  // sets decimal point to sprintf and strtod
+  setlocale(LC_ALL, "C");
   QLocale::setDefault(QLocale::c());
+
+  // setting gsl error handler
   gsl_set_error_handler(gsl_handler);
 
   // run application
@@ -201,28 +196,19 @@ int main(int argc, char *argv[])
     w.show();
 
     // opening files given as argument
-    for(int i=optind; i<argc; i++)
-    {
+    for(int i=optind; i<argc; i++) {
       QFileInfo filename(argv[i]);
       QUrl url = QUrl::fromLocalFile(filename.canonicalFilePath());
-      /*
-      if (!filename.toLower().endsWith("csv")) {
-        url.setPath(url.toLocalFile());
-        url.setScheme("exec");
-      }
-      */
       w.openFile(url);
     }
 
     return app.exec();
   }
-  catch (std::exception &e)
-  {
+  catch (std::exception &e) {
     cerr << "error: " << e.what() << endl;
     return EXIT_FAILURE;
   }
-  catch(...)
-  {
+  catch(...) {
     exception_handler();
     return EXIT_FAILURE;
   }
@@ -234,19 +220,16 @@ int main(int argc, char *argv[])
  * @param[in] niceval New priority.
  * @throw Exception Invalid nice value.
  */
-void setnice(int niceval) throw(Exception)
+void setnice(int niceval)
 {
   (void) niceval;
 #if !defined(_WIN32)
-  if (niceval < PRIO_MIN || niceval > PRIO_MAX)
-  {
+  if (niceval < PRIO_MIN || niceval > PRIO_MAX) {
     throw Exception("nice value out of range [" + to_string(PRIO_MIN) +
                     ".." + to_string(PRIO_MAX) + "]");
   }
-  else
-  {
-    if(setpriority(PRIO_PROCESS, 0, niceval) != 0)
-    {
+  else {
+    if(setpriority(PRIO_PROCESS, 0, niceval) != 0) {
       string msg = to_string(errno);
       msg = (errno==ESRCH?"ESRCH":msg);
       msg = (errno==EINVAL?"EINVAL":msg);

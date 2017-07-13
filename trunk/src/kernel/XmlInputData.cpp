@@ -199,7 +199,7 @@ void ccruncher::XmlInputData::parse(gzFile file)
       auto t2 = steady_clock::now();
       long millis = duration_cast<milliseconds>(t2-t1).count();
       logger << "file checksum (adler32)" << split << parser.getChecksum() << endl;
-      logger << "elapsed time parsing data" << split << Utils::millisToString(millis) << endl;
+      logger << "elapsed time" << split << Utils::millisToString(millis) << endl;
       logger << indent(-1);
       summary();
     }
