@@ -240,8 +240,8 @@ void ccruncher::Date::JdToYmd( const long lJD, int *piYear, int *piMonth, int *p
     d = (long) ( 365.25 * c );
     e = (long) ( ( b - d ) / 30.6001 );
     *piDay = (int) b - d - (long) ( 30.6001 * e );
-    *piMonth = (int) ( e < 13.5 ) ? e - 1 : e - 13;
-    *piYear = (int) ( *piMonth > 2.5 ) ? ( c - 4716 ) : c - 4715;
+    *piMonth = (int) ( e < 14 ) ? e - 1 : e - 13;
+    *piYear = (int) ( *piMonth > 2 ) ? ( c - 4716 ) : c - 4715;
     if ( *piYear <= 0 )
         *piYear -= 1;
 

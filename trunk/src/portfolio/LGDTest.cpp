@@ -144,17 +144,17 @@ void ccruncher_test::LGDTest::test2()
 }
 
 //===========================================================================
-// test3. comparison
+// test3. comparators
 //===========================================================================
 void ccruncher_test::LGDTest::test3()
 {
-  ASSERT(LGD("0.5") == LGD("0.5"));
-  ASSERT(LGD("0.6") != LGD("0.5"));
+  ASSERT(LGD("0.5") == LGD(0.5));
+  ASSERT(LGD("0.6") != LGD(0.5));
 
-  ASSERT(LGD("uniform(0.2,0.3)") == LGD("uniform(0.2,0.3)"));
-  ASSERT(LGD("uniform(0.1,0.3)") != LGD("uniform(0.2,0.3)"));
+  ASSERT(LGD("uniform(0.2,0.3)") == LGD(LGD::Type::Uniform, 0.2, 0.3));
+  ASSERT(LGD("uniform(0.1,0.3)") != LGD(LGD::Type::Uniform, 0.2, 0.3));
 
-  ASSERT(LGD("beta(0.5,0.25)") == LGD("beta(0.5,0.25)"));
-  ASSERT(LGD("beta(0.6,0.25)") != LGD("beta(0.5,0.25)"));
+  ASSERT(LGD("beta(0.5,0.25)") == LGD(LGD::Type::Beta, 0.5, 0.25));
+  ASSERT(LGD("beta(0.6,0.25)") != LGD(LGD::Type::Beta, 0.5, 0.25));
 }
 

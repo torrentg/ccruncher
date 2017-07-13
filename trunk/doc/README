@@ -244,7 +244,18 @@ Developers tips & tricks
      > flawfinder src/
      > cppcheck --enable=all -I ./ ./
 
-9. profiling executable (only if configure is called with option --enable-profiler)
+9. static code analysis (pvs-studio)
+     # https://www.viva64.com/en/b/0457/
+     # https://www.viva64.com/en/m/0036/#ID0EPG
+     > svn export http://www.ccruncher.net/svn/trunk/ ccruncher-rev
+     > cd ccruncher-rev
+     > how-to-use-pvs-studio-free -c 2 src/
+     > aclocal; autoconf; automake -avcf; ./configure
+     > pvs-studio-analyzer trace -- make check
+     > pvs-studio-analyzer analyze -o pvs-studio.log
+     > plog-converter -a GA:1,2 -t tasklist -o pvs-studio.tasks pvs-studio.log
+     
+10. profiling executable (only if configure is called with option --enable-profiler)
      ccruncher writes gmon.out because we compiled with -pg flag
      > gprof bin/ccruncher-cmd gmon.out
      > # with valgrind (not based on sampling, slow, don't require --enable-profiler)
@@ -266,7 +277,7 @@ Developers tips & tricks
      > perf record ./binary arg1 arg2 ...
      > perf report
 
-10. debuging executable
+11. debuging executable
       > gdb ./path/progname
         >> help
         >> set args arg1 arg2 arg3 ... argn
@@ -274,12 +285,12 @@ Developers tips & tricks
         >> backtrace
         >> quit
 
-11. creating html code documentation
+12. creating html code documentation
       > doxywizard Doxygen
       > doxygen Doxygen
       > firefox build/html/index.html
     
-12. other minor tasks
+13. other minor tasks
       > # man pages creation
       > export LANG=en_GB.utf8
       > help2man --no-info -n "simule the loss distribution of a credit portfolio using the \
@@ -290,7 +301,7 @@ Developers tips & tricks
       > # lines of code
       > cloc src
 
-13. using clang compiler (http://clang.llvm.org/)
+14. using clang compiler (http://clang.llvm.org/)
       > #using autotools
       > ./configure CXX=clang++
       > make CXX=clang++
@@ -299,7 +310,7 @@ Developers tips & tricks
       > # source code static analysis
       > scan-build make
 
-14. making source distribution package
+15. making source distribution package
       > make distcheck
       > make dist
     or (better) use script $CCRUNCHER/bin/makedist.sh
@@ -307,7 +318,7 @@ Developers tips & tricks
       > $CCRUNCHER/bin/makedist.sh -b
       > $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
 
-15. making the rpm package
+16. making the rpm package
       # https://fedoraproject.org/wiki/How_to_create_an_RPM_package
       > rpmdev-setuptree
       > cp build/ccruncher.spec ~/rpmbuild/SPECS
@@ -318,7 +329,7 @@ Developers tips & tricks
       > mock --verbose SRPMS/ccruncher-*.rpm
       > rpmdev-wipetree
 
-16. create a tag in subversion repository
+17. create a tag in subversion repository
       > svn cp http://www.ccruncher.net/svn/trunk/ \
              http://www.ccruncher.net/svn/tags/ccruncher-x.y/ \
              -m "created tag ccruncher-x.y"

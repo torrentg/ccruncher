@@ -994,7 +994,7 @@ Config& ccruncher_inf::Metropolis::getState()
   writeArray<double>("sigma", sR, Setting::TypeFloat, vSigmas);
   writeArray<double>("level", sR, Setting::TypeFloat, vLevels);
 
-  vValues.clear();
+  mValues.clear();
   vSigmas.clear();
   vLevels.clear();
   for(size_t i=0; i<Z.size(); i++) {
