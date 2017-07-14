@@ -19,13 +19,13 @@ INCLUDEPATH += \
     $$PWD/src
 
 LIBS += \
-    -lm \
-    -lconfig++
+	-lm
 
 unix {
   LIBS += \
     -lgsl \
-    -lgslcblas
+	-lgslcblas \
+	-lconfig++
 }
 
 win32 {
@@ -33,7 +33,8 @@ win32 {
     C:/MinGW/msys/1.0/local/include
   LIBS += \
     C:/MinGW/msys/1.0/local/lib/libgsl.a \
-    C:/MinGW/msys/1.0/local/lib/libgslcblas.a
+	C:/MinGW/msys/1.0/local/lib/libgslcblas.a \
+	C:/MinGW/msys/1.0/local/lib/libconfig++.dll.a
 }
 
 CONFIG(release, debug|release) {
