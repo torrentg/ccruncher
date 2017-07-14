@@ -55,9 +55,9 @@ using namespace ccruncher_inf;
 #define DEFAULT_Z 0.0
 #define DEFAULT_NU 15.0
 
-//===========================================================================
-// @param[in] seed RNG seed.
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] seed RNG seed.
+ */
 ccruncher_inf::Metropolis::Metropolis(unsigned long seed)
     : rng(nullptr), M0(nullptr), M1(nullptr)
 {
@@ -74,9 +74,9 @@ ccruncher_inf::Metropolis::Metropolis(unsigned long seed)
   gsl_rng_set(rng, seed);
 }
 
-//===========================================================================
-// destructor
-//===========================================================================
+/**************************************************************************//**
+ * destructor
+ */
 ccruncher_inf::Metropolis::~Metropolis()
 {
   if (M0 != nullptr) gsl_matrix_free(M0);
@@ -84,9 +84,9 @@ ccruncher_inf::Metropolis::~Metropolis()
   if (rng != nullptr) gsl_rng_free(rng);
 }
 
-//===========================================================================
-// read array values from a configuration item
-//===========================================================================
+/**************************************************************************//**
+ * read array values from a configuration item
+ */
 template<typename T>
 vector<T> ccruncher_inf::Metropolis::readArray(const Setting &setting)
 {
@@ -103,9 +103,9 @@ vector<T> ccruncher_inf::Metropolis::readArray(const Setting &setting)
   return ret;
 }
 
-//===========================================================================
-// read array values from a configuration item
-//===========================================================================
+/**************************************************************************//**
+ * read array values from a configuration item
+ */
 template<typename T>
 vector<T> ccruncher_inf::Metropolis::readArray(const Setting &setting, size_t nvals)
 {
@@ -126,9 +126,9 @@ vector<T> ccruncher_inf::Metropolis::readArray(const Setting &setting, size_t nv
   return ret;
 }
 
-//===========================================================================
-// read matrix values from a configuration item
-//===========================================================================
+/**************************************************************************//**
+ * read matrix values from a configuration item
+ */
 template<typename T>
 vector<vector<T>> ccruncher_inf::Metropolis::readMatrix(const Setting &setting)
 {
@@ -149,9 +149,9 @@ vector<vector<T>> ccruncher_inf::Metropolis::readMatrix(const Setting &setting)
   return ret;
 }
 
-//===========================================================================
-// read matrix values from a configuration item
-//===========================================================================
+/**************************************************************************//**
+ * read matrix values from a configuration item
+ */
 template<typename T>
 vector<vector<T>> ccruncher_inf::Metropolis::readMatrix(const Setting &setting, size_t nrows, size_t ncols)
 {
@@ -172,9 +172,9 @@ vector<vector<T>> ccruncher_inf::Metropolis::readMatrix(const Setting &setting, 
   return ret;
 }
 
-//===========================================================================
-// check for duplicates
-//===========================================================================
+/**************************************************************************//**
+ * check for duplicates
+ */
 template<typename T>
 bool ccruncher_inf::Metropolis::hasDuplicates(const vector<T> &v)
 {
@@ -188,9 +188,9 @@ bool ccruncher_inf::Metropolis::hasDuplicates(const vector<T> &v)
   return false;
 }
 
-//===========================================================================
-// check if array constains the given value
-//===========================================================================
+/**************************************************************************//**
+ * check if array constains the given value
+ */
 template<typename T>
 bool ccruncher_inf::Metropolis::containsValue(const vector<T> &v, const T &value)
 {
@@ -202,9 +202,9 @@ bool ccruncher_inf::Metropolis::containsValue(const vector<T> &v, const T &value
   return false;
 }
 
-//===========================================================================
-// read factors
-//===========================================================================
+/**************************************************************************//**
+ * read factors
+ */
 void ccruncher_inf::Metropolis::readFactors(const Config &config)
 {
   factors = readArray<string>(config.lookup("factors"));
@@ -217,9 +217,9 @@ void ccruncher_inf::Metropolis::readFactors(const Config &config)
   nfactors = factors.size();
 }
 
-//===========================================================================
-// read ratings and dprobs
-//===========================================================================
+/**************************************************************************//**
+ * read ratings and dprobs
+ */
 void ccruncher_inf::Metropolis::readRatings(const Config &config)
 {
   ratings = readArray<string>(config.lookup("ratings"));
@@ -242,9 +242,9 @@ void ccruncher_inf::Metropolis::readRatings(const Config &config)
   }
 }
 
-//===========================================================================
-// read the number of obligors
-//===========================================================================
+/**************************************************************************//**
+ * read the number of obligors
+ */
 void ccruncher_inf::Metropolis::readNobligors(const Config &config)
 {
   nobligors = readMatrix<int>(config.lookup("nobligors"));
@@ -262,9 +262,9 @@ void ccruncher_inf::Metropolis::readNobligors(const Config &config)
   nobs = nobligors.size();
 }
 
-//===========================================================================
-// read the number of defaults
-//===========================================================================
+/**************************************************************************//**
+ * read the number of defaults
+ */
 void ccruncher_inf::Metropolis::readNdefaults(const Config &config)
 {
   ndefaults = readMatrix<int>(config.lookup("ndefaults"));
@@ -282,9 +282,9 @@ void ccruncher_inf::Metropolis::readNdefaults(const Config &config)
   }
 }
 
-//===========================================================================
-// read nu component
-//===========================================================================
+/**************************************************************************//**
+ * read nu component
+ */
 void ccruncher_inf::Metropolis::readNu(const Config &config)
 {
   double sigma = config.lookup("NU.sigma");
@@ -298,9 +298,9 @@ void ccruncher_inf::Metropolis::readNu(const Config &config)
   nu.init("NU", value, sigma, level);
 }
 
-//===========================================================================
-// read W component
-//===========================================================================
+/**************************************************************************//**
+ * read W component
+ */
 void ccruncher_inf::Metropolis::readW(const Config &config)
 {
   vector<double> sigmas = readArray<double>(config.lookup("W.sigma"));
@@ -327,9 +327,9 @@ void ccruncher_inf::Metropolis::readW(const Config &config)
   }
 }
 
-//===========================================================================
-// read R component
-//===========================================================================
+/**************************************************************************//**
+ * read R component
+ */
 void ccruncher_inf::Metropolis::readR(const Config &config)
 {
   size_t ncors = (nfactors*(nfactors-1))/2;
@@ -362,9 +362,9 @@ void ccruncher_inf::Metropolis::readR(const Config &config)
   }
 }
 
-//===========================================================================
-// read Z component
-//===========================================================================
+/**************************************************************************//**
+ * read Z component
+ */
 void ccruncher_inf::Metropolis::readZ(const Config &config)
 {
   vector<double> sigmas = readArray<double>(config.lookup("Z.sigma"), nobs);
@@ -382,9 +382,9 @@ void ccruncher_inf::Metropolis::readZ(const Config &config)
   }
 }
 
-//===========================================================================
-// read S component (chi-squared latent variables)
-//===========================================================================
+/**************************************************************************//**
+ * read S component (chi-squared latent variables)
+ */
 void ccruncher_inf::Metropolis::readS(const Config &config)
 {
   vector<double> sigmas = readArray<double>(config.lookup("S.sigma"), nobs);
@@ -405,10 +405,10 @@ void ccruncher_inf::Metropolis::readS(const Config &config)
   }
 }
 
-//===========================================================================
-// @param[in] config Configuration object.
-// @throw Exception Invalid configuration values.
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] config Configuration object.
+ * @throw Exception Invalid configuration values.
+ */
 void ccruncher_inf::Metropolis::init(const Config &config)
 {
   // reading data
@@ -468,14 +468,14 @@ void ccruncher_inf::Metropolis::init(const Config &config)
   }
 }
 
-//===========================================================================
-// @param[in] output Stream to write simulated values.
-// @param[in] info Stream to write log info.
-// @param[in] blocksize Number of items used to compute the acceptance rate.
-// @param[in] maxiters Maximum number of iterations (=0 -> non-stop).
-// @param[in] burnin Number of initial simulations skiped.
-// @throw Exception Error running MCMC.
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] output Stream to write simulated values.
+ * @param[in] info Stream to write log info.
+ * @param[in] blocksize Number of items used to compute the acceptance rate.
+ * @param[in] maxiters Maximum number of iterations (=0 -> non-stop).
+ * @param[in] burnin Number of initial simulations skiped.
+ * @throw Exception Error running MCMC.
+ */
 int ccruncher_inf::Metropolis::run(ostream &output, ostream &info, size_t blocksize, size_t maxiters, size_t burnin)
 {
   size_t numsims = 0;
@@ -521,10 +521,8 @@ int ccruncher_inf::Metropolis::run(ostream &output, ostream &info, size_t blocks
       writeValues(output);
     }
 
-    if ((blocksize > 0 && numsims%blocksize == 0) || fstop == true)
-    {
+    if ((blocksize > 0 && numsims%blocksize == 0) || fstop == true) {
       output.flush();
-
       info << "NSIMS\t" << numsims << "\n";
       info << "VALUE\t"; writeValues(info);
       info << "PARAM\t"; writeParams(info);
@@ -542,11 +540,11 @@ int ccruncher_inf::Metropolis::run(ostream &output, ostream &info, size_t blocks
   return numsims;
 }
 
-//===========================================================================
-// update factor loadings
-// http://darrenjw.wordpress.com/2012/06/04/metropolis-hastings-mcmc-when-the-proposal-and-target-have-differing-support/
-// we don't shuffle because they are independents
-//===========================================================================
+/**************************************************************************//**
+ * update factor loadings
+ * @see http://darrenjw.wordpress.com/2012/06/04/metropolis-hastings-mcmc-when-the-proposal-and-target-have-differing-support/
+ * @note We don't shuffle because they are independents
+ */
 void ccruncher_inf::Metropolis::updateW()
 {
   for(size_t s=0; s<nfactors; s++) {
@@ -598,10 +596,10 @@ void Metropolis::updateW(size_t s)
   }
 }
 
-//===========================================================================
-// update correlations
-// http://darrenjw.wordpress.com/2012/06/04/metropolis-hastings-mcmc-when-the-proposal-and-target-have-differing-support/
-//===========================================================================
+/**************************************************************************//**
+ * update correlations
+ * @see http://darrenjw.wordpress.com/2012/06/04/metropolis-hastings-mcmc-when-the-proposal-and-target-have-differing-support/
+ */
 void ccruncher_inf::Metropolis::updateR()
 {
   vector<pair<size_t,size_t> > shuffler((nfactors*(nfactors-1))/2);
@@ -682,11 +680,10 @@ void Metropolis::updateR(size_t s1, size_t s2)
   }
 }
 
-//===========================================================================
-// update normal latent variables
-// we don't shuffle because they are independents
-// TODO: actualitzar component a component?
-//===========================================================================
+/**************************************************************************//**
+ * update normal latent variables
+ * @note We don't shuffle because they are independents
+ */
 void ccruncher_inf::Metropolis::updateZ()
 {
 #pragma omp parallel for schedule(dynamic)
@@ -738,10 +735,10 @@ void ccruncher_inf::Metropolis::updateZ(size_t n)
   }
 }
 
-//===========================================================================
-// update chi-square latent variables
-// we don't shuffle because they are independents
-//===========================================================================
+/**************************************************************************//**
+ * update chi-square latent variables
+ * @note We don't shuffle because they are independents
+ */
 void ccruncher_inf::Metropolis::updateS()
 {
 #pragma omp parallel for schedule(dynamic)
@@ -796,9 +793,9 @@ void Metropolis::updateS(size_t n)
   }
 }
 
-//===========================================================================
-// update degrees of freedom
-//===========================================================================
+/**************************************************************************//**
+ * update degrees of freedom
+ */
 void ccruncher_inf::Metropolis::updateNu()
 {
   if (nu.isFixed()) {
@@ -851,9 +848,9 @@ void ccruncher_inf::Metropolis::updateNu()
   }
 }
 
-//===========================================================================
-// vector to matrix
-//===========================================================================
+/**************************************************************************//**
+ * vector to matrix
+ */
 void ccruncher_inf::Metropolis::v2m(gsl_matrix *m) const
 {
   assert(m->size1 == nfactors);
@@ -868,10 +865,10 @@ void ccruncher_inf::Metropolis::v2m(gsl_matrix *m) const
   }
 }
 
-//===========================================================================
-// determinant of a Cholesky matrix, returns det(L)
-// obs: R=L.L' -> det(R)=det(L)^2 -> sqrt(det(R))=det(L)
-//===========================================================================
+/**************************************************************************//**
+ * determinant of a Cholesky matrix, returns det(L)
+ * obs: R=L.L' -> det(R)=det(L)^2 -> sqrt(det(R))=det(L)
+ */
 double ccruncher_inf::Metropolis::det(gsl_matrix *L)
 {
   assert(L->size1 == L->size2);
@@ -881,11 +878,11 @@ double ccruncher_inf::Metropolis::det(gsl_matrix *L)
   return ret;
 }
 
-//===========================================================================
-// quadratic prod (v'.M.v)
-// where M is a definite-positive symmetric matrix
-// TODO: allocar memoria i eliminar param aux
-//===========================================================================
+/**************************************************************************//**
+ * quadratic prod (v'.M.v)
+ * where M is a definite-positive symmetric matrix
+ * @todo Improve memory allocation (caution with multi-threading)
+ */
 double ccruncher_inf::Metropolis::qprod(const vector<double> &v, const gsl_matrix *M)
 {
   double ret = 0.0;
@@ -903,15 +900,14 @@ double ccruncher_inf::Metropolis::qprod(const vector<double> &v, const gsl_matri
   gsl_blas_dsymv(CblasLower, 1.0, M, &x, 0.0, y);
   //gsl_blas_dgemv(CblasNoTrans, 1.0, M, &x, 0.0, y);
   gsl_blas_ddot(&x, y, &ret);
-
   gsl_vector_free(y);
 
   return ret;
 }
 
-//===========================================================================
-// create a setting
-//===========================================================================
+/**************************************************************************//**
+ * create a setting
+ */
 Setting& ccruncher_inf::Metropolis::createSetting(const string &name, Setting &parent, enum Setting::Type type)
 {
   if(parent.exists(name)) {
@@ -943,9 +939,9 @@ Setting& ccruncher_inf::Metropolis::writeMatrix(const string &name, Setting &par
   return setting;
 }
 
-//===========================================================================
-// returns current state
-//===========================================================================
+/**************************************************************************//**
+ * returns current state
+ */
 Config& ccruncher_inf::Metropolis::getState()
 {
   Setting &root = mConfig.getRoot();
@@ -1023,9 +1019,9 @@ Config& ccruncher_inf::Metropolis::getState()
   return mConfig;
 }
 
-//===========================================================================
-// writeHeader
-//===========================================================================
+/**************************************************************************//**
+ * writeHeader
+ */
 void ccruncher_inf::Metropolis::writeHeader(ostream &s, int k) const
 {
   s << "NU\t";
@@ -1038,9 +1034,9 @@ void ccruncher_inf::Metropolis::writeHeader(ostream &s, int k) const
   s << "Z\tS\n";
 }
 
-//===========================================================================
-// write values
-//===========================================================================
+/**************************************************************************//**
+ * write values
+ */
 void ccruncher_inf::Metropolis::writeValues(ostream &s) const
 {
   s << nu.value << "\t";
@@ -1059,9 +1055,9 @@ void ccruncher_inf::Metropolis::writeValues(ostream &s) const
   s << "\n";
 }
 
-//===========================================================================
-// write acceptance rates
-//===========================================================================
+/**************************************************************************//**
+ * write acceptance rates
+ */
 void ccruncher_inf::Metropolis::writeAcRates(ostream &s) const
 {
   s << nu.getAccRate() << "\t";
@@ -1079,9 +1075,9 @@ void ccruncher_inf::Metropolis::writeAcRates(ostream &s) const
   s << avg/S.size() << "\n";
 }
 
-//===========================================================================
-// write acceptance params
-//===========================================================================
+/**************************************************************************//**
+ * write acceptance params
+ */
 void ccruncher_inf::Metropolis::writeParams(ostream &s) const
 {
   s << nu.sigma << "\t";
@@ -1099,18 +1095,19 @@ void ccruncher_inf::Metropolis::writeParams(ostream &s) const
   s << avg/S.size() << "\n";
 }
 
-//===========================================================================
-// logbinom
-// n: number of obligors
-// k: number of defaults
-// a: precomputed threshold (= tcdfinv(dprob,nu)) <- to speedup
-// ndf: degrees of freedom
-// w: factor loading
-// z: normal latent variable Z~N(0,w)
-// s: chi-square latent variable
-//===========================================================================
+/**************************************************************************//**
+ * logbinom
+ * @param[in] n Number of obligors.
+ * @param[in] k Number of defaults.
+ * @param[in] a Precomputed threshold (= tcdfinv(dprob,nu)) <- to speedup.
+ * @param[in] ndf Degrees of freedom.
+ * @param[in] w Factor loading.
+ * @param[in] z Normal latent variable Z~N(0,w).
+ * @param[in] s Chi-square latent variable.
+ */
 double ccruncher_inf::Metropolis::lbinom(int n, int k, double a, double ndf, double w, double z, double s)
 {
+  assert(n >= 0);
   assert(0 <= k && k <= n);
   assert(2.0 <= ndf);
   assert(0.0 <= w && w <= 1.0);

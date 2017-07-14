@@ -431,7 +431,7 @@ bool ccruncher::Input::validateAsset(const Asset &asset, const vector<Segmentati
  * @return Index (0-based) of the given factor.
  * @throw Exception Factor not found.
  */
-unsigned char ccruncher::Input::indexOfFactor(const vector<Factor> &factors, const char *name)
+unsigned char ccruncher::Input::indexOfFactor(const std::vector<Factor> &factors, const char *name)
 {
   assert(name != nullptr);
   assert(factors.size() <= numeric_limits<unsigned char>::max());
@@ -449,7 +449,7 @@ unsigned char ccruncher::Input::indexOfFactor(const vector<Factor> &factors, con
  * @return Index (0-based) of the given rating.
  * @throw Exception Rating not found.
  */
-unsigned char ccruncher::Input::indexOfRating(const vector<Rating> &ratings, const char *name)
+unsigned char ccruncher::Input::indexOfRating(const std::vector<Rating> &ratings, const char *name)
 {
   assert(name != nullptr);
   assert(ratings.size() <= numeric_limits<unsigned char>::max());
@@ -467,7 +467,7 @@ unsigned char ccruncher::Input::indexOfRating(const vector<Rating> &ratings, con
  * @return Index (0-based) of the segmentation.
  * @throw Exception Segmentation not found.
  */
-unsigned short ccruncher::Input::indexOfSegmentation(const vector<Segmentation> &segmentations, const char *name)
+unsigned short ccruncher::Input::indexOfSegmentation(const std::vector<Segmentation> &segmentations, const char *name)
 {
   assert(segmentations.size() <= numeric_limits<unsigned short>::max());
   for(size_t i=0; i<segmentations.size(); i++) {
@@ -503,7 +503,7 @@ unsigned char ccruncher::Input::indexOfDefaultRating(const vector<CDF> &dprobs)
  * @param[in] factors List of factors.
  * @return Factor loadings list.
  */
-vector<double> ccruncher::Input::getFactorLoadings(const vector<Factor> &factors)
+vector<double> ccruncher::Input::getFactorLoadings(const std::vector<Factor> &factors)
 {
   assert(factors.size() <= numeric_limits<unsigned char>::max());
   vector<double> w(factors.size());

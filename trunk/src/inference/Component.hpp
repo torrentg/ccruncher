@@ -83,9 +83,9 @@ class Component
 
 };
 
-//===========================================================================
-// @brief Creates a default component. Use init() and resize() to initialize.
-//===========================================================================
+/**************************************************************************//**
+ * @brief Creates a default component. Use init() and resize() to initialize.
+ */
 template <class T>
 Component<T>::Component() : name("?"), accepted(0,false), pos(-1), counter(0),
 value(T()), sigma(NAN), level(NAN)
@@ -93,13 +93,13 @@ value(T()), sigma(NAN), level(NAN)
   // nothing to do
 }
 
-//===========================================================================
-// @param[in] str Component name
-// @param[in] v Component value
-// @param[in] s Component sigma
-// @param[in] Component level
-// @throw Exception invalid parameter value
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] str Component name
+ * @param[in] v Component value
+ * @param[in] s Component sigma
+ * @param[in] l Component level
+ * @throw Exception invalid parameter value
+ */
 template <class T>
 void Component<T>::init(const std::string &str, const T &v, double s, double l)
 {
@@ -116,9 +116,9 @@ void Component<T>::init(const std::string &str, const T &v, double s, double l)
   else counter = (int)(5.0/(level*(1.0-level)));
 }
 
-//===========================================================================
-// @param[in] n Number of items used to compute the acceptance rate.
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] n Number of items used to compute the acceptance rate.
+ */
 template <class T>
 void Component<T>::resize(size_t n)
 {
@@ -126,10 +126,10 @@ void Component<T>::resize(size_t n)
   pos = n-1;
 }
 
-//===========================================================================
-// @brief Update the component state using the Robins-Monro algorithm.
-// @param[in] b Flag indicating if the value was accepted.
-//===========================================================================
+/**************************************************************************//**
+ * @brief Update the component state using the Robins-Monro algorithm.
+ * @param[in] b Flag indicating if the value was accepted.
+ */
 template <class T>
 void Component<T>::setAccepted(bool b)
 {
@@ -141,10 +141,10 @@ void Component<T>::setAccepted(bool b)
   }
 }
 
-//===========================================================================
-// @brief getAccRate = #accepted / #size
-// @return The acceptance ratio (value in [0,1]).
-//===========================================================================
+/**************************************************************************//**
+ * @brief getAccRate = accepted / length
+ * @return The acceptance ratio (value in [0,1]).
+ */
 template <class T>
 double Component<T>::getAccRate() const
 {
@@ -162,10 +162,10 @@ double Component<T>::getAccRate() const
   }
 }
 
-//===========================================================================
-// @param[in] b Flag indicating if the value was accepted.
-// @see 'Adaptative Optimal Scaling of Metropolis-Hastings Algorithms Using the Robbins-Monro process'
-//===========================================================================
+/**************************************************************************//**
+ * @param[in] b Flag indicating if the value was accepted.
+ * @see 'Adaptative Optimal Scaling of Metropolis-Hastings Algorithms Using the Robbins-Monro process'
+ */
 template <class T>
 void Component<T>::adapt(bool b)
 {

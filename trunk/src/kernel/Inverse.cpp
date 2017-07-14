@@ -50,7 +50,7 @@ ccruncher::Inverse::Inverse()
  * @param[in] nodes Days from starting date where asset events ocurres.
  * @throw Exception Error creating inverse function.
  */
-ccruncher::Inverse::Inverse(double ndf, double maxt, const CDF &cdf, const vector<int> &nodes)
+ccruncher::Inverse::Inverse(double ndf, double maxt, const CDF &cdf, const std::vector<int> &nodes)
 {
   mNdf = NAN;
   mMaxT = NAN;
@@ -160,7 +160,7 @@ double ccruncher::Inverse::tinv(double u) const
  * @param[in] nodes_ Days where assets events are defined.
  * @throw Exception Error creating spline functions.
  */
-void ccruncher::Inverse::setSpline(const CDF &cdf, const vector<int> &nodes_)
+void ccruncher::Inverse::setSpline(const CDF &cdf, const std::vector<int> &nodes_)
 {
   gsl_spline_free(mSpline);
   mSpline = nullptr;
@@ -222,7 +222,7 @@ void ccruncher::Inverse::setSpline(const CDF &cdf, const vector<int> &nodes_)
  * @param[in] days List of days.
  * @param[in] cache tinv(cdf(t)) values evaluated at days.
  */
-void ccruncher::Inverse::setSpline(const vector<int> &days, const map<int,double> &cache)
+void ccruncher::Inverse::setSpline(const std::vector<int> &days, const std::map<int,double> &cache)
 {
   assert(days.size() >= 2);
 
@@ -251,7 +251,6 @@ void ccruncher::Inverse::setSpline(const vector<int> &days, const map<int,double
     mSpline = gsl_spline_alloc(gsl_interp_linear, x.size());
     gsl_spline_init(mSpline, &(x[0]), &(y[0]), x.size());
   }
-
 }
 
 /**************************************************************************//**

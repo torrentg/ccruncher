@@ -23,11 +23,12 @@
 #ifndef _Input_
 #define _Input_
 
+#include <string>
 #include <vector>
+#include "portfolio/Obligor.hpp"
 #include "params/Params.hpp"
 #include "params/CDF.hpp"
 #include "params/Segmentation.hpp"
-#include "portfolio/Obligor.hpp"
 #include "params/Rating.hpp"
 #include "params/Factor.hpp"
 

@@ -278,61 +278,61 @@ Developers tips & tricks
      > perf report
 
 11. debuging executable
-      > gdb ./path/progname
-        >> help
-        >> set args arg1 arg2 arg3 ... argn
-        >> run
-        >> backtrace
-        >> quit
+     > gdb ./path/progname
+       >> help
+       >> set args arg1 arg2 arg3 ... argn
+       >> run
+       >> backtrace
+       >> quit
 
 12. creating html code documentation
-      > doxywizard Doxygen
-      > doxygen Doxygen
-      > firefox build/html/index.html
+     > doxywizard Doxyfile
+     > doxygen Doxyfile
+     > firefox build/html/index.html
     
 13. other minor tasks
-      > # man pages creation
-      > export LANG=en_GB.utf8
-      > help2man --no-info -n "simule the loss distribution of a credit portfolio using the \
-        Monte Carlo method" ./build/ccruncher-cmd > ccruncher-cmd.1
-      > help2man --no-info -n "infer  the  dependency  parameters of the multivariate default \
-        times using the Metropolis-Hastings method" ./build/ccruncher-inf > ccruncher-inf.1
-      > man -l ccruncher-cmd.1
-      > # lines of code
-      > cloc src
+     > # man pages creation
+     > export LANG=en_GB.utf8
+     > help2man --no-info -n "simule the loss distribution of a credit portfolio using the \
+       Monte Carlo method" ./build/ccruncher-cmd > ccruncher-cmd.1
+     > help2man --no-info -n "infer  the  dependency  parameters of the multivariate default \
+       times using the Metropolis-Hastings method" ./build/ccruncher-inf > ccruncher-inf.1
+     > man -l ccruncher-cmd.1
+     > # lines of code
+     > cloc src
 
 14. using clang compiler (http://clang.llvm.org/)
-      > #using autotools
-      > ./configure CXX=clang++
-      > make CXX=clang++
-      > # using qmake
-      > qmake -spec unsupported/linux-clang 
-      > # source code static analysis
-      > scan-build make
+     > #using autotools
+     > ./configure CXX=clang++
+     > make CXX=clang++
+     > # using qmake
+     > qmake -spec unsupported/linux-clang 
+     > # source code static analysis
+     > scan-build make
 
 15. making source distribution package
-      > make distcheck
-      > make dist
+     > make distcheck
+     > make dist
     or (better) use script $CCRUNCHER/bin/makedist.sh
-      > $CCRUNCHER/bin/makedist.sh -s
-      > $CCRUNCHER/bin/makedist.sh -b
-      > $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
+     > $CCRUNCHER/bin/makedist.sh -s
+     > $CCRUNCHER/bin/makedist.sh -b
+     > $CCRUNCHER/bin/makedist.sh -w -d /compiled/for/windows/path
 
 16. making the rpm package
-      # https://fedoraproject.org/wiki/How_to_create_an_RPM_package
-      > rpmdev-setuptree
-      > cp build/ccruncher.spec ~/rpmbuild/SPECS
-      > cp ccruncher-X.Y.Zsrc.tgz ~/rpmbuild/SOURCES
-      > cd ~/rpmbuild/
-      > rpmbuild -ba SPECS/ccruncher.spec
-      > rpmlint SPECS/ccruncher.spec SRPMS/ccruncher-*.rpm RPMS/x86_64/ccruncher-*.rpm
-      > mock --verbose SRPMS/ccruncher-*.rpm
-      > rpmdev-wipetree
+     # https://fedoraproject.org/wiki/How_to_create_an_RPM_package
+     > rpmdev-setuptree
+     > cp build/ccruncher.spec ~/rpmbuild/SPECS
+     > cp ccruncher-X.Y.Zsrc.tgz ~/rpmbuild/SOURCES
+     > cd ~/rpmbuild/
+     > rpmbuild -ba SPECS/ccruncher.spec
+     > rpmlint SPECS/ccruncher.spec SRPMS/ccruncher-*.rpm RPMS/x86_64/ccruncher-*.rpm
+     > mock --verbose SRPMS/ccruncher-*.rpm
+     > rpmdev-wipetree
 
 17. create a tag in subversion repository
-      > svn cp http://www.ccruncher.net/svn/trunk/ \
-             http://www.ccruncher.net/svn/tags/ccruncher-x.y/ \
-             -m "created tag ccruncher-x.y"
+     > svn cp http://www.ccruncher.net/svn/trunk/ \
+            http://www.ccruncher.net/svn/tags/ccruncher-x.y/ \
+            -m "created tag ccruncher-x.y"
 
 
 CCruncher Team

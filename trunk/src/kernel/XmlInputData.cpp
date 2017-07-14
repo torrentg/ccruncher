@@ -455,7 +455,6 @@ void ccruncher::XmlInputData::epstart4(const char *tag, const char **attributes)
 /**************************************************************************//**
  * @see ExpatHandlers::epdata
  * @todo Catch cdata sections using XML_SetCdataSectionHandler.
- * @param[in] tag Element name.
  * @param[in] data Chunck of data.
  * @param[in] len Data length.
  */
@@ -771,7 +770,6 @@ void ccruncher::XmlInputData::checkMacro(const string &key, const string &value)
 }
 
 /**************************************************************************//**
- * @param[in] defines Already defined macros.
  * @param[in] key Macro name.
  * @param[in] value Macro value.
  * @throw Invalid values.
@@ -784,7 +782,8 @@ void ccruncher::XmlInputData::processTagDefine(const string &key, const string &
   // has not defined previously (via command line or via gui or previous define)
   if (macros.values.find(key) == macros.values.end()) {
     logger << "macro (input file)" << split << key + "=" + value << endl;
-    macros.values[key] = value;  }
+    macros.values[key] = value;
+  }
 }
 
 /**************************************************************************//**
