@@ -172,9 +172,16 @@ Notes for Windows developers (QT+MINGW)
    > make
    > make install
 
-5. install and compile gsl libconfig
-   # TODO
-   
+5. install and compile libconfig lib
+   # download libconfig source in C:\MinGW\msys\1.0\home\user
+   > tar -xvzf libconfig-x.y.tar.gz
+   # open the mingw console and type
+   > cd libconfig-x.y
+   > mount c:/Qt/Tools/mingw491_32 /mingw
+   > ./configure
+   > make
+   > make install
+
 6. install qwt
    - download it from http://qwt.sourceforge.net
    - unpack zip file
