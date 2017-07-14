@@ -118,7 +118,7 @@ class Metropolis
     //! Check for duplicates
     template<typename T>
     bool hasDuplicates(const std::vector<T> &v);
-    //! Read array values from a configuration item
+    //! Read array values from a configuration item.
     template<typename T>
     std::vector<T> readArray(const libconfig::Setting &setting);
     template<typename T>
@@ -174,7 +174,7 @@ class Metropolis
     //! Destructor
     ~Metropolis();
     //! Initializes object
-    void init(const libconfig::Config &);
+    void init(const libconfig::Config &config);
     //! Run simulation
     int run(std::ostream &output, std::ostream &info, size_t blocksize, size_t maxiters_, size_t burnin);
     //! Returns current state
