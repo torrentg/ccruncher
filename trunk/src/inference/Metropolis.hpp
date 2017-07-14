@@ -159,7 +159,7 @@ class Metropolis
     void readS(const libconfig::Config &config);
 
     //! Set component names as header
-    void writeHeader(std::ostream &s, int k) const;
+    void writeHeader(std::ostream &s) const;
     //! Write values
     void writeValues(std::ostream &s) const;
     //! Write acceptance rates

@@ -125,8 +125,8 @@ void help()
   "      --version        show version and exit\n"
   "\n"
   "Examples:\n"
-  "  basic example     ccruncher-inf samples/inference01.in\n"
-  "  using parameters  ccruncher-inf -s 99 -n 50000 -b 10000 -r 1000 inference05.in\n"
+  "  basic example     ccruncher-inf samples/inference01.cfg\n"
+  "  using parameters  ccruncher-inf -s 99 -n 50000 -b 10000 -r 1000 samples/inference05.cfg\n"
   "\n"
   "Report bugs to gtorrent@ccruncher.net.\n"
   << endl;
@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
   // reading configuration file
   Config config;
   try {
-    config.setOptions(Setting::OptionNone);
+    config.setOptions(Setting::OptionNone | Setting::OptionAutoConvert);
     config.readFile(filename.c_str());
   }
   catch(const FileIOException &fioex) {

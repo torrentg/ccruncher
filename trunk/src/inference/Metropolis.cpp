@@ -115,7 +115,7 @@ vector<T> ccruncher_inf::Metropolis::readArray(const Setting &setting, size_t nv
     ret = readArray<T>(setting);
   }
   else {
-    double aux = setting;
+    T aux = setting;
     ret = vector<T>(nvals, aux);
   }
 
@@ -161,7 +161,7 @@ vector<vector<T>> ccruncher_inf::Metropolis::readMatrix(const Setting &setting, 
     ret = readMatrix<T>(setting);
   }
   else {
-    vector<double> aux = readArray<T>(setting, ncols);
+    vector<T> aux = readArray<T>(setting, ncols);
     ret = vector<vector<T>>(nrows, aux);
   }
 
@@ -491,10 +491,10 @@ int ccruncher_inf::Metropolis::run(ostream &output, ostream &info, size_t blocks
   // formating traces
   info.setf(ios::fixed, ios::floatfield);
   info.precision(4);
-  info << "CONCEPT\t"; writeHeader(info, nfactors);
+  info << "CONCEPT\t"; writeHeader(info);
   info.setf(ios::showpos);
   info << "VALUE\t"; writeValues(info); info << endl;
-  writeHeader(output, nfactors);
+  writeHeader(output);
 
   vector<int> shuffler(5);
   for(int i=0; i<5; i++) shuffler[i] = i;
@@ -1020,14 +1020,14 @@ Config& ccruncher_inf::Metropolis::getState()
 }
 
 /**************************************************************************//**
- * writeHeader
+ * param[in,out] s Output stream.
  */
-void ccruncher_inf::Metropolis::writeHeader(ostream &s, int k) const
+void ccruncher_inf::Metropolis::writeHeader(ostream &s) const
 {
   s << "NU\t";
-  for(int i=0; i<k; i++) s << "W" << i+1 << "\t";
-  for(int i=0; i<k; i++) {
-    for(int j=i+1; j<k; j++) {
+  for(size_t i=0; i<nfactors; i++) s << "W" << i+1 << "\t";
+  for(size_t i=0; i<nfactors; i++) {
+    for(size_t j=i+1; j<nfactors; j++) {
       s << "R" << i+1 << j+1 << "\t";
     }
   }
@@ -1035,28 +1035,29 @@ void ccruncher_inf::Metropolis::writeHeader(ostream &s, int k) const
 }
 
 /**************************************************************************//**
- * write values
+ * param[in,out] s Output stream.
  */
 void ccruncher_inf::Metropolis::writeValues(ostream &s) const
 {
   s << nu.value << "\t";
-  for(size_t i=0; i<W.size(); i++) s << W[i].value << "\t";
+  for(size_t i=0; i<W.size(); i++) {
+    s << W[i].value << "\t";
+  }
   for(size_t i=0; i<nfactors; i++) {
     for(size_t j=i+1; j<nfactors; j++) {
       s << R[i][j].value << "\t";
     }
   }
-  double avg = 0.0;
-  for(size_t i=0; i<nobs; i++) for(size_t j=0; j<nfactors; j++) avg += Z[i].value[j];
-  s << avg/double(nobs*nfactors) << "\t";
-  avg = 0.0;
-  for(size_t i=0; i<S.size(); i++) avg += S[i].value;
-  s << avg/S.size();
-  s << "\n";
+  double avgZ = 0.0;
+  for(size_t i=0; i<nobs; i++) for(size_t j=0; j<nfactors; j++) avgZ += Z[i].value[j];
+  s << avgZ/double(nobs*nfactors) << "\t";
+  double avgS = 0.0;
+  for(size_t i=0; i<S.size(); i++) avgS += S[i].value;
+  s << avgS/double(S.size()) << "\n";
 }
 
 /**************************************************************************//**
- * write acceptance rates
+ * param[in,out] s Output stream.
  */
 void ccruncher_inf::Metropolis::writeAcRates(ostream &s) const
 {
@@ -1067,16 +1068,16 @@ void ccruncher_inf::Metropolis::writeAcRates(ostream &s) const
       s << R[i][j].getAccRate() << "\t";
     }
   }
-  double avg = 0.0;
-  for(size_t i=0; i<Z.size(); i++) avg += Z[i].getAccRate();
-  s << avg/Z.size() << "\t";
-  avg = 0.0;
-  for(size_t i=0; i<S.size(); i++) avg += S[i].getAccRate();
-  s << avg/S.size() << "\n";
+  double avgZ = 0.0;
+  for(size_t i=0; i<Z.size(); i++) avgZ += Z[i].getAccRate();
+  s << avgZ/double(Z.size()) << "\t";
+  double avgS = 0.0;
+  for(size_t i=0; i<S.size(); i++) avgS += S[i].getAccRate();
+  s << avgS/double(S.size()) << "\n";
 }
 
 /**************************************************************************//**
- * write acceptance params
+ * param[in,out] s Output stream.
  */
 void ccruncher_inf::Metropolis::writeParams(ostream &s) const
 {
@@ -1087,12 +1088,12 @@ void ccruncher_inf::Metropolis::writeParams(ostream &s) const
       s << R[i][j].sigma << "\t";
     }
   }
-  double avg = 0.0;
-  for(size_t i=0; i<Z.size(); i++) avg += Z[i].sigma;
-  s << avg/Z.size() << "\t";
-  avg = 0.0;
-  for(size_t i=0; i<S.size(); i++) avg += S[i].sigma;
-  s << avg/S.size() << "\n";
+  double avgZ = 0.0;
+  for(size_t i=0; i<Z.size(); i++) avgZ += Z[i].sigma;
+  s << avgZ/double(Z.size()) << "\t";
+  double avgS = 0.0;
+  for(size_t i=0; i<S.size(); i++) avgS += S[i].sigma;
+  s << avgS/double(S.size()) << "\n";
 }
 
 /**************************************************************************//**
