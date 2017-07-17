@@ -1,7 +1,7 @@
 QT -= core gui
 TARGET = ccruncher-tests
 CONFIG -= qt
-CONFIG += c++11 console
+CONFIG += c++14 console thread
 VERSION = 2.5.0
 
 HEADERS += \
@@ -116,8 +116,7 @@ INCLUDEPATH += \
     $$PWD/src
 
 LIBS += \
-    -lm \
-    -pthread
+    -lm
 
 unix {
   LIBS += \
@@ -141,7 +140,7 @@ CONFIG(release, debug|release) {
   DEFINES += NDEBUG
 }
 
-QMAKE_CXXFLAGS += -pthread -std=c++11 -Wall -Wextra -Wshadow -Wpedantic
+QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wpedantic
 
 OBJECTS_DIR = $$PWD/build
 DESTDIR = $$PWD/build
