@@ -30,7 +30,7 @@ dnl -------------------------------------------------------------
 dnl macros
 dnl -------------------------------------------------------------
 AC_LANG_PUSH([C++])
-AX_CXX_COMPILE_STDCXX_11(noext,mandatory)
+AX_CXX_COMPILE_STDCXX_14(noext,mandatory)
 
 dnl -------------------------------------------------------------
 dnl checks for libraries
@@ -121,7 +121,7 @@ fi
 dnl -------------------------------------------------------------
 dnl setting compiler options
 dnl -------------------------------------------------------------
-AM_CXXFLAGS="$AM_CXXFLAGS -std=c++11 -pthread -fopenmp -Wall -Wextra -Wshadow -Wpedantic"
+AM_CXXFLAGS="$AM_CXXFLAGS -std=c++14 -pthread -fopenmp -Wall -Wextra -Wshadow -Wpedantic"
 AC_SUBST(AM_CXXFLAGS)
 
 dnl -------------------------------------------------------------

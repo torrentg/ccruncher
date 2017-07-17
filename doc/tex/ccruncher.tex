@@ -3229,10 +3229,9 @@ long term.
 	\end{displaymath}\par}
 	in which $r$ is the number of ratings and $m_{ij}$ is the probability that 
 	an obligor with i-th rating ends up having the j-th rating after $T$ years.
-	Note that row sums are $1$ and that two consecutive transition matrices, 
-	$M_{T_1}$ and $M_{T_2}$, give $M_{T_1+T_2} = M_{T_1} \cdot M_{T_2}$.
-	A valid transition matrix must have a unique \emph{defaulted} rating, and 
-	any rating ends up defaulting.
+	A valid transition matrix must have its elements in the range $[0,1]$, the 
+	row sums equal to $1$, a unique \emph{defaulted} rating, and any rating 
+	ends up defaulting.
 \end{definition}
 
 \begin{example}[1-year transition matrix]
@@ -3263,16 +3262,11 @@ long term.
 	\end{center}
 \end{table}
 
-Deriving PD functions from the transition matrix implies that transition 
-probabilities remain constant over time, undermining the economic cycle 
-effect. In practice, this constancy is equivalent to considering an averaged 
-economic cycle. See document~\cite[sec. 3.2.1]{bindseil:2007} to obtain 
-additional information related with this section and the 
-CreditMetrics\texttrademark{} approach.
-
-\begin{proposition}[Scaled transition matrix]
-	The transition matrix can be scaled in time using the following rules:
+\begin{proposition}[Composed and scaled transition matrix]
+	The transition matrix can be composed and scaled in time using the 
+	following rules:
 	\begin{itemize}
+		\item $M_{T_1+T_2} = M_{T_1} \cdot M_{T_2}$
 		\item $M_{k \cdot T} = M_{T}^k$
 		\item $M_{\frac{T}{k}} = \sqrt[k]{M_{T}}$
 	\end{itemize}
@@ -3308,6 +3302,13 @@ from~\cite{kreinin:2001}.
 	Apply the previous algorithm to every row.
 	The final matrix is a regularized matrix. 
 \end{algorithm}
+
+Deriving PD functions from the transition matrix implies that transition 
+probabilities remain constant over time, undermining the economic cycle 
+effect. In practice, this constancy is equivalent to considering an averaged 
+economic cycle. See document~\cite[sec. 3.2.1]{bindseil:2007} to obtain 
+additional information related with this section and the 
+CreditMetrics\texttrademark{} approach.
 
 \begin{proposition}[PDs derived from transition matrix]
 	\label{prop:pdftm}
@@ -3698,13 +3699,10 @@ use this statement to define and simulate the t-Student copula.
 \end{corollary}
 
 \begin{definition}
-	Spearman's rho is a measure of the linear relation between the two 
-	variables $X$ and $Y$, and it is defined as the Pearson's correlation 
-	coefficient between the ranked variables, $x$ and $y$:
-	\begin{displaymath}
-		\rho_s = \frac{\displaystyle \sum_i (x_i-\bar{x}) (y_i-\bar{y})}
-		{\sqrt{\displaystyle \sum_i (x_i-\bar{x})^2 \sum_i (y_i-\bar{y})^2}}
-	\end{displaymath}
+	Spearman's rho is a measure of dependence between two variables and 
+	it is defined as the Pearson's correlation coefficient between the 
+	ranked variables.
+	
 	It has the important property that its value only relies on the underlying 
 	copula $C$, not on marginals. It can be written as
 	\begin{displaymath}
@@ -3900,7 +3898,9 @@ in~\cite{torrent:2011}.
 %------------------------------------------------------------------------------
 \section{Multi-Factor Gaussian Distribution}
 \label{ap:mfgm}
-~\\
+
+We only consider the case where the variances are $1$, that is $\text{Var}(X_i)=1$.
+
 \begin{definition}[Gaussian multi-factor distribution]
 	\label{def:gmfm}
 	We say that a multivariate distribution $X$ follows a Gaussian multi-factor
@@ -4424,13 +4424,35 @@ and stratified sampling. This section outlines contains the antithetic
 variates method.
 
 We estimate $E(g(X))$ using the Monte Carlo method. Assume $Y_1$ and 
-$Y_2$ as random variables with the identical distribution $g(X)$. 
-This indicates that $E(g(X)) = E(Y_1) = E(Y_2) = E(\frac{Y_1+Y_2}{2})$ and
-$\text{Var}\left(\frac{Y_1+Y_2}{2}\right) = 
-\frac{\text{Var}(Y_1)+\text{Cov}(Y_1,Y_2)}{2}$.
-If $Y_1$ and $Y_2$ are negatively correlated, then the variance of $N$ 
-simulated values from $\frac{Y_1+Y_2}{2}$ is smaller than the variance 
-of $2{\times}N$ simulated values from $Y_1$ or $Y_2$.
+$Y_2$ as random variables with the identical distribution $X$. 
+This indicates that 
+\begin{displaymath}
+	E(g(X)) = E(g(Y_1)) = E(g(Y_2)) = E\left(\frac{g(Y_1)+g(Y_2)}{2}\right)
+\end{displaymath}
+and
+\small
+\begin{displaymath}
+	\text{Var}\left(\frac{g(Y_1)+g(Y_2)}{2}\right) = 
+	\frac{\text{Var}(g(Y_1))+\text{Var}(g(Y_2))+2\cdot\text{Cov}(g(Y_1),g(Y_2))}{4} =
+	\frac{\text{Var}(g(X))+\text{Cov}(g(Y_1),g(Y_2))}{2}
+\end{displaymath}
+\normalsize
+If $g(Y_1)$ and $g(Y_2)$ are negatively correlated, then the variance of $N$ 
+simulated values from $Y_1+Y_2$ is smaller than the variance 
+of $2{\times}N$ simulated values from $X$.
+
+Two classic cases are :
+\begin{displaymath}
+	\begin{array}{lll}
+		X \sim \text{Uniform}[0,1] 
+		&\Longrightarrow Y_1 \sim \text{Uniform}[0,1], \quad
+		&Y_2 \sim 1-\text{Uniform}[0,1]
+		\\
+		X \sim \text{N}(0,1)
+		&\Longrightarrow Y_1 \sim \text{N}(0,1), \quad 
+		&Y_2 \sim -\text{N}(0,1)
+	\end{array}
+\end{displaymath}
 
 \begin{example}
 	In this example extracted from 

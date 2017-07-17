@@ -12,8 +12,8 @@
 /* Define to 1 if you have the `alarm' function. */
 #undef HAVE_ALARM
 
-/* define if the compiler supports basic C++11 syntax */
-#undef HAVE_CXX11
+/* define if the compiler supports basic C++14 syntax */
+#undef HAVE_CXX14
 
 /* Define to 1 if you have the <expat.h> header file. */
 #undef HAVE_EXPAT_H

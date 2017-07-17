@@ -1,7 +1,7 @@
 QT -= core gui
 TARGET = ccruncher-inf
 CONFIG -= qt
-CONFIG += c++11 console thread
+CONFIG += c++14 console thread
 VERSION = 2.5.0
 
 HEADERS += \
@@ -41,9 +41,9 @@ CONFIG(release, debug|release) {
   DEFINES += NDEBUG
 }
 
-QMAKE_CXXFLAGS += -fopenmp -Os -std=c++11 -Wall -Wextra -Wshadow -Wpedantic
+QMAKE_CXXFLAGS += -fopenmp -Wall -Wextra -Wshadow -Wpedantic
 QMAKE_CXXFLAGS_RELEASE -= -g
-QMAKE_LFLAGS *= -fopenmp -Os
+QMAKE_LFLAGS *= -fopenmp
 
 OBJECTS_DIR = $$PWD/build
 DESTDIR = $$PWD/build

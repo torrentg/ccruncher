@@ -1,7 +1,7 @@
 QT += core gui network widgets
 TARGET = ccruncher-gui
 TEMPLATE = app
-CONFIG += c++11 qwt
+CONFIG += c++14 qwt thread
 VERSION = 2.5.0
 
 HEADERS += \
@@ -117,8 +117,7 @@ INCLUDEPATH += \
     $$PWD/src
 
 LIBS += \
-    -lm \
-    -pthread
+    -lm
 
 unix {
   INCLUDEPATH += \
@@ -148,7 +147,7 @@ CONFIG(release, debug|release) {
   DEFINES += NDEBUG
 }
 
-QMAKE_CXXFLAGS += -pthread -std=c++11 -Wall -Wextra -Wshadow -Wpedantic
+QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wpedantic
 QMAKE_CXXFLAGS_RELEASE -= -g
 
 UI_DIR = $$PWD/build

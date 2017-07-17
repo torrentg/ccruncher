@@ -2,16 +2,16 @@
 CCRUNCHER CHANGELOG
 ===================
 
-version 2.5.0 (Jan. 2017)
+version 2.5.0 (Jul. 2017)
 --------------------------
   * MCMC algorithm reviewed
   * published ccruncher-inf (MCMC)
-  * code moved from C++98 to C++11
+  * code moved from C++98 to C++14
   * code refactoring
   * html responsive design
   * removed support for LHS
   * parameter 'copula.type' renamed to 'copula'
-  * added 'actions'and 'view' menus in ccruncher-gui
+  * added 'actions' and 'view' menus in ccruncher-gui
   * fixed a bug related to user language and number format
 
 version 2.4.1 (Mar. 2014)
