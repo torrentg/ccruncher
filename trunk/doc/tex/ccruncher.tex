@@ -97,7 +97,7 @@
 %\SetWatermarkScale{0.75}
 
 \def\numversion{2.5.0}
-\def\svnversion{R1367}
+\def\svnversion{R1379}
 
 \hyphenation{CCruncher obli-gors}
 
@@ -443,8 +443,9 @@ distribution used to simulate the obligors' default times, and provides methods
 to estimate the copula parameters. The second chapter describes how to obtain 
 the portfolio loss distribution and quantify the portfolio credit risk.
 Finally, the third chapter covers four important topics: risk sensitivity, 
-parameters uncertainty, portfolio optimization, and an attempt to equate the 
-multivariate market model with the credit risk model using the Merton's framework.
+parameters uncertainty, and portfolio optimization.
+%, and an attempt to equate the multivariate market model with the 
+%credit risk model using the Merton's framework.
 In order to facilitate reading, those issues that are important to understanding 
 the content and require a detailed discussion have been relegated to appendices.
 
@@ -2687,6 +2688,7 @@ used to ensure the restrictions compliance.
 %------------------------------------------------------------------------------
 % MARKET MODEL
 %------------------------------------------------------------------------------
+\begin{comment}
 \section{Market Model}
 
 In some cases, historical data of portfolio defaults is not available, but 
@@ -2731,13 +2733,13 @@ with a value just above the threshold avoiding the default event; finally the
 	\label{fig:market1}
 \end{figure}
 
-Below we see that this scenario leads to a multivariate default times model of 
-type copula model as set forth in Chapter~\ref{chap:mdt}. Specifically, leads 
-to the Gaussian multi-factor copula model.
+We use this scenario to derive the multivariate default times distribution using 
+the copula model sketched in Chapter~\ref{chap:mdt}. Also, we will see that the 
+underlying copula is different from the t-Student copula.
 
-First, we need to determine the marginal distributions. The following basic result 
-establishes the relationship between the threshold functions and the corresponding 
-default time distributions. 
+\ul{First}, we need to determine the marginal distributions. The following basic 
+result establishes the relationship between the threshold functions and the 
+corresponding default time distributions. 
 
 \begin{proposition}[Default time distributions]
 	\label{prop:mmdtf}
@@ -2795,10 +2797,21 @@ Merton's default time distribution using the same assumptions we do. This
 distribution is harmonious with the current framework, but this framework is not 
 limited to such type of distributions.
 
-Second, we need to determine the copula. In the following result we see that the
-copula of the multivariate default times model is a Gaussian copula. Moreover, 
+\ul{Second}, we need to determine the copula. Before to proceed, we post a 
+result (without proof) that we will use later.
+\sout{In the following result we see that 
+the copula of the multivariate default times model is a Gaussian copula. Moreover, 
 the correlation matrix of the Gaussian copula and the correlation matrix of the 
-Brownian Motion are the same.
+Brownian Motion are the same.}
+
+\begin{proposition}[Linear combination of multivariate Gaussians]
+	\label{prop:lcmg}
+	If $X \sim N(\mu_X,\Sigma_X)$ and $Y \sim N(\mu_Y,\Sigma_Y)$ are independents, then 
+	\begin{displaymath}
+		A \cdot X + B \cdot Y + C \sim 
+		N\left(A \mu_X+ B \mu_Y + C,\ A \Sigma_X A^\intercal + B \Sigma_Y B^\intercal\right)
+	\end{displaymath}
+\end{proposition}
 
 \begin{proposition}[Multivariate default times has a \sout{Merton's copula}]
 	\label{prop:mmgc}
@@ -2808,8 +2821,8 @@ Brownian Motion are the same.
 	the time range $[0,t]$ when the asset value at time $t$ is below the 
 	threshold $h_i(t)$.
 	
-	Under these assumptions, the multivariate default times has a Gaussian 
-	copula with correlation matrix $R$.
+	\sout{Under these assumptions, the multivariate default times has a Gaussian 
+	copula with correlation matrix $R$.}
 \end{proposition}
 
 \begin{proof}
@@ -2836,7 +2849,7 @@ Brownian Motion are the same.
 		\right\} =
 	\end{displaymath}
 
-	We take logarithms in order to simplify the expressions
+	We take logarithms in order to simplify the expressions.
 	\begin{displaymath}
 		\hspace*{-1cm}
 		\Pr\left\{ 
@@ -2882,7 +2895,7 @@ Brownian Motion are the same.
 	\end{displaymath}
 
 	We express the threshold functions $h_i(t)$ in terms of the default times 
-	distribution as stated in Proposition~\ref{prop:mmdtf}
+	distribution as stated in Proposition~\ref{prop:mmdtf}.
 	\begin{displaymath}
 		\hspace*{-1cm}
 		\Pr\left\{ 
@@ -2895,12 +2908,29 @@ Brownian Motion are the same.
 		\end{array}
 		\right\} = 
 	\end{displaymath}
-
-	If $X \sim N(\mu_X,\Sigma_X)$ and $Y \sim N(\mu_Y,\Sigma_Y)$ are independents, then 
+	
+	We reformulate our expression in terms of $\epsilon$ (see below for its 
+	distribution) instead of $\epsilon'$ and $\epsilon''$.
 	\begin{displaymath}
-		A \cdot X + B \cdot Y + C \sim N\left(A \mu_X+ B \mu_Y + C,\ A \Sigma_X A^\intercal + B \Sigma_Y B^\intercal\right)
+		\hspace*{-1cm}
+		\Pr\left\{ 
+		\epsilon
+		\le \left(
+		\begin{array}{l}
+			\Phi^{-1}(F_1(t_1))
+			\\
+			\Phi^{-1}(F_2(t_2))
+		\end{array}
+		\right)
+		\right\} = 
+		\Pr\left\{ 
+			\epsilon_1 \le \Phi^{-1}(F_1(t_1)),
+			\ \epsilon_2 \le \Phi^{-1}(F_2(t_2))
+		\right\}
 	\end{displaymath}
-	In our case
+
+	Where the distribution of $\epsilon$ is obtained defining $K = \frac{t_1}{t_2}$ 
+	and applying Proposition~\ref{prop:lcmg}.
 	\begin{displaymath}
 		\epsilon = 
 		\left(
@@ -2924,50 +2954,15 @@ Brownian Motion are the same.
 				r \sqrt{K} & 1
 			\end{array}
 		\right)\right)
-		\text{ where }
-		K = \frac{t_1}{t_2}
-	\end{displaymath}
-	\begin{comment}
-		R = {{1,r},{r,1}}
-		A = {{1,0},{0,Sqrt[k]}}
-		B = {{0,0},{0,Sqrt[1-k]}}
-		M = Simplify[A.R.Transpose[A] + B.R.Transpose[B], Reals]
-		Q = CholeskyDecomposition[M]
-		S= Inverse[Q]
-		
-		Q = MatrixPower[M, 1/2]?
-	\end{comment}
-
-	We formulate our expression in terms of $\epsilon$ instead of $\epsilon'$ 
-	and $\epsilon''$.
-	\begin{displaymath}
-		\hspace*{-1cm}
-		\Pr\left\{ 
-		\epsilon
-		\le \left(
-		\begin{array}{l}
-			\Phi^{-1}(F_1(t_1))
-			\\
-			\Phi^{-1}(F_2(t_2))
-		\end{array}
-		\right)
-		\right\} = 
-		\Pr\left\{ 
-			\epsilon_1 \le \Phi^{-1}(F_1(t_1)),
-			\ \epsilon_2 \le \Phi^{-1}(F_2(t_2))
-		\right\}
 	\end{displaymath}
 	
-	% This is not a Gaussian Copula.
-	% Is it the Henriksson–Merton copula?
-	% Is it a new copula named Torrent-Merton ?
-	
-	That means that
+	Finally, this means that
 	\begin{displaymath}
 		F(t_1,\ t_2) = H\left( \Phi^{-1}(F_1(t_1)),\ \Phi^{-1}(F_2(t_2)) \right)
 	\end{displaymath}
-	where $H$ is the cdf of the multivariate Gaussian \sout{with correlation matrix $R$},
-	and $\Phi^{-1}$ is the inverse of the univariate Gaussian distribution.
+	where $H$ is the cdf of the multivariate Gaussian distribution $\epsilon$ 
+	(see above), and $\Phi^{-1}$ is the inverse of the univariate Gaussian 
+	distribution.
 	\sout{According to Proposition~\ref{prop:dtd}, this multivariate default times 
 	distribution has marginals $F_i(t)$ and a Gaussian copula with correlation 
 	matrix $R$}.
@@ -2975,6 +2970,39 @@ Brownian Motion are the same.
 	WARNING: $H$ DEPENDS ON $t_1,t_2$, BUT SHOULD ONLY DEPEND ON $F_1, F_2$ !!!
 	
 \end{proof}
+\end{comment}
+\begin{comment}
+R = {{1,r},{r,1}}
+A = {{1,0},{0,Sqrt[k]}}
+B = {{0,0},{0,Sqrt[1-k]}}
+M = Simplify[A.R.Transpose[A] + B.R.Transpose[B], Reals]
+Q = CholeskyDecomposition[M]
+S= Inverse[Q]
+Q = MatrixPower[M, 1/2]?
+
+% This is not a Gaussian Copula.
+% Is it the Henriksson–Merton copula?
+% Is it a new copula named Torrent-Merton ?
+
+myr[r_, x_, y_] := r*Sqrt[Min[x, y]/Max[x, y]]
+myc[t_, p_] := InverseCDF[
+  NormalDistribution[0, 1],
+  CDF[ExponentialDistribution[-Log[1 - p]], t]
+]
+Plot3D[
+ CDF[
+  MultinormalDistribution[
+    {0, 0},
+    {{1, myr[r, t1, t2]},
+     {myr[r, t1, t2], 1}}
+  ] /. r -> 0.25,
+  {myc[t1, 0.05], myc[t2, 0.1]}
+ ],
+ {t1, 0, 50},
+ {t2, 0, 50},
+ PlotRange -> All
+]
+\end{comment}
 
 \begin{comment}
 library(mvtnorm)
@@ -3014,7 +3042,7 @@ M = simu(25000, t1, t2)
 pmvnorm(upper=c(qnorm(f(1,t1)), qnorm(f(2,t2))), sigma=R)[1]
 
 \end{comment}
-
+\begin{comment}
 In the following lines we show that the Gaussian copula is a good-enough
 approximation of the Merton's copula.We use the following basic statements
 to derive the probability density functions.
@@ -3585,6 +3613,8 @@ that the expected annual return should be close to the risk-free rate.
 			\text{CCC} & 19.7846 &   1.2   &   r    & \to & 0.1928 \\
 		\end{array}
 	\end{displaymath}
+	Finally, we use these values in the $F_i(t)$ Merton's formula to draw the 
+	probablities of default exposed in Figure~\ref{fig:pdfmm}.
 \end{example}
 
 \begin{figure}[!ht]
