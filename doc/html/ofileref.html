@@ -177,27 +177,27 @@
         <pre>
 <b>&gt; bin/ccruncher-cmd -w -o data -DNU=12.54 -DW1=0.29 -DW2=0.48 -DR12=0.21 samples/test05.xml</b>
 
-        ccruncher is Copyright (C) 2004-2016 Gerard Torrent and licensed        
-        under the GNU General Public License, version 2. More info at          
+        ccruncher is Copyright (C) 2004-2017 Gerard Torrent and licensed        
+         under the GNU General Public License, version 2. More info at          
                             http://www.ccruncher.net                            
 
 general information ************************************************************
-  ccruncher version                                                2.5.0 (R1338)
-  start time (dd/MM/yyyy hh:mm:ss)                           27/07/2016 19:18:45
+  ccruncher version                                                2.5.0 (R1379)
+  start time (dd/MM/yyyy hh:mm:ss)                           20/07/2017 11:27:52
 
 reading input file *************************************************************
   file name                 [/home/gerard/projects/ccruncher/samples/test05.xml]
-  file size                                                            274.60 KB
-  define (user defined)                                                 NU=12.54
-  define (user defined)                                                 R12=0.21
-  define (user defined)                                                  W1=0.29
-  define (user defined)                                                  W2=0.48
-  define (input file)                                             numsims=200000
-  define (input file)                                            copula=t(12.54)
-  define (input file)                                            antithetic=true
-  define (input file)                                                     seed=0
-  file checksum (adler32)                                             2023977821
-  elapsed time parsing data                                         00:00:00.014
+  file size                                                            274.56 KB
+  macro (user defined)                                                  NU=12.54
+  macro (user defined)                                                  R12=0.21
+  macro (user defined)                                                   W1=0.29
+  macro (user defined)                                                   W2=0.48
+  macro (input file)                                              numsims=200000
+  macro (input file)                                             copula=t(12.54)
+  macro (input file)                                             antithetic=true
+  macro (input file)                                                      seed=0
+  file checksum (adler32)                                             2868339635
+  elapsed time                                                      00:00:00.016
 
 input file summary *************************************************************
   initial date                                                        01/01/2013
@@ -207,7 +207,6 @@ input file summary *************************************************************
   copula type                                                           t(12.54)
   default probability functions                                         computed
   transition matrix period (months)                                           12
-  transition matrix regularization error (1M)                                  0
   number of obligors                                                        1000
   number of assets                                                          1000
   number of values                                                          1000
@@ -219,7 +218,7 @@ output files *******************************************************************
   segmentation          [/home/gerard/projects/ccruncher/data/sector-rating.csv]
 
 Monte Carlo ********************************************************************
-  seed used to initialize randomizer                            1469639925676812
+  seed used to initialize RNG                                   1500542872427502
   maximum execution time (seconds)                                         86400
   maximum number of iterations                                            200000
   antithetic mode                                                           true
@@ -230,11 +229,11 @@ Monte Carlo ********************************************************************
     ............................................................................
     ................................................
   simulations realized                                                    200000
-  total simulation time                                             00:00:02.060
+  elapsed time                                                      00:00:02.012
 
 general information ************************************************************
-  end time (dd/MM/yyyy hh:mm:ss)                             27/07/2016 19:18:47
-  total elapsed time                                                00:00:02.079
+  end time (dd/MM/yyyy hh:mm:ss)                             20/07/2017 11:27:54
+  total elapsed time                                                00:00:02.033
         </pre>
         <p>
           ccruncher-gui program saves the execution trace in the ccruncher.out file.
@@ -254,7 +253,7 @@ general information ************************************************************
             Copyright &copy; 2004-2017 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>&nbsp;&nbsp;
           </span>
           <span id="modified" class="float-sm-right">
-            Last modified: 12-Jul-2017
+            Last modified: 20-Jul-2017
           </span>
         </div>
       </footer>
