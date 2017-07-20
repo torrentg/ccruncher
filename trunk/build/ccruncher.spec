@@ -12,12 +12,14 @@ BuildRequires: expat-devel >= 2.1.1
 BuildRequires: zlib-devel >= 1.2.8
 BuildRequires: qt-devel >= 5.6.1
 BuildRequires: qwt-qt5-devel >= 6.1.2
+BuildRequires: libconfig-devel >= 1.5
 
 Requires: gsl >= 2.1
 Requires: expat >= 2.1.1
 Requires: zlib >= 1.2.8
 Requires: qt >= 5.6.1
-Requires: qwt-qt5 >= 6.1.2 
+Requires: qwt-qt5 >= 6.1.2
+Requires: libconfig >= 1.5
 
 %description
 CCruncher is a project for quantifying portfolio credit risk using the copula 
@@ -62,7 +64,7 @@ install -m 644 doc/ccruncher-inf.1 $RPM_BUILD_ROOT%{_mandir}/man1/ccruncher-inf.
 %{_bindir}/ccruncher-inf
 
 %changelog
-* Sat Nov 12 2016 Gerard Torrent <gtorrent@ccruncher.net> - 2.5.0-1
+* Thu Jul 20 2017 Gerard Torrent <gtorrent@ccruncher.net> - 2.5.0-1
 - Initial RPM release
 
 
