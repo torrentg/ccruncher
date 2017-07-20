@@ -35,6 +35,7 @@ winfiles="ccruncher-cmd.exe
           libstdc++-6.dll
           libwinpthread-1.dll
           platforms/qwindows.dll
+          platforms/qminimal.dll
           Qt5Core.dll
           Qt5Gui.dll
           Qt5Network.dll
