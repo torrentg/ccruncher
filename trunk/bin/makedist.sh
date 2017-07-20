@@ -40,7 +40,9 @@ winfiles="ccruncher-cmd.exe
           Qt5Svg.dll
           Qt5Widgets.dll
           qwt.dll
-          ssleay32.dll"
+          ssleay32.dll
+          libconfig++-9.dll
+          libgomp-1.dll"
 
 #-------------------------------------------------------------
 # usage function
