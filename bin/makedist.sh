@@ -6,7 +6,8 @@
 #
 # dependencies:
 #   tar, gzip, zip, svn, auto-tools, unix2dos
-#   make, pdflatex, bibtex, iconv, rpmbuild
+#   make, pdflatex, bibtex, iconv, rpmbuild,
+#   dirname
 #
 # retcodes:
 #   0    : OK
@@ -27,8 +28,10 @@ winfiles="ccruncher-cmd.exe
           icudt53.dll
           icuin53.dll
           icuuc53.dll
+          libconfig++-9.dll
           libeay32.dll
           libgcc_s_dw2-1.dll
+          libgomp-1.dll
           libstdc++-6.dll
           libwinpthread-1.dll
           platforms/qwindows.dll
@@ -40,9 +43,7 @@ winfiles="ccruncher-cmd.exe
           Qt5Svg.dll
           Qt5Widgets.dll
           qwt.dll
-          ssleay32.dll
-          libconfig++-9.dll
-          libgomp-1.dll"
+          ssleay32.dll"
 
 #-------------------------------------------------------------
 # usage function
@@ -246,7 +247,8 @@ makeWinDist() {
       echo "error: file $winexes/$file not found";
       exit 1;
     else
-      cp "$winexes/$file" bin/
+      mkdir -p $(dirname "bin/$file");
+      cp "$winexes/$file" "bin/$file";
     fi
   done
 
