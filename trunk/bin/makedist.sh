@@ -28,9 +28,10 @@ winfiles="ccruncher-cmd.exe
           icudt53.dll
           icuin53.dll
           icuuc53.dll
+          libEGL.dll
           libconfig++-9.dll
-          libeay32.dll
           libgcc_s_dw2-1.dll
+          libGLESv2.dll
           libgomp-1.dll
           libstdc++-6.dll
           libwinpthread-1.dll
@@ -43,8 +44,7 @@ winfiles="ccruncher-cmd.exe
           Qt5PrintSupport.dll
           Qt5Svg.dll
           Qt5Widgets.dll
-          qwt.dll
-          ssleay32.dll"
+          qwt.dll"
 
 #-------------------------------------------------------------
 # usage function
