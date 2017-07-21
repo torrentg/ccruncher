@@ -82,6 +82,7 @@ ccruncher_gui::XmlEditWidget::XmlEditWidget(const QString &f, QWidget *parent) :
   catch(...) {
     delete toolbar;
     delete highlighter;
+    delete ui;
     throw;
   }
 }
