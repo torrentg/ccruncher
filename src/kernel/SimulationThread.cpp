@@ -89,12 +89,13 @@ void ccruncher::SimulationThread::run()
 
     for(size_t iobligor=0; iobligor<obligors.size(); iobligor++)
     {
-      // simulating multi-variate t-student
-      unsigned char ifactor = obligors[iobligor].ifactor;
-
+      // simulating iid N(0,1) values (epsilons)
       for(size_t j=0; j<x.size(); j++) {
         x[j] = gsl_ran_gaussian_ziggurat(rng, 1.0);
       }
+
+      // simulating multi-variate t-student
+      unsigned char ifactor = obligors[iobligor].ifactor;
 
       for(size_t j=0; j<x.size(); j++) {
         // z[ifactor] values are already multiplied by w[ifactor] (see chol matrix creation)
