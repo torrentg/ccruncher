@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _ExpatParser_
-#define _ExpatParser_
+#pragma once
 
 #include <string>
 #include <expat.h>
@@ -87,6 +86,3 @@ class ExpatParser
 };
 
 } // namespace
-
-#endif
-

@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _ObligorTest_
-#define _ObligorTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -47,6 +46,3 @@ class ObligorTest : public TestFixture<ObligorTest>
 REGISTER_FIXTURE(ObligorTest)
 
 } // namespace
-
-#endif
-

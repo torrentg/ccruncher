@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _ExprTest_
-#define _ExprTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -64,6 +63,3 @@ public:
 REGISTER_FIXTURE(ExprTest)
 
 } // namespace
-
-#endif
-

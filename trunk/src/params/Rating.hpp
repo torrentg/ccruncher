@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Rating_
-#define _Rating_
+#pragma once
 
 #include <string>
 
@@ -50,6 +49,3 @@ class Rating
 };
 
 } // namespace
-
-#endif
-

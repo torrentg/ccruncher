@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _UtilsTest_
-#define _UtilsTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -53,6 +52,3 @@ class UtilsTest : public TestFixture<UtilsTest>
 REGISTER_FIXTURE(UtilsTest)
 
 } // namespace
-
-#endif
-

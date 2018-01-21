@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _ParserTest_
-#define _ParserTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -57,6 +56,3 @@ class ParserTest : public TestFixture<ParserTest>
 REGISTER_FIXTURE(ParserTest)
 
 } // namespace
-
-#endif
-

@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _LGD_
-#define _LGD_
+#pragma once
 
 #include <cmath>
 #include <string>
@@ -151,6 +150,3 @@ inline double ccruncher::LGD::getValue(const gsl_rng *rng) const
 }
 
 }
-
-#endif
-

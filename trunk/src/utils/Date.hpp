@@ -21,8 +21,7 @@
 //
 //===========================================================================
 
-#ifndef _Date_
-#define _Date_
+#pragma once
 
 #include <cstdlib>
 #include <iostream>
@@ -389,6 +388,3 @@ inline bool ccruncher::Date::operator>=( const Date& date ) const
 }
 
 } // namespace
-
-#endif
-

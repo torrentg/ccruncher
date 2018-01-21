@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _XmlInputDataTest_
-#define _XmlInputDataTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -47,6 +46,3 @@ class XmlInputDataTest : public TestFixture<XmlInputDataTest>
 REGISTER_FIXTURE(XmlInputDataTest)
 
 } // namespace
-
-#endif
-

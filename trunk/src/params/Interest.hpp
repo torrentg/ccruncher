@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Interest_
-#define _Interest_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -134,6 +133,3 @@ class Interest
 };
 
 } // namespace
-
-#endif
-

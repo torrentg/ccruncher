@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Expr_
-#define _Expr_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -198,6 +197,3 @@ class Expr
 };
 
 } // namespace
-
-#endif
-

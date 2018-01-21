@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _TransitionsTest_
-#define _TransitionsTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -61,6 +60,3 @@ class TransitionsTest : public TestFixture<TransitionsTest>
 REGISTER_FIXTURE(TransitionsTest)
 
 } // namespace
-
-#endif
-

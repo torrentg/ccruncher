@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _InputTest_
-#define _InputTest_
+#pragma once
 
 #include <vector>
 #include "utils/MiniCppUnit.hxx"
@@ -67,6 +66,3 @@ class InputTest : public TestFixture<InputTest>
 REGISTER_FIXTURE(InputTest)
 
 } // namespace
-
-#endif
-

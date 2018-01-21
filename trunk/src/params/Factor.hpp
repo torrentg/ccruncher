@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Factor_
-#define _Factor_
+#pragma once
 
 #include <string>
 #include <cmath>
@@ -54,6 +53,3 @@ class Factor
 };
 
 } // namespace
-
-#endif
-

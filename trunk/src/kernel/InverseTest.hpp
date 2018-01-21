@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _InverseTest_
-#define _InverseTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -58,6 +57,3 @@ class InverseTest : public TestFixture<InverseTest>
 REGISTER_FIXTURE(InverseTest)
 
 } // namespace
-
-#endif
-

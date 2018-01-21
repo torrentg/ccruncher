@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Segmentation_
-#define _Segmentation_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -83,6 +82,3 @@ class Segmentation
 };
 
 } // namespace
-
-#endif
-

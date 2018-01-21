@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _AnalysisTask_
-#define _AnalysisTask_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -221,6 +220,3 @@ class AnalysisTask : public QThread
 } // namespace
 
 Q_DECLARE_METATYPE(ccruncher_gui::AnalysisTask::status)
-
-#endif
-

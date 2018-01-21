@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _PowMatrix_
-#define _PowMatrix_
+#pragma once
 
 #include <vector>
 #include "utils/Exception.hpp"
@@ -53,6 +52,3 @@ class PowMatrix
 };
 
 } // namespace
-
-#endif
-

@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _QStreamBuf_
-#define _QStreamBuf_
+#pragma once
 
 #include <streambuf>
 #include <QObject>
@@ -63,6 +62,3 @@ class QStreamBuf : public QObject, public std::basic_streambuf<char>
 };
 
 } // namespace
-
-#endif
-

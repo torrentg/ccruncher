@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Logger_
-#define _Logger_
+#pragma once
 
 #include <string>
 #include <ostream>
@@ -161,6 +160,3 @@ struct center
 };
 
 } // namespace
-
-#endif
-

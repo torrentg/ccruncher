@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _CsvFile_
-#define _CsvFile_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -105,6 +104,3 @@ class CsvFile
 };
 
 } // namespace
-
-#endif
-

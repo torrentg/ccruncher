@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _MainWindow_
-#define _MainWindow_
+#pragma once
 
 #include <QMainWindow>
 #include <QString>
@@ -118,6 +117,3 @@ class MainWindow : public QMainWindow
 };
 
 } // namespace
-
-#endif
-

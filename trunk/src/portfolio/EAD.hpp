@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _EAD_
-#define _EAD_
+#pragma once
 
 #include <cmath>
 #include <string>
@@ -157,6 +156,3 @@ inline double ccruncher::EAD::getValue(const gsl_rng *rng) const
 }
 
 } // namespace
-
-#endif
-

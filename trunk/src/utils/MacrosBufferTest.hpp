@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _MacrosBufferTest_
-#define _MacrosBufferTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -47,6 +46,3 @@ class MacrosBufferTest : public TestFixture<MacrosBufferTest>
 REGISTER_FIXTURE(MacrosBufferTest)
 
 } // namespace
-
-#endif
-

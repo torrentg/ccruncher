@@ -38,8 +38,7 @@
 **
 ****************************************************************************/
 
-#ifndef CODEEDITOR_H
-#define CODEEDITOR_H
+#pragma once
 
 #include <QPlainTextEdit>
 #include <QObject>
@@ -94,6 +93,3 @@ protected:
 private:
     CodeEditor *codeEditor;
 };
-
-
-#endif

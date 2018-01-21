@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _DateValues_
-#define _DateValues_
+#pragma once
 
 #include "portfolio/EAD.hpp"
 #include "portfolio/LGD.hpp"
@@ -118,7 +117,3 @@ inline bool ccruncher::DateValues::operator!=(const DateValues &o) const
 }
 
 } // namespace
-
-
-#endif
-

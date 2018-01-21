@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Exception_
-#define _Exception_
+#pragma once
 
 #include <stdexcept>
 #include <iostream>
@@ -66,6 +65,3 @@ class Exception : public std::exception
 std::ostream& operator << (std::ostream& os, const Exception &e);
 
 } // namespace
-
-#endif
-

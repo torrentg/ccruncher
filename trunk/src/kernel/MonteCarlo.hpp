@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _MonteCarlo_
-#define _MonteCarlo_
+#pragma once
 
 #include <mutex>
 #include <string>
@@ -176,6 +175,3 @@ class MonteCarlo
 };
 
 } // namespace
-
-#endif
-

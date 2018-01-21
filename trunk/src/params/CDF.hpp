@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _CDF_
-#define _CDF_
+#pragma once
 
 #include <cmath>
 #include <string>
@@ -91,6 +90,3 @@ class CDF
 };
 
 } // namespace
-
-#endif
-

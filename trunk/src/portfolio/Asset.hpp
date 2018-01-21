@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Asset_
-#define _Asset_
+#pragma once
 
 #include <vector>
 #include "portfolio/DateValues.hpp"
@@ -64,6 +63,3 @@ class Asset
 };
 
 } // namespace
-
-#endif
-

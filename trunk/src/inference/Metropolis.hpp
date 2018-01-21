@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Metropolis_
-#define _Metropolis_
+#pragma once
 
 #include <vector>
 #include <libconfig.h++>
@@ -185,5 +184,3 @@ class Metropolis
 };
 
 } // namespace
-
-#endif

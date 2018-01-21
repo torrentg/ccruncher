@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _ParamsTest_
-#define _ParamsTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -50,6 +49,3 @@ class ParamsTest : public TestFixture<ParamsTest>
 REGISTER_FIXTURE(ParamsTest)
 
 } // namespace
-
-#endif
-

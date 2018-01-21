@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _MacrosBuffer_
-#define _MacrosBuffer_
+#pragma once
 
 #include <map>
 #include <string>
@@ -78,6 +77,3 @@ class MacrosBuffer
 };
 
 } // namespace
-
-#endif
-

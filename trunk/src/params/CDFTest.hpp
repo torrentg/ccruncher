@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _CDFTest_
-#define _CDFTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -55,6 +54,3 @@ class CDFTest : public TestFixture<CDFTest>
 REGISTER_FIXTURE(CDFTest)
 
 } // namespace
-
-#endif
-

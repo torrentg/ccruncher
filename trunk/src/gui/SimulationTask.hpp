@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _SimulationTask_
-#define _SimulationTask_
+#pragma once
 
 #include <string>
 #include <map>
@@ -130,6 +129,3 @@ class SimulationTask : public QThread
 } // namespace
 
 Q_DECLARE_METATYPE(ccruncher_gui::SimulationTask::status)
-
-#endif
-
