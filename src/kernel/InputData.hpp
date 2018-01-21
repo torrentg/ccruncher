@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _InputData_
-#define _InputData_
+#pragma once
 
 #include <vector>
 #include <string>
@@ -126,6 +125,3 @@ class InputData : public Input
 };
 
 } // namespace
-
-#endif
-

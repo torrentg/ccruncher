@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _ExceptionTest_
-#define _ExceptionTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 #include "utils/Exception.hpp"
@@ -53,6 +52,3 @@ class ExceptionTest : public TestFixture<ExceptionTest>
 REGISTER_FIXTURE(ExceptionTest)
 
 } // namespace
-
-#endif
-

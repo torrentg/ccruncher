@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _SimulationWidget_
-#define _SimulationWidget_
+#pragma once
 
 #include <map>
 #include <fstream>
@@ -148,6 +147,3 @@ class SimulationWidget : public MdiChildWidget
 };
 
 } // namespace
-
-#endif
-

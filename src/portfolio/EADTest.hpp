@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _EADTest_
-#define _EADTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -51,6 +50,3 @@ class EADTest : public TestFixture<EADTest>
 REGISTER_FIXTURE(EADTest)
 
 } // namespace
-
-#endif
-

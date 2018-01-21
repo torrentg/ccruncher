@@ -13,8 +13,7 @@
 ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 **
 ****************************************************************************/
-#ifndef XMLHIGHLIGHTER_H
-#define XMLHIGHLIGHTER_H
+#pragma once
 
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>
@@ -82,6 +81,3 @@ class XmlHighlighter : public QSyntaxHighlighter
     XmlHighlighter(QTextEdit* parent);
 
 };
-
-#endif
-

@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _AssetTest_
-#define _AssetTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -55,6 +54,3 @@ class AssetTest : public TestFixture<AssetTest>
 REGISTER_FIXTURE(AssetTest)
 
 } // namespace
-
-#endif
-

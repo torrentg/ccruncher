@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Application_
-#define _Application_
+#pragma once
 
 #include <QApplication>
 
@@ -45,6 +44,3 @@ class Application : public QApplication
 };
 
 } // namespace
-
-#endif
-

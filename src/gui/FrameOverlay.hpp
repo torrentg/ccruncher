@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _FrameOverlay_
-#define _FrameOverlay_
+#pragma once
 
 #include <vector>
 #include <QFrame>
@@ -62,6 +61,3 @@ class FrameOverlay : public QFrame
 };
 
 } // namespace
-
-#endif
-

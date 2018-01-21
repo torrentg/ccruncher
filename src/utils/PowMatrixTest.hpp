@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _PowMatrixTest_
-#define _PowMatrixTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -56,6 +55,3 @@ class PowMatrixTest : public TestFixture<PowMatrixTest>
 REGISTER_FIXTURE(PowMatrixTest)
 
 } // namespace
-
-#endif
-

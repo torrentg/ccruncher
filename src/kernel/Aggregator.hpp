@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Aggregator_
-#define _Aggregator_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -77,6 +76,3 @@ class Aggregator
 };
 
 } // namespace
-
-#endif
-

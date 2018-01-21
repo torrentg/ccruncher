@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Input_
-#define _Input_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -105,6 +104,3 @@ class Input
 };
 
 } // namespace
-
-#endif
-

@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Parser_
-#define _Parser_
+#pragma once
 
 #include <string>
 #include "utils/Exception.hpp"
@@ -71,6 +70,3 @@ class Parser
 };
 
 } // namespace
-
-#endif
-

@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _ExpatHandlers_
-#define _ExpatHandlers_
+#pragma once
 
 #include <string>
 #include "utils/MacrosBuffer.hpp"
@@ -112,6 +111,3 @@ class ExpatHandlers
 };
 
 } // namespace
-
-#endif
-

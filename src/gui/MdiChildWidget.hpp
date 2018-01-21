@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _MdiChildWidget_
-#define _MdiChildWidget_
+#pragma once
 
 #include <QWidget>
 #include <QToolBar>
@@ -56,6 +55,3 @@ class MdiChildWidget: public QWidget
 };
 
 } // namespace
-
-#endif
-

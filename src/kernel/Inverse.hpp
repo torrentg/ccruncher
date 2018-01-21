@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Inverse_
-#define _Inverse_
+#pragma once
 
 #include <map>
 #include <vector>
@@ -132,6 +131,3 @@ inline double ccruncher::Inverse::evalue(double val) const
 }
 
 } // namespace
-
-#endif
-

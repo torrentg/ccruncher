@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _DefinesDialog_
-#define _DefinesDialog_
+#pragma once
 
 #include <map>
 #include <string>
@@ -66,6 +65,3 @@ class DefinesDialog : public QDialog
 };
 
 } // namespace
-
-#endif
-

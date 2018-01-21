@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _TextBrowser_
-#define _TextBrowser_
+#pragma once
 
 #include <QTextBrowser>
 
@@ -50,6 +49,3 @@ class TextBrowser : public QTextBrowser
 };
 
 } // namespace
-
-#endif
-

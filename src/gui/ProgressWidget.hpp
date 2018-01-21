@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _ProgressWidget_
-#define _ProgressWidget_
+#pragma once
 
 #include <QTimer>
 #include <QWidget>
@@ -73,5 +72,3 @@ class ProgressWidget : public QWidget
 };
 
 } // namespace
-
-#endif

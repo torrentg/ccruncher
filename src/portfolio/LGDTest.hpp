@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _LGDTest_
-#define _LGDTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -51,6 +50,3 @@ class LGDTest : public TestFixture<LGDTest>
 REGISTER_FIXTURE(LGDTest)
 
 } // namespace
-
-#endif
-

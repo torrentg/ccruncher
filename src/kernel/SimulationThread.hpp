@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _SimulationThread_
-#define _SimulationThread_
+#pragma once
 
 #include <vector>
 #include <gsl/gsl_vector.h>
@@ -118,6 +117,3 @@ class SimulationThread : public Thread
 };
 
 } // namespace
-
-#endif
-

@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _InterestTest_
-#define _InterestTest_
+#pragma once
 
 #include <vector>
 #include "params/Interest.hpp"
@@ -60,6 +59,3 @@ class InterestTest : public TestFixture<InterestTest>
 REGISTER_FIXTURE(InterestTest)
 
 } // namespace
-
-#endif
-

@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Component_
-#define _Component_
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -182,6 +181,3 @@ void Component<T>::adapt(bool b)
 }
 
 } // namespace
-
-#endif
-

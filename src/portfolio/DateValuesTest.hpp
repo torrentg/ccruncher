@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _DateValuesTest_
-#define _DateValuesTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 
@@ -47,6 +46,3 @@ class DateValuesTest : public TestFixture<DateValuesTest>
 REGISTER_FIXTURE(DateValuesTest)
 
 } // namespace
-
-#endif
-

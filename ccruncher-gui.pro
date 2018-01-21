@@ -30,9 +30,9 @@ HEADERS += \
     src/params/Segmentation.hpp \
     src/params/Transitions.hpp \
     src/params/CDF.hpp \
-    src/kernel/Input.cpp \
-    src/kernel/InputData.cpp \
-    src/kernel/XmlInputData.cpp \
+    src/kernel/Input.hpp \
+    src/kernel/InputData.hpp \
+    src/kernel/XmlInputData.hpp \
     src/kernel/Aggregator.hpp \
     src/kernel/MonteCarlo.hpp \
     src/kernel/SimulationThread.hpp \

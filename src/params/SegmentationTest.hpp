@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _SegmentationTest_
-#define _SegmentationTest_
+#pragma once
 
 #include "utils/MiniCppUnit.hxx"
 #include "params/Segmentation.hpp"
@@ -50,6 +49,3 @@ class SegmentationTest : public TestFixture<SegmentationTest>
 REGISTER_FIXTURE(SegmentationTest)
 
 } // namespace
-
-#endif
-

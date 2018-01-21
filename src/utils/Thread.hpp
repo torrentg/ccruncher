@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Thread_
-#define _Thread_
+#pragma once
 
 #include <thread>
 
@@ -69,6 +68,3 @@ class Thread
 };
 
 } // namespace
-
-#endif
-

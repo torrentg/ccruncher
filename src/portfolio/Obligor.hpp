@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Obligor_
-#define _Obligor_
+#pragma once
 
 #include <vector>
 #include "portfolio/Asset.hpp"
@@ -58,6 +57,3 @@ class Obligor
 };
 
 } // namespace
-
-#endif
-

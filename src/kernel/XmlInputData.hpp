@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _XmlInputData_
-#define _XmlInputData_
+#pragma once
 
 #include <cstdio>
 #include <map>
@@ -196,6 +195,3 @@ class XmlInputData : public InputData, public ExpatHandlers
 };
 
 } // namespace
-
-#endif
-

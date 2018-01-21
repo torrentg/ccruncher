@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _XmlEditWidget_
-#define _XmlEditWidget_
+#pragma once
 
 #include <QWidget>
 #include <QString>
@@ -113,6 +112,3 @@ class XmlEditWidget : public MdiChildWidget
 };
 
 } // namespace
-
-#endif
-

@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Transitions_
-#define _Transitions_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -94,6 +93,3 @@ class Transitions
 };
 
 } // namespace
-
-#endif
-

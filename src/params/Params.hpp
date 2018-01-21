@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Params_
-#define _Params_
+#pragma once
 
 #include <string>
 #include "utils/Date.hpp"
@@ -100,6 +99,3 @@ class Params
 };
 
 } // namespace
-
-#endif
-

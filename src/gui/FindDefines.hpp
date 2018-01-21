@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _FindDefines_
-#define _FindDefines_
+#pragma once
 
 #include <map>
 #include <string>
@@ -60,6 +59,3 @@ class FindDefines : public ccruncher::ExpatHandlers
 };
 
 } // namespace
-
-#endif
-

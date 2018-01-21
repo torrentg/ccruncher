@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _QwtPlotCanvasExt_
-#define _QwtPlotCanvasExt_
+#pragma once
 
 #include <qwt_plot_canvas.h>
 #include <QMouseEvent>
@@ -52,6 +51,3 @@ class QwtPlotCanvasExt : public QwtPlotCanvas
     void mouseMoved(QPoint);
 
 };
-
-#endif
-

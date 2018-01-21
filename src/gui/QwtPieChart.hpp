@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _PieChart_
-#define _PieChart_
+#pragma once
 
 #include <vector>
 #include <string>
@@ -97,6 +96,3 @@ class QwtPieChart : public QwtPlotSeriesItem
     bool getInfo(QPoint point, std::string &name, double &val, double &pct) const;
 
 };
-
-#endif
-

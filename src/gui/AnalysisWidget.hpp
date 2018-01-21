@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _AnalysisWidget_
-#define _AnalysisWidget_
+#pragma once
 
 #include <vector>
 #include <QTimer>
@@ -155,6 +154,3 @@ class AnalysisWidget: public MdiChildWidget
 };
 
 } // namespace
-
-#endif
-

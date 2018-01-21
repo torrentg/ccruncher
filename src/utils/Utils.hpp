@@ -20,8 +20,7 @@
 //
 //===========================================================================
 
-#ifndef _Utils_
-#define _Utils_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -91,6 +90,3 @@ class Utils
 };
 
 } // namespace
-
-#endif
-
