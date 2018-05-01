@@ -263,7 +263,7 @@ string ccruncher::Utils::toNativeSeparators(const std::string &str)
  */
 bool ccruncher::Utils::isAbsolutePath(const std::string &path)
 {
-  if (path.size() <= 0) {
+  if (path.empty()) {
     return false;
   }
 

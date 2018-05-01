@@ -89,9 +89,9 @@
         <!-- ==================================================== -->
         <h1>Input File</h1>
         <p>
-          This page describes the xml input file for ccruncher-2.5.0.
+          This page describes the XML input file for ccruncher-2.5.0.
           You can find the DTD, the XSD and some XML samples under the 
-          $CCRUNCHER/samples directory. The xml used as
+          $CCRUNCHER/samples directory. The XML used in the
           <a href="sample.xml">example</a> is not intended to reflect a real 
           case, but to see the CCruncher configuration options.
           <br /><br />
@@ -119,7 +119,7 @@
           XML is case-sensitive. Title and description tags are optional. 
         </p>
         <p>
-          The values of type <code>double</code> can be set as numeric 
+          The values of type <code>double</code> can be set as a numeric 
           value (eg. 0.053) or percentage (eg. 5.3%). This type also supports
           the evaluation of numerical expressions (eg. (+2.5+2*(7+7)/10)/100).
           The supported operators are the usual (<code>+,-,*,/,^</code>), and
@@ -135,12 +135,12 @@
         <h2>Section Defines</h2>
         <p>
           This section allows you to define macros, that is, identifiers with 
-          associated values. In the rest of the file you can refer to these values 
+          associated values. In the rest of the file, you can refer to these values 
           using the identifier preceded by '$'. This feature is useful 
           when simulating the same file repeatedly varying slightly the parameters 
           as in the case of sensitivity analysis. 
           In these cases, the usage of macros combined with the command line argument 
-          '-D' allows to use the same file without having to modify it each time. 
+          '-D' allows using the same file without having to modify it each time. 
           This section is optional. 
         </p>
         <h3>Example</h3>
@@ -163,7 +163,7 @@
           <tr>
             <td class="c1">name</td>
             <td class="c2">
-              Define identifier. Any occurrence of this identifier preceded by '$' 
+              The define identifier. Any occurrence of this identifier preceded by '$' 
               (eg. $numsims) in the configuration file will be replaced by its value (eg. 30000). 
               The define name can only consist of letters, numbers and the character '_'.
             </td>
@@ -175,7 +175,7 @@
           <tr>
             <td class="c1">value</td>
             <td class="c2">
-              Value used to replace the define identifier. <br/>
+              The value used to replace the define identifier. <br/>
               You can put any value that does not contain XML special characters (&lt; &amp; &gt; &quot; &apos;).
             </td>
             <td class="c3">yes</td>
@@ -241,7 +241,7 @@
           <tr>
             <td class="c1">maxiterations</td>
             <td class="c2">
-              Maximum number of iterations performed by the Monte Carlo algorithm.
+              The maximum number of iterations performed by the Monte Carlo algorithm.
               If it has value 0, this stop criterion is not considered. CCruncher stops when 
               the maxiterations or maxseconds criterion is achieved.
             </td>
@@ -253,7 +253,7 @@
           <tr>
             <td class="c1">maxseconds</td>
             <td class="c2">
-              Maximum number of seconds that the current execution can last.
+              The maximum number of seconds that the current execution can last.
               If it has value 0, this stop criterion is not considered. CCruncher stops when 
               the maxiterations or maxseconds criterion is achieved. 
             </td>
@@ -303,7 +303,7 @@
             <td class="c2">
               Specifies whether to use the 'antithetic' variance reduction technique.
               If you have doubts about setting this parameter then set it to 'false', 
-              otherwise set it to 'true'.
+              otherwise, set it to 'true'.
             </td>
             <td class="c3">no</td>
             <td class="c4">boolean</td>
@@ -313,7 +313,7 @@
           <tr>
             <td class="c1">blocksize</td>
             <td class="c2">
-              Number of simultaneous simulations realized for each thread. 
+              The number of simultaneous simulations realized for each thread. 
               If you enable antithetic mode then <code>blocksize</code> needs to be 
               a multiple of 2. It is desirable that the number of simulations be a 
               multiple of <code>blocksize&times;numthreads</code>.
@@ -374,7 +374,7 @@
           <tr>
             <td class="c1">spline</td>
             <td class="c2">
-              Indicates how curve is interpolated.
+              Indicates how the curve is interpolated.
             </td>
             <td class="c3">no</td>
             <td class="c4">string</td>
@@ -408,7 +408,7 @@
           <tr>
             <td class="c1">r</td>
             <td class="c2">
-              Interest rate at time t.
+              The interest rate at time t.
             </td>
             <td class="c3">yes</td>
             <td class="c4">double</td>
@@ -478,7 +478,7 @@
         <p>
           This section shows how to define the transition matrix.
           The number of elements to be established is NxN, where N is the number 
-          of credit ratings. All non-fixed values are considered 0. CCruncher checks
+          of credit ratings. All no-fixed values are considered 0. CCruncher checks
           that the sum of elements of each row is 1.0, that exist only one defaulted
           rating, and that the transition matrix is an absorbing Markov chain (any 
           rating may end up as defaulted). 
@@ -577,7 +577,7 @@
           <tr>
             <td class="c1">period</td>
             <td class="c2">
-              Number of months covered by the transition matrix. Usually the
+              The number of months covered by the transition matrix. Usually, the
               transition matrix covers 1 year, and in such case, set the value to 12. 
             </td>
             <td class="c3">yes</td>
@@ -621,7 +621,7 @@
           <tr>
             <td class="c1">value</td>
             <td class="c2">
-              Probability for credit rating migration and must have a value between 0 and 1.
+              The probability for credit rating migration and must have a value between 0 and 1.
             </td>
             <td class="c3">yes</td>
             <td class="c4">double</td>
@@ -702,7 +702,7 @@
           The non-diagonal elements are the correlation matrix coefficients. 
           You only need to set up the non-zero upper triangle elements. 
           The number of elements to set up is <i>(numfactors-1) x numfactors / 2</i>.
-          If you have only have <i>1</i> factor or you desire the identity matrix then 
+          If you have only had <i>1</i> factor or you desire the identity matrix then 
           you can skip this section or just set <code>&lt;correlations/&gt;</code> 
           and jump to the following section.
         </p>
@@ -775,11 +775,11 @@
           or another type of classification. Segmentation is composed of segments.
         </p>
         <p>
-          All segmentations must be complete, so that an asset belongs to only one segment and 
+          All segmentations must be complete so that an asset belongs to only one segment and 
           the union of all segments constitutes the whole portfolio. Each segmentation has a
           segment named 'unassigned' that is implicitly declared. If an asset does not belong to 
           any segment, then it is considered part of the 'unassigned' segment.
-          We recommend to create a segmentation with no segments in order to valuate the whole 
+          We recommend creating a segmentation with no segments in order to evaluate the whole 
           portfolio losses (all losses will accumulate in the 'unassigned' segment).
         </p>
         <h3>Example</h3>
@@ -879,7 +879,7 @@
         <h2>Section Portfolio</h2>
         <p>
           This section shows how to define the portfolio. 
-          A portfolio is a set of assets, where assets are grouped by obligor.
+          A portfolio is a set of assets, where assets are grouped by obligors.
           The description of each asset is done by listing the expected Exposures 
           At Default (EAD) and Loss Given Default rates (LGD). 
         </p>
@@ -891,11 +891,11 @@
           is assigned to the segment 'unassigned'.
         </p>
         <p>
-          LGD can be defined at three different levels: obligor, asset and data value. 
+          LGD can be defined at three different levels: obligor, asset, and data value. 
           When a default occurs at time t, we get the data value LGD at time <i>t</i> 
           (or the closest date above). If this value is not reported, we get the asset LGD. 
           Finally, if even the asset LGD is not reported, we get the obligor LGD. The 
-          obligor' LGD is shared by all assets that have not defined a LGD.
+          obligor' LGD is shared by all assets that have not defined an LGD.
         </p>
         <h3>Example</h3>
         <pre>
@@ -1111,7 +1111,7 @@
           <tr>
             <td class="c1">date</td>
             <td class="c2">
-              Date from which there is credit risk, eg. bond
+              Date from which there is the credit risk, eg. bond
               buy date or loan signature.
             </td>
             <td class="c3">yes</td>
@@ -1147,7 +1147,7 @@
           <tr>
             <td class="c1">t</td>
             <td class="c2">
-              Date where the values take place.
+              The date where the values take place.
               Can be a date (in format 'DD/MM/YYYY') bigger or equal than asset date or an interval 
               from asset date. Use suffix 'D' to indicate days (eg. 3D), suffix 'M' to indicate months 
               (eg. 6M) and suffix 'Y' to indicate years (eg. 15Y). 
@@ -1160,7 +1160,7 @@
           <tr>
             <td class="c1">ead</td>
             <td class="c2">
-              Amount that lender can lose in case of obligor's default at date "t". 
+              The amount that lender can lose in case of obligor's default at date "t". 
               EAD can be a fixed value or a probability distribution. 
               In the first case, set the numeric value that represents the EAD (eg. 50000). 
               In the second case, you can model EAD using the following distributions:<br/>
@@ -1178,7 +1178,7 @@
           <tr>
             <td class="c1">lgd</td>
             <td class="c2">
-              The portion of loss that will not be recovered in case of default at date "t". 
+              The portion of the loss that will not be recovered in case of default at date "t". 
               This value takes into account guarantees, the cost to take legal actions, 
               recovery rate based on historical data, etc.
               LGD can be a fixed value or a probability distribution. 
@@ -1202,7 +1202,7 @@
           the credit rating transitions follow a Markov model. Sometimes 
           this assumption is not acceptable because we desire that transition 
           probabilities change over the simulation period or we plan to do 
-          stress tests over the default probabilities. In these cases you can 
+          stress tests over the default probabilities. In these cases, you can 
           define the default probability functions explicitly. 
           You must define either a transition matrix or the default probability
           functions, but not both.
@@ -1279,7 +1279,7 @@
           <tr>
             <td class="c1">value</td>
             <td class="c2">
-              Probability that an obligor with initial rating <i>rating</i> 
+              The probability that an obligor with initial rating <i>rating</i> 
               defaults in the time range <i>[time.0,t]</i>.
             </td>
             <td class="c3">yes</td>
@@ -1295,7 +1295,7 @@
             Copyright &copy; 2004-2018 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>&nbsp;&nbsp;
           </span>
           <span id="modified" class="float-sm-right">
-            Last modified: 12-Jul-2017
+            Last modified: 01-May-2018
           </span>
         </div>
       </footer>
