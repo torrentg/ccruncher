@@ -64,8 +64,6 @@ class SimulationThread : public Thread
     const std::vector<unsigned short> &numSegmentsBySegmentation;
     //! Cholesky matrix (see MonteCarlo::initModel())
     const gsl_matrix *chol;
-    //! Factor loadings [w_i]
-    const std::vector<double> &floadings1;
     //! Factor loadings [sqrt(1-w_i^2)]
     const std::vector<double> &floadings2;
     //! Inverse functions

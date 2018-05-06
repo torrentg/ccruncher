@@ -38,7 +38,7 @@ using namespace ccruncher;
  */
 ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, unsigned long seed) :
   Thread(), montecarlo(mc), obligors(mc.obligors), numSegmentsBySegmentation(mc.numSegmentsBySegmentation), 
-  chol(mc.chol), floadings1(mc.floadings1), floadings2(mc.floadings2), inverses(mc.inverses),
+  chol(mc.chol), floadings2(mc.floadings2), inverses(mc.inverses),
   numfactors(mc.chol->size1), ndf(mc.ndf), time0(mc.time0), timeT(mc.timeT),
   antithetic(mc.antithetic), numsegments(mc.numsegments),
   blocksize(mc.blocksize), rng(nullptr), vec(nullptr)
@@ -48,7 +48,7 @@ ccruncher::SimulationThread::SimulationThread(MonteCarlo &mc, unsigned long seed
   assert(chol != nullptr);
   assert(chol->size1 == chol->size2);
   assert(chol->size1 == numfactors);
-  assert(numfactors == floadings1.size());
+  assert(numfactors == floadings2.size());
   assert(antithetic?(blocksize%2!=0?false:true):true);
 
   vec = gsl_vector_alloc(numfactors);

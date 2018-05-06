@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2018-03-14 07:18:38+01:00"
+#define BUILD_DATE "2018-05-06 13:36:33+02:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"

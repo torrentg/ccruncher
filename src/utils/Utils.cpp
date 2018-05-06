@@ -69,10 +69,10 @@ string ccruncher::Utils::timestamp()
   time_t now = time(nullptr);
   tm lt = *(localtime(&now));
 
-  char aux[] = "dd/mm/yyyy hh:mm:ss ";
+  char aux[80];
   aux[19] = 0;
 
-  snprintf(aux, 20, "%02d/%02d/%04d %02d:%02d:%02d", lt.tm_mday, lt.tm_mon+1,
+  snprintf(aux, 80, "%02d/%02d/%04d %02d:%02d:%02d", lt.tm_mday, lt.tm_mon+1,
            lt.tm_year+1900, lt.tm_hour, lt.tm_min, lt.tm_sec);
 
   return string(aux);

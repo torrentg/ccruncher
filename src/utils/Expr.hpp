@@ -47,7 +47,7 @@ class Expr
   private:
 
     //! Generic function pointer (equivalent to void*)
-    typedef double (*ffunc0)();
+    typedef void (*ffunc0)();
     //! Function with 1 argument
     typedef double (*ffunc1)(double);
     //! Function with 2 arguments
