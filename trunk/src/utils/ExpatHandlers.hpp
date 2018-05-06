@@ -56,7 +56,7 @@ class ExpatHandlers
   protected:
 
     //! Stops the parser
-    void epstop();
+    [[noreturn]] void epstop();
     //! String comparison
     bool isEqual(const char *, const char *) const;
     //! Returns the number of attributes

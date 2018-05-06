@@ -49,7 +49,7 @@ int ccruncher::Parser::intValue(const char *pnum)
   try {
     aux = Parser::longValue(pnum);
   }
-  catch(Exception) {
+  catch(Exception &) {
     throw Exception("error parsing integer value '" + string(pnum) + "'");
   }
 
