@@ -91,7 +91,7 @@
             Copyright &copy; 2004-2017 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>&nbsp;&nbsp;
           </span>
           <span id="modified" class="float-sm-right">
-            Last modified: 01-Jan-2017
+            Last modified: 12-Jun-2018
           </span>
         </div>
       </footer>

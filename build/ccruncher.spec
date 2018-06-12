@@ -1,5 +1,5 @@
 Name: ccruncher
-Version: 2.5.0
+Version: 2.5.1
 Release: 1
 Summary: A portfolio credit risk modeling program
 
@@ -64,8 +64,10 @@ install -m 644 doc/ccruncher-inf.1 $RPM_BUILD_ROOT%{_mandir}/man1/ccruncher-inf.
 %{_bindir}/ccruncher-inf
 
 %changelog
+* Tue Jun 12 2018 Gerard Torrent <gtorrent@ccruncher.net> - 2.5.1-1
+- Solved floating point comparison error.
 * Thu Jul 20 2017 Gerard Torrent <gtorrent@ccruncher.net> - 2.5.0-1
-- Initial RPM release
+- Initial RPM release.
 
 
 #https://fedoraproject.org/wiki/How_to_create_an_RPM_package

@@ -167,7 +167,7 @@ void ccruncher::CDF::add(double x, double prob)
       throw Exception("repeated value or decreasing function");
     }
   }
-  else if (!mData.empty() && mData.back().second > prob) {
+  else if (!mData.empty() && mData.back().second > prob + EPSILON) {
     throw Exception("decreasing function");
   }
 
