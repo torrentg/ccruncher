@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ccruncher_gui::SimulationWidget</class>
+ <widget class="QWidget" name="SimulationWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>698</width>
+    <height>493</height>
+   </rect>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="ccruncher.qrc">
+    <normaloff>:/images/exec.png</normaloff>:/images/exec.png</iconset>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>File:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="ifile">
+       <property name="styleSheet">
+        <string notr="true">border: 1px solid gray</string>
+       </property>
+       <property name="frame">
+        <bool>false</bool>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Edit</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Output:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="odir">
+       <property name="placeholderText">
+        <string>Set the output directory here</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="odirButton">
+       <property name="text">
+        <string>Browse...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Macros:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="defines">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QPushButton" name="definesButton">
+       <property name="text">
+        <string>Set...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Status:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QProgressBar" name="progress">
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QPushButton" name="runButton">
+       <property name="text">
+        <string>Run</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="ccruncher_gui::FrameOverlay" name="frame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="ccruncher_gui::TextBrowser" name="log">
+        <property name="font">
+         <font>
+          <family>Courier</family>
+         </font>
+        </property>
+        <property name="acceptDrops">
+         <bool>false</bool>
+        </property>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOn</enum>
+        </property>
+        <property name="tabChangesFocus">
+         <bool>true</bool>
+        </property>
+        <property name="lineWrapMode">
+         <enum>QTextEdit::NoWrap</enum>
+        </property>
+        <property name="acceptRichText">
+         <bool>false</bool>
+        </property>
+        <property name="openExternalLinks">
+         <bool>true</bool>
+        </property>
+        <property name="openLinks">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+  <action name="action_Open_file">
+   <property name="text">
+    <string>&amp;Open file ...</string>
+   </property>
+  </action>
+  <action name="action_Exit">
+   <property name="text">
+    <string>&amp;Exit</string>
+   </property>
+  </action>
+  <action name="action_Run">
+   <property name="text">
+    <string>&amp;Run</string>
+   </property>
+  </action>
+  <action name="action_Stop">
+   <property name="text">
+    <string>&amp;Stop</string>
+   </property>
+  </action>
+  <action name="action_Abort">
+   <property name="text">
+    <string>&amp;Abort</string>
+   </property>
+  </action>
+  <action name="action_Credits">
+   <property name="text">
+    <string>&amp;Credits</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ccruncher_gui::FrameOverlay</class>
+   <extends>QFrame</extends>
+   <header location="global">gui/FrameOverlay.hpp</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ccruncher_gui::TextBrowser</class>
+   <extends>QTextBrowser</extends>
+   <header location="global">gui/TextBrowser.hpp</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>ifile</tabstop>
+  <tabstop>odir</tabstop>
+  <tabstop>odirButton</tabstop>
+  <tabstop>defines</tabstop>
+  <tabstop>definesButton</tabstop>
+  <tabstop>runButton</tabstop>
+ </tabstops>
+ <resources>
+  <include location="ccruncher.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>odirButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SimulationWidget</receiver>
+   <slot>selectDir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>616</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>634</x>
+     <y>69</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>odir</sender>
+   <signal>editingFinished()</signal>
+   <receiver>SimulationWidget</receiver>
+   <slot>setDir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>415</x>
+     <y>45</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>635</x>
+     <y>94</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>runButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SimulationWidget</receiver>
+   <slot>submit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>692</x>
+     <y>112</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>636</x>
+     <y>141</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>definesButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SimulationWidget</receiver>
+   <slot>showDefines()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>692</x>
+     <y>84</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>635</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SimulationWidget</receiver>
+   <slot>editFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>676</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>695</x>
+     <y>290</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>selectDir()</slot>
+  <slot>submit()</slot>
+  <slot>showDefines()</slot>
+  <slot>setDir()</slot>
+  <slot>editFile()</slot>
+ </slots>
+</ui>

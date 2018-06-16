@@ -1,0 +1,85 @@
+/* CCruncher CSS */
+
+main {
+  color: #333333;
+}
+p {
+  text-align: justify;
+}
+h1 {
+  font-size: 150%;
+  color: #005080;
+}
+h2 {
+  font-size: 120%;
+  color: #005080;
+}
+h3 {
+  font-size: 100%;
+  font-weight: bold;
+}
+pre {
+  padding: 1em 1em 0em 1em;
+  background-color: #eee;
+  line-height: 120%;
+}
+
+.container-fluid {
+  max-width: 996px;
+	min-height: 100%; 
+}
+.table td, .table th {
+  padding: 0.5rem;
+}
+.nowrap {
+  white-space: nowrap;
+}
+
+#navbar {
+  background-color: #005080;
+  color: white;
+  margin-bottom: 1rem;
+}
+#footer {
+  margin-top: 1rem;
+  background-color: #fafafa;
+}
+#footer span {
+  font-size: smaller;
+  white-space: nowrap;
+}
+
+@media (min-width: 576px) {
+  main {
+    min-height: 500px;
+  }
+}
+@media (max-width: 576px) {
+  #navbarResponsive {
+    clear:both;
+  }
+  ol, ul {
+    padding-left: 1.5em;
+  }
+}
+@media (min-width: 996px) {
+  html,body {
+    height: 100%;
+    min-height: 100%; 
+  }
+  body {
+    background-color: #babbad;
+  }
+  main {
+    padding-right: 2em;
+    padding-left: 2em;
+  }
+  .container-fluid {
+    background: white;
+  }
+}
+@media (min-width: 768px) {
+  .container-fluid {
+    padding-top: 0.5rem;
+  }
+}

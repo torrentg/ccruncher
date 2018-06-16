@@ -1,0 +1,32 @@
+
+CCRUNCHER TODO
+==============
+
+Current works
+-------------------
+  * market model copula
+
+Future works
+-------------------
+  * VaR and ES estimators based on normal distr. (asympt)
+  * technical features
+     - create ccruncher docker image
+     - src subdirs: engine, readers, writers, utils
+     - create ccbinf-gui version
+     - add risk uncertainty in ccruncher-gui
+     - add portfolio optimization in ccruncher-gui
+     - isolate aggregators code
+     - create F() and Finv(t()) output
+     - support for input file in binary format
+     - force equal number of sims by thread
+     - simultaneous transition matrix and dprobs in input file
+     - add support for json and yaml input files (rapidjson?)
+  * underlying model
+     - investigate how correlation depends on time
+     - compute stderr using resampling techniques
+     - add grouped t-copula support
+     - an obligor could belong to a weighted sum of factors
+     - multi-level factors (eg. countries-sectors)
+  * others
+     - test ccruncher-cmd in xeon-phi architecture
+     - examples based on real data
