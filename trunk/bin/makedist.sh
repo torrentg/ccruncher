@@ -295,7 +295,7 @@ makeRpmDist() {
   # create the rpms packages
   cp "$1/build/ccruncher.spec" SPECS/;
   cp "$currpath/$PACKAGE-${numversion}_src.tgz" SOURCES/;
-  rpmbuild -ba SPECS/ccruncher.spec > /dev/null 2> /dev/null;
+  rpmbuild --define "debug_package %{nil}" -ba SPECS/ccruncher.spec > /dev/null 2> /dev/null;
   
   # copy rpms to current directory
   cp $(find RPMS/ -name $PACKAGE-${numversion}-\*.rpm) "$currpath";

@@ -540,7 +540,7 @@ void ccruncher::Expr::compile(const char *str, std::vector<variable> &variables,
   const char *ptr = str;
   char *endptr;
 
-  prevtok = {TokenType::END, 0};
+  prevtok = {TokenType::END, {0}};
 
   try
   {

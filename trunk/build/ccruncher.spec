@@ -10,14 +10,14 @@ Source: ccruncher-%{version}_src.tgz
 BuildRequires: gsl-devel >= 2.1
 BuildRequires: expat-devel >= 2.1.1
 BuildRequires: zlib-devel >= 1.2.8
-BuildRequires: qt-devel >= 5.6.1
+BuildRequires: qt5-devel >= 5.6.1
 BuildRequires: qwt-qt5-devel >= 6.1.2
 BuildRequires: libconfig-devel >= 1.5
 
 Requires: gsl >= 2.1
 Requires: expat >= 2.1.1
 Requires: zlib >= 1.2.8
-Requires: qt >= 5.6.1
+Requires: qt5 >= 5.6.1
 Requires: qwt-qt5 >= 6.1.2
 Requires: libconfig >= 1.5
 
