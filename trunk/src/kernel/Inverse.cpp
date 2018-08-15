@@ -110,7 +110,7 @@ size_t ccruncher::Inverse::size() const
  */
 void ccruncher::Inverse::init(double ndf, double maxt, const CDF &cdf, const vector<int> &nodes)
 {
-  if (isnan(ndf) || ndf < 2.0) {
+  if (std::isnan(ndf) || ndf < 2.0) {
     throw Exception("degrees of freedom out of range (ndf < 2)");
   }
   if (maxt < 1.0) {
@@ -145,7 +145,7 @@ int ccruncher::Inverse::getMinDay(const CDF &cdf) const
 double ccruncher::Inverse::tinv(double u) const
 {
   assert(0.0 <= u && u <= 1.0);
-  if (isinf(mNdf)) return gsl_cdf_ugaussian_Pinv(u);
+  if (std::isinf(mNdf)) return gsl_cdf_ugaussian_Pinv(u);
   else return gsl_cdf_tdist_Pinv(u, mNdf);
 }
 

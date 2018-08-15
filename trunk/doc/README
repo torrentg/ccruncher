@@ -338,8 +338,8 @@ Developers tips & tricks
 
 17. create a tag in subversion repository
      > svn cp http://www.ccruncher.net/svn/trunk/ \
-            http://www.ccruncher.net/svn/tags/ccruncher-x.y/ \
-            -m "created tag ccruncher-x.y"
+            http://www.ccruncher.net/svn/tags/ccruncher-x.y.z/ \
+            -m "created tag ccruncher-x.y.z"
 
 
 CCruncher Team
