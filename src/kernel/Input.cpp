@@ -173,7 +173,7 @@ bool ccruncher::Input::validateFactorLoadings(const vector<double> &loadings, bo
 
     // checking factor loading ranges
     for(size_t i=0; i<loadings.size(); i++) {
-      if (isnan(loadings[i]) || loadings[i] < 0.0 || 1.0 < loadings[i]) {
+      if (std::isnan(loadings[i]) || loadings[i] < 0.0 || 1.0 < loadings[i]) {
         string msg = "factor loading out of range [0,1]";
         throw Exception(msg);
       }

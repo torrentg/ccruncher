@@ -96,7 +96,7 @@ AC_ARG_ENABLE(debug,
 if test x$debug = xtrue ; then
   AM_CXXFLAGS="-g"
 else
-  # note: consider -mtune=native -flto
+  # note: consider -mtune=native -flto -fomit-frame-pointer
   AM_CXXFLAGS="-O2 -DNDEBUG"
 fi
 
