@@ -133,7 +133,8 @@ bool ccruncher::Input::validateFactors(const vector<Factor> &factors, bool throw
       throw Exception("'factors' have no elements");
     }
     if (factors.size() > numeric_limits<unsigned char>::max()) {
-      throw Exception("number of factors bigger than " + to_string((int)numeric_limits<unsigned char>::max()));
+      int maxval = numeric_limits<unsigned char>::max();
+      throw Exception("number of factors bigger than " + to_string(maxval));
     }
 
     // checking for duplicated elements
@@ -201,7 +202,8 @@ bool ccruncher::Input::validateRatings(const vector<Rating> &ratings, bool throw
       throw Exception("required a minimum of 2 ratings");
     }
     if (ratings.size() > numeric_limits<unsigned char>::max()) {
-      throw Exception("number of ratings bigger than " + to_string((int)numeric_limits<unsigned char>::max()));
+      int maxval = numeric_limits<unsigned char>::max();
+      throw Exception("number of ratings bigger than " + to_string(maxval));
     }
 
     // checking for duplicated elements
@@ -437,7 +439,7 @@ unsigned char ccruncher::Input::indexOfFactor(const std::vector<Factor> &factors
   assert(factors.size() <= numeric_limits<unsigned char>::max());
   for(size_t i=0; i<factors.size(); i++) {
     if (factors[i].name.compare(name) == 0) {
-      return (unsigned char) i;
+      return static_cast<unsigned char>(i);
     }
   }
   throw Exception("factor '" + string(name) + "' not found");
@@ -455,7 +457,7 @@ unsigned char ccruncher::Input::indexOfRating(const std::vector<Rating> &ratings
   assert(ratings.size() <= numeric_limits<unsigned char>::max());
   for(size_t i=0; i<ratings.size(); i++) {
     if (ratings[i].name.compare(name) == 0) {
-      return (unsigned char) i;
+      return static_cast<unsigned char>(i);
     }
   }
   throw Exception("rating '" + string(name) + "' not found");
@@ -472,7 +474,7 @@ unsigned short ccruncher::Input::indexOfSegmentation(const std::vector<Segmentat
   assert(segmentations.size() <= numeric_limits<unsigned short>::max());
   for(size_t i=0; i<segmentations.size(); i++) {
     if (segmentations[i].getName().compare(name) == 0) {
-      return (unsigned short)i;
+      return static_cast<unsigned short>(i);
     }
   }
   throw Exception("segmentation '" + string(name) + "' not found");
@@ -489,11 +491,12 @@ unsigned char ccruncher::Input::indexOfDefaultRating(const vector<CDF> &dprobs)
     throw Exception("required a minimum of 2 ratings");
   }
   if (dprobs.size() > numeric_limits<unsigned char>::max()) {
-    throw Exception("number of ratings bigger than " + to_string((int)numeric_limits<unsigned char>::max()));
+    int maxval = numeric_limits<unsigned char>::max();
+    throw Exception("number of ratings bigger than " + to_string(maxval));
   }
   for(size_t i=0; i<dprobs.size(); i++) {
     if (dprobs[i].evalue(0.0) > 1.0-EPSILON) {
-      return (unsigned char) i;
+      return static_cast<unsigned char>(i);
     }
   }
   throw Exception("default rating not found");

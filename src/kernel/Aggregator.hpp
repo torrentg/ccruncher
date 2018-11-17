@@ -52,7 +52,7 @@ class Aggregator
     //! Number of segments
     unsigned short mNumSegments;
     //! Open file mode
-    unsigned char mMode;
+    char mMode;
 
   public:
 

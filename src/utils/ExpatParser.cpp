@@ -242,8 +242,8 @@ void ccruncher::ExpatParser::parse(gzFile file, char *buf, size_t buffer_size, b
  */
 string ccruncher::ExpatParser::getErrorLocation() const
 {
-  return "error at line " + to_string((int) XML_GetCurrentLineNumber(mXmlParser)) +
-         " column " + to_string((int) XML_GetCurrentColumnNumber(mXmlParser));
+  return "error at line " + to_string(XML_GetCurrentLineNumber(mXmlParser)) +
+         " column " + to_string(XML_GetCurrentColumnNumber(mXmlParser));
 }
 
 /**************************************************************************//**

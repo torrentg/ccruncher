@@ -67,7 +67,7 @@ class Segmentation
     //! Sets the enabled flag
     void setEnabled(bool b);
     //! Number of segments
-    unsigned short size() const { return (unsigned short) mSegments.size(); }
+    unsigned short size() const { return static_cast<unsigned short>(mSegments.size()); }
     //! Returns i-th segment name
     const std::string& getSegment(unsigned short i) const;
     //! Adds a segment to this segmentation

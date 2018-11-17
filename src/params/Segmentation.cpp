@@ -65,7 +65,7 @@ unsigned short ccruncher::Segmentation::indexOfSegment(const char *sname) const
   assert(sname != nullptr);
   for(size_t i=0; i<mSegments.size(); i++) {
     if (mSegments[i].compare(sname) == 0) {
-      return (unsigned short) i;
+      return static_cast<unsigned short>(i);
     }
   }
   throw Exception("segment '" + string(sname) + "' not found");

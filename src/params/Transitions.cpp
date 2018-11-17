@@ -115,11 +115,11 @@ const vector<double>& ccruncher::Transitions::operator[] (unsigned char row) con
  */
 void ccruncher::Transitions::setValues(const std::vector<std::vector<double>> &matrix)
 {
-  size_t n = matrix.size();
-
-  if (n == 0 || n > numeric_limits<unsigned char>::max()) {
+  if (matrix.size() == 0 || matrix.size() > numeric_limits<unsigned char>::max()) {
     throw Exception("invalid matrix size");
   }
+
+  unsigned char n = static_cast<unsigned char>(matrix.size());
 
   for(auto row : matrix) {
     if (row.size() != n) {
@@ -129,8 +129,8 @@ void ccruncher::Transitions::setValues(const std::vector<std::vector<double>> &m
 
   mMatrix.assign(n, vector<double>(n, 0.0));
 
-  for(unsigned char i=0; i<(unsigned char)n; i++) {
-    for(unsigned char j=0; j<(unsigned char)n; j++) {
+  for(unsigned char i=0; i<n; i++) {
+    for(unsigned char j=0; j<n; j++) {
       setValue(i, j, matrix[i][j]);
     }
   }

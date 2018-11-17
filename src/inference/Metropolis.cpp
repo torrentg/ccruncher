@@ -948,7 +948,7 @@ Config& ccruncher_inf::Metropolis::getState()
   vector<double> vValues, vSigmas, vLevels;
   vector<vector<double>> mValues;
 
-  mConfig.setOptions(Setting::OptionNone);
+  mConfig.setOptions(Config::Option::OptionNone);
   mConfig.setTabWidth(2); // 0 = tab
 
   writeArray<string>("factors", root, Setting::TypeString, factors);
