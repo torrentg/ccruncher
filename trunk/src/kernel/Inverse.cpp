@@ -131,11 +131,11 @@ void ccruncher::Inverse::init(double ndf, double maxt, const CDF &cdf, const vec
 int ccruncher::Inverse::getMinDay(const CDF &cdf) const
 {
   for(int day=1; day<mMaxT; day++) {
-    if (EPSILON < cdf.evalue((double)day)) {
+    if (EPSILON < cdf.evalue(day)) {
       return day;
     }
   }
-  return mMaxT;
+  return static_cast<int>(mMaxT);
 }
 
 /**************************************************************************//**
@@ -173,7 +173,7 @@ void ccruncher::Inverse::setSpline(const CDF &cdf, const std::vector<int> &nodes
   }
 
   int minday = getMinDay(cdf);
-  int maxday = mMaxT;
+  int maxday = static_cast<int>(mMaxT);
 
   if (maxday <= minday) {
     // constant function

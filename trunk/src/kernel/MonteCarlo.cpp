@@ -370,7 +370,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
 
   // check that number of threads is lower than number of iterations
   if (maxiterations > 0 && numthreads*blocksize > maxiterations) {
-    numthreads = ceil(maxiterations/blocksize);
+    numthreads = ceil(double(maxiterations)/blocksize);
   }
 
   // tracing log info
@@ -395,7 +395,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   nfthreads = numthreads;
   numiterations = 0UL;
   threads.assign(numthreads, nullptr);
-  for(int i=0; i<numthreads; i++)
+  for(unsigned char i=0; i<numthreads; i++)
   {
     threads[i] = new SimulationThread(*this, seed+i);
     if (numthreads == 1) {
@@ -407,7 +407,7 @@ void ccruncher::MonteCarlo::run(unsigned char numthreads, size_t nhash, bool *st
   }
 
   // awaiting threads
-  for(int i=0; i<numthreads; i++) {
+  for(unsigned char i=0; i<numthreads; i++) {
     threads[i]->join();
     delete threads[i];
     threads[i] = nullptr;
@@ -498,7 +498,7 @@ bool ccruncher::MonteCarlo::append(const vector<vector<double>> &losses) noexcep
   // checking time stop criterion
   if (more && maxseconds > 0) {
     long secs = duration_cast<seconds>(steady_clock::now()-t1).count();
-    if (secs >= (long)maxseconds) {
+    if (secs >= static_cast<long>(maxseconds)) {
       more = false;
     }
   }

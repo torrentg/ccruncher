@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
   // reading configuration file
   Config config;
   try {
-    config.setOptions(Setting::OptionNone | Setting::OptionAutoConvert);
+    config.setOptions(Config::Option::OptionNone | Config::Option::OptionAutoConvert);
     config.readFile(filename.c_str());
   }
   catch(const FileIOException &fioex) {

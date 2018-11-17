@@ -44,31 +44,23 @@ using namespace std;
  */
 double ccruncher::PowMatrix::fpow(double base, double exponent)
 {
-  if (base >= 0.0)
-  {
+  if (base >= 0.0) {
     return std::pow(base, exponent);
   }
-  else
-  {
-    if (std::fabs(exponent) < EPSILON)
-    {
-       return 1.0; // x^0 = 1
-    }
-    else
-    {
-      double z = (std::fabs(exponent)>(1.0-EPSILON) ? exponent : 1.0/exponent);
-      int aux = (int) z;
 
-      if (((double) aux - z) < EPSILON)
-      {
-        return -std::pow(-base, exponent);
-      }
-      else
-      {
-        throw Exception("unable to pow to this negative number: " +
-                        to_string(base) + "^" + to_string(exponent));
-      }
-    }
+  if (std::fabs(exponent) < EPSILON) {
+     return 1.0; // x^0 = 1
+  }
+
+  double z = (std::fabs(exponent)>(1.0-EPSILON) ? exponent : 1.0/exponent);
+  int aux = static_cast<int>(z);
+
+  if (aux-z < EPSILON) {
+    return -std::pow(-base, exponent);
+  }
+  else {
+    throw Exception("unable to pow to this negative number: " +
+                    to_string(base) + "^" + to_string(exponent));
   }
 }
 
