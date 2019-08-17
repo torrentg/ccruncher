@@ -89,6 +89,8 @@ class Date
 
     //! Default constructor
     constexpr Date();
+    //! Copy constructor.
+    constexpr Date(const Date &) = default;
     //! Constructor
     Date(const int day, const int month, const int year);
     //! Constructor

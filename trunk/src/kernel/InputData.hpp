@@ -32,7 +32,6 @@
 #include "params/Factor.hpp"
 #include "params/Transitions.hpp"
 #include "params/Segmentation.hpp"
-#include "utils/Exception.hpp"
 
 namespace ccruncher {
 
