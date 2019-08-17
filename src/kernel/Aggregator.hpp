@@ -26,7 +26,6 @@
 #include <vector>
 #include <fstream>
 #include "params/Segmentation.hpp"
-#include "utils/Exception.hpp"
 
 namespace ccruncher {
 
@@ -45,7 +44,7 @@ class Aggregator
 
   private:
 
-    //! Segmentation name
+    //! File name
     std::string mFilename;
     //! Output file stream
     std::ofstream mFile;

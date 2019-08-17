@@ -25,7 +25,6 @@
 #include <map>
 #include <string>
 #include "utils/ExpatHandlers.hpp"
-#include "utils/Exception.hpp"
 
 namespace ccruncher_gui {
 
