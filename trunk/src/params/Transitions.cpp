@@ -121,7 +121,7 @@ void ccruncher::Transitions::setValues(const std::vector<std::vector<double>> &m
 
   unsigned char n = static_cast<unsigned char>(matrix.size());
 
-  for(auto row : matrix) {
+  for(auto &row : matrix) {
     if (row.size() != n) {
       throw Exception("non-square matrix");
     }
