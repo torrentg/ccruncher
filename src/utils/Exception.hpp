@@ -47,17 +47,17 @@ class Exception : public std::exception
   public:
 
     //! Default constructor.
-    Exception(const std::string &str="");
+    Exception(const std::string &str="") noexcept;
     //! Constructor.
-    Exception(const std::exception &e);
+    Exception(const std::exception &e) noexcept;
     //! Constructor.
-    Exception(const std::exception &e, const std::string &str);
+    Exception(const std::exception &e, const std::string &str) noexcept;
     //! Destructor.
-    virtual ~Exception() noexcept override {}
+    virtual ~Exception() override {}
     //! Returns exception message.
     virtual const char * what() const noexcept override;
     //! Returns exception message.
-    const std::string & toString() const;
+    const std::string & toString() const noexcept;
 
 };
 

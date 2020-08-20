@@ -341,6 +341,10 @@ Developers tips & tricks
             http://www.ccruncher.net/svn/tags/ccruncher-x.y.z/ \
             -m "created tag ccruncher-x.y.z"
 
+18. analize code maintenability
+    > tool = https://www.gnu.org/software/complexity/
+    > command = ./complexity --histogram --score --thresh=3 $(find $CCRUNCHER/src/ -name \*.?pp)
+    > check score values (see section -4.9 scale option- in manual)
 
 CCruncher Team
 http://www.ccruncher.net
