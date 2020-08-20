@@ -28,7 +28,7 @@ using namespace std;
  * @details Creates an Exception with the given message.
  * @param[in] str Exception message.
  */
-ccruncher::Exception::Exception(const std::string &str) : exception(), msg(str)
+ccruncher::Exception::Exception(const std::string &str) noexcept : exception(), msg(str)
 {
 }
 
@@ -36,7 +36,7 @@ ccruncher::Exception::Exception(const std::string &str) : exception(), msg(str)
  * @details Creates an Exception from a std::exception.
  * @param[in] e Base exception.
  */
-ccruncher::Exception::Exception(const std::exception &e) : exception(e), msg(e.what())
+ccruncher::Exception::Exception(const std::exception &e) noexcept : exception(e), msg(e.what())
 {
 }
 
@@ -45,7 +45,7 @@ ccruncher::Exception::Exception(const std::exception &e) : exception(e), msg(e.w
  * @param[in] e Base exception.
  * @param[in] str Message clarifying the exception.
  */
-ccruncher::Exception::Exception(const std::exception &e, const std::string &str) : exception(e)
+ccruncher::Exception::Exception(const std::exception &e, const std::string &str) noexcept : exception(e)
 {
   msg = e.what() + string("\n") + str;
 }
@@ -54,7 +54,7 @@ ccruncher::Exception::Exception(const std::exception &e, const std::string &str)
  * @details Returns exception message as string.
  * @return Exception message as string.
  */
-const string & ccruncher::Exception::toString() const
+const string & ccruncher::Exception::toString() const noexcept
 {
   return msg;
 }

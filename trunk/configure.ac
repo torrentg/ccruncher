@@ -7,7 +7,7 @@ dnl *************************************************************
 dnl -------------------------------------------------------------
 dnl initializing procedures
 dnl -------------------------------------------------------------
-AC_INIT(ccruncher, 2.5.1, gtorrent@ccruncher.net, ccruncher, http://www.ccruncher.net)
+AC_INIT([ccruncher],[2.5.1],[gtorrent@ccruncher.net],[ccruncher],[http://www.ccruncher.net])
 AC_CONFIG_SRCDIR([src/kernel/MonteCarlo.hpp])
 AC_CONFIG_HEADER([src/utils/config.h],,[src/utils/config.h.in])
 AM_INIT_AUTOMAKE([subdir-objects])
