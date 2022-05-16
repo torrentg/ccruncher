@@ -361,9 +361,9 @@ void ccruncher_gui::AnalysisWidget::drawHistogram()
     double val = gsl_histogram_get(hist, i);
     samples[i] = QwtIntervalSample(val, interval);
     numiterations += (int)(val+0.5);
-    strdata.append(QString::number(lower) + "\t" +
-                   QString::number(upper) + "\t" +
-                   QString::number(val) + "\n");
+    strdata.append(QString::number(lower).toUtf8() + "\t" +
+                   QString::number(upper).toUtf8() + "\t" +
+                   QString::number(val).toUtf8() + "\n");
   }
 
   QwtPlotHistogram *qhist = new QwtPlotHistogram("title");
@@ -422,9 +422,9 @@ void ccruncher_gui::AnalysisWidget::drawCurve()
     values[i] = QPointF(statvals[i].iteration, val);
     double delta = statvals[i].std_err * quantile;
     ranges[i] = QwtIntervalSample(statvals[i].iteration, QwtInterval(val-delta, val+delta));
-    strdata.append(QString::number(statvals[i].iteration) + "\t" +
-                   QString::number(statvals[i].value) + "\t" +
-                   QString::number(statvals[i].std_err) + "\n");
+    strdata.append(QString::number(statvals[i].iteration).toUtf8() + "\t" +
+                   QString::number(statvals[i].value).toUtf8() + "\t" +
+                   QString::number(statvals[i].std_err).toUtf8() + "\n");
   }
 
   // adjusting vertical scale (avoids initial 5%)
@@ -490,8 +490,8 @@ void ccruncher_gui::AnalysisWidget::drawPiechart()
   for(size_t i=0; i<contribs.size(); i++) {
     names[i] = contribs[i].name;
     values[i] = contribs[i].value;
-    strdata.append(QString(names[i].c_str()) + "\t" +
-                   QString::number(values[i]) + "\n");
+    strdata.append(QString(names[i].c_str()).toUtf8() + "\t" +
+                   QString::number(values[i]).toUtf8() + "\n");
   }
 
   ui->plot->setTitle(name + " Disaggregation");

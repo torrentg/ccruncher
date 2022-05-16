@@ -75,7 +75,7 @@ class QwtPieChart : public QwtPlotSeriesItem
   public:
 
     //! Constructor
-    QwtPieChart(const QString &title=QString::null);
+    QwtPieChart(const QString &title=QString());
     //! Destructor
     virtual ~QwtPieChart() override {}
     //! Extended from QwtAbstractSeriesStore
