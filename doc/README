@@ -90,7 +90,7 @@ Installation from source package
      > cd ccruncher-X.Y
      > ./configure 
      > make check
-     > qmake-qt5 ccruncher-gui.pro
+     > qmake-qt5 -spec linux-g++-64 ccruncher-gui.pro
      > make
      > bin/src2bin.sh
 
