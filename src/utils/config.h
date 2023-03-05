@@ -2,13 +2,13 @@
 /* src/utils/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2022-05-15 11:57:33+02:00"
+#define BUILD_DATE "2023-03-04 09:55:10+01:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
 
 /* build user */
-#define BUILD_USER "Gerard Torrent"
+#define BUILD_USER ""
 
 /* Define to 1 if you have the `alarm' function. */
 #define HAVE_ALARM 1
@@ -49,9 +49,6 @@
 /* Define to 1 if you have the `z' library (-lz). */
 #define HAVE_LIBZ 1
 
-/* Define to 1 if you have the <memory.h> header file. */
-#define HAVE_MEMORY_H 1
-
 /* Define to 1 if you have the `mkdir' function. */
 #define HAVE_MKDIR 1
 
@@ -65,10 +62,13 @@
 #define HAVE_SQRT 1
 
 /* Define to 1 if stdbool.h conforms to C99. */
-/* #undef HAVE_STDBOOL_H */
+#define HAVE_STDBOOL_H 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#define HAVE_STDIO_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #define HAVE_STDLIB_H 1
@@ -133,11 +133,10 @@
 /* Profiler instructions are added when this is defined. */
 /* #undef PROFILER */
 
-/* Define to 1 if you have the ANSI C header files. */
+/* Define to 1 if all of the C90 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
 #define STDC_HEADERS 1
-
-/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
-#define TIME_WITH_SYS_TIME 1
 
 /* Version number of package */
 #define VERSION "2.5.1"
