@@ -1,5 +1,5 @@
 Name: ccruncher
-Version: 2.5.1
+Version: 2.6.0
 Release: 1
 Summary: A portfolio credit risk modeling program
 

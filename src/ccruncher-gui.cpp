@@ -289,7 +289,7 @@ void help()
 void version()
 {
   cout <<
-  "ccruncher-gui " << PACKAGE_VERSION << " (" << SVN_VERSION << ")\n"
+  "ccruncher-gui " << PACKAGE_VERSION << " (" << GIT_VERSION << ")\n"
   "Copyright (c) 2023 Gerard Torrent.\n"
   "License GPLv2: GNU GPL version 2 <http://gnu.org/licenses/gpl-2.0.html>.\n"
   "This program is distributed in the hope that it will be useful, but WITHOUT ANY\n"
@@ -303,7 +303,7 @@ void version()
  */
 void info()
 {
-  cout << "ccruncher-gui " << PACKAGE_VERSION << " (" << SVN_VERSION << ")" << endl;
+  cout << "ccruncher-gui " << PACKAGE_VERSION << " (" << GIT_VERSION << ")" << endl;
   cout << "build host: " << BUILD_HOST << endl;
   cout << "build date: " << BUILD_DATE << endl;
   cout << "build author: " << BUILD_USER << endl;

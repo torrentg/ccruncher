@@ -141,7 +141,7 @@ void help()
 void version()
 {
   cout <<
-  "ccruncher-inf " << PACKAGE_VERSION << " (" << SVN_VERSION << ")\n"
+  "ccruncher-inf " << PACKAGE_VERSION << " (" << GIT_VERSION << ")\n"
   "Copyright (c) 2023 Gerard Torrent.\n"
   "License GPLv2: GNU GPL version 2 <http://gnu.org/licenses/gpl-2.0.html>.\n"
   "This program is distributed in the hope that it will be useful, but WITHOUT ANY\n"

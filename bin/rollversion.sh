@@ -6,7 +6,7 @@
 #   Caution: this is a tool for developers
 #
 # dependences:
-#   svnversion, awk, sed, help2man
+#   git, awk, sed, help2man
 #
 # retcodes:
 #   0    : OK
@@ -22,7 +22,7 @@ version=X.Y.Z
 retcode=0
 cman=false
 cver=false
-csvn=false
+cgit=false
 
 #-------------------------------------------------------------
 # usage function
@@ -37,8 +37,8 @@ usage() {
     CCruncher project. This script is only used by developers.
   options
     -m       update manual pages
-    -s       update svnversion tag
-    -g num   update svnversion and global version identifier tags
+    -s       update gitrev tag
+    -g num   update gitrev and global version identifier tags
     -h       show this message and exit
   return codes:
     0        OK. finished without errors
@@ -68,7 +68,7 @@ readconf() {
   do
     case $opt in
       m) cman=true;;
-      s) csvn=true;;
+      s) cgit=true;;
       g) cver=true;
          version=$OPTARG;;
       h) usage; 
@@ -104,15 +104,14 @@ getPath() {
 }
 
 #-------------------------------------------------------------
-# getSvnVersion function
+# getGitRev function
 #-------------------------------------------------------------
-getSvnVersion() {
+getGitRev() {
 
-  #svnversion=R$(svnversion $CCRUNCHERPATH | sed "s/^\([0-9]\+\)[MSP]*\(:.*\)\?/\1/g");
-  svnversion=R$(svn info https://www.ccruncher.net/svn/ | awk '/Revision:/ { print $2 }');
+  gitrev=$(git rev-parse --short HEAD)
  
   if [ $? != 0 ]; then
-    echo "error: problems retrieving svnversion";
+    echo "error: problems retrieving gitrev";
     exit 1;
   fi
 }
@@ -134,13 +133,13 @@ MONTH=${MONTH^}
 YEAR=$(date +%Y);
 curdate=$DAY-$MONTH-$YEAR
 
-# update svn version tag
-if [ "$csvn" = "true" ] || [ "$cver" = "true" ]; then
-  getSvnVersion;
-  sed -i -e "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/configure.ac
-  sed -i -e "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h.in
-  sed -i -e "s/\#define\ *SVN_VERSION\ *\".*\"/\#define SVN_VERSION \"$svnversion\"/g" $CCRUNCHERPATH/src/utils/config.h
-  sed -i -e "s/\\\def\\\svnversion{.*}/\\\def\\\svnversion{$svnversion}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
+# update gitrev tag
+if [ "$cgit" = "true" ] || [ "$cver" = "true" ]; then
+  getGitRev;
+  sed -i -e "s/\#define\ *GIT_VERSION\ *\".*\"/\#define GIT_VERSION \"$gitrev\"/g" $CCRUNCHERPATH/configure.ac
+  sed -i -e "s/\#define\ *GIT_VERSION\ *\".*\"/\#define GIT_VERSION \"$gitrev\"/g" $CCRUNCHERPATH/src/utils/config.h.in
+  sed -i -e "s/\#define\ *GIT_VERSION\ *\".*\"/\#define GIT_VERSION \"$gitrev\"/g" $CCRUNCHERPATH/src/utils/config.h
+  sed -i -e "s/\\\def\\\gitrev{.*}/\\\def\\\gitrev{$gitrev}/g" $CCRUNCHERPATH/doc/tex/ccruncher.tex
 fi
 
 # update global version tag

@@ -245,7 +245,7 @@ Logger& ccruncher::header(Logger &logger)
 {
   logger << "general information" << flood('*') << endl;
   logger << indent(+1);
-  logger << "ccruncher version" << split << string(PACKAGE_VERSION)+" ("+string(SVN_VERSION)+")" << endl;
+  logger << "ccruncher version" << split << string(PACKAGE_VERSION)+" ("+string(GIT_VERSION)+")" << endl;
   logger << "start time (dd/MM/yyyy hh:mm:ss)" << split << Utils::timestamp() << endl;
   logger << indent(-1);
   return logger;

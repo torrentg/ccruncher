@@ -64,7 +64,7 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdown4">
                 <a class="dropdown-item" href="/dependencies.html">Dependencies</a>
-                <a class="dropdown-item" href="http://www.ccruncher.net/svn/">Repository (svn)</a>
+                <a class="dropdown-item" href="https://github.com/torrentg/ccruncher">Repository (github)</a>
               </div>
             </li>
           </ul>
@@ -91,7 +91,7 @@
             Copyright &copy; 2004-2023 - <a href="mailto:gtorrent@ccruncher.net">CCruncher</a>&nbsp;&nbsp;
           </span>
           <span id="modified" class="float-sm-right">
-            Last modified: 04-Mar-2023
+            Last modified: 05-Mar-2023
           </span>
         </div>
       </footer>

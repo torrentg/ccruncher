@@ -208,7 +208,7 @@ void ccruncher_gui::MainWindow::about()
   msg.setText("<h3>CCruncher</h3>");
   msg.setInformativeText(
         "<p>"
-        "version: " VERSION " [" SVN_VERSION "]<br/><br/>"
+        "version: " VERSION " [" GIT_VERSION "]<br/><br/>"
         "copyright: Gerard Torrent<br/><br/>"
         "license: GPL<br/><br/>"
         "url: <a href='http://www.ccruncher.net'>www.ccruncher.net</a><br/><br/>"
