@@ -138,7 +138,7 @@ checkout() {
   chmod -R +w "$1";
 
   # get current version
-  numversion=$(grep AC_INIT $1/configure.ac | cut -d, -f2 | tr -d ' ');
+  numversion=$(grep AC_INIT $1/configure.ac | cut -d, -f2 | tr -d ' []');
   echo "project version = $numversion";
 
   # update subversion revision info
