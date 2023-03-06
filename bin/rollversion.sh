@@ -161,7 +161,7 @@ fi
 
 # update manual pages
 if [ "$cman" = "true" ]; then
-  
+
   if [ ! -f build/ccruncher-cmd ]; then 
     echo "error: file build/ccruncher-cmd not found" 
     exit 1;

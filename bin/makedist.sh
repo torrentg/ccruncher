@@ -5,7 +5,7 @@
 #   Create a CCruncher distribution package
 #
 # dependencies:
-#   tar, gzip, zip, svn, auto-tools, unix2dos
+#   tar, gzip, zip, git, auto-tools, unix2dos
 #   make, pdflatex, bibtex, iconv, rpmbuild,
 #   dirname
 #
@@ -129,10 +129,10 @@ readconf() {
 # -------------------------------------------------------------
 checkout() {
 
-  echo "retrieving project from SVN";
-  svn export https://www.ccruncher.net/svn/trunk "$1" > /dev/null;
+  echo "retrieving project from GIT";
+  git clone --depth 1 "git@github.com:torrentg/ccruncher.git" "$1" > /dev/null;
   if [ $? -ne 0 ]; then
-    echo "error retrieving project from svn";
+    echo "error retrieving project from git";
     exit 1;
   fi
   chmod -R +w "$1";
@@ -145,7 +145,7 @@ checkout() {
   echo "rolling version numbers";
   $1/bin/rollversion.sh -g "$numversion";
   if [ $? != 0 ]; then
-    echo "error setting current svn version";
+    echo "error setting current git version";
     exit 1;
   fi
 
@@ -178,7 +178,7 @@ remDevFiles() {
   rm "$1/doc/html/robots.txt";
   rm "$1/doc/html/repo.xsl";
   rm -rf "$1/doc/tex";
-  rm -rf $(find "$1/" -name \.svn\*);
+  rm -rf $(find "$1/" -name \.git\*);
 
 }
 

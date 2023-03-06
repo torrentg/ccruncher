@@ -147,7 +147,7 @@ CONFIG(release, debug|release) {
   DEFINES += NDEBUG
 }
 
-QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wpedantic
+QMAKE_CXXFLAGS += -Wall -Wextra -Wshadow -Wpedantic -fPIC
 QMAKE_CXXFLAGS_RELEASE -= -g
 
 UI_DIR = $$PWD/build
@@ -157,5 +157,5 @@ DESTDIR = $$PWD/build
 RCC_DIR = $$PWD/build
 
 RESOURCES += \
-    src/gui/ccruncher.qrc
+    $$PWD/src/gui/ccruncher.qrc
 

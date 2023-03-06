@@ -64,6 +64,8 @@ install -m 644 doc/ccruncher-inf.1 $RPM_BUILD_ROOT%{_mandir}/man1/ccruncher-inf.
 %{_bindir}/ccruncher-inf
 
 %changelog
+* Mon Mar 06 2023 Gerard Torrent <gtorrent@ccruncher.net> - 2.6.0-1
+- Project migrated to github.
 * Tue Jun 12 2018 Gerard Torrent <gtorrent@ccruncher.net> - 2.5.1-1
 - Solved floating point comparison error.
 * Thu Jul 20 2017 Gerard Torrent <gtorrent@ccruncher.net> - 2.5.0-1
