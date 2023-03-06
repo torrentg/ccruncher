@@ -2,7 +2,7 @@
 /* src/utils/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* build date */
-#define BUILD_DATE "2023-03-04 09:55:10+01:00"
+#define BUILD_DATE "2023-03-06 07:30:00+01:00"
 
 /* build host name */
 #define BUILD_HOST "fobos.generacio.com"
@@ -119,7 +119,7 @@
 #define PACKAGE_NAME "ccruncher"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "ccruncher 2.5.1"
+#define PACKAGE_STRING "ccruncher 2.6.0"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "ccruncher"
@@ -128,7 +128,7 @@
 #define PACKAGE_URL "http://www.ccruncher.net"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.5.1"
+#define PACKAGE_VERSION "2.6.0"
 
 /* Profiler instructions are added when this is defined. */
 /* #undef PROFILER */
@@ -139,7 +139,7 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "2.5.1"
+#define VERSION "2.6.0"
 
 /* Define to `__inline__' or `__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
