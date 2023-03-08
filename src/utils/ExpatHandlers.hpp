@@ -42,7 +42,7 @@ namespace ccruncher {
  *          This class provides support to define these handlers and methods
  *          to interact with the XML parser.
  *
- * @see     http://expat.sourceforge.net/
+ * @see     https://libexpat.github.io/
  * @see     http://www.xml.com/pub/a/1999/09/expat/index.html
  */
 class ExpatHandlers
