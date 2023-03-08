@@ -214,8 +214,8 @@ Notes for Windows developers (QT+MINGW)
 Developers tips & tricks
 --------------------------------
 
-1. download CCruncher sources from subversion repository
-     > svn checkout http://www.ccruncher.net/svn/trunk/ ccruncher 
+1. download CCruncher sources from repository
+     > git clone git@github.com:torrentg/ccruncher.git ccruncher 
 
 2. install required libraries
      * used by ccruncher (explained before)
@@ -254,7 +254,7 @@ Developers tips & tricks
 9. static code analysis (pvs-studio)
      # https://www.viva64.com/en/b/0457/
      # https://www.viva64.com/en/m/0036/#ID0EPG
-     > svn export http://www.ccruncher.net/svn/trunk/ ccruncher-rev
+     > git clone --depth 1 git@github.com:torrentg/ccruncher.git ccruncher-rev
      > cd ccruncher-rev
      > how-to-use-pvs-studio-free -c 2 src/
      > aclocal; autoconf; automake -avcf; ./configure
@@ -336,12 +336,7 @@ Developers tips & tricks
      > mock --verbose SRPMS/ccruncher-*.rpm
      > rpmdev-wipetree
 
-17. create a tag in subversion repository
-     > svn cp http://www.ccruncher.net/svn/trunk/ \
-            http://www.ccruncher.net/svn/tags/ccruncher-x.y.z/ \
-            -m "created tag ccruncher-x.y.z"
-
-18. analize code maintenability
+17. analize code maintenability
     > tool = https://www.gnu.org/software/complexity/
     > command = ./complexity --histogram --score --thresh=3 $(find $CCRUNCHER/src/ -name \*.?pp)
     > check score values (see section -4.9 scale option- in manual)

@@ -47,10 +47,10 @@ uninstall-hook:
 	chmod -R +w $(DESTDIR)$(docdir)/samples && rm -rvf $(DESTDIR)$(docdir)/samples;
 
 # -------------------------------------------------------------
-# removes subversion stuff
+# removes git stuff
 # -------------------------------------------------------------
 dist-hook:
-	rm -rf `find $(distdir) -name \.svn`
+	rm -rf `find $(distdir) -name \.git`
 
 # -------------------------------------------------------------
 # ccruncher-cmd

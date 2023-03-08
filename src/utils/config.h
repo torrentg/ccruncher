@@ -152,7 +152,7 @@
 
 
 
-/* subversion identifier */
+/* git identifier */
 #define GIT_VERSION "06b9824"
 
 

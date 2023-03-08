@@ -141,7 +141,7 @@ checkout() {
   numversion=$(grep AC_INIT $1/configure.ac | cut -d, -f2 | tr -d ' []');
   echo "project version = $numversion";
 
-  # update subversion revision info
+  # update git revision info
   echo "rolling version numbers";
   $1/bin/rollversion.sh -g "$numversion";
   if [ $? != 0 ]; then
@@ -175,8 +175,6 @@ remDevFiles() {
   rm "$1/bin/tests.R";
   rm "$1/doc/html/version";
   rm "$1/doc/html/favicon.ico";
-  rm "$1/doc/html/robots.txt";
-  rm "$1/doc/html/repo.xsl";
   rm -rf "$1/doc/tex";
   rm -rf $(find "$1/" -name \.git\*);
 
