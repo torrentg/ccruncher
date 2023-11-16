@@ -23,6 +23,7 @@
 #pragma once
 
 #include <vector>
+#include <random>
 #include <libconfig.h++>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_matrix.h>
@@ -43,8 +44,10 @@ class Metropolis
 
     //! Current configuration
     libconfig::Config mConfig;
-    //! Random number generator
+    //! Random number generator (used by gsl)
     gsl_rng *rng;
+    //! Uniform random bit generator (used by shuffler)
+    std::mt19937 urbg{std::random_device{}()};
     //! Stop flag
     bool fstop;
 

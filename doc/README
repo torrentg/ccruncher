@@ -231,7 +231,7 @@ Developers tips & tricks
      > automake -avcf    (--help --warnings=all)
 
 5. compile project in debug mode
-     > configure --enable-debug --enable-profiler
+     > ./configure --enable-debug --enable-profiler
      > make
      > make check
 

@@ -503,7 +503,7 @@ int ccruncher_inf::Metropolis::run(ostream &output, ostream &info, size_t blocks
   do
   {
     // shuffling components
-    random_shuffle(shuffler.begin(), shuffler.end());
+    std::shuffle(shuffler.begin(), shuffler.end(), urbg);
 
     // updating components
     for(size_t i=0; i<5; i++)
@@ -611,7 +611,7 @@ void ccruncher_inf::Metropolis::updateR()
     }
   }
   assert(pos == (nfactors*(nfactors-1))/2);
-  random_shuffle(shuffler.begin(), shuffler.end());
+  std::shuffle(shuffler.begin(), shuffler.end(), urbg);
   for(size_t i=0; i<shuffler.size(); i++) {
     size_t s1 = shuffler[i].first;
     size_t s2 = shuffler[i].second;
