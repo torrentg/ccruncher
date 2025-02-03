@@ -9,7 +9,7 @@ dnl initializing procedures
 dnl -------------------------------------------------------------
 AC_INIT([ccruncher],[2.6.0],[gtorrent@ccruncher.net],[ccruncher],[http://www.ccruncher.net])
 AC_CONFIG_SRCDIR([src/kernel/MonteCarlo.hpp])
-AC_CONFIG_HEADERS([src/utils/config.h],[],[src/utils/config.h.in])
+AC_CONFIG_HEADERS([src/utils/config.h],[],[])
 AM_INIT_AUTOMAKE([subdir-objects])
 
 dnl -------------------------------------------------------------
@@ -50,7 +50,7 @@ AC_CHECK_LIB([gslcblas],[cblas_dgemm],,
     [AC_MSG_ERROR([cannot find the gsl library]) ])
 AC_CHECK_LIB([gsl], [gsl_rng_alloc],,
     [AC_MSG_ERROR([cannot find the gsl library]) ])
-AC_CHECK_LIB([config++], [config_init],,
+AC_CHECK_LIB([config++], [main],,
     [AC_MSG_ERROR([cannot find the libconfig library]) ])
 
 dnl -------------------------------------------------------------

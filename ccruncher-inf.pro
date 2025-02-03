@@ -19,23 +19,10 @@ INCLUDEPATH += \
     $$PWD/src
 
 LIBS += \
-    -lm
-
-unix {
-  LIBS += \
+    -lm \
     -lgsl \
     -lgslcblas \
     -lconfig++
-}
-
-win32 {
-  INCLUDEPATH += \
-    C:/MinGW/msys/1.0/local/include
-  LIBS += \
-    C:/MinGW/msys/1.0/local/lib/libgsl.a \
-    C:/MinGW/msys/1.0/local/lib/libgslcblas.a \
-    C:/MinGW/msys/1.0/local/lib/libconfig++.dll.a
-}
 
 CONFIG(release, debug|release) {
   DEFINES += NDEBUG

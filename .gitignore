@@ -31,6 +31,10 @@ stamp-h1
 /doc/tex/*.pdf
 /doc/tex/*.toc
 /doc/ccruncher.pdf
+.qtc_clangd
+*~
+*.pro.user
+*.o
 
 !/data/readme
 !/build/ccruncher.spec

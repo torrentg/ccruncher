@@ -43,6 +43,7 @@
 #include <qwt_plot_zoomer.h>
 #include <qwt_plot_panner.h>
 #include <qwt_plot_magnifier.h>
+#include <qwt_column_symbol.h>
 #include <qwt_symbol.h>
 #include "ui_AnalysisWidget.h"
 #include "gui/QwtPlotCanvasExt.hpp"

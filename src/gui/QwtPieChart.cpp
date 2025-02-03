@@ -23,6 +23,8 @@
 #include <cmath>
 #include <cstdlib>
 #include <algorithm>
+#include <QColor>
+#include <QPainter>
 #include "QwtPieChart.hpp"
 
 using namespace std;

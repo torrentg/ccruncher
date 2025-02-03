@@ -4,6 +4,9 @@ TEMPLATE = app
 CONFIG += c++14 qwt thread
 VERSION = 2.6.0
 
+greaterThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
+lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
+
 HEADERS += \
     src/gui/Application.hpp \
     src/gui/MainWindow.hpp \
@@ -117,31 +120,13 @@ INCLUDEPATH += \
     $$PWD/src
 
 LIBS += \
-    -lm
-
-unix {
-  INCLUDEPATH += \
-    /usr/include/qt5/qwt
-  LIBS += \
+    -lm \
     -lz \
     -lgsl \
     -lgslcblas \
     -lexpat
-}
 
-win32 {
-  INCLUDEPATH += \
-    C:/MinGW/msys/1.0/local/include
-  LIBS += \
-    C:/MinGW/lib/libz.a \
-    C:/MinGW/msys/1.0/local/lib/libexpat.a \
-    C:/MinGW/msys/1.0/local/lib/libgsl.a \
-    C:/MinGW/msys/1.0/local/lib/libgslcblas.a
-  RC_FILE = \
-    $$PWD/src/gui/ccruncher-gui.rc
-  OTHER_FILES += \
-    $$PWD/src/gui/ccruncher-gui.rc
-}
+win32:RC_ICONS += $$PWD/src/gui/images/logo.ico
 
 CONFIG(release, debug|release) {
   DEFINES += NDEBUG
