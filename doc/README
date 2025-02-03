@@ -155,15 +155,15 @@ Notes for Windows developers (QT+MINGW)
    > pacman -S autoconf-archive
 
 2. Unpack the source tarball
-   Origin = ccruncher-a.b.c.zip
-   Destination = C:\msys64\home\<user>\ccruncher-a.b.c
-   > cd C:\msys64\home\<user>\ccruncher-a.b.c
+   Origin = ccruncher-xxx
+   Destination = C:\msys64\home\<user>\ccruncher
+   > cd C:\msys64\home\<user>\ccruncher
    > touch doc/ccruncher.pdf
 
 3. Create executables (using autotools)
    > aclocal
    > autoconf
-   > automake
+   > automake -avcf
    > ./configure
    > make
    > make check
@@ -172,13 +172,13 @@ Notes for Windows developers (QT+MINGW)
    https://wiki.qt.io/MSYS2
    > pacman -S mingw-w64-ucrt-x86_64-qt5
    > pacman -S mingw-w64-ucrt-x86_64-qwt-qt5
-   > qmake-qt5 ccruncher-cmd.pro
+   > qmake ccruncher-cmd.pro
    > make
-   > qmake-qt5 ccruncher-inf.pro
+   > qmake ccruncher-inf.pro
    > make
-   > qmake-qt5 ccruncher-tests.pro
+   > qmake ccruncher-tests.pro
    > make
-   > qmake-qt5 ccruncher-gui.pro
+   > qmake ccruncher-gui.pro
    > make
 
 

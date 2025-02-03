@@ -152,6 +152,6 @@
 
 
 /* git identifier */
-#define GIT_VERSION "06b9824"
+#define GIT_VERSION "46a2152"
 
 

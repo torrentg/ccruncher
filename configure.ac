@@ -7,7 +7,7 @@ dnl *************************************************************
 dnl -------------------------------------------------------------
 dnl initializing procedures
 dnl -------------------------------------------------------------
-AC_INIT([ccruncher],[2.6.0],[gtorrent@ccruncher.net],[ccruncher],[http://www.ccruncher.net])
+AC_INIT([ccruncher],[2.6.1],[gtorrent@ccruncher.net],[ccruncher],[http://www.ccruncher.net])
 AC_CONFIG_SRCDIR([src/kernel/MonteCarlo.hpp])
 AC_CONFIG_HEADERS([src/utils/config.h],[],[])
 AM_INIT_AUTOMAKE([subdir-objects])
@@ -142,7 +142,7 @@ dnl -------------------------------------------------------------
 AH_BOTTOM([
 
 /* git identifier */
-#define GIT_VERSION "06b9824"
+#define GIT_VERSION "46a2152"
 
 ])
 

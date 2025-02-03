@@ -2,7 +2,7 @@ QT -= core gui
 TARGET = ccruncher-tests
 CONFIG -= qt
 CONFIG += c++14 console thread
-VERSION = 2.6.0
+VERSION = 2.6.1
 
 HEADERS += \
     src/params/Params.hpp \

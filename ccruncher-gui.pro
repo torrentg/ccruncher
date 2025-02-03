@@ -2,7 +2,7 @@ QT += core gui network widgets
 TARGET = ccruncher-gui
 TEMPLATE = app
 CONFIG += c++14 qwt thread
-VERSION = 2.6.0
+VERSION = 2.6.1
 
 greaterThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
 lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5")
