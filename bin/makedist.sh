@@ -21,30 +21,7 @@
 progname=makedist.sh
 numversion="xxx"
 PACKAGE="ccruncher"
-winexes="xxx"
-winfiles="ccruncher-cmd.exe
-          ccruncher-gui.exe
-          ccruncher-inf.exe
-          icudt53.dll
-          icuin53.dll
-          icuuc53.dll
-          libEGL.dll
-          libconfig++-9.dll
-          libgcc_s_dw2-1.dll
-          libGLESv2.dll
-          libgomp-1.dll
-          libstdc++-6.dll
-          libwinpthread-1.dll
-          platforms/qwindows.dll
-          platforms/qminimal.dll
-          Qt5Core.dll
-          Qt5Gui.dll
-          Qt5Network.dll
-          Qt5OpenGL.dll
-          Qt5PrintSupport.dll
-          Qt5Svg.dll
-          Qt5Widgets.dll
-          qwt.dll"
+windir="xxx"
 
 #-------------------------------------------------------------
 # usage function
@@ -81,7 +58,7 @@ readconf() {
   while getopts 'w:h' opt
   do
     case $opt in
-      w) winexes=$OPTARG;;
+      w) windir=$OPTARG;;
       h) usage; 
          exit 0;;
      \?) echo "error: unknow option."; 
@@ -93,12 +70,12 @@ readconf() {
     esac
   done
 
-  if [ $winexes = "xxx" ]; then
+  if [ $windir = "xxx" ]; then
     echo "error: -w argument not set";
     echo "use -h for more information"; 
     exit 1;
   else
-    winexes=$(readlink -f "$winexes");
+    windir=$(readlink -f "$windir");
   fi
 
   shift `expr $OPTIND - 1`;
@@ -113,14 +90,11 @@ readconf() {
     done
   fi
 
-  # check winfiles
-  for file in $winfiles
-  do
-    if [ ! -f $winexes/$file ]; then 
-      echo "error: file $winexes/$file not found" 
-      exit 1;
-    fi
-  done
+  # check windows files
+  if [[ ! -d "$windir" ]]; then
+    echo "error: directory '$windir' not found" 
+    exit 1;
+  fi
 
 }
 
@@ -240,16 +214,8 @@ makeWinDist() {
   cd "$1";
 
   # copying binaries
-  for file in $winfiles
-  do
-    if [ ! -f $winexes/$file ]; then 
-      echo "error: file $winexes/$file not found";
-      exit 1;
-    else
-      mkdir -p $(dirname "bin/$file");
-      cp "$winexes/$file" "bin/$file";
-    fi
-  done
+  mkdir -p bin;
+  cp -r $windir/* bin;
 
   # dropping unused files
   bin/src2bin.sh -y;

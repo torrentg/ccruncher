@@ -9,15 +9,15 @@ Source: ccruncher-%{version}_src.tgz
 
 BuildRequires: gsl-devel >= 2.1
 BuildRequires: expat-devel >= 2.1.1
-BuildRequires: zlib-devel >= 1.2.8
-BuildRequires: qt5-devel >= 5.6.1
+BuildRequires: zlib-ng-compat-devel >= 1.2.8
+BuildRequires: qt5-qtbase-devel >= 5.6.1
 BuildRequires: qwt-qt5-devel >= 6.1.2
 BuildRequires: libconfig-devel >= 1.5
 
 Requires: gsl >= 2.1
 Requires: expat >= 2.1.1
-Requires: zlib >= 1.2.8
-Requires: qt5 >= 5.6.1
+Requires: zlib-ng-compat >= 1.2.8
+Requires: qt5-qtbase >= 5.6.1
 Requires: qwt-qt5 >= 6.1.2
 Requires: libconfig >= 1.5
 
