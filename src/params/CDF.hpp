@@ -66,6 +66,8 @@ class CDF
     CDF(double xmin=-INFINITY, double xmax=+INFINITY);
     //! Copy constructor
     CDF(const CDF &);
+    //! Move constructor
+    CDF(CDF &&) noexcept;
     //! Constructor
     CDF(const std::vector<std::pair<double,double>> &,
         double xmin=-INFINITY, double xmax=+INFINITY);
@@ -76,6 +78,8 @@ class CDF
     ~CDF();
     //! Assignment operator
     CDF & operator=(const CDF &);
+    //! Move assignment operator
+    CDF & operator=(CDF &&) noexcept;
     //! Returns the list of PDs provided by user
     const std::vector<std::pair<double,double>>& getPoints() const { return mData; }
     //! Set x range

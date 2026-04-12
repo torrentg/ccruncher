@@ -294,8 +294,8 @@ bool ccruncher::Utils::isAbsolutePath(const std::string &path)
  */
 string ccruncher::Utils::getWorkDir()
 {
-  char tempname[1024];
-  char *ret = getcwd(tempname, 1024);
+  char tempname[PATH_MAX];
+  char *ret = getcwd(tempname, PATH_MAX);
 
   if (ret != tempname) {
     throw Exception("unable to retrieve current working directory");

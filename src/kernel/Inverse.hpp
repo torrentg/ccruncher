@@ -81,10 +81,14 @@ class Inverse
     Inverse(double ndf, double maxt, const CDF &cdf, const std::vector<int> &nodes);
     //! Copy constructor
     Inverse(const Inverse &);
+    //! Move constructor
+    Inverse(Inverse &&) noexcept;
     //! Destructor
     ~Inverse();
     //! Assignment operator
     Inverse & operator=(const Inverse &);
+    //! Move assignment operator
+    Inverse & operator=(Inverse &&) noexcept;
     //! Initialize
     void init(double ndf, double maxt, const CDF &cdf, const std::vector<int> &nodes);
     //! Evalue (return days from t0)

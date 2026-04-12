@@ -49,6 +49,17 @@ ccruncher::CDF::CDF(const CDF &o)
 }
 
 /**************************************************************************//**
+ * @param[in] o Object to move.
+ */
+ccruncher::CDF::CDF(CDF &&o) noexcept
+    : mXmin(o.mXmin), mXmax(o.mXmax), mData(std::move(o.mData)),
+      mSpline(o.mSpline), mAccel(o.mAccel)
+{
+  o.mSpline = nullptr;
+  o.mAccel = nullptr;
+}
+
+/**************************************************************************//**
  * @param[in] data Function points provided by user. x-values are in range
  *          (-inf,+inf) and y-values are in range [0,1]. Note that points
  *          can be unordered (respect x-component).
@@ -122,6 +133,24 @@ CDF& ccruncher::CDF::operator=(const CDF &o)
   mXmin = o.mXmin;
   mXmax = o.mXmax;
   mData = o.mData;
+  return *this;
+}
+
+/**************************************************************************//**
+ * @param[in] o Object to move.
+ */
+CDF& ccruncher::CDF::operator=(CDF &&o) noexcept
+{
+  if (this != &o) {
+    freeSpline();
+    mXmin = o.mXmin;
+    mXmax = o.mXmax;
+    mData = std::move(o.mData);
+    mSpline = o.mSpline;
+    mAccel = o.mAccel;
+    o.mSpline = nullptr;
+    o.mAccel = nullptr;
+  }
   return *this;
 }
 

@@ -30,11 +30,15 @@ stamp-h1
 /doc/tex/*.out
 /doc/tex/*.pdf
 /doc/tex/*.toc
+/doc/tex/*.fls
+/doc/tex/*latexmk
+/doc/tex/*synctex.gz
 /doc/ccruncher.pdf
 .qtc_clangd
 *~
 *.pro.user
 *.o
+windir
 
 !/data/readme
 !/build/ccruncher.spec

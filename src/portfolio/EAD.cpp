@@ -244,7 +244,7 @@ void ccruncher::EAD::mult(double factor)
       // http://en.wikipedia.org/wiki/Normal_distribution
       // http://www.gnu.org/software/gsl/manual/html_node/The-Gaussian-Distribution.html
       mValue1 *= factor;
-      mValue2 *= factor*factor;
+      mValue2 *= factor;
       break;
 
     default:

@@ -66,6 +66,15 @@ ccruncher::Inverse::Inverse(const Inverse &o) : mSpline(nullptr)
   *this = o;
 }
 
+/**************************************************************************//**
+ * @param[in] o Object to move.
+ */
+ccruncher::Inverse::Inverse(Inverse &&o) noexcept
+    : mMaxT(o.mMaxT), mNdf(o.mNdf), mSpline(o.mSpline)
+{
+  o.mSpline = nullptr;
+}
+
 /**************************************************************************/
 ccruncher::Inverse::~Inverse()
 {
@@ -89,6 +98,21 @@ Inverse & ccruncher::Inverse::operator=(const Inverse &o)
     gsl_spline_init(mSpline, o.mSpline->x, o.mSpline->y, o.mSpline->size);
   }
 
+  return *this;
+}
+
+/**************************************************************************//**
+ * @param[in] o Object to move.
+ */
+Inverse & ccruncher::Inverse::operator=(Inverse &&o) noexcept
+{
+  if (this != &o) {
+    gsl_spline_free(mSpline);
+    mMaxT = o.mMaxT;
+    mNdf = o.mNdf;
+    mSpline = o.mSpline;
+    o.mSpline = nullptr;
+  }
   return *this;
 }
 

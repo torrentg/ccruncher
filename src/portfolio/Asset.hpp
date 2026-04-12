@@ -55,6 +55,14 @@ class Asset
     Asset(unsigned short nsegmentations=0) : segments(nsegmentations, 0) {}
     //! Constructor
     Asset(const std::vector<unsigned short> &segments_) : segments(segments_) {}
+    //! Move constructor
+    Asset(Asset &&) noexcept = default;
+    //! Move assignment operator
+    Asset & operator=(Asset &&) noexcept = default;
+    //! Copy constructor
+    Asset(const Asset &) = default;
+    //! Copy assignment operator
+    Asset & operator=(const Asset &) = default;
     //! Prepare data
     void prepare(const Date &d1, const Date &d2, const Interest &interest);
     //! Indicates if this asset has info in date1-date2

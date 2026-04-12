@@ -51,6 +51,14 @@ class Obligor
 
     //! Constructor
     Obligor(unsigned char factor=0, unsigned char rating=0) : ifactor(factor), irating(rating), lgd(1.0) {}
+    //! Move constructor
+    Obligor(Obligor &&) noexcept = default;
+    //! Move assignment operator
+    Obligor & operator=(Obligor &&) noexcept = default;
+    //! Copy constructor
+    Obligor(const Obligor &) = default;
+    //! Copy assignment operator
+    Obligor & operator=(const Obligor &) = default;
     //! Indicates if this obligor has values in date1-date2
     bool isActive(const Date &, const Date &) const;
 
